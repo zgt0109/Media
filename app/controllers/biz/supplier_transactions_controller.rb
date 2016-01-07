@@ -1,4 +1,4 @@
-class Biz::SupplierTransactionsController < Biz::winwemediaPayController
+class Biz::SupplierTransactionsController < Biz::WinwemediaPayController
 
 	def balance
 		@records_all = current_user.payments.success.winwemedia_pay.order("created_at DESC").search(params[:search])

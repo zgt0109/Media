@@ -1,4 +1,4 @@
-class Biz::SupplierWithdrawsController < Biz::winwemediaPayController
+class Biz::SupplierWithdrawsController < Biz::WinwemediaPayController
 
 	def index
 		@records_all = @supplier_account.supplier_withdraws.order("created_at DESC").search(params[:search])

@@ -1,4 +1,4 @@
-class Biz::winwemediaPayController < ApplicationController
+class Biz::WinwemediaPayController < ApplicationController
 	before_filter :require_wx_mp_user,  :require_privilege
 	before_filter :fetch_supplier_account, expect: [:conditions]
 

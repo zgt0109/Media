@@ -1,4 +1,4 @@
-class Biz::SupplierAccountsController < Biz::winwemediaPayController
+class Biz::SupplierAccountsController < Biz::WinwemediaPayController
 	def create
 		return redirect_to identity_supplier_accounts_path if @supplier_account.present?
 		@supplier_account = SupplierAccount.new(params[:supplier_account])
