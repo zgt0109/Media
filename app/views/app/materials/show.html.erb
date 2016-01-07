@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <title><%= @material.title %></title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/app/client-page1762b0.css">
+  <%= javascript_include_tag 'mobile/lib/jquery' %>
+  <style type="text/css">
+  #nickname {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 90%;
+  }
+  ol, ul {
+    padding-left: 25px;
+  }
+  #activity-detail .page-content .text {
+    font-size:16px;
+  }
+  </style>
+</head>
+
+<body id="activity-detail">
+  <div class="html">
+    <div class="main">
+      <div class="page-bizinfo">
+        <div class="header">
+          <h1 id="activity-name"><%= @material.title %></h1>
+          <p class="activity-info">
+            <span id="post-date" class="activity-meta no-extra"><%= @material.created_at.try(:to_date) %></span>
+            <!--<a href="javascript:;" id="post-user" class="activity-meta"><span class="text-ellipsis"><%#= @material.supplier.try(:name) %></span><i class="icon_link_arrow"></i></a>-->
+          </p>
+        </div>
+      </div>
+      <div class="page-content">
+        <% if @material.pic? && @material.is_show_pic %>
+            <div class="media" id="media"><%= image_tag @material.pic.large %></div>
+        <% end %>
+        <div class="text"><%= raw @material.content %></div>
+        <p class="page-url"><%= link_to '阅读原文', "#{@material.source_url}#mp.weixin.qq.com", class: 'page-url-link' if @material.source_url.present? %></p>
+      </div>
+    </div>
+  </div>
+  <%= render 'application/app_footer' %>
+</body>
+</html>

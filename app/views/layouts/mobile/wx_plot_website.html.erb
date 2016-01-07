@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title><%= yield(:title) || '微小区' %></title>
+
+  <%= yield(:head) %>
+
+
+  <link type="text/css" rel="stylesheet" href="/stylesheets/vweisiteV01.css"/>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.css"/>
+  <%= javascript_include_tag "mobile/vweisiteV01" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+  <%= render 'application/gb2big5' %>
+<%= yield :begin_animation_section %>
+
+<div class="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <%= yield :header %>
+      <div class="body">
+        <%= yield %>
+      </div>
+    </section>
+
+    <%= yield :nav_section %>
+
+    <%= yield :share_section %>
+
+    <%#= yield :pagination_section %>
+
+  </div><!--.stage end-->
+</div><!--.html end-->
+
+<%= render 'application/app_footer' %>
+
+<%= render 'application/kefu' %>
+
+<%= yield :bg_music_section %>
+
+<a href="javascript:scroll(0,0)" class="btn-up btn-up-1"><i class="fa fa-arrow-up"></i></a>
+<div class="loading fixed-top"></div>
+
+<div class="mod-pop" id="pop-share" onclick="hidePop('#pop-share')"><span class="text-share"></span></div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        <%= yield :document_ready_js %>
+
+        showBtnUp(100);
+    });
+</script>
+</body>
+</html>

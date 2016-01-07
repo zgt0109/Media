@@ -1,0 +1,12 @@
+<%= javascript_include_tag 'jquery', 'main' %>
+
+<script type="text/javascript">
+	var $parent_doc = $(parent.document);
+	$parent_doc.find('#menu-list-body').replaceWith('<%= j render "tbody" %>');
+	<% if @menus.size >= 4 %>
+		$parent_doc.find('.new-pop-menu').hide();
+	<% end %>
+	$parent_doc.find('.pop').fadeOut(function() { $(this).remove(); });
+	parent.showTip('success', '操作成功');
+    window.parent.location.reload();
+</script>

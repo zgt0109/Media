@@ -1,0 +1,148 @@
+<% if f.object.new_record? %>
+  <% default_pic_url = qiniu_image_url('FiF0tSo5WZzH_i0_CDUgemvPd8Et'); default_pic_key = 'FiF0tSo5WZzH_i0_CDUgemvPd8Et' %>
+<% else %>
+  <% default_pic_url = f.object.pic_url; default_pic_key = f.object.pic_key %>
+<% end %>
+
+<div class="form-wrap" id="form-0">
+  <%= f.hidden_field :material_type %>
+
+  <div class="form-group">
+    <label class="control-label">标题<span class="required-star">*</span></label>
+    <div class="clearfix">
+      <%= f.text_field :title, id: 'wx_title', class: 'col-xs-6 material_title', placeholder: "不能超过64个字" %>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">封面<span class="required-star">*</span><small class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</small></label>
+      <div class="clearfix">
+        <div class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200" data-name="material[pic_key]" data-img="<%= default_pic_url %>" data-key="<%= default_pic_key %>"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="margin-b-10">
+        <%= f.check_box :is_show_pic, class: 'ace' %><span class="lbl">封面图片显示在正文中</span>
+      </label>
+    </div>
+
+    <%= render 'weixin_show_type', f: f %>
+
+    <div class="form-group">
+      <input type="submit" value="保存" class="btn btn-primary btn-sm"/>
+    </div>
+  </div>
+</div>
+
+<% index = 0 %>
+<%= f.fields_for :children do |child| %>
+  <%= child.hidden_field :material_type %>
+  <%= child.hidden_field :supplier_id %>
+  
+  <% if child.object.new_record? %>
+    <% default_child_pic_url = qiniu_image_url('FiF0tSo5WZzH_i0_CDUgemvPd8Et'); default_child_pic_key = 'FiF0tSo5WZzH_i0_CDUgemvPd8Et' %>
+  <% else %>
+    <% default_child_pic_url = child.object.pic_url; default_child_pic_key = child.object.pic_key %>
+  <% end %>
+  
+  <div class="form-wrap" id="form-<%= index+1 %>" style="display:none;">
+    <div class="form-group">
+      <label class="control-label">标题<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= child.text_field :title, class: 'col-xs-6', placeholder: "不能超过64个字", data: { title: "#title-#{index+2}" } %>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">封面<small class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</small></label>
+        <div class="clearfix">
+          <div class="cieldon-file width-100px" data-type="1" data-name="material[children_attributes][<%= index %>][pic_key]" data-div="#img-<%= index+2 %>" data-height="70" data-width="70" data-img="<%= default_child_pic_url %>" data-key="<%= default_child_pic_key %>"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="margin-b-10">
+          <%= child.check_box :is_show_pic, class: 'ace' %><span class="lbl">封面图片显示在正文中</span>
+        </label>
+      </div>
+
+      <%= render 'weixin_show_type', f: child %>
+
+      <div class="form-group">
+        <input type="submit" value="保存" class="btn btn-primary btn-sm"/>
+      </div>
+    </div>
+  </div>
+
+  <% index +=1 %>
+<% end %>
+
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $('form').on('keyup', 'input[data-title]', function(){
+    $($(this).attr('data-title')).html($(this).val());
+  });
+
+  $(document).on('change', 'select[id*=_reply_type]', function () {
+    select_material_type($(this));
+  });
+  
+  $("select[id*=_reply_type]").each(function() {
+    select_material_type($(this));
+  });
+
+  function select_material_type(this_reply_type) {
+
+    var $current_material = this_reply_type.closest('.form-wrap');
+    $current_material.closest('.form-wrap').find('.tab-pane').removeClass('active');
+
+    if ( this_reply_type.val() == '1' ) {
+      $current_material.find('textarea[id*=summary]').closest('.tab-pane').addClass('active');
+    } else if ( this_reply_type.val() == '2' ) {
+      $current_material.find('select[id*=activity_id]').closest('.tab-pane').addClass('active');
+    } else if ( this_reply_type.val() == '3' ) {
+      $current_material.find('input[id*=source_url]').closest('.tab-pane').addClass('active');
+    }
+  }
+
+  $(document).on('click', 'input[type=submit]', function () {
+    $form = $(this).closest('.form-wrap');
+    if ( $form.find("select[id*=_reply_type]").val() == '3' ) {
+      var material_source_url = $form.find('input[id*=source_url]');
+      var source_url_rep = /^(http|https):\/\/[a-zA-Z0-9].+$/i;
+      
+      if ( !material_source_url.val() ) {
+        addErrorMessage(material_source_url, '请填写链接地址');
+        material_source_url.focus();
+        return false;
+      } else if ( !source_url_rep.test(material_source_url.val()) ) {
+        addErrorMessage(material_source_url, '地址格式不正确，必须以http(s)://开头');
+        material_source_url.focus();
+        return false;
+      }
+    }
+    
+    var blank_title = false;
+    $('.form-mater-multi .form-wrap .material_title').each(function(event) {
+      if ( !$(this).val() ) {
+        //var self = $(this),
+        //    top = self.attr("data-top");
+        //var mater = $(".form-mater");
+        //mater.css({"margin-top": top + "px"});
+        
+        blank_title = true;
+        $('.form-wrap').hide();
+        $(this).closest('.form-wrap').show();
+        $(this).focus();
+      }
+    });
+    
+    if ( blank_title ) {
+      event.preventDefault();
+    }
+    
+  });
+
+});
+</script>
+<% end %>

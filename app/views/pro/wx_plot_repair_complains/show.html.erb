@@ -1,0 +1,50 @@
+<form>
+  <div class="modal-body">
+    <div class="row vcommunity-repair-reply col-xs-12">
+      <dl>
+        <dt>
+          申请类型：
+        </dt>
+        <dd>
+          <%= @repair_complain.category_name %>
+        </dd>
+        <dt>
+          类        别 ：
+        </dt>
+        <dd>
+          <%= @repair_complain.wx_plot_category.try(:name) %>&nbsp;
+        </dd>
+        <dt>
+          如何称呼：
+        </dt>
+        <dd>
+          <%= @repair_complain.nickname %>
+        </dd>
+        <dt>
+          手机号：
+        </dt>
+        <dd>
+          <%= @repair_complain.phone %>
+        </dd>
+        <dt>
+          房间号：
+        </dt>
+        <dd>
+          <%= @repair_complain.room_no %>
+        </dd>
+        <dt>
+          说        明：
+        </dt>
+        <dd>
+          <%= @repair_complain.content %>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">返回</button>
+  </div>
+</form>
+<% content_for :custom_js do %>
+<% end %>

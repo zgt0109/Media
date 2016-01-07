@@ -1,0 +1,125 @@
+<% @category = "category_"+@vip_privilege.category.to_s+"_"+@vip_privilege.value_by.to_s %>
+<%= form_for @vip_privilege, validate: true do |f| %>
+    <% vip_grades = @vip_card.vip_grades.visible.sorted %>
+    <%= f.hidden_field :status, value: 1 %>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>特权名称<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <%= f.text_field :title, class: 'col-md-8', validate: true %>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>特权条件设置<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <% options = [["消费享积分特权","category_1_1"],["消费享折扣特权","category_1_2"],["充值享积分特权","category_2_1"],["充值享折扣特权","category_2_2"],["充值送现金特权","category_2_3"]] %>
+                <%= select_tag :category, options_for_select(options, @category) %>
+                <small id="point_type_1" class="privilege_category_tip help-inle test text-warning line-height-32">（有<%= @point_types.consume.count %>条符合条件的积分策略）</small>
+                <small id="point_type_2" class="privilege_category_tip help-inle test text-warning line-height-32">（有<%= @point_types.recharge.count %>条符合条件的积分策略）</small>
+            </div>
+            <div class="clearfix margin-top-10">
+                <span id="value_by_span1"><span id="category_name"><%= @vip_privilege.category_name.to_s[0..1] %></span> <%= f.text_field :amount, class: :inputSmall %>元以上</span>
+                <span id="value_by_span2"><span id="value_by_name1">享受</span><%= f.text_field :value, class: :inputSmall %><span id="value_by_name"><%= @vip_privilege.discount? ? "折" : "倍积分" %></span></%></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>适用范围<span class="required-star">*</span></label>
+            <div>
+                <label>
+                    <%= check_box_tag :all_check, '1', @vip_privilege.all_grades?, class: :ace %>
+                    <span class="lbl">所有会员</span>
+                </label>
+                <% vip_grades.each do |grade| %>
+                  <label> <%= f.check_box :vip_grade_ids, {name: "vip_privilege[vip_grade_ids][]", class: :ace}, grade.id, false %><span class="lbl"><%= grade.name %></span></label>
+                <% end %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>可使用次数<span class="required-star">*</span>
+                <small class="help-inle test text-warning line-height-32">-1表示不限制使用次数</small>
+            </label>
+            <div class="clearfix">
+                <%= f.text_field :limit_count, class: 'col-md-8' %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>有效期<span class="required-star">*</span>
+            </label>
+            <div class="rightsDateRange">
+                <div class="radioTab">
+                    <label>
+                        <%= f.radio_button :always_valid, true, checked: @vip_privilege.always_valid, class: :ace, data: { toggle: :radioTab, target: :foreverDate } %>
+                        <span class="lbl">长期有效</span>
+                    </label>
+                    <label>
+                        <%= f.radio_button :always_valid, false, checked: !@vip_privilege.always_valid, class: :ace, data: { toggle: :radioTab, target: :customDate } %>
+                        <span class="lbl">有效期限制</span>
+                    </label>
+                </div>
+                <div class="radio-tab-content">
+                    <div id="foreverDate" class="radio-tab-pane">
+                    </div>
+                    <div id="customDate" class="radio-tab-pane">
+                        <div class="clearfix">
+                            <div class="input-group  no-padding-left no-padding-right ">
+                                <%= datetime_range_tag f, start_at: :start_date, end_at: :end_date, options: {class: 'daterange min-width-280 col-sm-12'} %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>特权说明</label>
+            <div class="clearfix">
+                <%= f.text_area :content, rows: 5, class: "col-xs-12" %>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+        <button type="reset" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+    </div>
+
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    $(function() {
+        var category_select = $('#category'),
+        category_tips       = $('.privilege_category_tip');
+        ( show_or_hide_point_types = function () {
+          category_tips.hide();
+          amount_type = category_select.val().split('_')[1];
+          value_type  = category_select.val().split('_')[2];
+          if ( ['category_1_1', 'category_2_1'].indexOf( category_select.val() ) >= 0 ) {
+            $('#point_type_' + amount_type).show();
+          };
+
+          value_type == '2' || '3' ? $('#value_by_span1').show() : $('#value_by_span1').hide();
+          $('#value_by_name').text( value_type  == '3' ? '元' : value_type  == '2' ? '折' : '倍积分');
+          $('#category_name').text( amount_type == '1' ? '消费' : '充值' );
+          $('#value_by_name1').text( value_type  == '3' ? '赠送' : '享受' );
+        } )();
+        category_select.change( show_or_hide_point_types );
+
+        ( showOrHideCurtomDate = function ( flag ) {
+          !flag ? $('#customDate').show() : $('#customDate').hide();
+        } ) ( $('input[type="radio"]:checked').val() == 'true' );
+
+        $('input[type="radio"]').change(function(event) {
+          showOrHideCurtomDate ( $(this).val() == 'true' );
+        });
+
+
+        $('#all_check').click(function(event) {
+          $('input[type="checkbox"]').prop('checked', $(this).is(':checked'));
+        });
+        $(':checkbox:not(#all_check)').click(function(event) {
+          if ( !$(this).is(':checked') ) { $('#all_check').prop('checked', false); };
+        });
+    })
+  </script>
+<% end %>

@@ -1,0 +1,49 @@
+body{background: #000;}
+.box{overflow: hidden; display: block;}
+.index{ margin: 10px auto; overflow: hidden;}
+.index a{ padding:0 10px 0 0;
+    background-color:#dbdbdb;
+    background-repeat:repeat-x;
+    background:-webkit-gradient(linear,0% 0%,0% 100%,from(#222222),to(#343434));
+    background:-webkit-linear-gradient(top,#343434,#222222);
+    background:-moz-linear-gradient(top,#343434,#222222);
+    background:-ms-linear-gradient(top,#343434,#222222);
+    background:-o-linear-gradient(top,#343434,#222222);
+    padding:10px;
+    position: relative;
+}
+.index a:after{
+    position: absolute;
+    content: " ";
+    right: 10px;
+    top:50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 0;
+    border-radius: 1000px;
+    background: url(/assets/mobile/vweisiteV01/43/arrow.png) no-repeat center center #232323;
+    background-size:auto 8px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.6) inset;
+}
+.mod-index{width: 100%; float: left; display:block; color: #666; text-align: left; padding: 10px 0;}
+.mod-index >*{height: 50px; vertical-align: middle; display: table-cell;}
+.mod-index >*:last-child{width: 100%;}
+.mod-index .index-img{ padding: 5px;}
+/*.mod-index:first-child .index-img{background:#c63f3a; }*/
+/*.mod-index:nth-child(2n+2) .index-img{background:#d9756e; }*/
+/*.mod-index:nth-child(2n+3) .index-img{background:#b2cebf; }*/
+.mod-index .index-img i{ width: 30px; height: 30px; line-height: 30px; display: block; overflow: hidden;text-align: center;}
+.mod-index .index-text>*{font-weight: 100; line-height: 20px; padding:0px 30px 0 5px; display: block;}
+.mod-index >*:first-child >*{ padding-left: 0;}
+.index-text b{ font-weight: 100;}
+.index-text small{ font-size: 12px; color: #999;}
+.mod-index img{ max-height: 30px; float: left;}
+.mod-index .fa{ font-size: 30px; color: #fff;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}

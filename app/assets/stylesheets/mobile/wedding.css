@@ -1,0 +1,166 @@
+/*
+  *= require mobile/winwemediaV01
+ *= require mobile/wedding
+  *= require mobile/ckeditor_content
+ */
+
+body.index{background:url(/assets/mobile/wedding/bg.png) repeat #ffe3e9;
+    background-size:40px 40px;}
+body.index2{ background:url(/assets/mobile/wedding/bg-index2.png) repeat #e8f4f3;background-size:auto 40px;}
+
+body.list{background: url(/assets/mobile/wedding/bg-top.png) repeat-x left top #ffced8;}
+body.list2{background: #e8f4f3;}
+.list .body{ padding: 30px 0 0 0;}
+.list2 .body{ padding: 0;}
+
+
+.body,
+.wrap-body{ background: none;}
+.body{ padding: 160px 0 0 0;}
+.box-transition{ background: none;}
+.top-fl,
+.top-fr,
+.top-sculpture,
+.top-time{ width:100%; overflow: hidden; float: left;}
+.index header,
+.index .footer,
+.index footer{background: url(/assets/mobile/wedding/bg.png) repeat left top #ffced8; background-size:40px 40px; }
+.list .btn{display: inline-block; width: 80%; background: #de4d68;}
+.list2 .btn{display: inline-block; width: 80%; background: #6cc0b8;}
+
+/*btn*/
+.btn{ color: #fff; padding: 0 10px; margin: 10px 0;cursor:pointer;}
+.index .btn{background: #de4d68; }
+.index2 .btn{background: #6cc0b8; }
+/* .btn-up{ background-color:rgba(222,77,104,0.5);} */
+/* .loading.fixed-top{ top: 50px;} */
+
+.list .btn{display: inline-block; width: 80%; background: #de4d68;}
+.list2 .btn{display: inline-block; width: 80%; background: #6cc0b8;}
+.index .btn-up,
+.list .btn-up,
+.list .btn-zf{ background-color:rgba(222,77,104,0.5);}
+.index2 .btn-up,
+.list2 .btn-up,
+.list2 .btn-zf{ background-color:rgba(108,192,184,0.5);}
+.loading.fixed-top{ top: 50px;}
+.btn-zf{
+	display: block;
+	position: fixed;
+	left: 0;
+	bottom: 35px;
+	color: #fff;
+	padding: 5px 10px 5px 5px;
+	height: 40px;
+	line-height: 30px;
+	border-radius: 0 10000px 10000px 0;
+	z-index: 100;
+}
+.btn-zf>*{display: block; background: url(/assets/mobile/wedding/icon-pencil.png) no-repeat right center; background-size: contain; padding-right: 36px;}
+
+/*header*/
+header{height: 160px; border-bottom: 1px solid #fff;float:none;}
+.index2 header{ height: 170px; border: 0;}
+#index header{ position: static;margin-bottom:-160px;}
+.index header .wrap{background: url(/assets/mobile/wedding/bg-top.png) repeat-x left top; background-size: auto 8px;padding: 10px 2% 20px 2%;}
+.index2 header .wrap{ background: #e8f4f3;}
+.top-fl,
+.top-fr{ width: 50%; height:136px; padding:0 2%; float: left;text-align:center;}
+.top-fr{ background: url(/assets/mobile/wedding/ico-heart.png) no-repeat right top; color: #de4d68;background-size:auto 30px; display: table; line-height: 20px;}
+.top-fr p{ display: table-cell; vertical-align: middle; height: 100%; width: 100%; text-align: left;}
+.top-fr p span{ width: 100%; padding: 0 0 10px 0;}
+.index .top-sculpture{ position: relative; height: 80px; margin: 10px 0 0 0;}
+.index .top-sculpture span{ display: inline-block; width: 80px; height: 80px; line-height:80px; padding: 5px; background: #fff; border-radius: 80px; overflow: hidden;}
+.index .top-sculpture img{ max-height: 100%; max-width: 100%; border-radius: 70px;}
+.index .sculpture-male,
+.index .sculpture-female{ position: absolute; top: 0; left:50%;}
+.index .sculpture-male{ margin: 0 0 0 -70px; z-index: 2;}
+.index .sculpture-female{ margin: 0 0 0 -10px; z-index: 1;}
+.index2 .top-sculpture{ background: url(/assets/mobile/wedding/sculpture-index2.png) no-repeat center center; padding: 50px 0 0 0; height:100px; background-size:auto 100px;}
+.index2 .sculpture-male{ padding: 0 20px 0 0;}
+.index2 .sculpture-female{ padding: 0 0 0 30px;}
+.top-time{ background: url(/assets/mobile/wedding/bg-header.png) no-repeat center top; color: #4e9185;}
+.index .top-time{background-size: auto 70px; height: 86px;padding: 8px;font-size: 12px; line-height: 15px; position: relative; margin: -20px 0 0 0; z-index: 3;}
+.index2 .top-time{background-size: auto 90px; height: 106px;padding: 8px; }
+.ico-music{ background: url(/assets/mobile/wedding/ico-music.png) no-repeat center center; width: 100%; overflow: hidden;}
+.ico-music audio{width: 10px; height: 10px;}
+.ico-music.close{background-image: url(/assets/mobile/wedding/ico-music-no.png); }
+.index .ico-music{height: 15px; background-size:auto 15px; margin: 3px 0 0 0;}
+.index2 .ico-music{height: 20px; background-size:auto 20px; margin: 5px 0 -3px 0;}
+.top-time b,
+.top-time span{ width: 100%}
+.index2 .top-time b{ font-weight:bold;}
+.index2 .top-time span{ margin:-3px 0 0;}
+/*box*/
+.box{ background: #fff; border-radius: 0; overflow: hidden; margin: 10px 4%; width: 92%;}
+.box img{ max-width: 100%;}
+.box-slider{ height: 170px;}
+.box-slider-text{ background: no-repeat;}
+.box-video{ text-align: center;}
+.video-wrap{position: relative; width:100%; overflow: hidden; height: 220px;}
+.box-video img,
+.box-video video,
+.box-video .video-btn{ width: 100%;position:absolute; top:0; left:0; height: 100%;}
+.box-video video{ z-index: 0;}
+.box-video img{ z-index: 1;}
+.box-video .video-btn{ background: url(/assets/mobile/wedding/btn-video.png) no-repeat center center; z-index: 2; background-size: 60px 60px;}
+.box-wrap{ margin: 5px 4%; width: 92%; padding: 5px 10px; display: table;}
+.index .box-wrap{background: #fff; }
+.index .box-wrap .fl,
+.index .box-wrap .fr{ display: table-cell; float: none; vertical-align: middle; height: 100%;}
+.index .box-wrap .fl{ padding: 5px 0; line-height: 20px; color: #509185; width: 80%;}
+.index .box-wrap .fr{ text-align: right;}
+.ico{ border-radius: 3px; width:30px; height:30px; line-height: 26px; text-align: center; background: #6cc0b8;}
+.index2 .ico{ margin: 0 10px 0 0;}
+.ico img{ vertical-align: middle;}
+.index .ico img{ max-height:16px;}
+.index2 .ico img{ max-height:20px;}
+.index2 .box-wrap{ border:1px solid #d9cfbf; border-radius: 5px; background:url(/assets/mobile/wedding/bg-wrap-index2.png) no-repeat center 20px #cce8e5; margin: 10px 4%; padding: 50px 30px 40px 30px;}
+.index2 .box-wrap,
+.index2 .box-wrap a{ color: #4e9185;}
+.index2 .box-wrap em{}
+.index2 .box-wrap b{ font-size: 18px; line-height: 30px;}
+.index2 .box-wrap p{ margin: 20px 0;}
+.index2 .box-wrap .fw{ margin: 5px 0;}
+.box-order{display:none;width:92%;height:auto; margin:0 4%; padding:0; background: rgba(255,255,255,0.3); border-radius: 5px; position:absolute; box-shadow: 0 0 5px rgba(0,0,0,0.25); left:0; bottom:-3000px;}
+.box-order dl,
+.box-order p{ background: #fff;}
+.box-order dl{ margin: 0;}
+.box-order dd{ border: 0;}
+.box-order dt{border-radius: 5px 5px 0 0;}
+.box-order dl{ margin: 0; border-radius: 5px;}
+.box-order dt .btn{ width:30%; margin: 0;}
+.box-order p.tcenter .btn{ padding: 0 20px;}
+.box-order .order-row{ border: 0;}
+.box-order .order-row .fl{ padding:0 0 0 5%;}
+.box-order .order-row .fr{ width:75%;}
+.box-order .btn-close{ position: absolute; top:-6px; right: -6px; background: url(/assets/mobile/wedding/btn-close.png) no-repeat; width:30px; height: 30px; background-size: 30px 30px;}
+.box-full{position: fixed; width: 100%; height: 100%; top:0; bottom: 0; left: 0; z-index: 10; display: none;}
+.box-full .box-order{display:block; bottom:-1000px;}
+
+.list .footer,
+.list2 .footer{position: absolute; top: 0; left: 0; width: 100%; overflow: visible;}
+
+/*des*/
+.des{margin:0 4%;padding:10px;color:#fff;background:#f78897;}
+.des h3{font-size:18px;line-height:30px;color:#fff;text-align:center;}
+.des img{max-width: 100%;}
+/*footer*/
+.index .footer{ border-top:1px solid #fff;  box-shadow:0 -2px 5px rgba(0, 0, 0, 0.15);}
+.footer .btn{ margin: 10px;}
+/**/
+.order-row .fr{ width: 78%;margin-right:5%;}
+.fr textarea{height:120px;}
+
+.box-list{overflow: hidden;}
+.box-list>*{border-bottom: 1px solid #fff; padding: 10px;}
+.box-list>*:last-child{border:0;}
+.box-list>*>*{display: block;}
+.box-list>*>span{color: #333; line-height: 20px;}
+.box-list>*>b{text-align: right; font-weight: normal; font-size: 12px;}
+.list .box-list>*>b{color: #509185;}
+.list2 .box-list>*>b{color: #6cc0b8;}
+
+.note-share{ background:url(/assets/mobile/wedding/text.png) no-repeat right center; width:100%; height:155px; background-size:contain; top:0;}
+
+iframe{border: 0;}

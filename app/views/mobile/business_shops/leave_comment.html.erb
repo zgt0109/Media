@@ -1,0 +1,91 @@
+<div class="comment-hd"><p>留下您对本店铺的评价：</p></div>
+
+<div class="comment-bd">
+  <%= form_for @comment, url: create_comment_mobile_business_shop_path(@supplier,@business_shop) do |f| %>
+    <ul>
+      <li>
+        <span>昵称</span>
+        <div class="input-box">
+          <%= f.text_field :nickname, placeholder: '昵称（必填）', class: "input" %>
+        </div>
+      </li>
+      <%= f.fields_for :business_shop_impression do |impression| %>
+        <li>
+          <span>人均</span>
+          <div class="input-box">
+            <%= impression.text_field :avg_price, placeholder: '0.0（必填）', type: "tel", class: "input" %>
+          </div>
+        </li>
+        <li>
+          <span>总评</span>
+          <div class="input-box">
+            <div class="score">
+              <div class="start" style="width:100%;"></div>
+            </div>
+            <%= impression.hidden_field :total_star, value: 5 %>
+          </div>
+        </li>
+      <% end %>
+      <li>
+        <span>评价内容</span>
+        <div class="input-box">
+          <%= f.text_area :comment, rows: 5, placeholder: '请输入您的评论' %>
+        </div>
+      </li>
+    </ul>
+    <a href="#" class="btn btn-blue J-submit">发表评论</a>
+  <% end %>
+</div>
+
+<% content_for :custom_js do %>
+  <script>
+    $(".J-submit").click(function(event) {
+      var avg_price = $("input[name='comment[business_shop_impression_attributes][avg_price]']").val();
+      if($("[name='comment[comment]']").val() == "") {
+        alert('评论不能为空');
+        event.preventDefault();
+      }else if($("[name='comment[nickname]']").val() == "") {
+        alert('昵称不能为空');
+        event.preventDefault();
+      }else if(avg_price == "") {
+        alert('人均不能为空');
+        event.preventDefault();
+      }else if( isNaN( avg_price ) ) {
+        alert('人均必须为数字');
+        event.preventDefault();
+      }else if( parseFloat( avg_price ) <= 0 ) {
+        alert('人均必须大于0');
+        event.preventDefault();
+      } else {
+        $("form").submit();
+      }
+    });
+    $(function(){
+      // 评分
+      $(".score,.start").on({
+        click:function(){
+          var x=parseInt(event.offsetX);
+          var total_star = $("[name='comment[business_shop_impression_attributes][total_star]']");
+          if(x>0&&x<24){
+              $(".start").width("20px");
+              total_star.val(1);
+          }else if(x<48){
+              $(".start").width("44px");
+              total_star.val(2);
+          }
+          else if(x<72){
+              $(".start").width("68px");
+              total_star.val(3);
+          }
+          else if(x<96){
+              $(".start").width("92px");
+              total_star.val(4);
+          }else{
+              $(".start").width("118px");
+              total_star.val(5);
+          }
+        }
+      });
+    });
+  </script>
+<% end %>

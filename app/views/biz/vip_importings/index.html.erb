@@ -1,0 +1,240 @@
+<% content_for :vip_breadcrumb do %>
+    <li>
+      <%= link_to '会员导入管理', vip_importings_path %>
+    </li>
+<% end %>
+
+<% content_for :tab do %>
+    <div id="tab-1" class="tab-pane active row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、请确保导入的文件格式和模板一致，否则无法导入； <a href="/templates/vip/member-info.csv">模板下载</a></li>
+            <li> 2、导入时姓名、手机、等级不能为空，其他字段可根据需要导入；</li>
+            <li> 3、本会员信息表中只记录导入的以下表格中的字段，当导入文件中包含其他字段时系统不记录；</li>
+            <li> 4、导入的文件中会员等级字段为空的情况，会员绑卡后的等级为系统中最低的一个会员等级</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <label>
+          <%= check_box_tag "toggle_vip_importing", '1', @vip_card.vip_importing_enabled?, class: "ace ace-switch ace-switch-7" %>
+          <span class="lbl"></span>
+        </label>
+        <small class="text-warning" id="toggle_vip_importing_warning">
+          <%= @vip_card.vip_importing_enabled? ? '（关闭后会员不能在手机端进入实体卡绑定）' : '（开启后会员可在手机端进行实体卡绑定）' %>
+        </small>
+      </div>
+
+      <div class="col-sm-12 no-padding margin-top-10">
+        <%= render 'biz/vip_users/vip_users_search_form' %>
+
+        <div class="margin-left-10 pull-left">
+          <a href="#import-vipinfo" data-toggle="modal" class="btn btn-primary btn-sm margin-top-20">导入会员信息</a>
+        </div>
+
+        <div class="col-sm-12 margin-top-10 J-table-delete hide">
+          <div class="hidden-sm hidden-xs action-buttons ">
+            <%= link_to vip_importings_path, class: 'red no-margin', method: :delete, id: :delete_link, confirm: '确定删除选中数据？' do %>
+              <i class="ace-icon fa fa-trash-o bigger-130"></i>
+              删除
+            <% end %>
+          </div>
+        </div>
+        <div class="col-sm-12 margin-top-20">
+          <table id="vipData" class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+              <th class="center">
+                <label class="position-relative">
+                  <%= check_box_tag "delete_all", 0, false, class: :ace %>
+                  <span class="lbl"></span>
+                </label>
+              </th>
+              <th width="">序号</th>
+              <th width="">会员卡号</th>
+              <th width="">姓名</th>
+              <th width="">手机号码</th>
+              <th width="">等级</th>
+              <th width="">充值总额</th>
+              <th width="">消费总额</th>
+              <th width="">可用余额</th>
+              <th width="">历史总积分</th>
+              <th width="">可用积分</th>
+              <th width="">开卡时间</th>
+              <th width="">导入时间</th>
+              <th width="">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @vip_importings.each_with_index do |vip_importing, index| %>
+                <tr>
+                  <td class="center">
+                    <label class="position-relative">
+                      <%= check_box_tag "vip_importing_#{vip_importing.id}", vip_importing.id, false, class: :ace %>
+                      <span class="lbl"></span>
+                    </label>
+                  </td>
+                  <td><%= index+1 %></td>
+                  <td><%= vip_importing.user_no %></td>
+                  <td><%= vip_importing.name %></td>
+                  <td><%= vip_importing.mobile %></td>
+                  <td><%= vip_importing.vip_grade_name %></td>
+                  <td><%= f vip_importing.total_recharge_amount %></td>
+                  <td><%= f vip_importing.total_consume_amount %></td>
+                  <td><%= f vip_importing.usable_amount %></td>
+                  <td><%= vip_importing.total_points %></td>
+                  <td><%= vip_importing.usable_points %></td>
+                  <td><%= vip_importing.open_card_time %></td>
+                  <td><%= vip_importing.created_at %></td>
+                  <td>
+                    <!-- <a class="icon-file-text" title="编辑会员资料" data-rel="tooltip" data-toggle="modals" href="javascript:;" data-title="会员资料" data-height="1000" data-iframe="<%#= edit_vip_user_path(vip_user) %>"></a> -->
+                    <%= link_to '', 'javascript:;', class: 'icon-file-text', title: '编辑会员导入资料', data: {rel: 'tooltip', toggle: 'modals', title: '会员导入资料', height: 1000, iframe: edit_vip_importing_url(vip_importing) }%>
+                  </td>
+                </tr>
+            <% end.blank? %>
+                <%= no_records_tag 14 %>
+            <% end %>
+            </tbody>
+          </table>
+          <%= paginate @vip_importings %>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+
+<div class="modal fade" id="import-vipinfo">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_tag '', enctype: 'multipart/form-data', remote: true do %>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">导入会员信息</h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-block alert-success">
+            文件大小不要超过1M
+          </div>
+          <div>
+            <a href="/templates/vip/member-info.csv">下载模板:member-info.csv</a>
+          </div>
+          <div class="margin-top-10">
+            <%= text_field_tag :file, '', type: :file, id: :import_csv, class: "pull-left" %>
+            <label class="pull-left">
+              <%= check_box_tag :sync, 1, false, class: "ace" %>
+              <span class="lbl">同步会员信息</span>
+            </label>
+            <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="如果导入的会员中包含有微枚迪中已领卡的会员，可以通过同步来将会员信息进行合并"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+          <button type="button" id="upload_csv" class="btn btn-primary btn-sm">提交</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render 'biz/vip_users/admin' %>
+<% content_for :custom_js do %>
+<script>
+  var vip_importing_checkboxes = $('tr > td:first-child input:checkbox');
+  var delete_all_checkbox = $('#delete_all');
+  var jTableDelete = $('.J-table-delete');
+  delete_all_checkbox.click(function () {
+      if(vip_importing_checkboxes.length) {
+          if(delete_all_checkbox.is(':checked')) {
+              jTableDelete.removeClass('hide');
+          } else {
+              jTableDelete.addClass('hide');
+          }
+          vip_importing_checkboxes.prop('checked', $(this).is(':checked'));
+      }
+  });
+
+  vip_importing_checkboxes.on('click', function () {
+      var checked_length = $('tr > td:first-child input:checkbox:checked').length;
+      delete_all_checkbox.prop('checked', checked_length === vip_importing_checkboxes.length);
+      var action = checked_length > 0 ? "removeClass" : "addClass";
+      jTableDelete[action]('hide');
+  });
+
+  $('input:checkbox').click(function(event) {
+    var base   = '<%= vip_importing_path(0) %>?';
+    if($('#vipData input:checkbox:checked').length) {
+      var suffix = [].join.call($('#vipData input:checkbox:checked').map(function(index, el) {
+        return "ids[]=" + $(el).val();
+      }), "&");
+      $('#delete_link').attr('href', base + suffix);
+    } else {
+      $('#delete_link').attr('href', '');
+    }
+  });
+
+  $(function() {
+    var $vip_importing_checkbox = $('#toggle_vip_importing');
+    $vip_importing_checkbox.unbind('click').click(function(event) {
+      $.post('<%= toggle_vip_importing_vip_cards_path %>', function(data){
+          showTip('success', data.message);
+          var text = data.vip_importing_enabled ? '（关闭后会员不能在手机端进入实体卡绑定）' : '（开启后会员可在手机端进行实体卡绑定）';
+          $('#toggle_vip_importing_warning').text(text);
+      }, 'json');
+    });
+
+    $('#import_csv').change(function(event) {
+        var fileName = $(this).val();
+        if(!/\.csv$/i.test(fileName)) {
+            showTip('warning', '文件格式错误，请检查文件内容是否符合模板要求。')
+        }
+    });
+    var $uploadBtn = $('#upload_csv');
+    $uploadBtn.click(function(event) {
+        var fileName = $('#import_csv').val();
+        if(fileName.length === 0) {
+          showTip('warning', '请导入格式为.CSV的文件');
+          event.preventDefault();
+          return false;
+        } else if(!/\.csv$/i.test(fileName)) {
+          showTip('warning', '文件格式错误，请检查文件内容是否符合模板要求。');
+          event.preventDefault();
+          return false;
+        } else if (typeof FileReader !== "undefined") {
+          $uploadBtn.prop('disabled', true);
+          var size = document.getElementById('import_csv').files[0].size;
+          if(size > 1024 * 1024) {
+            showTip('warning', '上传文件不能大于1M，请重新上传。');
+            event.preventDefault();
+            return false;
+          }
+          var formdata = new FormData();
+          var file = document.getElementById('import_csv').files[0];
+          formdata.append("file", file, file.name);
+          if($('#sync').is(':checked')) {
+            formdata.append("sync", 1);
+          }
+          $.ajax({
+            url: '',
+            type: 'POST',
+            dataType: 'json',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              $uploadBtn.prop('disabled', false);
+              if(data.error) {
+                showTip('warning', data.message);
+              } else {
+                location.reload();
+              }
+            }
+          });
+        }
+    });
+
+  });
+</script>
+<% end %>

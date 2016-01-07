@@ -1,0 +1,246 @@
+<p class="p-note">提示：以下内容均为必填项；</p>
+
+<div class="box-form form-row fl">
+<%= form_for @card,validate: false do |f| %>
+  <%= f.hidden_field :greet_id %>
+
+  <div class="p">
+    <span>贺卡标题
+      <span class="fgray">（标题字数建议在5个汉字以内为最佳）</span>
+    </span>
+    <%= f.text_field :title, class: "input-text" %>
+  </div>
+
+  <div class="p">
+    <span style="float:none;width:auto;">贺卡类型</span>
+    <br/>
+    <label style="width:auto;float:none;margin-left:0;">
+      <%= f.radio_button :card_type, 1, style: "float:none;", class: "ct" %>
+      语音（贺卡中包含语音）
+    </label>
+    <label style="width:auto;float:none;margin-left:10px;">
+      <%= f.radio_button :card_type, 2, style: "float:none;", class: "ct" %>
+      文字（贺卡中不包含语音）
+    </label>
+  </div>
+
+  <!-- 图片上传 -->
+  <span>标题图片<span class="fgray">（用于贺卡列表的展示，通常上传“贺卡图片”的缩略图）</span></span>
+  <span>
+      <div style="font-size: 12px;margin-left: 62px;margin-top: -20px;">
+        <!-- 没有更好的图片?微枚迪给你提供 -->
+      </div>
+      <%= render 'title' %>
+    </span>
+  <div class="box-upload fl">
+    <div class="upload-img">
+      <span style="width: 160px;padding-right:0px;padding-top:0;height:80px; line-height:80px;">
+        <% if @card.recommand_title_pic.blank? %>
+        <%= @card.title_pic_url ? image_tag(@card.title_pic_url, class: 'view', id: 'preview_greet_card_title_pic') : "<img src='/assets/bg_fm.jpg' alt='' class='view' id='preview_greet_card_title_pic'/>".html_safe %>
+        <% else %>
+        <%= image_tag(@card.recommand_title_pic, id: 'preview_greet_card_title_pic') %>
+        <% end %>
+      </span>
+    </div>
+    <div class="upload-btn">
+      <div class="box-file">
+        <%= f.file_field :title_pic, rel: 'preview_greet_card_title_pic', class: 'advice_pic' %>
+        <a class="btn btn-big">上传封面</a>
+      </div>
+      <span class="p-file">
+        <span class="fgray">图片建议尺寸：500像素*244像素 </span>
+      </span>
+    </div>
+    <div class="p">
+      <span class='show_pic_advice_text'></span>
+    </div> <!-- 图片尺寸提示 -->
+  </div>
+
+  <span>
+    贺卡图片
+    <span class="fgray">（建议上传不是白色的图片）</span>
+    <span>
+      <div style="font-size: 12px;margin-left: 62px;margin-top: -20px;">
+        <!-- 没有更好的图片?微枚迪给你提供 -->
+      </div>
+      <%= render 'cards' %>
+    </span>
+  </span>
+  <div class="box-upload fl">
+    <div class="upload-img" style="width: 116px;">
+      <span style="width: 116px;padding-right:0px;padding-top:0;height:160px; line-height:160px;">
+      <% if @card.recommand_card_pic.blank? %>
+        <%= @card.card_pic_url ? image_tag(@card.card_pic_url, class: 'view high', id: 'preview_greet_card_card_pic') : "<img src='/assets/bg_fm.jpg' alt='' class='view high' id='preview_greet_card_card_pic'/>".html_safe %>
+        <% else %>
+        <%= image_tag(@card.recommand_card_pic, id: 'preview_greet_card_card_pic') %>
+      <% end %>
+      </span>
+    </div>
+    <div class="upload-btn" style="margin-top: 130px">
+      <div class="box-file">
+        <%= f.file_field :card_pic, rel: 'preview_greet_card_card_pic', class: 'advice_pic' %>
+        <a class="btn btn-big">上传封面</a>
+      </div>
+      <span class="p-file">
+        <span class="fgray">图片建议尺寸：640像素*1136像素</span>
+      </span>
+    </div>
+    <div class="p">
+      <span class='show_pic_advice_text'></span>
+    </div> <!-- 图片尺寸提示 -->
+  </div>
+
+  <div class="p">
+    <span>贺卡内容<span class="fgray" style="font-size: 12px;">（不能超过150个字）</span></span>
+    <%= f.text_area :content, rows: 5, maxlength: 150 %>
+  </div>
+
+<div style="display:none">
+  <%= f.text_field :recommand_title_pic %>
+  <%= f.text_field :recommand_card_pic %>
+</div>
+
+  <p id="upload_voice" class="form-check <%= f.object.card_type == 1 ? "hidden":"" %>">
+    <span></span>
+    <label><%= f.check_box :has_audio %><i>上传背景音乐</i></label>
+  </p>
+
+  <div id="back_audio" class="p <%= f.object.has_audio? ? "":"hidden" %>">
+    <span>贺卡背景音乐</span>
+    <%= f.select :material_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: f.object.try(:material_id) } %>
+  </div>
+
+  <br/>
+  <div class="p">
+    <!-- <input type="submit" class="btn btn-small btn-orange card_btn" value="保存"> -->
+    <%= f.submit "保存", class: "btn btn-small btn-orange card_btn", :disable_with => "保存中..." %>
+  </div>
+<% end %>
+</div>
+<script>
+  $(function(){
+
+    $("#greet_card_title").focus(function(){
+      $("#string_label").remove();
+    })
+
+    $("#greet_card_content").focus(function(){
+      $("#content_label").remove();
+    })
+
+    $("input:submit").click(function(){
+      var ret = true;
+      if($("#preview_greet_card_card_pic").attr("src") == '/assets/bg_fm.jpg'){ //没图片
+        $("#greet_card_card_pic").after('<label id="card_label" class="error-message" for="greet_card_title_pic" style="left: 0px; top: -33px;">不能为空<i></i><em></em></label>');
+        ret = false;
+      }else{
+        $("#card_label").remove();
+      }
+      if($("#preview_greet_card_title_pic").attr("src") == '/assets/bg_fm.jpg'){
+        $("#greet_card_title_pic").after('<label id="title_label" class="error-message" for="greet_card_title_pic" style="left: 0px; top: -33px;">不能为空<i></i><em></em></label>');
+        ret = false;
+      }else{
+        $("#title_label").remove();
+      }
+      if($("#greet_card_title").val() == ''){
+        $("#greet_card_title").after('<label id="string_label" class="error-message" for="greet_card_title" style="left: 20px; top: 71px;">不能为空<i></i><em></em></label>');
+        ret = false;
+      } else {
+        $("#string_label").remove();
+      }
+      if($("#greet_card_content").val() == ''){
+        $("#greet_card_content").after('<label id="content_label" class="error-message" for="greet_card_content" style="left: 20px; top: 601px;">不能为空<i></i><em></em></label>');
+        ret = false;
+      }else{
+        $("#content_label").remove();
+      }
+
+      return ret;
+    });
+
+    $('#greet_card_title_pic').change(function() {
+      var img = new Image();
+      var self = $(this);
+      setTimeout(function(){
+        var target_src = self.attr("rel");
+        img.src = $("#"+target_src).attr('src');
+        if(img.naturalWidth != 500 || img.naturalHeight != 244){
+          self.closest(".box-upload").find('.show_pic_advice').show();
+          self.closest(".box-upload").find(".show_pic_advice_text").html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.naturalWidth+"*"+img.naturalHeight+"，不是最佳尺寸，建议您重新上传");
+        }else{
+          self.closest(".box-upload").find('.show_pic_advice').hide();
+          self.closest(".box-upload").find(".show_pic_advice_text").html('');
+        }
+      }, 1000)
+
+      $("#greet_card_recommand_title_pic").val('');
+    });
+
+    $('#greet_card_card_pic').change(function() {
+      // alert($(this).val());
+      var img = new Image();
+      var self = $(this);
+      setTimeout(function(){
+        var target_src = self.attr("rel");
+        img.src = $("#"+target_src).attr('src');
+        if(img.naturalWidth != 640 || img.naturalHeight != 1136){
+          self.closest(".box-upload").find('.show_pic_advice').show();
+          self.closest(".box-upload").find(".show_pic_advice_text").html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.naturalWidth+"*"+img.naturalHeight+"，不是最佳尺寸，建议您重新上传");
+        }else{
+          self.closest(".box-upload").find('.show_pic_advice').hide();
+          self.closest(".box-upload").find(".show_pic_advice_text").html('');
+        }
+      }, 1000)
+
+      $("#greet_card_recommand_card_pic").val('');
+    });
+
+    $("#greet_card_has_audio").click(function(){
+      if($(this).prop("checked")){
+        $("#back_audio").removeClass("hidden");
+      }else{
+        $("#back_audio").addClass("hidden");
+      }
+    });
+    $(".ct").click(function(){
+      if($(this).val() == '1'){
+        $("#upload_voice").addClass('hidden');
+        $("#back_audio").addClass("hidden");
+      }
+      if($(this).val() == '2'){
+        $("#upload_voice").removeClass('hidden');
+        // $("#back_audio").removeClass("hidden");
+        if($("#greet_card_has_audio").prop("checked")){
+          $("#back_audio").removeClass("hidden");
+        }else{
+          $("#back_audio").addClass("hidden");
+        }
+      }
+    })
+  });
+
+  // 推荐图片弹出层
+  $(document).click(function(e){
+    var ret = true;
+    if($(e.target).is(".select-icon.title a,.select-icon.title div,.scrollBox *")){
+      ret = false;
+    }else{
+      $(".icon-box.title").hide();
+    }
+    if($(e.target).is(".select-icon.card a,.select-icon.card div,.scrollBox *")){
+      ret = false;
+    }else{
+      $(".icon-box.card").hide();
+    }
+    return ret;
+  });
+</script>
+<style>
+  .box-form p.form-check {
+    padding-bottom: 0;
+  }
+  .high {
+    width: 116px;
+    height: 160px;
+  }
+</style>

@@ -1,0 +1,88 @@
+<% provide(:title, @user_greet_card.greet_card.title) %>
+<form>
+  <div class="text">
+    <div class="text-bg">
+
+      <% if @user_greet_card.greet_card.recommand_card_pic.blank? %>
+        <%= image_tag(@user_greet_card.greet_card.card_pic) %>
+      <% else %>
+        <%= image_tag(@user_greet_card.greet_card.recommand_card_pic) %>
+      <% end %>
+    </div>
+    <div class="text-cont">
+      <div class="check-box">
+      <% if @user_greet_card.greet_card.has_audio? && @user_greet_card.greet_card.card_type == 2 %>
+        <div class="label-box">
+          <div class="audio-btn"></div><!-- 音乐开关 -->
+        </div>
+      <% end %>
+      </div>
+      <div class="text-info">
+        <p><%= @user_greet_card.content %></p>
+        <h2><%= @user_greet_card.sender_name %></h2>
+        <p class="tright"><%= @user_greet_card.created_at.strftime "%Y.%m.%d" %></p>
+        <i class="fa fa-volume-down" style="float:right"></i>
+      </div>
+    </div>
+    <div class="text-share">
+      <a href="#" class="btn-share"><span class="ico-share">发送给朋友</span></a>
+      <a href="#" class="btn-share"><span class="ico-pyq">分享到朋友圈</span></a>
+    </div>
+  </div>
+</form>
+<div class="pop-share">
+  <p class="note-share"></p>
+</div>
+<script>
+  $(function(){
+    $(".btn-share").click(function(){
+      var h=$(document).height();
+      var pop=$(".pop-share");
+      pop.height(h).show(); 
+    });
+    $(".pop-share").click(function(){
+      var pop=$(".pop-share");
+      pop.hide();
+    });
+  });
+</script>
+
+
+<!-- 音乐 -->
+<% if @user_greet_card.greet_card.has_audio? && @user_greet_card.greet_card.card_type == 2 %>
+
+<%= audio_tag(@user_greet_card.greet_card.material.try(:qiniu_audio_url), autoplay: true, :id => "music_audio") if @user_greet_card.greet_card.material && @user_greet_card.greet_card.card_type == 2 %>
+
+<% end %>
+<!-- 人声 -->
+<% if @user_greet_card.greet_card.card_type == 1 %>
+<a id="playbox" class="ico-music close" onclick="playbox.init(this).play();">
+<%= audio_tag(@user_greet_card.user_voice.try(:sound).try(:mp3), :id => "sound") if @user_greet_card.user_voice.try(:sound?) %>
+</a>
+<% end %>
+<script>
+$().ready(function(){
+    playbox.init("playbox");
+    $("#playbox")[0].className = 'ico-music close';
+});
+
+// 开关背景音乐
+$(".audio-btn").click(function(){
+  $(this).toggleClass('on');
+  var oAudio = document.getElementById('music_audio');
+  if (oAudio.paused) {
+      oAudio.play();
+  }
+  else {
+      oAudio.pause();
+  }
+})
+</script>
+<style>
+  .on {
+    left: 40px;
+  }
+  .off {
+    left: 0px;
+  }
+</style>

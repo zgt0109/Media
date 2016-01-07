@@ -1,0 +1,174 @@
+<% title @activity.try(:name) %>
+<%= stylesheet_link_tag 'mobile/wheel' %>
+<section class="sec-game">
+  <div class="sec-index" id="sec-index">
+    <div class="rotor" id="rotor">
+      <div class="rotor-wrap">
+        <ul class="rotor-list">
+          <%- failed_words = %w(不要灰心 祝你好运 谢谢参与 再接再厉 要加油哦 求人品啊) %>
+          <% @prizes.to_a.each_slice(3) do |arr| %>
+            <li>
+            <% arr.each do |prize| %>
+              <a><span><small><%= prize %></small></span></a>
+              <a><span><small><%= failed_words.pop %></small></span></a>
+            <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div><!--rotor end-->
+    <div class="rotor-btn active" id="pointer"></div>
+  </div><!--#scene-index end-->
+</section>
+<section class="sec-info sec-bg-top">
+  <% @activity.activity_prizes.each do |prize| %>
+    <p><b><%= prize.title %><% if @activity.activity_property.is_show_prize_qty? %>（共<%= prize.prize_count %>个）<% end %></b><span><%= prize.prize %></span></p>
+  <% end %>
+  <i>活动奖项:</i>
+</section>
+<section class="sec-text sec-bg-bottom">
+  <em></em>亲，中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
+</section>
+<%- if @wx_user %>
+  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+    <a href="list?aid=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
+   <%- end %>
+<%- end %>
+<section class="sec-detail sec-bg-top sec-bg-bottom">
+  <i>活动说明:</i>
+  <em></em>
+  <div class="mod-cke">
+    <%= raw @activity_notice.description rescue '' %>
+  </div>
+</section>
+
+<%= javascript_include_tag 'mobile/wheel' %>
+
+<script>
+$(function(){
+  var timeOut = function(){  //超时函数
+    $("#rotor").rotate({
+      angle:0,
+      duration: 10000,
+      animateTo: 2160, //这里是设置请求超时后返回的角度，所以应该还是回到最原始的位置，2160是因为我要让它转6圈，就是360*6得来的
+      callback:function(){
+        alertMessage(1,"网络超时");
+        activePointer();
+      }
+    });
+  };
+  var rotateFunc = function(awards,angle,text,type){  //awards:奖项，angle:奖项对应的角度
+    $('#rotor').stopRotate();
+    $("#rotor").rotate({
+      angle:0,
+      duration: 10000,
+      animateTo: angle+5760, //angle是图片上各奖项对应的角度，1440是我要让指针旋转4圈。所以最后的结束的角度就是这样子^^
+      callback:function(){
+        if(type==0){
+          popResult(type,text);
+        }else{
+          alertMessage(type,text);
+        }
+        activePointer();
+      }
+    });
+  };
+
+  $("#pointer").on("click",function(){
+    <%- if @wx_user.blank? %>
+      showTips(".J-guanzhu");
+    <%- elsif @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+      showTips(".J-register");
+    <%- else%>
+      var self=$(this);
+      if(self.hasClass("active")){
+        self.removeClass("active");
+        $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: 'prize?aid=<%= params[:id] %>&anid=<%= params[:anid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&t=lottery&' + Math.random(),
+          dataType: 'json',
+          timeout:60000,
+          success: function (data) {
+            var winmsg = data.ajax_msg
+            //alert(data.ajax_msg);
+            if (winmsg) {
+              if(winmsg.iserror){//内部服务器错误
+                var angle = [45,105,165,225,285,345];
+                angle = angle[Math.floor(Math.random()*angle.length)];
+                if(winmsg.errorid == "-100"){
+                  alertMessage(1,"您的抽奖次数已经用完");
+                }else if(winmsg.errorid == "-101"){
+                  alertMessage(1,"您的当日抽奖次数已经用完");
+                }else if(winmsg.errorid == "-104"){
+                  alertMessage(1,"对不起，活动已经停止");
+                }else if(winmsg.errorid == "-401"){
+                  alertMessage(1,"对不起，活动已经结束");
+                }else if(winmsg.errorid == "-999"){
+                  alertMessage(1,winmsg.errorMsg);
+                }else{
+                  alertMessage(1,"对不起，网络连接错误，请重试");
+                }
+                activePointer();
+              }
+              if(winmsg.iswin){//中奖
+                rotateFunc(winmsg.prizeid,(15+(winmsg.prizeid-1)*60),'恭喜您抽中'+winmsg.prize_title+'<br/><a class="btn btn-success" data-id="'+winmsg.winid+'" data-title="'+winmsg.prize_title+'" data-sn="'+winmsg.sn+'" onclick="getSuccess(this)">我要领奖</a>',0);
+              }
+              if(winmsg.isthank){//鼓励奖
+                var angle = [45,105,165,225,285,345];
+                angle = angle[Math.floor(Math.random()*angle.length)];
+                rotateFunc(0,angle,'对不起，您这次没有中奖',1);
+              }
+
+            }else {
+              timeOut(); //网络超时
+            }
+          },
+          error: function(e){
+            timeOut(); //网络超时
+          }
+        });
+      }
+    <%- end %>
+  });
+});
+
+function activePointer(){
+    $("#pointer").addClass("active");
+}
+
+//我要领奖
+function getSuccess(self){
+  var h=$(".html").innerHeight();
+  self=$(self);
+  var sn=self.attr("data-sn");
+  var title=self.attr("data-title");
+  var id=self.attr("data-id");
+  var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+title+'，</b><br/>兑奖SN码：'+sn+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @wx_user.try(:related_mobile) %>" /></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile(\''+sn+'\','+id+');" readonly/></p></div></div></div></div>';
+  $("body").append(html);
+}
+
+function submitMobile(sn,id) {
+  var tel = $('#phone').val();
+  if (!(winwemedia_validators.mobile_reg.test(tel))) {
+    alertMessage(1,"请输入正确的手机号码");
+    return;
+  }
+
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    url: 'prize?anid=<%= params[:anid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&aid=<%= params[:id] %>&t=mobile&sn=' + sn + '&acid=' + id + '&mobile=' + tel + '&' + Math.random(),
+    dataType: 'json',
+    timeout:30000,
+    success: function (data) {
+      alertMessage(0,"信息提交成功，我们的工作人员稍后会联系您，请牢记您的SN码");
+      window.location.reload();
+    },
+    error: function(e){
+      window.location.reload();
+      //alert(JSON.stringify(e));
+    }
+  });
+}
+</script>

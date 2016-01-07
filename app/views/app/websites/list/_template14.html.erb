@@ -1,0 +1,16 @@
+<div class="box-list">
+  <% website_menu.sub_menus.each do |child| %>
+      <a class="table" href="<%= menu_url child %>">
+        <% if child.pic? %>
+            <span class="fl td">
+                <b><%= image_tag child.is_a?(Assistant) ? child.pic.try(:thumb) : child.pic.try(:large) %></b>
+            </span>
+        <% end %>
+        <span class="<%= child.pic? ? "fr td" : "fw td"%>">
+            <b><%= child.name %></b>
+            <!--<i><%#= date_format_full_l(child.created_at)  %></i>-->
+            <em class="arrow"></em>
+        </span>
+      </a>
+  <% end %>
+</div>

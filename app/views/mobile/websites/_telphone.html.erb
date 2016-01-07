@@ -1,0 +1,6 @@
+<% tel = @website.shortcut_menus.phone.first.try(:tel) %>
+<% if tel.present? %>
+  <div class="mod-btn box">
+    <%= link_to "tel:#{tel}" do %><i class="fa fa-phone"></i><%= tel %><% end %>
+  </div>
+<% end %>

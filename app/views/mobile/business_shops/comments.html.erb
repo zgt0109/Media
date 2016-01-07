@@ -1,0 +1,90 @@
+<style type="text/css">
+    .pagination li{display: none;}
+</style>
+<% if @template_id == 1 %>
+  <div class="mod-form form-comment">
+    <div class="hd"><p class="tcenter">发表评论</p></div>
+    <div class="bd">
+      <div class="mod-box box box-comment-type">
+        <dl>
+          <dt><span><img src="/assets/mobile/sculpture－1.png"/></span></dt>
+          <dd>
+            <%= form_for @comment, url: create_comment_mobile_business_shop_path(@supplier,@business_shop) do |f| %>
+              <div class="form-li">
+                <%= f.text_area :comment, rows: 5, placeholder: '请输入您的评论', class: "input comment_area" %>
+              </div>
+              <div class="form-li">
+                <%= f.text_field :nickname, placeholder: '昵称（必填）', class: "input" %>
+              </div>
+              <div class="form-li">
+                <input type="button" value="发布" class="btn"/>
+              </div>
+            <% end %>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <% if @comments.blank? %>
+    <div class="mod-null">还没有人发表过评论，快来抢占第一条吧！</div>
+  <% else %>
+    <div class="mod-box box box-comment">
+      <% @comments.each do |c| %>
+        <dl>
+          <dd>
+            <p><%= c.comment %></p>
+            <p>
+              <span class="fl"><%= c.nickname %></span>
+              <span class="fr"><%= c.created_at.to_date.to_s %></span>
+            </p>
+          </dd>
+        </dl>
+      <% end %>
+      <div class="b-loading" style="text-align: center;display:none;"><img src="/assets/albums/loading.gif" style="float:none;"></div><%= paginate @comments %>
+    </div>
+  <% end %>
+
+  <% content_for :custom_js do %>
+    <script>
+      $(".btn").click(function(event) {
+        if($("[name='comment[comment]']").val() == "") {
+          alert('评论不能为空');
+          event.preventDefault();
+        }else if($("[name='comment[nickname]']").val() == "") {
+          alert('昵称不能为空');
+          event.preventDefault();
+        }else {
+          $("form").submit();
+        }
+      });
+    </script>
+  <% end %>
+<% else %>
+  <% if @comments.blank? %>
+    <div class="mod-null">还没有人发表过评论，快来抢占第一条吧！</div>
+  <% else %>
+    <div class="box-comment">
+      <% @comments.each do |c| %>
+        <dl>
+          <dt><span><%= truncate c.nickname, length: 12 %></span><span class="fr fgary"><%= c.created_at.to_s[0..15] %></span></dt>
+          <dd>
+            <% if c.business_shop_impression %>
+              <p>
+                <span class="score">
+                  <span class="start start-<%= c.business_shop_impression.try(:total_star) %>"></span>
+                </span>
+                <span>人均</span>
+                <span class="forange">￥ <%= c.business_shop_impression.avg_price %></span>
+              </p>
+            <% end %>
+            <p>
+              <span>点评：</span>
+              <span class="fgray"><%= c.comment %></span>
+            </p>
+          </dd>
+        </dl>
+      <% end %>
+    </div>
+    <div class="b-loading"><img src="/assets/albums/loading.gif"></div><%= paginate @comments %>
+  <% end %>
+<% end %>

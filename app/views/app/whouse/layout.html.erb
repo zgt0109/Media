@@ -1,0 +1,41 @@
+<header>
+	<a class="ico-prev" href="/app/whouse?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>"></a>
+	<h1>房产户型</h1>
+</header>
+<div class="contxt">
+	<% if @cover_house_pictures %>
+	<div class="box-cont cont-img">
+		<div class="flashshow">
+			<div class="flashCont" id="defaultFlash">
+				<% @cover_house_pictures.each_with_index do |picture, i| %>
+				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+	<% if @house_layout %>
+	<div class="box-cont cont-imgTxt">
+		<div class="hd">
+			<%= image_tag @house_layout.house_picture_id ? @house_layout.house_picture.path : '/assets/whouse/2.jpg' %>
+		</div>
+		<div class="bd">
+			<p><b>参考面积：</b><span>约<%=f @house_layout.reference_area %>平米</span></p>
+			<p><b>朝       向：</b><span><%= @house_layout.orientation %></span></p>
+			<p><b>层       高：</b><span><%=f @house_layout.floor_height %>米</span></p>
+		</div>
+		<div class="ft">
+			<a class="btn-tel" href="tel:<%= @house.tel.gsub(/(-|\s+)/, '') %>">
+				<%= @house.tel %><%= " 转 #{@house.tel_extension}" if @house.tel_extension.present? %><br/>
+				免费咨询户型详细信息
+			</a>
+		</div>
+	</div>
+	<div class="box-cont cont-txt">
+		<h2>户型解析</h2>
+		<h3><%= format '%.0f', @house_layout.reference_area %>平 <%= @house_layout.name %></h3>
+		<p><%= @house_layout.intro %></p>
+	</div>
+	<%end%>
+</div>

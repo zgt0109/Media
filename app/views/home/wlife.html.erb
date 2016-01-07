@@ -1,0 +1,235 @@
+<% content_for :keywords, "商业广场O2O解决方案" %>
+<% content_for :description, "微客生活圈，商业广场O2O解决方案，重新连接人与服务，打造智能体验式生活空间。" %>
+<% content_for :title, "微枚迪移动商圈--商业广场o2o解决方案" %>
+<%= stylesheet_link_tag 'v5/public' %>
+<%= javascript_include_tag "v5/wlife/jquery.event.drag-1.5.min","v5/wlife/jquery.touchSlider" %>
+<div class="index-banner">
+ <div class="blank180"></div>
+ <div class="banner-content">
+   <div class="content-message">
+    <i class="name"></i>
+    <i class="detail"></i>
+    <i class="phone"></i>
+    <div class="blank20"></div>
+    <a class="button-content"></a>
+  </div>
+</div>
+</div>
+<div class="module">
+  <div class="module-content">
+    <div class="blank100"></div>
+    <i class="module-name"></i>
+    <div class="blank100"></div>
+  </div>
+  <div class="module-step"></div>
+  <div class="blank100"></div>
+</div>
+<div class="main_visual">
+  <div class="flicking_con">
+    <a href="#">1</a>
+    <a href="#">2</a>
+  </div>
+  <div class="main_image">
+    <ul>
+      <li><span class="img_1"></span></li>
+      <li><span class="img_2"></span></li>
+    </ul>
+    <a href="javascript:;" id="btn_prev"></a>
+    <a href="javascript:;" id="btn_next"></a>
+  </div>
+</div>
+<div class="blank100"></div>
+<div class="wisdom"></div>
+<div class="blank20"></div>
+<div class="partners">
+ <div class="partners-content">
+  <i class="one"></i>
+  <i class="two"></i>
+  <i class="three"></i>
+  <i class="four"></i>
+  <i class="five"></i>
+  <i class="six"></i>
+  <i class="seven"></i>
+  <i class="night"></i>
+  <i class="eight"></i>
+</div>
+</div>
+<div class="blank50"></div>
+<div class="link-module">
+  <%= form_for @supplier_apply, validate: false, remote: true do |f| %>
+    <%= f.hidden_field :admin_user_id, value: 23 %>
+    <%= f.hidden_field :apply_type, value: 8 %>
+    <%= f.hidden_field :status, value: -1 %>
+    <%= f.hidden_field :business_type, value: 2 %>
+    <%= f.hidden_field :product_agent_type, value: 4 %>
+    <%= f.hidden_field :promotion_code, value: session[:promotion_code] %>
+    <%= f.hidden_field :intro, value: f.object.intro || "公司简介"%>
+    <div class="module-left">
+      <div class="left-title"><i class="title-logo"></i></div>
+      <div class="blank50"></div>
+      <span class="module-message"><i class="company-name"></i>
+        <%= f.text_field :name, class: "link-txt validate", validate: true, placeholder: "公司名称" %>
+      </span>
+      <div class="clearfix width-620 m-select">
+        <%= address_select(@supplier_apply, class: "m-select-real m-select-prov") %>
+      </div>
+      <span class="module-txt txt-name"><i class="you-name"></i>
+        <%= f.text_field :contact, class: "writer-txt validate", placeholder: "联系人" %>
+      </span>
+      <span class="module-txt txt-email mrg-left mrg-right"><i class="you-email"></i>
+        <%= f.text_field :email, class: "writer-txt validate", placeholder: "电子邮件" %>
+      </span>
+      <span class="module-txt txt-qq"><i class="you-qq"></i>
+        <%= f.text_field :qq, class: "writer-txt validate", placeholder: "QQ号码" %>
+      </span>
+      <span class="module-txt txt-phone mrg-left mrg-right"><i class="you-phone"></i>
+        <%= f.text_field :tel, class: "writer-txt validate", placeholder: "手机号" %>
+      </span>
+      <span class="module-btn">
+        <%= f.submit "立即免费试用", class: "btn-text", disabled: true, disable_with: "提交中..." %>
+      </span>
+    </div>
+  <% end %>
+  <div class="module-right"><img src="/assets/v5/wlife/1.png" /></div>
+  <div class="blank100"></div>
+</div>
+<%= content_for :custom_js do %>
+<script type="text/javascript">
+
+  var input = $(".validate");
+  input.on("input", function() {
+    var flag = true;
+    input.each(function(i) {
+      var $val = $(this).val();
+      if (!$val) {
+        flag = false;
+        $(".btn-text").removeClass("btn-textnow").attr("disabled",true);
+        return false;
+      }
+    });
+    if(flag){
+      $(".btn-text").addClass("btn-textnow").removeAttr("disabled");
+    }
+  });
+
+  input.on("blur", function() {
+    var val = $(this).val(),
+        id = $(this).attr("id"),
+        mobile_reg = /^[0-9_\-]{11}$/,
+        reg_email = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i;
+    if(!val){
+      error_msg($(this),"不能为空");
+    }else if(id == "supplier_apply_qq" && !/^\d{5,12}$/.test(val)){
+      error_msg($(this),"QQ号码不正确");
+    }else if(id == "supplier_apply_tel" && !mobile_reg.test(val)){
+      error_msg($(this),"手机号不正确");
+    }else if(id == "supplier_apply_email" && !reg_email.test(val)){
+      error_msg($(this),"邮箱格式错误");
+    }else{
+      checkInputDel($(this).closest("span"));
+    }
+  });
+
+  function error_msg(obj,msg){
+    checkInput(obj.closest("span"), 0, msg);
+    $(".btn-text").removeClass("btn-textnow").attr("disabled",true);
+  }
+</script>
+
+<script>
+  $("#new_supplier_apply").bind("ajax:success", function(event, xhr, settings) {
+    $(".li-tips").attr("class", "li-tips")
+    $(".li-tips").html("")
+    if(xhr["code"]==0){
+      alert("代理商申请成功");
+      location.reload();
+    }else{
+      messages = xhr["message"].split("; ")
+      $.each(messages, function(i,e) {
+        error_list = e.split(":")
+        error_input = $("[name='supplier_apply[" + error_list[0] + "]']")
+
+        if (xhr["status"] == 0) {
+          alert(xhr["message"]);
+        } else if (error_input){
+          error_input.focus();
+          checkInput(error_input.closest("span"), 0, error_list[1]);
+        }
+
+      })
+    }
+  });
+</script>
+<script>
+  $(document).ready(function(){
+
+  $(".main_visual").hover(function(){                                          
+    $("#btn_prev,#btn_next").fadeOut()
+  },function(){
+    $("#btn_prev,#btn_next").fadeOut()
+  });
+  
+  $dragBln = false;
+  
+  $(".main_image").touchSlider({
+    flexible : true,
+    speed : 1000,
+    btn_prev : $("#btn_prev"),
+    btn_next : $("#btn_next"),
+    paging : $(".flicking_con a"),
+    counter : function (e){
+      $(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
+    }
+  });
+  
+  $(".main_image").bind("mousedown", function() {
+    $dragBln = false;
+  });
+  
+  $(".main_image").bind("dragstart", function() {
+    $dragBln = true;
+  });
+  
+  $(".main_image a").click(function(){
+    if($dragBln) {
+      return false;
+    }
+  });
+  
+  timer = setInterval(function(){
+    $("#btn_next").click();
+  }, 2000);
+  
+  $(".main_visual").hover(function(){
+    clearInterval(timer);
+  },function(){
+    timer = setInterval(function(){
+      $("#btn_next").click();
+    },2000);
+  });
+  
+  $(".main_image").bind("touchstart",function(){
+    clearInterval(timer);
+  }).bind("touchend", function(){
+    timer = setInterval(function(){
+      $("#btn_next").click();
+    }, 2000);
+  });
+  
+});
+
+
+ $(function () {
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 3000) {
+    $(".partners-content").fadeIn();
+        }
+    });
+    $(".button-content").click(function(){
+      window.scrollTo(650,33440);
+      })
+    
+    });
+</script>
+<% end %>

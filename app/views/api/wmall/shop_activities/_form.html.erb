@@ -1,0 +1,17 @@
+<%= form_for(@api_wmall_shop_activity) do |f| %>
+  <% if @api_wmall_shop_activity.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@api_wmall_shop_activity.errors.count, "error") %> prohibited this api_wmall_shop_activity from being saved:</h2>
+
+      <ul>
+      <% @api_wmall_shop_activity.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

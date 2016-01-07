@@ -1,0 +1,65 @@
+<%= form_for @commission_type, url: brokerage_commission_type_path, validate: true, :html => { :class => 'box-form fl' } do |f| %>
+  <%= f.hidden_field :activity_id, value: current_user.brokerage_activity.id %>
+  <div class="modal-body">
+    <div class="form-group">
+      <div class="input-group input-group-text width-100">
+        <span class="input-group-addon width-100px">推荐任务</span>
+        <input type="text" class="col-sm-6" value="<%= @commission_type.mission_type_name %>" disabled="disabled">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group input-group-text width-100">
+        <span class="input-group-addon width-100px">佣金类型</span>
+        <%= f.select :commission_type, options_types(@commission_type.mission_type), { selected: (@commission_type.try(:commission_type) || 1) }, class: "col-xs-6" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group input-group-text width-100">
+        <span class="input-group-addon width-100px" id="value_title"></span>
+        <div class="cell">
+          <%= f.text_field :commission_value, class: 'width-60px', id: 'money' %>
+          <span id="value_symbol"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-sm btn-primary" data-fn="submit" id="btn-submit">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $('form').validate();
+  check_commission_type();
+});
+
+var check_commission_type = function(){
+  var commission_type =  $('#brokerage_commission_type_commission_type').val();
+  if(commission_type == "1"){
+    $("#value_title").html("赠送现金");
+    $("#value_symbol").html("元");
+  }else if(commission_type == "2"){
+    $("#value_title").html("赠送话费");
+    $("#value_symbol").html("元");
+  }else if(commission_type == "3"){
+    $("#value_title").html("赠送定金的");
+    $("#value_symbol").html("%");
+  }else if(commission_type == "4"){
+    $("#value_title").html("赠送价格的");
+    $("#value_symbol").html("%");
+  }
+};
+
+$('#brokerage_commission_type_commission_type').on('change', check_commission_type);
+
+$('#btn-submit').on('click', function(){
+    if($('#money').val() > 0.0) {
+    }else{
+    return showTip('warnning', '输入必须为数字且大于0！');
+    };
+});
+</script>
+<% end %>

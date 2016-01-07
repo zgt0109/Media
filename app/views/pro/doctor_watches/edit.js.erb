@@ -1,0 +1,9 @@
+var model_html = "<%= j(render 'model', :doctor_watch => @doctor_watch) %>";
+$("#edit_modal").empty();
+$("#edit_modal").append(model_html);
+$('input[class*="date-time"]').attr('readonly', 'readonly').datetimepicker({
+	autoclose: true,
+	todayBtn: true,
+	language: "zh"
+});
+$("#edit_modal").modal('show');

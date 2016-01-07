@@ -1,0 +1,18 @@
+<% provide(:title, '专业名师') %>
+<div class="box box-padding">
+  <div class="box-teacher">
+    <div class="hd college_title">名师简介</div>
+    <div class="bd">
+      <img src="<%= @teacher.avatar  %>"/>
+      <p>姓名： <%= @teacher.name %></p>
+      <p>职称： <%= @teacher.position  %></p>
+    </div>
+    <div class="ft box-line ckeditor_content">
+      <!--<img src="<%#= @teacher.avatar  %>"/>-->
+      <div><%= @teacher.intro.to_s.html_safe %></div>
+      <!-- <p><%#= @teacher.description.to_s.html_safe %></p> -->
+    </div>
+  </div>
+</div>
+
+

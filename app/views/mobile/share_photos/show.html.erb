@@ -1,0 +1,108 @@
+<section>
+  <article class="lay-list">
+    <div class="list-t cf">
+      <!--<div class="user-img"><%#= image_tag "/assets/life/user_logo.png" %></div>-->
+      <div class="user-info">
+        <!--<p class="f-blue"><%#= @share_photo.wx_user.nickname? ? @share_photo.wx_user.nickname : "匿名" %></p>-->
+        <p class="f-gray"><%= @share_photo.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+        <p><span>标签：</span><span><%= @share_photo.title? ? @share_photo.title : "晒图" %></span></p>
+      </div>
+    </div>
+    <div class="list-main">
+      <%= image_tag @share_photo.try(:pic_url) %>
+    </div>
+    <div class="list-foot">
+      <% if @wx_user.present? %><a class="praise f-red" href="javascript:;"><i></i>赞</a><% end %>
+      <em class="f-red" id="red"><%= @share_photo.likes_count %></em><span class="f-gray">人赞过</span>
+    </div>
+    <div class="comment-list">
+      <div class="comment-t"><h1>大家说什么</h1></div>
+      <ul>
+        <% @share_photo.share_photo_comments.order("created_at desc").each do |comment| %>
+        <li>
+          <div class="cf">
+            <span class="name"><%= comment.nickname? ? comment.nickname : "匿名" %></span>
+            <span class="f-gray time"><%= comment.created_at.strftime("%Y-%m-%d %H:%M") %></span>
+          </div>
+          <p><%= comment.content %></p>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="comment-btn cf">
+      <a href="javascript:;" class="showComment">
+        <i class="ico-1"></i>
+        看评论
+        <em>(<%= @share_photo.comments_count %>)</em>
+      </a>
+      <a href="javascript:;" class="addComment">
+        <i class="ico-2"></i>
+        留个言
+      </a>
+    </div>
+    <%= form_for @share_photo_comment, url: mobile_share_photo_comments_path(share_photo_id: @share_photo.id) do |f| %>
+    <%= f.hidden_field :share_photo_id, value: @share_photo.id  %>
+    <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+    <div class="comment-add">
+      <%= f.text_area :content, :rows => 3, :placeholder => "请您留言", class: "text", maxlength: 140 %>
+      <%= f.text_field :nickname, value: @wx_user.try(:nickname), placeholder: "请输入您的昵称", class: "input",size: 25 %>
+      <a class="btn form-submit" href="">发布</a>
+    </div>
+    <% end %>
+  </article>
+</section>
+
+
+<script>
+$(".btn").click(function(){
+  if($("#share_photo_comment_content").val() == ''){
+    alert("评论不能为空！");
+    $("#share_photo_comment_content").focus();
+    return false;
+  }else{
+    $(".new_share_photo_comment").submit();
+    return false;
+  }
+});
+
+$(function(){
+  $(".top").on("click",function(){
+    $("html,body").animate({scrollTop:"0"},300);
+  });
+
+  $(".comment-btn").on("click",".showComment",function(){
+    var $this =$(this);
+    $.ajax({
+      type:"GET",
+      data: {share_photo_id: <%= @share_photo.id %>},
+      url:"<%= mobile_share_photo_comments_url %>",
+      success: function(data){
+        $(".comment-list ul").append(data);
+        $(".comment-list").show();
+        $this.text("加载完毕").removeClass("showComment");
+      }
+    });
+  });
+
+  $(".addComment").on("click",function(){
+    $(".comment-add").toggle();
+  });
+
+  $(".praise").on("click",function(){
+    $.ajax({
+      type:"POST",
+      data: {share_photo_id: <%= @share_photo.id %>, wx_user_id: <%= @wx_user.id rescue 0 %>},
+      url:"<%= like_mobile_share_photo_url %>",
+      success: function(data){
+        if (data == 'true'){
+          var likes_count = parseInt($("#red").text());
+          var ret = likes_count + 1;
+          $("#red").text(ret);
+        }else{
+          alert("对不起，亲！您已经点过赞了！");
+        }
+      }
+    });
+  });
+});
+</script>

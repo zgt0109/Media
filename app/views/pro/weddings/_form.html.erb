@@ -1,0 +1,189 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+				<li> <i class="icon-home home-icon"></i><%= link_to "首页", root_path %> </li>
+				<li> <%= link_to "微婚礼", weddings_path %> </li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接微婚礼页面。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <%= form_for @activity, url: (@wedding.new_record? ? weddings_path : wedding_path(@wedding.id)), validate: true, html: {role: "form", class: "form col-xs-12"} do |activity| %>
+            <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述', wx_pic: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url)  %>
+            <div class="col-xs-12 col-md-6 col-lg-7">
+              <%= render "weixin_setting", activity: activity, data_img: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url), pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+
+              <%= fields_for :wedding, @wedding, validate: true do |f| %>
+              <div class="form-group">
+                <label class="control-label">新郎<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :groom, class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">新娘<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :bride, class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">婚礼举办时间（公历）<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :wedding_at, readonly: true, class: 'col-xs-6 date-time col-sm-6 min-width-280', id: "wedding_wedding_at" %>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label class="control-label">所在地区<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.select(:province_id, options_for_select(@provinces, @wedding.province_id), {id: 'wedding_province_id'}, class: "") %>
+                  <%= f.select(:city_id, options_for_select(@cities, @wedding.city_id), {id: 'wedding_city_id'}, class: "") %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">举办婚礼场所<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :address, class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">酒店名称</label>
+                <div class="clearfix">
+                  <%= f.text_field :hotel_name, class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">请输入电话号码<span class="required-star">*</span><small class="text-warning">此号码作为现场负责人电话。宾客如有问题可通过手机端直接拨打此电话进行询问</small></label>
+                <div class="clearfix">
+                  <%= f.text_field :phone, class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="margin-b-10 margin-top-10" for="wedding_music_enabled">
+                  <%= f.check_box :phone_enable, class: 'ace' %>
+                  <span class="lbl">确认赴宴需输入手机号<small class="help-inline text-warning"></small></span>
+                </label>  
+              </div>
+
+              <div class="form-group">
+                <!-- <label class="control&#45;label">音乐<small class="text&#45;warning">输入有效的音乐链接地址即可，如不输入则默认不使用背景音乐</small></label> -->
+                
+								<label class="margin-b-10 margin-top-10" for="wedding_music_enabled">
+									<%= f.check_box :music_enabled, class: 'ace' %>
+									<span class="lbl">开启背景音乐<small class="help-inline text-warning"></small></span>
+								</label>
+                <div class="clearfix">
+                  <%#= f.text_field :music_url, class: 'col-xs-12' %>
+                  <%= f.hidden_field :music_url %>
+                  <%= f.hidden_field :music_file_name %>
+                  <%=file_field_tag "file", data: {url: "http://up.qiniu.com", bucket: BUCKET_PICTURES, 'form-data'=>{token: qiniu_pictures_upload_token }}, class: "music_uploader hidden" %>
+                  <a class="btn btn-primary btn-sm" id="music_uploader_btn">上传音乐</a>
+									<%#= audio_tag @wedding.music_url, autoplay: false, controls: true if @wedding.music_url.present? %>
+									<span class="upload_progress"><%= @wedding.music_file_name %></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">视频<small class="text-warning">输入视频链接地址</small></label>
+                <div class="clearfix">
+                  <%= f.text_field :video_url, class: 'col-xs-12' %>
+                </div>
+                <code class="help-block">
+									视频链接操作指南
+									优酷视频：
+									您可以直接将优酷视频播放页的URL（如：http://v.youku.com/v_show/id_XNjgzMjQ2NTM2.html）复制到视频网址栏并点击插入
+									腾讯视频：
+									您可以在腾讯视频播放页，点击视频左下角的分享按钮，并点击分享到QQ空间（星星标志），将http链接（如：http://v.qq.com/cover/3/3x0x6czcrvedphk.html?vid=l0130jm1fhj&ptag=1.qzone）复制到视频网址栏，并点击插入
+                </code>
+              </div>
+              <div class="form-group">
+                <label class="control-label">想说的话</label>
+                <div class="clearfix">
+                  <%= render "shared/form_rich_text", field_name: "description", obj: @wedding, f: f, wrapper_html_options: {class: "wysiwyg-editor col-xs-12"}%>
+                </div>
+              </div>
+              <% end %>
+
+              <div class="form-group">
+                <input type="submit" class="btn btn-sm btn-primary" value="保存" />
+                <!-- <input type="button" class="btn btn&#45;sm btn&#45;default" value="停用"> -->
+              </div>
+            </div>
+          <% end %>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- /.page-content -->
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+  <script>
+    $(function(){
+      $("#wedding_activity_attributes_name").keyup(function(){
+        $("#preview_title").html($(this).val());
+      });
+      $("#wedding_activity_attributes_summary").keyup(function(){
+        $("#preview_summary").html($(this).val());
+      });
+      $(".btn-remove").click(function(){
+        $(window.parent.document).find('#pop-name').fadeOut()
+      });
+    });
+
+    /*
+     * $('#wedding_wedding_at').on('change', function(){
+     *   var wedding_wedding_at = $(this).val();
+     *   var now = moment().format("YYYY-MM-DD hh:mm");
+     *   if (wedding_wedding_at){
+     *     if(wedding_wedding_at < now){
+     *       addErrorMessage($(this), '婚礼举办时间不能小于当前时间');
+     *     }else{
+     *       removeErrorMessage($(this));
+     *     }
+     *   }
+     * });
+     */
+  </script>
+
+  <% if ["update", "create"].include?(params[:action])%>
+    <script>
+      $(function(){
+        if($("#wedding_activity_attributes_name").val() != ''){
+          $("#preview_title").html($("#wedding_activity_attributes_name").val());
+        }
+        if($("#wedding_activity_attributes_summary").val() != ''){
+          $("#preview_summary").html($("#wedding_activity_attributes_summary").val());
+        }
+        $(".error-message").css({"left":"265px"});
+      })
+    </script>
+  <% end %>
+
+  <script>
+    $("#music_uploader_btn").click(function(){
+        $(".music_uploader").click();
+    });
+    music_uploader();
+  </script>
+
+<% end %>

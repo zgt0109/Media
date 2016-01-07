@@ -1,0 +1,15 @@
+<% provide(:title, '酒店地址') %>
+<div class="contxt cont-index">
+
+  <div class="box-contxt box-map">
+    <div class="bd">
+      <p class="ico-location">酒店地址：<%= @wedding.address %></p>
+          <a href='<%= map_app_weddings_path %>'><img style="width:100%" src="http://api.map.baidu.com/staticimage?width=480&height=175&center=<%= @location['lng'] %>,<%= @location['lat'] %>&zoom=18&markers=<%= @location['lng'] %>,<%= @location['lat'] %>&markerStyles=l,0"></a>
+    </div>
+  </div>
+
+
+
+  <p class="tcenter"><a class="btn btn-nav" href="http://api.map.baidu.com/geocoder?address=<%= @wedding.address %>&output=html"><span>一键导航</span><i></i><em></em></a></p>
+</div>
+

@@ -1,0 +1,53 @@
+<%
+label ||= "title_pic"
+titles = {"title_pic" => "标题图片", "card_pic" => "贺卡图片"}
+helps = {"title_pic" => "用于贺卡列表的展示，通常上传“贺卡图片”的缩略图", "card_pic" => "建议上传不是白色的图片"}
+suggests = {"title_pic" => "图片建议尺寸：500像素*244像素", "card_pic" => "图片建议尺寸：640像素*1136像素"}
+width_and_heights = {"title_pic" => "width: 250px; height: 122px;", "card_pic" => "width: 115px; height: 160px;"}
+material_names = {"title_pic" => "suoluetu", "card_pic" => "big"}
+material_widths = {"title_pic" => 175, "card_pic" => 250}
+%>
+
+
+<div class="form-group">
+  <label class="control-label"><%= titles[label] %><span class="required-star">*</span><small class="help-inline text-warning line-height-32"><%= helps[label] %></small></label>
+  <div class="clearfix">
+    <div style="<%= width_and_heights[label] %> float: left">
+      <% img_url = @card.try(label + "_url").present? ? @card.try(label + "_url") : "/assets/default_cards/#{material_names[label]}/1.png"%>
+      <%= image_tag img_url, class: label, width: "100%", height: "100%", alt: titles[label] + "预览" %>
+      </div>
+      <div class="cieldon-file width-100px margin-left-10" data-name="<%= label %>_upload" data-callback="<%= label %>_upload_callback" data-type="1" data-div="#img-1" data-height="200"></div>
+      <div class="dropdown displayInline">
+
+        <%= f.hidden_field "qiniu_" + label + "_key" %>
+        <%= f.hidden_field "recommand_" + label, value: img_url %>
+
+        <button class="btn btn-primary btn-sm pull-left" data-toggle="dropdown" data-target="#">图片素材</button>
+        <div id="<%= label %>s"class="dropdown-menu dropdown-yellow dropdown-close fbBgHeader" role="menu" aria-labelledby="dLabel">
+          <% 1.upto(7).each do |i| %>
+            <p><%= image_tag "/assets/default_cards/#{material_names[label]}/#{i}.png", width: material_widths[label] %></p>
+          <% end %>
+        </div>
+      </div>
+      <small class="help-inline text-warning line-height-32"><%= suggests[label] %></small>
+    </div>
+  </div>
+
+  <% content_for :custom_js do %>
+    <script type="text/javascript">
+      function <%= label %>_upload_callback(key, img_url){
+        $("#greet_card_qiniu_<%= label %>_key").val(key);
+        $("#greet_card_recommand_<%= label %>").val("");
+        $("img.<%= label %>").attr("src", img_url);
+      }
+
+      $(function(){
+        $("#<%= label %>s").on("click","img",function(){
+          var img_url = $(this).attr("src");
+          $("#greet_card_recommand_<%= label %>").val(img_url);
+          $("#greet_card_qiniu_<%= label %>_key").val("");
+          $("img.<%= label %>").attr("src", img_url);
+        });
+      });
+    </script>
+  <% end %>

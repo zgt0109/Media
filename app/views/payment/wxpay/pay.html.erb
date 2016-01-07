@@ -1,0 +1,74 @@
+  <title><% provide(:title, @supplier.try(:wx_mp_user).try(:name) || "微枚迪") %></title>
+  <script language="javascript" src="/javascripts/wxpay/jquery.js"></script>
+  <script language="javascript" src="/javascripts/wxpay/lazyloadv3.js"></script>
+  <script src="/javascripts/wxpay/md5.js"></script>
+  <script src="/javascripts/wxpay/sha1.js"></script>
+  <script src="/javascripts/app/wxpay/util.js"></script>
+
+  <script language="javascript">
+      // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+      var flag = true;
+      document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+          //公众号支付
+          jQuery('a#getBrandWCPayRequest').click(function(e){
+              if(flag){
+                  flag = false;
+                  WeixinJSBridge.invoke('getBrandWCPayRequest',{
+                      "appId" : "<%= @wxpay.app_id%>", //公众号名称，由商户传入
+                      "timeStamp" : "<%= @pay_sign_time_stamp %>", //时间戳
+                      "nonceStr" : "<%= @pay_sign_nonce_str %>", //随机串
+                      "package" : "prepay_id=<%= @payment.prepay_id %>",//扩展包
+                      "signType" : "<%= get_sign_type %>", //微信签名方式:1.md5
+                      "paySign" : "<%= @pay_sign %>" //微信签名
+                  },function(res){
+                      if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                          window.location.href="<%= payment_wxpay_success_url(payment_id: @payment.id)%>";
+                      }else{
+                          window.location.href="<%= payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.uid)%>";
+                      }
+                  });
+              }
+          });
+          // WeixinJSBridge.log('yo~ ready.');
+      }, false)
+  </script>
+  <script type="text/javascript">
+      function onBridgeReady(){
+         WeixinJSBridge.call('hideOptionMenu');
+        }
+
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        }else{
+            onBridgeReady();
+     }
+  </script>
+<div class="html" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="body">
+        <div class="mod-null mod-result tcenter">
+          <p class="table">
+                        <!--<span>-->
+                            <!--<i class="fa fa-exclamation-circle"></i>-->
+                        <!--</span>-->
+                        <span>
+                            <em class="order_sure">订单编号：<%= @payment.out_trade_no %></em><br/>
+                            <em class="order_sure">订单金额：<%= f @payment.amount %>元</em><br/>
+                            <em class="order_sure">当前状态：未支付</em>
+                        </span>
+          </p>
+          <a href="javascript:void(0);" class="btn btn-shopcar" id="getBrandWCPayRequest">确认支付</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<style>
+ .order_sure{font-size: 16px;}
+</style>

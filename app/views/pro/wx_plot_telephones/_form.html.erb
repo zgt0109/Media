@@ -1,0 +1,64 @@
+<%= form_for @phone, validate: false do |f| %>
+  <%= f.hidden_field :wx_plot_id %>
+  <div class="modal-body">
+    <div class="row col-xs-12">
+
+      <div class="form-group">
+        <label class="col-xs-2">类别<span class="required-star">*</span></label>
+        <%= f.select :wx_plot_category_id, @categories.collect{|t| [t.name, t.id]}, {}, class: 'col-xs-10' %>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="form-group margin-top-10">
+        <label class="col-xs-2">名称<span class="required-star">*</span></label>
+        <%= f.text_field :name, class: 'col-xs-10' %>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="form-group margin-top-10">
+        <label class="col-xs-2">联系电话<span class="required-star">*</span></label>
+        <%= f.text_field :phone, class: 'col-xs-10' %>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary' %>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('form input[type=submit]').click(function(){
+              var reg = /^[0-9_\-]*$/;
+              if(!$('#wx_plot_telephone_wx_plot_category_id').val()){
+                  showTip('warning',"请选择类别");
+                  $('#wx_plot_telephone_wx_plot_category_id').focus();
+                  return false;
+              }
+              if(!$('#wx_plot_telephone_name').val()){
+                  showTip('warning',"请填写名称");
+                  $('#wx_plot_telephone_name').focus();
+                  return false;
+              }
+              if(!$('#wx_plot_telephone_phone').val()){
+                  showTip('warning',"请填写联系电话");
+                  $('#wx_plot_telephone_phone').focus();
+                  return false;
+              }
+              if($('#wx_plot_telephone_phone').val() && !reg.test($('#wx_plot_telephone_phone').val())){
+                  showTip('warning',"联系电话格式不正确");
+                  $('#wx_plot_telephone_phone').focus();
+                  return false;
+              }
+          });
+      });
+    </script>
+<% end %>

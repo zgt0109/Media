@@ -1,0 +1,67 @@
+<% content_for :main_content do %>
+	<div class="main-content ">
+		<div class="breadcrumbs" id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home home-icon"></i>
+					<%= link_to "首页", root_path %>
+				</li>
+
+				<li>
+					<%= link_to "微商圈", pro_wmall_shops_path %>
+				</li>
+				<li>商铺管理</li>
+			</ul>
+			<%= render partial:'/layouts/qrcode' %>
+		</div>
+
+		<div class="page-content">
+			<div class="tabbable">
+				<ul class="nav nav-tabs padding-24 tab-size-bigger no-padding-left" id="myTab">
+					<li class="active"> <a data-toggle="tab" href="#tab-1"> 商铺信息 </a> </li>
+					<li> <a data-toggle="tab" href="#tab-2"> 会员卡设置 </a> </li>
+					<li> <a data-toggle="tab" href="#tab-3"> 微信设置 </a> </li>
+					<li> <a data-toggle="tab" href="#tab-4"> 优惠信息 </a> </li>
+					<li> <a data-toggle="tab" href="#tab-5"> 商品展示 </a> </li>
+					<li> <a data-toggle="tab" href="#tab-6"> 子账户权限 </a> </li>
+				</ul>
+				<div class="tab-content no-border padding-24 no-padding-left">
+					<div id="tab-1" class="tab-pane fade active in ">
+						<%= render "form_shop_info" %>
+					</div>
+					<div id="tab-2" class="tab-pane fade">
+						<%= render "form_card" %>
+					</div>
+					<div id="tab-3" class="tab-pane fade">
+						<%= render "form_wx_setting" %>
+					</div>
+					<div id="tab-4" class="tab-pane fade">
+						<%= render "form_coupon" %>
+					</div>
+					<div id="tab-5" class="tab-pane fade">
+						<%= render "form_products" %>
+					</div>
+					<div id="tab-6" class="tab-pane fade">
+						<%= render "form_sub_accounts" %>
+					</div>
+				</div>
+			</div>
+
+			<%= render "form_modal_product", product: @shop.products.new %>
+		</div>
+		<!-- /.modal -->
+		<!-- /.page-content -->
+	</div>
+<% end %>
+
+<script type="text/javascript">
+	$(function () {
+		App.init();
+
+		$('input[name=date-range-picker]').daterangepicker().prev().on(ace.click_event, function () {
+			$(this).next().focus();
+		});
+		Validate.validateVipPwd();
+
+	})
+</script>

@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>House:</b>
+  <%= @house_expert_comment.house_id %>
+</p>
+
+<p>
+  <b>House expert:</b>
+  <%= @house_expert_comment.house_expert_id %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @house_expert_comment.content %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @house_expert_comment.status %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @house_expert_comment.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_house_expert_comment_path(@house_expert_comment) %> |
+<%= link_to 'Back', house_expert_comments_path %>

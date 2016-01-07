@@ -1,0 +1,105 @@
+<% title "详情" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="visable1=true;visable2=true"<% end %>
+<% content_for :header do %>
+  <header>
+    <%= link_to plot_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <span class="text">详情</span>
+    <a href="javascript:;"></a>
+  </header>
+  <div class="mod-foot">
+    <div class="cell" ng-hide="visable1">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(1)">受理</a>
+    </div>
+    <div class="cell" ng-hide="visable1">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(2)">完成</a>
+    </div>
+    <div class="cell" ng-hide="visable2">
+      <a href="javascript:;" class="btn btn-big btn-primary" ng-click="change_status(2)">完成</a>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="mod-list">
+  <dl>
+    <dd>
+      <p>创建时间：{{order.created_at}}</p>
+      <p>姓名：{{order.nickname}}</p>
+      <p>手机号：{{order.phone}}</p>
+      <p>房间号：{{order.room_no}}</p>
+      <p>状态：{{order.status_name}}</p>
+      <p>说明：{{order.content}}</p>
+    </dd>
+  </dl>
+</div>
+
+<script>
+var app = angular.module('app', []);
+function customersController($scope,$http) {
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/plots/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    .success(function(response) {
+        if(response.result == 'success'){
+ 	  $scope.order = response.data;
+          $scope.set_visable($scope.order.status, false);
+        }
+        else{
+          console.log(response); 
+        }
+
+    })
+    .error(function(response) {
+      console.log(response);
+    });
+    
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=WxPlotRepairComplain&source=winwemedia_wx_plot&is_read=1" %>')
+    .success(function(response) {
+	console.log(response);
+    })
+    .error(function(response) {
+        console.log(response);
+    });
+
+    $scope.change_status = function(status) {
+        if(confirm('确认是否执行此操作？')){
+          $http({method: 'POST', url: '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/plots/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status})
+         .success(function(response){
+           if(response.result == 'success'){
+             $scope.set_visable(status, true);
+           }
+	   else{
+             console.log(response);
+           }
+         })
+         .error(function(response) {
+           console.log(response);
+         });
+        }
+    };
+
+    $scope.set_visable = function(status, flag) {
+console.log(status);
+      switch(status){
+        case 0:
+          $scope.visable1 = false;
+          $scope.visable2 = true;
+          break;
+        case 1:
+          $scope.order.status_name = '已受理';
+          $scope.visable2 = false;
+          $scope.visable1 = true;
+          break;
+        case 2:
+          if(flag){
+	    window.location.href = '<%= raw plot_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) %>'
+          }
+          else{
+            $scope.visable2 = true;
+            $scope.visable1 = true;
+          }
+          break;
+      }  
+    }
+}
+customersController.inject = ['$scope', '$http'];
+app.controller('customersController', customersController);
+</script>

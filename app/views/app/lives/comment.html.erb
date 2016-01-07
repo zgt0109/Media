@@ -1,0 +1,58 @@
+<body class="list">
+<div class="html">
+  <div class="main">
+    <header>
+      <a class="ico ico-arrow-left" href="<%= detail_app_life_path(@article, anchor: "mp.weixin.qq.com") %>"></a>
+      <h1 class="ellipsis">参与评论</h1>
+    </header><!-- header end -->
+    <section>
+      <div class="box box-index box-comment">
+        <div class="hd">
+          <h2 class="ellipsis">发表评论</h2>
+          <a class="ico icon-heart fr"><em><%= @comments.count %></em></a>
+        </div>
+        <div class="bd">
+          <div class="fl">
+                	<span class="bd-img">
+                    	<%= image_tag "/assets/life/user_logo.png" %>
+                    </span>
+          </div>
+          <div class="fr">
+            <%= form_for @comment, :validate => true, :url => create_comment_app_lives_path do |form| %>
+              <%= hidden_field_tag "website_article_id", @article.id  %>
+              <div class="bd-comment">
+                <%= form.text_area :content, :rows=> 3, :maxlength => 140,:placeholder=> "请输入您的评论" %>
+                <div class="bd-face">
+                  <!--<a class="ico icon-smile"></a>-->
+                  <span class="fr">140</span>
+                </div>
+              </div>
+              <label class="bd-text">
+                <!--<img src="../assets/img/qq.png"/>-->
+                <%= form.text_field :name, :placeholder => '昵称（必填）'  %>
+              </label>
+              <label><input type="submit" class="btn form-submit" value="发布"/></label>
+            <% end %>
+          </div>
+        </div>
+        <%= render :partial=> "comment", :object => @comments %>
+      </div>
+    </section><!-- section end -->
+  </div><!-- main end -->
+</div><!-- html end -->
+<script>
+  $(".btn").click(function(){
+      if($("#website_comment_content").val() == ''){
+          alert("评论不能为空！");
+          $("#website_comment_content").focus();
+          return false;
+      }else if($("#website_comment_name").val() == ''){
+          alert("昵称不能为空！");
+          $("#website_comment_name").focus();
+          return false;
+      }else{
+          $(".new_website_comment").submit();
+      }
+  })
+</script>
+</body>

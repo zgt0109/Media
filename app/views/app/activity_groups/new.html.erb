@@ -1,0 +1,76 @@
+<header>
+		<div class="header hd-index">
+			<div class="bd">
+				<h1><%= @activity.activity_property.item_name %></h1>
+			</div>
+			<div class="ft"></div>
+		</div>
+	</header>
+	<div class="contxt">
+		<div class="cont-order">
+			<b>活动描述</b>
+			<p>
+				<label>商品名称：</label>
+				<span><%= @activity.activity_property.item_name %></span>
+			</p>
+			<p>
+				<label>单       价：</label>
+				<span><%=f @activity.activity_property.coupon_price %></span>
+			</p>
+			<%= form_for @activity_group, url: app_activity_groups_url, validate: true do |f| %>
+			<%= f.hidden_field :activity_id %>
+			<%= f.hidden_field :wx_user_id %>
+			<p>
+				<label>数       量：</label>
+				<a class="input-operate" id="input-minus" data-min="1"><</a>
+				<%= f.text_field :item_qty, class:"input-number",id: "input-number", :data => {:max => "#{ @activity.activity_property.get_limit_count }", :min => '1'}%>
+				<a class="input-operate" id="input-add" data-max="<%= @activity.activity_property.get_limit_count %>">></a>
+			</p>
+		</div>
+		<div class="cont-order">
+			<b>用户信息</b>
+			<p>
+				<label>姓       名：</label>
+				<%= f.text_field :name, placeholder: '请输入您的姓名', class: 'error' %>
+			</p>
+			<p>
+				<label>手       机：</label>
+				<%= f.text_field :mobile, placeholder: '请输入您的电话', class: 'error' %>
+			</p>
+			<div class="tcenter">
+				<a class="btn btn-red submit form-submit" id="btn-order"><span>提交订单</span></a>
+				<%= link_to app_activity_group_path(id: @activity.id), class: "btn btn-blue" do %><span>返 回</span><% end %>
+      </div>
+		</div>
+		<% end %>
+    
+	</div>
+  <script type="text/javascript">
+     $(function() {
+       $('.submit').click(function() {
+         $activity_group_name = $('#activity_group_name');
+				 $activity_group_mobile = $('#activity_group_mobile');
+				 if(!$activity_group_name || $activity_group_name.val()==""){
+           alert('姓名不能为空');
+           $activity_group_name.focus();
+				 }else if(!test_mobile_number($activity_group_mobile.val()) || $activity_group_mobile.val()==""){
+           alert('手机号码格式不正确');
+           $activity_group_mobile.focus();
+				 }else{
+				 	 $("form").submit();
+				 }
+			 });
+		 });
+
+     // 手机号码正则表达式
+     function test_mobile_number(mobile_number) {
+       if (mobile_number == undefined) {
+         return false;
+       }
+       if (winwemedia_validators.mobile_reg.test(mobile_number)){
+         return true;
+       };
+       return false;
+     }
+		 
+	</script>

@@ -1,0 +1,13 @@
+<form>
+<div class="modal-body">
+<p>添加车型： <%= @car_owner.owner_name %></p>
+<p>车牌号码： <%= @car_owner.car_license_no %></p>
+<p>车主姓名： <%= @car_owner.car_owner %></p>
+<p>上牌时间： <%= @car_owner.car_license_time.try(:to_date) %></p>
+<p>上次保险日期：<%= @car_owner.last_insurance_time.try(:to_date) %></p>
+<p>上次保险费用：<%= f @car_owner.last_insurance_charge %></p>
+<p>上次保养里程：<%= @car_owner.last_maintenance_mile %></p>
+<p>上次保养时间：<%= @car_owner.last_maintenance_time.try(:to_date) %></p>
+<p>上次保养费用：<%= f @car_owner.last_maintenance_charge %></p>
+</div>
+</form>

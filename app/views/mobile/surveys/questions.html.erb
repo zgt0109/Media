@@ -1,0 +1,115 @@
+<%= form_for :activity_survey_question, url: create_answer_mobile_survey_url do |form| %>
+<%= hidden_field_tag 'qid', params[:qid] %>
+<%= hidden_field_tag 'supplier_id' , @activity.supplier_id %>
+<%= hidden_field_tag 'answers_ids' %>
+
+<div class="topic">
+  <div class="topic-text"><%= @activity_survey_question.activity_progess %>. <%= @activity_survey_question.name %></div>
+  <div class="tips">注：本题最多能选择<%= @activity_survey_question.limit_select %>个答案</div>
+</div>
+
+<div class="list" data-max="<%= @activity_survey_question.limit_select %>">
+  <ul class="list-ul">
+    <%- @activity_survey_question.survey_question_choices.each_with_index do |choice, index| %>
+      <li class="item <%= 'checked' if (@activity_survey_answers_ids.include?(choice.id.to_s) || @activity_survey_answers_ids.include?(choice.id)) %>" data-val="<%= choice.id %>" data-index="<%= index + 1 %>" data-answered="<%= @activity_user.survey_finish? ? 'yes': 'no' %>">
+        <div class="checkbox"></div>
+        <%- if @activity_survey_question.text? %>
+          <div class="item-text"><%= choice.name %></div>
+        <%- elsif @activity_survey_question.text_picture? %>
+          <div class="item-text"><%= choice.name %></div>
+          <div class="item-pic">
+            <img src="<%= choice.pic %>" alt="">
+          </div>
+        <%- elsif @activity_survey_question.picture? %>
+          <div class="item-pic">
+            <img src="<%= choice.pic %>" alt="">
+          </div>
+        <%- end %>
+      </li>
+    <%- end %>
+    <%- if @activity_survey_question.text? && @activity_survey_question.answer_other? %>
+      <li id="other" class="item <%= 'checked' if @activity_survey_summary.present? %>" data-answered="<%= @activity_user.survey_finish? ? 'yes': 'no' %>">
+        <div class="checkbox"></div>
+        其他：<input type="text" name="summary" value="<%= @activity_survey_summary %>" class="input" style="width: 80%;" <%= @activity_user.survey_finish? ? 'disabled': '' %>/>
+      </li>
+    <%- end %>
+  </ul>
+</div>
+
+<div class="body">
+  <div class="btn-box">
+    <%- if @activity_survey_questions.count == 1 %>
+      <%- unless @activity_user.try(:survey_finish?) %>
+        <div class="cell">
+          <a class="btn btn-bigest btn-primary submit">提交</a>
+        </div>
+      <%- end %>
+    <%- else %>
+      <%- if @activity_survey_question.has_prev? %>
+        <div class="cell">
+          <a class="btn btn-bigest" href="<%= questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: @activity_survey_question.prev_question_id) %>" >上一题</a>
+        </div>
+        <%- if @activity_survey_question.last? %>
+          <%- unless @activity_user.try(:survey_finish?) %>
+            <div class="cell">
+              <a class="btn btn-bigest btn-primary submit">提交</a>
+            </div>
+          <%- end %>
+        <%- end %>
+      <%- end %>
+       <%- if @activity_survey_question.has_next? %>
+        <div class="cell">
+          <%- if @activity_user.try(:survey_finish?) %>
+            <a class="btn btn-bigest btn-primary" href="<%= questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: @activity_survey_question.next_question_id) %>">下一题(<%= @activity_survey_question.activity_progess %> / <%= @activity_survey_question.activity_questions_ids.count %>)</a>
+          <%- else %>
+            <a class="btn btn-bigest btn-primary submit">下一题(<%= @activity_survey_question.activity_progess %>/<%= @activity_survey_question.activity_questions_ids.count %>)</a>
+          <%- end %>
+        </div>
+      <%- end %>
+    <%- end %>
+  </div>
+</div>
+
+<% end  %>
+
+<script type="text/javascript">
+  $("input[name=summary]").on('click', function(e){
+    e.stopPropagation();
+  })
+
+  $(".submit").click(function(){
+   if($(this).hasClass('btn-gray')){return false;}
+   $(this).addClass('btn-gray');
+   var other_checked = $("#other").hasClass("checked"),
+   summary = $("input[name=summary]").val(),
+   answers = [];
+   $.each($("li.item.checked"), function(){
+    answers.push([$(this).data('val'), $(this).data('index')]);
+  });
+
+  $('#answers_ids').val(answers);
+
+  if(!answers.length && !summary){
+    alert("您还没有答题");
+    $(this).removeClass('btn-gray');
+    return false;
+  }
+
+  if(other_checked){
+    if (!summary){
+      alert("请填写其他选项");
+      $(this).removeClass('btn-gray');
+      return false;
+    }
+    if(summary.length > 50){
+      alert("其他选项不能超过50个字");
+      $(this).removeClass('btn-gray');
+      return false;
+    }
+  }else{
+    $("input[name=summary]").val('');
+  }
+
+  $("form").submit()
+})
+</script>

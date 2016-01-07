@@ -1,0 +1,34 @@
+<% unless @website_pictures.size.zero? %>
+    <div class="banner" id="banner">
+      <ul class='clearfix'>
+        <% @website_pictures.each do |picture| %>
+            <li>
+              <%= link_to picture.menu_type.present? ? menu_url(picture) : 'javascript:;' do %>
+                  <%= image_tag picture.pic.large, class: 'img' if picture.pic? %>
+              <% end %>
+            </li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<% unless @website_menus.size.zero? %>
+    <div class="list1 clearfix">
+      <% @website_menus.in_groups_of(8, false) do |menus| %>
+          <% menus.each_with_index do |menu, i| %>
+              <%= link_to menu_url(menu), class: 'box' do %>
+                  <% if [2, 7].include? i %>
+                      <div class="text-box">
+                        <div class="text-title"><%= menu.title %></div>
+                        <div class="text-summary"><%= menu.summary %></div>
+                      </div>
+                  <% else %>
+                      <div class="img-box">
+                        <%= menu.pic_or_icon has_title: false, pic_type: "custom", pic_wrap_tag_i: :no, show_picture_material: :no, class: 'img' %>
+                      </div>
+                  <% end %>
+              <% end %>
+          <% end %>
+      <% end %>
+    </div>
+<% end %>

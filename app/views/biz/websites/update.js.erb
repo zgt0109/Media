@@ -1,0 +1,5 @@
+<% if current_user.can_show_introduce? && current_user.task0? && current_user.update_attributes(show_introduce: 1) %>
+  <% session[:first_sign_in] = nil %>
+	$('.mission_box1 .mission_box_div').hide();
+	$('.mission_box1 .mission_box_div:last').show();
+<% end %>

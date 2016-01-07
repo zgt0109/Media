@@ -1,0 +1,199 @@
+<% provide(:title, '个人资料') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <section>
+      <%= form_for(@vip_user, url: '/app/vips/info', validate: true, method: 'post', html: {class: "card_data"}) do |f| %>
+        <%= f.hidden_field :id %>
+        <!--div class="card-hd">填写信息即可领取会员卡，享受会员特权</div-->
+        <ul class="card_phone">
+          <%- @vip_card.custom_fields.normal.order(:position).each do |field|%>
+            <%- if field.name == "姓名" %>
+              <li>
+                <label class="block">姓名<span class="text_denger">*</span></label>
+                <%- name_class = " txt field is_required" %>
+                <%- name_class += field.try(:editable?) ? " editable" : " uneditable" %>
+                <%= f.text_field :name, placeholder: "", maxlength: 50, class: name_class, data: {name: '真实姓名'} %>
+              </li>
+            <%- end %>
+            <%- if field.name == "电话" %>
+              <li>
+                <label class="block">电话<span class="text_denger">*</span></label>
+                <%- mobile_class = " txt field is_required" %>
+                <%- mobile_class += field.try(:editable?) ? " editable" : " uneditable" %>
+                <%= f.telephone_field :mobile, placeholder: "如13888888888", maxlength: 11, class: mobile_class, data: {name: '联系电话'} %>
+                <% if @vip_card.sms_check? %>
+                  <li class="verification">
+                    <input id="captcha" name="captcha" type="tel" placeholder="请输入验证码" data-name='验证码' class="txt is_required">
+                    <a class="btn btn_code J-getCode" href="#">获取验证码</a>
+                  </li>
+                <% end %>
+              </li>
+            <%- end %>
+            <%- next if %w(姓名 电话).include?(field.name) %>
+            <li>
+              <label class="block"><%= field.name %><%= raw(field.is_required? ? '<span class="text_denger">*</span>' : '' )%></label>
+              <%- if %(integer string).include?(field.field_format) %>
+                 <% text_pattern = field.field_format == 'integer' ? 'pattern=[0-9]*' : '' %>
+                 <input id="field_<%= field.id %>" class= "<%= field.is_required? ? 'is_required' : '' %> <%= field.editable? ? "editable" : "uneditable" %> txt field" name="custom_field[<%= field.id %>]" type="text" <%= text_pattern %> placeholder="<%= field.placeholder %>" data-name="<%= field.name %>" value="<%= field.custom_values.where(vip_user_id: @vip_user.id).first.try(:value) %>" />
+              <%- elsif %(text).include?(field.field_format) %>
+                 <textarea id="field_<%= field.id %>" class= "<%= field.is_required? ? 'is_required' : '' %> <%= field.editable? ? "editable" : "uneditable" %> txt field" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" data-name="<%= field.name %>" style="height: 60px;"><%= field.custom_values.where(vip_user_id: @vip_user.id).first.try(:value) %></textarea>
+              <%- elsif %(datetime).include?(field.field_format) %>
+                  <input id="field_<%= field.id %>" class= "date <%= field.is_required? ? 'is_required' : '' %> <%= field.editable? ? "editable" : "uneditable" %> txt field" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" data-name="<%= field.name %>" value="<%= field.custom_values.where(vip_user_id: @vip_user.id).first.try(:value) %>" readonly/>
+              <%- elsif %(select radio).include?(field.field_format) %>
+                 <select id="field_<%= field.id %>" style="padding: 0 5px;" class= "<%= field.is_required? ? 'is_required' : '' %> select <%= field.editable? ? "editable" : "uneditable" %> txt field" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" data-value="<%= field.custom_values.where(vip_user_id: @vip_user.id).first.try(:value) %>">
+                  <option value="">请选择</option>
+                  <%- field.possible_options.each do |option| %>
+                    <%- if option.present? %>
+                      <option value="<%= option %>"><%= option %></option>
+                    <%- end %>
+                  <%- end %>
+                </select>
+              <%- elsif %(checkbox).include?(field.field_format) %>
+                <ul class="clearfix choose_checkbox <%= 'required' if field.is_required? %>" data-name="<%= field.name %>">
+                  <% custom_values = @vip_user.custom_values.where(custom_field_id: field.id) %>
+                  <% field.possible_options.map(&:presence).compact.each do |field_value| %>
+                    <li>
+                      <label>
+                        <%= check_box_tag "custom_field[#{field.id}][]", field_value, custom_values.any? { |custom_value| custom_value.value == field_value }, class: "checkbox_field #{'required' if field.is_required?}" %><%= field_value %>
+                      </label>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </li>
+          <%- end %>
+          <div class="form-btn">
+            <a href="#" class="btn btn-big info_validate">保存</a>
+            <a href="#" class="btn btn-small btn-gray J-cancel" onclick="javascript:cancelSubmit();">取消</a>
+          </div>
+        </ul>
+      <% end %>
+    </section>
+  </div><!--.stage end-->
+</div><!--.html end-->
+<script src="/assets/address.js"></script>
+<script type="text/javascript">
+  function cancelSubmit() {
+    $(".J-getCode").removeClass("btn-gray").val("获取验证码");
+    window.location.href = '<%= app_vips_path %>';
+  }
+
+  // 倒计时
+  $(".J-getCode").on("click",function(){
+      if($('#vip_user_mobile').val() == ""){
+          alert('请输入手机号码');
+      }else{
+          var $this = $(this),
+              $time = 60;
+          if(!$this.hasClass("btn-gray")){
+              $this.addClass("btn-gray").text("重新获取(60)");
+              showTime();
+              $.get("<%= send_sms_app_vips_path %>" + "?phone=" + $('#vip_user_mobile').val());
+          }
+          function showTime(){
+              if($time ==0){
+                  $this.removeClass("btn-gray").text("获取验证码");
+              }else{
+                  $this.text("重新获取("+$time+")");
+                  setTimeout(showTime,1000);
+                  $time--;
+              }
+          }
+      }
+  });
+
+$(function(){
+  <%- unless @vip_card.custom_fields.normal.pluck(:editable).map{|x| x ? 1 : 0 }.include?(1) %>
+    $('.info_validate').attr('disabled', true)
+  <%- end %>
+  $( ".date" ).datepicker({
+    yearRange: "-100:+0",
+    maxDate: "+0d",
+    autoSize: true,
+    changeMonth: true,
+    changeYear: true,
+    dateFormat: 'yy-mm-dd',
+    dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+    monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+  });
+
+  $('.select').each(function(){
+    $(this).val($(this).data('value'));
+  });
+  if ($('.multiple')){
+    $('.multiple').each(function(){
+      $(this).val($(this).data('value').toString().split(','));
+    });
+  }
+  $('.uneditable').attr('disabled', true).css('background', '#f0eef0');
+});
+
+
+$('.info_validate').click(function(e){
+  var mobile = $('#vip_user_mobile').val();
+  var mobile_required = $('#vip_user_mobile').hasClass('is_required');
+  var editable = $('#vip_user_mobile').hasClass('editable');
+
+  var required_done = 1;
+
+  $('.is_required').each(function(){
+    var value = $(this).val();
+    var editable = $(this).hasClass('editable')
+    var name = $(this).data('name');
+    if (!value){
+      alert(name + '不能为空');
+      required_done = 0;
+      return false;
+    }
+  });
+
+  $('.choose_checkbox.required').each(function(){
+    if($(this).find("input:checked").length == 0) {
+      alert($(this).data('name') + "不能为空");
+      required_done = 0;
+      return false
+    }
+  });
+
+  if (mobile && editable && mobile_required && !(winwemedia_validators.mobile_reg.test(mobile))) {
+    alert('请输入正确的手机号码');
+    required_done = 0;
+    return false;
+  }
+
+  if(!required_done){
+    return false;
+  }
+
+  e.preventDefault();
+
+  var field_params = "";
+
+  $('.field,.checkbox_field:checked').each(function(){
+    var name = $(this).attr('name');
+    var value = $(this).val();
+    param = ('&' + name + '=' + value)
+    field_params += param
+  });
+
+  $("input.info_validate").attr('disabled', true);
+
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    url: '/app/vips/info?' + field_params + '&captcha=' + $('#captcha').val() + '&' + Math.random() +'#mp.weixin.qq.com',
+    dataType: 'json',
+    timeout:30000,
+    success: function (data) {
+      if (data.notice) {
+        alert(data.notice);
+        window.location.reload();
+      }
+    },
+    error: function(e){
+      // alert(JSON.stringify(e));
+    }
+  });
+  $("input.info_validate").attr('disabled', false);
+});
+</script>

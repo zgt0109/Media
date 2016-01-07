@@ -1,0 +1,915 @@
+<%
+   @activity.activity_vote_items.new
+   @activity.activity_vote_items.new
+   flag = false;
+   if @activity.end_at.nil? && !@activity.setted?
+     flag = false
+   elsif @activity.end_at.nil? && @activity.setted?
+     flag = false
+   elsif @activity.end_at && @activity.end_at < Time.now
+     flag = true
+   elsif @activity.end_at && @activity.end_at > Time.now && !@activity.setted?
+     flag = false
+   elsif @activity.end_at && @activity.end_at > Time.now && @activity.setted?
+     flag = false
+   end
+%>
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微投票', votes_activities_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+      <div class="page-content">
+          <div class="row">
+
+            <div class="col-xs-12">
+              <div class="alert alert-block alert-info">
+                <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                  <li>1、最少编辑两个投票选项；</li>
+                  <li>2、投票项的文字和图片可以全部填写，也可以只填写文字或只上传图片；</li>
+                  <li>3、"投票方式选择"保存后，切换到其他的投票方式系统会将已保存的投票内容清空，所以投票方式选择后不建议随意切换；</li>
+                  <li>4、建议：为确保手机端的效果，投票内容最多编辑36个字。</li>
+                </ul>
+              </div>
+            </div>
+
+
+
+            <div class="col-xs-12">
+              <%= form_for @activity, validate: true, :html => { class: 'width-800' } do |f| %>
+                <%= f.hidden_field :status, value: f.object.status == 0 ? -3 : f.object.status %>
+                <%= hidden_field_tag :allow_repeat_apply, @activity.allow_repeat_apply? ? 1 : 0 %>
+                <%= hidden_field_tag :allow_show_user_tel, @activity.allow_show_user_tel? ? 0 : 1, name: 'activity[extend][allow_show_user_tel]' %>
+                <%= hidden_field_tag :extend_closing_note, @activity.extend.closing_note %>
+
+                <div class="VCFields voteSetting">
+                  <div class="form-group">
+                    <label class="control-label">活动说明 (投票说明可不添加)</label>
+                    <div class="clearfix">
+                    <%= render "shared/form_rich_text", field_name: "description", obj: f.object, f: f, wrapper_html_options: {class: "form-control", placeholder: "请输入微信活动说明"}, options: {value: f.object.read_attribute("description"), style: "display:none"} %>
+		    </div>
+                  </div>
+
+                  <%= f.fields_for :activity_setting, @activity.new_record? ? @activity.build_activity_setting : @activity.activity_setting do |as| %>
+                    <div class="form-group">
+                      <label class="control-label" style="font-weight: bold; float: left;line-height: 32px;">投票主题：</label>
+                      <%= as.text_field :vote_theme, class: 'col-xs-6'%>
+                    </div><br><br>
+                  <% end %>
+
+
+                  <br>
+                  <label class="control-label">投票选项：</label>
+                  <div class="radioTab">
+                    <% Activity.vote_item_type_options.each_with_index do |m, i| %>
+                      <label class="control-label">
+                        <%= f.radio_button :vote_item_type, m[1], disabled: flag, class: 'ace vote_item_type', info: m[0], data: {toggle: 'radioTab', target: "radioTab#{m[1]}"} %>
+                        <span class="lbl"><%= m[0] %></span>
+                      </label>
+                    <% end %>
+                    <%= hidden_field_tag 'view_vote_item_type', f.object.vote_item_type %>
+                  </div>
+                  <div class="radio-tab-content">
+                    <% Activity.vote_item_type_options.each do |m| %>
+                        <% next if f.object.vote_item_type == m[1] && f.object.activity_vote_items.collect(&:new_record?).include?(false) %>
+                        <div id="radioTab<%= m[1] %>" class="radio-tab-pane vote_items">
+                          <% index = 0 %>
+                          <%= f.fields_for :activity_vote_items do |item| %>
+                              <% next unless item.object.new_record? %>
+                              <% uuid = UUIDTools::UUID.random_create.to_s[0,6] %>
+                              <% if m[1] == Activity::TEXT %>
+                                  <div class="form-group text">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="clearfix">
+                                      <%= item.text_field :name, class: "col-md-8 vote_item_input_#{Activity::TEXT}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][name]" %>
+                                      <% if index >= 2 && !flag %>
+                                          <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                      <% end %>
+                                      <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                    </div>
+                                  </div>
+                              <% elsif  m[1] == Activity::TEXT_PICTURE %>
+                                  <div class="form-group text_picture">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="clearfix">
+                                      <%= item.text_field :name, class: "col-md-8 vote_item_input_#{Activity::TEXT_PICTURE}", disabled: flag, placeholder: "",  name: "activity[activity_vote_items_attributes][#{uuid}][name]" %>
+                                      <% if index >= 2 && !flag %>
+                                          <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                      <% end %>
+                                      <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]"  %>
+                                    </div>
+                                    <div class="margin-top-10 clearfix">
+
+                                      <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="<%= item.object.pic_url %>" data-name="activity[activity_vote_items_attributes][<%= uuid %>][pic_key]" data-key="<%= item.object.pic_key %>"></div>
+                                      <small class="text-warning margin-left-10">建议尺寸：宽160像素*高120像素</small>
+                                    </div>
+                                  </div>
+                              <% elsif m[1] == Activity::PICTURE %>
+                                  <div class="form-group picture">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="margin-top-10 clearfix">
+                                      <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="<%= item.object.pic_url %>" data-name="activity[activity_vote_items_attributes][<%= uuid %>][pic_key]" data-key="<%= item.object.pic_key %>"></div>
+                                      <small class="text-warning margin-left-10">建议尺寸：宽264像素*高198像素</small>
+                                      <% if index >= 2 && !flag %>
+                                          <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                      <% end %>
+                                      <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]" %>
+                                    </div>
+                                  </div>
+                              <% elsif m[1] == Activity::TEXT_LINK %>
+                                <div class="form-group text_link">
+                                  <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                  <div class="clearfix">
+                                    <div class="col-sm-12">
+                                      <div class="col-md-5 row">
+                                        <div class="input-group input-group-text col-md-12">
+                                          <%= item.text_field :name, class: "col-xs-12 vote_item_input_#{Activity::TEXT_LINK}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][name]" %>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="input-group input-group-text">
+                                          <span class="input-group-addon">超链接：</span>
+                                          <%= item.text_field :link, class: "col-xs-12 vote_item_link_#{Activity::TEXT_LINK}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][link]" %>
+                                        </div>
+                                      </div>
+                                      <div class="input-group input-group-text">
+                                        <span class="input-group-addon">例：http://www.abc.com</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <% if index >= 2 && !flag %>
+                                    <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                  <% end %>
+                                  <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                </div>
+                              <% else %>
+                              <% end %>
+                              <% index += 1 %>
+                          <% end %>
+                        </div>
+                    <% end %>
+
+                    <div id="radioTab<%= f.object.vote_item_type %>" class="radio-tab-pane vote_items">
+                      <% index = 0 %>
+                      <%= f.fields_for :activity_vote_items do |item| %>
+                          <% uuid = UUIDTools::UUID.random_create.to_s[0,6]%>
+                          <% unless item.object.new_record? %>
+                              <%= item.hidden_field :id, name: "activity[activity_vote_items_attributes][#{uuid}][id]" %>
+                              <% if f.object.vote_item_type == Activity::TEXT %>
+                                  <div class="form-group text">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="clearfix">
+                                      <%= item.text_field :name, class: "col-md-8 vote_item_input_#{Activity::TEXT}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][name]" %>
+                                      <% if index >= 2 && !flag %>
+                                          <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                      <% end %>
+                                      <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                    </div>
+                                  </div>
+                              <% elsif f.object.vote_item_type == Activity::TEXT_PICTURE %>
+                                  <div class="form-group text_picture">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="clearfix">
+                                      <%= item.text_field :name, class: "col-md-8 vote_item_input_#{Activity::TEXT_PICTURE}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][name]" %>
+                                      <% if index >= 2 && !flag %>
+                                          <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                      <% end %>
+                                      <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]"  %>
+                                    </div>
+                                    <div class="margin-top-10 clearfix">
+                                      <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="<%= item.object.pic_url %>" data-name="activity[activity_vote_items_attributes][<%= uuid %>][pic_key]" data-key="<%= item.object.pic_key %>"></div>
+                                      <small class="text-warning margin-left-10">建议尺寸：宽160像素*高120像素</small>
+                                    </div>
+                                  </div>
+                              <% elsif f.object.vote_item_type == Activity::PICTURE %>
+                                  <div class="form-group picture">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="margin-top-10 clearfix">
+                                      <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="<%= item.object.pic_url %>" data-name="activity[activity_vote_items_attributes][<%= uuid %>][pic_key]" data-key="<%= item.object.pic_key %>"></div>
+                                      <small class="text-warning margin-left-10">建议尺寸：宽264像素*高198像素</small>
+                                      <% if index >= 2 && !flag %>
+                                          <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                      <% end %>
+                                      <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]"  %>
+                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]"  %>
+                                    </div>
+                                  </div>
+                              <% elsif f.object.vote_item_type == Activity::TEXT_LINK %>
+                                  <div class="form-group text_link">
+                                    <label class="control-label vote_count">投票项<%= index + 1 %><span class="required-star">*</span></label>
+                                    <div class="clearfix">
+                                      <div class="col-sm-12">
+                                        <div class="col-md-5 row">
+                                          <div class="input-group input-group-text col-md-12">
+                                            <%= item.text_field :name, class: "col-xs-12 vote_item_input_#{Activity::TEXT_LINK}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][name]" %>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="input-group input-group-text">
+                                            <span class="input-group-addon">超链接：</span>
+                                            <%= item.text_field :link, class: "col-xs-12 vote_item_link_#{Activity::TEXT_LINK}", disabled: flag, placeholder: "", name: "activity[activity_vote_items_attributes][#{uuid}][link]" %>
+                                          </div>
+                                        </div>
+                                        <div class="input-group input-group-text">
+                                          <span class="input-group-addon">例：http://www.abc.com</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <% if index >= 2 && !flag %>
+                                      <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+                                    <% end %>
+                                    <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
+                                  </div>
+                              <% end %>
+                          <% else %>
+
+                          <% end %>
+                          <% index += 1 %>
+                      <% end %>
+                    </div>
+
+                    <div class="form-group item_add">
+                      <%= link_to '增加选项', '#foot', class: 'btn btn-primary btn-sm add' %>
+                    </div>
+
+                      <!--最多可以投
+                      <%#= f.fields_for :activity_property do |activity_property| %>
+                          <%#= activity_property.text_field :get_limit_count, validate: true, class: "inputSmall", disabled: flag %>
+                          <%#= activity_property.hidden_field :activity_type_id %>
+                      <%# end %>
+                      个-->
+
+                  </div>
+
+<div class="form-group" style="margin-bottom: 0;">
+                  <% tag = @activity.activity_property.try(:get_limit_count).to_i <= 1 %>
+                  <label class="control-label">选择模式：</label>
+                  <label class="line-height-32 margin-right-10">
+                    <input name="form-field-radio2" type="radio" class="ace less-sec" <% if tag %>checked<% end %>>
+                    <span class="lbl less-sec">单选</span>
+                  </label>
+                  <label class="line-height-32 margin-right-10" style=" position: relative; ">
+                    <input name="form-field-radio2" type="radio" class="ace more-sec" <% unless tag %>checked<% end %>>
+                    <span class="lbl more-sec margin-right-10">多选</span>
+                    <div class="more" style="<%= tag ? 'float: right; display: none;' : '' %>position: absolute; top: 1px; right: -77px; ">
+                    
+                    </div>
+
+                  </label>
+                  <div class="" style=" float: right; position: absolute; margin-left: 204px; margin-top: -31px; ">
+                   最多
+                    <%= f.fields_for :activity_property do |activity_property| %>
+                      <%= activity_property.text_field :get_limit_count, validate: true, class: "inputSmall", disabled: flag, style: "width:30px;height:24px;" %>项
+                      <%= activity_property.hidden_field :activity_type_id %>
+                    <% end %>
+                  </div>
+                </div>
+
+                 <div class="form-group">
+                      <div class="clearfix J-selected">
+                        <label class="line-height-32 margin-right-20">
+                          <span class="lbl">投票结果设置：</span>
+                        </label>
+                        <label class="line-height-32 margin-right-20">
+                          <input name="form-field-checkbox" class="ace allow_show_vote_percent" type="checkbox" <% if f.object.allow_show_vote_percent? %> checked <% end %>>
+                          <span class="lbl">显示投票百分比</span>
+                          <%= hidden_field_tag :allow_show_vote_percent, @activity.allow_show_vote_percent? ? 0 : 1, name: 'activity[extend][allow_show_vote_percent]' %>
+                        </label>
+                        <label class="line-height-32 margin-right-20">
+                          <%= check_box_tag :allow_show_vote_count, 1, @activity.allow_show_vote_count?, class: "ace", name: 'activity[extend][allow_show_vote_count]' %>
+                          <span class="lbl">显示投票数</span>
+                        </label>
+                      </div>
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <div class="clearfix">
+                          <label class="line-height-32 margin-right-20">
+                            <span class="lbl">排序方式：</span>
+                          </label>
+                          <%= f.fields_for :activity_setting do |as| %>
+                            <% ActivitySetting.vote_result_sort_way_options.each do |m| %>
+                              <label class="line-height-32 margin-right-10">
+                                <%= as.radio_button :vote_result_sort_way, m[1], disabled: flag, class: 'ace' %>
+                                <span class="lbl"><%= m[0] %></span>
+                              </label>
+                            <% end %>
+                          <% end %>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">
+			    <input type="submit" class="btn btn-sm btn-primary pull-right" data-fn="submit" value="确定" data-disable-with="数据提交中 ..." >
+                          </label>
+                          <label class="control-label">
+                            <button type="button" class="btn btn-sm" data-dismiss="modals" onclick="javascript: window.location.href = '<%= votes_activities_path %>'">返回</button>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+
+                
+
+
+                
+
+                      
+
+
+
+                  <!--div class="form-group">
+                    <label class="control-label">投票结果设置<span class="required-star">*</span></label>
+
+                    <div class="clearfix J-selected">
+                      <label>
+                        <input name="form-field-checkbox" class="ace allow_show_vote_percent" type="checkbox" <%# if f.object.allow_show_vote_percent? %> checked <%# end %>>
+                        <span class="lbl">显示投票百分比</span>
+                        <%#= hidden_field_tag :allow_show_vote_percent, @activity.allow_show_vote_percent? ? 0 : 1, name: 'activity[extend][allow_show_vote_percent]' %>
+                      </label>
+                      <label>
+                        <%#= check_box_tag :allow_show_vote_count, 1, @activity.allow_show_vote_count?, class: "ace", name: 'activity[extend][allow_show_vote_count]' %>
+                        <span class="lbl">显示投票数</span>
+                      </label>
+                    </div>
+                  </div-->
+
+                  <!--div class="form-group">
+                    <input type="submit" class="btn btn-sm btn-primary" data-fn="submit" value="确定" data-disable-with="数据提交中 ..." >
+                    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals" onclick="javascript: window.location.href = '<%#= votes_activities_path %>'">返回</button>
+                  </div-->
+              </div>
+
+
+              <% end %>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+      </div>
+    </div>
+
+    <div template_id="1" class="form-group text" style="display: none;">
+      <label class="control-label vote_count">投票项<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <input type="text" size="30" name="activity[activity_vote_items_attributes][][name]" data-validate="true" class="col-md-8 vote_item_input_<%= Activity::TEXT %>" placeholder="" />
+        <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+        <input name="activity[activity_vote_items_attributes][][_destroy]" style="display:none" type="checkbox">
+      </div>
+    </div>
+
+    <div template_id="2" class="form-group text_picture" style="display: none;">
+      <label class="control-label vote_count">投票项<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <input type="text" size="30" name="activity[activity_vote_items_attributes][][name]" data-validate="true" class="col-md-8 vote_item_input_<%= Activity::TEXT_PICTURE %>" placeholder="">
+        <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+        <input name="activity[activity_vote_items_attributes][][_destroy]" style="display:none" type="checkbox">
+        <input class="pic" name="activity[activity_vote_items_attributes][][pic]" type="hidden" value="">
+      </div>
+      <div class="margin-top-10 clearfix">
+        <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="" data-name="activity[activity_vote_items_attributes][][pic_key]" data-key=""></div>
+        <small class="text-warning margin-left-10">建议尺寸：宽160像素*高120像素</small>
+      </div>
+    </div>
+
+    <div template_id="3" class="form-group picture" style="display: none;">
+      <label class="control-label vote_count">投票项<span class="required-star">*</span></label>
+      <div class="margin-top-10 clearfix">
+        <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="" data-name="activity[activity_vote_items_attributes][][pic_key]" data-key=""></div>
+        <small class="text-warning margin-left-10">建议尺寸：宽264像素*高198像素</small>
+        <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+        <input name="activity[activity_vote_items_attributes][][_destroy]" style="display:none" type="checkbox">
+        <input class="pic" name="activity[activity_vote_items_attributes][][pic]" type="hidden" value="">
+      </div>
+    </div>
+
+    <div template_id="4" class="form-group text_link" style="display: none;">
+      <label class="control-label vote_count">投票项<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <div class="col-sm-12">
+            <div class="col-md-5 row">
+              <div class="input-group input-group-text col-md-12">
+                <input class="col-xs-12 vote_item_input_<%= Activity::TEXT_LINK %>" type="text" name="activity[activity_vote_items_attributes][][name]" data-validate="true" class="col-md-8 ">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">超链接：</span>
+                <input class="col-xs-12 vote_item_link_<%= Activity::TEXT_LINK %>" type="text" name="activity[activity_vote_items_attributes][][link]">
+              </div>
+            </div>
+            <div class="input-group input-group-text">
+              <span class="input-group-addon">例：http://www.abc.com</span>
+            </div>
+          </div>
+        </div>
+        <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
+        <input name="activity[activity_vote_items_attributes][][_destroy]" style="display:none" type="checkbox">
+    </div>
+
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        select_vote_item_type();
+
+        function select_vote_item_type(){
+            //三种切换效果
+            var type = $('input[type=radio]:checked').val();
+            $('#radioTab' + '<%= Activity::TEXT %>').addClass('hide');
+            $('#radioTab' + '<%= Activity::TEXT_PICTURE %>').addClass('hide');
+            $('#radioTab' + '<%= Activity::PICTURE %>').addClass('hide');
+            $('#radioTab' + '<%= Activity::TEXT_LINK %>').addClass('hide');
+            $('.item_add').removeClass('hide');
+            if(parseInt(type) == <%= Activity::TEXT %>){
+                $('#radioTab' + '<%= Activity::TEXT %>').removeClass('hide');
+            }else if(parseInt(type) == <%= Activity::TEXT_PICTURE %>){
+                $('#radioTab' + '<%= Activity::TEXT_PICTURE %>').removeClass('hide');
+            }else if(parseInt(type) == <%= Activity::PICTURE %>){
+                $('#radioTab' + '<%= Activity::PICTURE %>').removeClass('hide');
+            }else if(parseInt(type) == <%= Activity::TEXT_LINK %>){
+                $('#radioTab' + '<%= Activity::TEXT_LINK %>').removeClass('hide');
+            }else{
+
+            }
+
+        }
+        function close_modal(){
+            var dc = $(parent.document),
+                    $modal = dc.find('.modal'),
+                    $modalBg = dc.find(".modal-backdrop")
+            $modal.attr('aria-hidden', true).removeClass('in');
+            $modalBg.remove();
+            $(parent.document.body).removeClass('modal-open');
+            $modal.remove();
+        }
+        function set_info(str, type, text){
+            var html = '<div class="modal fade modal-text" id="popup-confirm" style="display: block;">' +
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancel(\''+str+'\', '+type +');">×</button>' +
+                    '<h4 class="modal-title">系统提示</h4>' +
+                    '</div><form role="form" action="" method="">';
+
+            html += '<div class="modal-body">' +
+                    '<p class="text-center">' + text + '</p></div>' +
+                    '<div class="clearfix"></div>';
+
+            html += '<div class="modal-footer">';
+            html += '<a href="javascript:;" class="btn btn-sm btn-primary" id="pop-confrim-submit" onclick="notarize(\''+str+'\', '+type +');">确定</a>';
+            html += '<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" onclick="cancel(\''+str+'\', '+type +');">取消</button>';
+            html += '</div></form>';
+            html += '</div>';
+
+            html += '</div></div></div>';
+            var a = $(html)
+            $('#popup-confirm').remove();
+            $("body").append(html);
+            $('#popup-confirm').modal('show');
+            $('.modal').on('hidden.bs.modal', function (e) {
+                cancel(str, type);
+                close_modal();
+            })
+        }
+
+        function cancel(str, type){
+            close_modal();
+            if(type == 5){
+
+            }else{
+                document.getElementById(str).checked = false;
+                document.getElementById('activity_vote_item_type_' + type).checked = true;
+                select_vote_item_type();
+                $('#activity_vote_item_type_' + type).attr('checked', true);
+            }
+        }
+
+        function notarize(str, type){
+            close_modal();
+            if(type == 5){
+                var cb_type = $('input[type=radio]:checked').val(),
+                    self = $('input[name="'+str+'"]');
+                self.parent().find('input[type="checkbox"]').attr('checked',true);
+                if(parseInt(cb_type) == <%= Activity::TEXT %>){
+                    self.closest('.text').hide();
+                    $.each($('.radio-tab-content .text:visible'), function(i, e){
+                        $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+                    });
+                }else if(parseInt(cb_type) == <%= Activity::TEXT_PICTURE %>){
+                    self.closest('.text_picture').hide();
+                    $.each($('.radio-tab-content .text_picture:visible'), function(i, e){
+                        $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+                    });
+                }else if(parseInt(cb_type) == <%= Activity::PICTURE %>){
+                    self.closest('.picture').hide();
+                    $.each($('.radio-tab-content .picture:visible'), function(i, e){
+                        $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+                    });
+                }else if(parseInt(cb_type) == <%= Activity::TEXT_LINK %>){
+                    self.closest('.text_link').hide();
+                    $.each($('.radio-tab-content .text_link:visible'), function(i, e){
+                        $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+                    });
+                }else{
+
+                }
+            }else{
+                select_vote_item_type();
+                $('#view_vote_item_type').val($('input[type=radio]:checked').val());
+            }
+        }
+        $(function(){
+
+          // 点击多选
+          $(".more-sec").click(function(){
+            $('#activity_activity_property_attributes_get_limit_count').closest('div').show();
+          });
+          $(".less-sec").click(function(){
+            $('#activity_activity_property_attributes_get_limit_count').closest('div').hide();
+          });
+
+          <% if @activity.try(:activity_property).try(:get_limit_count).to_i <= 1 %>
+            $('#activity_activity_property_attributes_get_limit_count').closest('div').hide();
+          <% end %>
+
+
+            $('.allow_show_vote_percent').click(function(){
+                if($(this).is(':checked')){
+                    $('#allow_show_vote_percent').val(0);
+                }else{
+                    $('#allow_show_vote_percent').val(1);
+                }
+            });
+
+            $('.J-selected input[type=checkbox]').click(function(){
+                if($('.J-selected input[type=checkbox]:checked').length == 0){
+                    showTip('warning', '投票结果设置至少勾选一项');
+                    $(this).prop('checked', 'checked')
+                    if($(this).hasClass('allow_show_vote_percent')){
+                        $('#allow_show_vote_percent').val(0);
+                    }
+                }
+            });
+
+            $("form").on('click', 'input[type=radio].vote_item_type', function(){
+                $('.item_add').removeClass('hide');
+                <% unless @activity.activity_vote_items.collect(&:new_record?).include?(false) %>
+                select_vote_item_type();
+                document.getElementById($(this).attr('id')).checked = true;
+                <% else %>
+                var type = $('#view_vote_item_type').val();
+                if(type == $('input[type=radio]:checked').val()){return false;}
+                set_info($(this).attr('id'), type, "切换保存后系统会将原来的投票内容清除，确认切换到“" + $(this).attr('info') + "”吗？");
+//                if(confirm("切换保存后系统会将原来的投票内容清除，确认切换到“" + $(this).attr('info') + "”吗？")){
+//                    select_vote_item_type();
+//                    $('#view_vote_item_type').val($('input[type=radio]:checked').val());
+//                }else{
+//                    document.getElementById($(this).attr('id')).checked = false;
+//                    document.getElementById('activity_vote_item_type_' + type).checked = true;
+//                    select_vote_item_type();
+//                    $('#activity_vote_item_type_' + type).attr('checked', true);
+//                }
+                <% end %>
+            });
+
+            $(".add").click(function(){
+                <% if flag %>
+                return false;
+                <% end %>
+                //4种情况
+                var type = $('input[type=radio]:checked').val();
+                if(parseInt(type) == <%= Activity::TEXT %>){
+                    var template = $("[template_id='1']");
+                    var tool =  $('.radio-tab-content .text:last');
+                    var uuid = Date.now();
+                    var new_template = template.clone(true).insertAfter(tool).show();
+                    new_template.attr('template_id', '');
+                    new_template.find('.vote_count').html('投票项' + $('.radio-tab-content .text:visible').length + '<span class="required-star">*</span>');
+                    new_template.find('input[type=text]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][name]');
+                    new_template.find('input[type=text]').focus();
+                    new_template.find('input[type=checkbox]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][_destroy]');
+                }else if(parseInt(type) == <%= Activity::TEXT_PICTURE %>){
+                    var template = $("[template_id='2']");
+                    var tool =  $('.radio-tab-content .text_picture:last');
+                    var uuid = Date.now();
+                    var new_template = template.clone(true).insertAfter(tool).show();
+                    new_template.attr('template_id', '');
+                    new_template.find('.vote_count').html('投票项' + $('.radio-tab-content .text_picture:visible').length + '<span class="required-star">*</span>');
+                    new_template.find('input[type=text]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][name]');
+                    new_template.find('input[type=text]').focus();
+                    new_template.find('input[type=checkbox]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][_destroy]');
+                    new_template.find('input[type=hidden]').eq(0).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic]');
+                    new_template.find('input[type=hidden]').eq(1).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic_key]');
+                    new_template.find('input[type=hidden]').eq(1).val('');
+                }else if(parseInt(type) == <%= Activity::PICTURE %>){
+                    var template = $("[template_id='3']");
+                    var tool =  $('.radio-tab-content .picture:last');
+                    var uuid = Date.now();
+                    var new_template = template.clone(true).insertAfter(tool).show();
+                    new_template.attr('template_id', '');
+                    new_template.find('.vote_count').html('投票项' + $('.radio-tab-content .picture:visible').length + '<span class="required-star">*</span>');
+                    new_template.find('input[type=checkbox]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][_destroy]');
+                    new_template.find('input[type=hidden]').eq(0).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic_key]')
+                    new_template.find('input[type=hidden]').eq(0).val('');
+                    new_template.find('input[type=hidden]').eq(1).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic]')
+                }else if(parseInt(type) == <%= Activity::TEXT_LINK %>){
+                    var template = $("[template_id='4']");
+                    var tool =  $('.radio-tab-content .text_link:last');
+                    var uuid = Date.now();
+                    var new_template = template.clone(true).insertAfter(tool).show();
+                    new_template.attr('template_id', '');
+                    new_template.find('.vote_count').html('投票项' + $('.radio-tab-content .text_link:visible').length + '<span class="required-star">*</span>');
+                    new_template.find('input[type=text].vote_item_input_' +<%= Activity::TEXT_LINK %>).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][name]');
+                    new_template.find('input[type=text].vote_item_link_' +<%= Activity::TEXT_LINK %>).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][link]');
+                    new_template.find('input[type=checkbox]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][_destroy]');
+                }else{
+
+                }
+            });
+
+            $("form").on('click','.del', function(){
+                set_info($(this).next().attr('name'), 5, "确认删除？");
+//                if(confirm("确认删除?")){
+//                    var type = $('input[type=radio]:checked').val();
+//                    $(this).parent().find('input[type="checkbox"]').attr('checked',true);
+//                    if(parseInt(type) == <%#= Activity::TEXT %>){
+//                        $(this).closest('.text').hide();
+//                        $.each($('.radio-tab-content .text:visible'), function(i, e){
+//                            $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+//                        });
+//                    }else if(parseInt(type) == <%#= Activity::TEXT_PICTURE %>){
+//                        $(this).closest('.text_picture').hide();
+//                        $.each($('.radio-tab-content .text_picture:visible'), function(i, e){
+//                            $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+//                        });
+//                    }else if(parseInt(type) == <%#= Activity::PICTURE %>){
+//                        $(this).closest('.picture').hide();
+//                        $.each($('.radio-tab-content .picture:visible'), function(i, e){
+//                            $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+//                        });
+//                    }else if(parseInt(type) == <%#= Activity::TEXT_LINK %>){
+//                        $(this).closest('.text_link').hide();
+//                        $.each($('.radio-tab-content .text_link:visible'), function(i, e){
+//                            $(e).find('.vote_count').html('投票项' + (i + 1) + '<span class="required-star">*</span>');
+//                        });
+//                    }else{
+//
+//                    }
+//                }
+            });
+
+            $('form input[type=submit]').click(function(){
+                <% if flag %>
+                $('form').submit();
+                return true;
+                <% end %>
+                //三种情况，当前情况外的都_destroy
+                if(handle()){
+                    var type = $('input[type=radio]:checked').val();
+                    if(parseInt(type) == <%= Activity::TEXT %>){
+                        $.each($('#radioTab' + '<%= Activity::TEXT_PICTURE %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::PICTURE %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::TEXT_LINK %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                    }else if(parseInt(type) == <%= Activity::TEXT_PICTURE %>){
+                        $.each($('#radioTab' + '<%= Activity::TEXT %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::PICTURE %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::TEXT_LINK %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                    }else if(parseInt(type) == <%= Activity::PICTURE %>){
+                        $.each($('#radioTab' + '<%= Activity::TEXT %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::TEXT_PICTURE %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::TEXT_LINK %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                    }else if(parseInt(type) == <%= Activity::TEXT_LINK %>){
+                        $.each($('#radioTab' + '<%= Activity::TEXT %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::TEXT_PICTURE %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                        $.each($('#radioTab' + '<%= Activity::PICTURE %> input[type=checkbox]'), function(){
+                            $(this).attr('checked',true);
+                        });
+                    }else{
+
+                    }
+                    if($('.less-sec').is(':checked')){
+	              $('#activity_activity_property_attributes_get_limit_count').val(1);
+                    }
+                    $('form').submit();
+                    return true;
+                }else{
+                    return false;
+                }
+
+            });
+        });
+
+        function handle(){
+            if(!$('#activity_activity_setting_attributes_vote_theme').val()){
+              addErrorMessage($('#activity_activity_setting_attributes_vote_theme'), "投票主题不能为空!");
+              showTip('warning', '投票主题不能为空!');
+              $('#activity_activity_setting_attributes_vote_theme').focus();
+              return false;
+            }else{
+              removeErrorMessage($('#activity_activity_setting_attributes_vote_theme'));
+            }
+            var type = $('input[type=radio]:checked').val();
+            var select_limit = $('#activity_activity_property_attributes_get_limit_count');
+            if(parseInt(type) == <%= Activity::TEXT %>){
+                var o={};
+                var flag = true;
+                var arr = $(".vote_item_input_<%= Activity::TEXT %>:visible")
+                arr.each(function(){
+                    if($(this).val() == ""){
+                        addErrorMessage($(this), "投票选项不能为空!");
+                        showTip('warning', '投票选项不能为空!');
+                        $(this).focus();
+                        flag = false;
+                        return false;
+                    }
+                    if(!(o[$(this).val()])){
+                        o[$(this).val()] = true;
+                    }else{
+                        addErrorMessage($(this), "投票选项不能重复!");
+                        showTip('warning', '投票选项不能重复!');
+                        $(this).focus();
+                        flag = false;
+                        return false;
+                    }
+                });
+
+                if(!flag){flag= true;return false;}
+
+                if(parseInt(select_limit.val()) > arr.length){
+//                  addErrorMessage(select_limit,'最多能选择'+arr.length+'个选项!');
+                    showTip('warning', '最多能选择'+arr.length+'个选项!');
+                    return false;
+                }else if(parseInt(select_limit.val()) <= 0){
+//                  addErrorMessage(select_limit,'最多能选择的选项必须大于0!');
+                    showTip('warning', '最多能选择的选项必须大于0!');
+                    return false;
+                }
+            }else if(parseInt(type) == <%= Activity::TEXT_PICTURE %>){
+                var o={};
+                var flag = true;
+                var arr = $(".vote_item_input_<%= Activity::TEXT_PICTURE %>:visible");
+                var imgs = $('#radioTab' + <%= Activity::TEXT_PICTURE %> + ' .form-group:visible .pic');
+                var keys = $('#radioTab' + <%= Activity::TEXT_PICTURE %> + ' .form-group:visible .file-btn input[type=hidden]')
+                $('.radio-tab-content .text_picture:visible .pic')
+                arr.each(function(i, e){
+                    if($(e).val() == ""){
+                        addErrorMessage($(e), "投票选项不能为空!");
+                        showTip('warning', '投票选项不能为空!');
+                        $(e).focus();
+                        flag = false;
+                        return false;
+                    }
+                    if(!(o[$(e).val()])){
+                        o[$(e).val()] = true;
+                    }else{
+                        addErrorMessage($(e), "投票选项不能重复!");
+                        showTip('warning', '投票选项不能重复!');
+                        $(e).focus();
+                        flag = false;
+                        return false;
+                    }
+
+                    if(!imgs.eq(i).val() && !keys.eq(i).val()){
+                        addErrorMessage(imgs.eq(i), "图片不能为空!");
+                        showTip('warning', '图片不能为空!');
+                        $(e).focus();
+                        flag = false;
+                        return false;
+                    }else{
+                        removeErrorMessage(imgs.eq(i));
+                    }
+                });
+
+                if(!flag){flag= true;return false;}
+
+                if(parseInt(select_limit.val()) > arr.length){
+//                  addErrorMessage(select_limit,'最多能选择'+arr.length+'个选项!');
+                    showTip('warning', '最多能选择'+arr.length+'个选项!');
+                    return false;
+                }else if(parseInt(select_limit.val()) <= 0){
+//                  addErrorMessage(select_limit,'最多能选择的选项必须大于0!');
+                    showTip('warning', '最多能选择的选项必须大于0!');
+                    return false;
+                }
+
+            }else if(parseInt(type) == <%= Activity::PICTURE %>){
+                var imgs = $('#radioTab<%= Activity::PICTURE %> .form-group:visible .pic');
+                var keys = $('#radioTab<%= Activity::PICTURE %> .form-group:visible .file-btn input[type=hidden]')
+                var flag = true;
+                imgs.each(function(i, e){
+                    if(!$(e).val() && !keys.eq(i).val()){
+                        addErrorMessage($(e), "图片不能为空!");
+			showTip('warning', '图片不能为空!');
+                        $(e).focus();
+                        flag =false;
+                        return false;
+                    }else{
+                        removeErrorMessage($(e));
+                    }
+                });
+
+                if(!flag){return false;}
+
+                if(parseInt(select_limit.val()) > imgs.length){
+//                  addErrorMessage(select_limit,'最多能选择'+imgs.length+'个选项!');
+                    showTip('warning', '最多能选择'+imgs.length+'个选项!');
+                    return false;
+                }else if(parseInt(select_limit.val()) <= 0){
+                    showTip('warning', '最多能选择的选项必须大于0!');
+//                  addErrorMessage(select_limit,'最多能选择的选项必须大于0!');
+                    return false;
+                }
+            }else if(parseInt(type) == <%= Activity::TEXT_LINK %>){
+                var o={};
+                var flag = true;
+                var arr = $(".vote_item_input_<%= Activity::TEXT_LINK %>:visible")
+                var links = $(".vote_item_link_<%= Activity::TEXT_LINK %>:visible")
+                arr.each(function(i, e){
+                    if($(e).val() == ""){
+                        addErrorMessage($(this), "投票选项不能为空!");
+                        showTip('warning', '投票选项不能为空!');
+                        $(e).focus();
+                        flag = false;
+                        return false;
+                    }
+                    if(!(o[$(e).val()])){
+                        o[$(e).val()] = true;
+                    }else{
+                        addErrorMessage($(this), "投票选项不能重复!");
+                        showTip('warning', '投票选项不能重复!');
+                        $(e).focus();
+                        flag = false;
+                        return false;
+                    }
+
+                    if(!links.eq(i).val()){
+                        addErrorMessage(links.eq(i), "超链接不能为空!");
+                        showTip('warning', '超链接不能为空!');
+                        links.eq(i).focus();
+                        flag = false;
+                        return false;
+                    }else if(!/^(http|https):\/\/[a-zA-Z0-9].+$/.test(links.eq(i).val())){
+                        addErrorMessage(links.eq(i), "超链接格式不正确!");
+                        showTip('warning', '超链接格式不正确!');
+                        links.eq(i).focus();
+                        flag = false;
+                        return false;
+                    }else{
+                        removeErrorMessage(links.eq(i));
+                    }
+                });
+
+                if(!flag){flag= true;return false;}
+
+                if(parseInt(select_limit.val()) > arr.length){
+//                  addErrorMessage(select_limit,'最多能选择'+arr.length+'个选项!');
+                    showTip('warning', '最多能选择'+arr.length+'个选项!');
+                    return false;
+                }else if(parseInt(select_limit.val()) <= 0){
+//                  addErrorMessage(select_limit,'最多能选择的选项必须大于0!');
+                    showTip('warning', '最多能选择的选项必须大于0!');
+                    return false;
+                }
+            }else{
+
+            }
+            if($('.more-sec').is(':checked') && parseInt(select_limit.val()) < 2){
+              addErrorMessage(select_limit,'最多能选择的选项必须大于2!');
+              select_limit.focus();
+              return false;
+            }
+            return true;
+        }
+    </script>
+<% end %>

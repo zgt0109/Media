@@ -1,0 +1,83 @@
+<script type="text/javascript" src="/javascripts/app/website/swipe.js"></script>
+<body class="index">
+<% if @website.home_cover_pic.present? && @website.is_open_cover_pic %>
+    <div class="pageShow" id="pageShow">
+      <%= image_tag @website.home_cover_pic.large %>
+    </div>
+<% end %><!-- 封面图片, 帷幕效果 -->
+<div class="html">
+  <div class="main">
+    <%= render :partial=> "website_picture", :object => @website_pictures %>
+    <section>
+      <% @website.website_menus.root.order(:sort).each_with_index do |menu,index| %>
+      <div class="box box-index">
+        <div class="hd">
+          <a href="<%= app_business_circle_path(menu, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id])  %>" class="box-block"></a>
+          <h2 class="ellipsis"><%= menu.name %></h2>
+          <a class="ico fr">查看更多</a>
+        </div>
+
+        <div class="bd box-circle slider" style="height:auto;" id="slider0<%= index%>">
+            <% if menu.has_children? %>
+              <div class="slider-cont" style="height:auto;">
+                <% menu.children.sorted.each_slice(8).each do |children| %>
+                  <div class="slider-li" style="height:auto;">
+                    <% children.each do |child| %>
+                      <a href="<%= child.has_children? ?  page_app_business_circle_url(child.id, anchor: "mp.weixin.qq.com",wxmuid: session[:wx_mp_user_id]) : website_activity_link(child) %>">
+                        <b style="background-image:url(<%= child.pic.try(:thumb)  if child.pic? %>)"></b>
+                        <% if child.menuable_type == 'Activity' %>
+                          <% if child.menuable.try(:activityable_type) == 'BusinessShop' %>
+                            <i><%= child.menuable.activityable.name %></i>
+                          <% else %>
+                            <i><%= child.name %></i>
+                          <% end %>
+                        <% else %>
+                          <i><%= child.name %></i>
+                        <% end %>
+
+                        <small>
+                          <% if child.menuable_type == 'Activity' %>
+                            <% if child.menuable.try(:activityable_type) == 'BusinessShop' %>
+                              <% unless child.menuable.activityable.subtitle.blank? %>
+                                (<%= child.menuable.activityable.subtitle %>)
+                              <% end %>
+                            <% end %>
+                          <% end %>
+                        </small>
+                      </a>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <% if menu.children.count >= 9 %>
+              <div class="box-img-page">
+                  <% menu.children.sorted.in_groups_of(8,false).each_with_index do |child, sub_sub_index| %>
+                         <a href="#" class="<%= sub_sub_index == 0 ? "active" : ''%>"><%= sub_sub_index + 1%></a>
+                  <% end %>
+              </div>
+              <% end %>
+            <% end %>
+        </div>
+        </div>
+      <% end %>
+    </section><!-- section end -->
+  </div><!-- main end -->
+</div><!-- html end -->
+<script>
+    $(function(){
+      var sliders=$(".slider");
+      $.each(sliders, function(i){
+          var id=$(sliders[i]).attr("id");
+          if($("#"+id).children().length > 0){
+              new Swipe(document.getElementById(id), {
+                  speed:500,
+                  callback: function(){
+                      var lis = $(this.element).parents(".slider").find(".box-img-page").children();
+                      lis.removeClass("active").eq(this.index).addClass("active");
+                  }
+              });
+          }
+      });
+    });
+</script>
+</body>

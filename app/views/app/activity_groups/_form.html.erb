@@ -1,0 +1,51 @@
+<header>
+    <div class="header hd-index">
+        <div class="bd">
+            <h1><%= @activity.activity_property.item_name %></h1>
+        </div>
+        <div class="ft"></div>
+    </div>
+</header>
+<div class="contxt">
+ <p class="cont-img">
+    <img src='<%= @activity.pic %>'>
+</p>
+<div class="cont-brief">
+    <div class="hd">
+        <span>团购价：<b>￥<%=f @activity.activity_property.coupon_price %></b></span>
+        <del>原   价： ￥<%=f @activity.activity_property.item_price%></del>
+        <i>活动结束倒计时：剩余 
+           <% if @activity.end_at > Time.now %>
+           <b><%= ((@activity.end_at - Time.now)/(24*60*60)).to_i + 1 %></b> 天
+           <% else %>
+           <b>0</b> 天
+           <% end %>
+       </i>
+   </div>
+
+   <div class="bd table">
+     <% if @activity.ready_at <= Time.now and Time.now < @activity.start_at %>
+     <p class="td"><b><%= @activity.activity_groups.count %></b> 人参与</p>
+     <% elsif @activity.deal_failed? or @activity.pending? %>
+     <p class="td">已有 <b><%= @activity.activity_groups.count %></b> 人参与<br/>
+      还差 <b><%= @activity.activity_property.min_people_num - @activity.activity_groups.count %></b> 人成团</p>
+      <% elsif @activity.deal_success? %>
+      <p class="td">已有 <b><%= @activity.activity_groups.count %></b> 人参与<br/>
+        <b>已成团</b></p>
+        <% end %>
+    </div>
+    <div class="ft"></div>
+</div>
+<div class="cont-txt">
+    <b>活动描述</b>
+    <div class="ckeditor_content"><%= @activity.description.to_s.html_safe %></div>
+</div>
+<div class="cont-txt">
+    <b>特别提醒</b>
+    <div class="ckeditor_content"><%= @activity.activity_property.special_warn.to_s.html_safe %></div>
+</div>
+</div>
+<link type="text/css" rel="stylesheet" href="/stylesheets/life/ckeditor_content.css"/>
+<script>
+    $(".ckeditor_content img").css({"width":"auto","height":"auto"})
+</script>

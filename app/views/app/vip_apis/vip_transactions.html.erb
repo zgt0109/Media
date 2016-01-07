@@ -1,0 +1,47 @@
+<% provide(:title, '会员流水') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section id="sec-index">
+      <div class="check">
+        <%= months_for_select('month', id: 'month', class: 'input input-small', selected: params[:startDate])%>
+        <a href="#" class="btn btn-check" id="select_date">查询</a>
+      </div>
+      <div class="card-table">
+        <table>
+          <% if @transactions.present? %>
+            <tr>
+              <% @transactions.first.keys.each do |key| %>
+              <th><%= key %></th>
+              <% end %>
+            </tr>
+            <% @transactions.each do |transaction| %>
+            <tr>
+              <% transaction.each do |k, v| %>
+                <td><%= v %></td>
+              <% end %>
+            </tr>
+            <% end %>
+          <% else %>
+            <tr><td colspan="<%= @transactions.first.keys.size rescue 1 %>">暂无记录</td></tr>
+          <% end %>
+        </table>
+      </div>
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>
+<script>
+  $(function(){
+    $( "#date" ).datepicker({
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+  });
+
+  $(document).on("click", "#select_date", function(){
+    location.href = '<%= vip_transactions_app_vip_apis_path %>?startDate=' + $("#month").val();
+  });
+</script>

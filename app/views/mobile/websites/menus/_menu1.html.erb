@@ -1,0 +1,47 @@
+<% if @shortcut_menus.present? %>
+  <!-- 快捷菜单 Start -->
+  <% if @home_template && @home_template.websitev02? %>
+    <div class="mod-navPop">
+      <div class="navPop-btn"><a href="javascript:;"><i class="fa fa-plus" id="fa-btn"></i></a></div>
+      <div class="navPop-wrap" id="navPop-wrap">
+         <% @shortcut_menus[0..3].each do |menu| %>
+           <% url = menu.operation_class_name.present? && "javascript:;" || website_activity_link(menu) %>
+           <div class="menu-pop">
+             <a href="<%= url %>" class="<%= menu.operation_class_name %>">
+               <% if menu.font_icon.present? %>
+                 <i class="<%= menu.font_icon %>"></i>
+               <% else %>
+                 <%= image_tag menu.icon %>
+               <% end %>
+             </a>
+           </div> 
+         <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="mod-navPop navPop-1">
+      <div class="navPop-wrap hide" id="navPop-wrap">
+        <b class="navPop-btn" id="navPop-btn"><i class="fa fa-plus" id="fa-btn" onclick="toggleToClass('#navPop-btn','active')"></i></b>
+        <%  @shortcut_menus[0..3].each do |menu| %>
+          <% url = menu.operation_class_name.present? && "javascript:;" || website_activity_link(menu) %>
+          <div>
+            <a href="<%= url %>" class="<%= menu.operation_class_name %>">
+              <% if menu.font_icon.present? %>
+                <i class="<%= menu.font_icon %>"></i>
+              <% else %>
+                <%= image_tag menu.icon %>
+              <% end %>
+            </a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- 快捷菜单 End -->
+  
+    <% content_for :document_ready_js do %>
+      navPop1("#navPop-wrap","#navPop-btn"); // 快捷菜单    
+      $("#navPop-wrap").show();
+    <% end %>
+  <% end %>
+<% end %>
+

@@ -1,0 +1,18 @@
+html{ height: 100%;}
+body{padding:0;	margin:0;font-family:"Microsoft YaHei",Arial, Helvetica, sans-serif; background:#d2d1cd;  height: 100%;width:100%; min-width: 640px;}
+div, h1, h2, h3, h4, p, form, label,  textarea, img, span{margin:0; padding:0; border:none; outline: none;}
+a{ text-decoration:none;}
+ul{	margin:0; 	padding:0; 	list-style-type:none;	font-size:0;line-height:0;}
+.clear{ zoom:1;}
+.clear:after{ content:"";display:block; clear:both;}
+.header{ /*wng position: fixed;*/ left: 0; top: 0; width: 100%; z-index: 5; min-width: 640px;}
+.header .topline{background: #76caca; height: 85px; position: relative; padding: 0 20px; text-align: center; line-height: 85px; font-size: 36px; color: #fff; text-shadow:1px -1px 1px #60a4a4;}
+.header .topline img{  position: absolute; left: 20px; top: 12px;}
+
+.header .search{ padding: 0 20px; background: url(/assets/activity_enroll/bg_top_bg.png) repeat-x; height: 94px;}
+.header .search .form{ float: left; /*wng width: 370px;*/width : 78%; padding: 13px 0 0 0;}
+.header .search .form input{border: 1px solid #c2c2c2; background:url(/assets/activity_enroll/bg_ico_search.png) no-repeat 6px center #fff; border-radius: 5px 5px; overflow: hidden; font-size: 54px; height: 55px;  font-size: 24px; color: #666; width:90%; padding: 0 0 0 35px; vertical-align: middle;}
+.header .search a.near{ display: block; height: 20px; padding: 40px 0 0 0; background: url(/assets/activity_enroll/bg_ico_near.png) no-repeat center top; width:100px; float: right; text-align: center; font-size: 16px; line-height: 20px; color: #888888; margin:10px 15px 0;}
+.header .search a.near:active{ color: #e8645a;}
+.header .search a.order{ display: block; height: 20px; padding: 40px 0 0 0; background: url(/assets/activity_enroll/bg_ico_order.png) no-repeat center top; width:100px; float: left; text-align: center; font-size: 16px; line-height: 20px; color: #888888; margin: 10px 0 0;}
+.header .search a.order:active{ color: #e8645a;}

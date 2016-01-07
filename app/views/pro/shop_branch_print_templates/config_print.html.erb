@@ -1,0 +1,174 @@
+<% content_for :main_content do %>
+<div class="main-content">
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+       微硬件
+     </li>
+     <li>微小票机</li>
+   </ul>
+   <%= render '/layouts/qrcode' %>
+ </div>
+<div class="page-content">
+
+  <div class="row">
+
+    <div class="col-xs-6" style="margin-left: 10px;">
+      <!-- 开始 template 的表单 -->
+
+      <div style="display:none">
+        <% @template.shop_branch.shop_branch_print_templates.each do |t| %>
+          <%= link_to "", config_print_shop_branch_print_template_path(t.shop_branch, template_type: t.template_type), id: "btn_#{t.id}" %>
+        <% end %>
+      </div>
+
+
+      <%= form_for @template do |f| %>
+     
+      <div class="form-group">
+        <label><%= @template.shop_branch.name %>：</label>
+        <div class="clearfix">
+          <%= select_tag "people", options_from_collection_for_select(@template.shop_branch.shop_branch_print_templates, "id", "name", @template.id) %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>
+          <%= f.check_box :is_open, class: "ace" %>
+          <span class="lbl"> 开启 </span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>小票标题：</label>
+        <div class="clearfix">
+          <%= f.text_field :title, class: "col-xs-12" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>自定义说明字段：</label>
+        <div class="clearfix">
+          <%= f.text_field :description, class: "col-xs-12", placeholder: "请输入一段说明（显示在小票结束段）" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>厨房菜品小票：</label>
+        <div class="clearfix">
+          <label class="margin-right-20">
+             <%= f.radio_button :is_print_kitchen, true %>
+            <span class="lbl"> 打印 </span>
+          </label>
+          <label>
+            <%= f.radio_button :is_print_kitchen, false %>
+            <span class="lbl"> 不打印 </span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>打印模式：</label>
+        <div class="clearfix">
+          <div>
+            <label>
+              <%= f.radio_button :print_type, 1, class: "ace print_r" %>
+              <span class="lbl"> 无线打印模式（GPRS收发器或者WIFI收发器） </span>
+            </label>
+          </div>
+          <div>
+            <label>
+              <%= f.radio_button :print_type, 2, class: 'ace print_r' %>
+              <span class="lbl"> USB打印模式（小票打印机通过USB与电脑连接） </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="abc">无线收发器配置地址：</label>
+        <label class="abc">
+          <%= f.check_box :is_auto_print, class: 'ace' %>
+          <span class="lbl"> 自动打印 </span>
+        </label>
+        <div class="clearfix input-list">
+
+         <%= f.fields_for :thermal_printers do |printer| %>     
+
+            <div class="input-group input-group-sm input-group-text margin-top-10">
+              <span class="input-group-addon">http://www.winwemedia.com/recepit/print?supplier_id=</span>
+              <%= printer.text_field :no, validate: true, class: "col-xs-12" %>
+              <span class="input-group-btn">
+                <input type="button" value="添加" class="btn btn-sm btn-filter btn-primary btn-add-print">
+              </span>
+              <%= printer.check_box '_destroy', class: "cd", style: "display: none;" %>
+            </div>
+          <% end %>
+
+        </div>
+        
+      </div>
+      
+
+      <div class="form-group ">
+         <%= f.submit "保存", class: "btn btn-sm btn-primary" %>
+         <a href="/shops/pos", class="btn btn-sm btn-default">取消</a>
+      </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% end %>
+
+<% content_for :custom_js do %>
+
+<script type="text/javascript">
+  $(function(){
+    $("#people").change(function(){
+      window.location = $("#btn_"+$(this).val()).attr("href");
+    });
+    $(".btn-add-print").click(function(){
+      var html = '<div class="input-group input-group-sm input-group-text margin-top-10"><span class="input-group-addon">http://www.winwemedia.com/recepit/print?supplier_id=</span><input class="col-xs-12" id="shop_branch_print_template_thermal_printers_attributes_'+Date.now()+'_no" name="shop_branch_print_template[thermal_printers_attributes]['+Date.now()+'][no]" size="30" type="text"><span class="input-group-btn"><input type="button" value="删除" class="btn btn-sm btn-filter btn-primary btn-delete"></span><input class="cd" id="shop_branch_print_template_thermal_printers_attributes_'+Date.now()+'__destroy" name="shop_branch_print_template[thermal_printers_attributes]['+Date.now()+'][_destroy]" type="checkbox" value="1"></div>';
+
+      $(".input-list").append(html);
+    });
+    $(".input-list").on("click", ".btn-delete", function(){
+      // alert('dd');
+      $(this).parent().parent().find(".cd").prop("checked", true);
+      $(this).parent().parent().hide();
+    });
+    render_print_input();
+    // toggle print input
+    $(".print_r").click(function(){
+      // alert('dd');
+      render_print_input();
+    });
+    correct_btn_type();
+  });
+
+  function render_print_input(){
+    var t = $(".print_r:checked").val();
+    // alert(t);
+    if(t == "1"){
+      $(".input-list").show();
+      $(".abc").show();
+    }else{
+      $(".input-list").hide();
+      $(".abc").hide();
+    }
+  }
+
+  function correct_btn_type(){
+    $(".input-list").find(".btn-add-print:not(:first)").addClass("btn-delete");
+    $(".input-list").find(".btn-add-print:not(:first)").val("删除");
+    $(".input-list").find(".btn-add-print:not(:first)").removeClass("btn-add-print");
+  }
+</script>
+
+<% end %>
+
+<style>
+  .cd {
+    display: none;
+  }
+</style>

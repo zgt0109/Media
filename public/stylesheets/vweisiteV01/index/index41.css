@@ -1,0 +1,102 @@
+.index-title {
+    width: 320px;
+    margin: 0 auto;
+    height: 90px;
+    background: url('/assets/mobile/vweisiteV01/41/MainHeadlineBg.png') no-repeat center top;
+    background-size: 100% 100%;
+    z-index: 11;
+    position: relative;
+    padding: 0;
+}
+
+.index-title h1 {
+    color: #410102;
+    font-size: 20px;
+    padding: 0 26px;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    word-spacing:normal; word-break:normal; word-break:break-all;
+}
+
+.index-title h2 {
+    font-size: 16px;
+    text-align: center;
+    color: #4e0002;
+    text-shadow: 0px 1px 0px #cc5a5f;
+    height: 20px;
+    padding: 0 26px;
+    overflow: hidden;
+    word-spacing:normal; word-break:normal; word-break:break-all;
+    margin: 10px 0 0 0;
+}
+
+.index {
+    background: url('/assets/mobile/vweisiteV01/41/mainNavBg.png');
+    width: 280px;
+    height: 70px;
+    position: relative;
+    top: -15px;
+    margin: 0 auto;
+    z-index: 10;
+    -webkit-border-radius: 0 0 10px 10px;
+    -moz-border-radius: 0 0 10px 10px;
+    border-radius: 0 0 10px 10px;
+    padding: 20px 5px;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0px 0px 5px rgba(0, 0, 0, .3);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, .3);
+}
+
+.index li a {
+    color: #978560;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    width: 66px;
+    height: 20px;
+    line-height: 20px;
+    text-shadow: 0px 1px #f5f4ea;
+    overflow: hidden;
+    display: inline-block;
+    margin: 10px 0 0 0;
+    text-align: center;
+    word-spacing:normal; word-break:normal; word-break:break-all;
+}
+.NavItemInfo {
+    text-transform: lowercase;
+    font-size: 13px;
+    margin-top: 8px;
+    color: #ccbd8b;
+    text-shadow: none;
+    display: none;
+}
+.btn-up-1{display: none;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+    .index-title {
+        width: 460px;
+        height: 140px;
+    }
+    .index-title h1{ font-size: 30px;height: 30px; line-height: 30px;padding: 0 40px;}
+    .index-title h2{margin: 20px 0 0 0; font-size: 20px;padding: 0 40px;}
+    .index {
+        width: 380px;
+        height: 90px;
+        top: -30px;
+        padding: 40px 10px;
+    }
+    .index li a {
+        font-size: 18px;
+        width: 84px;
+        height: 20px;
+        margin: 10px 0 0 0;
+    }
+}

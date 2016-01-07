@@ -1,0 +1,28 @@
+<% content_for :nav_section do %>
+  <% website_menus = website_menus[0..2] %>
+  <% if website_menus.length > 0  %>
+    <section class="mod-navLine navLine-8 ft-<%= website_menus.length%>">
+      <% website_menus.each_with_index do |menu, index| %>
+        <% menus = menu.sub_menus.to_a[0..7] %>
+        <% if menus.present? %>
+          <p>
+            <img src="/assets/mobile/vweisiteV01/16/bg-nav-ft.png"/><%= menu.title %>
+            <span>
+              <i></i><em></em>
+              <% menus.each_with_index do |sub_menu, index| %>
+                <%= link_to sub_menu.title, menu_url(sub_menu) %>
+              <% end  %>
+            </span>
+          </p>
+        <% else %>
+          <%= link_to menu.title, menu_url(menu) %>
+        <% end %>
+      <% end  %>
+    </section>
+  <% end  %>
+<% end %>
+
+<% content_for :document_ready_js do %>
+  $("body").addClass("body-navLine-bottom");
+  navLinePop(".navLine-8 p",".navLine-8 a");
+<% end %>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%= @activity.try(:name) || "美图猜猜" %></title>
+  <%= stylesheet_link_tag 'mobile/guess' %>
+  <style type="text/css">
+  img {width: 100%;}
+  </style>
+  <%= javascript_include_tag 'mobile/lib/guess' %>
+</head>
+<body>
+  <div class="html <%= 'pagelist' if action_name == 'prizes' %>" id="html">
+    <div class="stage" id="stage">
+      <section id="sec-index">
+        <%= yield %>
+      </section>
+    </div>
+  </div>
+  <%= render 'application/app_footer' %>
+  <script type="text/javascript">
+
+  function showForm() {
+   var height = $(window).outerHeight();
+   $(".pop-body").css("margin-top",-height/4);
+   $('.guess_participations_pop').fadeIn();
+  }
+
+  $('.submit_answer').on('click', function(){
+      var select_answers_count = $('.answers .yes').length;
+      var errors_count = $('.guess_errors').length;
+      if(select_answers_count > 0 && errors_count < 1){
+        <%- if @activity_user.new_record? %>
+          showForm();
+        <%- else %>
+          $('#new_guess_participation').submit();
+        <%- end %>
+      }
+    })
+
+  $(document).on('click', '.save_form', function(e){
+    var can_submit = true;
+    $('.activity_user_fields input').each(function(index, input){
+      if ($.trim($(input).val()) == ""){
+        $(input).parent().find('.blank_tip').show();
+        setTimeout(function(){
+          $(input).parent().find('.blank_tip').hide();
+        }, 2000)
+        can_submit = false;
+      }
+      if (input.id == 'mobile'){
+        if(!winwemedia_validators.mobile_reg.test(input.value)){
+          $(input).parent().find('.error_tip').show();
+          setTimeout(function(){
+            $(input).parent().find('.error_tip').hide();
+          }, 2000)
+          can_submit = false;
+        }
+      }
+      if (input.id == 'email'){
+        if(!winwemedia_validators.email_reg.test(input.value)){
+          $(input).parent().find('.error_tip').show();
+          setTimeout(function(){
+            $(input).parent().find('.error_tip').hide();
+          }, 2000)
+          can_submit = false;
+        }
+      }
+    })
+    if(can_submit){
+      $('#new_guess_participation').submit();
+    }
+  })
+  </script>
+  <%- if action_name == 'detail' %>
+    <div class="popup guess_participations_pop" style="display: hide;">
+      <div class="pop-body" style="margin-top: 100px;">
+        <div class="pop-t">信息填写</div>
+          <div class="pop-m">
+            <%= form_for (@wx_user.guess_participations.new), url: create_participation_mobile_guess_path, remote: true  do |guess_participation| %>
+              <%= guess_participation.hidden_field :answer %>
+              <%= guess_participation.hidden_field :activity_user_id, value: @activity_user.id %>
+              <%= guess_participation.hidden_field :wx_user_id, value: @wx_user.id %>
+              <%= guess_participation.hidden_field :question_id, value: @question.id %>
+              <%= guess_participation.hidden_field :activity_id, value: @activity.id %>
+              <%= guess_participation.hidden_field :activity_question_id, value: @guess_activity_question.id %>
+              <div class="mod-form activity_user_fields">
+                <%- @user_info_columns.each do |column| %>
+                  <div class="mod-li">
+                    <%= text_field_tag column.to_sym, @activity_user.send(column.to_sym), placeholder: mobile_label_name_for(column) %>
+                    <div class="error-tips blank_tip" style="display:none">
+                      <span class="error-icon"></span>
+                      <span>请输入您的<%= mobile_label_name_for(column) %></span>
+                    </div>
+                    <div class="error-tips error_tip" style="display:none">
+                      <span class="error-icon"></span>
+                      <span><%= mobile_label_name_for(column) %>格式不正确</span>
+                    </div>
+                  </div>
+                <%- end %>
+              </div>
+            </div>
+            <div class="pop-f">
+              <div class="cell">
+                <a href="javascript:;" data-fn="modal" class="btn btn-yellow save_form">确定</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <%- end %>
+    </div>
+  <%- end %>
+</body>
+</html>

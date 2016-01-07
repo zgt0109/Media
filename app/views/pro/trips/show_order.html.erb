@@ -1,0 +1,14 @@
+<form>
+<div class="modal-body">
+    <p>订单编号：<%= @trip_order.order_no %></p>
+    <p>门票名称：<%= @trip_order.ticket_name %></p>
+    <p>预订数量：<%= @trip_order.qty %></p>
+    <p>门票单价：<%= f @trip_order.price %></p>
+    <p>下单时间：<%= @trip_order.created_at %></p>
+    <p>门票总价：<%= f @trip_order.total_amount %></p>
+    <p>联系人姓名：<%= @trip_order.username %></p>
+    <p> 联系人电话： <%= @trip_order.tel %> </p>
+    <p>游玩时间：<%= @trip_order.booking_at %></p>
+</div>
+<div class="clearfix"></div>
+</form>

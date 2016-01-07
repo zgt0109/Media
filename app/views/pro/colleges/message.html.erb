@@ -1,0 +1,44 @@
+<% content_for :tab_content do %>
+    <div id="tab-1" class="tab-pane fade active in">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                        <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微教育。</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <%= render 'application/weixin_preview', wx_title: @activity.name, wx_summary: @activity.summary, wx_pic: @activity.pic_url %>
+            <div class="col-xs-12 col-md-6 col-lg-7">
+                <%= form_for @activity, url: create_activity_colleges_url, validate: true, class: 'form col-xs-12', role: 'form' do |f| %>
+                    <%= render "application/weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-sm btn-primary form-submit" value="保存">
+                        <!--input type="reset" class="btn btn-sm btn-default" value="取消"-->
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<%= render 'pro/colleges/main_content' %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        function save_submit(){
+            if($('#activity_keyword').val() == ""){
+                showTip('warning',"请设置回复关键词！");
+                return false;
+            }else if($('#activity_name').val() == ""){
+                showTip('warning',"请设置微信消息标题！");
+                return false;
+            }else{
+                $('form').submit()
+            }
+            // return true;
+        }
+    </script>
+<% end %>

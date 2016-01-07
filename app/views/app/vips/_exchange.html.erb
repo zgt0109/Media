@@ -1,0 +1,44 @@
+<% @point_gift_exchanges.each do |exchanged| %>
+    <% point_gift = exchanged.point_gift %>
+    <dl id="exchanged_<%= exchanged.id %>">
+      <dt class="border">
+        <a class="icon-right" href="#">
+          <i class="icon icon-3"></i>
+          <span><%= point_gift.name %></span>
+          <div class="num"><%= exchanged.used? ? '已' : '未' %>领取</div>
+        </a>
+      </dt>
+      <dd>
+        <p><%= image_tag point_gift.pic_url %></p>
+        <p>
+          <span class="c-6">兑换所需积分：</span>
+          <span class="c-orange"><%= point_gift.points %>分</span>
+        </p>
+        <p>
+          <span class="c-6">可用积分：</span>
+          <span class="c-orange"><%= @vip_user.usable_points %></span>
+        </p>
+        <p>
+          <span class="c-6">可兑换次数：</span>
+          <%= point_gift.limit_count_name( @vip_user ) %>
+        </p>
+        <% if point_gift.shop_branches_count > 0 %>
+          <p>
+            <span class="c-6">使用门店：</span>
+            <span><a class="c-blue underline" href="<%= shops_app_vips_path( ids: ( point_gift.shop_branch_ids.join(',') if point_gift.shop_branch_limited? ) ) %>"><span><%= point_gift.shop_branches_count %>家</span></a></span>
+          </p>
+        <% end %>
+        <% if exchanged.consume %>
+          <p>
+            <span class="c-6">领取截止日期：</span>
+            <%= exchanged.consume.expired_at || '不限制' %>
+          </p>
+        <% end %>
+        <p>
+          <span class="c-6">礼品兑换说明：</span>
+        </p>
+        <p><%= point_gift.description %></p>
+        <%= link_to '立即使用', use_gift_app_vips_path(id: exchanged.id), class: 'btn btn-biger mt' if exchanged.usable? %>
+      </dd>
+    </dl>
+<% end %>

@@ -1,0 +1,49 @@
+<style type="text/css">
+  .pluin-btn { width: 56px; height: 34px; background: url(/assets/business.png) no-repeat; cursor: pointer; }
+  .wedding-seats-settings a.pluin-open { background-position: 0 -807px; }
+  .wedding-seats-settings a.pluin-close { background-position: 0 -736px; }
+</style>
+
+<%= content_for :sidebar do %>
+  <%= render partial: 'pro/weddings/sidebar', locals: { wedding: @wedding } %>
+<% end %>
+
+<%= content_for :topbar do %>
+  <h1 class="pagecurrent">贵宾座位设置</h1>
+<% end %>
+
+<div class="box-table fl" id="wedding">
+  <div class="pluin-ft">
+    <span class="p-plugin fl">开启此功能：</span>
+    <a class="btn-pluin pluin-<%= @wedding.seats_enabled? ? 'open' : 'close' %>"></a>
+  </div>
+  <p class="plugin-show">请在下方填写正确的贵宾名称以及桌号（请务必填写正确，否则贵宾将查询不到自己的桌位）</p>
+  <p class="plugin-show"><a class="btn btn-big btn-pop seat-add-btn">添加桌位</a></p>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
+    <tr>
+      <th>桌号 </th>
+      <th>座位情况</th>
+      <th>操作</th>
+    </tr>
+    <% if @seats.each do |seat| %>
+      <tr id="seat-row-<%= seat.id %>">
+        <td><%= seat.name %></td>
+        <td><%= "#{seat.guest_names.size}/#{seat.seats_count}" %></td>
+        <td>
+          <a class="btn-pop seat-edit-btn" data-table="0" data-id="<%= seat.id %>" data-path="<%= wedding_seat_path(@wedding, seat) %>" style="cursor: pointer;">
+            编辑
+          </a>
+          <%= link_to '删除', wedding_seat_path(@wedding, seat), remote: true, method: :delete, confirm: '确定删除该座位？' %>
+        </td>
+      </tr>
+    <% end.blank? %>
+      <tr><td colspan="3" class="green text-center">无记录</td></tr>
+    <% end %>
+  </table>
+</div>
+
+<div class="ft">
+  <%= paginate @seats, theme: 'pretty' %>
+</div>
+
+<%= render partial: 'pop', locals: { wedding: @wedding, seat: @seat } %>

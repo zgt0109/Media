@@ -1,0 +1,17 @@
+<div class="index" id="indexList">
+  <ul class="navLine-ul">
+    <% website_menus.in_groups_of(4, false).each do |sub_menus| %>
+      <li>
+        <% sub_menus.each do |menu| %>
+          <%= link_to menu_url(menu), class: 'box mod-index' do %>
+              <small><%= menu.title %></small>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <% content_for :document_ready_js do %>
+    divSwipe("indexList");
+  <% end %>

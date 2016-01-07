@@ -1,0 +1,24 @@
+<div class="list-li">
+  <div class="list-img">
+    <%= link_to mobile_micro_store_path( :supplier_id => session[:supplier_id] , id: branch.id), class: "box" do %>
+      <img src="<%= branch.pic_url %>">
+    <% end %>
+  </div>
+  <div class="list-info">
+    <div class="list-top">
+      <%= link_to mobile_micro_store_path( :supplier_id => session[:supplier_id] , id: branch.id), class: "box" do %>
+        <div class="name"><%= branch.name %></div>
+        <div class="mark"><%= branch.human_distance_to(@wx_user) if @wx_user.try(:location_x).present? %></div>
+        <div class="add"><%= branch.ditu_address %></div>
+      <% end %>
+    </div>
+    <div class="list-tool">
+      <a href="tel:<%= branch.tel %>" class="tel"><i class="icon icon-1"></i>电话</a>
+      <%# if @wx_user.try(:location_x).present? %>
+        <!--a target="_blank" href="<%#= baidu_map_location_http(@wx_user.location_x,@wx_user.location_y,branch.location_y,branch.location_x,branch.name,branch.city.name) %>"><i class="icon icon-2"></i>导航</a-->
+      <%# else %>
+        <a target="_blank" href="<%= baidu_map_address_http(branch.location_y,branch.location_x,branch.ditu_address) %>"><i class="icon icon-2"></i>导航</a>
+      <%# end %>
+    </div>
+  </div>
+</div>

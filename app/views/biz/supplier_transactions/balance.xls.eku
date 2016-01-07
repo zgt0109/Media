@@ -1,0 +1,9 @@
+__filename = "supplier_balance.xls"
+sheet1 = xls.create_worksheet
+system_header = ['业务订单号', '支付流水号', '所属业务', '支付时间',  '支付金额', '费率', '可提现金额', '状态']
+sheet1.row(0).concat(system_header)
+@records_all.relation.each_with_index do |record, i|
+  system_values = [record.out_trade_no, record.trade_no, record.source_name, record.gmt_payment.try(:to_s),
+  				     record.amount, (record.settle_fee_rate * 100).to_s+'%',  record.withdraw_amount, record.settle_status_name]
+  sheet1.row(i + 1).replace(system_values)
+end

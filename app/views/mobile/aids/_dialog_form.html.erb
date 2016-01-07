@@ -1,0 +1,65 @@
+<div class="dialog dialog-form1">
+  <div class="dialog-body">
+    <div class="clearfix dialog-main dialog-form">
+      <div class="clearfix dialog-form-tips">
+        <div class="dialog-form-pic">
+          <%= image_tag "/assets/mobile/aids/prize_2.png", size: "199x230", class: "img-full", alt: "" %>
+        </div>
+        <div class="dialog-form-txt">
+          <div class="dialog-form-prize">奖品：<strong class="dialog-form-prizestrong"><%= @prize.present? && @prize.title %></strong></div>
+          <p class="dialog-form-tip">请在下面留下您的联系方式，我们的工作人员将与您联系并发奖。</p>
+        </div>
+    </div>
+    <div class="dialog-form-error"></div>
+    <div class="dialog-form-main">
+      <%- if need_name? %>
+        <div class="dialog-form-wp form-type-text dialog-form-name">
+          <input class="dialog-input-txt input-name" type="text" placeholder="请输入姓名">
+        </div>
+      <%- end %>
+      <%- if need_mobile? %>
+        <div class="dialog-form-wp form-type-text dialog-form-phone">
+          <input class="dialog-input-txt input-mobile" type="text" placeholder="请输入电话号码">
+        </div>
+        <%- if sms_verification? %>
+          <div class="dialog-form-wp form-type-text dialog-form-check">
+            <input class="dialog-input-txt sms-verification" type="text" placeholder="请输入验证码">
+            <input class="dialog-input-btn" type="button" value="获取验证码">
+          </div>
+        <%- end %>
+      <%- end %>
+    </div>
+  </div>
+  <div class="dialog-close"></div>
+    <a href="javascript:;" class="btn main-btn main-btn-full dialog-btn">提交</a>
+  </div>
+</div>
+
+<div class="dialog dialog-form2">
+  <div class="dialog-body">
+    <div class="clearfix dialog-main dialog-form">
+      <div class="dialog-close"></div>
+      <div class="dialog-form-error"></div>
+      <div class="dialog-form-main dialog-form-main1">
+        <div class="dialog-form-wp form-type-text dialog-form-convertpass">
+          <input class="dialog-input-txt input-password" type="text" placeholder="请输入兑奖密码">
+        </div>
+      </div>
+      <div class="dialog-form-main dialog-form-main2">
+        <div class="dialog-form-wp form-type-radio dialog-form-store">
+            <label class="dialog-radio-label">
+              <input class="dialog-input-radio input-shop" type="radio" name="store" value=''  checked ><span class="dialog-form-simulate"></span>
+              <span class="dialog-form-txt">商户总部</span>
+            </label>
+          <% @shop_branches.present? && @shop_branches.each do |shop| %> 
+            <label class="dialog-radio-label">
+              <input class="dialog-input-radio input-shop" type="radio" name="store" value=<%= shop.id %>><span class="dialog-form-simulate"></span>
+              <span class="dialog-form-txt"><%= shop.name %></span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+      <a href="javascript:;" class="btn main-btn main-btn-full dialog-btn">提交</a>
+    </div>
+  </div>
+</div>

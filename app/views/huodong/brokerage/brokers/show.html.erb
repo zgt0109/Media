@@ -1,0 +1,20 @@
+<form>
+<div class="modal-body">
+  <div class="form-group">
+    <p>经纪人姓名: <%= @brokerage_broker.name %></p>
+    <p>经纪人电话: <%= @brokerage_broker.mobile %></p>
+    <% if @brokerage_broker.settlement_type == 1  ||  @brokerage_broker.settlement_type == 2 %>
+        <p>结算银行卡账户名:       <%= @brokerage_broker.bank_account_name %></p>
+        <p>结算银行卡号:          <%= @brokerage_broker.bank_card_no %></p>
+        <p>结算银行卡开户银行:     <%= @brokerage_broker.bank_name %></p>
+        <p>结算支付宝用户名:       <%= @brokerage_broker.alipay_account_name %></p>
+        <p>结算支付宝收款人姓名:    <%= @brokerage_broker.alipay_receiver %></p>
+    <% else %>
+        <p>尚未绑定银行卡或支付宝</p>
+    <% end %>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-primary" data-dismiss="modals">确定</button>
+</div>
+</form>

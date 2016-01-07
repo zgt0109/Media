@@ -1,0 +1,117 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title></title>
+    <script src="http://lib.sinaapp.com/js/jquery/1.7.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/donations/winwemedia01.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/donations/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/donations/wdonations.css">
+</head>
+<body>
+    <div class="html" id="html">
+        <div class="stage" id="stage">
+            <section id="sec-index">
+                <div class="body">
+                    <%= form_for @donation_order, url: mobile_donation_order_url(supplier_id: session[:supplier_id], id: @donation_order.id), method: :put, :html => { class: "mod-form form-hor" } do |f| %>
+                        <div class="bd">
+                            <div class="form-li">
+                                <div class="li-l"> <b>您的姓名</b>
+                                </div>
+                                <div class="li-r">
+                                    <%= f.text_field :name, class: "input name-input", place: "请输入您的真实姓名" %>
+                                </div>
+                            </div>
+                            <div class="form-li">
+                                <div class="li-l"> <b>捐赠金额</b>
+                                </div>
+                                <div class="li-r">
+                                    <span style="font-size:18px;"><%= @donation_order.fee %>元</span>
+                                    <%= f.hidden_field :fee %>
+                                </div>
+                            </div>
+                            <div class="form-li">
+                                <div class="li-l">
+                                    <b>手机号码</b>
+                                </div>
+                                <div class="li-r">
+                                    <%= f.text_field :mobile, class: "input mobile-input", place: "请输入您的手机号码" %>
+                                </div>
+                            </div>
+                            <div class="form-li">
+                                <div class="li-l">
+                                    <b>需要发票</b>
+                                </div>
+                                <div class="li-r">
+                                    <label>
+                                        <%= f.radio_button :receipt, 0, checked: true, onclick: "hide_div();" %>   
+                                        否
+                                    </label>
+                                    <label>
+                                        <%= f.radio_button :receipt, 1, checked: false, onclick: "show_div();" %>     
+                                        是
+                                    </label>
+                                </div>
+                            </div>
+
+                        <div id="detail_div" style="display:none">
+                            <div class="form-li">
+                                <div class="li-l">
+                                    <b>地址</b>
+                                </div>
+                                <div class="li-r">
+                                    <%= f.text_field :address, class: "input address-input", placeholder: "请输入您的详细地址" %>  
+                                </div>
+                            </div>
+                        </div>   
+                        </div>
+                        <div class="ft">
+                            <%= f.submit "确认捐款", class: "btn btn-orange" %> 
+                        </div>
+                    <% end %>
+                </div>
+            </section>
+        </div>
+    </div>
+    <footer></footer>
+    <script src="/assets/mobile/winwemedia01.js"></script>
+    <script type="text/javascript">
+        function show_div(){
+            $("#detail_div").show();
+        }
+
+        function hide_div(){
+            $("#detail_div").hide();
+        }
+        $(function(){
+            $("form").submit(function(){
+                if($("input[type=radio]:checked").val()=="1"){
+                    if($(".name-input").val() == ""){
+                        alert("姓名不能为空!");
+                        return false;
+                    }
+                    if($(".mobile-input").val() == ""){
+                        alert("手机不能为空!");
+                        return false;
+                    }
+                    if($(".address-input").val() == ""){
+                        alert("地址不能为空!");
+                        return false;
+                    }
+                }
+            })
+        })
+    </script>
+<script>
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+      WeixinJSBridge.call('hideOptionMenu');
+    });
+  </script>
+</body>
+</html>

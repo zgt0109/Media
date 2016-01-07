@@ -1,0 +1,85 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+
+<% if website_menus.present? %>
+    <% menu = website_menus.first %>
+    <div class="index-goods">
+      <%= link_to menu_url(menu), class: "box" do %>
+          <div class="goods-img">
+            <!--<i class="fa fa-home"></i>-->
+            <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+          </div>
+          <div class="goods-info">
+            <div class="table">
+              <div class="td">
+                <!--<div class="g-type"><%#= menu.title %></div>-->
+                <div class="g-title"><%= menu.title %></div>
+              </div>
+            </div>
+          </div>
+          <div class="goods-link"><i class="fa fa-angle-right"></i></div>
+      <% end %>
+    </div>
+    <div class="index">
+      <% website_menus[1..8].to_a.each do |menu| %>
+          <%= link_to menu_url(menu), class: "box mod-index" do %>
+              <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+          <% end %>
+      <% end %>
+    </div>
+    <% if website_menus[9] %>
+        <div class="rank">
+          <% menu = website_menus[9] %>
+          <div class="rank-l">
+            <%= link_to menu_url(menu), class: "box" do %>
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+            <% end if menu.present? %>
+          </div>
+          <div class="rank-r">
+            <ul class="ranking">
+              <% website_menus[10..11].to_a.each do |menu| %>
+                  <li>
+                    <%= link_to menu_url(menu), class: "box" do %>
+                        <div class="img">
+                          <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+                        </div>
+                        <div class="rank-goods">
+                          <div class="table">
+                            <div class="td">
+                              <span><%= menu.title %></span>
+                              <!--<b>热销1512瓶</b>-->
+                            </div>
+                          </div>
+                        </div>
+                    <% end %>
+                  </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+    <% end %>
+
+    <% website_menus[12..-1].to_a.in_groups_of(5, false).each do |menus| %>
+        <div class="rank">
+            <% menus.each_with_index do |menu, index| %>
+                <%= "<div class='rank-r'><ul class='rank-list'>".html_safe if index == 1 %>
+                <% if index == 0 %>
+                  <div class="rank-l">
+                    <%= link_to menu_url(menu), class: "box" do %>
+                        <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                    <% end %>
+                  </div>
+                <% else%>
+                    <li>
+                      <%= link_to menu_url(menu), class: "box" do %>
+                          <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                          <span><%= menu.title %></span>
+                      <% end %>
+                    </li>
+                <% end %>
+                <%= "</ul></div>".html_safe if index == menus.count - 1 %>
+            <% end %>
+        </div>
+    <% end %>
+
+<% end %>

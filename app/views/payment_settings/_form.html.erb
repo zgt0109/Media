@@ -1,0 +1,156 @@
+<%= form_for @payment_setting, validate: true do |f| %>
+  <%= f.hidden_field :payment_type_id %>
+
+  <div class="modal-body">
+    <% if @payment_setting.weixinpay? %>
+      <div class="form-group">
+        <label>微信支付商户号MCHID<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_id, class: 'form-control', placeholder: 'MCHID' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>微信支付密钥Key<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_key, class: 'form-control', placeholder: 'Key', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>微信公众平台公众号AppID<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :app_id, class: 'form-control', placeholder: 'AppId', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>微信公众平台公众号AppSecret<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :app_secret, class: 'form-control', placeholder: 'AppSecret', validate: true %>
+        </div>
+      </div>
+    <% elsif @payment_setting.wxpay? %>
+      <div class="form-group">
+        <label>财付通商户号PartnerID<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_id, class: 'form-control', placeholder: 'PartnerID' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>财付通初始密钥PartnerKey<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_key, class: 'form-control', placeholder: 'PartnerKey' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>微信支付密钥PaySignKey<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :pay_sign_key, class: 'form-control', placeholder: 'PaySignKey', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>微信公众平台公众号AppID<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :app_id, class: 'form-control', placeholder: 'AppId', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>微信公众平台公众号AppSecret<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :app_secret, class: 'form-control', placeholder: 'AppSecret', validate: true %>
+        </div>
+      </div>
+    <% elsif @payment_setting.tenpay? %>
+      <div class="form-group">
+        <label>财付通商户号PartnerID<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_id, class: 'form-control', placeholder: 'PartnerID' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>财付通初始密钥PartnerKey<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_key, class: 'form-control', placeholder: 'PartnerKey' %>
+        </div>
+      </div>
+    <% elsif @payment_setting.alipay? %>
+      <div class="form-group">
+        <label>支付宝账号<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_account, class: 'form-control', placeholder: '支付宝账号', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>合作者身份PID<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_id, placeholder: 'PID', class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>安全校验码Key<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_key, placeholder: 'Key', class: 'form-control' %>
+        </div>
+      </div>
+    <% elsif @payment_setting.yeepay? %>
+      <div class="form-group">
+        <label>商家账户编号<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_field :partner_id, class: 'form-control', placeholder: '例如：YB01000000xxx' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>商品类别码<span class="required-star">*签合同时指定</span></label>
+
+        <div class="clearfix">
+          <%= f.select :product_catalog, PaymentSetting.product_catalog_options, placeholder: '1虚拟产品 2信用卡还款 3公共事业缴费 4手机充值 5普通商品 6慈善和社会公益服务 7实物商品', class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>商户RSA私钥<span class="required-star">* <a href="http://mobiletest.yeepay.com/file/caculate/rsa" target="_blank">一键支付生成RSA密钥对工具</a></span></label>
+
+        <div class="clearfix">
+          <%= f.text_area :pay_private_key, rows: 5, class: 'form-control', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>商户RSA公钥<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_area :pay_public_key, rows: 5, class: 'form-control', validate: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>易宝RSA公钥<span class="required-star">*</span></label>
+
+        <div class="clearfix">
+          <%= f.text_area :partner_key, rows: 5, class: 'form-control' %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <label>排序<span class="required-star">*值越小越靠前</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :sort, maxlength: 5, class: 'form-control' %>
+      </div>
+    </div>
+
+  </div>
+
+  <%= render 'shared/modalFooter' %>
+<% end %>

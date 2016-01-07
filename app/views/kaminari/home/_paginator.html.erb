@@ -1,0 +1,9 @@
+<%= paginator.render do -%>
+  <div class="page">
+    <%= prev_page_tag %>
+      <% each_page do |page| -%>  
+        <%= page_tag page %>
+      <% end -%>
+    <%= next_page_tag %>
+  </div>
+<% end -%>

@@ -1,0 +1,113 @@
+<% provide(:title, '积分兑换礼品') %>
+<style type="text/css">
+  .pagination li{display: none;}
+</style>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="J-slider" id="sec-index">
+      <!-- tab box start -->
+      <div class="tab-box">
+        <%= link_to '全部礼品', gifts_app_vips_path(wxmuid: session[:wx_mp_user_id]), class: "cur" %>
+        <%= link_to '已兑换礼品', exchanged_app_vips_path(wxmuid: session[:wx_mp_user_id]), id: 'exchanged' %>
+      </div>
+      <!-- tab box end -->
+      <!-- list box start -->
+      <% if @gifts.present? %>
+          <div class="list-box">
+            <%= render 'gift' %>
+          </div>
+      <% else %>
+        <div class="nothing">暂无礼品</div>
+      <% end %>
+      <div class="loading"><img src="/assets/albums/loading.gif"/></div>
+      <div class="hide"><%= paginate @gifts %></div>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>
+<script>
+    var max_given_points    = <%= @vip_user.vip_givens.point.usable.maximum(:value).to_i rescue 0 %>,
+        user_account_points = <%= @vip_user.usable_points rescue 0 %>;
+
+    <% if @vip_user %>
+    $(".btn-exchange").click(exchangeGift);
+
+    function exchangeGift(event) {
+        var $this = $(this);
+        if ($this.hasClass('disabled')) {
+          event.preventDefault();
+          return false;
+        }
+        var gift_point = $this.data('gift-point');
+        var gift_limit_count = $this.data('gift-limit-count');
+        var people_limit_count = $this.data('people-limit-count');
+        $('#need_point').text( gift_point );
+        if ( !isNaN( gift_limit_count ) && !parseInt( gift_limit_count ) ) {
+            alert('兑换失败，每个用户最多可兑换' + people_limit_count + '次');
+            return false;
+        } else if ( user_account_points + max_given_points < gift_point ) {
+            alert('积分不足，无法兑换该礼品');
+            return false;
+        }
+    }
+    <% else %>
+      $('.btn-exchange').click(function (event) {
+          event.preventDefault();
+          if ($(this).hasClass('disabled')) return false;
+          if(confirm('这是会员专属礼品，开通会员可以获得更多特权惊喜，赶紧去开通吧！')) {
+              location.href = '<%= app_vips_path %>';
+          }
+          return false;
+      })
+      $('#exchanged').click(function(event) {
+        event.preventDefault();
+        if(confirm('您还不是会员，赶紧去开通吧！')) {
+            location.href = '<%= app_vips_path %>';
+        }
+        return false;
+      });
+    <% end %>
+
+
+    $(".J-close").on("click",function(){
+        $(this).parents(".pop").hide();
+    });
+
+    $(function(){
+        setTimeout(function() {
+            $("a.fa-chevron-right:first").click();
+        }, 1);
+        //底部上拉刷新
+        document.addEventListener("touchstart",function(e){
+            var t=e.touches[0],
+                y=t.pageY;
+            $documentH = $(document).height();
+            $("body").attr("data-y",y);
+        });
+        var urls = [];
+        document.addEventListener("touchmove",function(e){
+            var nextA = $('.pagination .next');
+            var url = nextA.attr('href');
+
+            var t=e.touches[0],
+                startY=parseInt($("body").attr("data-y")),
+                pageY=(startY - t.pageY);
+            $touchT = $(window).scrollTop() + $(window).height() +pageY;
+            if($touchT>=$documentH){
+                if (url && urls.indexOf(url) == -1) {
+                    urls.push(url);
+                    $(".loading").show();
+                    var nextPage = parseInt(/page=(\d+)/.exec(url)[1]) + 1;
+                    nextA.attr('href', url.replace(/page=(\d+)/, "page=" + nextPage));
+                    return $.getScript(url);
+                }
+            }
+        });
+        document.addEventListener("touchend",function(e){
+            // var t=e.touches[0];
+        });
+    });
+</script>
+

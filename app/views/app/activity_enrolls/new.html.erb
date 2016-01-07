@@ -1,0 +1,271 @@
+<% activity_status_name = @activity.enroll_status_attrs[0] %>
+<div class="bodybg"></div>
+<div id='mySwipe' class='swipe'>
+  <div class='swipe-wrap'>
+    <!--活动介绍-->
+    <div class="swiper-slide">
+      <div class="logo animation fddown"></div>
+      <div class="border1 animation fdup">
+        <div class="apply_box1">
+          <div class="h1 col1"><%= @activity.name.presence || '微报名' %></div>
+          <div class="apply_txt1">
+            <p class="h4 col1"><i class="ico ico1"></i>报名时间</p>
+	    <%- if ['已结束', '未开始'].include?(activity_status_name) %>
+              <p><%= activity_status_name %></p>
+            <%- else %>
+              <%- if @activity.start_at.nil? &&  @activity.end_at.nil? %>
+                <p>永久有效</p>
+              <%- else %>
+              <p><%= @activity.start_at.try(:strftime, '%Y-%m-%d') %>~<%= @activity.end_at.try(:strftime, '%Y-%m-%d') %></p>
+              <%- end %>
+            <%- end %>
+          </div>
+          <div class="apply_txt1 ">
+            <p class="h4 col1"><i class="ico ico2"></i>活动说明</p>
+            <div class="minh1">
+              <p><%= raw @activity.description rescue "#{@activity.name}报名活动" %></p>
+            </div>
+            <div class="blank"></div>
+            <%- if @activity.extend.related_link_type == 'website' && @activity.extend.related_website_id %>
+              <p class="col1" align="right"><a href="<%= enroll_related_link(@activity.extend.related_link_type, @activity.extend.related_website_id, @openid) %>"><%= enroll_related_name(@activity.extend.related_link_type, @activity.extend.related_website_id) %></a></p>
+            <%- end %>
+            <%- if @activity.extend.related_link_type == 'scene' && @activity.extend.related_scene_id %>
+              <p class="col1" align="right"><a href="<%= enroll_related_link(@activity.extend.related_link_type, @activity.extend.related_scene_id, @openid) %>"><%= enroll_related_name(@activity.extend.related_link_type, @activity.extend.related_scene_id) %></a></p>
+            <%- end %>
+            <%- if @activity.extend.related_link_type == 'album' && @activity.extend.related_album_id %>
+              <p class="col1" align="right"><a href="<%= enroll_related_link(@activity.extend.related_link_type, @activity.extend.related_album_id, @openid) %>"><%= enroll_related_name(@activity.extend.related_link_type, @activity.extend.related_album_id) %></a></p>
+            <%- end %>
+          </div>
+        </div>
+      </div>
+      <div class="blank6"></div>
+    </div>
+    <%#- if (@activity.setted? && @activity.activity_status_name == '进行中') %>
+    <%- if activity_status_name.eql?('进行中') %>
+    <!--报名展示-->
+    <div class="swiper-slide">
+      <div class="logo  animation fddown"></div>
+      <%= form_tag app_activity_enrolls_url, id: "apply_form", class: 'animation fdup' do %>
+      <div class="border1">
+        <div class="apply_form_cont">
+          <div class="apply_form">
+            <ul>
+              <% @activity.activity_forms.order("sort desc").each do |activity_form| %>
+              <li>
+               <%
+               options = {field_name: activity_form.field_value, placeholder: "请输入您的#{activity_form.field_value}", class: "apply_input"}
+               options.merge!(type: "date").merge!(value: Date.today.to_s) if activity_form.activity_form_field.try(:field_type_name) == "日期"
+               options.merge!(required: "1") if activity_form.required
+               %>
+               <% if "username" == activity_form.field_name %>
+               <%= text_field_tag "fields[#{activity_form.field_name}]", nil, options %>
+               <% elsif "mobile" == activity_form.field_name %>
+               <%= text_field_tag "fields[#{activity_form.field_name}]", nil, options %>
+               <% else %>
+               <%= text_field_tag "fields[#{activity_form.field_name}]", nil, options %>
+               <% end %>
+               <% if activity_form.required %><div class="star"></div><% end %>
+             </li>
+             <% end %>
+           </ul>
+         </div>
+       </div>
+     </div>
+
+     <%- if @exists_activity_enroll  %>
+        <%- if @activity.allow_repeat_apply? %>
+          <div class="appbtn animation2 fdinx"><input type="button" class="apply_btn" value="再次报名"/></div>
+        <%- else %>
+          <div class="appbtn animation2 fdinx"><input type="button" class="apply_btn" value="报名成功"/></div>
+        <%- end %>
+     <%- else %>
+      <div class="appbtn animation2 fdinx"><input type="button" class="apply_btn" value="确认报名"/></div>
+    <%- end %>
+     <div class="blank6"></div>
+     <%- end %>
+   </div>
+   <%- end %>
+
+   <!--报名状态-->
+
+   <div class="swiper-slide slide3">
+    <!--无表单-->
+    <div class="noForm <%= (!@activity.audited? || @activity_enrolls.blank?) ? '' : 'hide' %>">
+      <div class="logo  animation fddown"></div>
+      <div class="border1  animation fdup">
+        <div class="apply_box1">
+          <div class="h1 bordn">
+            <% if @exists_activity_enroll %>
+              <div class="padv30 padm5 enroll_status" align="center"><%= @activity.extend.enrolled_tip.presence || '已报名' %></div>
+            <% else %>
+              <div class="padv30 padm5 enroll_status" align="center"><%= @activity.extend.unenrolled_tip.presence || '您还未报名，左划进入报名页面' %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--有表单-->
+      <div class="hform <%= (!@activity.audited? || @activity_enrolls.blank?) ? 'hide' : '' %>">
+        <div class="logo  animation fddown"></div>
+        <div class="bb animation fdup">
+         <div class="border1 ">
+          <div class="apply_box1">
+            <% if @exists_activity_enroll %>
+              <div class="h1 col1 enroll_status"><%= @activity.extend.enrolled_tip.presence || '已报名' %></div>
+            <% else %>
+              <div class="h1 col1 enroll_status"><%= @activity.extend.unenrolled_tip.presence || '您还未报名，左划进入报名页面' %></div>
+            <% end %>
+            <div class="pad10"><p class="h4 col1"><i class="ico ico2"></i>已报名人员名单</p></div>
+            <div class="tab_tit ">
+              <table>
+                <tr>
+                  <th width="30%">姓名</th>
+                  <th width="38%">电话</th>
+                  <th width="32%">报名时间</th>
+                </tr>
+              </table>
+            </div>
+            <div>
+                  <div id="scroll-wrap">
+                      <div id="scroller" class="tab1">
+              <table class="enroll_list">
+                <%-  @activity_enrolls.each_with_index do |enroll, index| %>
+                <tr>
+                  <td width="30%"><%= enroll.username %></td>
+                  <td width="38%"><%= enroll.secure_mobile %></td>
+                  <td width="32%"><%= enroll.created_at.try(:strftime, '%Y-%m-%d') %></td>
+                </tr>
+                <%- end %>
+              </table>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="blank6"></div>
+</div>
+</div>
+</div>
+
+<div class="pagination"><span class="swiper-pagination-switch swiper-visible-switch swiper-active-switch"></span><span class="swiper-pagination-switch"></span><span class="swiper-pagination-switch"></span></div>
+    <a class="arrow-left arr_act" href="#"><i></i>报名状态</a>
+  <%#- if (@activity.setted? && @activity.activity_status_name == '进行中') %>
+  <%- if activity_status_name.eql?('进行中') %>
+    <a class="arrow-right arr_act" href="#"><i></i>立刻报名</a>
+  <%- else %>
+    <a class="nolink arrow-right arr_act" href="#"><i></i>立刻报名</a>
+  <%- end %>
+
+      <script type="text/javascript">
+
+      $(document).ready(function(){
+        if(!can_apply){
+          $(".arrow-right").removeClass("arr_act");
+        }
+
+        <%- if @activity.audited? && @activity_enrolls.present? %>
+          var myScroll;
+          myScroll = new IScroll('#scroll-wrap');
+          $("#scroll-wrap").addClass("tab_h1")
+        <%- end %>
+
+         var allow_repeat_apply = false;
+         var allow_submit = true;
+
+         <%- if @activity.template_url.present? %>
+            $('.bodybg').css('background-image', "url(<%= @activity.template_url %>)");
+         <%- end %>
+
+        <%- if @activity.allow_repeat_apply? %>
+          allow_repeat_apply = true;
+        <%- end %>
+
+        var has_not_submit = true;
+        // 报名表单客户端验证
+        $(".apply_btn").click(function(){
+          var has_blank = false;
+          var mobile = $("#fields_mobile").val();
+
+
+          <% if activity_status_name.eql?('未开始') %>
+            alert("该活动还未开始，请稍后再来~");
+            return false;
+          <% elsif activity_status_name.eql?('已结束') %>
+            alert("对不起，该活动已经结束！");
+            return false;
+          <% end %>
+
+          if ($(".apply_btn").val() == "报名成功"){
+            return false;
+          }
+          $(".apply_form input[required]").each(function(index, input){
+            if ($.trim($(input).val()) == ""){
+              alert($(input).attr("field_name") + "必须填写！");
+              allow_submit = false;
+              has_blank = true;
+              return false;
+            }
+          });
+          var  mobile_reg =/^1\d{10}$/
+          var secure_mobile='';
+          if (mobile){
+            if (!mobile_reg.test(mobile)){
+              alert("手机号码格式不正确");
+              var secure_mobile = '';
+              allow_submit = false;
+              return false;
+            }else{
+               allow_submit = true;
+               var secure_mobile = mobile.slice(0,4)+'****'+mobile.slice(8,11);
+            }
+           }
+
+          var username = $("#fields_username").val();
+          var enrolled_tip = "<%= @activity.extend.enrolled_tip.presence || '已报名' %>";
+
+          if (has_not_submit && allow_submit && !has_blank){
+            allow_submit = false;
+            has_not_submit = false;
+            $.ajax({
+              type: "POST",
+              url: $("#apply_form").attr("action"),
+              data: $("#apply_form").serialize(),
+              dataType: "json",
+              success: function (data) {
+                if (data.errors.length > 0){
+                  alert(data.errors[0]);
+                  return false;
+                }else{
+                  // if (!$("div").hasClass("noForm")){
+                    <%- if @activity.audited? %>
+                      $(".enroll_list").prepend("<tr><td width='30%'>" + username + "</td><td width='28%'>" + secure_mobile + "</td><td width='32%'><%= Date.today.to_s %></td></tr>");
+                      $('.noForm').addClass('hide');
+                      $('.hform').removeClass('hide');
+                      var myScroll;
+                      myScroll = new IScroll('#scroll-wrap');
+                      $("#scroll-wrap").addClass("tab_h1")
+                    <%- end %>
+                  // }
+                  if(allow_repeat_apply){
+                    $(".apply_btn").val("再次报名");
+                    allow_submit = true;
+                  }else{
+                    $(".apply_btn").val("报名成功");
+                  }
+                  $('.enroll_status').text(enrolled_tip);
+                  mySwipe.next();
+                  has_not_submit = true;
+                  alert("报名成功，感谢您的参与！");
+                }
+              },
+              error: function (msg) {
+                alert("报名失败，请稍后重试");
+                allow_submit = true;
+                has_not_submit = true;
+              }
+            });
+          }
+        });
+      });
+    </script>

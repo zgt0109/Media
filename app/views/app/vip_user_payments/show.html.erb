@@ -1,0 +1,33 @@
+<!-- 会员卡首页 start -->
+<section id="sec-index">
+  <% if @vip_user_payment.transfer_success? %>
+    <div class="mod-success c-6">
+      <i class="img img-4"></i>
+      支付成功<%= number_to_currency @vip_user_payment.amount, unit: "", delimiter: ""%>元
+    </div>
+    <div class="form-btn p10 mt">
+      <%= link_to "返回商户", @vip_user_payment.callback_url_with_trade_result, class: "btn btn-biger"%>
+    </div>
+  <% elsif @vip_user_payment.transfer_failure?%>
+    <div class="mod-success c-6">
+      <i class="img img-5"></i>
+      <%= flash[:error] || "支付失败"%>
+    </div>
+    <div class="form-btn p10 mt">
+      <!--a href="javascript:void(0);" class="btn">重新支付</a-->
+      <%= link_to "返回商户", @vip_user_payment.callback_url_with_trade_result, class: "btn btn-small btn-gray"%>
+    </div>
+  <% else %>
+    <% if @vip_user_payment.present? %>
+      <div class="mod-success c-6">
+        <i class="img img-5"></i>
+        <%= flash[:error] || "支付异常"%>
+      </div>
+      <div class="form-btn p10 mt">
+        <!--a href="javascript:void(0);" class="btn">重新支付</a-->
+        <%= link_to "返回商户", @vip_user_payment.callback_url_with_trade_result, class: "btn btn-small btn-gray"%>
+      </div>
+    <% end %>
+  <% end %>
+</section>
+<!-- 会员卡首页 end -->

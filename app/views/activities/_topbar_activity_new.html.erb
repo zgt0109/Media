@@ -1,0 +1,19 @@
+<% if @activity.fight?%>
+  <%= link_to_activities_by_type(ActivityType::FIGHT, class: 'h1 pagecurrent') %>
+  <%= link_to '题库管理', fight_questions_path, class: 'h1 uncurrent' %>
+  <%= link_to 'SN码管理', consumes_activities_path(activtity_type_id: ActivityType::FIGHT), class: 'h1 uncurrent' %>
+  <%= link_to_activities_reports_by_type(ActivityType::FIGHT, class: 'h1 uncurrent') %>
+<% elsif @activity.vote? %>
+  <%= link_to "微投票", votes_activities_path, class: "h1 #{((request.original_url =~ /activities\/votes/i or %(new edit show).include? action_name) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "统计图表", votes_diagram_activities_path, class: "h1 #{((request.original_url =~ /activities\/diagram/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "用户数据", votes_user_data_activities_path, class: "h1 #{((request.original_url =~ /activities\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+<% elsif @activity.surveys? %>
+  <%= link_to "微调研", surveys_activities_path, class: "h1 #{((request.original_url =~ /activities\/user_data/i or %(new edit show).include? action_name) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "题目设置", activity_survey_questions_path, class: "h1 #{((controller_name == 'activity_survey_questions' && %(index new edit show).include?(action_name))? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "统计图表", diagram_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/diagram/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "用户数据", user_data_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+<% elsif @activity.slot? %>
+ <%= link_to '老虎机', "javascript:void(0);", class: "h1 pagecurrent" %>
+<% else %>
+  <%= link_to (@activity.groups? ? "我的团购" : "新建活动"), "javascript:void(0);", class: "h1 pagecurrent" %>
+<%end%>

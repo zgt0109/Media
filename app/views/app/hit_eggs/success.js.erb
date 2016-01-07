@@ -1,0 +1,13 @@
+var success_html = '<div id="scene-success"><div class="game-text" id="text-success" style="top: 0px;"><a class="btn" id="btn-success">我要领奖</a> </div></div>'
+var prize = '<%=j render "prize" %>';
+var my_prize = '<%= j render "my_prize"%>'
+$(".sec-game").append(success_html);
+$("#scene-index").hide();
+$("#sec-result").html(my_prize);
+$("#pop-form").html(prize);
+//领奖
+$("#btn-success").click(function(){
+    var h=$(document).height();
+    $("#pop-form").height(h);
+    $("#pop-form").show();
+});

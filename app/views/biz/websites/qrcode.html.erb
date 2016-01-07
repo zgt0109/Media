@@ -1,0 +1,112 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <li><%= link_to '个性域名', qrcode_websites_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 1、将微官网地址生成二维码，可以拓宽您的推广渠道，用户只要扫一扫二维码，就可以通过浏览器打开您的微官网；</li>
+                <li> 2、拥有个性化域名有助于推广您的公众号，也可以提升您产品和企业的品牌；</li>
+                <li> 3、个性化域名只允许设定一次，设定好以后将不能再进行修改；</li>
+
+              </ul>
+
+
+            </div>
+
+
+          </div>
+          <div class=" col-sm-12">
+
+            <div>
+              <span class="custom_domain">当前微官网网址：<%= "#{Settings.mhostname}/#{@website.custom_domain}" %></span>
+            </div>
+
+            <div class="websiteqr">
+              <ul class="ace-thumbnails">
+                <li>
+                  <a href="javascript:;" class="">
+                    <%= raw @website.preview %>
+                    <div class="text">
+                      <div class="inner downLoadText">下载
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="setDomin">
+              <label class="control-label clearfix">请设定个性化域名</label>
+              <div class="">
+                <span><%= "http://#{Settings.mhostname}/"%><a href="#" id="domainName" exist="<%= @website_domain.present? ? 'true' : 'false' %>"><%= @website_domain.present? ?  @website_domain : '点击设置个性化域名' %></a></span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- /.page-content -->
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script src="/assets/bootstrap-editable.js"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('#domainName').editable({
+                type: 'text',
+                pk: 1,
+                url: '/websites/custom_domain',
+                title: '请输入个性域名',
+                error: function (response, newValue) {
+                    if (response.status !== 200) {
+                        return '服务器暂不可用，请稍后再试.';
+                    } else {
+                        return response.responseText;
+                    }
+                },
+                success: function (response, newValue) {
+                    if(response['type'] == 'error'){
+                        return response['info'];
+                    }else{
+                        $('#domainName').html(newValue);
+                        $('#domainName').attr('exist', true);
+                        $('.form-control.input-sm').val(newValue);
+                        $('.custom_domain').html('当前微官网网址：<%= "#{APP_SUB_DOMAIN}.winwemedia.com/" %>' + newValue);
+                        showTip('success', response['info']);
+                        $('.ace-thumbnails li img').replaceWith(response['img']);
+                    }
+                }
+            });
+            $('.ace-thumbnails').on('click', 'li', function(){
+                window.location.href = '<%= download_websites_path %>';
+            });
+
+            $('#domainName').click(function(){
+                if($(this).attr('exist') == 'true'){
+                    $('.popover').hide();
+                }else{
+                    $('.form-control.input-sm').val('');
+                }
+            });
+        });
+    </script>
+<% end %>

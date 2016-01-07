@@ -1,0 +1,29 @@
+<form>
+  <div class="modal-body">
+    <div class="form-group">
+      <table id="menuTable" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>客户姓名</th>
+            <th>客户状态</th>
+            <th>已结佣金</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @client_changes.each do |client_change| %>
+            <tr>
+              <td><%= client_change.client.name %></td>
+              <td><%= client_change.commission_type.mission_type_name %></td>
+              <td><%= client_change.commission %></td>
+            </tr>
+          <% end.blank? %>
+            <tr><td colspan="8" class="green text-center">暂无数据</td></tr>
+          <%- end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modals">确定</button>
+  </div>
+</form>

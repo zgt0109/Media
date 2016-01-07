@@ -1,0 +1,156 @@
+<% if current_user.bqq_account? %>
+  <ul class="box-nav box important">
+    <li class="<%= (controller_name == 'vip_cards' && action_name == 'index') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3001) %>
+      <%= link_to(vip_cards_url) do %><span>基本信息</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>基本信息</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_cards' && %(settings conditions template).include?(action_name)) ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3002) %>
+      <%= link_to(settings_vip_cards_url) do %><span>会员卡设置</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>会员卡设置</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_users' && %(index audited).include?(action_name)) ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3003) %>
+      <%= link_to(vip_users_url) do %><span>微会员管理</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>微会员管理</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_grades') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3004) %>
+      <%= link_to(vip_grades_path) do %><span>会员卡等级</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>会员卡等级</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_privileges') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3005) %>
+      <%= link_to(vip_privileges_url) do %><span>会员卡特权</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>会员卡特权</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'point_types') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3006) %>
+      <%= link_to(point_types_path) do %><span>积分策略</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>积分策略</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (%(point_gifts vip_cares).include?(controller_name)) ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3007) %>
+      <%= link_to(point_gifts_path) do %><span>会员营销</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>会员营销</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_message_plans') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3008) %>
+      <%= link_to(vip_message_plans_path) do %><span>站内信管理</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>站内信管理</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_transactions') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3009) %>
+      <%= link_to(vip_transactions_path) do %><span>交易密码设置</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>交易密码设置</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_statistics') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3010) %>
+      <%= link_to(vip_statistics_url) do %><span>会员卡统计</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>会员卡统计</span><% end %>
+    <% end %>
+    </li>
+
+    <li class="<%= (controller_name == 'vip_records') ? "pagecurrent current" : '' %>">
+    <% if current_user.has_privilege_for?(3011) %>
+      <%= link_to(vip_records_url) do %><span>消费记录</span><% end %>
+    <% else %>
+      <%= link_to('javascript:;', class: 'product_item') do %><span>消费记录</span><% end %>
+    <% end %>
+    </li>
+  </ul> 
+<% else %>
+<ul class="box-nav box">
+  <li class="<%= (controller_name == 'vip_users' && %(index audited pending rejected).include?(action_name)) ? "pagecurrent current" : '' %>">
+    <%= link_to vip_users_url do %><span>会员管理</span><% end %>
+  </li>
+  <li class="<%= (controller_name == 'vip_cards' && action_name == 'index') ? "pagecurrent current" : '' %>">
+    <%= link_to vip_cards_url do %><span>会员卡触发设置</span><% end %>
+  </li>
+  <li class="<%= (controller_name == 'vip_cards' && %w(settings conditions template).include?(action_name)) ? "pagecurrent current" : '' %>">
+    <%= link_to settings_vip_cards_url do %><span>会员卡设置</span><% end %>
+  </li>
+
+  <li class="<%= %w(vip_grades vip_privileges).include?(controller_name) ? "pagecurrent current" : '' %>">
+    <%= link_to vip_grades_path do %><span>等级特权设置</span><% end %>
+  </li>
+
+  <li class="<%= (controller_name == 'vip_groups') ? "pagecurrent current" : '' %>">
+    <%= link_to vip_groups_path do %><span>会员分组</span><% end %>
+  </li>
+  <li class="<%= (controller_name == 'point_types') ? "pagecurrent current" : '' %>">
+    <%= link_to point_types_path do %><span>积分策略</span><% end %>
+  </li>
+
+  <li class="<%= %w(point_gifts vip_cares).include?(controller_name) ? "pagecurrent current" : '' %>">
+    <%= link_to point_gifts_path do %><span>会员营销</span><% end %>
+  </li>
+
+  <li class="<%= %w(vip_packages vip_package_items).include?(controller_name) ? "pagecurrent current" : '' %>">
+    <%= link_to vip_packages_path do %><span>会员卡套餐</span><% end %>
+  </li>
+
+  <li class="<%= %w(vip_message_plans).include?(controller_name) ? "pagecurrent current" : '' %>">
+    <%= link_to vip_message_plans_path do %><span>站内信管理</span><% end %>
+  </li>
+  <li class="<%= (controller_name == 'vip_transactions') ? "pagecurrent current" : '' %>">
+    <%= link_to vip_transactions_path do %><span>交易密码设置</span><% end %>
+  </li>
+
+  <li class="<%= (controller_name == 'vip_records') ? "pagecurrent current" : '' %>">
+    <%= link_to vip_records_url do %><span>消费记录</span><% end %>
+  </li>
+
+  <li class="<%= (controller_name == 'vip_statistics') ? "pagecurrent current" : '' %>">
+    <%= link_to vip_statistics_url do %><span>会员卡统计</span><% end %>
+  </li>
+
+  <li class="<%= (controller_name == 'vip_api_settings') ? "pagecurrent current" : '' %>">
+    <%= link_to vip_api_settings_path do %><span>开放接口</span><% end %>
+  </li>
+</ul>
+<% end %>
+
+<div class="help"><a href="/vip_cards/help"></a></div>
+
+<script>
+$(function(){
+  $(".box-nav").on("click","a",function(){
+    var $this = $(this);
+
+    if ( $this.hasClass('product_item') ) {
+      alert('您的套餐类型无法使用该功能，请联系经销商升级高版本套餐')
+      return false;
+    }
+  });
+});
+</script>

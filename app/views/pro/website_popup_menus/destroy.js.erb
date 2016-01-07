@@ -1,0 +1,7 @@
+$('#menu-row-<%= @menu.id %>').remove();
+showTip('success', '删除成功');
+$('.new-pop-menu').fadeIn();
+
+<% if @menus_count < 4 %>
+  $('.new-pop-menu').show();
+<% end %>

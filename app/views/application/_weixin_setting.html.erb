@@ -1,0 +1,166 @@
+<%
+include_activity_date ||= 0
+include_description ||= 0
+include_extend_closing_note ||= 0
+pic_data_name ||= "activity[qiniu_pic_key]"
+pic_data_key ||= ""
+is_scene ||= false
+is_guess ||= false
+%>
+
+<%- if is_scene %>
+    <div class="form-group">
+        <label class="control-label">微场景名称<span class="required-star">*</span></label>
+        <div class="clearfix">
+            <%= activity.text_field :name, class: 'col-xs-6', id: 'wx_title' %>
+        </div>
+    </div>
+
+    <%- unless @activity.new_record? %>
+        <%- url = "http://#{Settings.mhostname}/#{current_user.id}/scenes?aid=#{@activity.try(:id)}" %>
+        <div class="form-group">
+            <label class="control-label">分享连接<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <%= activity.text_field :name, class: 'col-xs-6', id: "copylink", disabled: true, value: url %>
+                <input type="button" class="btn btn-primary btn-sm copy-button" value="复制" data-clipboard-text="<%= url %>">
+            </div>
+        </div>
+    <%- end %>
+
+    <div class="form-group">
+        <label class="control-label">回复关键词<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="关键词不能和其他进行中的活动的关键词重复"> </span></label>
+        <div class="clearfix">
+            <%= activity.text_field :keyword, class: 'col-xs-6', id: 'keyword', placeholder: '请输入回复关键词' %>
+        </div>
+    </div>
+<%- elsif is_guess %>
+    <div class="form-group">
+        <label class="control-label">活动名称<span class="required-star">*</span></label>
+        <div class="clearfix">
+            <%= activity.text_field :name, class: 'col-xs-6', id: 'wx_title' %>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">活动触发关键词<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="关键词不能和其他进行中的活动的关键词重复"> </span></label>
+        <div class="clearfix">
+            <%= activity.text_field :keyword, class: 'col-xs-6', id: 'keyword', placeholder: '请输入回复关键词' %>
+        </div>
+    </div>
+<%- else %>
+    <div class="form-group">
+        <label class="control-label">回复关键词<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="关键词不能和其他进行中的活动的关键词重复"> </span></label>
+        <div class="clearfix">
+            <%= activity.text_field :keyword, class: 'col-xs-6', id: 'keyword', placeholder: '请输入回复关键词' %>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">微信消息标题<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息标题"> </span></label>
+        <div class="clearfix">
+            <%= activity.text_field :name, class: 'col-xs-6', id: 'wx_title',  placeholder: '请输入微信消息标题' %>
+        </div>
+    </div>
+<%- end %>
+<% if include_activity_date == 1 %>
+    <div class="form-group">
+        <label class="control-label">活动时间<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="活动时间活动开始和结束时间，非必填"> </span></label>
+        <div class="clearfix">
+            <div class="input-daterange input-group col-xs-6 no-padding">
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </span>
+                <%= datetime_range_tag activity %>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<div class="form-group">
+    <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+    <div class="clearfix">
+        <div data-name="<%= pic_data_name %>" data-img = "<%= data_img %>" data-key="<%= pic_data_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+        <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
+    <div class="clearfix">
+        <%= activity.text_area :summary, rows: 5, class: 'form-control', id: 'wx_summary', placeholder: '请输入微信消息摘要', maxlength: 128 %>
+    </div>
+</div>
+
+<% if include_description == 1 %>
+    <div class="form-group">
+        <label class="control-label">活动说明<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="不能超过2000个字"></span></label>
+        <div class="clearfix">
+            <%= activity.text_area :description, rows: 5, class: 'form-control', placeholder: '请输入微信活动说明', maxlength: 255 %>
+        </div>
+    </div>
+<% end %>
+
+<% if include_description == 2 %>
+    <div class="form-group">
+      <label class="control-label">活动说明<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="不能超过2000个字"></span></label>
+      <div class="clearfix">
+        <%= render "shared/form_rich_text", field_name: "description", obj: activity.object, f: activity, wrapper_html_options: {class: "form-control", placeholder: "请输入微信活动说明"}, options: {value: activity.object.read_attribute("description"), style: "display:none"} %>
+      </div>
+    </div>
+<% end %>
+
+<% if include_activity_date == 2 %>
+    <div class="form-group">
+        <label class="control-label">活动时间<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="活动时间活动开始和结束时间，非必填"> </span></label>
+        <div class="clearfix">
+            <div class="input-daterange input-group col-xs-6 no-padding">
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </span>
+                <%= datetime_range_tag activity %>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<% if include_activity_date == 3 %>
+    <div class="form-group">
+        <label class="control-label">活动时间<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="活动时间活动开始和结束时间，非必填"> </span></label>
+        <div class="clearfix">
+            <div class="input-daterange input-group col-xs-6 no-padding">
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </span>
+                <%= datetime_range_tag activity, options: {class: 'daterange col-sm-12'} %>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<% if include_description == 4 %>
+     <div class="form-group">
+        <label class="control-label">信箱须知<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="不能超过2000个字"></span></label>
+        <div class="clearfix">
+            <%= render "shared/form_rich_text", field_name: "description", obj: activity.object, f: activity, wrapper_html_options: {class: "form-control", placeholder: "请输入信箱须知"}, options: {value: activity.object.read_attribute("description"), style: "display:none"} %>
+        </div>
+    </div>
+<% end %>
+
+<% if include_description == 3 %>
+     <div class="form-group">
+        <label class="control-label">公告板<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="不能超过2000个字"></span></label>
+        <div class="clearfix">
+            <%= render "shared/form_rich_text", field_name: "description", obj: activity.object, f: activity, wrapper_html_options: {class: "form-control", placeholder: "请输入公告"}, options: {value: activity.object.read_attribute("description"), style: "display:none"} %>
+        </div>
+    </div>
+<% end %>
+
+
+<% if include_extend_closing_note == 1 %>
+    <div class="form-group">
+        <label class="control-label">结束后的活动说明<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="活动结束后显示的“活动说明”，不能超过255个字"></span></label>
+        <div class="clearfix">
+            <%= text_area_tag "extend_closing_note", @activity.extend.closing_note, :maxlength => 255, rows: 5, class: 'form-control', placeholder: '请输入结束后的活动说明' %>
+        </div>
+    </div>
+<% end %>

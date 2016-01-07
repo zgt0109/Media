@@ -1,0 +1,267 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <%= render "breadcrumb" %>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、以下各项功能如果填写，微信墙PC端则会显示；若不填写，微信墙PC端则不显示；</li>
+            <li> 2、奖品图片建议尺寸：宽240像素 * 高120像素。</li>
+          </ul>
+        </div>
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+            <li class="active">
+              <a data-toggle="tab" href="#tab-3">
+                现场图片展示
+              </a>
+            </li>
+            <li class="dropdown">
+              <a data-toggle="tab" href="#tab-5">
+                抽奖
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-3" class="tab-pane fade active in ">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="form-group">
+                    <label class="control-label">按住 Ctrl 可多选</label>
+                    <div class="vwebsitePicture col-sm-12">
+                      <ul class="ace-thumbnails thumbnails-1">
+                        <li>
+                          <div class="cieldon-file" data-wx-wall-id="<%= @wx_wall.id %>" data-type="5" data-height="96" data-width="176"></div>
+                        </li>
+                        <% @pictures.each do |photo| %>
+                        <%= render "photo_li", {photo: photo} %>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="tab-5" class="tab-pane fade">
+              <%= form_for @wx_wall, validate: true, remote: @wx_wall.persisted? do |wall| %>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label">领奖关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">中奖者进入你的公众账号中通过此关键词获取SN码，通过SN码领取奖品</small></label>
+                    <div class="clearfix">
+                      <%= wall.text_field :award_keyword, class: 'required col-xs-6', value: wall.object.award_keyword || "领奖" %>
+                    </div>
+                  </div>
+                  <div class="form-group no-margin-bottom">
+                    <div class="clearfix">
+                      <div>
+                        <div class="radioTab">
+                          <label class="control-label"> 
+                            <%= wall.radio_button :lottery_type, 1, class: "ace", checked: @wx_wall.free_mode? %>
+                            <span class="lbl">自由控制模式</span>
+                          </label>
+                          <label class="control-label"> 
+                            <%= wall.radio_button :lottery_type, 2, class: "ace", checked: @wx_wall.random_mode? || @wx_wall.lottery_type.blank? %> 
+                            <span class="lbl">系统随机模式</span> 
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="<%= 'hide' if @wx_wall.random_mode? || @wx_wall.lottery_type.blank? %>" id="tab_1">
+                    <span>设置内定中奖人</span>
+                    <table id="lotteryTable_1" class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>会员卡号</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @free_mode_index = 1 %>
+                        <%= wall.fields_for :wx_wall_winning_users do |user| %>
+                          <% if user.object.persisted? && user.object.normal? %>
+                            <tr>
+                              <td><%= @free_mode_index %></td>
+                              <td>
+                                <div class="form-input col-2">
+                                  <%= user.text_field :vip_user_id, class: 'input-text', value: user.object.try(:vip_user).try(:user_no) %>
+                                  <%#= text_field_tag "wx_wall_winning_user[#{@free_mode_index}][user_no]", user.object.try(:vip_user).try(:user_no), id: "wx_wall_winning_user_#{@free_mode_index}_user_no", class: 'input-text' %>
+                                </div>
+                              </td>
+                              <td>
+                                <a href="javascript:;" class="J-awards-del">删除</a>
+                                <%= user.hidden_field :status %>
+                              </td>
+                            </tr>
+                            <% @free_mode_index += 1%>
+                          <% end %>
+                        <% end %>
+                        <% if @free_mode_index == 1 %>
+                        <tr>
+                          <td colspan="3" class="no_td">没有记录</td>
+                        </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                    <div class="form-group">
+                      <button type="button" class="btn btn-primary btn-sm J-addAwards">增加</button>
+                    </div>
+                  </div>
+                  <div class="<%= 'hide' if @wx_wall.free_mode? %>" id="tab_2">
+                    <table id="lotteryTable" class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>排序</th>
+                          <th>奖品等级</th>
+                          <th>奖品名称</th>
+                          <th>奖品图片</th>
+                          <th>奖品数量</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @random_mode_index = 1 %>
+                        <%= wall.fields_for :wx_wall_prizes do |prize| %>
+                        <% if prize.object.persisted? && prize.object.normal? %>
+                        <tr>
+                          <td><%= @random_mode_index %></td>
+                          <td>
+                            <div class="form-input col-12">
+                              <%= prize.text_field :grade, class: 'input-text' %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-input col-12">
+                              <%= prize.text_field :name, class: 'input-text' %>
+                            </div>
+                          </td>
+                          <td>
+                            <%= render "upload_image_div", name: "wx_wall[wx_wall_prizes_attributes][#{@random_mode_index - 1}][pic]", key: prize.object.try(:pic), img: (prize.object.try(:pic_url) || '/assets/bg_fm.jpg'), width: 150 %>
+                          </td>
+                          <td>
+                            <div class="form-input col-12">
+                              <%= prize.text_field :num, class: 'input-text'%>
+                            </div>
+                          </td>
+                          <td>
+                            <a href="javascript:;" class="J-awards-del">删除</a>
+                            <%= prize.hidden_field :status %>
+                          </td>
+                        </tr>
+                        <% @random_mode_index += 1%>
+                        <% end %>
+                        <% end %>
+                        <% if @random_mode_index == 1 %>
+                        <tr>
+                          <td colspan="6" class="no_td">没有记录</td>
+                        </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                    <div class="form-group">
+                      <button type="button" class="btn btn-primary btn-sm J-addAwards">添加奖项</button>
+                      <small class="help-inline text-warning line-height-32">最多添加12个奖项</small>
+                    </div>
+                    <div class="form-group">
+                      <%= wall.check_box :repeat_draw, class: "ace" %>
+                      <span class="lbl">重复抽奖<small class="help-inline text-warning">勾选后已被抽奖的用户可以再次参与抽奖</small></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-sm btn-primary">保存</button>
+                    <button type="button" class="cancel btn btn-sm btn-default">取消</button>
+                  </div>
+                </div>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script>
+    var current_index = <%= @random_mode_index - 1 %>,
+        current_index_1 = <%= @free_mode_index - 1 %> ;
+
+    $(function() {
+        $("button.cancel").click(function() {
+            window.open("/wx_walls", "_self");
+        });
+        // 添加奖项
+        $("body").on("click", ".J-addAwards", function() {
+          if($('input[type=radio]:checked').val() == "1"){
+            $.get("/wx_walls/<%= @wx_wall.id %>/add_new_prize?lottery_type=1", {
+                    index: current_index_1
+                }, function(result) {
+                  current_index_1 += 1;
+                  $("#lotteryTable_1 .no_td").remove();
+                  $("#lotteryTable_1 tbody").append(result);
+                });
+          }else{
+            if (current_index >= 12) {
+                showTip("error", "最多添加12个奖项!");
+            } else {
+                $.get("/wx_walls/<%= @wx_wall.id %>/add_new_prize?lottery_type=2", {
+                    index: current_index
+                }, function(result) {
+                    $("#lotteryTable .no_td").remove();
+                    $("#lotteryTable tbody").append(result);
+                    current_index += 1;
+                    $(".cieldon-file").cieldonfileupload({
+                        token: "<%= @qiniu_token %>",
+                        bucket: "<%= BUCKET_PICTURES %>"
+                    });
+                });
+            }
+          }
+        });
+        // 删除奖项
+        $("body").on("click", ".J-awards-del", function() {
+          if($('input[type=radio]:checked').val() == "1"){
+            var $this = $(this),
+                $parent = $this.closest("tr"),
+                $list = $("#lotteryTable_1 tbody");
+            $parent.remove();
+            $list.find("tr").each(function(i) {
+                $(this).find("td").first().text(i + 1);
+            });
+          }else{
+            var $this = $(this),
+                $parent = $this.closest("tr"),
+                $list = $("#lotteryTable tbody"),
+                len = $list.find("tr").length;
+            if (len == 12) {
+                $(".J-addAwards").addClass("btn-primary").removeAttr("disabled", "disabled");
+            }
+            $parent.remove();
+            $list.find("tr").each(function(i) {
+                $(this).find("td").first().text(i + 1);
+                $(this).find(".cieldon-file").attr("data-div", "#img-" + (i + 1));
+            });
+          }
+        });
+
+        $('form:last').validate();
+
+        $('input[type=radio]').on('click', function () {
+          var $self = $(this);
+          if($self.val() == "1"){
+            $('#tab_1').removeClass("hide").show();
+            $('#tab_2').hide();
+          }else if($self.val() == "2"){
+            $('#tab_1').hide();
+            $('#tab_2').removeClass("hide").show();
+          }
+        });
+    });
+</script>
+<% end %>

@@ -1,0 +1,74 @@
+<%= form_for(@address, url: @url) do |f| %>
+  <header>
+    <a href="javascript:history.go(-1);" class="ico-prev">
+      <%= image_tag 'mobile/wshop/ico-back.png' %>
+    </a>
+    <h1><%= @address.new_record? ? '新增' : '编辑' %>收货地址</h1>
+    <a id="save_new_address">完成</a>
+    <%= f.submit '完成', id: 'submit', style: 'display: none;' %>
+  </header>
+
+  <section>
+    <div class="box-form">
+      <p>
+        <span class="fl">收货人姓名：</span>
+        <span class="fr"><%= f.text_field :username, placeholder: '姓名' %></span>
+        
+      </p>
+      <p>
+        <span class="fl">所在地区：</span>
+        <span class="fr-inline"><%= address_select @address, no_district: true, select_gap: '' %></span>
+      </p>
+      <p>
+        <span class="fl">详细地址：</span>
+        <span class="fr"><%= f.text_area :address, rows: 3, placeholder: '详细地址' %></span>
+      </p>
+      <p>
+        <span class="fl">手机电话：</span>
+        <span class="fr"><%= f.text_field :tel, placeholder: '手机电话' %></span>
+        
+      </p>
+      <p>
+        <span class="fl">邮政编码：</span>
+        <span class="fr"><%= f.text_field :zipcode, placeholder: '邮政编码' %></span>
+        
+      </p>
+    </div>
+  </section>
+<% end %>
+
+
+<a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>
+
+
+<%= javascript_include_tag 'address' %>
+
+<script>
+  $(function(){
+    $('#save_new_address').click(function() {
+      $('#submit').click();
+    });
+
+    $('#submit').click(function(event) {
+      if($('#wx_user_address_username').val().length == 0) {
+        alert('收货人姓名不能为空');
+        event.preventDefault();
+      } else if($('#wx_user_address_address').val().length == 0) {
+        alert('详细地址不能为空');
+        event.preventDefault();
+      } else if($('#wx_user_address_tel').val().length == 0) {
+        alert('手机电话不能为空');
+        event.preventDefault();
+      }  else if( !/^(\d|-){11,13}$/.test( $('#wx_user_address_tel').val() ) ) {
+        alert('手机电话格式不正确');
+        event.preventDefault();
+      } else if($('#wx_user_address_zipcode').val().length == 0) {
+        alert('邮政编码不能为空');
+        event.preventDefault();
+      } else if( !/^\d{4,8}$/.test( $('#wx_user_address_zipcode').val() ) ) {
+        alert('邮政编码格式不正确');
+        event.preventDefault();
+      }
+    });
+  });    
+</script>

@@ -1,0 +1,4 @@
+var html = '<%= j (render :partial => 'app/hotel_orders/hotel_orders', :object => @hotel_orders, :as => :hotel_order) %>'
+$(".box-cont").append(html);
+$("div.tcenter").remove();
+$(".box-cont").append('<div class="tcenter"><%= link_to_next_page @hotel_orders, "点击查看更多...", class: "loading", id: "more_loading", :remote => true %></div>');

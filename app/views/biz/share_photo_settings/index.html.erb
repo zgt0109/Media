@@ -1,0 +1,63 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<%= render 'partials/home' %>
+      <li><%= link_to '图片分享', share_photo_settings_url %></li>
+      <li><%= link_to '基本设置', share_photo_settings_url %></li>
+		</ul>
+		<%= render '/layouts/qrcode' %>
+	</div>
+	<div class="page-content">
+		<div class="tabbable">
+			<ul class="nav nav-tabs padding-24 tab-size-bigger ">
+				<li class="active">
+					<a href="<%= share_photo_settings_url %>">
+						基本设置
+					</a>
+				</li>
+				<li>
+					<a href="<%= photo_share_photo_settings_url %>">
+						图片触发
+					</a>
+				</li>
+				<li>
+					<a href="<%= tag_share_photo_settings_url %>">
+						标签触发
+					</a>
+				</li>
+				<li>
+					<a href="<%= my_setting_share_photo_settings_url %>">
+						查看设置
+					</a>
+				</li>
+                  <li>
+                    <a href="<%= share_photos_url %>">
+                      图片管理
+                    </a>
+                  </li>
+			</ul>
+			<div class="tab-content no-border padding-24">
+				<div class="tab-pane active">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="alert alert-block alert-info">
+								<strong class="pull-left">提示：</strong>
+								<ul class="vwebsiteHeadAlert">
+									<li> 1、设置时间段范围，在时间范围内无交互自动退出图片分享功能；</li>
+									<li> 2、{share_keyword}是重新进入图片分享功能的变量，请不要手动修改变量，否则系统无法正常调用。</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<%= render 'form' %>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<% end %>
+
+

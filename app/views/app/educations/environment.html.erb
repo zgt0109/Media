@@ -1,0 +1,47 @@
+<% provide(:title, '校园环境') %>
+<%= javascript_include_tag "application"  %>
+<link type="text/css" rel="stylesheet" href="/stylesheets/weddings/photoswipe.css"/>
+<script type="text/javascript" src="/javascripts/app/wedding/klass.min.js"></script>
+<script type="text/javascript" src="/javascripts/app/wedding/code.photoswipe-3.0.5.js"></script>
+<div class="box box-padding">
+  <div class="hd college_title" style="padding-bottom: 10px;">校园环境</div>
+  <% if @photos.present? %>
+  <div class="bd list-img">
+      <%= render :partial => "photo", :collection => @photos, :as => :p  %>
+  </div>
+    <div class="ft tcenter more"><%= link_to_next_page @photos, "点击加载更多", :remote => true, :class => "loading", :id => "more_loading" ,:style=>"display: block;" %></div>
+      <div class="ft tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
+  <% else %>
+      <div>没有数据！</div>
+  <% end %>
+
+</div>
+<script>
+    $(document).ready(function(){
+        $(".list-img a").photoSwipe();
+    });
+
+        $(".list-img a").on('click', function(){
+            $(".list-img a").photoSwipe();
+        })
+
+    $( "#more_loading").click(function() {
+        $(".isloading").css("display",'inline-block');
+        $(this).css("display","none");
+    })
+
+//    $( "#more_loading" ).ajaxStart(function() {
+//        alert(4444444444444);
+////        $(".isloading").css("display",'inline-block');
+////        $("#more_loading").css("display","none");
+//        $(".isloading").css("display",'inline-block');
+//        $(this).css("display","none");
+//    });
+//
+//    $( document ).ajaxStop(function() {
+////    alert(44444444);
+//        $(".isloading").css("display",'none');
+//        $("#more_loading").css("display","block");
+//    });
+
+</script>

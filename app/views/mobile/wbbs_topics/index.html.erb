@@ -1,0 +1,160 @@
+<%= render 'title' %>
+
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'mobile/wbbs' %>
+  <%= javascript_include_tag 'mobile/wbbs' %>
+<% end %>
+
+<section id="sec-index">
+    <header class="untoppable">
+        <%= link_to "", mobile_wbbs_topics_path( @supplier, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
+        <% if @wx_user.present? && !@wx_user.leave_message_forbidden? %>
+            <%- if @wx_user.has_info? %>
+                <%- if params[:receiver_id].blank? %>
+                    <%= link_to new_mobile_wbbs_topic_path(@supplier) do %>
+                        <i class="fa fa-pencil-square-o"></i>发帖
+                    <% end %>
+                <%- else %>
+                    <%= link_to new_mobile_wbbs_topic_path(@supplier, status: 2, receiver_id: params[:receiver_id]) do %>
+                        <i class="fa fa-pencil-square-o"></i>留言
+                    <% end %>
+                <%- end %>
+            <%- else %>
+                <%- if params[:receiver_id].blank? %>
+                    <a onclick="showPop('#pop-nichen')"><i class="fa fa-pencil-square-o"></i>发帖</a>
+                <%- else %>
+                    <a onclick="showPop('#pop-nichen')"><i class="fa fa-pencil-square-o"></i>留言</a>
+                <%- end %>
+            <%- end %>
+            <a class="fa fa-ellipsis-h <%= 'mod-tip-number' if @notifications_count > 0 %>" href="javascript:;" onclick="showPop('#pop-more')"><i><%= @notifications_count if @notifications_count > 0 %></i></a>
+        <% else %>
+            <a></a>
+            <a></a>
+        <% end %>
+    </header>
+    <div class="body">
+        <div class="mod-hd mod-user">
+            <%- if params[:receiver_id].present? %>
+                <div class="hd-img">
+                    <img src="<%= @receiver.logo_url %>">
+                </div>
+                <div class="hd-text">
+                    <b>
+                        <%= @receiver.nickname %>
+                    </b>
+                    <p>
+                        <span class="fa fa-stack-exchange"><%= @receiver.wbbs_topics_count %>话题</span>
+                        <span class="fa fa-user"><%= @receiver.wbbs_replies_count %>回复</span>
+                        <%- if @receiver && @wx_user && @receiver == @wx_user %>
+                            <a href="javascript:;" class="text-link" onclick="showPop('#pop-nichen')">修改资料</a>
+                        <%- end %>
+                    </p>
+                </div>
+            <%- else %>
+                <div class="hd-img">
+                    <img src="<%= @wbbs_community.logo_url %>">
+                </div>
+                <div class="hd-text">
+                    <b><%= @wbbs_community.name || @wbbs_community.activity.name || '微社区' %></b>
+                    <p>
+                        <span class="fa fa-stack-exchange"><%= @wbbs_community.wbbs_topics_count %>话题</span>
+                        <span class="fa fa-user"><%= @wbbs_community.wbbs_replies_count %>回复</span>
+                    </p>
+                </div>
+            <%- end %>
+        </div>
+        <div class="mod-bd" id="topics" data-topic-id="<%= @wbbs_topics.last.try(:id) %>" data-top-ids="<%= @wbbs_topics.select(&:top?).map(&:id).join(',') %>">
+            <%= render partial: 'wbbs_topic', collection: @wbbs_topics %>
+            <div class="mod-load tcenter">
+                <i class="fa fa-spinner"></i>正在加载...
+            </div>
+        </div>
+    </div>
+</section>
+
+<%= render 'js' %>
+<script>
+    $(function(){
+        $('.mod-bd').on('click', '.commentable', function(event) {
+            <% if @wx_user %>
+                showPop('#pop-comment');
+                $('#new_wbbs_reply').attr( 'action', $(this).data('url') );
+                $('#wbbs_reply_parent_id').val( $(this).data('parent_id') );
+            <% else %>
+                alert('只有关注或者同意授权用户方可评论');
+            <% end %>
+        });
+
+        $('#pop-tools').on('click', '.commentable', function(event) {
+            hidePop('#pop-tools');
+            <% if @wx_user %>
+                showPop('#pop-comment');
+                $('#new_wbbs_reply').attr( 'action', $(this).data('url') );
+                $('#wbbs_reply_parent_id').val( $(this).data('parent_id') );
+            <% else %>
+                alert('只有关注或者同意授权用户方可评论');
+            <% end %>
+        });
+
+        showBtnUp(100);
+        bottomRefresh(50);
+
+        $('#wbbs_reply_content').keyup( content_words_keyup );
+        $('.form-submit').click( validate_content_presence );
+    });
+    function showAll(self,selector){
+        $(self).parents('.box-bd').find(".hide").slideToggle();
+        $(self).remove();
+    }
+
+    function setLinkForPop(supplier, topic, receiver, activity){
+        $('#pop-tools .pop-ul').html('');
+        var links = '<a class="commentable" href="javascript:;" data-url="/'+supplier+'/wbbs_topics/'+topic+'/create_reply">回复</a><a href="/'+supplier+'/wbbs_topics/new?status=3&receiver_id='+receiver+'">私信</a><a href="/'+supplier+'/wbbs_topics/'+topic+' ?activity_id='+activity+'">查看话题</a><a href="/'+supplier+'/wbbs_topics?receiver_id='+receiver+'&activity_id='+activity+'">查看空间</a>';
+        $('#pop-tools .pop-ul').append(links);
+        showPop('#pop-tools');
+    }
+
+    function showTip(self,selector, topic_id){
+        var html='<div class="mod-tooltip" onclick="report_wbbs_topic(' + topic_id + ')"><span>举报</span></div>';
+        self=$(self);
+        var parent=self.parents(selector);
+        parent.find(".mod-tooltip").remove();
+        self.toggleClass("active");
+        if(self.hasClass("active")){
+            parent.append(html);
+            setTimeout(function(){
+                parent.find(".mod-tooltip").remove();
+                self.removeClass("active");
+            },3000);
+        }else{
+            parent.find(".mod-tooltip").remove();
+        }
+    }
+    function report_wbbs_topic(topic_id) {
+        $.getScript('/<%= @supplier.id %>/wbbs_topics/' + topic_id + '/report');
+    }
+
+    document.addEventListener("touchmove",function(e){
+        var a = document.documentElement.scrollTop==0? document.body.clientHeight : document.documentElement.clientHeight;
+        var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;
+        var c = document.documentElement.scrollTop==0? document.body.scrollHeight : document.documentElement.scrollHeight;
+        if(a+b == c){
+            var topic_id = $('#topics').data('topic-id');
+            if ( topic_id ) {
+                var top_ids = $('#topics').data('top-ids');
+                var url = '<%= mobile_wbbs_topics_path(@supplier, receiver_id: params[:receiver_id]) %>?top_ids=' + top_ids + '&id=' + topic_id + "<%= params.key?(:my) ? '&my'.html_safe : '' %>";
+                $.getScript(url);
+            } else {
+                setTimeout(function() { $(".mod-load").slideUp(); }, 20);
+            }
+        } else {
+            setTimeout(function() { $(".mod-load").slideUp(); }, 20);
+        }
+    });
+
+</script>
+
+<% content_for(:mod_pop) do %>
+    <%= render 'reply_form' %>
+    <%= render 'user_center' %>
+<% end %>

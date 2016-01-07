@@ -1,0 +1,31 @@
+<section id="transition-category" class="box-transition">
+	<header>
+		<div class="wrap">
+			<a onclick="transition('#transition-category','#index',0)" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>			
+			<h1>科室分类</h1>
+		</div>
+	</header><!-- header end -->
+	<div class="body">
+		
+		<p class="categoey" id="category-0">
+			<% @hospital.hospital_departments.root.order("sort asc").each do |department| %>
+				<% if department.has_children? %>
+			  	<a data-target="<%= department.id %>"><span><%= department.name %></span><i class="arrow fr"></i></a>
+				<% else %>
+					<a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id, department_id: department.id) %>"><span><%= department.name %></span><i class="arrow fr"></i></a>
+				<% end %>
+			<% end %>
+		</p>
+		
+		<% @hospital.hospital_departments.all.each do |department| %>
+			<% if department.has_children? %>
+				<p class="categoey hide" id="category-<%= department.id %>">
+					<% department.children.each do |d| %>
+						<a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id, department_id: d.id) %>"><span><%= d.name %></span><i class="arrow fr"></i></a>
+					<% end %>
+				</p>
+			<% end %>
+		<% end %>
+	
+	</div>
+</section>

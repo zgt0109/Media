@@ -1,0 +1,28 @@
+<% title '文章中心详情' %>
+
+<div class="news-top">
+  <div class="news-title"><%= @article.title %></div>
+  <div class="news-attr">
+    <span class="news-time"><%= @article.subtitle_content %></span>
+    <%= link_to @article.author, @article.link.present? ? @article.link : 'javascript:;'  if @article.show_author %>
+  </div>
+</div>
+<div class="edit-box">
+  <div class="edit">
+    <%= raw @article.content %>
+  </div>
+</div>
+<div class="page-nav">
+  <% if @prev_article %>
+    <%= link_to '<i class="fa fa-angle-left"></i>上一条'.html_safe, mobile_website_article_url(@prev_article, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
+  <% else %>
+    <a href="javascript:;" class="disabled"><i class="fa fa-angle-left"></i>上一条</a>  
+  <% end %>
+  <%= link_to '返回列表', mobile_website_articles_url(supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
+  <% if @next_article %>
+    <%= link_to '下一条<i class="fa fa-angle-right"></i>'.html_safe, mobile_website_article_url(@next_article, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) if @next_article %>
+  <% else %>
+    <a href="javascript:;" class="disabled">下一条<i class="fa fa-angle-right"></i></a>
+  <% end %>
+</div>
+

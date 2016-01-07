@@ -1,0 +1,120 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '会员卡', vip_users_path %></li>
+      <li><%= link_to '营销报表', point_vip_records_url %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <%= render 'biz/vip_records/tab' %>
+
+      <div class="tab-content no-border">
+        <div class="tab-pane fade active in">
+          <div class="row">
+            <%= form_for @search, url: point_vip_records_path, :html => { :method => :get } do |f| %>
+              <div class="col-sm-12">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">会员名：</span>
+                    <%= f.text_field :vip_user_name_like, class: "col-xs-12" %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">时间范围：</span>
+                      <div class="input-group">
+                        <%= datetime_range_tag f, start_at: :created_at_gte, end_at: :created_at_lte, options: {class: 'daterange'} %>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">积分范围：</span>
+                    <div class="input-group">
+                        <%= f.text_field :points_gte, class: 'input-sm form-control' %>
+                          <span class="input-group-addon">
+                             -
+                          </span>
+                          <%= f.text_field :points_lte, class: 'input-sm form-control' %>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">门店：</span>
+                    <%= f.select :shop_branch_id_eq, options_for_select(current_user.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), params[:search].try(:[], :shop_branch_id_eq)), {}, :class=> "col-xs-12" %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12 margin-top-20">
+                <div class="col-md-3 row">
+                  <button class="btn btn-primary btn-sm btn-filter" type="submit">查询</button>
+                  <% all_search_count = @search.count %>
+                  <% if all_search_count <= EXPORTING_COUNT%>
+                    <%= link_to '导出EXCEL', point_vip_records_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) , class: 'btn btn-primary btn-sm btn-filter' %>
+                  <% else %>
+                    <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= point_vip_records_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) %>" data-title="导出EXCEL" data-toggle="modals" data-target="delModal" data-text='<%= data_text(all_search_count,(all_search_count/EXPORTING_COUNT.to_f).ceil) %>'>导出EXCEL</a>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            <div class="col-md-12 margin-top-20">
+              <table id="pointRecordTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                  <tr>
+                    <th width="180">时间</th>
+                    <th>会员卡号</th>
+                    <th>会员姓名</th>
+                    <th>积分类型</th>
+                    <th>积分</th>
+                    <th>门店</th>
+                    <th width="40%">备注</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @point_transactions.each do |transaction| %>
+                    <tr>
+                      <td><%= transaction.created_at %></td>
+                      <td><%= transaction.vip_user.try(:user_no) %></td>
+                      <td><%= transaction.vip_user.try(:name) %></td>
+                      <td><%= transaction.direction_type_name %></td>
+                      <td><%= transaction.transaction_amount %></td>
+                      <td><%= transaction.shop_branch_name %></td>
+                      <td><%= transaction.description.present? ? transaction.description : "积分调节" %></td>
+                    </tr>
+                  <% end.blank? %>
+                    <tr><td colspan="8" class="green text-center">没有记录</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @point_transactions %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $('body').on('click','button[data-fn="submit"]',function(){
+            var page_exl = $('#delModal').find("[name=page_exl]:checked");
+            var url = "<%= point_vip_records_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) %>"+"<%= (params[:search].present? || params[:field].present? || params[:q].present? ) ?  '&page_exl=' : '?page_exl='%>"+page_exl.val();
+            window.location.href=url;
+        });
+        
+        $(".btn-filter").on("click", function(){
+            setTimeout(function(){
+                $("button[data-fn=submit]").attr("type","button");
+            },200)
+        });
+    </script>
+<% end %>

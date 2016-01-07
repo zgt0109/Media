@@ -1,0 +1,34 @@
+<% title "订单一览" %>
+<% content_for :booking_top_pic do %>
+    <header>
+
+          <a href="<%=  BookingOrder.flow_suppliers.include?(@supplier.id) ? new_mobile_booking_order_url(supplier_id: @supplier.id) : mobile_bookings_url(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")  %>" class="ico-prev">
+            <img src="/assets/mobile/wserver/ico-back.png"/>
+          </a>
+
+      <h1>我的订单</h1>
+    </header>
+<% end %>
+
+
+<% @booking_orders.each do |order| %>
+    <a href="<%= mobile_booking_order_url(order, supplier_id: @supplier.id) %>" class="box-p">
+      <p class="p-title">
+        <b>预订单号：</b>
+        <span><%= order.order_no %></span>
+      </p>
+      <p>
+        <b>服务名称：</b>
+        <span><%= order.booking_item.try(:name) %></span>
+      </p>
+      <p>
+        <b>下单时间：</b>
+        <span><%= order.created_at %></span>
+      </p>
+      <i class="arrow"></i>
+    </a>
+<% end %>
+<% if @booking_orders.count == 0 %>
+    <br>
+    <p style="text-align: center;">还没有订单记录</p>
+<% end %>

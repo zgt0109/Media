@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" id="viewport">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title><%= @activity.try(:name) %></title>
+    <link rel="stylesheet" type="text/css" href="/mobile/css/vscene_3.0.0/vscene-3.css">
+    <script>
+        var config = {
+            "start": 0,
+            "direction": "<%=  @activity.extend.scene_type == "0" ? 'vertical' : 'horizontal' %>",
+            "lottery": {
+                "has": <%= @activity.splash_url.present? %>,
+                "src": "<%= @activity.splash_url.present? ? @activity.splash_url : '' %>",
+            },
+            "music": {
+                "has": <%= @activity.bg_music_url.present? %>,    // 页面是否有音乐
+                "src": "<%= @activity.bg_music_url.present? ? @activity.bg_music_url : '' %>", //音乐文件路径
+            },
+            "loading": {
+                "bgSrc": null,
+                "bgColor": "#fff",
+                "loadingSrc": "<%= qiniu_image_url('FtUHsTRBLe6P8dX0-b5svadqgtGf') %>"
+            },
+            "sceneSize": {
+              "width": 320,
+              "height": 486
+            },
+            "scenes": <%=raw @scene_html.content %>
+        }
+    </script>
+</head>
+<body>
+    <div class="html theme-1" id="html">
+        <div class="stage" id="stage">
+            <div class="pages">
+                <!--
+                    <section class="page" style="background-image: url(../assets/img/vscene-2/1.jpg);"></section>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <div class="vBtn"></div>
+    <div class="hBtn hBtnL"></div>
+    <div class="hBtn hBtnR"></div>
+		<div class="off" id="music"><em class="icon"></em><em class="tips"></em><em class="expand"></em></div>
+    <div id="loading"><div class="loadingImg"></div></div>
+    <div id="lottery"></div>
+
+    <script src="/mobile/js/lib/jquery-1.11.2.min.js"></script>
+    <script src="/mobile/js/vscene_3.0.0/vscene-2-utils.js"></script>
+    <script>
+        // 避免lottery报错
+        var Zepto = null;
+    </script>
+    <script src="/mobile/js/lottery.js"></script>
+    <script src="/mobile/js/vscene_3.0.0/vscene-3.js"></script>
+    <script src="/mobile/js/vscene_3.0.0/vscene-map-3.js"></script>
+    <script>
+        // 初始化页面
+        var pages = new window.pages();
+        pages.init();
+    </script>
+    <%= render 'application/app_footer' %>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<% content_for :tab do %>
+  <div id="tab2" class="tab-pane fade active in">
+    <div class="row">
+      <div class="col-sm-12">
+        <!--<div class="alert alert-block alert-warning">
+          <span class=""><strong>提示：</strong>由于支付调整，购买短信套餐暂时只支持线上申请线下付款。流程说明：点击【购买套餐］进行在线申请，然后联系我们的渠道经理进行线下付款，确认收款后激活购买套餐。</span>
+        </div>-->
+
+        <%= form_for @search, :html => { :method => :get } do |f| %>
+        <div class="col-sm-3 no-padding-left">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">套餐：</span>
+            <%= f.select :plan_id_eq, SmsOrder.plan_id_options,{ include_blank: '全部'}, class: 'col-sm-12' %>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">状态：</span>
+            <%= f.select :status_eq, SmsOrder.status_options.reject{|m| [SmsOrder::F_DELETE, SmsOrder::T_DELETE].include?(m.last)}, {include_blank: '全部'}, class: 'col-sm-12' %>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <input type="submit" class="btn btn-primary btn-sm" value="查询">
+          <% if current_user.trial_account? || current_user.industry_free? %>
+          <a href="javascript:;" class="btn btn-sm">购买套餐</a>
+          <% else %>
+          <a href="javascript:;" class="btn btn-primary btn-sm" data-toggle="modals" data-height="500" data-iframe="<%= new_sms_order_path %>" data-title="购买短信套餐">购买套餐</a>
+          <% end %>
+        </div>
+        <div class="col-sm-3">
+          <p class="line-height-30 text-right">购买总数：<%= current_user.buy_sms_totality %>条； 赠送总数：<%= current_user.giv_sms_totality %>条</p>
+        </div>
+        <% end %>
+      </div>
+      <div class="col-sm-12 margin-top-10">
+        <table class="table table-striped table-bordered table-hover dataTable">
+          <thead>
+          <tr>
+            <th>编号</th>
+            <th>套餐</th>
+            <th>支付状态</th>
+            <th>时间</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @sms_orders.each do |order| %>
+            <tr>
+              <td><%= order.id %></td>
+              <td><%= order.plan_name %></td>
+              <td><%= order.buy? ? order.status_name : '<hr style="margin-top: 10px; margin-bottom: 0px;">'.html_safe %></td>
+              <td><%= order.created_at %></td>
+              <td><%= order.remark %></td>
+              <td>
+                <% if order.cancel? %>
+                  <%= link_to '删除', sms_order_path(order), data:{confirm: '删除本记录后，该记录将不再显示了，确定删除本条记录吗？', method: 'delete', title: '短信套餐支付取消'}  %>
+                <% elsif order.pending? %>
+                  <% if Rails.env.production? || Rails.env.staging? %>
+                    <%= link_to '支付', alipayapi_sms_order_url(order, payment_id: order.payments.wait_buyer_pay.first.try(:id), host: 'm.weiligongshe.com'), target: '_blank' %>
+                  <% else %>
+                    <%= link_to '支付', alipayapi_sms_order_url(order, payment_id: order.payments.wait_buyer_pay.first.try(:id)), target: '_blank' %>
+                  <% end %>
+
+                  <%= link_to '取消',cancel_sms_order_path(order), data:{confirm: '取消支付后，本条记录将不能再支付了，确定取消支付吗？', method: 'get', title: '短信套餐支付取消'} %>
+                  <%#= link_to '删除', sms_order_path(order), data:{confirm: '删除本记录后，该记录将不再显示了，确定删除本条记录吗？', method: 'delete', title: '短信套餐支付取消'}  %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @sms_orders.blank? %>
+            <td colspan="6" class="blue text-center">还没有套餐购买记录</td>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-12">
+        <%= paginate @sms_orders %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'sms_expenses/main_content' %>

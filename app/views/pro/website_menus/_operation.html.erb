@@ -1,0 +1,11 @@
+<b id="menu-name-<%= menu.id %>"><%= menu.name %></b>
+<span>
+	<% if menu.allow_menu_layer %>
+	  <a class="ico-add" onclick="popUrl(this)" data-name="new_website_menu" data-w="600" title="新增菜单" data-h="500" data-title="新增菜单" data-url="<%= new_pro_website_menu_url(parent_id: menu.id) %>"></a>
+  <% end %>
+  <%#= link_to '', edit_pro_website_menu_url(menu), title: '编辑当前栏目', class: 'ico-edit' %>
+  <a class="ico-edit" onclick="popUrl(this)" data-name="website_menu_<%= menu.id %>" data-w="600" data-h="500" data-title="编辑菜单" title="编辑菜单" data-url="<%= edit_pro_website_menu_url(menu) %>"></a>
+  <%= link_to '', [:pro, menu], method: :delete, remote: true, confirm: '确定要删除吗？', title: '删除当前栏目', class: 'ico-delete' %>
+  <a class="reorder ico-up" title="上移" data-sort="up" data-id="<%= menu.id %>" data-url="<%= reorder_pro_website_menu_path(menu) %>"></a>
+  <a class="reorder ico-down" title="下移" data-sort="down" data-id="<%= menu.id %>" data-url="<%= reorder_pro_website_menu_path(menu) %>"></a>
+</span>

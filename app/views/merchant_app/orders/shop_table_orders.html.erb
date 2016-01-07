@@ -1,0 +1,94 @@
+<% title "微订餐-订单" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"<% end %>
+<% content_for :header do %>
+  <header>
+    <span class="text">微餐饮-订单</span>
+    <a href="javascript:;"></a>
+  </header>
+<% end %>
+
+<%= form_tag shop_table_orders_merchant_app_orders_url, method: :get do %>
+  <%= hidden_field_tag :role,  params[:role] %>
+  <%= hidden_field_tag :role_id, @login_user.id %>
+  <%= hidden_field_tag :token, @login_user.auth_token %>
+  <div class="search-box">
+    <div class="search">
+      <div class="s-icon"></div>
+      <%= text_field_tag 'value_like', params[:value_like], placeholder: '搜索' %>
+    </div>
+  </div>
+<% end %>
+
+<div infinite-scroll='demo.nextPage()' infinite-scroll-disabled='demo.busy' infinite-scroll-distance='1'>
+  <div class="mod-list" ng-repeat="order in demo.orders">
+    <dl>
+      <dt class="icon-right {{order.dt_class}}">
+        <a href='/merchant_app/orders/{{order.id}}/shop_table_order_detail?order_type={{order.book_type}}&role=<%= params[:role] %>&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>订单号：{{order.order_no}}</a>
+      </dt>
+      <dd>
+        <p>预定类型：{{order.book_type}}</p>
+        <p>门店：{{order.branch_name}}</p>
+        <p>姓名：{{order.username}}</p>
+        <p>下单时间：{{order.created_at}}</p>
+      </dd>
+     </dl>
+  </div>
+</div>
+<div class="mod-load" ng-show='demo.busy'>加载中…</div>
+
+
+<script>
+ var app = angular.module('app', ['infinite-scroll']);
+
+ app.controller('customersController', 
+      function ($scope, Demo) {
+          $scope.demo = new Demo();
+      }
+ );
+
+  // 创建后台数据交互工厂
+  app.factory('Demo', function ($http) {
+     var Demo = function () {
+         this.orders = [];
+         this.order_ids = [];
+         this.categories = [];
+         this.busy = false;
+         this.page = 1;
+         this.last_order_id = null;
+     };
+     
+     Demo.prototype.nextPage = function () {
+         if (this.busy) return;
+         this.busy = true;
+         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/shop_table_orders?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[phone_or_nickname_cont]=#{params[:phone_or_nickname_like]}&search[wx_plot_category_id_eq]=#{params[:wx_plot_category_id_eq]}&page=" %>'+ this.page;
+         $http.get(url).success(function (response) {
+           if(response.result == 'success'){
+             var items = response.data['orders'];
+             this.busy = false;
+             // alert(items.length);
+             if(items.length > 0 && this.last_order_id != items[items.length-1]['id']){
+               for(var i = 0; i < items.length; i++) {
+                 if(this.order_ids.indexOf() == -1){
+                   this.orders.push(items[i]);
+                   this.order_ids.push(items[i].id);
+                 }
+               }
+               this.last_order_id = items[items.length-1].id
+               // this.page = this.orders.length % 10 == 0 ? (this.orders.length == 0 ? 1 : this.page + 1) : this.page;
+               this.page = this.page + 1
+             }  
+            
+           }
+           else{
+              console.log(response);
+           }
+          }.bind(this))
+             .error(function(response) {
+                console.log(response);
+             }.bind(this));
+       };
+ 
+     return Demo;
+});
+
+</script>

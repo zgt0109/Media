@@ -1,0 +1,29 @@
+<div class="body">
+  <div class="done">
+    <div class="end-img-4"></div>
+    <div class="done-text">您的答题已经完成</div>
+    <div class="done-tips">感谢您的参与，请留下您的宝贵意见</div>
+  </div>
+  <%= form_tag create_feedback_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id) do %>
+  <textarea name="content" id="content" cols="30" rows="10" class="input" placeholder="请输入您想对我们说的话"><%= @feedback.try(:content) %></textarea>
+  <div class="btn-box mt-10px">
+    <div class="cell">
+      <a class='btn btn-bigest' href="<%= success_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id) %>">残忍拒绝</a>
+    </div>
+    <div class="cell submit">
+      <%= submit_tag '提交建议', class: 'btn btn-bigest btn-primary submit_button' %>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    $(".submit_button").click(function(){
+      if(!$('#content').val()){
+        alert("意见内容不能为空");
+        return false;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,46 @@
+<script>
+  function content_words_keyup(e) {
+    var $this = $( this ),
+        word_count = $this.val().length,
+        content_length = parseInt( $this.attr('maxlength') );
+    $this.next('.form-btn').find('span:first').text( content_length - word_count );
+  }
+
+  function validate_content_presence( e ) {
+    $this = $(this);
+    var content = $this.parent().prev('textarea').val();
+    if ( /^\s*$/.test( content ) ) {
+      alert('内容不能为空');
+      e.preventDefault();
+      return false;
+    } else {
+      setTimeout($this, 10);
+    };
+  }
+
+  function load_more_replies( supplier_id, topic_id, el ) {
+    reply_id = $(el).data('id');
+    $.getScript( '/' + supplier_id + '/wbbs_topics/' + topic_id + '/load_replies?reply_id=' + reply_id );
+  }
+
+  $(document).on("click",".btn-praise",function(){
+      var self=$(this),
+          number=parseInt(self.attr("data-number"));
+
+      if ( !self.hasClass('fa-thumbs-up') ) {
+          self.addClass("fa-thumbs-up");
+          number++;
+          self.html(number);
+          self.attr("data-number",number);
+          self.addClass('voted');
+          $.getJSON('<%= vote_up_mobile_wbbs_topics_path %>', { id: self.data('id') });
+      };
+  });
+
+  $(function() {
+    $('.form-submit').click(function(event) {
+        $this = $(this);
+        setTimeout(function() { $this.attr('disabled', true) }, 10);
+    });
+  })
+</script>

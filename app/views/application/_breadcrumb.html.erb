@@ -1,0 +1,23 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <%= render 'partials/home' %>
+    <li>
+      <% if enrolls_path? %>
+        <%= link_to "微报名", "/activity_forms" %>
+      <% elsif albums_path? %>
+        <%= link_to "微相册", "/albums/activity" %>
+      <% elsif greet_cards_path? %>
+        <%= link_to "微贺卡", "/greets/activity" %>
+      <% elsif wx_walls_path? %>
+        <%= link_to "微信墙", "/wx_walls" %>
+      <% elsif leaving_messages_path? %>
+        <%= link_to "微留言", "/leaving_messages/edit_activity" %>
+      <% elsif surveys_path? %>
+        <%= link_to "微调研", "/activities/surveys" %>
+      <% else %>
+        <%= link_to "微官网", "/websites" %>
+      <% end %>
+    </li>    
+  </ul>
+  <%= render partial:'/layouts/qrcode' %>
+</div>

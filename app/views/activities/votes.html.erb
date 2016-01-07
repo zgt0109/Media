@@ -1,0 +1,155 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微投票', votes_activities_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger">
+            <li class="active">
+              <%= link_to '微投票管理', votes_activities_path %>
+            </li>
+            <li>
+              <%= link_to '用户数据', votes_user_data_activities_path %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-1" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <%= activity_notes(ActivityType::VOTE) %>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <%= form_for @search, url: {action: action_name}, html: { method: :get } do |f| %>
+                    <div class="col-md-3 row">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">活动名称：</span>
+                        <%= f.text_field :name_like, placeholder:"请输入活动名称", class: 'col-xs-12' %>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">关键词：</span>
+                        <%= f.text_field :keyword_like, placeholder:"请输入关键词", class: 'col-xs-12' %>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">状态：</span>
+                        <%= select_tag :status,  options_for_select(Activity.status_options_by_type_id(ActivityType::VOTE), params[:status]), {class: 'col-xs-12'} %>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3 row pull-right">
+                      <%= f.submit '查询', class: 'btn btn-primary btn-sm btn-filter' %>
+                      <%= link_to '新增', vote_form_activities_path, class: 'btn btn-primary btn-filter btn-sm pull-right' %>
+                    </div>
+                  <% end %>
+                </div>
+
+                <div class="col-md-12 margin-top-20">
+
+                  <table id="researchTable" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                    <tr>
+                      <th width="30%">活动名称</th>
+                      <th>关键词</th>
+                      <th>活动时间</th>
+                      <th>状态</th>
+                      <th width="25%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @activities.each do |activity| %>
+                        <% attrs = activity.vote_status_attrs %>
+                        <tr>
+                          <td><%= truncate_u activity.name, length: 16 %></td>
+                          <td><%= activity.keyword %></td>
+                          <td><%= activity.duration %></td>
+                          <td>
+                            <%#= show_activity_status(activity) %>
+			    <%= attrs[0] %>
+                          </td>
+                          <td class="">
+                            <%= link_to '查看', vote_form_activity_path(activity) %>
+                            <%= link_to '投票设置', vote_items_activity_path(activity)  %>
+                            <%= link_to '统计', votes_diagram_activities_path(id: activity.id) %>
+                            <% if activity.activity_type.is_show? %>
+                                <%#= link_to '开启', active_activity_path(activity), method: :post if activity.allow_active? %>
+                                <%= link_to '开启', active_activity_path(activity), method: :post if attrs[1] %>
+                                <%#= link_to '停止', [:stop, activity], data: {confirm: '投票活动正在进行，确认停止吗？', method: :post } if ['进行中'].include? show_activity_status(activity) %>
+                                <%= link_to '停止', [:stop, activity], data: {confirm: '投票活动正在进行，确认停止吗？', method: :post } if attrs[2] %>
+                            <% end %>
+                            <%#= link_to '删除', activity_path(activity), data: {confirm: '确认删除吗？', method: :delete} if activity.vote? && !activity.setted? %>
+                            <%= link_to '删除', activity_path(activity), data: {confirm: '确认删除吗？', method: :delete} if attrs[3] %>
+                            <%= link_to '投票链接', vote_qrcode_activity_url(activity), class: 'fgreen', data: {target: "qrocde-#{activity.id}", remote: true} %>
+                            <div class="new-add" style="display: none;" id="qrocde-<%= activity.id %>">
+                              <!--p class="mod-loading"><img src="/assets/loading.gif"/></p-->
+                            </div>
+                          </td>
+                        </tr>
+                    <% end %>
+                    <% if @activities.count == 0 %>
+                        <tr><td colspan="5" class="text-center green">还没有创建活动</td></tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+
+                  <%= paginate @activities %>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    $(function(){
+      var clip=[], ids = [];
+      $('.copy-button').each(function(i){
+          ids[i] = $(this).attr('id');
+          clip[i] = new ZeroClipboard($(this), {
+              moviePath: "/flash/ZeroClipboard.swf"
+          } );
+
+          clip[i].on( "load", function(client) {
+              client.on( "complete", function(client, args) {
+                  if(args['current_element_id'] == ids[i]){
+                      showTip('success', '路径已复制到剪贴板')
+                  }
+              });
+          });
+      })
+
+      $("#researchTable").on("click", '.fgreen', function(){
+        $('.new-add').hide();
+        $('#'+$(this).data('target')).show();  
+      });
+       
+      $(".new-add").on("click", '.close', function(){
+        $('#'+$(this).data('target')).hide();
+      });
+    });
+  </script>
+<% end %>

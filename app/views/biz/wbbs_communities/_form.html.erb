@@ -1,0 +1,76 @@
+<%= content_for :breadcrumb_li do %>
+  <%- if @activity.new_record? %>
+    <li><%= link_to '新增微社区', new_wbbs_community_path(type: params[:type]) %></li>
+  <%- else %>
+    <li><%= link_to params[:type] == 'wx_plot' ? '编辑微社区' : '微社区设置', edit_wbbs_community_path(@wbbs_community, type: params[:type]) %></li>
+  <%- end %>
+<%- end %>
+<%= content_for :tab do %>
+<div id="tab-1" class="tab-pane fade active in">
+  <div class="col-sm-12">
+    <div class="alert alert-block alert-success ">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li> 1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微社区；</li>
+        <li> 2、以下“<span class="required-star">*</span>”均为必填项；</li>
+        <li> 3、微社区开放给所有类型公众平台账号均可使用，用户到社区交流需要上传头像和昵称；</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <%= render "weixin_preview", wx_title: @activity.try(:name) || '这里显示<微信消息标题>', wx_summary: @activity.try(:summary) || '这里显示你输入的 <微信消息摘要>' %>
+    <%= form_for @wbbs_community, url: @wbbs_community.new_record? ? wbbs_communities_path(type: params[:type]) : wbbs_community_path(id: @wbbs_community.id, type: params[:type]), validate: true do |community| %>
+      <%= community.hidden_field :supplier_id, value: current_user.id %>
+      <%= community.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+      <div class="col-xs-12 col-md-6 col-lg-7">
+        <div class="form-group">
+          <label class="control-label">社区名称</label>
+          <div class="clearfix">
+            <%= community.text_field :name, validate: true, class: 'col-sm-6' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">社区LOGO</label>
+          <div class="clearfix">
+            <div class="cieldon-file width-100px " data-type="0" data-height="100" data-width="100" data-img="<%= @wbbs_community.try(:logo_url) %>" data-name="wbbs_community[logo]" data-key="<%= @wbbs_community.try(:logo) %>"></div>
+            <small class="text-warning pull-left display-block margin-top-20 line-height-32 margin-left-10">图片建议尺寸：300像素*300像素</small>
+          </div>
+        </div>
+        <%= community.fields_for :activity do |activity| %>
+          <%- if @activity.new_record? %>
+            <%= activity.hidden_field :supplier_id, value: current_user.id %>
+            <%= activity.hidden_field :status, value: 1 %>
+            <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+            <%= activity.hidden_field :activity_type_id, value: 49 %>
+            <%= activity.hidden_field :ready_at, value: Time.now %>
+            <%= activity.hidden_field :start_at, value: Time.now %>
+            <%= activity.hidden_field :end_at, value: Time.now + 100.years %>
+          <%- end %>
+          <%= render "weixin_setting", activity: activity, data_img: @activity.try(:pic_url), pic_data_name: "wbbs_community[activity_attributes][qiniu_pic_key]", pic_data_key: @activity.try(:qiniu_pic_key) %>
+          <div class="form-group">
+            <input type="submit" class="btn btn-sm btn-primary submit_wbbs" value="保存">
+          </div>
+        <%- end %>
+      </div>
+    <%- end %>
+  </div>
+</div>
+<%- end %>
+<%= render "community" %>
+<%= content_for :custom_js do %>
+<script type="text/javascript">
+$('.submit_wbbs').on('click', function(event) {
+  var keyword = $('#keyword').val();
+  <% if @wbbs_community.new_record? %>
+  var exists_keywords = <%= raw current_user.activities.show.pluck(:keyword).to_json %> ;
+  <% else %>
+  var exists_keywords = <%= raw current_user.activities.show.where("id != ?", @wbbs_community.activity.try(:id)).pluck(:keyword).to_json %> ;
+  <% end %>
+  if ($.inArray(keyword, exists_keywords) >= 0) {
+      showTip('warning', '关键字重复，请重新选择关键字');
+      return false;
+  }
+});
+
+</script>
+<%- end %>

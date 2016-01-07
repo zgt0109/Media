@@ -1,0 +1,19 @@
+<% form_url = @wbbs_topic ? create_reply_mobile_wbbs_topic_path(@supplier, @wbbs_topic) : ''  %>
+<div class="mod-pop" id="pop-comment">
+    <div class="pop-bg" onclick="hidePop('#pop-comment')"></div>
+    <div class="pop-body">
+        <div class="pop-hd">
+            <%= form_for(WbbsReply.new, url: form_url, remote: true, html: { class: 'mod-form form-ver' }) do |f| %>
+                <%= f.hidden_field :parent_id %>
+                <%= f.hidden_field :replier_type, value: 'WxUser' %>
+                <%= f.hidden_field :replier_id, value: @wx_user.try(:id) %>
+                <%= f.text_area :content, rows: 7, maxlength: WbbsReply::MAX_CONTENT_LENGTH, class: 'input', placeholder: "说两句吧..." %>
+                <div class="form-btn">
+                    <span><%= WbbsReply::MAX_CONTENT_LENGTH %></span>
+                    <%= f.button '取消', type: :reset, class: 'btn btn-gray', onclick: "hidePop('#pop-comment')" %>
+                    <%= f.submit '确定', class: 'btn btn-green form-submit' %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

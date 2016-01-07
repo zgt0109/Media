@@ -1,0 +1,9 @@
+var html = '<%= j (render partial: "shop_branches", collection: @shop_branches, as: :branch) %>';
+$list_box = $(".list-box");
+$list_box.find(".tcenter").remove();
+$list_box.append(html);
+<% if (link_to_next_page @shop_branches, '点击加载更多', remote: true).present? %>
+    $list_box.append('<p class="tcenter"><span class="loading"><%= link_to_next_page @shop_branches, "点击加载更多", remote: true, params: {search: params[:search]} %></span></p>');
+<% else %>
+    $(".loading").remove();
+<% end %>

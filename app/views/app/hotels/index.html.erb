@@ -1,0 +1,47 @@
+<header>
+	<h1><%= @hotel.try(:name) %></h1>
+	<%= link_to "我的订单", app_hotel_orders_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id]), class: "ico-hd ico-order" %>
+</header>
+<div class="contxt cont-index">
+	<div class="box-cont box-half index-city">
+		<a href="<%= city_app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id])%>" class="box-block"></a>
+		<div class="hd">
+			<span class="ico ico-city">城 市</span>
+		</div>
+		<div class="bd">
+			<span><%= (params[:city_name].present? ? URI.decode(params[:city_name]) : nil) || session[:city_name] || '上海' %></span>
+			<span class="arrow arr-small"></span>
+		</div>
+	</div>
+	<div class="box-cont box-half index-time">
+		<div class="hd">
+			<span class="ico ico-date">入住时间</span>
+			<p class="table">
+				<%= date_for_select('hotel_room_order[check_in_date]', id: 'select-s', class: '')%>
+				<span class="td"><b id="time-s"><%= Date.today.strftime("%m月%d日") %></b></span>
+				<span class="arrow arr-big"></span>
+			</p>
+		</div>
+		<div class="bd">
+			<span class="ico ico-date">离店时间</span>
+			<p class="table">
+				<%= date_for_select('hotel_room_order[check_in_date]', id: 'select-e', class: '', start_date: Date.tomorrow.to_s)%>
+				<span class="td"><b id="time-e"><%= Date.tomorrow.strftime("%m月%d日") %></b></span>
+				<span class="arrow arr-big"></span>
+			</p>
+		</div>
+	</div>
+	<br/><br/><br/>
+	<div class="tcenter"><a class="btn btn-big to_book" onclick="javascript:toBook();">开始预订</a></div>
+</div>
+<script>
+function toBook(){
+	var check_in_date = $('#select-s').val(), check_out_date = $('#select-e').val();
+	if(check_in_date >= check_out_date){
+		alert('离店时间必须大于入住时间!');
+	}else{
+		window.location.href = "<%= list_app_hotels_path %>?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date="+check_in_date+"&check_out_date="+check_out_date+"&page=1#mp.weixin.qq.com";
+	}
+}
+
+</script>

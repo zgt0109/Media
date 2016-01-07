@@ -1,0 +1,12 @@
+<%- if (@wx_user && @wx_user.has_info?) || !@wx_user  %>
+    <a class="mod-user" onclick="setLinkForPop(<%= @supplier.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>);" data-parent_id="<%= wbbs_reply.id %>">
+<%- else %>
+    <a class="mod-user" href="javascript:;" onclick="showPop('#pop-nichen')">
+<%- end %>
+    <div class="hd-img">
+        <img src="<%= wbbs_reply.replier_avatar %>">
+    </div>
+    <div class="hd-text">
+        <p><b><%= wbbs_reply.replier_name %>:</b><span><%= wbbs_reply.visible_for?(@wx_user) ? wbbs_reply.content : '该用户的留言已被屏蔽' %></span></p>
+    </div>
+</a>

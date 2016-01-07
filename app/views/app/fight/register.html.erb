@@ -1,0 +1,54 @@
+<% content_for(:title) { '填写资料' } %>
+<div id="wrapper">
+	<div id="header">
+		<h1 class="title_a">填写资料</h1>
+	</div>
+
+	<div id="user_info">
+		<%#= form_tag app_fight_index_path, class: 'user_inner' do %>
+		<form action="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=register" method="post" class="user_inner">
+		<p><label for="us_name">请输入您的昵称：</label><%= text_field_tag :name, @activity_user.try(:name), class: 'input_style' %><span class="name-message" style="color:red;"></span></p>
+		<p><label for="us_name">请输入您的手机号码：</label><%= text_field_tag :mobile, @activity_user.try(:mobile), class: 'input_style' %><span class="mobile-message" style="color:red;"></span></p>
+		<h3>*请务必填写正确，这将是作为您中奖后的领奖依据</h3>
+		<%#end%>
+		</form>
+	</div>
+
+	<div id="kz_begin">
+		<p><a href="javascript:submit_user()" class="btn_b">开&nbsp;战</a></p>
+	</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+function submit_user(){
+	if(validate_fields()){
+		$('form').submit();
+	}else{
+		// console.log('validate fields false')
+	}
+}
+
+function validate_fields(){
+	var _name = $('#name').val(), _mobile = $('#mobile').val();
+	if(!(_name && _name.replace(/^\s*$/, ''))){
+		$('.name-message').text('不能为空');
+		return false
+	}else if(_name.length == 1){
+		$('.name-message').text('昵称至少2个字');
+		return false;
+	}else if(!(_mobile && _mobile.replace(/^\s*$/, ''))){
+		$('.name-message').text('');
+		$('.mobile-message').text('不能为空');
+		return false;
+	}else if(!(winwemedia_validators.mobile_reg.test(_mobile))){
+		$('.name-message').text('');
+		$('.mobile-message').text('手机号码格式不正确');
+		return false;
+	}else{
+		return true;
+	}
+	return false
+}
+</script>

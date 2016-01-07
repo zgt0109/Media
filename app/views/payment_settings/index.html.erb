@@ -1,0 +1,60 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '系统设置', account_url %></li>
+        <li><%= link_to '支付设置', payment_settings_url %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+
+        <div class="col-sm-12">
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、我们推荐大家使用的支付方式是：微信支付（认证服务号和部分认证订阅号可使用） 易宝支付（都可使用）；</li>
+              <li>2、【易宝支付】此方式的支付流程类似银行卡支付。在申请过程中“网站”一栏填写“团购链接”或“电商链接”，请商户在填写过程中不要填写贵公司网站。（注：必须以企业形式注册）；</li>
+              <li>3、【支付宝】2014年2月13日前接入支付宝"手机网站支付"的企业用户可以使用（必须以企业形式注册）,之后申请的用户，支付宝已无法接入；</li>
+              <li style="display:none;">4、【财付通】目前财付通官方并未支持微信支付，暂停支持财付通支付方式<!--但可以通过非“微信”名义进行申请和使用（请勿在申请过程中跟财付通客服透露是接入微信，否则客服会将该申请否决），由于官方未公开支持, 建议各位谨慎选择此支付方式-->。</li>
+              <li>4、微信支付分为V2和V3两个版本，不需要缴纳保证金申请的商户，请配置微信支付V3版本</li>
+            </ul>
+          </div>
+
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">支付设置说明：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>
+                <a class="decoration" href="http://fun.alipay.com/zfbxt/qianyueditu.htm?src=nsf04#J-two" target="_blank">支付宝使用说明</a>　　
+                <a class="decoration" href="http://mp.weixin.qq.com/cgi-bin/readtemplate?t=business/faq_tmpl" target="_blank">微信支付使用说明</a>　　
+                <!--<a class="decoration" href="http://union.tenpay.com/mch/mch_register.shtml" target="_blank">财付通使用说明</a>-->　
+                <a class="decoration" href="http://www.yeepay.com/article/merchantServices/self_service/queyArticle/53cce159a0d639926516c605" target="_blank">易宝使用说明</a>　
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <table id="" class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+            <tr>
+              <th width="120">操作</th>
+              <th>支付类型</th>
+              <th>排序</th>
+              <th>使用状态</th>
+            </tr>
+            </thead>
+            <tbody>
+              <%= render "tr" %>
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+<% end %>

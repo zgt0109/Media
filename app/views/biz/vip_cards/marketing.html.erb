@@ -1,0 +1,106 @@
+<div class="main-content">
+  <!-- 这里是内容 start-->
+  <!--新手任务 代码块-->
+  <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+        <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+        <li><%= link_to '会员卡', vip_users_path %></li>
+        <li><%= link_to '会员营销', marketing_vip_cards_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+</div>
+  <!-- page-content start-->
+
+  <div class="page-content">
+    <dl class="vcard-mklist-dl">
+      <dt>会员类型分组</dt>
+      <dd>
+        <ul class="vcard-mklist-ul">
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_01.png" alt="会员卡等级设置" />
+            <p>会员卡等级设置</p>
+            <%= link_to '', vip_grades_url %>
+          </li>
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_02.png" alt="会员卡等级特权" />
+            <p>会员卡等级特权</p>
+            <%= link_to '', vip_privileges_url %>
+          </li>
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_03.png" alt="会员分组" />
+            <p>会员分组</p>
+            <%= link_to '', vip_groups_url %>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+    <dl class="vcard-mklist-dl">
+      <dt>会员卡套餐设置</dt>
+      <dd>
+        <ul class="vcard-mklist-ul">
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_04.png" alt="会员卡套餐设置" />
+            <p>会员卡套餐设置</p>
+            <%= link_to '', vip_packages_path %>
+          </li>
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_05.png" alt="会员套餐服务项目管理" />
+            <p>会员套餐服务项目管理</p>
+            <%= link_to '', vip_package_items_path %>
+          </li>
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_06.png" alt="会员卡套餐核销" />
+            <p>会员卡套餐核销</p>
+            <%= link_to '', item_consumes_vip_packages_path %>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+    <dl class="vcard-mklist-dl">
+      <dt>会员积分设置</dt>
+      <dd>
+        <ul class="vcard-mklist-ul">
+          <li class="vcard-mktlist-item vcard-mktlist-itemspecial">
+            <img src="/assets/vcard/vip_marketingListIcon_07.png" alt="会员积分策略" />
+            <p>会员积分策略</p>
+            <%= link_to '', point_types_path %>
+          </li>
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_08.png" alt="积分兑换商品设置" />
+            <p>积分兑换商品设置<br />（原<code>会员营销中礼品管理</code>）</p>
+            <%= link_to '', point_gifts_path %>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+    <dl class="vcard-mklist-dl">
+      <dt>会员关怀</dt>
+      <dd>
+        <ul class="vcard-mklist-ul">
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_09.png" alt="会员关怀" />
+            <p>会员关怀<br />（原<code>会员关怀</code>）</p>
+            <%= link_to '', vip_cares_path %>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+    <dl class="vcard-mklist-dl">
+      <dt>会员通知设置</dt>
+      <dd>
+        <ul class="vcard-mklist-ul">
+          <li class="vcard-mktlist-item">
+            <img src="/assets/vcard/vip_marketingListIcon_10.png" alt="会员站内信" />
+            <p>会员站内信</p>
+            <%= link_to '', vip_message_plans_path %>
+          </li>
+          <!--<li class="vcard-mktlist-item">-->
+            <!--<img src="/assets/vcard/vip_marketingListIcon_11.png" alt="消息模板设置" />-->
+            <!--<p>消息模板设置</p>-->
+            <!--<a href="../vcard/vip_notice.html#?#tab2"></a>-->
+          <!--</li>-->
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</div>

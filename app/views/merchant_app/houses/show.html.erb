@@ -1,0 +1,95 @@
+<% title "详情" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="visable1=true;visable2=true"<% end %>
+<% content_for :header do %>
+  <header>
+    <%= link_to merchant_app_houses_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <span class="text">详情</span>
+    <a href="javascript:;"></a>
+  </header>
+  <div class="mod-foot">
+  <div class="cell" ng-hide="visable1">
+      <a href="javascript:;" class="btn btn-biger">已确认</a>
+    </div>
+    <div class="cell" ng-hide="visable2">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(2)">确认</a>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="mod-list">
+  <dl>
+    <dd>
+      <p>预约人：{{order.name}}</p>
+      <p>手机号：{{order.mobile}}</p>
+      <p>随行人数：{{order.people_count}}</p>
+      <p>状态：{{order.status_name}}</p>
+      <p>备注：{{order.description}}</p>
+    </dd>
+  </dl>
+</div>
+
+<script>
+var app = angular.module('app', []);
+function customersController($scope,$http) {
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    .success(function(response) {
+        if(response.result == 'success'){
+ 	  $scope.order = response.data;
+          $scope.set_visable($scope.order.status, false);
+        }
+        else{
+          console.log(response); 
+        }
+
+    })
+    .error(function(response) {
+      console.log(response);
+    });
+    
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=HouseBespeak&source=winwemedia_house&is_read=1" %>')
+    .success(function(response) {
+	     console.log(response);
+    })
+    .error(function(response) {
+        console.log(response);
+    });
+
+    $scope.change_status = function(status) {
+        if(confirm('确认是否执行此操作？')){
+          $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+          .success(function(response) {
+	     if(response.result == 'success'){
+               $scope.set_visable(status, true);
+               window.location.href = '<%= raw merchant_app_houses_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) %>';
+             }
+             else{
+               console.log(response);
+               alert('操作失败');
+             }
+          })
+          .error(function(response) {
+            console.log(response);
+            alert('操作失败');
+          });
+        }
+    };
+
+    $scope.set_visable = function(status, flag) {
+      switch(status){
+        case 1:
+          $scope.visable1 = true;
+          $scope.visable2 = false;
+          break;
+        case 2:
+          $scope.order.status_name = '已看房';
+          $scope.visable2 = true;
+          $scope.visable1 = false;
+          break;
+        
+      }  
+    }
+}
+customersController.inject = ['$scope', '$http'];
+app.controller('customersController', customersController);
+</script>

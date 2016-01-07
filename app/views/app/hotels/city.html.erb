@@ -1,0 +1,26 @@
+<header>
+	<%= link_to "", app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id]), class: "ico-hd arr-hd" %>
+    <h1>入住城市</h1>
+</header>
+<div class="contxt cont-city">
+        <div class="box-search">
+            <label class="hide">
+                <input type="text" placeholder="城市名"/>
+            </label>
+        </div>
+        <div class="box-city">
+            <% @group_cities.each do |first_letter, cities|%>
+            <dl id="<%= first_letter %>">
+                <dt><%= first_letter %></dt>
+                <% cities.each do |city|%>
+            <dd><a href="<%= app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], city_id: city['city_id'], city_name: URI.escape(city['city_name'])) %>"><%= city['city_name'] %></a></dd>
+            <%end%>
+        </dl>
+        <% end -%>
+        <p class="city-page">
+            <% @group_cities.each do |first_letter, cities|%>
+            <a href="#<%= first_letter %>"><%= first_letter %></a>
+            <% end -%>
+        </p>
+    </div>
+</div>

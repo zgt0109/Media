@@ -1,0 +1,75 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '吸粉游戏', fans_games_path %></li>
+      <li><%= link_to '游戏管理', fans_game_path(@activity) %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li>
+          <a href="<%= fans_games_path %>">
+            基础设置
+          </a>
+        </li>
+        <li class="active">
+          <a href="<%= fans_game_path(@activity) %>">
+            游戏管理
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-md-12 handler">
+              <% @fans_games.each_with_index do |game,i| %>
+              <div class="widget-box ">
+                <div class="widget-header widget-header-large widget-header-flat">
+                  <h4>
+                    <%= game.name %>
+                  </h4>
+                </div>
+                <div class="widget-body">
+                  <div class="widget-main">
+                    <div class="widget-content align-center">
+                      <%= image_tag "/images/fans_game/game_#{game.id}.jpg", class: "", width: "80", height: "80" %>
+                      <%#= truncate game.summary, length: 40 %>
+                    </div>
+                    <div class="hr hr8 hr-double"></div>
+                    <div class="widget-foot">
+                      <label>
+                        <input name="switch-field-1" class="ace ace-switch ace-switch-7" type="checkbox"
+                        onclick="javascript:toggle_hidden_link(<%= game.id %>)"
+                        <% if @ids.include?(game.id) %>
+                        checked="checked"
+                        <% end %>
+                        >
+                        <span class="lbl"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%= link_to " ", fans_game_path(id: game.id), method: :delete, remote: true, class: "btn-pluin pluin-open hidden", id:"toggle_#{game.id}" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script type="text/javascript">
+    function toggle_hidden_link(a_id){
+        $("#toggle_"+a_id).click();
+    }
+</script>
+<% end %>

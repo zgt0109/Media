@@ -1,0 +1,18 @@
+<% if @activity.fight?%>
+  <a href="javascript:void(0);" class="h1 pagecurrent">一战到底</a>
+  <a href="<%= fight_questions_path %>" class="h1 uncurrent">题库管理</a>
+<% elsif @activity.vote? %>
+  <%= link_to "微投票", votes_activities_path, class: "h1 #{((request.original_url =~ /activities\/votes/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "统计图表", votes_diagram_activities_path, class: "h1 #{((request.original_url =~ /activities\/diagram/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "用户数据", votes_user_data_activities_path, class: "h1 #{((request.original_url =~ /activities\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+<% elsif @activity.groups? %>
+  <%= link_to "我的团购", groups_activities_path, class: 'h1 pagecurrent' %>
+  <a href="<%= consumes_activities_path %>?activity_type_id=14" class="h1 uncurrent">SN码管理</a>
+<% elsif @activity.surveys? %>
+  <%= link_to "微调研", surveys_activities_path, class: "h1 #{((request.original_url =~ /activities\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "题目设置", activity_survey_questions_path, class: "h1 #{((controller_name == 'activity_survey_questions' && %(index new edit show).include?(action_name))? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "统计图表", diagram_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/diagram/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%= link_to "用户数据", user_data_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+<% else %>
+  <a href="javascript:void(0);" class="h1 pagecurrent"><%= @activity.activity_type.name %></a>
+<%end-%>

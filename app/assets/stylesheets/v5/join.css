@@ -1,0 +1,21 @@
+@charset "utf-8";
+.join-center{width: 1200px; margin: 0px auto;}
+.join-bann{height: 285px; position: relative; overflow: hidden; border-bottom: 1px #e1e1e1 solid;}
+.join-bann-img{position: absolute; top: 0px; left: 50%; margin-left: -960px;}
+.join-slogn{height: 38px; line-height: 38px; border-bottom: 1px #e1e1e1 solid; color: #77c04b; font-size: 18px; font-weight: bold;}
+
+.join-main{padding-top: 60px; margin-bottom: 100px;}
+.join-main .join-center{overflow: hidden;}
+.join-left{width: 250px; float: left; border-right: 1px #e1e1e1 solid; padding-bottom: 5000px; margin-bottom: -5000px;}
+.join-left li{height: 34px; line-height: 34px;}
+.join-left-link{color: #3396d1;}
+.join-left-link:hover, .join-left-link.active{color: #77c04b;}
+.join-left-gt{margin-right: 17px;}
+.join-right{width: 880px; float: left; padding-left: 40px; padding-bottom: 5000px; margin-bottom: -5000px;}
+
+.join-desp{line-height: 1.6em;}
+.join-mail{font-size: 18px; color: #77c04b; margin: 40px 0px; background: url(/assets/v5.1/join/join_icon_mail.png) 0 center no-repeat; padding-left: 30px;}
+
+.join-body{line-height: 2em; display: none;}
+.join-h4{font-size: 20px; color: #555; font-weight: bold; margin-bottom: 14px;}
+.join-h6{font-size: 16px; color: #3396d1; margin-bottom: 24px; font-weight: bold;}

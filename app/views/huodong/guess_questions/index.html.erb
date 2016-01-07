@@ -1,0 +1,33 @@
+<% content_for :breadcrumb_li do %>
+    <li><%= link_to_activities_by_type(ActivityType::GUESS) %></li>
+    <li><%= link_to '题库管理', guess_questions_path %></li>
+<% end %>
+
+<% content_for :tab_content do %>
+    <div id="tab-3" class="tab-pane fade active in">
+       <div class="row">
+             <%= link_to '新增', new_guess_question_path, class: 'btn btn-primary btn-sm pull-right' %>
+         <div class="col-sm-12 margin-top-20">
+           <ul class="questions">
+             <% if @fight_questions.each_with_index do |question, index| %>
+              <li style="margin-top: 10px;margin-bottom: 10px;">
+                <img alt="" src="<%= question.pic_url %>">
+                <span><%= index + 1 %>.<%= question.title %></span>
+                  <div class="tools">
+                    <%= link_to '修改', edit_guess_question_path(question)%>
+                    <%= link_to '删除', question, method: :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) } %>
+                  </div>
+              </li>
+              <% end.blank? %>
+              <tr>
+                <td class="green text-center" colspan="2">还没有创建题库</td>
+              </tr>
+             <% end %>
+           </ul>
+           <%= paginate @fight_questions %>
+         </div>
+       </div>
+    </div>
+<% end %>
+<%- @activity_type_id = ActivityType::GUESS %>
+<%= render 'activities/main_content' %>

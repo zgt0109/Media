@@ -1,0 +1,111 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <% if can_see? %>
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li>
+        <% if  params[:rule_type] == "3" %>
+          <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+        <% else %>
+          <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+        <% end %>
+      </li>
+      <li>
+        <% if current_user.industry_takeout? || session[:current_industry_id] == 10002 || params[:rule_type] == "3" %>
+          <%= link_to "外卖规则", shop_products_path(industry_id: 10002) %>
+        <% end %>
+        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+          <%= link_to "订座规则", shop_products_path(industry_id: 10001)  if params[:rule_type] == "2" %>
+          <%= link_to "订餐规则", shop_products_path(industry_id: 10001) if params[:rule_type] == "1" %>
+        <% end %>
+      </li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+    <% end %>
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="tabbable">
+
+      	<ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <% if params[:rule_type] == "1" || params[:rule_type] == "2" %>
+      		<li class='<%= params[:rule_type] == "1" ? "active" : "" %>'>
+      			<%= link_to "订餐规则", book_rules_path(rule_type: "1") %>
+      		</li>
+      		<li class='<%= params[:rule_type] == "2" ? "active" : "" %>'>
+      			<%= link_to "订座规则", book_rules_path(rule_type: "2") %>
+      		</li>
+        <% end %>
+        <% if params[:rule_type] == "3" %>
+      		<li class='<%= params[:rule_type] == "3" ? "active" : "" %>'>
+      			<%= link_to "外卖规则", book_rules_path(rule_type: "3") %>
+      		</li>
+        <% end %>
+      	</ul>
+
+        <div class="tab-content no-border padding-24">
+
+            <div id="tab-2" class="tab-pane fade active in">
+              <div class="row">
+              <%# unless @book_rule.new_record? %>
+                <div class="col-xs-12" id="main_rule_div">
+                  <% if params[:rule_type] == "1" %>
+                  <%= render "book_dinner_rule", book_rule: @book_rule %>
+                  <% end %>
+                  <% if params[:rule_type] == "2" %>
+                  <%= render "book_table_rule", book_rule: @book_rule %>
+                  <% end %>
+                  <% if params[:rule_type] == "3" %>
+                  <%= render "take_out_rule", book_rule: @book_rule %>
+                  <% end %>
+                </div>
+                <%# end %>
+              </div>
+            </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="modal_div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    </div>
+
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+
+<script>
+  $(function(){
+    $(".js-branch-id").change(function(){
+      if($(this).val() == ''){
+        $("#main_rule_div").remove();
+      }else{
+        location.href = location.href + "&shop_branch_id="+$(this).val();
+      }
+    });
+    $('.timepicker').attr('readonly', 'readonly').clockpicker({
+        autoclose: true
+    });
+  })
+</script>
+
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+

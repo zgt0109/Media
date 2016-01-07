@@ -1,0 +1,98 @@
+/*
+ *= require mobile/game
+ *= require_self
+ *= require mobile/showshare
+ */
+
+body{background:#fcb8c5;}
+.sec-text,
+.sec-info,
+.sec-list a{background:#feeaee; margin: 8px;padding:10px;}
+.sec-text b,
+.sec-list a{color:#d6293e;}
+/*btn*/
+.btn{
+    background:#f1d95f;
+    box-shadow: 0 0 5px rgba(0,0,0,0.25);
+    color: #d6293e;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    width: 250px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+.btn.hide{display: none;}
+.btn>*{position: relative; z-index: 1;}
+.btn:before{position: absolute; content: " "; height:15px; width: 100%; z-index: 0; background: #fef5aa; top:0; left: 0;}
+.btn-gray{background: #dbdbdb;}
+.btn-gray:before{background: #eeeeee;}
+.btn-block,
+.sec-result .btn,
+.pop input[type="submit"].btn{box-shadow: none; background: #d6293e; position: static; width: auto; color: #fff;}
+.btn-block:before,
+.sec-result .btn:before,
+.pop input[type="submit"].btn:before{display: none;}
+.pop input[type="submit"].btn{width: 100%;}
+/*sec-game*/
+.sec-game{ position: relative; background: url(/images/gua/sec-clound.png?20833sss) no-repeat center bottom, url(/images/gua/bg.jpg) no-repeat center top; background-size: 100% auto, 100% auto; background-color: #d6283f; height: 320px; padding: 80px 0 0 0; overflow: hidden;}
+.mod-gua{background: url(/images/gua/bg-gua.png) no-repeat center center; background-size: 100% 100%;width:260px; height: 142px; padding: 10px; margin:20px auto; position: relative; text-align:center; line-height: 122px;}
+.mod-gua>div{background-size: 100% 100%;}
+.mod-gua>span{font-size: 25px; letter-spacing: 5px;}
+.sec-end,
+.sec-start,
+.sec-share{ font-size: 24px; color: #fff; text-shadow: 0 0 3px rgba(0,0,0,0.5); position: relative;line-height: 40px; padding: 0 20px; }
+.stage-end .sec-game{ height: 200px;}
+.sec-end{text-align: center;font-weight:bold; }
+.stage-start .sec-game{ height: 300px;}
+.sec-start{padding: 5% 5% 5% 0; font-size: 20px;}
+.sec-start .td{text-align: right;}
+.sec-start:after{ content: " "; position: absolute; width:100px; height: 67px; left: 5%; top:80px; background: url(/images/gua/sec-start.png) no-repeat left bottom; background-size: contain;}
+.sec-start em{font-weight:bold;  font-style: normal; font-size: 26px;}
+.sec-start span{color: #fef5aa;font-weight:bold;  }
+.stage-share .sec-game{height: 320px;}
+.sec-share{text-align: center;}
+.sec-share>*{display:block; margin: 5px auto;}
+.share-img{background: url(/assets/app/bg-share.png) no-repeat center center; width:100%; height: 142px; background-size: 100% 100%; overflow: hidden; padding: 7px;}
+.share-img img{width: 100%; height:100%;}
+.share-btn{background: url(/assets/app/btn-share.png) no-repeat center center; width: 178px; height: 30px; background-size: 100% 100%; overflow: hidden; margin-top: 20px;}
+/*sec-bg*/
+.sec-bg-bottom,
+.sec-bg-top{color:#a2a2a2;position:relative; margin: 8px;}
+.sec-bg-bottom{ padding:10px 10px 10px 10px;}
+.sec-bg-bottom em{ position:absolute; background:url(/images/gua/sec-info.png) no-repeat right bottom; width:51px; height:55px; background-size:contain; right:-5px; bottom:-5px;}
+.sec-bg-top{ padding:40px 10px 10px 10px;}
+.sec-bg-top i{ font-style: normal; position:absolute; background:url(/images/gua/sec-text.png) no-repeat left top; width:141px; height:40px; background-size:contain; top:-4px; left:-8px; padding:15px 0 0 10px; color:#fff; font-weight:bold;}
+/*sec-text*/
+.sec-text{color:#666; line-height:20px;}
+.sec-text > *{display: inline-block;}
+.sec-text b{ font-weight: 100;}
+
+/*sec-info*/
+.sec-info{}
+.sec-info p{ padding:5px 0;}
+.sec-info p>*{display: block;}
+.sec-info b{ color:#666; font-weight:300; padding: 0 0 5px 0;}
+
+/*sec-detail*/
+.sec-detail{background:#feeaee; padding-bottom: 40px;}
+
+/*sec-list*/
+.sec-list a{text-align:center; display: block;}
+.sec-result{ overflow: hidden;background:#feeaee;}
+.result-hd{ height: 40px; line-height: 40px; text-align: center; color: #fff;background:#d6293e; font-size: 16px;}
+.mod-list{padding:10px;}
+/*pop*/
+.result-success .box-pop{ background-image:url(/images/gua/bg-success.png); }
+.result-fail .box-pop{ background-image:url(/images/gua/bg-fail.png); }
+.result-success .box-pop .btn{ display: block; width: 100px; margin-top: 5px;}
+.result-success .pop-bd{width:80%; height:100px;margin:-50px 0 0 -40%;}
+.result-success .box-pop{}
+@media screen and (orientation:landscape) {
+    .sec-game{height: 440px; padding: 140px 0 0 0;}
+    .stage-end .sec-game{ height: 260px;}
+    .stage-start .sec-game{ height: 400px;}
+    .stage-share .sec-game{height: 420px;}
+}

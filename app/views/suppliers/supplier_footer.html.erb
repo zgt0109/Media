@@ -1,0 +1,70 @@
+<% content_for :main_content do %>
+    <div class="main-content">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '系统设置', account_url %></li>
+          <li><%= link_to '版权设置', supplier_footer_url %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 版权模式是<%= agent_name %>的名称，需要修改版权可以“自定义”编辑你的版权内容，如果不需要显示版权信息可以选择“不显示版权”；</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <%= form_tag(controller: "suppliers", action: "update_supplier_footer", method: :post, class: 'form width-1000 margin-left-10') do |f| %>
+              <div class="form-group clearfix">
+                <label class="pull-left width-100px">
+                  <input type="radio" name="status" value="1" class='ace' <%= @ret == 1 ? "checked" : "" %>>
+                  <span class="lbl">默认</span>
+                </label>
+                <% if agent_name == "顶享微客" %>
+                  <input type="text" class="col-sm-4" value="技术支持:顶享微客" disabled>
+                <% else %>
+                  <input type="text" class="col-sm-4" value="<%= SupplierFooter.default_footer.footer_content %>" disabled>
+
+                  <label class="pull-left" style="margin-left: 20px">
+                    <span class="lbl">链接</span>
+                  </label>
+                  <input type="text" class="col-sm-4" value="<%= SupplierFooter.default_footer.footer_link %>" disabled>
+                <% end %>
+              </div>
+
+              <% unless current_user.try(:free_account?) %>
+                <div class="form-group clearfix">
+                  <label class="pull-left width-100px">
+                    <input type="radio" name="status" value="2" class='ace' <%= @ret == 2 ? "checked" : "" %>>
+                    <span class="lbl">自定义</span>
+                  </label>
+                  <input type="text" name="content" class="col-sm-4" placeholder="请输入你的版权内容（建议不超过12个字）" value="<%= current_user.supplier_footers.where(is_default: false).first.try(:footer_content) %>">
+
+                  <label class="pull-left" style="margin-left: 20px">
+                    <span class="lbl">链接</span>
+                  </label>
+                  <input type="text" name="link" class="col-sm-4" placeholder="请输入你的版权链接（可选项）" value="<%= current_user.supplier_footers.where(is_default: false).first.try(:footer_link) %>">
+                </div>
+
+                <div class="form-group clearfix">
+                  <label class="pull-left width-100px">
+                    <input type="radio" name="status" value="3" class='ace' <%= @ret == 3 ? "checked" : "" %>>
+                    <span class="lbl">不显示版权</span>
+                  </label>
+                </div>
+              <% end %>
+
+              <div class="form-group">
+                <input type="submit" class="btn btn-sm btn-primary" value="保存">
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

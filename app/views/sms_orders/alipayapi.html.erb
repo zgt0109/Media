@@ -1,0 +1,25 @@
+<div id="main" style="display: none;">
+  <div class="box">
+    <span class="title">支付宝即时到账交易接口快速通道</span>
+
+    <form action="<%= @sms_order.options_pay_for(@payment)[:service_url] %>" method="get" id='alipaysubmit'>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <% @data.each do |field, value| %>
+        <% next if value.blank? %>
+        <tr>
+          <td width="250"><%= field %>：</td><td><input type="hidden" size="50" name="<%= field %>" value="<%= value %>">
+          </td>
+        </tr>
+        <% end %>
+        <tr>
+          <td width="250">sign:</td><td><input type="hidden" size="50" name="sign" value="<%= @sign %>"> </td>
+        </tr>
+      </table>
+      <input type="submit" value="submit" id="pay_button">
+    </form>
+
+  </div>
+</div>
+
+<script>document.forms['alipaysubmit'].submit();</script>
+

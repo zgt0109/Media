@@ -1,0 +1,19 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '节日礼包', red_packet_packets_path %></li>
+      <%= yield :red_packet_breadcrumb_li if content_for?(:red_packet_breadcrumb_li) %>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <%= render 'huodong/red_packet/tabs' %>
+      <div class="tab-content no-border padding-24">
+        <%= yield :red_packet_tab_content %>
+      </div>
+    </div>
+  </div>
+</div>

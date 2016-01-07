@@ -1,0 +1,33 @@
+<tr>
+  <td><%= @object.custom_fields.normal.count %></td>
+  <%- if @new_field.customized_type == 'Activity' &&@new_field.customized.reservation? %>
+      <td><%= @new_field.customized.extend.service rescue '' %></td>
+  <%- end %>
+  <td><%= @new_field.name %></td>
+  <td><%= @new_field.field_type %></td>
+  <td>
+    <%- if @new_field.customized_type == 'Activity' %>
+      <%= check_box_tag 'visible', @new_field.visible, @new_field.visible, data: {url: toggle_is_required_custom_field_path(@new_field)}, class: 'ace' %>
+       <span class="lbl">显示</span>
+       <%= check_box_tag 'is_required', @new_field.is_required, @new_field.is_required, data: {url: toggle_is_required_custom_field_path(@new_field)}, class: 'ace' %>
+       <span class="lbl">必填</span>
+    <%- else %>
+      <label><%= check_box_tag 'editable', @new_field.editable, @new_field.editable, data: {url: toggle_editable_custom_field_path(@new_field)}, class: 'ace' %><span class="lbl">可修改</span></label>
+      <label><%= check_box_tag 'is_required', @new_field.is_required, @new_field.is_required, data: {url: toggle_is_required_custom_field_path(@new_field)}, class: 'ace' %><span class="lbl">领卡时必填</span></label>
+      <% if VipCard::LABELED_CUSTOM_FIELD_NAMES.include?(@new_field.name) %>
+        <label>
+          <%= check_box_tag :label_custom_field, 1, current_user.vip_card.labeled_custom_field_ids.include?(@new_field.id), class: 'ace label_custom_field', data: {url: toggle_label_custom_field_vip_cards_path(custom_field_id: @new_field.id)} %>
+          <span class="lbl">设为标签</span>
+        </label>
+      <% end %>
+    <%- end %>
+  </td>
+  <td>
+     <a href="javascript:;" data-toggle="modals" data-title="编辑字段" data-height="1000" data-iframe="<%= edit_custom_field_path(@new_field) %>">编辑</a>
+    <%= link_to '删除', @new_field, method: :delete, confirm: "你确定要删除字段“#{@new_field.name}”吗？" %>
+    <%= link_to '上移', move_up_custom_field_path(@new_field), method: :post %>
+    <% if @new_field != @object.custom_fields.normal.reload.last %>
+      <%= link_to '下移', move_down_custom_field_path(@new_field), method: :post %>
+    <% end %>
+  </td>
+</tr>

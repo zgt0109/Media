@@ -1,0 +1,28 @@
+<% if sub_menu.has_children? %>
+    <dl>
+      <dt>
+        <b><%= sub_menu.name %></b>
+                        <span>
+                          <a class="ico-edit" href="<%= edit_group_category_url(sub_menu) %>" data-remote="true"></a>
+                          <%#= link_to '', new_booking_category_url(parent_id: sub_menu.id), class: 'ico-add' if sub_menu.allow_menu_layer %>
+                          <%#= link_to '', edit_group_category_url(sub_menu), class: 'ico-edit' %>
+                          <%#= link_to '', sub_menu, method: :delete, data: { confirm: '确定要删除吗？', url: booking_category_path(sub_menu)}, class: 'ico-delete' %>
+                          <a class="ico-delete" href="javascript:void(0);" onclick="pop(this)" data-id="<%= sub_menu.id %>" data-w="300" data-h="140" data-title="确认删除" data-bd="<div class='box-form form-row'><form><p>确定要删除？</p><p class='tcenter'><a class='btn btn-small btn-orange' href='<%= group_category_path(sub_menu) %>' data-method= 'delete'>确认</a>　<input value='取消' class='btn btn-small btn-close'/></p></form></div>"></a>
+                        </span>
+      </dt>
+      <dd>
+        <%= render :partial=> "sub_menu", :collection => sub_menu.children.order(:sort), :as =>:sub_menu %>
+      </dd>
+    </dl>
+<% else %>
+    <p>
+      <b><%= sub_menu.name %></b>
+                    <span>
+                      <a class="ico-edit" href="<%= edit_group_category_url(sub_menu) %>" data-remote="true"></a>
+                      <%#= link_to '', new_booking_category_url(parent_id: sub_menu.id), class: 'ico-add' if sub_menu.allow_menu_layer %>
+                      <%#= link_to '', edit_group_category_url(sub_menu), class: 'ico-edit' %>
+                      <%#= link_to '', sub_menu, method: :delete, data: { confirm: '确定要删除吗？', url: booking_category_path(sub_menu)}, class: 'ico-delete' %>
+                      <a class="ico-delete" href="javascript:void(0);" onclick="pop(this)" data-id="<%= sub_menu.id %>" data-w="300" data-h="140" data-title="确认删除" data-bd="<div class='box-form form-row'><form><p>确定要删除？</p><p class='tcenter'><a class='btn btn-small btn-orange' href='<%= group_category_path(sub_menu) %>' data-method= 'delete'>确认</a>　<input value='取消' class='btn btn-small btn-close'/></p></form></div>"></a>
+                    </span>
+    </p>
+<% end %>

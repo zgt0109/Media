@@ -1,0 +1,39 @@
+<style type="text/css">
+  .box-step span {font-size: 18px; width: 24%; text-align: center; color: #000000; }
+  span.active {color: #0000FF; }
+  .next_step{width: 110%; margin-left: 15px; left: 0px; top: 0px; width: 42px; height: 23px;background-image:url(/assets/next_step.png)}
+</style>
+<% content_for :sidebar do %>
+  <%= render(['votes', 'surveys', 'groups'].include?(params[:action]) ? 'sidebar_business' : 'sidebar_activity') %>
+<% end %>
+
+<% content_for :topbar do %>
+  <%= render 'topbar_activity_new' %>
+<% end %>
+
+<%= form_for @activity, :url => prepare_settings_activity_path, validate: true, :html => { class: 'form-horizontal', id: 'setting-form' } do |f| %>
+
+  <p class="box-step">
+    <span class="active">活动预热设置<img class="next_step" src="/assets/next_step.png" /></span>
+    <span>活动开始设置<img class="next_step" src="/assets/next_step.png" /></span>
+    <span>活动规则设置<img class="next_step" src="/assets/next_step.png" /></span>
+    <span style="width:12%">奖品设置</span>
+  </p>
+
+  <%= f.fields_for :ready_activity_notice do |ready_activity_notice| %>
+  <%= render 'slot_ready_notice', ran: ready_activity_notice, f: f if @activity.ready_activity_notice %>
+  <% end %>
+
+  <div class="box-des fl" style="height: 30px;">
+    <div class="des-l">
+    </div>
+    <div class="des-r">
+      <p class="p-but p-but-r" style="text-align: right;">
+        <%= submit_tag "下一步", id: 'setting_activity_validate', class: "submit-keep btn btn-big" %>
+      </p>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  var activity_type = 28;
+</script>

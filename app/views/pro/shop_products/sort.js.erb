@@ -1,0 +1,4 @@
+var model_html = "<%= j(render 'sort', :shop_product => @shop_product) %>";
+$("#modal_div").empty();
+$("#modal_div").append(model_html);
+$("#modal_div").modal('show');

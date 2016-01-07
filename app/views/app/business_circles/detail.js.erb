@@ -1,0 +1,7 @@
+$('.ft-comment').append('<%= j render(:partial => "ft_comment") %>');
+<% if @comments.try(:last_page?) %>
+  $('.page').remove();
+<% else %>
+  $('.page').replaceWith('<%= j paginate(@comments) %>');
+<% end %>
+$(".b-loading").hide();

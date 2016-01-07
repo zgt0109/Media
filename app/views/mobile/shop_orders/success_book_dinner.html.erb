@@ -1,0 +1,88 @@
+<% provide(:title, '我要订餐') %>
+<div class="stage" id="stage">
+  <header>
+    <%= link_to "", mobile_shop_orders_url(supplier_id: session[:supplier_id], :order_type => 1, anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" %>
+
+    <h1><%= @shop_order.finish? ? '订餐成功' : '请重新支付' %></h1>
+  </header>
+
+  <section id="sec-index">
+    <div class="body">
+      <div class="order">
+        <div class="mod-order">
+          <div class="mod-form form-hor">
+
+            <div class="bd">
+              <div class="form-li">
+                <div class="li-l"><b>订单号：</b></div>
+                <div class="li-r"><span class="text-red"><%= @shop_order.order_no %></span></div>
+              </div>
+
+              <div class="form-li">
+                <div class="li-l"><b>说明：</b></div>
+                <div class="li-r"><span>请直接前往门店将订单号或手机号码告知服务员即可用餐</span></div>
+              </div>
+
+              <div class="form-li">
+                <div class="li-l"><b>支付状态：</b></div>
+                <div class="li-r">
+                  <span> ￥<%= @shop_order.total_amount %> &nbsp;&nbsp;  <%= @shop_order.pay_type_name %> &nbsp;&nbsp;   <%= @shop_order.pay_status_name %> </span>
+                </div>
+              </div>
+
+              <a class="form-li" href="tel:<%= @shop_order.shop_branch.book_dinner_rule.book_phone %>">
+                <div class="li-l"><b>门店电话：</b></div>
+                <div class="li-r mod-fa fa fa-phone">
+                  <span><%= @shop_order.shop_branch.book_dinner_rule.book_phone %></span>
+                </div>
+              </a>
+
+              <a class="form-li" href="http://api.map.baidu.com/marker?location=<%= @shop_order.shop_branch.location_y%>,<%= @shop_order.shop_branch.location_x%>&title=<%= @shop_order.shop_branch.address%>&content=<%= @shop_order.shop_branch.address%>&output=html">
+                <div class="li-l"><b>门店地址：</b></div>
+                <div class="li-r mod-fa fa fa-location-arrow"><span><%= @shop_order.shop_branch.ditu_address %></span></div>
+              </a>
+
+              <div class="form-li">
+                <div class="li-l"><b>订餐说明：</b></div>
+                <div class="li-r"><span><%= @shop_order.shop_branch.try(:book_dinner_rule).try(:description) %></span></div>
+              </div>
+
+              <% if @shop_order.book_dinner? && @shop_order.in_queue? %>
+                <div class="form-li">
+                  <div class="li-l"><b>排号信息：</b></div>
+                  <div class="li-r"><span><%= @shop_order.queue_no %></span></div>
+                </div>
+              <% end %>
+
+              <% if @shop_order.book_dinner? && @shop_order.in_branch? %>
+                <div class="form-li">
+                  <div class="li-l"><b>座位信息：</b></div>
+                  <div class="li-r"><span><%= @shop_order.desk_no %></span></div>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="ft">
+              <div class="food-shopcar food-shopcar-btn">
+                <div class="hd">
+                  <div class="tcenter">
+                    <% if @shop_order.ref_order_id.blank? %>
+                      <% if @shop_order.in_branch? || @shop_order.in_queue? %>
+                      <% else %>
+                        <a class="btn btn-blue" href="/<%= session[:supplier_id] %>/shop_table_orders/new?shop_branch_id=<%= @shop_order.shop_branch.id %>&ref_order_id=<%= @shop_order.id %>">去订座</a>
+                      <% end %>
+                    <% end %>
+                    <a href="<%= mobile_shop_order_url(supplier_id: session[:supplier_id], id: @shop_order.id) %>" class="btn">查看订单详情</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+

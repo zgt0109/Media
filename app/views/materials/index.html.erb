@@ -1,0 +1,46 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '素材管理', materials_url %></li>
+          <li><%= link_to '单图文', materials_url %></li>
+        </ul>
+        <%= render partial:'/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+
+            <div class="listVMS">
+              <div class="clearfix">
+                <div class="col-md-12 col-lg-12">
+                  <%= paginate @materials %>
+                </div>
+
+                <% left_materials, right_materials = [], [] %>
+                <% @materials.each_with_index{|m, i| i % 2 == 0 ? left_materials.push(m) : right_materials.push(m) } %>
+
+                <div class="col-md-5 col-lg-5">
+                  <a class="warpVMS addVMS" href="<%= new_material_url %>">
+                    <i class="fa fa-plus"></i> 单图文添加
+                  </a>
+
+                  <%= render 'list_materials_one', materials: left_materials %>
+                </div>
+
+                <div class="col-md-5 col-lg-5">
+                  <%= render 'list_materials_one', materials: right_materials %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>
+

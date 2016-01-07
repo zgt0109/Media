@@ -1,0 +1,133 @@
+<%= content_for :tab do %>
+<%= form_for @activity, url: guess_path(@activity), validate: true do |f| %>
+<div class="col-sm-12">
+  <a href="<%= new_guess_question_path %>" class="btn btn-sm btn-primary pull-right">新增题目</a>
+  <a href="<%= guess_questions_path %>" class="btn btn-sm btn-primary pull-right margin-right-10">题库管理</a>
+</div>
+<div class="col-sm-12 margin-top-20">
+  <%- if @questions.blank? %>
+    <p>请先添加题目。</p>
+  <%- else %>
+    <ul class="questions" id="questions">
+      <%= render(partial: 'question', object: @questions) %>
+    </ul>
+  <%- end %>
+  <%- if @has_more %>
+  <div class="form-group load_more">
+    <a href="javascript:void(0);" class="btn btn-sm btn-primary add_questions">显示更多题目</a>
+  </div>
+  <%- end %>
+</div>
+<%= f.hidden_field :status, value: 1 %>
+<div class="col-sm-12 margin-top-20">
+  <%= f.fields_for :guess_setting, (@activity.guess_setting || @activity.build_guess_setting) do |guess_setting_form| %>
+    <div class="form-group clearfix">
+      <div class="col-sm-4">
+        <div class="input-group input-group-text">
+          <%= guess_setting_form.hidden_field :prize_type, value: 'Coupon' %>
+          <span class="input-group-addon">奖品选择：</span>
+          <%= guess_setting_form.select :prize_id, options_for_select(@coupons.map{|m| [truncate_u(m.name), m.id] }, selected: guess_setting_form.object.prize_id), include_blank: '请选择奖品', class: "col-xs-12"%>
+          <span class="text-danger">*</span>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">每题每天允许答对数目：</span>
+          <%= guess_setting_form.select :question_answer_limit, options_for_select([5,10,15].map{|m| [m,m] }, selected: guess_setting_form.object.question_answer_limit), {}, class: "col-xs-12", id: 'answer_limit' %>
+        </div>
+      </div>
+      <div class="col-sm-4 line-height-32">
+        题目达到限制后题目会下线。
+      </div>
+    </div>
+    <div class="form-group line-height-32 clearfix">
+      <div class="col-sm-4">
+        预计每天最多发放奖品数：<span class="text-danger day_count" id="day_prizes_count"><%= @guess.guess_consumes_day_count %></span> 个
+      </div>
+      <div class="col-sm-8">提示：每天最多发放奖品数为题目数量乘以每道题目允许最多答对数目</div>
+    </div>
+    <div class="form-group line-height-32 clearfix">
+      <div class="col-sm-4">
+      预计活动最多发放奖品总数为：<span class="text-danger all_count" id="all_prizes_count"><%= @guess.guess_consumes_max_count %></span> 个
+     </div>
+     <div class="col-sm-8">提示：活动最多发放奖品数为每天最多数量乘以活动天数</div>
+   </div>
+   <div class="form-group">
+    <a href="<%= edit_guess_path(@activity) %>" class="btn btn-prev btn-sm">
+      <i class="icon-arrow-left"></i>
+      上一步
+    </a>
+    <%- unless (@activity.can_not_edit? || @activity.stopped? ) %>
+      <button type='submit' class="btn btn-primary btn-sm btn-next btn-submit">确定</button>
+    <%- end %>
+    <a href="<%= guesses_activities_path %>" class="btn btn-sm">返回</a>
+  <%- end %>
+</div>
+</div>
+  <%- end %>
+<%- end %>
+<%= render "header" %>
+<%= content_for :custom_js do %>
+<script type="text/javascript">
+$(function(){
+    <%- @activity.guess_activity_questions.to_a.each do |relation|%>
+      var dom = document.getElementById('question_<%= relation.question_id %>');
+      if(dom){
+        dom.checked = true;
+      }
+    <%- end %>
+
+    <%- unless @guess.guess_consumes_day_count %>
+      check_prizes_count();
+    <%- end %>
+
+    <%- if @activity.can_not_edit? || @activity.stopped?  %>
+      $('input,select,textarea').prop('disabled', true);
+      $('.wysiwyg-editor').attr('contenteditable', false);
+    <% end %>
+
+    $('#answer_limit').change(check_prizes_count);
+    $(document).on('click', '.question', check_prizes_count);
+
+  });
+
+  $(document).on('click', '.add_questions', function(){
+      var last_id = $('.question :last').val();
+      $.getScript("<%= load_more_guesses_path %>?last_id=" + last_id + "&id=<%= @activity.id %>");
+  })
+
+  var check_prizes_count = function(){
+    <%- if @activity.can_not_edit? || @activity.stopped?  %>
+      return false;
+    <%- end %>
+    var question_answer_limit = $('#answer_limit').val(),
+        questions_count = $(document).find(".question:checked").length,
+        days_count = <%= @activity.duration_days %>,
+        day_prizes_count =  question_answer_limit * questions_count,
+        all_prizes_count =  day_prizes_count * days_count;
+    $("#day_prizes_count").html(day_prizes_count);
+    $("#all_prizes_count").html(all_prizes_count);
+  }
+
+
+  $('.btn-submit').on('click', function(){
+    var prize_id = $('#activity_guess_setting_attributes_prize_id').val();
+    if(!prize_id){
+      showTip('warnning', '请选择奖品')
+      return false;
+    }
+    if($('.question:checked').length < 1){
+      showTip('warnning', '请先添加题目')
+      return false;
+    }
+  })
+
+</script>
+<%- end %>
+
+
+
+
+
+
+

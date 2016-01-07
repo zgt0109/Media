@@ -1,0 +1,57 @@
+body{background: #ccc;}
+.box{overflow: hidden; display: block;}
+.index{ margin: 10px auto; overflow: hidden;}
+.index a{ padding:0 10px 0 0;
+    background-color:#dbdbdb;
+    background-repeat:repeat-x;
+    background:-webkit-gradient(linear,0% 0%,0% 100%,from(#fef8f9),to(#fff));
+    background:-webkit-linear-gradient(top,#fff,#fef8f9);
+    background:-moz-linear-gradient(top,#fff,#fef8f9);
+    background:-ms-linear-gradient(top,#fff,#fef8f9);
+    background:-o-linear-gradient(top,#fff,#fef8f9);
+    padding:10px;
+    position: relative;
+    border-bottom:1px solid #ffd8e2;
+}
+.index a:after{
+    position: absolute;
+    content: "\f0da";
+    font-family:"FontAwesome";
+    right: 10px;
+    top:50%;
+    width: 20px;
+    height: 20px;
+    font-size:20px;
+    margin-top:-10px;
+    color:#d30037;
+    border-radius: 1000px;
+    background-size:auto 8px;
+}
+.mod-logo{max-height:60px;text-align:center;overflow:hidden;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#e8e8e8),to(#fdfdfc));
+    background:-webkit-linear-gradient(top,#fdfdfc,#e8e8e8);
+    background:-moz-linear-gradient(top,#fdfdfc,#e8e8e8);
+    background:-ms-linear-gradient(top,#fdfdfc,#e8e8e8);
+    background:-o-linear-gradient(top,#fdfdfc,#e8e8e8);}
+.mod-logo img{max-height:60px;}
+.mod-index{width: 100%; float: left; display:block; color: #666; text-align: left; padding: 10px 0;}
+.mod-index >*{height: 50px; vertical-align: middle; display: table-cell;}
+.mod-index >*:last-child{width: 100%;}
+.mod-index .index-img{ padding: 5px;}
+/*.mod-index:first-child .index-img{background:#c63f3a; }*/
+/*.mod-index:nth-child(2n+2) .index-img{background:#d9756e; }*/
+/*.mod-index:nth-child(2n+3) .index-img{background:#b2cebf; }*/
+.mod-index .index-img i{ width: 90px; height: 60px; line-height: 60px; display: block; overflow: hidden;text-align: center;}
+.mod-index .index-text>*{font-weight: 100; line-height: 20px; padding:0px 30px 0 5px; display: block;}
+.mod-index >*:first-child >*{ padding-left: 0;}
+.index-text b{ font-weight: 100;color:#000;}
+.index-text small{ font-size: 12px; color: #d30037;}
+.mod-index img{width:100%; min-height: 60px; float: left;}
+.mod-index .fa{ font-size: 40px; color: #d30037;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}

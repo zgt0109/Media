@@ -1,0 +1,88 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '二维码推广', channel_qrcodes_path %></li>
+      <li><%= link_to '二维码管理', channel_qrcodes_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、二维码管理用于新增不同的二维码,二维码生成后可下载放到不同的推广平台；</li>
+            <li> 2、用户可以通过平台提供的二维码进行扫描后立即关注你的公众账号；</li>
+            <li> 3、“统计推广”会记录通过不同二维码关注公众账号的用户数。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <%= form_for @search, :html => { :method => :get } do |f| %>
+          <div class="col-md-3 row">
+            <div class="input-group input-group-text">
+              <span class="input-group-addon">二维码名称：</span>
+              <%= f.text_field :name_like, class: "col-xs-12" %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-text">
+              <span class="input-group-addon">二维码分类：</span>
+              <% options = current_user.channel_types.normal.pluck(:name, :id) %>
+              <%= f.select :channel_type_id_eq, options_for_select(options.insert(0,['全部','']), @type_id), {},class: "col-xs-12" %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-text">
+              <span class="input-group-addon">推广类型：</span>
+              <% options = [['全部',''],['线上',1],['线下',2],['其他',3]] %>
+              <%= f.select :channel_way_eq, options_for_select(options, @channel_way), {},class: "col-xs-12" %>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <input type="submit" class="btn btn-sm btn-primary btn-filter margin-right-5" value="查询">
+          </div>
+          <div class="col-md-2 pull-right row">
+            <a href="javascript:;" class="btn btn-sm btn-primary pull-right" data-toggle="modals" data-target="weisiteModal" data-title="新增二维码" data-width="" data-height="1000" data-iframe="<%= new_channel_qrcode_path %>">新增</a>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-sm-12 margin-top-10">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th >二维码名称</th>
+              <th >二维码分类</th>
+              <th >推广类型</th>
+              <th width="180">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <% if @channel_qrcodes.each do |channel_qrcode| %>
+                <tr>
+                  <td><%= channel_qrcode.name %></td>
+                  <td><%= channel_qrcode.channel_type.try(:name) %></td>
+                  <td><%= channel_qrcode.channel_way_name %></td>
+                  <td>
+                    <a href="javascript:;" data-toggle="modals" data-target="weisiteModal" data-title="编辑二维码" data-width="" data-height="1000" data-iframe="<%= edit_channel_qrcode_path(channel_qrcode) %>">编辑</a>
+                    <a href="javascript:;" data-toggle="modals" data-target="weisiteModal" data-title="更多尺寸" data-width="" data-height="500" data-iframe="<%= qrcode_download_channel_qrcode_path(channel_qrcode) %>">下载二维码</a>
+                    <%#= link_to "下载二维码", download_channel_qrcode_path(channel_qrcode) %>
+                    <%= link_to '删除', channel_qrcode_path(channel_qrcode), method: 'delete', confirm: "确定要删除该二维码？", data: {height: 160, weight: 350} %>
+                  </td>
+                </tr>
+              <% end.blank? %>
+                <tr><td colspan="4" class="green text-center">无记录</td></tr>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+        <%= paginate @channel_qrcodes %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

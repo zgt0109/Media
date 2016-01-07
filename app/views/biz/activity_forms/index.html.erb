@@ -1,0 +1,120 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微报名', activity_forms_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="tabbable">
+            <ul class="nav nav-tabs padding-24 tab-size-bigger">
+              <li class="active">
+                <a href="/activity_forms">微报名管理</a>
+              </li>
+              <li>
+                <a href="/activity_enrolls">用户数据</a>
+              </li>
+            </ul>
+            <div class="tab-content no-border padding-24  ">
+              <div id="tab-1" class="tab-pane active">
+                <div class="row">
+                  <%= form_for @search, url: {action: "index"}, :html => { :method => :get } do |f| %>
+                  <div class="col-sm-12">
+                    <div class="col-md-3 row">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">活动名称：</span>
+                        <%= f.text_field :name_like, class: 'col-xs-12' %>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">关键词：</span>
+                        <%= f.text_field :keyword_like, class: 'col-xs-12' %>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">状态：</span>
+                        <%#= f.select :status_eq,  Activity.status_options_by_type_id(@activity_type_id), {}, class: 'col-xs-12' %>
+                        <%= select_tag :status,  options_for_select(Activity.status_options_by_type_id(@activity_type_id), params[:status]), {class: 'col-xs-12'} %>
+                      </div>
+                    </div>
+                    <div class="col-md-3 row pull-right">
+                      <input type="submit" class="btn btn-primary btn-sm btn-filter" value="查询" />
+                      <a href="<%= new_activity_form_path %>" class="btn btn-primary btn-sm pull-right">新增</a>
+                    </div>
+                  </div>
+                  <% end %>
+                  <div class="col-md-12 margin-top-20">
+                    <table id="applyTable" class="table table-striped table-bordered table-hovero">
+                      <thead>
+                      <tr>
+                        <th>活动名称</th>
+                        <th width="15%">关键词</th>
+                        <th width="18%">活动时间</th>
+                        <th width="10%">状态</th>
+                        <th width="10%">报名名单</th>
+                        <th width="27%">操作</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <% if @activities.each do |activity| %>
+                          <% attrs = activity.enroll_status_attrs %>
+                          <tr>
+                            <td><%= truncate_u activity.name, length: 16 %></td>
+                            <td><%= activity.keyword %></td>
+                            <td>
+                              <%= activity.duration %>
+                            </td>
+                            <td><%#= activity.activity_status_name %><%= attrs[0] %></td>
+                            <td>
+                              <label>
+                                <input name="switch-field-1" remote-url="<%= edit_audited_activity_forms_path(id: activity.id) %>" class="ace ace-switch ace-switch-4" type="checkbox" <%= activity.audited? ? "checked" : "" %> />
+                                <span class="lbl"></span>
+                              </label>
+                            </td>
+                            <td class="tleft">
+                              <a href="<%= activity_form_path(id: activity.id) %>"><%= activity.setted? && "查看" || "编辑" %></a>
+                              <a href="<%= edit_fields_activity_forms_path(id: activity.id) %>" title="报名字段设置：<%= activity.name %>">报名字段</a>
+                              <%= link_to '用户数据', activity_enrolls_path(id: activity.id) %>
+                              <%#= link_to '开启', [:active, activity], method: :post, :data => { :confirm => t('.confirm', :default => "确认开启该活动吗？") } if activity.allow_active? %>
+			      <%= link_to '开启', [:active, activity], method: :post, :data => { :confirm => t('.confirm', :default => "确认开启该活动吗？") } if attrs[1] %>
+                              <%#= link_to '停止', [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => "报名活动正在进行，确认停止吗？") } if ['进行中'].include? show_activity_status(activity) %>
+                              <%= link_to '停止', [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => "报名活动正在进行，确认停止吗？") } if attrs[2] %>
+
+                              <%#= link_to '删除', [:delete, activity], method: :post, :data => { :confirm => t('.confirm', :default => "报名活动的相关信息将被永久删除！") } if activity.allow_delete? %>
+                              <%= link_to '删除', [:delete, activity], method: :post, :data => { :confirm => t('.confirm', :default => "报名活动的相关信息将被永久删除！") } if attrs[3] %>
+                            </td>
+                          </tr>
+                      <% end.blank? %>
+                          <tr><td colspan="6" class="green text-center">还没有活动</td></tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                    <%= paginate @activities %>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.page-content -->
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            $("input[remote-url]").click(function(){
+                $.post($(this).attr("remote-url"));
+            });
+        });
+    </script>
+<% end %>

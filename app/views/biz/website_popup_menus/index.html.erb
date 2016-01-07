@@ -1,0 +1,299 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <li><%= link_to '快捷菜单', website_popup_menus_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+
+        <div class="row">
+          <% if @nav_type == WebsitePopupMenu::POPUP_MENU %>
+              <div class="col-sm-12">
+                <!-- PAGE CONTENT BEGINS -->
+
+                <div class="alert alert-block alert-info">
+                  <strong class="pull-left">提示：</strong>
+                  <ul class="vwebsiteHeadAlert">
+                    <li>1、快捷菜单最好使用<%= agent_name %>系统提供的图标，展示效果更佳；</li>
+                    <li>2、快捷菜单无需设置太多，以4个为佳，如果设置超过4个系统会按照顺序默认调用排在前面的菜单。</li>
+                  </ul>
+                </div>
+              </div>
+              <div class=" col-sm-12">
+
+                <div class="pull-right addBtn">
+                  <%= link_to '新增', 'javascript:;', class: 'btn btn-primary btn-sm', data: {toggle: 'modals', width: '1000', height: '530', title: '新增快捷菜单', iframe: new_website_popup_menu_path(nav_type: WebsitePopupMenu::POPUP_MENU)} %>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <table id="menuTable" class="table table-striped table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>图标</th>
+                    <th>类型</th>
+                    <th>描述</th>
+                    <th>排序</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @menus.each do |menu| %>
+                      <tr id="menu-row-<%= menu.id %>">
+                        <td>
+
+                          <% if menu.font_icon.present? %>
+                              <i class="<%= menu.font_icon %>" style="width: 30px;height: 30px;"></i>
+                          <% else %>
+                              <%= image_tag menu.icon_url, size: '40x40' %>
+                          <% end %>
+
+                        </td>
+                        <td><%= menu.menu_type_name %></td>
+                        <td><span class="word-break"><%= menu.description %></span></td>
+                        <td><%= select_tag :sort, options_for_select(@menu_sorts, menu.sort), id: nil, class: "sort form-control", menu_id: menu.id, nav_type: WebsitePopupMenu::POPUP_MENU %></td>
+                        <td>
+                          <%= link_to '编辑', 'javascript:;', data: {toggle: 'modals', target: 'weisiteModal', title: '编辑快捷菜单', width: '1000', height: '460', iframe: edit_website_popup_menu_path(menu)} %>
+                          <%= link_to '删除', website_popup_menu_path(menu), data: {method: :delete, confirm: '确定删除？'} %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  <% if @menus.blank? %>
+                    <tr><td colspan="5">还没有添加快捷菜单</td></tr>
+                  <% end %>
+                  </tbody>
+
+
+                </table>
+              </div>
+          <% else %>
+              <div class="tabbable">
+                <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+                  <li class="active">
+                    <a data-toggle="tab" href="#tab-1" hh="%23tab-1">
+                      首页模板
+                    </a>
+                  </li>
+                  <li>
+                    <a data-toggle="tab" href="#tab-2" hh="%23tab-2">
+                      内页模板
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="tab-content no-border padding-24">
+                  <div id="tab-1" class="tab-pane active">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="alert alert-block alert-info">
+                          <strong class="pull-left">提示：</strong>
+                          <ul class="vwebsiteHeadAlert">
+                            <% if @unable_edit_home_menu %>
+                                <li>您当前选择的导航模版是从“站点内容”内提取菜单内容。不支持自定义菜单内容，请更换导航模版再尝试。
+                                  <%= link_to "立即更换导航模版", "#{website_settings_path}?#?#template-tab-4" %></li>
+                            <% else %>
+                                <li>首页导航菜单最好使用<%= agent_name %>系统提供的图标；展示效果更佳。</li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <% unless @unable_edit_home_menu %>
+                          <div class="col-sm-12">
+                            <!--<label class="pull-left">-->
+                            <!--<input name="switch-field-1" class="ace ace-switch ace-switch-3" type="checkbox" data-toggle="notify"-->
+                            <!--data-title="中不中?" data-text="真中." data-type="error">-->
+                            <!--<span class="lbl"></span>-->
+                            <!--</label>-->
+
+                            <div class="pull-right">
+                              <%= link_to '复制内页数据', copy_website_popup_menus_path(from: WebsitePopupMenu::INSIDE_NAV_MENU, end: WebsitePopupMenu::HOME_NAV_MENU), class: 'btn btn-primary btn-sm', data:{confirm: '将首页模版现有数据删除，并复制内页模版数据到首页模版中，确认继续执行操作？', method: 'get'} %>
+                              <%= link_to '新增', 'javascript:void(0);', class: 'btn btn-primary btn-sm', data: {toggle: 'modals', width:800,height: '1000', title: '新增首页导航菜单', iframe: new_website_popup_menu_path(nav_type: WebsitePopupMenu::HOME_NAV_MENU)} %>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12 margin-top-20">
+                            <table id="" class="table table-striped table-bordered table-hover">
+                              <thead>
+                              <tr>
+                                <th>图标</th>
+                                <!--<th>顶级分类</th>-->
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>排序</th>
+                                <th>操作</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <% home_nav_menus = @menus.select{|m| m.nav_type == WebsitePopupMenu::HOME_NAV_MENU} %>
+                              <% home_nav_menus.each do |menu| %>
+                                  <tr id="menu-row-<%= menu.id %>">
+                                    <td>
+                                      <% if menu.font_icon.present? %>
+                                          <i class="<%= menu.font_icon %>" style="width: 30px;height: 30px;"></i>
+                                      <% else %>
+                                          <%= image_tag menu.icon_url, size: '40x40' %>
+                                      <% end %>
+
+                                    </td>
+                                    <!--<td><%#= menu.parent_name %></td>-->
+                                    <td><%= menu.menu_type_name %></td>
+                                    <td><span class="word-break"><%= menu.description %></span></td>
+                                    <td><%= select_tag :sort, options_for_select(@menu_sorts, menu.sort), id: nil, class: "sort form-control", menu_id: menu.id, nav_type: WebsitePopupMenu::HOME_NAV_MENU %></td>
+                                    <td>
+                                      <%= link_to '编辑', 'javascript:;', data: {toggle: 'modals', target: 'weisiteModal', title: '编辑首页导航菜单', height: '460', iframe: edit_website_popup_menu_path(menu)} %>
+                                      <%= link_to '删除', website_popup_menu_path(menu), data: {method: :delete, confirm: '确定删除？'} %>
+                                    </td>
+                                  </tr>
+                              <% end %>
+                              <% if home_nav_menus.blank? %>
+                                  <tr><td colspan="5">还没有添加首页导航菜单</td></tr>
+                              <% end %>
+                              </tbody>
+                            </table>
+
+                          </div>
+                      <% end %>
+
+                    </div>
+                  </div>
+
+                  <div id="tab-2" class="tab-pane">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="alert alert-block alert-info">
+                          <strong class="pull-left">提示：</strong>
+                          <ul class="vwebsiteHeadAlert">
+                            <% if @unable_edit_inside_menu %>
+                                <li>您当前选择的导航模版是从“站点内容”内提取菜单内容。不支持自定义菜单内容，请更换导航模版再尝试。
+                                  <%= link_to "立即更换导航模版", "#{website_settings_path}?#?#template-tab-4" %></li>
+                            <% else %>
+                                <li>首页导航菜单最好使用<%= agent_name %>系统提供的图标；展示效果更佳。</li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <% unless @unable_edit_inside_menu %>
+                          <div class="col-sm-12">
+                            <!--<label class="pull-left">-->
+                            <!--<input name="switch-field-1" class="ace ace-switch ace-switch-3" type="checkbox">-->
+                            <!--<span class="lbl"></span>-->
+                            <!--</label>-->
+
+                            <div class="pull-right">
+                              <%= link_to '复制首页数据', copy_website_popup_menus_path(from: WebsitePopupMenu::HOME_NAV_MENU, end: WebsitePopupMenu::INSIDE_NAV_MENU), class: 'btn btn-primary btn-sm', data:{confirm: '将内页模版现有数据删除，并复制首页模版数据到内页模版中，确认继续执行操作？', method: 'get'} %>
+                              <%= link_to '新增', 'javascript:void(0);', class: 'btn btn-primary btn-sm', data: {toggle: 'modals', width: '1000', height: '530', title: '新增内页导航菜单', iframe: new_website_popup_menu_path(nav_type: WebsitePopupMenu::INSIDE_NAV_MENU)} %>
+                            </div>
+                          </div>
+                          <div class="col-sm-12 margin-top-20">
+                            <table class="table table-striped table-bordered table-hover dataTable ">
+                              <thead>
+                              <tr>
+                                <th>图标</th>
+                                <!--<th>顶级分类</th>-->
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>排序</th>
+                                <th>操作</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <% inside_nav_menus = @menus.select{|m| m.nav_type == WebsitePopupMenu::INSIDE_NAV_MENU} %>
+                              <% inside_nav_menus.each do |menu| %>
+                                  <tr id="menu-row-<%= menu.id %>">
+                                    <td>
+                                      <% if menu.font_icon.present? %>
+                                          <i class="<%= menu.font_icon %>" style="width: 30px;height: 30px;"></i>
+                                      <% else %>
+                                          <img src="<%= menu.icon_url %>" width="40" height="40">
+                                      <% end %>
+
+                                    </td>
+                                    <!--<td><%#= menu.parent_name %></td>-->
+                                    <td><%= menu.menu_type_name %></td>
+                                    <td><span class="word-break"><%= menu.description %></span></td>
+                                    <td><%= select_tag :sort, options_for_select(@menu_sorts, menu.sort), id: nil, class: "sort form-control", menu_id: menu.id, nav_type: WebsitePopupMenu::HOME_NAV_MENU %></td>
+                                    <td>
+                                      <%= link_to '编辑', 'javascript:;', data: {toggle: 'modals', target: 'weisiteModal', title: '编辑内页导航菜单', width: '1000', height: '460', iframe: edit_website_popup_menu_path(menu)} %>
+                                      <%= link_to '删除', website_popup_menu_path(menu), data: {method: :delete, confirm: '确定删除？'} %>
+                                    </td>
+                                  </tr>
+                              <% end %>
+                              <% if inside_nav_menus.blank? %>
+                                  <tr><td colspan="5">还没有添加内页导航菜单</td></tr>
+                              <% end %>
+                              </tbody>
+                            </table>
+                          </div>
+                      <% end %>
+
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+          <% end %>
+        </div>
+        <!-- /.page-content -->
+      </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            <% if params[:type].blank? %>
+                $(".nav-list li.open").eq(2).removeClass('open active');
+            <% end %>
+            setTimeout(function(){
+                var targets = {"#tab-1": "", "#tab-2": ''};
+                $('#myTab li a').each(function(){
+                    if($(this).closest('li').hasClass('active')){
+                        $('.breadcrumb li a').eq(2).text(($(this).text()));
+                        $('.breadcrumb li a').eq(2).attr('href', '/website_popup_menus?target=' + $(this).find('a').attr('hh') );
+                    }
+                });
+            }, 1000);
+
+            $('#myTab').on('click', 'li', function(){
+                $('.breadcrumb li a').eq(2).text(($(this).find('a').text()));
+                $('.breadcrumb li a').eq(2).attr('href', '/website_popup_menus?target=' + $(this).find('a').attr('hh'));
+            });
+
+            $("select.sort").change(function(){
+                $("select.sort").attr("disabled", true);
+                $.post("/website_popup_menus/update_menu_sort", {nav_type: $(this).attr('nav_type'), menu_id: $(this).attr("menu_id"), sort: $(this).val()}, function(result){
+                    location.reload();
+                });
+            });
+
+        });
+
+        <% if params[:target].present? %>
+            setTimeout(function(){
+                var targets = ["#tab-1", "#tab-2"],
+                    target = "<%= params[:target] %>",
+                    id = "<%= params[:target].gsub('#', '') %>",
+                    arr = window.location.href.split('?');
+                if(targets.indexOf(arr[arr.length - 1]) != -1){return false;}
+                $('#myTab li').each(function(){
+                    if($(this).find('a').attr('href') == target){
+                        $('#myTab li.active').removeClass('active');
+                        $(this).addClass('active');
+                        $('.tab-content .tab-pane.active').removeClass('active');
+                        $('.tab-content #' + id).addClass('active');
+                    }
+                });
+            }, 100);
+
+        <% end %>
+    </script>
+<% end %>

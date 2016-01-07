@@ -1,0 +1,58 @@
+<% content_for(:title) { '赛前阅读' } %>
+<div id="pre-competition-read" style="display:none">
+	<div id="wrapper">
+		<div id="header">
+			<h1 class="title_a">赛前阅读</h1>
+		</div>
+		<div id="content">
+			<div class="bd_box">
+				<p class="sc_info"><%= @fight_paper.try(:description) %></p>
+			</div>
+		</div>
+		<div id="time_begin">
+			<p><a href="javascript:" class="btn_a"><span id="remaining-time"></span></a></p>
+			<p class="js_txt">倒计时开始答题</p>
+		</div>
+	</div>
+</div>
+
+<div id="alert-day" style="display:none">
+	<div id="wrapper">
+		<div id="header">
+			<h1 class="title_a title_b"><img src="/assets/fight/title_b.png" width="233" height="65"></h1>
+		</div>
+		<div id="main_box" class="main_box2">
+			<h3 class="join_time">赛事已经进入第<%= @fight_paper.try(:the_day) %>天<br>祝您旗开得胜！</h3>
+		</div>
+		<div id="kz_begin">
+			<p><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_b">开始答题</a></p>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var second = <%= (!@fight_paper.description or "".eql?(@fight_paper.description)) ? 0 : (@fight_paper.read_time ? @fight_paper.read_time : 10) %>, msec = 0;
+	if(second > 0 ) $('#pre-competition-read').fadeIn();
+	window.onload = setTimeout(update_remaining_time,0);
+	function update_remaining_time(){
+		if(second > 0 || msec > 0){
+			setTimeout(update_remaining_time,9);
+			if(--msec == -1){
+				msec = 98;
+				second --;
+			}
+			$('#remaining-time').text((second<10 ? '0' : '')+second+(msec<10 ? '：0' : '：')+msec);
+
+		}else{
+			setTimeout(fadeInDay,0);
+			$('#pre-competition-read').fadeOut();
+		}
+	}
+
+	function fadeInDay(){
+		$('body').attr('id', 'main_box2');
+		$('#pre-competition-read').hide();
+		$('#alert-day').fadeIn();
+	}
+</script>
+

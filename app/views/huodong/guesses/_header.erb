@@ -1,0 +1,37 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微互动', activity_forms_path %></li>
+      <li><%= link_to '美图猜猜', guesses_activities_path %></li>
+      <%= yield :breadcrumb_li %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="tabbable">
+        <div class="tab-content no-border">
+          <div class="col-sm-12">
+            <div id="fuelux-wizard">
+              <ul class="wizard-steps">
+                <li class="active">
+                  <span class="step">1</span>
+                  <span class="title">活动设置</span>
+                </li>
+                <li class="<%= action_name == 'settings' ? 'active' : '' %>">
+                  <span class="step">2</span>
+                  <span class="title">选择题目</span>
+                </li>
+              </ul>
+            </div>
+            <hr>
+          </div>
+          <%= yield :tab %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,117 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+			<li> <i class="icon-home home-icon"></i> <%= link_to "首页", root_path %> </li>
+			<li> <%= link_to "微房产", house_layouts_path %> </li>
+			<li><%= link_to "全景图管理", house_layout_house_layout_panoramas_path(@house_layout) %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+						<li> 1、360全景和720全景展示会由于少部分手机兼容性问题而显示不完整，请谅解！ </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>展示方式选择</label>
+          <div class="radioTab">
+              <%= link_to panorama_720_house_layout_path(@house_layout, panorama_type: "720"), class: "lbl", method: :post do %>
+								<label> <%= radio_button_tag "view", "720", @house_layout.panorama_type_list.first.eql?('720'), class: "ace" %> <span class='lbl'></span> 720全景展示 </label>
+							<% end %>
+              <!-- <input name="view" type="radio" class="ace"> -->
+              <!-- <span class="lbl">360全景展示</span> -->
+              <%= link_to panorama_360_house_layout_path(@house_layout, panorama_type: "360"), class: "lbl", method: :post do %>
+								<label> <%= radio_button_tag "view", "360", !@house_layout.panorama_type_list.first.eql?('720'), class: "ace" %><span class="lbl"></span>360全景展示 </label>
+							<% end %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>全景图管理</label>
+          <% if @standalone_panorama.present? %>
+            <%= link_to "编辑720全景", edit_house_layout_standalone_panorama_path(@house_layout,@standalone_panorama), class: "btn btn-sm btn-primary pull-right" %>
+          <% else %>
+            <a href="<%= new_house_layout_standalone_panorama_path(@house_layout) %>" class="btn btn-sm btn-primary pull-right">新增720全景</a>
+          <% end %>
+          <a href="<%= new_house_layout_house_layout_panorama_path(@house_layout) %>" class="btn btn-sm btn-primary pull-right margin-right-10">新增360全景</a>
+        </div>
+      </div>
+      <% if @house_layout.panorama_type_list.first.eql?('720') %>
+        <div class="col-sm-12">
+        <table class="table table-striped table-bordered table-hover dataTable ">
+          <thead>
+            <tr>
+              <th>名字</th>
+              <th>展示方式</th>
+              <th>操作</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @standalone_panorama.present? %>
+              <tr>
+                <td><%=@standalone_panorama.name%></td>
+                <td><%="720全景图" %></td>
+                <td>
+                  <%= link_to '编辑', edit_house_layout_standalone_panorama_path(@house_layout,@standalone_panorama) %>
+                  <%= link_to '删除', [@house_layout,@standalone_panorama], method: :delete, :data => { :confirm => "确定要删除该全景图？" } %>
+                </td>
+								<td>
+									<!--
+									<%= link_to "预览", @standalone_panorama.preview_url %>
+									-->
+									<span class="faye_message"><%= '已完成' if @standalone_panorama.preview_url.present? %></span>
+								</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% else %>
+        <div class="col-sm-12">
+        <table class="table table-striped table-bordered table-hover dataTable ">
+          <thead>
+            <tr>
+              <th>名字</th>
+              <th>展示方式</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+          <%@panoramas.each do |it|%>
+            <tr>
+            <td><%=it.name%></td>
+            <td><%="360全景图" %></td>
+            <td>
+              <%# <%= link_to '编辑', edit_house_layout_house_layout_panorama_path(@house_layout,it) %>
+              <%= link_to '删除', [@house_layout,it], method: :delete, :data => { :confirm => "确定要删除该全景图？" } %>
+            </td>
+          </tr>
+        <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <%= javascript_include_tag "#{PANORAMA_FAYE_HOST}/faye.js" %> 
+
+  <script>
+    var client = new Faye.Client("<%= PANORAMA_FAYE_HOST %>/faye");
+		client.subscribe("/standalone_panorama/<%= @standalone_panorama.try(:file_key) %>", function(data) {
+				// console.log(data);
+				$(".faye_message").text(data.message);
+    });
+  </script>
+<% end %>

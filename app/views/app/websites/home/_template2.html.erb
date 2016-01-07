@@ -1,0 +1,49 @@
+<% if website_pictures.present? %>
+    <% content_for :website_top_pic do %>
+        <header>
+          <div class="box-img" id="slider">
+            <ul class="box-img-list">
+              <% website_pictures.each do |w| %>
+                  <li>
+                    <% if w.url.present? %>
+                        <a href="<%= w.url%>"><%= image_tag w.pic.try(:large)%></a>
+                    <% else %>
+                        <%= image_tag w.pic.try(:large)%>
+                    <% end %>
+                  </li>
+              <% end %>
+            </ul>
+            <div class="box-text">
+      <span class="box-bd ellipsis" id="slider-span">
+        <%= website_pictures.first.title %></span>
+              <div id="pagenavi" class="fr box-img-page">
+                <% website_pictures.each_with_index do |w, index| %>
+                    <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>
+          ">
+                      <% index + 1 %></a>
+                <% end %></div>
+
+            </div>
+          </div>
+        </header>
+
+    <% end %>
+<% end %>
+
+<div class="body">
+  <% if website.tel.present? %>
+  <div class="box btn btn-phone">
+    <a href="tel:<%= website.tel %>
+      " class="ico-phone">
+      <%= website.tel %></a>
+  </div>
+  <% end %>
+  <div class="box box-index">
+    <% website_menus.each_with_index do |menu,index| %>
+    <a class="box-circle" href="<%= menu_url menu %>
+      "> <b style="background-image:url(<%= menu.pic if menu.pic? %>)"></b>
+      <span>
+        <%= menu.name %></span>
+    </a>
+    <% end %></div>
+</div>

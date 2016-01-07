@@ -1,0 +1,7 @@
+var faild_html = '<div id="scene-fail"><div class="game-text" id="text-fail" style="top: 0px;"><%= @error_msg %></div></div>'
+$(".sec-game").append(faild_html);
+
+$("#scene-index").hide();
+setTimeout(function(){
+	window.location.reload();
+}, 2000)

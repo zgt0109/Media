@@ -1,0 +1,21 @@
+<h1>Listing pro_wmall_slide_pictures</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @pro_wmall_slide_pictures.each do |pro_wmall_slide_picture| %>
+  <tr>
+    <td><%= link_to 'Show', pro_wmall_slide_picture %></td>
+    <td><%= link_to 'Edit', edit_pro_wmall_slide_picture_path(pro_wmall_slide_picture) %></td>
+    <td><%= link_to 'Destroy', pro_wmall_slide_picture, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Slide picture', new_pro_wmall_slide_picture_path %>

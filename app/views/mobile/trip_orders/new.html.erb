@@ -1,0 +1,102 @@
+<header>
+  <a href="<%= mobile_trips_url(supplier_id: @supplier.id) %>" class="ico-prev tleft"><img src="/assets/mobile/wtrave/ico-back.png"></a>
+  <h1>填写预订单</h1>
+  <a href="<%= mobile_trip_orders_url %>" class="tright"><img src="/assets/mobile/wtrave/ico-order.png"></a>
+</header>
+
+<section>
+  <%= form_for @trip_order, url: mobile_trip_orders_url, html: { id: "order_form" } do |f| %>
+    <%= f.hidden_field :trip_ticket_id %>
+    <%= f.hidden_field :trip_id, value: @supplier.trip.id %>
+    <%= f.hidden_field :price, value: @ticket.price %>
+    <%= f.hidden_field :ticket_name, value: @ticket.name %>
+    <div class="box box-order">
+      <dl>
+        <dt>门票信息</dt>
+        <dd>
+          <div class="order-row">
+            <div class="fl">门票名称：</div>
+            <div class="fr"><span><%= @ticket.name %></span></div>
+          </div>
+          <div class="order-row">
+            <div class="fl">游玩时间：</div>
+            <div class="fr"><%= f.text_field :booking_at, type: 'date' %></div>
+          </div>
+          <div class="order-row">
+            <div class="fl">门票单价：</div>
+            <div class="fr fred tright"><span>￥<%= f @ticket.price %></span></div>
+          </div>
+          <div class="order-row order-number">
+            <div class="fl">预定数量：</div>
+            <div class="fr">
+              <div class="box-number">
+                <i id="down">-</i><%= f.text_field :qty, value: 1, type: 'tel', minlength: 1 %><i id="up">+</i>
+              </div>
+            </div>
+          </div>
+          <div class="order-row">
+            <div class="fl">门票总价：</div>
+            <div class="fr fred tright"><span id="total_amount">￥<%= f @ticket.price %></span></div>
+          </div>
+        </dd>
+      </dl>
+      <dl>
+        <dt>个人信息</dt>
+        <dd>
+          <div class="order-row">
+            <div class="fl">联系人：</div>
+            <div class="fr"><%= f.text_field :username, value: @wx_user.try(:nickname) %></div>
+          </div>
+          <div class="order-row order-input">
+            <div class="fl">手机号码：</div>
+            <div class="fr"><%= f.text_field :tel, type: :tel, value: @wx_user.try(:mobile) %></div>
+          </div>
+        </dd>
+      </dl>
+      <p class="tcenter">
+        <input type="botton" class="btn" value="提交订单" onclick="save_form()" readonly>
+      </p>
+    </div><!--box-order end -->
+  
+    <div class="box-note">
+      <b>预定须知</b>
+      <p><%= @ticket.content.to_s.html_safe %></p>
+    </div>
+  <% end %>
+</section>
+
+<script type="text/javascript">
+function save_form(){
+  if($("#trip_order_username").val() == ""){
+    alert("请填写联系人！");
+    // $("#trip_order_username").focus();
+  }else if($("#trip_order_tel").val() == ""){
+    alert("请填写手机号码！");
+    // $("#trip_order_tel").focus();
+  }else if(!$("#trip_order_tel").val().match(/^1[3|4|5|8][0-9]\d{4,8}$/)){
+      alert("请填写正确的手机号码！");
+      // $("#trip_order_tel").focus();
+  }else if($("#trip_order_booking_at").val() == ""){
+      alert("请填写游玩时间！");
+      // $("#trip_order_booking_at").focus();
+  }else{
+    $('#order_form').submit();
+  }
+}
+$("#trip_order_qty").change(function(){
+  var count = parseInt($(this).val());
+  var price = parseFloat($("#trip_order_price").val());
+  var total_amount = count * price
+  $('#total_amount').text("￥" + total_amount.toFixed(2));
+});
+
+$("#up").click(function(){
+  var count = parseInt($("#trip_order_qty").val());
+  $("#trip_order_qty").val(count+1).change();
+});
+
+$("#down").click(function(){
+  var count = parseInt($("#trip_order_qty").val());
+  $("#trip_order_qty").val(count-1 < 1 ? "1" : count-1).change();
+});
+</script>

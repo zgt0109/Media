@@ -1,0 +1,9 @@
+$('.mod-box').append('<%= j render(:partial => "note") %>');
+<% if @vip_user_messages.try(:last_page?) %>
+  $('.page').remove();
+<% else %>
+  $('.page').replaceWith('<%= j paginate(@vip_user_messages) %>');
+<% end %>
+$(".loading").hide();
+$(".mod-box dl dt").unbind('click');
+showSlider(".mod-box dl");

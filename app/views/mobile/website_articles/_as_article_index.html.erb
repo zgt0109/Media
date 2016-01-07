@@ -1,0 +1,56 @@
+<% title '文章中心' %>
+<header>
+  <%= form_for @search, url: mobile_website_articles_url(supplier_id: @website.supplier_id) do |f| %>
+  <%= hidden_field_tag :article_type, params[:article_type] %>
+  <%= hidden_field_tag :category_id, params[:category_id] %>
+  <div class="head-name"><span>全部分类</span></div>
+  <div class="search-box">
+    <%= f.text_field :title_like %>
+  </div>
+  <a href="javascript:;" class="hide">
+    <span class="search"></span>
+  </a>
+  <% end %>
+</header>
+<div class="news-list">
+  <% @articles.each do |m| %>
+    <%= link_to mobile_website_article_url(m, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], serach: params[:search]), class: 'list-box' do %>
+      <div class="img">
+        <%= image_tag m.pic if m.pic? %>
+      </div>
+      <div class="news-info">
+        <h1><%= m.title %></h1>
+        <% if m.subtitle_content %><div class="news-summary"><%= raw m.subtitle_content %></div><% end %>
+        <% if m.tags.present? %>
+        <div class="news-tags">
+          <% m.tags.order(:position).each_with_index do |t, i| %>
+            <span class="tag-<%= (i + 1) % 3 == 0 ? 3 : (i + 1) % 3 %>"><%= t.name %></span>
+          <% end %>
+        </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<%= paginate @articles, :theme => 'article', :window => 1 %>
+<div class="category">
+  <div class="category-main">
+    <div class="category-box">
+      <a href="javascript:;" class="category all <%= 'active' unless @category %>" data-children-count="0" data-id="" data-parent-id="0" style="display: block;">全部</a>
+      <% @categories.root.order(:position).each do |c| %>
+        <%= link_to 'javascript:;', data: {children_count: c.children_count, id: c.id, parent_id: c.parent_id.to_i}, class: "category #{@category.try(:id).to_i == c.id ? 'active' : ''}" do %>
+          <%= c.name %>
+          <% if c.children_count > 0 %>
+          <i class="fa fa-angle-right"></i>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="category-foot">
+      <a href="javascript:;" class="back disabled">上一级</a>
+      <a href="javascript:;" class="all" data-id="<%= @category.try(:id).to_i %>">确认</a>
+    </div>
+  </div>
+  <div class="category-bg"></div>
+</div>
+

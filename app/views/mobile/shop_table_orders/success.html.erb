@@ -1,0 +1,80 @@
+<% provide(:title, '我要订座') %>
+<div class="stage" id="stage">
+  <header>
+    <%= link_to book_table_mobile_shops_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" do %>
+    <% end %>
+    <h1>订座成功</h1>
+  </header>
+
+<section id="sec-index">
+    <div class="body">
+      <div class="order">
+        <div class="mod-order">
+          <div class="mod-form form-hor">
+            <div class="bd">
+
+              <div class="form-li">
+                <div class="li-l"><b>订单号：</b></div>
+                <div class="li-r"><span class="text-red"><%= @shop_table_order.order_no %></span></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>说明：</b></div>
+                <div class="li-r"><span>
+                  请直接前往门店将订单号或手机号码告知服务员即可用餐
+                </span></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>支付状态：</b></div>
+                <div class="li-r">
+                  <span>无需支付</span>
+                </div>
+              </div>
+              <a class="form-li" href="tel:<%=@shop_table_order.shop_branch.book_table_rule.book_phone %>">
+                <div class="li-l"><b>门店电话：</b></div>
+                <div class="li-r mod-fa fa fa-phone">
+                  <span>
+                  <%= @shop_table_order.shop_branch.book_table_rule.book_phone %> 
+                  </span>
+                </div>
+              </a>
+
+
+              <a class="form-li" href="http://api.map.baidu.com/marker?location=<%= @shop_table_order.shop_branch.location_y%>,<%= @shop_table_order.shop_branch.location_x%>&title=<%= @shop_table_order.shop_branch.address%>&content=<%= @shop_table_order.shop_branch.address%>&output=html">
+                <div class="li-l"><b>门店地址：</b></div>
+                <div class="li-r mod-fa fa fa-location-arrow">
+                  <span>
+                    <%= @shop_table_order.shop_branch.ditu_address %>
+                  </span>
+                </div>
+              </a>
+
+
+              <div class="form-li">
+               <div class="li-l"><b>订座规则：</b></div>
+               <div class="li-r">
+                <span>
+                  <%= @shop_table_order.shop_branch.book_table_rule.description %>
+                </span>
+              </div>
+            </div>
+
+   
+            
+            <div class="ft">
+              <div class="food-shopcar food-shopcar-btn">
+                <div class="hd">
+                  <div class="tcenter">
+                    <% if @shop_table_order.ref_order_id.blank? %>
+                    <a class="btn btn-blue" href="/<%= session[:supplier_id] %>/shop_branches/<%= @shop_table_order.shop_branch.id %>/want_dinner?ref_order_id=<%= @shop_table_order.id %>">去点菜</a>
+                    <% end %>
+                    <a href="<%= mobile_shop_table_order_url(supplier_id: session[:supplier_id], id: @shop_table_order.id) %>" class="btn">查看订单详情</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

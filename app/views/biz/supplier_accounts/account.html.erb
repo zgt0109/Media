@@ -1,0 +1,83 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+      <li><%= link_to '微枚迪支付', supplier_accounts_path %></li>
+      <li><%= link_to '支付申请', supplier_accounts_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="tabbable ">
+      <div class="tab-pane active" id="tab-1">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-success ">
+              <strong class="font-size20">微枚迪支付介绍</strong>
+              <ul class="no-margin-left">
+                <li>微枚迪支付是商户委托微枚迪代为收取消费者支付的相应服务款（货款），经结算系统结算并查验后结算给商户的代收代付产品，从而帮助广大商户提供更快捷、更便利的支付方式，解决商户申请支付方式困难、配置繁琐的问题。</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-sm-12 margin-b-10">
+            <a href="<%= conditions_supplier_accounts_path %>" class="font-size30">点击查看申请条件</a>
+          </div>
+
+          <%= render 'status' %>
+
+          <% @supplier_account.step2 = 1 %>
+          <%= form_for @supplier_account, validate: true do |f| %>
+            <%= f.hidden_field :step3,  value: 1 %>
+              <div id="goc" class="row tab-pane">
+                <div class="col-sm-12 margin-top-20">
+                  <div class="clearfix col-md-7 margin-top-20">
+                    <strong class="font-size20">账户信息</strong>
+                  </div>
+                  <div  class="form col-sm-10 margin-top-20">
+                    <div class="form-group">
+                      <label class="control-label">收款银行：</label>
+                      <div class="clearfix">
+                        <%= f.text_field :bank_name, placeholder: '例如：招商银行', class: "col-xs-6", validate: true %>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">收款账户：</label>
+                      <div class="clearfix">
+                        <%= f.text_field :bank_account, placeholder: '银行卡卡号', class: "col-xs-6", validate: true %>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">开户人：</label>
+                      <div class="clearfix">
+                        <%= f.text_field :username, class: "col-xs-6", validate: true %>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">开户行地区</label>
+                      <div class="clearfix">
+                        <%= address_select(@supplier_account, name_prefix: 'supplier_account', no_district: true) %>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">开户行名称：</label>
+                      <div class="clearfix">
+                        <%= f.text_field :bank_branch, placeholder: '例如：上海分行浦东新区张江支行', class: "col-xs-6", validate: true %>
+                      </div>
+                    </div>
+                    <div class="form-group ">
+                       <a href="<%= identity_supplier_accounts_path %>" class="btn btn-sm">上一步</a>
+                      <input type="submit" value="提交申请" class="btn btn-sm btn-primary  form-submit" >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <%- end %>
+          </div>
+<% end %>

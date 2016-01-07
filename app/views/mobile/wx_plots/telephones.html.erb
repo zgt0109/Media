@@ -1,0 +1,29 @@
+<% title @wx_plot.try(:telephone) %>
+<div class="body">
+  <div class="life-box">
+    <dl>
+      <% @categories.each do |f| %>
+        <% phones = @phones.select{|t| t.wx_plot_category_id == f.id} %>
+        <% next if phones.blank? %>
+        <dt><%= f.name %></dt>
+        <% phones.each do |m| %>
+          <dd>
+            <div class="info">
+              <%= link_to 'javascript:void(0);' do %>
+                <span class="info-text">
+                  <b><%= m.name %></b>
+                  <span><%= m.phone %></span>
+                </span>
+              <% end %>
+            </div>
+            <div class="phone">
+              <%= link_to "tel:#{m.phone}", class: 'box' do %>
+                <i class="icon fa fa-phone"></i>
+              <% end %>
+            </div>
+          </dd>
+        <% end %>
+      <% end %>
+    </dl>
+  </div>
+</div>

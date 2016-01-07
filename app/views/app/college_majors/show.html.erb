@@ -1,0 +1,6 @@
+<% provide(:title, '专业介绍') %>
+<div class="box box-padding">
+  <div class="hd"><%= @college_major.name %></div>
+  <div class="bd box-line ckeditor_content"><%= @college_major.description.to_s.html_safe %></div>
+</div>
+

@@ -1,0 +1,104 @@
+<%= form_for @wx_plot, validate: false do |f| %>
+  <div class="modal-body">
+    <div class="row vcommunity-advise">
+      <div class="col-xs-10">
+
+        <%= f.fields_for :wx_plot_categories, @categories do |w| %>
+            <div class="margin-top-10 category">
+
+              <% reject_categories = params[:category].to_s.split(',').map(&:to_i) %>
+              <%= w.select :category, WxPlotCategory.category_options.reject{|m| !reject_categories.include?(m.last)}, {}, class: 'pull-left', style: [2, 3] == reject_categories && w.object.new_record? ? '':'display:none;' %>
+
+              <% if [2, 3].include?(w.object.category) %>
+                <label class="pull-left" style="display: <%= w.object.new_record? ? 'none;' : ''%>"><%= w.object.category_name %>：</label>
+              <% end %>
+
+              <div class="input-group input-group-sm input-group-text margin-top-10">
+                <%= w.text_field :name , class: 'col-xs-12', size: 30 %>
+
+                <span class="input-group-btn">
+                    <%= w.check_box '_destroy', style:'display:none' %>
+                    <% if w.object.new_record? %>
+                        <input type="button" value="添加" class="btn btn-sm btn-filter btn-primary add">
+                    <% else %>
+                        <input type="button" value="删除" class="btn btn-sm btn-filter btn-primary delete">
+                    <% end %>
+                </span>
+
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary form-submit' %>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+
+<% end %>
+
+<div class="margin-top-10 category" data-template="true" style="display: none;">
+  <% reject_categories = params[:category].to_s.split(',').map(&:to_i) %>
+  <%= select_tag 'category', options_for_select(WxPlotCategory.category_options.reject{|m| !reject_categories.include?(m.last)}), class: 'pull-left', style: [2, 3] == reject_categories ? '':'display:none;' %>
+  <% if reject_categories == [2, 3] %>
+    <label class="pull-left"></label>
+  <% end %>
+  <div class="input-group input-group-sm input-group-text margin-top-10">
+    <input class="col-xs-12" size="30" type="text" data-validate="true">
+    <span class="input-group-btn">
+      <input style="display:none" type="checkbox">
+      <input type="button" value="添加" class="btn btn-sm btn-filter btn-primary add">
+    </span>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+        $('form').on('click', '.add', function(){
+            $(this).val('删除');
+            $(this).removeClass('add');
+            $(this).addClass('delete');
+            var template = $("[data-template='true']");
+            var tool =  $('form .category:visible:last');
+            var uuid = Date.now();
+            var new_template = template.clone(true).insertAfter(tool).show();
+            new_template.attr('data-template', '');
+            new_template.find('select').attr('name', 'wx_plot[wx_plot_categories_attributes]['+uuid+'][category]');
+            new_template.find('input[type=text]').attr('name', 'wx_plot[wx_plot_categories_attributes]['+uuid+'][name]');
+            new_template.find('input[type=checkbox]').attr('name', 'wx_plot[wx_plot_categories_attributes]['+uuid+'][_destroy]');
+            new_template.find('label.pull-left').hide();
+//            tool.find('select.pull-left').hide();
+            tool.find('label.pull-left').html(tool.find('select.pull-left option:selected').text()+'：');
+//            tool.find('label.pull-left').show();
+        });
+        $('form').on('click', '.delete', function(){
+            $(this).parent().parent().parent().hide();
+            $(this).closest('.margin-top-10').find('input[type=checkbox]').attr('checked',true);
+        });
+        $('form input[type=submit]').click(function(){
+            var flag = true, arr = $('form input[type=text].col-xs-12:visible'),  o={};
+            $.each(arr, function(e, i){
+                if(!$(this).val() && e != arr.length -1){
+                    showTip('warning',"类别名称不能为空");
+                    flag = false;
+                    $(this).focus();
+                    return flag;
+                }
+                if(!(o[$(this).val().toString() + $(this).closest('.category').find('select').val().toString()])){
+                    o[$(this).val() + $(this).closest('.category').find('select').val()] = true;
+                }else{
+                    showTip('warning',"类别不能重复!");
+                    flag = false;
+                    $(this).focus();
+                    return flag;
+                }
+            });
+            return flag;
+        });
+      });
+    </script>
+<% end %>

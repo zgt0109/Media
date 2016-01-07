@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>捐赠成功</title>
+    <script src="http://lib.sinaapp.com/js/jquery/1.7.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/donations/winwemedia01.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/donations/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/donations/wdonations.css">
+</head>
+<body>
+<div class="html bg" id="html">
+    <div class="stage" id="stage">
+        <section id="sec-index">
+            <div class="body">
+                <div class="mod-top">
+                    <img src="/assets/donations/banner.jpg">
+                </div>
+                <div class="text">捐助成功，感谢您的爱心</div>
+                <div class="btn-box">
+<%= link_to my_orders_mobile_donations_url(supplier_id: session[:supplier_id]), class: "btn btn-orange mt" do %>
+  <i class="fa fa-search"></i>查看我的捐助
+<% end %>
+                </div>
+                <div class="btn-box">
+ <%= link_to mobile_donations_url(supplier_id: session[:supplier_id], aid: @activity.id), class: "btn mt" do %>
+    <i class="fa fa-heart-o"></i>继续献爱心
+ <% end %>
+                </div>
+                <div class="foot">
+                    <div class="foot-box">
+                        <p>我们将向您反馈项目进展</p>
+                        <p>您可以继续关注我们</p>
+                        <p>了解更多捐赠项目&nbsp;&nbsp;&nbsp;&nbsp;帮助更多的人!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+      WeixinJSBridge.call('hideOptionMenu');
+    });
+  </script>
+<footer></footer>
+
+</body>
+</html>

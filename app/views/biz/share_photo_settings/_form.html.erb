@@ -1,0 +1,32 @@
+<%= form_for @share_photo_setting, :url=> update_activity_share_photo_settings_path, :validate => true,:method => :put do |f| %>
+  <%= f.fields_for :activities, @activities do |activity| %>
+    <h4 class="text-info"><%= activity.object.show_title_for_share_photo_setting %></h4>
+    <div class="form-group">
+      <label class="control-label clearfix">关键字<span class="required-star">*</span><small class="help-inline text-warning line-height-32">用于公众账号中触发进入图片分享，不能同其他关键字重复</small></label>
+      <div class="clearfix">
+        <%= activity.text_field :keyword, class: 'col-xs-6', placeholder: "请输入关键字"  %>
+      </div>
+    </div>
+    <% if activity.object.activity_type_id != 36 %>
+      <div class="form-group">
+        <label class="control-label">文本内容<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= activity.text_area :summary, rows: 5, class: 'col-xs-6', validate: true %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <% if params[:action] == 'index' %>
+    <h4 class="text-info">无交互时间设置</h4>
+    <div class="form-group">
+      <label class="control-label">设置失效时间<span class="required-star">*</span><small class="help-inline text-warning line-height-32">设置无交互时间段，超过时间系统自动退出图片分享,单位／分钟</small></label>
+      <div class="clearfix">
+        <%= f.text_field :request_expired_at, class: 'col-xs-6', placeholder: "请输入时间"  %>
+      </div>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= f.submit "保存", :class => "btn btn-sm btn-primary" %>
+    <a href="javascript:history.go(-1);" class="btn btn-sm btn-default">取消</a>
+  </div>
+<% end %>

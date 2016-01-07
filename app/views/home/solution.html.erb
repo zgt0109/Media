@@ -1,0 +1,119 @@
+<%= stylesheet_link_tag "v5.1/cases" %>
+<%= javascript_include_tag  'v5.1/cases' %>
+<% content_for :keywords, "微枚迪客户案例" %>
+<% content_for :title, "微枚迪客户案例" %>
+
+
+<div class="cases_wrapper">
+    <div class="center1200 case-main">
+        <div class="mod-nav fl">
+            <ul>
+                <%= solution_li_class(@name) %>
+            </ul>
+            <div class="mod-nav-hover"></div>
+        </div>
+        <div class="case-main-group fr">
+            <div class="wrapp pr">
+                <ul class="clearfix">
+                <% @cases.limit(6).each_with_index do |c,index| %>
+                    <li class="<%= 'pr' if index == 0%>">
+                        <% c.case_pictures.limit(2).each_with_index do |p,no| %>
+                            <img class="block pa cases<%= no+1 %>" src="<%= p.pic_url %>" height="398" width="224">
+                        <% end %>
+                        <!-- <img class="block pa cases1" src="/assets/v5.1/cases/cases1.jpg" height="398" width="224">
+                        <img class="block pa cases2" src="/assets/v5.1/cases/cases2.jpg" height="398" width="224"> -->
+                        <div class="casesBg pa"></div>
+                        <div class="pa cases_content">
+                            <img class="bc block" src="<%= c.icon_url %>" height="80" width="80">
+                            <h1 class="tc"><%= truncate_utf(c.name, 5) %></h1>
+                            <h4 class="tc">扫描下方二维码</h4>
+                            <img class="bc block" src="<%= c.qr_code_url %>" height="105" width="105" />
+                        </div>
+                    </li>
+                <% end %>
+                </ul>
+            </div>
+            <div class="sildebtn_box pa">
+                <div class="silde_btn bc clearfix">
+                    <div class="btn btnL fl"></div>
+                    <div class="i-btns fl">
+                        <% @cases.limit(6).to_a.each_with_index do |c,index|%>
+                            <span class="i-btns-item <%= 'last' if index +1 == @cases.limit(6).count %>"><em></em></span>
+                        <% end %>
+                    </div>               
+                    <div class="btn btnR fl"></div> 
+                </div> 
+            </div>          
+        </div>       
+    </div>
+</div>
+
+<%= content_for :custom_js do %>
+<script type="text/javascript">
+        $(function(){
+            var ML = $(".mod-nav li");
+            var HL = $(".case-hd-group li");
+            var BL = $(".case-bd-group li");
+            var logo = $(".com-logo");
+            var line = $(".case-hd-line");
+            var curr = 0;
+            var currClick = 0;
+            var liWidth = HL.outerWidth(true);
+
+            // $(".mod-nav").on("click", "li", function(){
+            //     $(this).addClass('nav-cur').siblings().removeClass('nav-cur');
+            // });
+
+            $(".case-hd-group").on("click", "li", function(){
+                var self = $(this);
+                curr = currClick = self.index();
+                self.addClass('main-cur').siblings().removeClass('main-cur');
+                logo.addClass("grayscale").eq(curr).removeClass('grayscale');
+                BL.hide().eq(curr).show();
+            }).on("mouseenter", "li", function(){
+                var self = $(this);
+                curr = self.index();
+
+                var aimLeft = 36 + curr * liWidth;
+                line.stop(true, false).animate({
+                    left: aimLeft
+                }, 300);
+            }).on("mouseleave", function(){
+                var aimLeft = 36 + currClick * liWidth;
+                line.stop(true, false).animate({
+                    left: aimLeft
+                }, 400);
+            }).find("li").eq(0).trigger("click");
+
+
+
+        });
+
+        $(function(){
+            var navHover = $(".mod-nav-hover");
+            var navActiveIndex = $(".mod-nav .nav-cur").index();
+            var navActiveTop = $(".mod-nav .nav-cur").position().top;
+            var curr = 0;
+            var h3Height = $(".mod-nav-h3").outerHeight(true);
+
+            $(".mod-nav").on("mouseenter", "li", function(){
+                var aimTop = $(this).position().top;
+
+                if(!$(this).hasClass('nav-cur')){
+                    $(".nav-cur").removeClass('nav-cur');
+                }
+
+                navHover.stop(true, false).animate({
+                    top: aimTop + h3Height
+                }, 300);
+            }).on("mouseleave", function(){
+                $(".mod-nav li").eq(navActiveIndex).addClass('nav-cur');
+
+                navHover.stop(true, false).animate({
+                    top: navActiveTop + h3Height
+                });
+            }).trigger("mouseleave");
+
+        });
+    </script>
+<% end %>

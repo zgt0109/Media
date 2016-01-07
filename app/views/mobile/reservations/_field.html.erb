@@ -1,0 +1,73 @@
+<%- index = @reservation.custom_fields.order(:id).pluck(:id).index(field.id) %>
+<%- value = @order.custom_values.where(custom_field_id: field.id).first.value rescue '' %>
+<%- if field.name == "姓名" %>
+    <div class="form-li">
+      <p>姓名<span>*</span></p>
+      <input <%= (@order&& @order.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="user_name" name="custom_field[<%= field.id %>]" type="text" placeholder="请输入您的姓名" class="input field is_required" data-name='真实姓名' />
+    </div>
+<%- end %>
+<%- if field.name == "电话" %>
+    <div class="form-li">
+      <p>电话<span>*</span></p>
+      <input <%= (@order&& @order.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="phone" name="custom_field[<%= field.id %>]" type="tel" placeholder="请输入您的电话" class="input field is_required" data-name='联系电话'/>
+    </div>
+
+    <%- if @reservation.extend.captcha_required && action_name == 'new' %>
+    <div class="form-li" style="position: relative;padding-right: 120px;margin-bottom: 5px;">
+        <input <%= (@order&& @order.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="captcha" name="captcha" type="tel" data-name='验证码' placeholder="请输入验证码" class="input is_required">
+      <a class="btn btn-code J-getCode" href="#" style="width: 115px; position: absolute; right: 0; top: 0;background: #7b93d6;margin: 0 0;top: 5px;height: 32px;">获取验证码</a> </div>
+    <% end %>
+<%- end %>
+<%-  unless %w(姓名 电话).include?(field.name) %>
+  <%- if %(integer string).include?(field.field_format) %>
+    <% text_pattern = field.field_format == 'integer' ? 'pattern=[0-9]*' : '' %>
+      <div class="form-li">
+        <p><%= field.name %><%= raw(field.is_required? ? '<span>*</span>' : '' )%></p>
+        <input <%= (@order&& @order.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="field_<%= field.id %>" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" <%= text_pattern %> placeholder="<%= field.placeholder %>" />
+      </div>
+    <%- elsif %(text).include?(field.field_format) %>
+      <div class="form-li">
+        <p><%= field.name %><%= raw(field.is_required? ? '<span>*</span>' : '' )%></p>
+        <textarea id="field_<%= field.id %>" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" placeholder="<%= field.placeholder %>" style="height: 60px;"><%= value %></textarea>
+      </div>
+    <%- elsif %(datetime).include?(field.field_format) %>
+      <%- if field.name == "生日" %>
+        <%- date_class = 'maxdate' %>
+      <%- elsif index == 2 %>
+        <%- date_class = 'mindate' %>
+      <%- else %>
+        <%- date_class = 'date' %>
+      <%- end %>
+      <%- date_class = (@order && @order.persisted?) ? '' : date_class %>
+
+      <div class="form-li">
+        <p><%= field.name %><%= raw(field.is_required? ? '<span>*</span>' : '' )%></p>
+        <input value="<%= value %>" id="field_<%= field.id %>" class= "<%= date_class%> <%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" readonly/>
+      </div>
+    <%- elsif %(select radio).include?(field.field_format) %>
+      <div class="form-li">
+        <p><%= field.name %><%= raw(field.is_required? ? '<span>*</span>' : '' )%></p>
+          <select <%= (@order&& @order.persisted?) ? 'readonly disabled' : ''  %> value="<%= value %>" id="field_<%= field.id %>" style="background: #f0eef0;padding: 0;" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+            <option value="">请选择</option>
+            <%- field.possible_options.each do |option| %>
+              <%- if option.present? %>
+                <option value="<%= option %>" <%= 'selected' if option.eql?(value) %> ><%= option %></option>
+              <%- end %>
+            <%- end %>
+          </select>
+        </div>
+    <%- elsif %(checkbox).include?(field.field_format) %>
+      <div class="form-li">
+        <p><%= field.name %><%= raw(field.is_required? ? '<span>*</span>' : '' )%></p>
+        <select <%= (@order&& @order.persisted?) ? 'readonly disabled' : ''  %> value="<%= value %>" multiple="multiple" id="field_<%= field.id %>" style="background: #f0eef0;padding: 0;" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+          <option value="">请选择</option>
+          <% values = value.split(',') %>
+          <%- field.possible_options.each do |option| %>
+            <%- if option.present? %>
+              <option value="<%= option %>" <%= 'selected' if values.include?(option) %>><%= option %></option>
+            <%- end %>
+          <%- end %>
+        </select>
+      </div>
+  <%- end %>
+<%- end %>

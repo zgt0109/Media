@@ -1,0 +1,13 @@
+<% if flash[:notice] %>
+    <script type="text/javascript">
+        alert("<%= flash[:notice] %>")
+    </script>
+<% end %>
+
+<% if flash[:alert] %>
+    <script type="text/javascript">
+        alert("<%= flash[:alert] %>")
+    </script>
+<% end %>
+
+<% flash.clear %>

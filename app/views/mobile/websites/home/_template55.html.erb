@@ -1,0 +1,18 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% website_menus.each do |menu| %>
+      <%= link_to menu_url(menu), class: 'box mod-index' do %>
+          <% if menu.pic? || menu.font_icon.present? %>
+              <div class="index-img">
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+              </div>
+          <% end %>
+          <div class="index-text">
+            <b><%= menu.title %></b>
+            <!--<small>副标题</small>-->
+          </div>
+          <i class="fa fa-chevron-circle-right"></i>
+      <% end %>
+  <% end %>
+</div>

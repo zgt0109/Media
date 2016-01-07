@@ -1,0 +1,129 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li><i class="icon-home home-icon"></i> <%= link_to "首页", root_path %> </li>
+          <li> <%= link_to "微房产", house_layouts_path %> </li>
+          <li><%= link_to "楼盘简介", house_intros_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+            <li class="active">
+              <a data-toggle="tab" href="#tab-1">
+                楼盘简介微信设置
+              </a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#tab-2">
+                楼盘简介设置
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-1" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12 ">
+                  <!-- PAGE CONTENT BEGINS -->
+
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接楼盘简介页面。</li>
+                    </ul>
+                  </div>
+
+
+                </div>
+                <!--
+                <form class="form col-xs-12" role="form">
+                  <%#= render 'partials/weixin_preview' %>
+                  <%#= render 'partials/weixin_setting' %>
+                </form>
+                -->
+                <%= form_for @activity, url: update_activity_house_intros_path, validate: true, html: {role: "form", class: "form col-xs-12"} do |activity| %>
+                    <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述' %>
+                    <div class="col-xs-12 col-md-6 col-lg-7">
+                      <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+                      <div class="form-group col-xs-12 ">
+                        <input type="submit" class="btn btn-sm btn-primary" value="保存"/>
+                        <!-- <input type="reset" class="btn btn&#45;sm btn&#45;primary" value="停用" /> -->
+                      </div>
+                    </div>
+                <% end %>
+              </div>
+            </div>
+            <div id="tab-2" class="tab-pane fade">
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- PAGE CONTENT BEGINS -->
+                  <%= form_for @intro, validate: true, html: {class: "form", role: "form"} do |f| %>
+                    <div class="form-group">
+                      <label class="control-label">楼盘图片<small class="help-inline text-warning line-height-32">图片尺寸建议：宽640像素＊高360像素</small></label>
+                      <div class="clearfix">
+                        <!-- <div class="cieldon&#45;file" data&#45;type="0" data&#45;width="356" data&#45;height="200" style="width: 360px;"></div> -->
+												<%= content_tag :div, nil, class: "cieldon-file", data: {type: "0", name: "house_intro[pic_key]", img: "#{@intro.pic_url}", key: "#{@intro.pic_key}", width: "356", height: "200"} %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">楼盘简介</label>
+                      <div class="clearfix ">
+													<%= render "shared/form_rich_text", field_name: "description", obj: @intro, f: f, wrapper_html_options: {class: "col-md-8"}%>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">楼盘地址</label>
+                        <div class="clearfix">
+                          <%= f.text_field :typed_address, class: 'col-md-8', placeholder: ' 请输入楼盘地址 ' %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">地图标识</label>
+                      <label class="">经纬度<span class="required-star">*</span><small class="text-warning">这个地址只是模糊定位，准确地址请地图上标记</small></label>
+                      <div id="preview" class="clearfix">
+                        <div id="float_search_bar">
+                          <label class="control-label">区域：</label>
+                          <%= f.text_field :address, class: "input-text bd_map_address", style:"width :40%", validate: true %>
+                          <a id="search_button" class="button">查找</a>
+                          <span>点击地图或标注获取坐标</span>
+                        </div>
+                        <div id="map_container"></div>
+                        <%= f.text_field :location_x, class: 'input-text bd_map_lng', readonly: true, style: "width:120px; margin-top:10px; margin-left:10px;" %>
+                        <%= f.text_field :location_y, class: 'input-text bd_map_lat', readonly: true, style: "width:120px; margin-top:10px; margin-left:6px;" %>
+                        <input type="hidden" id="is_address" value="">
+                        <input type="hidden" id="is_just" value="">
+                        <input type="hidden" id="is_new" value="<%= @intro.address.present? ? '0':'1' %>">
+                        <%= render 'baidu_map'%>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">项目简介</label>
+                      <div class="clearfix">
+                        <%= render "shared/form_rich_text", field_name: "project_description", obj: @intro, f: f, wrapper_html_options: {class: "col-md-8"} %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">交通配套</label>
+                      <div class="clearfix">
+                        <%= render "shared/form_rich_text", field_name: "traffic", obj: @intro, f: f, wrapper_html_options: {class: "col-md-8"} %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-primary btn-sm" value="保存">
+                      <input type="reset" class="btn btn-default btn-sm" value="取消">
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

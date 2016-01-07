@@ -1,0 +1,44 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <%= form_for book_rule, remote: true, url: copy_book_rule_path(book_rule)  do |f| %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="myModalLabel">复制规则</h4>
+    </div>
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label for="" class="">将一个门店的权限复制给其他门店：</label>
+        <div class="clearfix">
+          <%= select_tag "shop_branch_id", options_for_select( current_user.shop.shop_branches.used.pluck(:name, :id), :selected=> book_rule.shop_branch.id ), {:class =>"col-xs-6",:onchange=>""} %>
+        </div>
+      </div>
+      <div class="clearfix margin-top-10">
+        <% current_user.shop_branches.used.each do |branch| %>
+        <label class="inline-block">
+        	<input type="checkbox" name="branch_ids[]" value="<%= branch.id %>" class="ace">
+        	<span class="lbl"><%= branch.name %></span>
+        </label>
+        <% end %>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+      <%= f.submit "保存", class: "btn btn-primary btn-sm" %>
+      <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+    </div>
+    <% end %>
+  </div>
+
+</div>
+
+<script>
+$(function(){
+  $("#shop_branch_id").change(function(){
+    url = "/book_rules/<%= book_rule.id %>/assign?shop_branch_id="+$(this).val();
+    $.get(url, function (data, status) {
+
+    });
+  });
+});
+</script>

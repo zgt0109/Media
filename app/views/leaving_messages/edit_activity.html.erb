@@ -1,0 +1,72 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微留言', edit_activity_leaving_messages_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <%= render "top_navs" %>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-1" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12 ">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微留言。</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <%= form_for @activity, url: update_activity_leaving_messages_path, class: "form col-xs-12", validate: true do |f| %>
+                      <%= f.hidden_field :activity_type_id, value: 24 %>
+                      <%= f.hidden_field :status, value: 1 %>
+                      <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+                      <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述' %>
+                      <div class="col-xs-12 col-md-6 col-lg-7">
+                        <div class="form-group">
+                          <label class="control-label">微留言名称<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="手机端微留言页面title"></span></label>
+
+                          <div class="clearfix">
+                            <%= f.text_field :page_title, value: (@activity.page_title.present? ? @activity.page_title : '微留言'), class: 'col-xs-6', validate: true, placeholder: '请输入微留言名称' %>
+                          </div>
+                        </div>
+                        <%= render "weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+                        <div class="form-group">
+                          <label class="control-label">
+                            <%= f.check_box :audited, id: 'audited', class: "ace" %>
+                            <span class="lbl">留言需要审核<small class="text-warning">选中后，用户的留言需要审核后才能发布</small></span>
+                          </label>
+                          <br/>
+                          <label class="control-label">
+                            <%= f.check_box :show_contact, id: 'show_contact', class: "ace" %>
+                            <span class="lbl">留言需要联系方式<small class="text-warning">选中后，用户留言可以输入联系方式</small></span>
+                            
+                          </label>
+                        </div>
+                        <div class="form-group ">
+                          <input type="submit" class="btn btn-sm btn-primary" value="保存"/>
+                          <!--<input type="reset" class="btn btn-sm margin-left-10" value="取消" />-->
+                        </div>
+                      </div>
+                      </div>
+                  <% end %>
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script>
+        //$('#breadcrumbs>ul').append("<li><%= j link_to '基础设置', edit_activity_leaving_messages_path %></li>");
+    </script>
+<% end %>

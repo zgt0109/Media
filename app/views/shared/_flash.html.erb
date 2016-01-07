@@ -1,0 +1,12 @@
+<script>
+  <% [:notice, :error, :alert, :message, :warning].each do |level| %>
+    <% unless flash[level].blank? %>
+      titles = {"notice": "提醒", "message": "提醒", "error": "错误！", "warning": "警告！", "alert": "警告！"}
+      new PNotify({
+          title: titles["<%= level -%>"],
+          text: "<%= flash[level] %>",
+          addclass: "stack-topright"
+      });
+    <% end %>
+  <% end unless flash.nil? %>
+</script>

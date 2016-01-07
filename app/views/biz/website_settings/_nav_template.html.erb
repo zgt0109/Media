@@ -1,0 +1,58 @@
+<div class="row">
+
+  <div class="col-md-6 home">
+    <% flag = WebsiteSetting::UNABLE_CUSTOM_NAV_TEMPLATE_IDS.include?(@website_setting.index_nav_template_id) %>
+    <div class="widget-box">
+      <div class="widget-header widget-header-flat">
+        <h4 class="widget-title">首页导航</h4>
+        <div class="widget-toolbar">
+          <%= link_to '选择模板', 'javascript:;', class: 'setting_nav', data: {toggle: 'modals', iframe: navs_website_settings_path(nav_type: WebsitePopupMenu::HOME_NAV_MENU), title: '选择首页模板', height: '600',width:'750'} %>
+          <%= link_to '移除导航栏', 'javascript:;', class: 'fgreen no_nav', nav_type: WebsitePopupMenu::HOME_NAV_MENU %>
+          <%= link_to '菜单设置', "#{website_popup_menus_path}#?#tab-1", class: 'setting', style: flag ? 'display:none;' : '' %>
+        </div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main">
+          <div class="no-template">
+            <% if @website_setting.index_nav_template_id == 0 %>
+                请选择模板
+            <% else %>
+                <%= image_tag @website_setting.home_nav_template.pic.large, style: "height: 320px;width: 320px;" %>
+            <% end %>
+
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 inside">
+    <% flag = WebsiteSetting::UNABLE_CUSTOM_NAV_TEMPLATE_IDS.include?(@website_setting.nav_template_id) %>
+    <div class="widget-box">
+      <div class="widget-header widget-header-flat">
+        <h4 class="widget-title">内页导航</h4>
+        <div class="widget-toolbar">
+          <%= link_to '选择模板', 'javascript:;', class: 'setting_nav', data: {toggle: 'modals', iframe: navs_website_settings_path(nav_type: WebsitePopupMenu::INSIDE_NAV_MENU), title: '选择内页模板', height: '600',width:'750'} %>
+          <%= link_to '移除导航栏', 'javascript:void(0);', class: 'fgreen no_nav', nav_type: WebsitePopupMenu::INSIDE_NAV_MENU %>
+          <%= link_to '菜单设置', "#{website_popup_menus_path}#?#tab-2", class: 'setting', style: flag ? 'display:none;' : ''  %>
+        </div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main">
+          <div class="no-template">
+            <% if @website_setting.nav_template_id == 0 %>
+                请选择模板
+            <% else %>
+                <image src="<%= @website_setting.try(:inside_nav_template).try(:pic).try(:large) %>" height='320' width='320'/>
+            <% end %>
+
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+
+</div>

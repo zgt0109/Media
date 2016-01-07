@@ -1,0 +1,22 @@
+<% content_for :nav_section do %>
+  <section class="mod-navLine navLine-4">
+    <ul class="navLine-ul">
+      <% @nav_menus.each do |menu| %>
+          <li>
+            <%= link_to menu.operation_class_name.present? && "javascript:;" || website_activity_link(menu), class: menu.operation_class_name do %>
+                <%if menu.font_icon.present? %>
+                    <i class="<%= menu.font_icon %>"></i>
+                <% else %>
+                    <%= image_tag menu.icon %>
+                <% end %>
+            <% end %>
+          </li>
+      <% end %>
+    </ul>
+  </section>
+  <% content_for :document_ready_js do %>
+    $("body").addClass("body-navLine-bottom");
+  <% end %>
+<% end if @nav_menus.present? %>
+
+

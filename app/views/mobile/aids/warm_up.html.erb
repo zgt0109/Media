@@ -1,0 +1,87 @@
+<%= content_for :title do %>
+  活动预热
+<% end %>
+
+<div class="bgfefedc">
+  <%= render 'banner' %> 
+
+  <div class="timer">
+    <strong class="timer-txt timer-end">距离活动开始还有</strong>
+  </div>
+
+  <div class="clearfix count-down">
+    <div class="count-down-num timer-time-count">00</div>
+    <div class="count-down-unit">天</div>
+    <div class="count-down-num timer-time-count">00</div>
+    <div class="count-down-unit">时</div>
+    <div class="count-down-num timer-time-count">00</div>
+    <div class="count-down-unit">分</div>
+    <div class="count-down-num timer-time-count">00</div>
+    <div class="count-down-unit">秒</div>
+  </div>
+</div>
+
+<%= content_for :custom_js do %>
+<script type="text/javascript">
+  document.getElementsByTagName('body')[0].setAttribute('class', 'bgfefedc');
+</script>
+
+<script type="text/javascript">
+
+// 倒计时
+$(function(){
+
+    String.prototype.zeroFill = function(){
+        return (this + "").replace(/\b(?=(\d)$)/g,'0');
+    }        
+
+    function getCountDown(aimDate){
+        var dateDeadLine = aimDate,
+            timestampDeadLine = new Date(dateDeadLine).getTime(),
+            timestampNow = new Date().getTime(),
+            timestampDiff = timestampDeadLine - timestampNow,
+            s = 1000,
+            m = 60 * s,
+            h = 60 * m,
+            d = 24 * h;
+
+        if(timestampDiff > 0){
+            return [
+                (Math.floor(timestampDiff/d) + "").zeroFill(),
+                (Math.floor((timestampDiff%d)/h) + "").zeroFill(),
+                (Math.floor((timestampDiff%d%h)/m) + "").zeroFill(),
+                (Math.floor((timestampDiff%d%h%m)/s) + "").zeroFill()
+            ]
+        }else{
+            return false;
+        }
+    }
+
+    var wpTime = $('.timer-time-count'),
+        wpTimeEnd = $('.timer-end'),
+        setCountDown = function(aimDate){
+            var countdown = getCountDown(aimDate);
+
+            if(countdown){
+                wpTime.each(function(i){
+                    $(this).text( countdown[i] );
+                });
+
+                setTimeout(function(){
+                    setCountDown(aimDate);
+                }, 1000);
+            }else{
+                //wpTimeEnd.text("活动已结束");
+                window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>"
+                return false;
+            }
+        };
+
+    if(wpTime.length){
+        var endTime = "<%= @activity.start_at.strftime("%Y/%m/%d %H:%M:%S") %>";
+        setCountDown(endTime);
+    }
+});
+
+</script>
+<% end %>

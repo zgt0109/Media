@@ -1,0 +1,120 @@
+<div class="gl-ct-inner2">
+  <div class="step" id="step">
+    <div class="step-bar">
+      <div class="step-bar-cont active">
+        <span class="title">登录微信公众平台</span>
+
+        <div class="step-num">
+          <span class="count">1</span>
+        </div>
+      </div>
+      <div class="step-bar-cont ">
+        <span class="title">进入开发者中心</span>
+
+        <div class="step-num">
+          <span class="count">2</span>
+        </div>
+      </div>
+      <div class="step-bar-cont">
+        <span class="title">进入修改配置</span>
+
+        <div class="step-num">
+          <span class="count">3</span>
+        </div>
+      </div>
+      <div class="step-bar-cont">
+        <span class="title">输入URL和Token</span>
+
+        <div class="step-num">
+          <span class="count">4</span>
+        </div>
+      </div>
+      <div class="step-bar-cont">
+        <span class="title">验证绑定结果</span>
+
+        <div class="step-num">
+          <span class="count">5</span>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="step-content">
+      <div class="details show">
+        <div class="title">1、登录您的微信公众平台</div>
+        <div class="pic">
+          <img src="/assets/guide_line/step1.jpg">
+        </div>
+      </div>
+      <div class="details">
+        <div class="title">2、点击进入开发者中心</div>
+        <div class="pic">
+          <img src="/assets/guide_line/step2.jpg" height="363">
+        </div>
+      </div>
+      <div class="details">
+        <div class="title">3、点击进入修改配置</div>
+        <div class="pic">
+          <img src="/assets/guide_line/step3.jpg">
+        </div>
+      </div>
+      <div class="details">
+        <div class="title">4、输入我们为您生成的URL和Token</div>
+        <div class="pic">
+          <img src="/assets/guide_line/step4.jpg">
+        </div>
+
+        <div class="group"><label class="green">URL：</label>
+          <input type="text" value="<%= @wx_mp_user.try(:url) %>"><input id="copy-button1" data-clipboard-text="<%= @wx_mp_user.try(:url).to_s %>" type="button" class="btn btn-sm btn-default" value="复制">
+        </div>
+        <div class="group"><label class="green">Token：</label>
+          <input type="text" value="<%= @wx_mp_user.try(:token) %>"><input id="copy-button2" data-clipboard-text="<%= @wx_mp_user.try(:token).to_s %>" type="button" class="btn btn-sm btn-default" value="复制">
+        </div>
+
+      </div>
+      <div class="details last ">
+        <div class="pic ">
+          <img class="pull-left" src="/assets/guide_line/7.png">
+
+          <div class="up-success">用个人微信账号往您的公众账号发送一条消息<span class="green">“为爱升级”</span>，如收到回复<span class="green">“升级成功”</span>，说明您已经升级成功。
+          </div>
+          <div class="tools align-center">
+            <label class="grey">未收到回复？<a href="<%= rebind_binds_url %>">重新绑定</a></label>
+            <a href="<%= console_url %>" class="btn btn-primary form-control">升级成功，下一步</a>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="pull-right margin-top-20 tools">
+        <a href="<%= step1_binds_url %>">返回</a>
+        <a href="javascript:;" data-toggle="prev" data-target="#step" class="hide">上一步</a>
+        <a href="javascript:;" data-toggle="next" data-target="#step">下一步</a>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+</div>
+
+<% content_for :custom_js do %>
+<script>
+  $(function(){
+    var clip1 = new ZeroClipboard( document.getElementById("copy-button1"), {
+      moviePath: "/flash/ZeroClipboard.swf"
+    });
+    clip1.on( "load", function(client) {
+      client.on( "complete", function(client, args) {
+        showTip("success","链接已复制到剪贴板");
+      });
+    } );
+
+    var clip2 = new ZeroClipboard( document.getElementById("copy-button2"), {
+      moviePath: "/flash/ZeroClipboard.swf"
+    });
+    clip2.on( "load", function(client) {
+      client.on( "complete", function(client, args) {
+        showTip("success","链接已复制到剪贴板");
+      });
+    } );
+  });
+</script>
+<% end %>

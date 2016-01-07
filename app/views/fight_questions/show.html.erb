@@ -1,0 +1,21 @@
+<% content_for :sidebar do %>
+<%= render 'sidebar_activity' %>
+<% end %>
+<div class="showright">
+	<span class="corner right_corner_left_top"></span>
+	<span class="corner right_corner_left_bot"></span>
+	<span class="corner right_corner_right_top"></span>
+	<span class="corner right_corner_right_bot"></span>
+
+	<div class="topline">
+		<a href="<%= fights_activities_path %>">&nbsp;&nbsp;一战到底&nbsp;&nbsp;</a>
+		<a href="<%= fight_questions_path %>" class="active">题库管理</a>
+	</div>
+	<br/>
+	<div style="font-family:微软雅黑;font-size:16px;font-weight:bold;font-style:normal;text-decoration:none;color:#333333;">题目查看</div>
+	<%= render :partial => 'form' %>
+
+</div>
+<script type="text/javascript">
+window.onload = initSelectOption();
+</script>

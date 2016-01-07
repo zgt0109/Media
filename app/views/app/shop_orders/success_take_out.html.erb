@@ -1,0 +1,44 @@
+<% provide(:title, '我要叫外卖') %>
+<body>
+  <div class="html">
+    <div class="main">
+      <header>
+        <%= link_to app_shop_orders_url(:order_type => 2, anchor: "mp.weixin.qq.com"),class: "ico ico-prev" do %>
+          <img src="/assets/micro_stores/ico-prev.png"/>
+        <% end %>
+        <h1>叫外卖成功</h1>
+      </header>
+
+      <section>
+        <div style="position:fixed;"></div>
+        <div class="box box-order-text">
+          <p>
+            <b>订单号：</b>
+            <span class="fred"><%= @shop_order.order_no %></span>
+          </p>
+
+          <p>
+            <b>外送地址：</b>
+            <span> <%= @shop_order.try(:address) %> </span>
+          </p>
+          <p class="map">
+            <% if @location.blank? %>
+              您输入的外送地址无法显示！
+            <% else %>
+              <a href='http://api.map.baidu.com/geocoder?address=<%= @shop_order.address %>&output=html'><img style="width:100%" src="http://api.map.baidu.com/staticimage?width=480&height=175&center=<%= @location['lng'] %>,<%= @location['lat'] %>&zoom=18&markers=<%= @location['lng'] %>,<%= @location['lat'] %>&markerStyles=l,0"></a>
+            <% end %>
+          </p>
+        </div>
+        <p class="box">
+          <input onclick="window.location.href='<%= app_shop_order_url(@shop_order) %>'" class="btn" type="submit" value="查看订单详情"/>
+        </p>
+      </section>
+    </div>
+  </div>
+  <style>
+  .header .topline {
+     color: #fff;
+  }
+  </style>
+  <%= render "application/app_footer" %>
+</body>

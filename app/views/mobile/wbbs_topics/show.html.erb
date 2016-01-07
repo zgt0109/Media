@@ -1,0 +1,105 @@
+<%= render 'title' %>
+
+<% content_for :head do %>
+<%= stylesheet_link_tag 'mobile/wbbs' %>
+<%= javascript_include_tag 'mobile/wbbs' %>
+<% end %>
+
+<section id="sec-index">
+  <header class="untoppable">
+    <%= link_to "", mobile_wbbs_topics_path( @supplier , activity_id: @activity.id), class: 'fa fa-chevron-left' %>
+    <% if @wx_user.present? && !@wx_user.leave_message_forbidden? %>
+      <a href="javascript:;" class="commentable"><i class="fa fa-comment-o"></i>回复</a>
+      <a class="fa fa-ellipsis-h <%= 'mod-tip-number' if @notifications_count > 0 %>" href="javascript:;" onclick="showPop('#pop-more')"><i><%= @notifications_count if @notifications_count > 0 %></i></a>
+    <% else %>
+      <a></a>
+      <a></a>
+    <% end %>
+  </header>
+  <div class="body">
+    <%- unless @noshare %>
+      <div class="mod-message">
+        喜欢这个话题，请点击右上角图标分享<i class="fa fa-share"></i>
+      </div>
+    <%- end %>
+    <a href="<%= mobile_wbbs_topics_path(@supplier, activity_id: @activity.id) %>" class="mod-hd mod-user hd-detail mod-fa fa fa-angle-right">
+      <div class="hd-img">
+        <%= image_tag @wbbs_community.logo_url %>
+      </div>
+      <div class="hd-text">
+        <b><%= @wbbs_community.name || @wbbs_community.activity.name || '微社区' %></b>
+      </div>
+    </a><!--hd end-->
+    <div class="mod-bd">
+      <div class="mod-box">
+        <div class="box-hd mod-user">
+          <div class="hd-img">
+            <b><img src="<%= @wbbs_topic.poster_avatar %>"></b>
+          </div>
+          <div class="hd-text">
+            <b><%= @wbbs_topic.poster_name %></b>
+            <p><abbr class="timeago" title="<%= @wbbs_topic.created_at.to_s(:local) %>"></abbr></p>
+          </div>
+        </div><!--box-hd end-->
+        <div class="box-bd">
+           <p>
+            <div class="slideBox">
+              <div class="mod-img">
+                <div class="img-wrap">
+                  <%- all_pics = @wbbs_topic.qiniu_pictures %>
+                  <%- pics = all_pics.take(3) %>
+                  <ul>
+                    <% pics.each do |pic| %>
+                      <li><%= link_to image_tag(qiniu_img_url(pic.sn, type: 10)), display_photo_mobile_wbbs_topic_path(supplier_id: @supplier, id: @wbbs_topic)%></li>
+                    <% end %>
+                  </ul>
+                  <%- if pics.count == 3 %>
+                    <i><%= all_pics.count %>张</i>
+                  <%- end  %>
+              </div>
+            </div>
+          </div>
+          </p>
+          <p><%= @wbbs_topic.content %> </p>
+          <div class="mod-btn">
+            <a class="fa fa-thumbs-o-up btn-praise <%= 'fa-thumbs-up' if @wbbs_topic.voted_up_by?( @wx_user ) %>" data-number="<%= @wbbs_topic.up_count %>" data-id="<%= @wbbs_topic.id %>" href="javascript:;"><%= @wbbs_topic.up_count %></a>
+          </div>
+        </div><!--box-bd end-->
+        <!-- 回复列表开始 -->
+        <div class="box-ft">
+          <div class="mod-comment">
+            <%= render partial: 'wbbs_reply', collection: @wbbs_topic.wbbs_replies.recent, locals: { wbbs_topic: @wbbs_topic } %>
+          </div>
+        </div>
+
+        <!-- 回复列表结束 -->
+      </div><!--mod-box end-->
+    </div>
+  </div>
+</section>
+
+<%= render 'js' %>
+<script type="text/javascript" src='/javascripts/jquery.timeago.js'></script>
+<script>
+  $(function(){
+    $('#wbbs_reply_content').keyup( content_words_keyup );
+    $('.form-submit').click( validate_content_presence );
+
+    $(".timeago").timeago();
+
+    $('.commentable').on('click', function(event) {
+      <% if @wx_user %>
+        showPop('#pop-comment');
+        $('#new_wbbs_reply').attr( 'action', $(this).data('url') );
+        $('#wbbs_reply_parent_id').val( $(this).data('parent_id') );
+      <% else %>
+        alert('只有关注或者同意授权用户方可评论');
+      <% end %>
+    });
+  });
+</script>
+
+<% content_for(:mod_pop) do %>
+<%= render 'reply_form' %>
+<%= render 'user_center' %>
+<% end %>

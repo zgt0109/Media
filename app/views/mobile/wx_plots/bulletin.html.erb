@@ -1,0 +1,40 @@
+<% title @bulletin.title %>
+
+<% stylesheet "/stylesheets/vweisiteV01/article/article#{@detail_template_id}.css" %>
+
+<% content_for :header do %>
+    <header></header>
+<% end if @detail_template_id == 7 %>
+
+<div class="article ckeditor_content" id="article">
+  <% if @detail_template_id == 7 %><div class="article-wrap"><% end %>
+      <div class="hd">
+        <h1><%= @bulletin.title %></h1>
+        <small>
+            <%= @bulletin.subtitle %>
+        </small>
+      </div>
+
+      <div class="bd">
+        <%#= image_tag @website_menu.pic.try(:large) if @website_menu.pic? %>
+        <%= raw @bulletin.content %>
+      </div>
+  <% if @detail_template_id == 7 %></div><% end %>
+</div>
+
+<%= render "mobile/websites/iscroll", {:selector => "#article"} if @detail_template_id == 7 %>
+
+<% content_for :share_section do %>
+    <% unless @detail_template_id == 7 %>
+        <section class="mod-share share-1">
+          <a class="share-btn" onclick="showPop('#pop-share')"><span class="ico-share">发送给朋友</span></a>
+          <a class="share-btn" onclick="showPop('#pop-share')"><span class="ico-pyq">分享到朋友圈</span></a>
+        </section>
+    <% end %>
+<% end %>
+
+<script>
+    $(function(){
+        $(".ckeditor_content img").css({"height":"auto","width":"auto","max-width":"100%"});
+    });
+</script>

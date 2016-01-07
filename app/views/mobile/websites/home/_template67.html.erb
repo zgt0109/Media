@@ -1,0 +1,22 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.each_with_index do |menu, index| %>
+        <li>
+          <%= link_to menu_url(menu), class: "box mod-index" do %>
+              <div class="index-img">
+                <% if index == 0 %>
+                    <i class="fa fa-refresh"></i>
+                <% elsif index == 3 %>
+                    <i class="fa fa-cog"></i>
+                <% end %>
+              </div>
+              <div class="index-text">
+                <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+              </div>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>

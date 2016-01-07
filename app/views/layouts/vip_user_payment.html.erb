@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <link href="/assets/favicon.ico" rel="shortcut icon">
+  <title><%= content_for?(:title) ? yield(:title) : "微会员卡" %></title>
+  <meta name="keywords"  content="<%= content_for?(:meta_keywords) ? yield(:meta_keywords) : "微枚迪,微会员卡" %>"/>
+  <meta name="description"  content="<%= content_for?(:meta_description) ? yield(:meta_description) : "微枚迪" %>"/>
+  <%= stylesheet_link_tag    "mobile/winwemedia01", media: "all" %>
+  <%= stylesheet_link_tag    "mobile/font-awesome.min", media: "all" %>
+  <%= stylesheet_link_tag    "mobile/wcard", media: "all" %>
+  <%= javascript_include_tag "jquery" %>
+  <%#= javascript_include_tag "app/app.js" %>
+
+  <%= yield :head %>
+  <%= csrf_meta_tags %>
+
+</head>
+<body>
+  <div class="html theme-1" id="html">
+    <div class="stage" id="stage">
+      <%= yield %>
+    </div>
+  </div>
+  <%= render 'application/app_footer' %>
+
+  <% if @vip_user_payment.try(:vip_user).try(:supplier).try(:bqq_account?) %>
+    <footer>Powered By Tencent</footer>
+	<% else %>
+    <footer>@winwemedia</footer>
+  <%- end %>
+
+  <%= javascript_include_tag "mobile/wcard.js" %>
+  <%= yield(:insert_to_body) if content_for?(:insert_to_body) %>
+</body>
+</html>

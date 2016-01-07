@@ -1,0 +1,23 @@
+<dl class="active">
+  <dt>活动结束设置<span class="fr">查看</span></dt>
+  <dd>
+    <div class="wrap-l">
+      <div class="wrap-view">
+      </div>
+    </div>
+    <div class="wrap-r">
+      <%= form_for(@activity, validate: true, html: { id: 'stopped_notice_form' }) do |f| %>
+        <%= f.fields_for :stopped_activity_notice, validate: true do |san| %>
+          <div class="box-form form-row">
+            <div class="p">
+              <span>活动结束说明<span class="fgray">（不能超过128个字）</span></span>
+              <%= san.text_area :summary, maxlength: 128, rows: 5, class: "activity_notice_summary", style: 'height: auto;' %>
+            </div>
+
+            <%= render 'form_submit' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </dd>
+</dl>

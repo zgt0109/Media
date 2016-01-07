@@ -1,0 +1,55 @@
+<div class="main">
+	<div class="wrap">
+		<!-- photo list start -->
+		<div class="photo-list">
+			<ul class='clearfix' id="photo-list">
+				<% @pictures.in_groups_of(6,false).each do |picture| %>
+					<li>
+						<% picture.each do |p| %>
+							<a href="javascript:void(0);">
+								<%= image_tag qiniu_auto_orient_url(p.sn) %>
+							</a>
+						<% end %>
+					</li>
+				<% end %>
+			</ul>
+		</div>
+		<!-- photo list start -->
+		<!-- slideshow start -->
+		<div class="slideshow J-slideshow">
+			<div class="bg-color"></div>
+			<div class="slideshow-main">
+				<div class="slideshow-list">
+					<ul class="clearfix" id="marquee-slide">
+						<% @pictures.each do |picture| %>
+							<li>
+								<%= image_tag qiniu_auto_orient_url(picture.sn) %>
+							</li>
+						<% end %>
+					</ul>
+					<div class="slide-nav">
+						<ul>
+							<!-- <li><i class="icon icon-6"></i></li> -->
+							<li><i class="icon icon-7"></i></li>
+							<li><i class="icon icon-8"></i></li>
+							<li><i class="icon icon-9"></i></li>
+							<!-- <li><i class="icon icon-10"></i></li> -->
+						</ul>
+						<div class="slide-bg"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="slideshow J-imgshow">
+			<div class="bg-color"></div>
+			<div class="slideshow-main">
+				<img src="" />
+			</div>
+		</div>
+		<!-- slideshow end -->
+		<a class="play-btn btn-color">
+			<i class="icon icon-11"></i>
+			<span>播放幻灯片</span>
+		</a>
+	</div>
+</div>

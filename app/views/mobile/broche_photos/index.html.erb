@@ -1,0 +1,29 @@
+<% provide(:title, @broche.name) %>
+<div class="html yuyue" id="html">
+  <div class="img" id="img">
+    <div class="list">
+      <% @broche_photos.each do |photo| %>
+      <div class="col">
+        <a href="javascript:;">
+          <%= image_tag photo.pic %>
+          <span class="til"><%= photo.title %></span>
+          <span class="int"><%= photo.description %></span>
+        </a>
+      </div>
+      <% end %>
+    </div>
+    <div class="showright">
+      <div class="l"></div>
+      <div class="r"></div>
+    </div>
+    <div class="showleft">
+      <div class="l"></div>
+      <div class="r"></div>
+    </div>
+    <div class="poi">
+      <% @broche_photos.each_with_index do |photo, index| %>
+      <p class="<%= index == 0 ? 'active' : ''%>"></p>
+      <% end %>
+    </div>
+  </div>
+</div>

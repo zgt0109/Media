@@ -1,0 +1,43 @@
+<% content_for :stage_after_foot do %>
+ <%= render 'foot' %>
+<% end %>
+
+<% content_for :stage_after_pop do %>
+ <%= render 'pop' %>
+<% end %>
+
+<% select_count = @activity.activity_property.try(:get_limit_count).to_i %>
+
+<% content_for :html_stage_header do %>
+  <div class="temp"></div>
+  <header class="bg box-shadow">
+    <div class="head-bd">
+      <div class="info break"> 
+        <p>活动说明：</p>
+        <div class="content1" id="content1" style="display: block;"><%= raw @activity.description %></div>
+        <div class="content" id="content" style="display: none;"><%= raw @activity.description %></div>
+        <p class="slideup" id="slideup" target="_self">展开</p>
+      </div>
+    </div>
+  </header>
+<% end if judge_rich_text_present?(@activity.description) %>
+
+<div class="lanmu-content">
+  <div class="hd bor">
+    <h3><%= raw @activity.activity_setting.try(:vote_theme) %></h3>
+    <p>活动时间：<%= @activity.duration '--'%></p>
+    <p>最多可投<%= select_count %>票</p>
+  </div>
+  <%= render "search", {search: @search} %>
+  <ul class="img-list J-<%= select_count > 1 ? 'checkbox' : 'radio' %>">
+    <%= render "mobile/vote/list3_li", {activity_vote_items: @activity_vote_items, select_count: select_count} %>
+  </ul>
+  <div style="clear: both;"></div>
+  <% if @activity_vote_items.try(:next_page) %>
+    <div class="mod-load">
+      <span class="tips">下拉加载更多</span>
+      <span class="jiazai"><i class="fa fa-spinner fa-spin "></i> 正在加载...</span>
+      <%= link_to_next_page @activity_vote_items, "加载更多", remote: true, style: 'display:none;' %>
+    </div>
+  <% end %>
+</div>

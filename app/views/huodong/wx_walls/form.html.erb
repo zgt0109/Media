@@ -1,0 +1,251 @@
+<%= stylesheet_link_tag "msdropdown/dd.css" %>
+<% content_for :main_content do %>
+<div class="main-content ">
+  <%= render "breadcrumb" %>
+  <div class="page-content">
+    <div class="row">
+      <%= form_for @wx_wall, validate: true do |wall| %>
+        <%= wall.fields_for :activity do |activity| %>
+        <%= activity.hidden_field :ready_at, value: nil %>
+        <%= activity.hidden_field :supplier_id, value: current_user.id %>
+        <%- if @wx_wall.new_record? %>
+          <%= activity.hidden_field :status, value: 1 %>
+        <%- end %>
+        <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="control-label">触发关键字<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= activity.text_field :keyword, class: 'col-md-8', placeholder: '请输入微信墙对应的关键字', maxlength: 15 %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">活动时间<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <div class="input-daterange input-group col-xs-4 no-padding">
+                <%= datetime_range_tag activity %>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">活动参与设置<small class="help-inline text-warning line-height-32">设置是否需要活动开始才能发送关键字参与活动</small></label>
+            <div class="clearfix">
+              <label class="control-label">
+                <input type="radio"  class="ace" name="wx_wall[pre_join]" value="1" <%= @wx_wall.pre_join? ? 'checked: checked' : '' %> />
+                <span class="lbl">活动未开始即可参与</span>
+              </label>
+              <label class="margin-left-10">
+                <input type="radio"  class="ace" name="wx_wall[pre_join]" value="0" <%= @wx_wall.pre_join? ? '' : 'checked: checked' %> />
+                <span class="lbl">活动开始才可参与</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">活动主题<span class="required-star">*</span><small class="help-inline text-warning line-height-32">为确保展示的最佳效果最多不要超过20个字</small></label>
+            <div class="clearfix">
+              <%= activity.text_field :name, class: 'col-md-8', placeholder: '请输入活动主题名称', maxlength: 20  %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">活动说明<small class="help-inline text-warning line-height-32">为确保展示的最佳效果最多不要超过20个字</small></label>
+            <div class="clearfix">
+              <%= activity.text_field :summary, class: 'col-md-8', placeholder: '请输入活动说明', maxlength: 20  %>
+            </div>
+          </div>
+        <% end %>
+        <div class="form-group">
+          <label class="control-label">主办方名称</label>
+          <div class="clearfix">
+            <%= wall.text_field :sponsor, class: 'col-md-8', placeholder: '请输入主办方的个人/单位名字', maxlength: 15 %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">主办方LOGO</label>
+          <div class="clearfix">
+            <%= render "upload_image_div", name: "wx_wall[logo]", key: @wx_wall.logo, img: (wall.object.try(:logo_url) || '/assets/bg_fm.jpg'), width: 180, height: 60,  suggest: "建议尺寸：宽180像素 * 高60像素" %>
+          </div>
+        </div>
+        <!--div class="form-group">
+          <label class="control-label">公众账号二维码<small class="help-inline text-warning line-height-32">二维码用于微信墙大屏幕展示，现场嘉宾扫描后可快速参与活动</small></label>
+          <div class="clearfix">
+            <%#= render "upload_image_div", name: "wx_wall[qrcode]", key: @wx_wall.qrcode, img: (wall.object.try(:qrcode_url) || '/assets/bg_fm.jpg'), width: 100, height: 100,  suggest: "建议尺寸：宽400像素 * 高400像素" %>
+          </div>
+        </div-->
+        <% if current_user.wx_mp_user.qrcode_key.blank? %>
+          <div class="form-group">
+            <label>公众号二维码<span class="required-star">*</span>
+              <small class="text-warning">(请到<a href="<%= account_url %>">系统设置</a>上传二维码)</small>
+            </label>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= wall.hidden_field :template_id %>
+          <%= wall.hidden_field :system_template, value: 1 %>
+          <label class="control-label">选择模板<span class="help-inline text-warning line-height-32">点击查看大图</span></label>
+          <div class="clearfix">
+            <div class="template-list">
+              <ul class="ace-thumbnails">
+                <li class="<%= 'active' if @wx_wall.template_id == "1" || @wx_wall.new_record? %>" data-id="1">
+                  <a href="javascript:;" data-height="1000" data-width="1000" data-iframe="<%= preview_template_wx_wall_path(id: 1) %>" data-title="模板预览" data-toggle="modals">
+                    <img alt="" src="/assets/wx_wall/template/v1.png">
+                    <span>多彩</span>
+                  </a>
+                </li>
+                <li class="<%= 'active' if @wx_wall.template_id == "2" %>" data-id="2">
+                  <a href="javascript:;" data-height="1000" data-width="1000" data-iframe="<%= preview_template_wx_wall_path(id: 2) %>" data-title="模板预览" data-toggle="modals">
+                    <img alt="" src="/assets/wx_wall/template/v2.png">
+                    <span>多彩</span>
+                  </a>
+                </li>
+                <li class="<%= 'active' if @wx_wall.template_id == "3" %>" data-id="3">
+                  <a href="javascript:;" data-height="1000" data-width="1000" data-iframe="<%= preview_template_wx_wall_path(id: 3) %>" data-title="模板预览" data-toggle="modals">
+                    <img alt="" src="/assets/wx_wall/template/v3.png">
+                    <span>水钻</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="margin-top-10">
+            <div class="clearfix">
+              <div class="pull-left">
+                <div>
+                  <div class="cieldon-file" data-type="0" data-div="#img-3" data-width="200" data-height="130" data-name="wx_wall[custom_template]" data-img="<%= wall.object.try(:custom_template_url) %>" data-key="<%= @wx_wall.custom_template %>"></div>
+                </div>
+              </div>
+              <div class="pull-left">
+                <p>上传背景图请选择和背景图相似的模版，如想采用系统背景删除自选背景即可</p>
+                <p><span class="help-inline text-warning line-height-32 margin-top-20">建议尺寸：宽1000像素 * 高634像素</span></p>
+                <p>
+                  <a href="javascript:void(0);" class="btn btn-sm" id="del_custom_template">删除自选背景</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">背景音乐</label>
+          <div class="clearfix">
+            <%= wall.select :material_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @wx_wall.try(:material_id), include_blank: '请选择' } %>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <% @wx_wall.extra_check_box_names.each do |key,value| %>
+              <div class="form-group clearfix">
+                <label class="col-xs-<%= %w(vote_check shake_check enroll_check).include?(key.to_s) ? "1" : "12" %>">
+                  <%= wall.check_box key, {class: "ace"}, 'true', 'false' %>
+                  <span class="lbl"> <%= value %></span>
+                </label>
+                <%= render "extra_select", wall: wall, value: value %>
+              </div>
+            <% end %>
+            <label class="col-xs-12">
+              <%= wall.check_box :verify_message, class: "ace" %>
+              <span class="lbl"> 留言审核
+                <span class="help-inline text-warning line-height-32">勾选后嘉宾在微信手机端发送的留言需要审核</span>
+              </span>
+            </label>
+            <!--label class="col-xs-12">
+              <%#= wall.check_box :scroll_message, class: "ace" %>
+              <span class="lbl"> 留言滚动
+                <span class="help-inline text-warning line-height-32">勾选后嘉宾的留言在微信墙上会滚动显示</span>
+              </span>
+            </label-->
+          </div>
+        </div>
+        <% if @wx_wall.persisted?  %>
+          <div class="form-group">
+            <label class="control-label">微信墙地址</label>
+            <% @wx_wall_url = WEBSITE_DOMAIN + '/wx_walls/' + @wx_wall.id.to_s %>
+            <span><%= link_to @wx_wall_url, @wx_wall_url, target: "_blank" %></span>
+          </div>
+        <% end %>
+        <div class="form-group">
+          <% if @wx_wall.persisted?  %>
+          <button type="submit" class="btn btn-sm btn-primary submit-wxwall">保存</button>
+          <% else %>
+          <button type="submit" class="btn btn-sm btn-primary submit-wxwall">保存并进行互动设置</button>
+          <% end %>
+          <button type="reset" class="btn btn-sm btn-default"  onclick="window.location.href='<%= wx_walls_url %>'">取消</button>
+        </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>
+<style>
+#wx_wall_template_id_title img { width: 120px; height: 68px; }
+</style>
+<% content_for :custom_js do %>
+<%= javascript_include_tag "msdropdown/jquery.dd.min.js" %>
+<script type="text/javascript">
+  $('#del_custom_template').on('click', function() {
+    $('[name="wx_wall[custom_template]"]').val('');
+    $(".fa-plus").parents('.file-img').find('.file-btn a').removeAttr('style');
+  });
+  $(function() {
+    $('#wx_wall_template_id').msDropDown().data('dd').set('selectedIndex', '<%= @wx_wall.template_id.to_i - 1 %>'); 
+    <% if @wx_wall.persisted? %>
+    if ($('#wx_wall_system_template').val() == "1") {
+      var img = $('#wx_wall_template_id_title img')[0];
+      $('#img_preview_2').css("background-image", "url(" + $(img).attr('src') + ")");
+    } 
+    <% end %>
+  })
+  $('.submit-wxwall').on('click', function(event) {
+    $('#wx_wall_template_id').val($(".ace-thumbnails li.active").attr("data-id"));
+    var date_time = $('#start_at_end_at').val().split(" - ");
+    $('#wx_wall_activity_attributes_start_at').val(date_time[0]);
+    $('#wx_wall_activity_attributes_end_at').val(date_time[1]);
+    var start_at = date_time[0];
+    var end_at = date_time[1];
+    var keyword = $('#wx_wall_activity_attributes_keyword').val();
+    var name = $('#wx_wall_activity_attributes_name').val();
+    var time_range_invalid = start_at && end_at && (start_at >= end_at);
+    var now = new Date().format("yyyy-MM-dd hh:mm:ss");
+    if (start_at && start_at < now) {
+      showTip('warning', '活动开始时间不能小于当前时间');
+      event.preventDefault();
+      return false;
+    }
+    if (!start_at) {
+      showTip('warning', '开始时间不能为空');
+      event.preventDefault();
+      return false;
+    }
+    if (!end_at) {
+      showTip('warning', '结束时间不能为空');
+      event.preventDefault();
+      return false;
+    }
+    if (time_range_invalid) {
+      showTip('warning', '结束时间必须大于开始时间');
+      event.preventDefault();
+      return false;
+    }
+    <% if @wx_wall.new_record? %>
+    var exists_names = <%= raw current_user.activities.wx_wall.show.pluck(:name).to_json %> ; 
+    <% else %>
+    var exists_names = <%= raw current_user.activities.wx_wall.show.where("id != ?", @wx_wall.activity.try(:id)).pluck(:name).to_json %> ; 
+    <% end %>
+    if ($.inArray(name, exists_names) >= 0) {
+      showTip('warning', '活动主题重复，请重新填写活动主题');
+      event.preventDefault();
+      return false;
+    }
+  });
+
+  var clip = new ZeroClipboard(document.getElementById("copy-button"), {
+    moviePath: "/flash/ZeroClipboard.swf"
+  });
+  clip.on("load", function(client) {
+    client.on("complete", function(client, args) {
+      showTip("success", "链接已复制到剪贴板")
+    });
+  });
+</script>
+<% end %>

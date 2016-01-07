@@ -1,0 +1,37 @@
+/*
+*= require mobile/winwemedia01
+*= require mobile/font-awesome.min
+*= require_self
+*/
+
+.html{background:#f9f9f9;}
+.package-list{padding:10px 8px;}
+.list-item{color:#fff;padding:6px 5px;margin-bottom:10px;text-align:center;border-radius:5px;box-shadow:0 2px 2px #ccc;line-height:1;position:relative;}
+.list-item:before,
+.list-item:after{display:block;content:"";position:absolute;width:15px;height:15px;border-radius:1000px;background:#fff;position:absolute;top:56px;}
+.list-item:before{left:-7px;}
+.list-item:after{right:-7px;}
+.business{height:30px;padding-top:8px;overflow:hidden;}
+.logo{width:22px;height:22px;display:inline-block;border-radius:1000px;overflow:hidden;vertical-align:middle;}
+.logo img{width:100%;min-height:100%;border-radius:1000px;overflow:hidden;}
+.b-name{display:inline-block;font-size:15px;line-height:22px;}
+.p-name{font-size:30px;padding:12px 0;}
+.p-summary{font-size:16px;padding-bottom:12px;}
+.p-time{font-size:12px;padding-bottom:20px;}
+.btn{height:40px;line-height:40px;}
+.btn-white{color:#666;background:#fff;}
+.btn-biger{width:100%;}
+.state{position:absolute;right:0;top:0;width:77px;height:47px;background:url(/assets/mobile/state-icon.png) no-repeat;-webkit-background-size:auto 47px;background-size:auto 47px;}
+.mod-load{display:none;text-align:center;color:#666;}
+.loading{display:block;}
+.c-1{background:#55bd47;}
+.c-2{background:#10ad61;}
+.c-3{background:#35a4de;}
+.c-4{background:#3d78da;}
+.c-5{background:#9058cb;}
+.c-6{background:#de9c33;}
+.c-7{background:#ebac16;}
+.c-8{background:#f9861f;}
+.c-9{background:#e75735;}
+.c-10{background:#d54036;}
+.c-11{background:#cf3e36;}

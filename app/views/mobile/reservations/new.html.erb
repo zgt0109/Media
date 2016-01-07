@@ -1,0 +1,159 @@
+<section id="sec-index">
+    <div class="body">
+        <div class="mod-des">
+            <img src="<%= @reservation.logo_url %>">
+            <p><%= @reservation.description %></p>
+        </div>
+        <div class="mod-form form-hor">
+            <div class="bd">
+                <%- @reservation.custom_fields.normal.visible.order(:position).each do |field|%>
+                    <%= render "field", field: field %>
+                <%- end %>
+            </div>
+            <div class="ft">
+                <%- if @wx_user %>
+                    <input type="button" value="预定" class="btn btn-blue form-submit" onclick="javascript:submitMobile();"/>
+                    <input type="button" value="取消" class="btn btn-gray" onclick="cancelSubmit();" />
+                 <%- else %>
+                    <input type="button" value="关注微信账号预定" class="btn btn-gray" onclick="cancelSubmit();" />
+                  <%- end %>
+            </div>
+          </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $(function(){
+    $( ".date" ).datepicker({
+      yearRange: "-100:+50",
+      changeMonth: true,
+      changeYear: true,
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    $( ".mindate" ).datepicker({
+      yearRange: "-100:+0",
+      changeMonth: true,
+      changeYear: true,
+      minDate: "+0d",
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    $( ".maxdate" ).datepicker({
+      yearRange: "0:+100",
+      changeMonth: true,
+      changeYear: true,
+      maxDate: "+0d",
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    if ($('.multiple')){
+      $('.multiple').each(function(){
+        $(this).val($(this).data('value').split(','));
+      });
+    }
+  });
+
+  $(".J-getCode").on("click",function(){
+    if($('#phone').val() == ""){
+      alert('请输入手机号码');
+      $('#phone').focus();
+      return false;
+    }
+
+    if ($('#phone').val() && !(/^1[3|4|5|8][0-9]\d{8}$/.test($('#phone').val()))) {
+      alert('请输入正确的手机号码');
+      $('#phone').focus();
+      return false;
+    }
+
+    var $this = $(this),
+    $time = 60;
+    if(!$this.hasClass("btn-gray")){
+      $this.css('background', '#ccc').addClass('btn-gray').text("重新获取(60)");
+      showTime();
+      $.get("<%= send_sms_mobile_reservations_path %>" + "?phone=" + $('#phone').val());
+      $('#captcha').focus();
+    }
+    function showTime(){
+      if($time ==0){
+        $this.css('background', '#7b93d6').removeClass('btn-gray').text("获取验证码");
+      }else{
+        $this.text("重新获取("+$time+")");
+        setTimeout(showTime,1000);
+        $time--;
+      }
+    }
+  });
+
+  function submitMobile() {
+    var mobile = $('#phone').val();
+    var mobile_required = $('#phone').hasClass('is_required');
+    var required_done = 1;
+
+    $('.is_required').each(function(){
+      var value = $(this).val();
+      var name = $(this).data('name');
+      if (!value){
+        alert(name + '不能为空');
+        required_done = 0;
+        return false;
+      }
+    });
+
+    if (mobile && mobile_required && !(winwemedia_validators.mobile_reg.test(mobile))) {
+      alert('请输入正确的手机号码');
+      required_done = 0;
+      $('#phone').focus();
+      return false;
+    }
+
+    if(required_done == 0){
+      return false;
+    }else{
+      $("input.form-submit").attr('disabled', true);
+      var field_params = "";
+
+      $('.field').each(function(){
+        var name = $(this).attr('name');
+        var value = $(this).val();
+        param = ('&' + name + '=' + value)
+        field_params += param
+      });
+      var url = window.encodeURI("/<%= session[:supplier_id] %>/reservations/reserve?" + field_params + '&captcha=' + $('#captcha').val() + '&mobile=' + $('#phone').val() + '&' + Math.random() +'#mp.weixin.qq.com')
+      success= function (data) {
+        if (data.ajax_msg) {
+          if(data.ajax_msg.status == 1){
+            alert('预定成功');
+            location.href = data.ajax_msg.url
+          }else if(data.ajax_msg.status == -3){
+            alert('验证码不正确!');
+            $('#captcha').focus();
+          }else {
+            alert('当前申请人数较多，请稍后预定');
+          }
+        }else {
+          alert('当前申请人数较多，请稍后预定');
+        }
+        $("input.form-submit").attr('disabled', false);
+      }
+      if(confirm('确认提交预定么？')){
+        $.post(url, {}, success, 'json');
+      }
+    }
+  }
+  function cancel(){
+    $(".J-identifying").css('background', '#7b93d6').removeClass("btn-gray").val("获取验证码");
+  }
+</script>

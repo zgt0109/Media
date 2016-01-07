@@ -1,0 +1,87 @@
+<div class="tabbable">
+  <%= render "/biz/wmall_groups/top_nav_tabs"%>
+  <div id="tab-4" class="tab-content no-border padding-24">
+    <%= form_for @search, url: bill_wmall_group_orders_path, :html => { :method => :get } do |f| %>
+        <div class="row">
+            <div class="col-sm-12 margin-top-10">
+              <div class="col-md-3 row">
+                <div class="input-group input-group-text">
+
+                  <span class="input-group-addon">商户名称：</span>
+                  <%= f.text_field :name_like, class: 'col-xs-12', placeholder: "请输入商户名称" %>
+                  <%#= f.text_field :group_items_group_orders_created_at_age, class: 'col-xs-12', placeholder: "请输入商户名称" %>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">下单时间：</span>
+
+                  <div class="input-group">
+                    <%= f.text_field :created_at_gte, class: 'datepicker input-sm form-control', value: (params[:search][:created_at_gte].try(:to_date) if params[:search]) %>
+                    <span class="input-group-addon">
+                           -
+                        </span>
+                    <%= f.text_field :created_at_lte, class: 'datepicker input-sm form-control', value: (params[:search][:created_at_lte].try(:to_date) if params[:search]) %>
+                  </div>
+                </div>
+              </div>
+              　
+              <div class="col-md-2">
+                <button class="btn btn-primary btn-sm btn-filter" type="submit">查询</button>
+              </div>
+
+              <div class="col-md-4 text-right">
+                <a href="<%= bill_wmall_group_orders_path(start_at: time_7_days_ago.to_s, end_at: Time.now.to_s )%>" class="btn btn-link btn-sm btn-filter">过去一周</a>
+                <a href="<%= bill_wmall_group_orders_path(start_at: a_months_ago.to_s, end_at: Time.now.to_s )%>" class="btn btn-link btn-sm btn-filter">过去一月</a>
+                <!--<a class="datetimerange btn btn-primary btn-sm btn-filter">自定义时段</a>-->
+                <%= link_to '导出EXCEL', bill_wmall_group_orders_path(:format => :xls,:search => params[:search], field: params[:field], page: params[:page]) , class: 'btn btn-primary btn-sm btn-filter' %>
+              </div>
+        </div>
+        </div>
+    <% end %>
+
+    <div class="col-sm-12 no-padding">
+      <table id="orderManageTable" class="table table-striped table-bordered table-hover margin-top-20">
+        <thead>
+        <tr>
+          <th>编号</th>
+          <th>商家名称</th>
+          <th>已完成订单总数</th>
+          <th>金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if @shops.blank? %>
+            <tr><td colspan="9" style="text-align: center;">还没有数据哦!</td></tr>
+        <% else %>
+            <% @shops.each do |shop| %>
+                <tr>
+                  <td><%= shop.id %></td>
+                  <td><%= shop.name %></td>
+                  <td><%= shop.qty %></td>
+                  <td><%= shop.amount   %></td>
+                </tr>
+            <% end %>
+        <% end %>
+
+        </tbody>
+      </table>
+
+      <%= paginate @shops, :param_name => :page %>
+    </div>
+  </div>
+</div>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+    $(function(){
+        $('.datetimerange').daterangepicker({
+            timePicker: true,
+            format: 'YYYY-MM-DD HH:mm',
+            onselect: function(){
+                alert("s")
+            }
+        });
+    })
+</script>
+<% end %>

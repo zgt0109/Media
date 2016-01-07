@@ -1,0 +1,30 @@
+<header>
+    <a class="ico-hd arr-hd" href="javascript:history.go(-1);"></a>
+    <h1>预订成功</h1>
+</header>
+<div class="contxt cont-artical">
+    <div class="box-cont cont-success">
+        <div class="hd">
+        	<p>恭喜您成功预定！</p>
+            <b><%= @hotel_branch.try(:hotel).try(:name) %><%= @hotel_branch.try(:name) %></b>
+						<i class="success-fr"><%= @hotel_order.try(:qty) %>间</i>
+						<i class="success-fl"><%= @hotel_room_type.name %></i>
+        </div>
+        <div class="bd box-txt">
+        	<p><span>入住日期</span><b> <%= Date.parse(params[:check_in_date]).strftime("%m月%d日") %></b></p>
+        	<p><span>离店日期</span><b> <%= Date.parse(params[:check_out_date]).strftime("%m月%d日") %></b><i class="tright"><%= (Date.parse(params[:check_out_date])-Date.parse(params[:check_in_date])).to_i %>晚</i></p>
+            <em>如果您需要取消订单，请在入住当天<%= (Time.now >  Time.parse("#{params[:check_in_date]}  #{@hotel_branch.hotel.obligate_time}")) ? '23:59' : @hotel_branch.hotel.obligate_time %>之前取消</em>
+        </div>
+        <div class="ft box-txt">
+        	<p><span>联系人电话：</span><b><%= @hotel_order.try(:mobile) %></b></p>
+            <p><span>现 金 支 付：</span><b>￥<%= @hotel_order.try(:total_amount) %></b></p>
+        </div>
+    </div>
+    <div class="box-cont cont-share">
+			<!--<div class="hd"><span class="arrow arr-small"><b>分享给朋友</b></span></div>
+				<div class="bd"><span class="arrow arr-small"><b>带我去店里</b></span></div>
+				<div class="ft"><span class="arrow arr-small"><b>查看我的订单</b></span></div>-->
+        <div class="warp"><span class="arrow arr-small"><%= link_to app_hotel_orders_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], anchor: "mp.weixin.qq.com") do %><b>查看我的订单</b><% end %></span></div>
+    </div>
+    <div class="tcenter"><%= link_to "确定", app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], anchor: "mp.weixin.qq.com"), class: "btn btn-big" %></div>
+</div>

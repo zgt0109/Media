@@ -1,0 +1,52 @@
+<% if sub_menu.has_children? %>
+    <div class="tree-folder tree-li current" data-id="<%= sub_menu.id %>" data-name="<%= sub_menu.name %>" data-parent-id="<%= sub_menu.parent_id %>">
+      <div class="tree-folder-header" data-level="<%= sub_menu.parent_id == 0 ? 0 : 1%>" >
+        <i class="tree-fa fa fa-plus-square"></i>
+        <div class="tree-folder-name"><%= sub_menu.name %></div>
+        <div class="tree-tools" data-id="<%= sub_menu.id %>">
+          <div>
+            <%= link_to '', 'javascript:;', class: 'fa fa-plus tree-add', data: {title: '新增菜单'}  %>
+          </div>
+          <div>
+            <%= link_to '', edit_wx_menu_path(sub_menu), class: 'fa fa-pencil tree-edit', data: {remote: true, title: '编辑菜单'} %>
+          </div>
+          <div>
+            <%= link_to '', wx_menu_path(sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, url: wx_menu_path(sub_menu), confirm: '确定要删除吗？'} %>
+          </div>
+          <div>
+            <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {fn: 'upFn'} %>
+          </div>
+          <div>
+            <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-down tree-down', data: {fn: 'downFn'} %>
+          </div>
+        </div>
+      </div>
+      <div class="tree-folder-content" style="display: block;">
+        <%= render :partial=> "sub_menu", :collection => sub_menu.children.order(:sort), :as =>:sub_menu %>
+      </div>
+    </div>
+<% else %>
+    <div class="tree-item tree-li current" data-id="<%= sub_menu.id %>" data-name="<%= sub_menu.name %>" data-parent-id="<%= sub_menu.parent_id %>" data-level="<%= sub_menu.parent_id == 0 ? 0 : 1 %>">
+      <i class="tree-fa fa fa-circle"></i>
+      <div class="tree-item-name"><%= sub_menu.name %></div>
+      <div class="tree-tools" data-id="<%= sub_menu.id %>">
+        <% if sub_menu.parent_id == 0 %>
+            <div>
+              <%= link_to '', 'javascript:;', class: 'fa fa-plus tree-add', data: {title: '新增菜单'}  %>
+            </div>
+        <% end %>
+        <div>
+          <%= link_to '', edit_wx_menu_path(sub_menu), class: 'fa fa-pencil tree-edit', data: {remote: true, title: '编辑菜单'} %>
+        </div>
+        <div>
+          <%= link_to '', wx_menu_path(sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, url: wx_menu_path(sub_menu), confirm: '确定要删除吗？'} %>
+        </div>
+        <div>
+          <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {fn: 'upFn'} %>
+        </div>
+        <div>
+          <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-down tree-down', data: {fn: 'downFn'} %>
+        </div>
+      </div>
+    </div>
+<% end %>

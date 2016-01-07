@@ -1,0 +1,116 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <%= render "breadcrumb" %>
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li <% if controller_name == "wx_walls" %>class="active"<% end %>>
+            <%= link_to "微信墙管理", "/wx_walls" %>
+          </li>
+          <li <% if controller_name == "wx_wall_messages" %>class="active"<% end %>>
+            <%= link_to "留言管理", "/wx_wall_messages" %>
+          </li>
+          <li <% if controller_name == "wx_wall_datas" %>class="active"<% end %>>
+            <%= link_to "数据统计", "/wx_wall_datas" %>
+          </li>
+        </ul>
+        <div class="tab-content no-border padding-24  ">
+          <div id="tab-1" class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="alert alert-block alert-info">
+                  <strong class="pull-left">提示：</strong>
+                  <ul class="vwebsiteHeadAlert">
+                    <li> 1、建议使用<a href="https://www.google.com/intl/zh-CN/chrome/browser/">谷歌浏览器</a>最新版，以保证最佳的动画效果；</li>
+                    <li> 2、进入活动页面后，点击键盘上的“ F11 ”可实现全屏；</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <%= form_for @search, url: wx_walls_path, html: { method: :get } do |f| %>
+                  <div class="col-md-3 row">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">活动名称：</span>
+                      <%= f.text_field :activity_name_like, class: 'col-xs-12' %>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="input-group input-group-text">
+                        <span class="input-group-addon">关键词：</span>
+                        <%= f.text_field :activity_keyword_like, class: 'col-xs-12' %>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="input-group input-group-text">
+                          <span class="input-group-addon">状态：</span>
+                            <%= f.select :activity_status_eq,  [["全部", ""], ["进行中", 3], ["未开始", 1], ["已结束", 4], ["已终止", -1]], {}, class: "col-xs-12" %>
+                          </div>
+                        </div>
+                        <div class="col-md-3 row pull-right">
+                          <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                          <%= link_to "新增", "/wx_walls/new", class: "btn btn-primary btn-sm btn-filter pull-right" %>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="col-md-12 margin-top-20">
+                      <table id="wallTable" class="table table-striped table-bordered table-hover dataTable ">
+                        <thead>
+                          <tr>
+                            <th>活动主题</th>
+                            <th width="100">关键词</th>
+                            <th width="80">人数</th>
+                            <th width="320">开始结束时间</th>
+                            <th width="80">状态</th>
+                            <th width="200">操作</th>
+                          </tr>
+                        </thead>
+                        <tbody id="wx_wall_tbody">
+                          <% @wx_walls.each do |wall| %>
+                            <% unless wall.activity.try(:deleted?) %>
+                              <tr id="record<%= wall.id %>">
+                                <td class="tleft"><%= wall.name %></td>
+                                <td><%= wall.keyword %></td>
+                                <td><%= wall.wx_wall_users.count %></td>
+                                <td>
+                                  <p><%= wall.start_at %></p>
+                                  <p><%= wall.end_at %></p>
+                                </td>
+                                <td><%= wall.activity_status_name %></td>
+                                <td class="tooltop">
+                                  <% unless ['已结束'].include?(wall.activity_status_name) %>
+                                    <%= link_to "", wx_wall_path(wall), class: "icon-picture", target: "_blank", title: "上墙页面", data:{rel: 'tooltip'} %>
+                                    <%= link_to "", edit_wx_wall_path(wall), class: "icon-edit", title: "编辑微信墙" %>
+                                    <%= link_to "", extra_settings_wx_wall_path(wall), class: "icon-exchange", title: "互动设置", data:{rel: 'tooltip'} %>
+                                  <% end %>
+                                  <%= link_to "", wx_wall_messages_path(wx_wall_id: wall.id), class: "icon-comments", title: "留言管理", data:{rel: 'tooltip'} %>
+                                  <%= link_to "", wx_wall_user_prizes_path(id: wall.id), class: "icon-trophy", title: "中奖管理", data:{rel: 'tooltip'} %>
+                                  <% if !wall.deleted? && wall.activity.starting? %>
+                                    <% if wall.stopped? %>
+                                      <%= link_to "", start_wx_wall_path(wall), class: "icon-play", title: "开启", method: "post", data:{rel: 'tooltip'} %>
+                                    <% else %>
+                                      <%= link_to "", stop_wx_wall_path(wall), class: "icon-stop", title: "停止", method: "post", data:{rel: 'tooltip'} %>
+                                    <% end %>
+                                  <% end %>
+                                  <%= link_to "",  wx_wall_path(wall), class: "icon-remove", method: "delete", title: "删除", confirm: "删除后活动的所有信息将不可恢复，确认删除吗？", data:{rel: 'tooltip'} %>
+                                </td>
+                              </tr>
+                            <% end %>
+                          <% end %>
+                        </tbody>
+                      </table>
+                      <%= paginate @wx_walls %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% content_for :custom_js do %>
+        <script>
+          $(function(){
+            $("ul.breadcrumb").append("<li><a href='/wx_walls'>微信墙管理</a></li>");
+          });
+        </script>
+      <% end %>

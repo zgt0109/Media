@@ -1,0 +1,85 @@
+<div class="main">
+	<div class="bank-card">
+		<section>
+			<%= form_for @broker, url: mobile_brokerage_path(@supplier,@broker), remote: true, html: { method: :put } do |f| %>
+			<%= f.hidden_field :settlement_type %>
+				<div class="blank10"></div>
+				<div class="way">
+					<ul>
+						<li class="bank <%= 'bg' if @broker.bank_card? %>" ref="bank">银行卡绑定</li>
+						<li class="alipay <%= 'bg' if @broker.alipay? %>" ref="alipay">支付宝绑定</li>
+					</ul>
+				</div>
+				<div class="blank20"></div>
+				<div>
+					<!-- bank-card start-->
+					<div class="bank-content" id="bank">
+						<div class="text">
+							<%= f.text_field :bank_account_name, placeholder: '银行开户名' %>
+							<span>*</span>
+						</div>
+						<div class="text">
+							<%= f.text_field :bank_card_no, type: :tel, placeholder: '输入您的银行卡号' %>
+							<span>*</span>
+						</div>
+						<div class="text">
+							<%= f.text_field :bank_name, placeholder: '开户银行精确到支行' %>
+							<span>*</span>
+						</div>
+						<div class="blank40"></div>
+						<div class="broker-btn"><a href="#" id="broker_bank">保存</a></div>
+					</div>
+					<!-- bank-card end-->
+
+
+					<!-- alipay start-->
+					<div class="alipay-content" id="alipay">
+						<div class="text">
+							<%= f.text_field :alipay_account_name, placeholder: '支付宝账户' %>
+							<span>*</span>
+						</div>
+						<div class="text">
+							<%= f.text_field :alipay_receiver, placeholder: '收款人姓名' %>
+							<span>*</span>
+						</div>
+						<div class="blank40"></div>
+						<div class="broker-btn"><a href="#" id="broker_alipay">保存</a></div>
+					</div>
+					<!-- alipay end-->
+				</div>
+			<% end %>
+		</section>
+	</div>
+</div>
+<script type="text/javascript">
+   $(function(){
+   		$('#'+$('.bg').attr('ref')).show().siblings().hide();
+
+		  $('.way ul li').click(function(){
+			  $('#'+$(this).attr('ref')).show().siblings().hide();
+			  $(this).addClass("bg").siblings().removeClass("bg");
+			});
+			$('body').on('click','#broker_bank',function(){
+				if($('#brokerage_broker_bank_account_name').val() == ""){
+					alert("请输入银行开户名！");
+				}else if($('#brokerage_broker_bank_card_no').val() == ""){
+					alert("请输入您的银行卡号！");
+				}else if($('#brokerage_broker_bank_name').val() == ""){
+					alert("请输入开户银行精确到支行！");
+				}else{
+					$('#brokerage_broker_settlement_type').val("<%= Brokerage::Broker::BANK_CARD %>");
+					$('form').submit();
+				}
+			});
+			$('body').on('click','#broker_alipay',function(){
+				if($('#brokerage_broker_alipay_account_name').val() == ""){
+					alert("请输入支付宝账户！");
+				}else if($('#brokerage_broker_alipay_receiver').val() == ""){
+					alert("请输入收款人姓名！");
+				}else{
+					$('#brokerage_broker_settlement_type').val("<%= Brokerage::Broker::ALIPAY %>");
+					$('form').submit();
+				}
+			});
+	  });
+</script>

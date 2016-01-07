@@ -1,0 +1,88 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to "微硬件", dashboard_supplier_prints_url %></li>
+      <li><%= link_to "微打印机", dashboard_supplier_prints_url %></li>
+      <li><%= link_to "基础设置", activities_supplier_prints_path(activity_id: 46) %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+    <div class="page-content">
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-24 tab-size-bigger">
+                <li class="active">
+                    <%= link_to "基础设置", activities_supplier_prints_path(activity_id: 46) %>
+                </li>
+                <li>
+                    <%= link_to "帐号管理", supplier_prints_path(activity_id: 42) %>
+                </li>
+                <li>
+                    <%= link_to "设备管理", supplier_print_clients_path %>
+                </li>
+            </ul>
+            <div class="tab-content no-border padding-24">
+                <div id="tab-1" class="tab-pane fade active in">
+                    <div class="row">
+                        <div class="col-xs-12 ">
+                            <div class="alert alert-block alert-info"> <strong class="pull-left">提示：</strong>
+                                <ul class="vwebsiteHeadAlert">
+                                    <li>1、此功能需要购买“印立得”设备后，才能使得设置生效；</li>
+                                    <li>2、这里设置的内容用于引导和控制用户在微信手机端的操作；</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12 ">
+                        <%= form_for @supplier_print_setting, :url => update_activities_supplier_print_path(@supplier_print_setting), :validate => true, :method => :put do |f| %>
+
+                            <%= f.fields_for :activities do |activity| %>
+                            
+                                <% if activity.object.new_record? && @supplier_print_setting.activities.count == 2 %>
+
+                                <% else %>
+                                 <div style="display:none">
+                                  <%= activity.text_field :name, value: activity.object.activity_type_id == 46 ? "微信打印" : "退出微信打印" %>
+                                  <%= activity.text_field :activity_type_id %>
+                                  <%= activity.text_field :wx_mp_user_id %>
+                                  <%= activity.text_field :supplier_id %>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>
+                                        <%= activity.object.activity_type_id == 46 ? "进入微打印关键字" : "退出微打印关键字" %>
+                                        <span class="required-star">*</span>
+                                        <span class="help-inline text-warning line-height-32">
+                                        <%= activity.object.activity_type_id == 46 ? "(用于触发微打印功能，进入图片打印模式）" : "(用于微信手机端退出微打印功能）" %>   
+                                        </span>
+                                    </label>
+                                    <div class="clearfix">
+                                <%= activity.text_field :keyword, class: 'col-md-8', placeholder: "请输入关键字" %>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <%= activity.object.activity_type_id == 46 ? "进入微打印的文本内容" : "退出微打印的文本内容" %>
+                                        <span class="required-star">*</span>
+                                    </label>
+                                    <div class="clearfix">
+                                        <%= activity.text_area :summary, cols:30, rows: 5, class: "col-md-8", validate: true %>
+                                    </div>
+                                </div>
+                               
+                                <% end %>
+                            <% end %>               
+                                <div class="form-group">
+                                    <input type="submit" value="保存" class="btn btn-sm btn-primary">
+                                    <input onclick="javascript:location.reload()" type="button" value="取消" class="btn btn-sm btn-default">
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% end %>

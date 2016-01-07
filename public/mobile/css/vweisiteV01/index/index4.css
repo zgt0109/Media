@@ -1,0 +1,38 @@
+body{background: #e8e8e8;}
+.box{padding: 10px 5px 10px 15px; overflow: hidden; display: block;}
+.mod-top{ height: 48px; background: #1064ad; line-height: 48px; color: #fff; font-size: 20px; text-align: center;}
+.index{border-bottom: 3px solid #9c9c9c; border-top:3px solid #d2d1d1; padding:10px 0; overflow: hidden;
+    background-color:#bdbcba;
+    background-repeat:repeat-x;
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#bdbcba),to(#dfdeda));
+    background:-webkit-linear-gradient(top,#dfdeda,#bdbcba);
+    background:-moz-linear-gradient(top,#dfdeda,#bdbcba);
+    background:-ms-linear-gradient(top,#dfdeda,#bdbcba);
+    background:-o-linear-gradient(top,#dfdeda,#bdbcba);}
+.index a{ border-right:1px solid #b7b7b6;}
+.index a:last-child{ border-right: 0; border-left:1px solid #dedddb;}
+.index a:first-child{ border-left:0;}
+.mod-index{width: 50%; float: left; display:block; color: #666; text-align: left;}
+.mod-index >*{height: 50px; vertical-align: middle; display: table-cell;}
+.mod-index >*:last-child{width: 100%;}
+.mod-index .index-img i{ width: 50px; height: 50px; line-height: 50px; display: block; overflow: hidden;text-align:center;}
+.mod-index .index-text>*{font-weight: 100; line-height: 20px; padding-left: 10px; display: block;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index >*:first-child >*{ padding-left: 0;}
+.index-text b{ color: #1064ad; font-weight: 100;}
+.index-text small{ font-size: 12px; color: #666;}
+.mod-index img{ width: 100%; min-height: 100%;}
+.mod-index .fa{ font-size: 40px; color: #1064ad;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+
+.mod-ft{ width:100%; background: #063f70;border-top:1px solid #444d56;text-align:center; padding:5px 2%;}
+.mod-ft a{display: inline-block; height:30px; line-height:30px; color:#fff; background:#0c5595; border-top:1px solid #4d7fab; box-shadow:0 0 3px rgba(0,0,0,0.25); width:48.8%; margin:0; text-align: left; padding: 0 0 0 6%;}
+.mod-ft a:first-child{ margin:0 1% 0 0;}
+.mod-ft .fa{ font-size: 18px; margin: 0 5px 0 0;}
+.mod-ft .fa-mobile{ font-size: 20px;}

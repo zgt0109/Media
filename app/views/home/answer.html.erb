@@ -1,0 +1,61 @@
+<%= content_for :head  do%>
+<title>帮助中心</title>
+<% end %>
+
+<div class="body">
+  <div class="clearfix article">
+    
+    <div class="clearfix bg-gray bg-shadow">
+      <div class="answerbox">
+	<div class="catelist">
+	  <ul>
+	  	<% @interlocution_one_levels.each do |one| %>
+	    <li>
+	      <p id="current_p_<%=one.id%>"><%= one.name %><span>(<%= one.interlocutions.count %>)</span></p>
+	      <ul>
+	      	<% one.interlocution_two_levels.each do |two| %>
+					<li><a href="?tid=<%=two.id %>"><%= two.name %> <span>(<%= two.interlocutions.count %>)</span></a></li>
+					<% end %>
+	      </ul>
+	    </li>
+	    <% end %>
+	  </ul>
+	</div>
+	<div class="queslist">
+		<% if @interlocution_two_level %>
+			<% @interlocution_two_level.interlocutions.each do |i| %>
+	  <div class="item">
+	    <h3><span class="qa-ask">问</span><%= i.question %></h3>
+	    <p><span class="qa-answer">答</span><%= i.answer %></p>
+	  </div>
+	  	<% end %>
+	  <% end %>
+	<!--
+	  <div class="mod-page">
+	    <a>上一页</a>
+	    <a>1</a>
+	    <a class="active">1</a>
+	    <a>1</a>
+	    <a>下一页</a>
+	  </div>
+	  -->
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= content_for :custom_js do %>
+<script>
+	$(function(){
+		$('.answerbox p').click(function(){
+			if($(this).next().is(":visible")){
+				$(this).next().slideUp();
+			}else{
+				$(this).next().clearQueue().stop().slideDown();
+			}
+		});
+		$("#current_p_<%= @interlocution_two_level.interlocution_one_level.id %>").click();
+	});
+</script>
+<% end %>

@@ -1,0 +1,37 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '素材管理', materials_url %></li>
+          <li><%= link_to '多图文', multiple_materials_url %></li>
+          <li><%= link_to '新增', '#' %></li>
+        </ul>
+        <%= render partial:'/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-info ">
+              <strong class="pull-left">注意：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 1、以下“ <span class="required-star"> * </span> ”均为必填项。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12 material">
+            <%= render 'weixin_preview_multi', wx_title: @material.title, wx_summary: @material.summary %>
+            <div class="col-xs-12 col-md-6 col-lg-7">
+              <%= form_for @material, url: multiple_materials_url, validate: true, html: { class: "form-mater form col-xs-12 form-mater-multi", role: 'form' } do |f| %>
+                <%= render 'add_materials', f: f %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

@@ -1,0 +1,41 @@
+<%- unless @activity.surveys? %>
+  <% content_for :sidebar do %>
+    <%= render activity_sidebar_name %>
+  <% end %>
+
+  <% content_for :topbar do %>
+    <%= render 'topbar_activity_new' %>
+  <% end %>
+<%- end %>
+
+<%- unless [12, 15].include?(@activity.activity_type_id) %>
+  <%= render 'p_note' %>
+<%- end %>
+
+<%
+  @activity.activity_property ||= ActivityProperty.new(:activity_type_id => @activity.activity_type_id)
+%>
+
+<% if @activity.fight? %>
+  <%= render 'fight_form' %>
+<% elsif @activity.vote? %>
+  <%= render 'vote_form' %>
+<% elsif @activity.groups? %>
+  <%= render 'group_form' %>
+<% elsif @activity.surveys? %>
+  <%= render 'survey_form' %>
+<% else %>
+<%= render 'setting_form' %>
+<% end %>
+
+<script>
+  var activity_type = <%= @activity.activity_type_id %>
+  <% if @activity.activity_type.wheel? %>
+  wheel_disable_prize_titles();
+  <% end %>
+</script>
+<style>
+textarea {
+  height: 40px;
+}
+</style>

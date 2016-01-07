@@ -1,0 +1,4 @@
+<%= content_tag :option, value: -1, data:{users: all_vip_users_count}, selected: ( giver.given_group_id == -1 ) do %>
+    全部用户(<%= all_vip_users_count %>)
+<% end %>
+<%= options_for_select(current_user.vip_card.vip_grades.map{|grade|["#{grade.name}(#{grade.vip_users_count})", grade.id, {'data-users' => grade.vip_users_count}]}, selected: giver.given_group_id) %>

@@ -1,0 +1,82 @@
+<header>
+	<a class="ico-prev" href="/app/whouse?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>"></a>
+	<h1>房产简介</h1>
+</header>
+<div class="contxt">
+	<% if @cover_house_pictures %>
+	<div class="box-cont cont-img">
+		<div class="flashshow">
+			<div class="flashCont" id="defaultFlash">
+				<% @cover_house_pictures.each_with_index do |picture, i| %>
+				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+	<div class="box-cont cont-listTxt">
+		<p><span class="tleft"><%= @house.name %></span><span class="tright">售价：<b><%= @house.price > 0 ? "#{f @house.price}元/平米" : '待定' %></b></span></p>
+	</div>
+	<div class="box-cont cont-imgTxt">
+		<h2>位置及周边</h2>
+		<h3><%= @house.province.try(:name) %><%= @house.city.try(:name) %><%= @house.district.try(:name) %><%= @house.address %></h3>
+		<div class="hd"></div>
+		<div id="container" style="height:200px;width:288px;"></div>
+	</div>
+	<!--
+		<div class="box-cont cont-imgTxt">
+			<h2>楼盘参数</h2>
+			<p><b>开盘时间：</b><span>2013-05-01</span></p>
+			<p><b>建筑类型：</b><span>住宅、别墅</span></p>
+			<p><b>装修情况：</b><span>毛坯、精装修</span></p>
+			<p><b>区域板块：</b><span>南汇</span></p>
+		</div>
+	-->
+	<div class="box-cont cont-imgTxt">
+		<h2>楼盘参数</h2>
+		<p><b>开盘时间：</b><span><%= @house.house_property.try(:opening_at).try(:to_date) %></span></p>
+		<p><b>建筑类型：</b><span><%= @house.house_property.try(:building_type) %></span></p>
+		<p><b>装修情况：</b><span><%= @house.house_property.try(:decorate_condition) %></span></p>
+		<p><b>区域板块：</b><span><%= @house.house_property.try(:region) %></span></p>
+		<br/><hr/><br/>
+		<p><b>开发商：</b><span><%= @house.house_property.try(:developer) %></span></p> 
+		<p><b>投资商：</b><span><%= @house.house_property.try(:investors) %></span></p>
+		<p><b>售楼处地址：</b><span><%= @house.house_property.try(:sales_address) %></span></p>
+		<p><b>物业类型：</b><span><%= @house.house_property.try(:property_type) %></span></p>
+		<p><b>产权年限：</b><span><%= @house.house_property.try(:property_right) %>年</span></p>
+		<p><b>环线位置：</b><span><%= @house.house_property.try(:link_position) %></span></p>
+		<br/><hr/><br/>
+		<p><b>规划面积：</b><span><%=f @house.house_property.try(:planning_area) %>平米</span></p>
+		<p><b>建筑面积：</b><span><%=f @house.house_property.try(:covered_area) %>平米</span></p>
+		<p><b>规划户数：</b><span><%= @house.house_property.try(:household_count) %>户</span></p> 
+		<p><b>车位数：</b><span><%= @house.house_property.try(:parking_count) %>个</span></p> 
+		<p><b>容积率住宅：</b><span><%= @house.house_property.try(:plot_ratio) %></span></p>
+		<p><b>绿化率：</b><span><%=f @house.house_property.try(:greening_rate) %>%</span></p>
+		<p><b>楼层状况：</b><span><%= @house.house_property.try(:floor_condition) %></span></p>
+		<p><b>工程进度：</b><span><%= @house.house_property.try(:progress_rate) %></span></p>
+	</div>
+</div>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9c72e3ee80443243eb9d61bebeed1735"></script>
+<script type="text/javascript">
+var map = new BMap.Map("container");
+var myGeo = new BMap.Geocoder();
+
+myGeo.getPoint("<%= @house.address %>", function(point){
+	if (!point) {
+		point = new BMap.Point(121.507137, 31.24475);
+	}
+	map.centerAndZoom(point, 15);
+	map.addOverlay(new BMap.Marker(point));
+}, "<%= @house.city.try(:name) %>");
+</script>
+
+<style>
+<!--
+hr{border: 0;
+   height: 1px;
+   background: #eee;
+  }
+-->
+</style>

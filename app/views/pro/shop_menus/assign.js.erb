@@ -1,0 +1,4 @@
+var model_html = "<%= j(render 'assign', :shop_menu => @shop_menu) %>";
+$("#modal_div").empty();
+$("#modal_div").append(model_html);
+$("#modal_div").modal('show');

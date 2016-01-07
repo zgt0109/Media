@@ -1,0 +1,49 @@
+<%= content_for :breadcrumb_li do %>
+  <li><%= link_to '屏蔽名单', forbidden_users_wbbs_topics_path(community_id: @wbbs_community.id, type: params[:type]) %></li>
+<%- end %>
+<%= content_for :tab do %>
+<div id="tab-4" class="tab-pane fade active in">
+  <div class="col-sm-12">
+    <div class="alert alert-block alert-success ">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li>对已屏蔽用户进行管理，可以对已屏蔽用户进行取消屏蔽的操作，即可恢复该用户的社区功能。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-12 margin-top-20">
+    <table id="drTable" class="table table-striped table-bordered table-hover dataTable ">
+      <thead>
+      <tr>
+        <th width="100">用户名</th>
+        <th width="50">发帖数</th>
+        <th width="50">点赞数</th>
+        <th width="50">评论数</th>
+        <th width="50">举报数</th>
+        <th width="50">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% if @wx_users.present? %>
+          <%- @wx_users.each do |user| %>
+            <tr>
+              <td><%= user.nickname.present? ? user.nickname : '游客' %></td>
+              <td><%= user.wbbs_topics_count %></td>
+              <td><%= user.wbbs_up_count %></td>
+              <td><%= user.wbbs_replies_count  %></td>
+              <td><%= user.wbbs_reports_count  %></td>
+              <td>
+                <%= link_to '取消屏蔽', cancel_forbid_user_wbbs_topic_path(user,community_id: @wbbs_community.id, type: params[:type]), method: 'post', confirm: "你确定要取消屏蔽此用户？" %>
+              </td>
+            </tr>
+          <%- end %>
+        <% else %>
+          <tr><td colspan="6"><span>无记录</span></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @wx_users %>
+  </div>
+</div>
+<%- end %>
+<%= render "biz/wbbs_communities/community" %>

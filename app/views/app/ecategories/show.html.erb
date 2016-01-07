@@ -1,0 +1,52 @@
+<%= javascript_include_tag "application"  %>
+<body class="list">
+<div class="html">
+  <div class="main">
+    <header>
+      <div class="header">
+        <a class="ico ico-left" href="<%= app_ebusinesses_path(:id => @category.ec_shop_id) %>"><i></i>首页</a>
+        <a class="ico ico-list ico-right">分类</a>
+      </div>
+    </header><!-- header end -->
+    <section>
+          <div class="box-list">
+            <% if @items  %>
+                <% #@items.each do |item| %>
+                   <%= render :partial => "item", :collection => @items, :as => :item  %>
+                <%# end %>
+            <% else %>
+                <div class="list-li">没有数据</div>
+            <% end %>
+          </div>
+          <div class="footer tcenter more"><%= link_to_next_page @items, '点击加载更多', :remote => true, :class => "loading", :id => "more_loading" ,:style=>"display: block;" %></div>
+          <div class="footer tcenter"><div class="loading isloading" style="display:none">加载中...</div></div>
+    </section>
+  </div><!-- main end -->
+</div><!-- html end -->
+<style>
+<!--
+   .footer{
+       position: relative;
+       float: left;
+       width: 100%;
+   }
+    .loading{
+        padding:0 0 0 40px;
+        display: inline-block;
+    }
+-->
+</style>
+<script>
+    $( document ).ajaxStart(function() {
+//      alert(44444444);
+        $(".isloading").css("display",'inline-block');
+        $("#more_loading").css("display","none");
+    });
+
+    $( document ).ajaxStop(function() {
+//    alert(44444444);
+        $(".isloading").css("display",'none');
+        $("#more_loading").css("display","block");
+    });
+</script>
+</body>

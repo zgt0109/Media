@@ -1,0 +1,45 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-slider slider-hor" id="index">
+      <ul class="slider-list">
+        <% @car_catenas.each_with_index do |catena,index| %>
+          <% if index < 5 %>
+            <li><a><img src="<%= catena.pic_url || '/assets/mobile/wcar/bg2.jpg' %>"/></a></li>
+          <% end %>
+        <% end %>
+      </ul><!--slider-list end-->
+      <div class="slider-text">
+        <span class="fl slider-span" id="slider-span">
+          <img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/><%= @car_brand.name %>
+        </span>
+        <div id="pagenavi" class="fr slider-page">
+          <% @car_catenas.each_with_index do |catena,index| %>
+            <% if index < 5 %>
+              <a href="#" class="<%= 'active' if index == 0 %>"><%= index + 1 %></a>
+            <% end %>
+          <% end %>
+        </div><!--slider-page end-->
+      </div><!--slider-text end-->
+    </div><!--mod-slider end-->
+    <div class="mod-list">
+      <% @car_catenas.each do |catena| %>
+      <% type_count = catena.car_types.count %>
+        <a href="<%= car_type_mobile_car_shop_path(catena, supplier_id: @supplier.id) %>" class="mod-fa fa fa-chevron-right">
+          <div class="list-img">
+            <span><img src="<%= catena.pic_url %>"/></span>
+          </div>
+          <div class="list-text">
+            <b><%= catena.name %></b>
+            <small>共<%= type_count %>款</small>
+          </div>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</section>
+<script>
+  $(function(){
+    indexSwipe("index");
+  });
+</script>

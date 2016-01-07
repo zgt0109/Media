@@ -1,0 +1,16 @@
+<a href="<%= detail_mobile_coupons_path(id: coupon.id) %>" class="box <%= coupon.link_class %>">
+  <div class="cp-info">
+    <dl class="cp-price">
+      <dd class="coin">&yen;</dd>
+      <dt><%= coupon.value %></dt>
+      <dd>
+        <b>元优惠券</b>
+        <span>满<%= (coupon.value_by>0) ? coupon.value_by : 0 %>元可用</span>
+      </dd>
+    </dl>
+    <div class="cp-time">有效期<%= coupon.use_end %></div>
+  </div>
+  <div class="cp-logo">
+    <img src="<%= coupon.logo_url %>">
+  </div>
+</a>

@@ -1,0 +1,278 @@
+@charset "utf-8";
+
+/*global*/
+body, select, input, textarea {background-color: #fff; color: #fff2b4; font-family: "\5FAE\8F6F\96C5\9ED1",arial; font-size: 12px;}
+ins {background-color: #fcd700; color: #000; text-decoration: none;}
+mark {background-color: #fcd700; color: #000; font-style: italic; font-weight: bold;}
+input:-moz-placeholder { color:#a9a9a9;}
+textarea:-moz-placeholder { color:#a9a9a9;}
+a{text-decoration: none;}
+
+body{background-color: #e04833;}
+.bgfefedc{background-color: #fefedc;}
+.clearfix:after{content: ""; display: block; height: 0px; line-height: 0px; clear: both;}
+
+.img-full{width: 100%; height: auto; display: block;}
+.btn{height: 40px; line-height: 40px; display: block; text-align: center; color: #e34e3f; font-size: 14px; background-color: #fcdd43; -webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px; -webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.15);
+-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.15);
+-o-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.15);
+box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.15);}
+.btn:active{opacity: 0.7;}
+
+.timer{margin-top: 14px; height: 24px; line-height: 24px; font-size: 16px; text-align: center;}
+.timer-txt{color: #e34e3f; padding-left: 20px; position: relative;}
+.timer-txt:before{content: ""; width: 14px; height: 16px; position: absolute; left: 0px; top: 3px; background: url(/assets/mobile/aids/global_icon.png) 0px -60px no-repeat; -webkit-background-size: 200px 120px; background-size: 200px 120px;}
+.timer-time{color: #666666; margin-left: 12px; font-size: 14px;}
+.timer-time-count{margin: 0px 2px;}
+
+.count-down{position: relative; left: 50%; float: left; margin-top: 22px; -webkit-transform: translate(-50%, 0px);
+-moz-transform: translate(-50%, 0px);
+-o-transform: translate(-50%, 0px);
+transform: translate(-50%, 0px);}
+.count-down-num{float: left; width: 50px; height: 52px; line-height: 50px; text-align: center; color: #fff; font-size: 30px; font-weight: bold; background: url(/assets/mobile/aids/timer_bg.png) 0px 0px no-repeat; -webkit-background-size: 100% auto;
+background-size: 100% auto;}
+.count-down-unit{float: left; width: 22px; height: 20px; line-height: 20px; font-size: 12px; color: #a9a97b; text-align: center; margin-top: 34px;}
+
+.main{margin: 20px 10px 0px; overflow: hidden; background-color: #e34e3f; position: relative; padding-bottom: 12px; border: 2px #ffe8a5 solid; -webkit-border-radius: 30px;
+-moz-border-radius: 30px;
+-o-border-radius: 30px;
+border-radius: 30px;}
+.main-portrait{width: 70px; border: 2px #ffe8a5 solid; position: absolute; top: -2px; left: -4px; overflow: hidden; -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+-o-border-radius: 50%;
+border-radius: 50%;}
+.main-name{line-height: 24px; height: 24px; text-overflow:ellipsis; white-space: nowrap; font-size: 12px; color: #fff2b4; margin-left: 30.8%; padding-top: 10px; padding-right: 20px; overflow: hidden;}
+.main-rank{line-height: 24px; font-size: 16px; color: #fff; margin-left: 30.8%; padding-top: 4px;}
+.main-rank-strong{font-size: 20px; color: #fff846; margin-left: 10px; vertical-align: -2px;}
+.main-count{line-height: 20px; font-size: 14px; color: #fff2b4; margin-left: 30.8%; padding-top: 6px;}
+.main-count-strong{font-size: 16px; margin-left: 4px; vertical-align: -1px;}
+.main-praise{line-height: 20px; font-size: 14px; color: #b02e21; margin-left: 30.8%; padding-left: 14px; margin-top: 4px; position: relative;}
+.main-praise:before{content: ""; width: 11px; height: 12px; position: absolute; left: 0px; top: 4px; background: url(/assets/mobile/aids/global_icon.png) 0px -80px no-repeat; -webkit-background-size: 200px 120px; background-size: 200px 120px;}
+.main-effect{position: absolute; left: 55%; top: 70px; opacity: 0;}
+.main-effect-show{-webkit-animation: textEffect 2s ease-in-out;
+-moz-animation: textEffect 2s ease-in-out;
+-o-animation: textEffect 2s ease-in-out;
+animation: textEffect 2s ease-in-out;}
+.main-action{margin: 18px 10% 0px; overflow: hidden;}
+.main-btn{width: 47%;}
+.main-left{float: left;}
+.main-right{float: right;}
+.main-btn-full{width: 100%;}
+.main-btn-hidden{display: none;}
+
+.division2{margin: 19px 10px 0px;}
+
+.msg{position: relative; margin: 0px 10px 0px; padding-bottom: 10px; background-color: #fbd931; -webkit-border-radius: 0px 0px 9px 9px; -moz-border-radius: 0px 0px 9px 9px; -o-border-radius: 0px 0px 9px 9px; border-radius: 0px 0px 9px 9px;}
+.msg-decoration{width: 100%; background: url(/assets/mobile/aids/global_arch.png) center 0px no-repeat; -webkit-background-size: 100% auto;
+background-size: 100% auto; position: absolute; left: 0px; top: -15px;}
+.msg-decoration:before{content: ""; display: block; padding-top: 40%;}
+.msg-header{position: relative; padding: 4px 0px 14px; overflow: hidden;}
+.msg-header-item{float: left; width: 33.33333%; text-align: center; font-size: 16px; color: #c05c11; cursor: pointer; font-weight: bold; -webkit-tap-highlight-color:rgba(0,0,0,0);}
+.msg-header-item.active{color: #e04833;}
+.msg-list{display: none; margin: 0px 10px; position: relative; background-color: #c87c1e; border: 2px #b26d17 solid; padding: 5px 4px 0px; -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;}
+.msg-list-item{overflow: hidden; height: 46px; margin: 0px; position: relative; background-color: #faf9c0; margin-bottom: 5px; -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;}
+.msg-rank-num{float: left; margin-top: 6px; margin-left: 13px; margin-right: 17px; font-size: 20px; width: 30px; height: 30px; line-height: 30px; text-align: center; -webkit-box-shadow: 0px 1px 0px 0px rgba(201, 90, 45, 1);
+-o-box-shadow: 0px 1px 0px 0px rgba(201, 90, 45, 1);
+-moz-box-shadow: 0px 1px 0px 0px rgba(201, 90, 45, 1);
+box-shadow: 0px 1px 0px 0px rgba(201, 90, 45, 1); background-color: #fa824d; color: #fff; -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+-o-border-radius: 50%;
+border-radius: 50%;}
+.msg-list-item:nth-child(1) .msg-rank-num{width: 35px; height: 36px; margin-top: 0px; margin-left: 10px; margin-right: 15px; background: transparent url(/assets/mobile/aids/global_icon.png) -17.5px 0px no-repeat; -webkit-background-size: 200px 120px;
+background-size: 200px 120px; -webkit-border-radius: 0; box-shadow: none;
+-moz-border-radius: 0; box-shadow: none;
+-o-border-radius: 0; box-shadow: none;
+border-radius: 0; box-shadow: none;}
+.msg-list-item:nth-child(2) .msg-rank-num{width: 35px; height: 36px; margin-top: 0px; margin-left: 10px; margin-right: 15px; background: transparent url(/assets/mobile/aids/global_icon.png) -17.5px -40px no-repeat; -webkit-background-size: 200px 120px;
+background-size: 200px 120px; -webkit-border-radius: 0; box-shadow: none;
+-moz-border-radius: 0; box-shadow: none;
+-o-border-radius: 0; box-shadow: none;
+border-radius: 0; box-shadow: none;}
+.msg-list-item:nth-child(3) .msg-rank-num{width: 35px; height: 36px; margin-top: 0px; margin-left: 10px; margin-right: 15px; background: transparent url(/assets/mobile/aids/global_icon.png) -17.5px -80px no-repeat; -webkit-background-size: 200px 120px;
+background-size: 200px 120px; -webkit-border-radius: 0; box-shadow: none;
+-moz-border-radius: 0; box-shadow: none;
+-o-border-radius: 0; box-shadow: none;
+border-radius: 0; box-shadow: none;}
+.msg-rank-portrait{float: left; margin-top: 6px; width: 30px; border: 2px #fff solid; overflow: hidden; -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+-o-border-radius: 50%;
+border-radius: 50%;}
+.msg-rank-helper{float: left; margin-left: 10px; padding-top: 4px;}
+.msg-rank-nickname{display: block; font-size: 12px; color: #cb7123;}
+.msg-rank-count{display: block; position: relative; margin-top: 2px; font-size: 15px; color: #e92817; padding-left: 20px;}
+.msg-rank-count:before{content: "助"; position: absolute; left: 0px; top: 1px; width: 18px; height: 18px; line-height: 18px; text-align: center; color: #fff; font-size: 12px; background-color: #ffce0f; -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+-o-border-radius: 50%;
+border-radius: 50%;}
+.msg-info{line-height: 46px; position: relative; color: #cb7123;}
+.msg-info-ranking{width: 75px; height: 46px; position: absolute; left: 0px; top: 0px; margin-left: 15px; color: #e92817;}
+.msg-inof-prize{height: 46px; margin-left: 84px; margin-right: 75px; overflow: hidden;}
+.msg-inof-count{width: 60px; height: 46px; position: absolute; right: 0px; top: 0px; margin-right: 15px; text-align: right; font-size: 14px; overflow: hidden;}
+.msg-friend .msg-rank-portrait{margin-left: 13px;}
+
+.msg-none{line-height: 40px; padding-bottom: 4px; text-align: center;}
+
+.description{margin: 0px 10px;}
+.description-h2{font-size: 16px; color: #fff846; margin-top: 14px; margin-bottom: 6px;}
+.description-cnt{line-height: 1.8em;}
+
+.division3{height: 40px;}
+
+.convert{text-align: center;}
+.convert-tit{margin-top: 35px; font-size: 20px; color: #fff846;}
+.convert-qrcode{width: 180px; margin: 0px auto; margin-top: 12px;}
+.convert-qrcode-tit{margin-top: 8px; color: #fff;}
+.convert-sn{margin-top: 14px; color: #fff;}
+.convert-btn{margin: 35px 15px 0px;}
+
+.share{display: none; width: 100%; height: 100%; position: fixed; left: 0px; top: 0px; z-index: 99999999; background-color: rgba(0, 0, 0, 0.8);}
+.share-img{width: 40%; position: absolute; right: 0px; top: 0px;}
+
+.dialog-forbidden{height: 100%; overflow: hidden;}
+.dialog-forbidden body{height: 100%; overflow: hidden;}
+.dialog{display: none; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7);}
+.dialog-body{width: 92%; position: absolute; left: 50%; top: 50%; height:100%; -webkit-transform: translate(-50%, -50%);
+-moz-transform: translate(-50%, -50%);
+-o-transform: translate(-50%, -50%);
+transform: translate(-50%, -50%);}
+.dialog-main{padding: 25px 30px; background-color: #e34e3f; -webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-o-box-sizing: border-box;
+box-sizing: border-box;}
+.dialog-form{height:90%;top:5%;position:relative;}
+.dialog-form-tips{}
+.dialog-form-txt{}
+.dialog-form-prize{font-size: 14px; color: #fff;}
+.dialog-form-prizestrong{font-size: 20px; color: #fff846; vertical-align: -2px;}
+.dialog-form-tip{color: #ffffff; opacity: 0.7; line-height: 1.6em; padding-top: 8px;}
+.dialog-form-pic{width: 35%; float: right;}
+
+.dialog-form-error{height: 24px; line-height: 24px; text-align: right; color: #fbed51; font-size: 12px;}
+
+.dialog-form-main{background-color: #fff; -webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+-o-border-radius: 2px;
+border-radius: 2px;}
+.dialog-form-main1{-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px; overflow: hidden;}
+.dialog-form-main2{height:100%; background-color: transparent;padding:90px 0 50px;margin:-80px 0 -30px;-webkit-box-sizing:border-box;
+-moz-box-sizing:border-box;
+box-sizing:border-box;}
+.dialog-form-wp{padding-left: 35px; padding-right: 15px; height: 40px; overflow: hidden; position: relative; margin-top: -1px; border-top: 1px #e0dddd solid;}
+.dialog-form-wp:before{content: ""; position: absolute; width: 17px; height: 20px; left: 7px; top: 10px; background: url(/assets/mobile/aids/global_icon.png) 0px 0px no-repeat; -webkit-background-size: 200px 120px; background-size: 200px 120px;}
+.dialog-form-phone:before{background-position: 0px -20px;}
+.dialog-form-convertpass:before{background-position: 0px -95px;}
+.dialog-form-check{padding-right: 100px;}
+.dialog-form-check:before{background-position: 0px -40px;}
+.dialog-form-store{padding: 0px;min-height:100%;  border: none;overflow-y:auto;overflow-x:hidden;}
+.dialog-form-store:before{display: none;}
+.dialog-radio-label{max-width:100%;float: left; height: 24px; line-height: 24px; font-size: 14px; margin-bottom: 4px;white-space:nowrap;overflow:hidden;-ms-text-overflow:ellipsis;
+text-overflow:ellipsis;}
+.dialog-form-txt{color: #fff;}
+.dialog-input-radio{display: none;}
+.dialog-form-simulate{float: left; margin-right: 5px; width: 12px; height: 12px; margin-top: 4px; border: 2px #fff solid; -webkit-border-radius: 50% 50%;
+-moz-border-radius: 50% 50%;
+-o-border-radius: 50% 50%;
+border-radius: 50% 50%;}
+.dialog-input-radio:checked + .dialog-form-simulate{background-color: #fff846; border-color: #fff846;}
+.dialog-input-radio:checked + .dialog-form-simulate + .dialog-form-txt{color: #fff846;}
+.dialog-input-txt{display: block; color: #333333; width: 100%; height: 20px; line-height: 20px; padding: 10px 0px 10px 4px; border: none;}
+.dialog-input-btn{border: none; background-color: #1cb0f6; width: 90px; position: absolute; right: 0px; top: 0px; height: 100%;}
+.dialog-input-btn:focus, .dialog-input-txt:focus{outline-style: none;}
+.dialog-input-btn:disabled{background-color: #c2c2c2; color: #fff;}
+.input-error .dialog-input-txt{color: #e34e3f;}
+
+.dialog-btn{margin-top: 10px; -webkit-box-shadow: 0px 2px 0px 0px rgba(194, 181, 33, 1);
+-o-box-shadow: 0px 2px 0px 0px rgba(194, 181, 33, 1);
+-moz-box-shadow: 0px 2px 0px 0px rgba(194, 181, 33, 1);
+box-shadow: 0px 2px 0px 0px rgba(194, 181, 33, 1);}
+
+.dialog-close{width: 39px; height: 39px; position: absolute; top: -10px; right: -10px; background: url(/assets/mobile/aids/global_icon.png) -53px -60px no-repeat; -webkit-background-size: 200px 120px; background-size: 200px 120px;}
+
+
+@keyframes textEffect
+{
+    0% {
+        opacity: 0;
+        font-size: 12px;
+        transform: translate(0, 0);
+    }
+    50% {
+        opacity: 0.8;
+        font-size: 20px;
+        transform: translate(50px, -50px);
+    }
+    100% {
+        opacity: 0;
+        font-size: 12px;
+        transform: translate(100px, -100px);
+    }
+}
+
+@-moz-keyframes textEffect
+{
+    0% {
+        opacity: 0;
+        font-size: 12px;
+        -moz-transform: translate(0, 0);
+    }
+    50% {
+        opacity: 0.8;
+        font-size: 20px;
+        -moz-transform: translate(50px, -50px);
+    }
+    100% {
+        opacity: 0;
+        font-size: 12px;
+        -moz-transform: translate(100px, -100px);
+    }
+}
+
+@-webkit-keyframes textEffect
+{
+    0% {
+        opacity: 0;
+        font-size: 12px;
+        -webkit-transform: translate(0, 0);
+    }
+    50% {
+        opacity: 0.8;
+        font-size: 20px;
+        -webkit-transform: translate(50px, -50px);
+    }
+    100% {
+        opacity: 0;
+        font-size: 12px;
+        -webkit-transform: translate(100px, -100px);
+    }
+}
+
+@-o-keyframes textEffect
+{
+    0% {
+        opacity: 0;
+        font-size: 12px;
+        -o-transform: translate(0, 0);
+    }
+    50% {
+        opacity: 0.8;
+        font-size: 20px;
+        -o-transform: translate(50px, -50px);
+    }
+    100% {
+        opacity: 0;
+        font-size: 12px;
+        -o-transform: translate(100px, -100px);
+    }
+}

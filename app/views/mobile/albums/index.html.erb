@@ -1,0 +1,50 @@
+<% provide(:title, @activity.try(:name)) %>
+<div class="cent">
+  <div class="padding10 pad-t-0">
+    <div class="pic_list">
+      <ul>
+        <% @activity.albums.inline.show.each_with_index do |album,index| %>
+          <% if index == 0 %>
+            <li class="on">
+              <div class="big_pic">
+                <a href="<%= list_mobile_album_path(supplier_id: album.supplier_id, id: album.id) %>">
+                  <div class="shadow"><img class="img100" src="<%= album.cover_picture %>"/></div>
+                  <span class="pic_num"><i class="icon photo_i mar-r-5"></i><%= album.photos_count %></span>
+                  <div class="clear pic_txt f16">
+                    <p class="left"><%= album.name %><span class="time"><%= album.updated_at.to_date %></span></p>
+                    <i class="right icon arrow1"></i>
+                  </div>
+                </a>
+              </div>
+            </li>
+          <% else %>
+            <li>
+              <a href="<%= list_mobile_album_path(supplier_id: album.supplier_id, id: album.id) %>">
+                <i class="icon arrow2"></i>
+                <span class="left leftimg mar-r-5"><img  src="<%= album.cover_picture %>"/> </span>
+                <div class="auto">
+                  <div class="list_t1 overhidden"><%= album.name %></div>
+                  <p class="list_time"><%= album.updated_at.to_date %></p>
+                  <p class="list_num mar-t-5"><i class="icon photo_i2 mar-r-5"></i><%= album.photos_count %></p>
+                </div>
+              </a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $(".pic_list ul li").each(function(i){
+      var time = 'enter bottom  over '+0.2*2+'s';
+      $(this).attr("data-scroll-reveal",time)
+    })
+    if (!(/msie [6|7|8|9]/i.test(navigator.userAgent))){
+      (function(){
+          window.scrollReveal = new scrollReveal({reset: true});
+      })();
+    };
+  })
+</script>

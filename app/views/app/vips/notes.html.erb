@@ -1,0 +1,104 @@
+<% provide(:title, '最新通知') %>
+<style type="text/css">
+  .pagination li{display: none;}
+</style>
+<div class="html theme-<%= @vip_card.template_id %> <%= "add-nav" if @vip_card.template_id == 2 %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="J-slider" id="sec-index">
+      <!-- tab box start -->
+      <div class="tab-box">
+        <a class="<%= 'cur' if params[:is_read].blank? %>" href="/app/vips/notes">全部通知</a>
+        <a class="<%= 'cur' if params[:is_read] == 'false' %>" href="/app/vips/notes?is_read=false">未读通知</a>
+        <a class="<%= 'cur' if params[:is_read] == 'true' %>" href="/app/vips/notes?is_read=true">已读通知</a>
+      </div>
+      <!-- tab box end -->
+      <!-- list box start -->
+      <% if @vip_user_messages.present? %>
+        <div class="list-box">
+          <% @vip_user_messages.each_with_index do |message, index| %>
+            <dl>
+              <dt class="border" data-mid="<%= message.id %>" data-read="<%= message.is_read %>" onclick="read_message($(this),<%= index %>)">
+                <a class="icon-right" href="javascript:;">
+                  <i class="icon icon-17"></i>
+                  <% if !message.is_read %>
+                    <i class="noread"></i>
+                  <% end %>
+                  <span><%= message.title %></span>
+                  <div class="notice-date"><%= message.created_at.to_date.to_s[5, 5] %></div>
+                </a>
+              </dt>
+              <dd>
+                <%= raw message.content %>
+              </dd>
+            </dl>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="nothing">暂无通知</div>
+      <% end %>
+      <div class="loading"><img src="/assets/albums/loading.gif"/></div><%= paginate @vip_user_messages %>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+  <%= render 'footbar' %>
+</div>
+<script>
+$(function(){
+  showSlider(".mod-box dl");
+
+  //底部上拉刷新
+  document.addEventListener("touchstart",function(e){
+      var t=e.touches[0],
+          y=t.pageY;
+      $documentH = $(document).height();
+      $("body").attr("data-y",y);
+  });
+  var urls = [];
+  document.addEventListener("touchmove",function(e){
+      var url = $('.page .next').attr('href');
+      var t=e.touches[0],
+          startY=parseInt($("body").attr("data-y")),
+          pageY=(startY - t.pageY);
+      $touchT = $(window).scrollTop() + $(window).height() +pageY;
+      if($touchT>=$documentH){
+          if (url && urls.indexOf(url) == -1) {
+              urls.push(url);
+              $(".loading").show();
+              return $.getScript(url);
+          }
+      }
+  });
+  document.addEventListener("touchend",function(e){
+      // var t=e.touches[0];
+  });
+
+  // read_message($(".active .hd"));
+
+  // $(".box .hd").click(function(){
+  //   openFold($(this), '.bd');
+  //   read_message($(this));
+  // });
+});
+
+function read_message(obj,index){
+  if(obj.attr('data-read') === 'true'){
+    return false;
+  }
+  var id = obj.attr('data-mid');
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    url: '/app/vips/notes?id=' + id + '&' + Math.random() +'#mp.weixin.qq.com',
+    dataType: 'json',
+    timeout:30000,
+    success: function (data) {
+      if (!data.error) {
+        obj.attr('data-read', 'true');
+        // delTag(obj,'em');
+      }
+    }
+  });
+}
+</script>

@@ -1,0 +1,32 @@
+<% content_for :title do %>
+  <%= @wbbs_topic.content || @wbbs_community.name || @wbbs_community.activity.name %>
+<% end %>
+
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'mobile/wbbs' %>
+  <%= javascript_include_tag 'mobile/wbbs' %>
+  <%= stylesheet_link_tag "mobile/font-awesome.min" %>
+  <script type="text/javascript" src="/javascripts/app/website/swipe.js"></script>
+<% end %>
+<div class="html" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="body">
+        <div class="mod-slider slider-ver" id="index">
+          <ul class="slider-list">
+            <% @wbbs_topic.qiniu_pictures.each do |pic| %>
+            <li><%= link_to image_tag(qiniu_img_url(pic.sn)), '' %></li>
+            <% end %>
+          </ul><!--slider-list end-->
+        </div><!--mod-slider end-->
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+  $(function(){
+    indexSwipe("index");
+    var h=$("#index").innerHeight();
+    $(".slider-list li").height(h).css({"line-height":h+"px"});
+  });
+</script>

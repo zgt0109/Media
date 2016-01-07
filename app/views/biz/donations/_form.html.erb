@@ -1,0 +1,142 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li>
+            <i class="icon-home home-icon"></i>
+            <a href="#">首页</a>
+          </li>
+          <li>
+            微官网
+          </li>
+          <li>微官网设置</li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-success ">
+              <strong class="pull-left">注意：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微捐款</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <!-- <form class="form width-800" role="form"> -->
+            <%= form_for @donation, validate: true, :html =>  { class: 'form width-800' } do |f| %>
+
+              <%= f.hidden_field :supplier_id, value: current_user.id %>
+
+              <div class="form-group">
+                <label>项目名称<span class="required-star">*</span></label>
+                <div class="clearfix">
+                   <%= f.text_field :name, class: "form-control" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>显示顺序<small class="text-warning">数值越大手机端页面的排列位置越靠后</small></label>
+                <div class="clearfix">
+                  <%= f.text_field :order, class: "form-control" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>目标捐款金额<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :target_money, class: "form-control" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>所属类别<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.select :activity_id, current_user.activities.where(activity_type_id: 53).pluck(:name, :id), {}, style: "width:150px;" %>
+                </div>
+              </div>
+
+
+ <div class="p" style="display:none;">
+      <span>初始化人数<em>*</em></span>
+      <%= f.text_field :init_number, class: "input-text" %>
+    </div>
+    <div class="p" style="display:none;">
+      <span>初始化金额<em>*</em></span>
+      <%= f.text_field :init_fee, class: "input-text" %>
+    </div>
+
+
+
+
+              <div class="form-group">
+                <label>项目概要<span class="required-star">*</span></label>
+                <div class="clearfix">
+                 <!-- <textarea class="form-control" rows="5"></textarea> -->
+                 <%= f.text_area :summary, class: "form-control", rows: 10 %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>项目图片<span class="required-star">*</span><small class="text-warning">图片建议尺寸：640像素*450像素</small></label>
+                <!-- <div class="clearfix">
+                  <div class="cieldon-file" data-type="0" data-height="225" data-width="320" data-name="website_setting[bg_pic_key]" data-img="" data-key=""></div>
+                </div> -->
+          <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="320" data-height="225" data-name="donation[pic]" data-img="<%= @donation.pic_url %>" data-key="<%= @donation.pic || "" %>"></div>
+
+
+              </div>
+           
+              <div class="form-group">
+                <label>项目详细</label>
+               
+
+<%= render "shared/form_rich_text", field_name: "detail", obj: @donation, f: f, wrapper_html_options: {class: "clearfix"} %>
+
+              
+              </div>
+              <div class="form-group">
+                <label>公益组织<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <!-- <input type="text" class="form-control"> -->
+                  <%= f.text_field :group_name, class: "form-control" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>资质描述</label>
+                <div class="clearfix">
+                  <!-- <input type="text" class="form-control"> -->
+                  <%= f.text_field :qualification, class: "form-control" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>微信反馈内容:<small>捐款成功后用户会收到微信的捐款成功提示，以下编辑提示的文本内容</small></label>
+                <div class="clearfix">
+                  <!-- <textarea class="form-control" rows="5"></textarea> -->
+                  <%= f.text_area :feedback, class: "form-control", rows: 5 %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>视频:<small class="text-warning">输入视频链接地址</small></label>
+                <div class="clearfix">
+                  <!-- <input type="text" class="form-control"> -->
+                  <%= f.text_field :video_url, class: 'form-control' %>
+                </div>
+                <textarea class="form-control" rows="7" readonly>
+                  视频链接操作指南（针对优酷）
+                  优酷视频链接 http://v.youku.com/v_show/id_XNTY3ODc5NTk2.html，其中 XNTY3ODc5NTk2 是它的ID号。
+                  将下面格式中的xxxx替换成上面的ID号，然后复制到上面的输入框就可以了：
+                  （1）http://v.youku.com/player/getRealM3U8/vid/xxxx/type/mp4/v.m3u8
+                  （2）http://v.youku.com/player/getRealM3U8/vid/xxxx/type/video.m3u8
+                  以上二种二选一
+                </textarea>
+              </div>
+
+
+              <div class="form-group ">
+                <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                <input type="button" class="btn btn-sm btn-default" value="取消">
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

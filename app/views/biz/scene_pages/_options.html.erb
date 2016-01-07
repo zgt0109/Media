@@ -1,0 +1,49 @@
+<%- activities = current_user.activities.show %>
+<div class="c-group menuable_type">
+  <label class="label-name">跳转类型</label>
+  <div class="c-box">
+    <%= select_tag :menuable_type, options_for_select([['无', nil], ["链接", 'link'], ["电话", 'tel'],["微投票", 'vote'],["微报名", 'enroll'],["微调研", 'surveys'],["微预定", 'reservation']]), class: "col-sm-12 menuable_option", data: {name: 'link', url: ''} %>
+  </div>
+</div>
+
+<div class="c-group link_options enroll">
+  <label class="label-name">选择微报名</label>
+  <div class="c-box">
+    <%= select_tag :menuable_id, options_for_select(activities.enroll.map{|m| [truncate_u(m.name), m.respond_mobile_url ] }), class: "col-sm-12 enroll_select url_option" %>
+  </div>
+</div>
+
+<div class="c-group link_options vote">
+  <label class="label-name">选择微投票</label>
+  <div class="c-box">
+    <%= select_tag :menuable_id, options_for_select(activities.vote.map{|m| [truncate_u(m.name), m.respond_mobile_url ] }), class: "col-sm-12 vote_select url_option" %>
+  </div>
+</div>
+
+<div class="c-group link_options  surveys">
+  <label class="label-name">选择微调研</label>
+  <div class="c-box">
+    <%= select_tag :menuable_id, options_for_select(activities.surveys.map{|m| [truncate_u(m.name), m.respond_mobile_url ] }), class: "col-sm-12 surveys_select url_option" %>
+  </div>
+</div>
+
+<div class="c-group link_options reservation">
+  <label class="label-name">选择微预定</label>
+  <div class="c-box">
+    <%= select_tag :menuable_id, options_for_select(activities.reservation.map{|m| [truncate_u(m.name), m.respond_mobile_url ] }), class: "col-sm-12 reservation_select url_option" %>
+  </div>
+</div>
+
+<div class="c-group link_options tel">
+  <label class="label-name">联系电话</label>
+  <div class="c-box">
+    <%= text_field_tag :tel, nil, class: "col-sm-12 url_option", maxlength: 15 %>
+  </div>
+</div>
+
+<div class="c-group link_options link">
+  <label class="label-name">自定义链接<span class="help-inline text-warning line-height-32"></span></label>
+  <div class="c-box">
+    <%= text_field_tag :url, nil, class: "col-sm-12 url_option", maxlength: 1024, placeholder: '请输入带http://的完整网址'  %>
+  </div>
+</div>

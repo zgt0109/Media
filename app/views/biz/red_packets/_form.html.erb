@@ -1,0 +1,98 @@
+<% url = @red_packet.new_record? ? red_packets_path : red_packet_path(@red_packet) %>
+<%= form_for @red_packet, url: url, html: {class: 'form-horizontal form_wallet', role: 'form'} do |f| %>
+    <div class="form-group">
+      <h3 class="text-info">事件红包</h3>
+    </div>
+    <div class="form-group">
+      <label class="control-label fl">活动名称：</label>
+      <%= f.text_field :act_name, class: 'col-sm-2' %>
+    </div>
+    <div class="form-group">
+      <label class="control-label fl">红包金额：</label>
+      <%= f.text_field :min_value, class: 'col-sm-3', placeholder: '输入1.00-200.00之间的数值' %>
+      <label class="control-label ml20">元</label>
+    </div>
+    <div class="form-group">
+      <label class="control-label fl">预算总额：</label>
+      <%= f.text_field :total_budget, class: 'col-sm-3', placeholder: '输入不小于1.00的数值' %>
+      <label class="control-label ml20">元</label>
+      <!--<label class="control-label ml20 text-danger">*红包会根据发放者数量发放</label>-->
+    </div>
+    <div class="form-group">
+      <label class="control-label fl">发送时间：</label>
+      <%= f.text_field :send_at, class: 'date-time', readonly: true %>
+      <!--<input class="date-time" size="30" type="text" readonly="readonly">-->
+    </div>
+    <div class="form-group">
+      <span class="fl">发送对象：</span>
+
+      <div class="radioTab fl">
+        <label>
+          <%= f.radio_button :receive_type, RedPacket::RedPacket::ALL_FANS, class: 'ace', data: {toggle: 'radioTab', target: 'usualField', id: 'fans_count'} %>
+          <span class="lbl">所有粉丝（<i id="fans_count"><%= @current_user.wx_users.subscribe.count.to_i %></i>人）</span>
+        </label>
+        <label>
+          <%= f.radio_button :receive_type, RedPacket::RedPacket::ALL_VIPS, class: 'ace', data: {toggle: 'radioTab', target: 'customField', id: 'vips_count'} %>
+          <span class="lbl">所有会员（<i id="vips_count"><%= @current_user.vip_users.normal.count.to_i %></i>人）</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group total-estimation" style="display:none;">
+      <label class="control-label fl">红包估算总额：</label>
+      <label class="control-label ml20"><i id="total_estimation">0</i>元</label>
+      <label class="control-label ml20 text-danger">*红包估算总额根据发放者数量和红包金额获得</label>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit '完成', class: 'btn btn-primary btn-sm btn-filter mr20 btn-enter'%>
+      <%= link_to '取消', settings_red_packets_path, class: 'btn btn-primary btn-sm btn-filter'%>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script>
+        $(".ace").click(function(){
+            var ele_id = $(this).attr("data-id");
+            var counter = parseInt($("#"+ele_id).html());
+            if($("#red_packet_event_red_packet_min_value").val()){
+                var min_price = $("#red_packet_event_red_packet_min_value").val();
+                var total_estimation = min_price *counter
+                $("#total_estimation").html(total_estimation);
+                $(".total-estimation").show();
+            }
+        });
+        $(".btn-enter").click(function(){
+            if(!$("#red_packet_event_red_packet_act_name").val()){
+                showTip('warning', '活动名称不能为空');
+                return false;
+            }
+            if(!$("#red_packet_event_red_packet_min_value").val()){
+                showTip('waring', '红包金额不能为空');
+                return false;
+            }
+            var min_value = $("#red_packet_event_red_packet_min_value").val();
+            if( parseInt(min_value) < 1 || parseInt(min_value) > 200){
+                showTip('waring', '红包金额输入有误,请重新填写');
+                return false;
+            }
+            if(!$("#red_packet_event_red_packet_total_budget").val()){
+                showTip('waring', '预算总额不能为空');
+                return false;
+            }
+            var total_budget = $("#red_packet_event_red_packet_total_budget").val();
+            if(parseInt(total_budget) < 1){
+                showTip('waring', '预算总额输入有误,请重新填写');
+                return false;
+            }
+            if(!$("#red_packet_event_red_packet_send_at").val()){
+                showTip('waring', '发送时间不能为空');
+                return false;
+            }
+            if(!$("input:radio[name*='receive_type']:checked").val()){
+                showTip('waring', '发送对象必须选择');
+                return false;
+            }
+        })
+    </script>
+<% end %>

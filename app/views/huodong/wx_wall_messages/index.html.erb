@@ -1,0 +1,128 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <%= render "breadcrumb" %>
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li <% if controller_name == "wx_walls" %>class="active"<% end %>>
+            <%= link_to "微信墙管理", "/wx_walls" %>
+          </li>
+          <li <% if controller_name == "wx_wall_messages" %>class="active"<% end %>>
+            <%= link_to "留言管理", "/wx_wall_messages" %>
+          </li>
+          <li <% if controller_name == "wx_wall_datas" %>class="active"<% end %>>
+            <%= link_to "数据统计", "/wx_wall_datas" %>
+          </li>
+        </ul>
+        <div class="tab-content no-border padding-24  ">
+
+          <div id="tab-2" class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-sm-12">
+                <%= form_for @search, url: wx_wall_messages_path, :html => { :method => :get } do |f| %>
+                  <div class="col-md-3 row">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">选择活动：</span>
+                      <% options = current_user.wx_walls.show.map{|a|[a.name,a.id]} %>
+                      <%= f.select :wx_wall_id_eq, options_for_select(options, session[:wx_wall_id]),{},class:"col-xs-12" %>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">用户昵称：</span>
+                      <%= f.text_field :wx_wall_user_nickname_like, class: 'col-xs-12' %>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <input id="wx_wall_user_type" type="hidden" name="type" value="<%= params[:type] %>" />
+                      <button type="submit" class="btn btn-primary btn-sm btn-filter activity_search">查询</button>
+                      <a href="javascript:location.reload();" class="btn btn-sm btn-success">刷新查看新留言</a>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="col-md-12 margin-top-20">
+                  <ul class="nav nav-tabs padding-24 tab-size-bigger">
+                    <li class="<%= "active" if @type == "normal" %>">
+                      <%= link_to '已上墙', "javascript:;", data: { type: :normal } %>
+                    </li>
+                    <li class="<%= "active" if @type == "unchecked" %>">
+                      <%= link_to '待审核', "javascript:;", data: { type: :unchecked } %>
+                    </li>
+                    <li class="<%= "active" if @type == "blacklist" %>">
+                      <%= link_to '拉黑', "javascript:;", data: { type: :blacklist } %>
+                    </li>
+                  </ul>
+                  <div class="tab-content no-padding no-border">
+                    <div id="sub-tab-1" class="tab-pane fade active in">
+                      <table id="peopleDataTable" class="table table-striped table-bordered table-hover dataTable ">
+                        <thead>
+                          <tr>
+                            <th>头像</th>
+                            <th>昵称</th>
+                            <th>内容</th>
+                            <th>留言时间</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% if @wx_wall_messages.each do |wx_wall_message| %>
+                            <tr>
+                              <td>
+                                <% if wx_wall_message.wx_wall_user.try(:avatar_url).present? %>
+                                  <img src="<%= wx_wall_message.wx_wall_user.try(:avatar_url) %>" alt="<%= wx_wall_message.wx_wall_user.try(:nickname) %>" width="100">
+                                <% end %>
+                              </td>
+                              <td><%= wx_wall_message.wx_wall_user.try(:nickname) %></td>
+                              <td>
+                                <% if wx_wall_message.image? %>
+                                  <%= image_tag wx_wall_message.pic, size: '100x100' %>
+                                <% else %>
+                                  <%= wx_wall_message.message %>
+                                <% end %>
+                              </td>
+                              <td><%= wx_wall_message.created_at.to_s[0..15] %></td>
+                              <td>
+                                <% if @type == "normal" %>
+                                  <%= link_to '删除', wx_wall_message_path(wx_wall_message), method: :delete, confirm: "确定删除？" %>
+                                  <%= link_to '拉黑', pull_black_wx_wall_message_path(wx_wall_message), method: :post, confirm: "确定拉黑？" %>
+                                <% elsif @type == "unchecked" %>
+                                  <%= link_to '通过', allow_wx_wall_message_path(wx_wall_message), method: :post %>
+                                  <%= link_to '拒绝', wx_wall_message_path(wx_wall_message), method: :delete, confirm: "确定拒绝？" %>
+                                  <%= link_to '拉黑', pull_black_wx_wall_message_path(wx_wall_message), method: :post, confirm: "确定拉黑？" %>
+                                <% elsif @type == "blacklist" %>
+                                  <%= link_to '允许上墙', allow_wx_wall_message_path(wx_wall_message), method: :post %>
+                                <% end %>
+                              </td>
+                            </tr>
+                          <% end.blank? %>
+                            <tr>
+                              <td colspan="5" class="green text-center">没有记录</td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+
+                      <%= paginate @wx_wall_messages %>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% content_for :custom_js do %>
+    <script>
+      $(function() {
+        $("ul.breadcrumb").append("<li><a href='/wx_wall_messages'>留言管理</a></li>");
+        $("a[data-type]").on('click', function() {
+          $('#wx_wall_user_type').val( $(this).data('type') );
+          $("form.wx_wall_message_search").submit();
+        });
+      })
+    </script>
+  <% end %>

@@ -1,0 +1,105 @@
+<div class="main-content">
+  <!-- 这里是内容 start-->
+  <!--新手任务 代码块-->
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <!-- page-content start-->
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24" id="myTab">
+            <li class="">
+              <%= link_to settings_red_packets_path do %>
+                  <i class="green icon-home bigger-110"></i>红包设置
+              <% end %>
+            </li>
+            <li class="active">
+              <%= link_to "红包管理", red_packets_path %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+
+            <div id="marketRecord" class="tab-pane active">
+              <div class="row">
+
+                <div class="col-md-12">
+                  <%= form_for @search, url: red_packets_path do |f| %>
+                  <div class="col-md-3">
+                    <div class="col-md-12">
+                      <%= f.text_field :act_name_like, placeholder: '请输入红包名称' %>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group col-sm-6 input-group-text">
+                      <span class="input-group-addon">创建时间：</span>
+                      <%= f.text_field :send_at_greater_than, class: 'date-time input-sm form-control' %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= f.submit '查询', class: 'btn btn-primary btn-sm'%>
+                    </div>
+                  </div>
+                  <% end %>
+                  <%= link_to '新增红包', new_red_packet_path, class: "btn btn-primary btn-sm pull-right" %>
+                </div>
+
+
+                <div class="col-sm-12 margin-top-20">
+                  <table class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                    <tr>
+                      <th width="15%">活动名称</th>
+                      <th width="15%">红包金额</th>
+                      <th width="15%">红包预算总额</th>
+                      <th width="15%">红包预算余额</th>
+                      <th width="12%">红包发送时间</th>
+                      <th width="12%">创建时间</th>
+                      <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @red_packets.each do |packet| %>
+                    <tr>
+                      <td><%= packet.act_name %></td>
+                      <td><%= packet.min_value %></td>
+                      <td><%= packet.total_budget %></td>
+                      <td><%= packet.budget_balance %></td>
+                      <td><%= packet.send_at %></td>
+                      <td><%= packet.created_at %></td>
+                      <td>
+                        <%= link_to '红包设置', edit_red_packet_path(packet) if (!packet.follow? && packet.send_at > Time.now) %>
+                        <%= link_to '领取详情', red_packet_path(packet)%>
+                        <% if !packet.follow? && (Time.now > packet.send_at + 4.days || Time.now < packet.send_at) %>
+                            <%= link_to '删除', red_packet_path(packet), method: :delete, confirm: "确认要删除这条记录吗?" %>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <% end %>
+                    <% if @red_packets.length < 1%>
+                    <tr>
+                      <td colspan="7" align="center">暂无记录</td>
+                    </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                  <%= paginate @red_packets %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- page-content end-->
+</div>
+<!--新手任务 代码块 -end -->
+
+<!-- 这里是内容 end-->

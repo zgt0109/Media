@@ -1,0 +1,13 @@
+<% @hotel_orders.each do |order| %>
+<div class="list-li" onclick="javascript:showOrder('<%= order.id%>')">
+	<div class="hd box-txt">
+		<b><%= order.hotel.try(:name) %><%= order.hotel_branch.name %></b>
+		<p><span>入住日期</span><b><%= order.check_in_date.strftime("%m月%d日") %></b></p>
+		<p><span>离店日期</span><b><%= order.check_out_date.strftime("%m月%d日") %></b></p>
+		<p><span>状态</span><b><%= order.try(:real_status_name) %></b></p>
+	</div>
+	<div class="bd">
+		<span class="arrow arr-small"><em>￥<%= order.total_amount %></em><br/><i><%= (order.check_out_date - order.check_in_date).to_i %>晚</i></span>
+	</div>
+</div>
+<% end %>

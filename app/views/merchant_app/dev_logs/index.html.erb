@@ -1,0 +1,61 @@
+<% title "升级公告" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"<% end %>
+
+<div infinite-scroll='demo.nextPage()' infinite-scroll-disabled='demo.busy' infinite-scroll-distance='1'>
+  <div class="mod-list" ng-repeat="order in demo.orders">
+    <dl>
+      <dt class="icon-right {{order.is_new == '1' ? 'new' : 'fa-animate'}}">
+        <a href='/merchant_app/dev_logs/{{order.id}}?role=supplier&&role_id=<%= @login_user.id %>&&token=<%= @login_user.auth_token %>'>{{order.title}}<span>{{order.created_at}}</span></a>
+      </dt>
+      <dd>
+        <p ng-bind-html="order.content"></p>
+      </dd>
+     </dl>
+  </div>
+</div>
+<div class="mod-load" ng-show='demo.busy'>加载中…</div>
+
+<script>
+var app = angular.module('app', ['infinite-scroll', 'ngSanitize']);
+
+app.controller('customersController', function ($scope, Demo) {
+  $scope.demo = new Demo();
+});
+
+// 创建后台数据交互工厂
+app.factory('Demo', function ($http) {
+  var Demo = function () {
+    this.orders = [];
+    this.busy = false;
+    this.page = 1;
+    this.last_order_id = null;
+  };
+ 
+  Demo.prototype.nextPage = function () {
+    if (this.busy) return;
+    this.busy = true;
+    var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/dev_logs?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&page=" %>'+ this.page;
+    $http.get(url).success(function (response) {
+      if(response.result == 'success'){
+        var items = response.data;
+        this.busy = false;
+        if(items.length > 0 && this.last_order_id != items[items.length-1]['id']){
+          for(var i = 0; i < items.length; i++) {
+            this.orders.push(items[i]);
+          }
+          this.last_order_id = items[items.length-1].id
+          this.page += 1;
+        }  
+      } else {
+        console.log(response);
+      }
+    }.bind(this))
+    .error(function(response) {
+     console.log(response);
+   }.bind(this));
+  };
+ 
+  return Demo;
+});
+</script>
+

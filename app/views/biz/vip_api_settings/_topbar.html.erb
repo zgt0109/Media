@@ -1,0 +1,6 @@
+<% content_for :topbar do %>
+  <%= link_to '基本信息', vip_api_settings_path,      class: "h1 #{ vip_api_settings_path      == request.path ? 'pagecurrent' : 'uncurrent' }" %>
+  <%= link_to '接口说明', spec_vip_api_settings_path, class: "h1 #{ spec_vip_api_settings_path == request.path ? 'pagecurrent' : 'uncurrent' }" %>
+  <%= link_to '接口列表', vip_external_http_apis_path, class: "h1 #{ vip_external_http_apis_path == request.path ? 'pagecurrent' : 'uncurrent' }" %>
+  <%= link_to '字段说明', vip_fields_spec_vip_api_settings_path, class: "h1 #{ vip_fields_spec_vip_api_settings_path == request.path ? 'pagecurrent' : 'uncurrent' }" %>
+<% end %>

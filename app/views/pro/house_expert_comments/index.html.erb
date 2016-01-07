@@ -1,0 +1,62 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar_house' %>
+<% end %>
+
+<% content_for :topbar do %>
+    <a class="h1 uncurrent" href="<%= house_experts_url %>">专家管理</a>
+    <a class="h1 pagecurrent" href="<%= house_expert_comments_url %>">点评管理</a>
+<% end %>
+
+<%= form_for(@house_expert_comment, validate: true) do |f| %>
+    <div class="box-form form-col fl">
+      <%= f.hidden_field :house_id, value: @house_expert_comment.try(:house_id) %>
+
+      <p>
+        <span>点评内容：</span>
+        <%= f.text_area :content, placeholder: '限200字', rows: 4, cols: 20 %>
+      </p>
+
+      <p class="form-address">
+        <span>选择专家发言</span>
+        <%= f.select :house_expert_id, options_for_select(current_user.house.house_experts.normal.map{|e| [truncate_u(e.name),e.id]}, @house_expert_comment.house_expert.try(:id)) %>
+      </p>
+
+      <p class="search" style="margin-left: 83px;">
+        <%= f.submit '保存', class: 'btn btn-small btn-orange' %>
+      </p>
+
+    </div>
+
+<% end %>
+
+
+<div class="box-table fl">
+  <p>已发表的点评：</p>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
+    <tr>
+      <th width="12%">专家名称</th>
+      <th width="55%">点评内容</th>
+      <th width="20%">点评时间 </th>
+      <th>操作</th>
+    </tr>
+    <% if @house_expert_comments.count > 0 %>
+        <% @house_expert_comments.each do |expert_comment| %>
+            <tr>
+              <td><%= expert_comment.house_expert.try(:name) %></td>
+              <td><%= expert_comment.content %></td>
+              <td><%= expert_comment.created_at %></td>
+              <td>
+                <a href="<%= house_expert_comments_path(id: expert_comment.id) %>" class="fgreen">修改</a>
+                <%= link_to '删除', expert_comment, method: :delete, :data => { :confirm => "确认删除此点评？" },  class:"fred" %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr><td class="fgreen" style="float:center">还没有信息</td></tr>
+    <% end %>
+  </table>
+</div>
+
+<div class="ft">
+  <%= paginate @house_expert_comments, theme: :pretty %>
+</div>
+

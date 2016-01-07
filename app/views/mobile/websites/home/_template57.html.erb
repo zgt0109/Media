@@ -1,0 +1,20 @@
+<div class="index" id="indexList">
+  <div class="index-wrap">
+    <% website_menus[0..7].each do |menu| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <small><%= menu.title %></small>
+        <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render "iscroll", {:selector => "#indexList"} %>
+
+<% content_for :document_ready_js do %>
+    var h=$(".html").height();
+    $(".body").css({"min-height":h+"px"});
+    <% if @website_setting.bg_image.present? %>
+        // 静态背景图
+        //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+    <% end %>
+<% end %>

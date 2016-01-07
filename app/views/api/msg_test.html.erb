@@ -1,0 +1,83 @@
+<%= form_tag '/api/service'  do %>
+<%= hidden_field_tag :nonce, '914792049' %>
+<%= hidden_field_tag :timestamp, '1409023865' %>
+<%= hidden_field_tag :signature, '9ac61f47f9778884a408020005f8ee5132fc7e8e' %>
+<div class="row clearfix">
+  <label class="landscape-label">公众账号ID(basecode64)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field_tag 'id', 'MTAwMDE=', :class => 'txt-input' %>
+    </div>
+  </div>
+</div>
+<div class="row clearfix">
+  <label class="landscape-label">关键词<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :Content, :class => 'txt-input' %>
+    </div>
+  </div>
+</div>
+
+<div class="row clearfix">
+  <label class="landscape-label">微信用户uid(ToUserName)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :ToUserName, :class => 'txt-input', :value => 'toUser' %>
+    </div>
+  </div>
+</div>
+<div class="row clearfix">
+  <label class="landscape-label">微信公众账号uid(FromUserName)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :FromUserName, :class => 'txt-input', :value => 'fromUser' %>
+    </div>
+  </div>
+</div>
+<div class="row clearfix">
+  <label class="landscape-label">消息类型(MsgType)(第一次需要先使用event，进行关注。测试接口其他其他时用text)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :MsgType, :class => 'txt-input', :value => 'text' %>
+    </div>
+  </div>
+</div>
+<div class="row clearfix">
+  <label class="landscape-label">事件类型(Event)(msgtype为event时生效)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :Event, :class => 'txt-input', :value => 'subscribe' %>
+    </div>
+  </div>
+</div>
+<div class="row clearfix">
+  <label class="landscape-label">事件值(EventKey)(click事件值)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :EventKey, :class => 'txt-input', :value => '10013_46' %>
+    </div>
+  </div>
+</div>
+
+<div class="row clearfix">
+  <label class="landscape-label">消息ID(MsgId)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :MsgId, :class => 'txt-input', :value => '1234567890123456' %>
+    </div>
+  </div>
+</div>
+<div class="row clearfix">
+  <label class="landscape-label">消息创建时间(CreateTime)<span class="arsk">*</span><span class="label-tip"></span></label>
+  <div class="form-field">
+    <div class="input-box input-470 sprits inline-block">
+      <%= text_field :xml, :CreateTime, :class => 'txt-input', :value => '1348831860' %>
+    </div>
+  </div>
+</div>
+
+  <div class="actions">
+    <%= submit_tag '发送' %>
+  </div>
+<% end %>

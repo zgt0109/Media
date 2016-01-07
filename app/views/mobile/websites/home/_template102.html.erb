@@ -1,0 +1,29 @@
+<style>
+    .p-index{width:100%;margin:0 auto;}
+</style>
+<div class="mod-slider slider-ver" id="index" style="visibility: visible;">
+  <ul class="slider-list" >
+    <% website_menus.each_with_index do |menu, index| %>
+        <li class="<%= 'show' if index == 0 %>">
+          <div class="li">
+            <div class="text">
+              <%= link_to menu_url(menu) do %>
+                <h1><%= menu.title %></h1>
+                <p><%= menu.summary %></p>
+              <% end %>
+            </div>
+            <%= image_tag menu.pic.custom, class: 'website_list_21' if menu.pic? %>
+          </div>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<%= javascript_include_tag "/javascripts/vweisiteV01/index/102/jquery_easing", "/javascripts/vweisiteV01/index/102/yl3d", "/javascripts/vweisiteV01/index/102/50" %>
+
+<% content_for :document_ready_js do %>
+$('body').attr('ontouchmove', 'event.preventDefault()');
+$('body').attr('onselectstart', 'return true;');
+$('body').attr('ondragstart', 'return false;');
+$('footer').css('z-index', 10);
+<% end %>

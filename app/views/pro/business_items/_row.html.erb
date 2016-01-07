@@ -1,0 +1,9 @@
+<tr id="row-<%= business_item.id %>">
+  <td><%= business_item.name %></td>
+  <td><%= business_item.price.to_f > 0 ? f(business_item.price) : '（无）' %></td>
+  <td><%= business_item.sort %></td>
+  <td>
+    <a onclick="popUrl(this)" data-name="name" data-w="800" data-h="0.8" data-title="编辑商品" data-url="<%= edit_business_shop_business_item_path(@business_shop, business_item) %>">编辑</a>
+    <%= link_to '删除', [@business_shop, business_item], data: { remote: true, method: :delete, confirm: '确定要删除该商品吗？'} %>
+  </td>
+</tr>

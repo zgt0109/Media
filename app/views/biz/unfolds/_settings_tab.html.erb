@@ -1,0 +1,40 @@
+<%= content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '拆包有奖', unfolds_activities_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、重要提示：因为订阅号本身的限制，拆包有礼奖活动中我们无法取得用户转发给朋友时朋友的关注状态可相关信息，所以无法防止用户作弊，请注意。</li>
+            <%- if action_name == 'settings' %>
+              <li>2、系统中有可用优惠券时才可以选择优惠券。</li>
+            <%- end %>
+          </ul>
+        </div>
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24" id="myTab">
+            <li class="<%= 'active' if %w(new edit show index settings).include?(action_name)  %>">
+              <%= link_to '拆包有奖', unfolds_activities_path %>
+            </li>
+            <li class="<%= 'active' if action_name == 'consumes' %>">
+              <%= link_to 'SN码管理', consumes_unfolds_path %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <%= yield :tab %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,132 @@
+<%= content_for :step do %>
+<div class="step-pane active" id="step3">
+  <div class="form-group">
+    <label>
+      摇奖元素设置
+      <span class="required-star">*</span>
+      <span class="help-inline text-warning line-height-32">元素名称最多输入20个字；图片建议尺寸：80像素*80像素</span>
+    </label>
+    <div class="clearfix margin-left-20 elements_form">
+      <%- @activity.activity_prize_elements.each_with_index do |element, index| %>
+        <%= form_for element, :url => activity_prize_element_path(element), remote: true do |f| %>
+          <div class="form-group">
+            <div class="pull-left">
+              <label>元素<%= index+1 %>：</label>
+              <%= f.text_field :name, data: { id: element.id }, maxlength: 20, class: 'element_name unable-focus' %>
+            </div>
+            <div class="cieldon-file width-100px margin-left-10" data-type="1" data-div="#img-<%= index %>" data-width="35" data-height="35" data-img="<%= element.pic_url %>" data-name="activity_prize_element[qiniu_pic_key]" data-key="<%= element.qiniu_pic_key %>" data-callback="submitElement(<%= element.id %>);"></div>
+            <img id="img-<%= index %>">
+            <%- if index > 2 %>
+            <%= link_to raw("&nbsp;&nbsp;删除"), activity_prize_element_path(element), method: 'delete' %>
+            <%- end %>
+          </div>
+        <%- end %>
+      <%- end %>
+    </div>
+    <div class="form-group">
+      <a class="btn btn-sm btn-primary" id="add_element">+增加元素</a>
+    </div>
+    <div class="form-group">
+      <label>中奖设置<span class="required-star">*</span><small class="help-inline text-warning line-height-32">最多可以设置6个奖项</small></label>
+      <div class="clearfix margin-left-20">
+        <%= form_for @activity, :url => rule_settings_activity_path, :html => { id: 'setting-form' } do |f| %>
+        <%= hidden_field_tag :prize_id %>
+        <%= f.fields_for :activity_prizes do |activity_prize| %>
+        <div class="form-group">
+          <label><%= activity_prize.object.title %>：</label>
+          <select style="min-width: 150px;" class="select<%= activity_prize.object.id%>" name="activity_element_ids[]" onchange="changeElement(<%= activity_prize.object.id %>);">
+            <% if activity_prize.object.activity_element_ids.blank? %><option></option><% end %>
+            <%- @activity.activity_prize_elements.with_name.each do |element| %>
+            <option value="<%=element.id %>" <%= activity_prize.object.slot_first_id == element.id.to_s ?  'selected="selected"' : '' %> ><%= element.name %></option>
+            <%- end %>
+          </select>
+          <select style="min-width: 150px;" class="select<%= activity_prize.object.id%>" name="activity_element_ids[]" onchange="changeElement(<%= activity_prize.object.id %>)">
+            <% if activity_prize.object.activity_element_ids.blank? %><option></option><% end %>
+            <%- @activity.activity_prize_elements.with_name.each do |element| %>
+            <option value="<%=element.id %>" <%= activity_prize.object.slot_second_id == element.id.to_s ?  'selected="selected"' : '' %> ><%= element.name %></option>
+            <%- end %>
+          </select>
+          <select style="min-width: 150px;" class="select<%= activity_prize.object.id%>" name="activity_element_ids[]" onchange="changeElement(<%= activity_prize.object.id %>)">
+            <% if activity_prize.object.activity_element_ids.blank? %><option></option><% end %>
+            <%- @activity.activity_prize_elements.with_name.each do |element| %>
+            <option value="<%=element.id %>" <%= activity_prize.object.slot_last_id == element.id.to_s ?  'selected="selected"' : '' %>><%= element.name %></option>
+            <%- end %>
+          </select>
+          <%- if ['四等奖', '五等奖', '六等奖'].include?(activity_prize.object.title) %>
+          <%= link_to '删除', activity_prize_path(activity_prize.object, activity_id: @activity.id), class: 'margin-left-10', method: 'delete' %>
+          <%- end %>
+        </div>
+        <%- end %>
+        <% if @activity.activity_prizes.count < 6 %>
+        <div class="form-group">
+          <a class="btn btn-sm btn-primary" id="add_prize">+增加奖项</a>
+        </div>
+        <%- end %>
+        <%- end %>
+      </div>
+      <%= form_for @activity, :url => slot_path, validate: true  do |activity| %>
+      <%= hidden_field_tag :redirect_to, edit_prize_settings_slot_path(@activity)%>
+      <%= activity.fields_for :activity_property, validate: true do |ap| %>
+      <%= render 'activities/property_form', ap: ap %>
+      <% end %>
+
+      <div class="row-fluid center">
+        <a class="btn btn-prev btn-sm" href='<%= edit_start_settings_slot_path(@activity) %>'> <i class="icon-arrow-left"></i> 上一步 </a>
+        <%- if @activity.can_not_edit? %>
+          <a href="<%= edit_prize_settings_slot_path(@activity) %>" class="btn btn-prev btn-sm"><i class="icon-arrow-right icon-on-right"></i>下一步</a>
+        <%- else %>
+          <button class="btn btn-success btn-sm btn-next next_step" data-last="完成">
+            <i class="icon-arrow-right icon-on-right"></i>下一步
+          </button>
+        <%- end %>
+        <a class="btn btn-sm" href="/activities/slots">返回</a>
+      </div>
+      <%- end %>
+    </div>
+  </div>
+</div>
+</div>
+<%- end %>
+<%= render 'main_content' %>
+<%- content_for :custom_js do %>
+<script type="text/javascript">
+  $(function() {
+
+    <%- if @activity.can_not_edit? %>
+      $('input,select,textarea').prop('disabled', true);
+      $('.wysiwyg-editor').attr('contenteditable', false);
+    <%- end %>
+
+    $('.element_name').blur(function () {
+      var id = $(this).data('id')
+      $('#edit_activity_prize_element_'+id).submit();
+    });
+  });
+
+  function submitElement(id,key,url){
+    var form = $('#edit_activity_prize_element_'+id);
+    setTimeout(function(){
+      form.trigger('submit.rails');
+    }, 500)
+  }
+
+  $('#add_element').on('click', function(){
+    $.post('<%= activity_prize_elements_path(activity_id: @activity.id) %>', {}, function() { location.href=location.href;});
+  });
+
+  function changeElement(id){
+    $('#prize_id').val(id);
+    var selects = $('.select'+id);
+    var results = new Array();
+    $.each(selects,function(i){results[i]=$(selects[i]).val(); });
+    results = $.grep(results, function (n) { return $.trim(n).length > 0;});
+    if(results.length == 3){
+      $('#setting-form').submit();
+    }
+  };
+
+  $('#add_prize').on('click', function(){
+    $ .post('<%= activity_prizes_path(activity_id: @activity.id) %>', {}, function() { location.href=location.href;});
+  });
+</script>
+<%- end %>

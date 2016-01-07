@@ -1,0 +1,28 @@
+__filename = "surveys_users.xls"
+sheet1 = xls.create_worksheet
+
+
+if @search.relation.present?
+  questions = @activity.activity_survey_questions.includes(:activity_survey_answers)
+  question_names = questions.map(&:name)
+  sheet1.row(0).concat(["序号","姓名","手机号",question_names,"建议","调研时间"].flatten)
+  row = 1
+  search_result = @search.page(params[:page_exl]).per(EXPORTING_COUNT)
+  answers_hash = ActivitySurveyAnswer.where(activity_survey_question_id: questions.map(&:id), activity_user_id: search_result.map(&:id)).pluck(:activity_survey_question_id, :activity_user_id, :answer).each_with_object(Hash.new { |hash, key| hash[key] = [] }) do |(activity_survey_question_id, activity_user_id, answer), h|
+    h["#{activity_survey_question_id}-#{activity_user_id}"] << answer
+  end
+  search_result.each_with_index do |obj, index|
+    sheet1[row, 0] = index + 1
+    sheet1[row, 1] = obj.name.presence || '匿名用户'
+    sheet1[row, 2] = obj.mobile.presence || '匿名用户'
+    num = 3
+    questions.each_with_index do |question,index|
+      answers = answers_hash["#{question.id}-#{obj.id}"].map { |answer| survey_answer(answer) }
+      sheet1[row, (index+3)] = answers.join("  |  ")
+      num += 1
+    end
+    sheet1[row, num] = obj.activity_feedback.try(:content)
+    sheet1[row, (num+1)] = obj.created_at
+    row += 1
+  end
+end

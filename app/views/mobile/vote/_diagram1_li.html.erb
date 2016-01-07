@@ -1,0 +1,11 @@
+<% results.each_with_index do |f, index| %>
+  <li>
+    <span><%#= (results.current_page - 1) * results.limit_value + index + 1 %><%= f.item_no%>、</span>
+    <p class=""><%= truncate f.name, length: 36 %></p>
+    <%= div_for f, class: 'line' do %>
+      <label><b style="width:<%= f.item_per %>%;"></b></label>
+      <span class="count"><%= f.item_per %>%</span>
+    <% end if activity.allow_show_vote_percent? %>
+    <%= content_tag_for :span, f, class: 'nu' do %><%= f.item_select_count %>票<% end if activity.allow_show_vote_count? %>
+  </li>
+<% end %>

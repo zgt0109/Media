@@ -1,0 +1,238 @@
+* {margin:0;padding:0;}
+html, body {
+	height: 100%
+}
+body {
+	position: relative;
+	overflow-x: hidden;
+	font-size: 14px;
+	font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+	-webkit-text-size-adjust: none;
+}
+body, p, form, h1, h2, h3, h4, h5, h6, ul, ol, li, section, div, * {
+	padding: 0;
+	margin: 0
+}
+ul, ol, li {
+	list-style: none
+}
+img {
+	border: 0
+}
+a {
+	text-decoration: none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0); 
+}
+video {
+	display: inline-block;
+	width:100%;
+	background:#000;
+}
+::-moz-selection {
+ background: none;
+ color: #fff;
+ text-shadow: none;
+}
+::selection {
+	background: none;
+	color: #fff;
+	text-shadow: none;
+}
+img {
+	-ms-interpolation-mode: bicubic;
+}
+h1, h2, h3 {
+	color: #444;
+}
+h1 {
+	/*-webkit-text-stroke: 1px #fff;*/
+	font: 20px "\5FAE\8F6F\96C5\9ED1";
+}
+h2 {
+	/*-webkit-text-stroke: 1px #fff;*/
+	font: 16px "\5FAE\8F6F\96C5\9ED1";
+}
+h3 {
+	/*-webkit-text-stroke: 1px #fff;*/
+	font: 15px "\5FAE\8F6F\96C5\9ED1";
+	color:#333;
+}
+i,em,b,span,label,a{ display:inline-block; font-style:normal;}
+img{ }
+.hide {
+	display: none;
+}
+.visuallyhidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+	clip: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	position: static;
+	width: auto;
+}
+.break {
+	word-spacing: normal;
+	word-break: normal;
+	word-break: break-all;
+}
+.ellipsis {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow:hidden;
+}
+.fixed-top {
+	position: fixed;
+	bottom: auto;
+	top: 0px;
+}
+.fixed-bottom {
+	position: fixed;
+	bottom: 0px;
+	top: auto;
+}
+.fixed-left {
+	position: fixed;
+	right: auto;
+	left: 0px;
+}
+.fixed-right {
+	position: fixed;
+	right: 0px;
+	left: auto;
+}
+.tleft {
+	text-align: left;
+}
+.tright {
+	text-align: right;
+}
+.tcenter {
+	text-align: center;
+}
+.fred{ color:#fe4773;}
+.fl{ float:left;}
+.fr{ float:right;}
+/*table*/
+.table {
+	height: 100%;
+	width: 100%;
+	display: table;
+	text-align: center;
+}
+.tr{ display:table-row;}
+.td {
+	width: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+/*input*/
+input[type="text"],
+input[type="search"],
+input[type="number"],
+input[type="password"],
+input[type="checkbox"],
+input[type="radio"],
+select{ border-color:#ccc;}
+input[type="text"],
+input[type="search"],
+input[type="number"],
+input[type="password"],
+select{ height: 30px; -webkit-appearance:none;border-radius:5px; border:1px solid #ccc; padding:0 5px;}
+input[type="checkbox"],
+input[type="radio"]{-webkit-appearance:none; background: #ccc; width: 14px; height: 14px; border-radius: 14px;}
+input[type="checkbox"]:checked,
+input[type="radio"]:checked{ background: #666;}
+input[type="submit"],
+input[type="botton"]{-webkit-appearance:none; border-radius:5px;}
+/*layout*/
+.html {min-height: 100%;}
+.main {overflow-y:auto;
+    overflow-x:hidden;
+padding-bottom: 50px;}
+footer {position: relative;
+margin-top: -50px;
+height: 30px;
+clear:both;
+text-align:center; padding:20px 0 0 0;}
+body:before {
+content:"";
+height:100%;
+float:left;
+width:0;
+margin-top:-32767px;
+} 
+header,
+footer,
+section{ width:100%;}
+section{ padding:0 0 0 0;}
+/*footer*/
+footer a{ color:#888;}
+/*modua*/
+/*section*/
+section{margin:10px 3% 0 3%;}
+/*sec-game*/
+.sec-game{ position:relative; width:100%; margin:0; overflow:hidden;}
+/*sec-list*/
+.sec-list a{ color:#fff;height:30px; line-height:30px;padding:0 2%; width:90%;}
+.sec-list a:active,
+.sec-list a.active{}
+/*sec-info*/
+.sec-info{ width:94%; font-size:12px;}
+/*sec-text*/
+.sec-text{padding:2%; width:90%; color:#666; line-height:20px;}
+/*pop*/
+.pop,
+.pop-bg,
+.pop-bd{ width:100%; height:100%; left:0; top:0; z-index:999;}
+.pop{position:absolute; background:rgba(0,0,0,0.5); display:none;}
+.pop-bg{ position:absolute; background:#000;opacity:0.5;
+filter:alpha(opacity=50);
+-moz-opacity:0.5;
+-khtml-opacity:0.5;z-index:999;}
+.pop-bd{position:fixed;  z-index:1000;}
+/*pop*/
+.pop-bd{background:rgba(255,255,255,0.5); top:50%; left:50%; border-radius:20px; padding:1%; overflow:hidden;}
+.pop-bd .box-pop{ width:100%; height:100%; background:#fff; border-radius:20px; overflow:hidden;}
+.pop-bd .hd{ height:35px; line-height:35px; font-size:16px; text-shadow:0 1px 1px #fff; border-radius:10px 10px 0 0; text-align:center; width:100%;}
+.pop-bd .bd{ background:#fff; border-radius:0 0 10px 10px; width:80%; overflow:hidden; padding:10px 10%;}
+.pop-bd b{font-weight:normal;}
+.pop-bd p{ padding:5px 0; overflow:hidden;}
+.pop-bd p span{ width:100%; line-height:25px;}
+.pop-bd input{ width:94%;}
+.pop-bd .btn{ width:100%;}
+.pop-form .pop-bd{width:78%; height:260px;margin:-130px 0 0 -40%; }
+.pop-result .pop-bd{width:78%; height:70px;margin:-35px 0 0 -40%;}
+.pop-result .box-pop{line-height:30px; padding:20px 0; text-align:center; height:30px;}
+.pop-result .box-pop span{ background-position:left center; background-repeat:no-repeat;padding:0 0 0 60px; background-size:auto 30px;}
+/*sec-result*/
+.sec-result{background:#f0eff4; position:fixed; top:0; left:0; z-index:100; width:100%; height:100%; margin:0; display:none; overflow:hidden;}
+/*box-page*/
+.box-page .hd,
+.box-page .bd{border-bottom:1px solid #ccc;}
+.box-page .hd{ color:#333; height:40px; line-height:40px; padding:10px 5% 0 5%; position:fixed; top:0; left:0; width:90%; z-index:101; box-shadow:0 0 5px rgba(0,0,0,0.25);}
+.box-page .bd{ background:#fff; padding:51px 0 0 0; height:80%; overflow:auto; position:fixed; top:0; left:0;}
+.btn-back{ border-radius:5px; height:30px; line-height:30px; padding:0 10px; border:1px solid #ccc; float:right;}
+/*box-list*/
+.box-list li{ position:relative; padding:10px 5%; font-size:12px; overflow:hidden; border-bottom:1px dashed #ccc;}
+.box-list li:last-child{ border:0;}
+.box-list b{ color:#da8d13;}
+.box-list b,
+.box-list span,
+.box-list p{ width:100%; overflow:hidden; float:left;}
+.box-list p{ padding:5px 0;}
+.box-list li .btn{ width:30%; position:absolute; top:10px; right:10px;}
+/*btn*/
+.btn{ border-radius:2px; color:#fff; height:30px; line-height:30px; text-align:center; font-size:18px; border:0;}
+@media screen and (orientation:landscape) {
+	
+}

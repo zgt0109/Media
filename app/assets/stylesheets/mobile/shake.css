@@ -1,0 +1,50 @@
+/*
+ *= require mobile/winwemedia01
+ *= require font/font-awesome.min
+ *= require_self
+ */
+body{
+    background: #2e3132;
+}
+.mod-game{
+    background: url(/assets/shake/bg.jpg) no-repeat center 0;
+    background-size: auto 150px;
+    height: 200px;
+    padding: 180px 0 0 0;
+    color: #fff;
+    text-align: center;
+    margin: 30px 0 0 0;
+}
+.mod-gift{
+    border-radius: 5px;
+    padding: 10px 5px;
+    position: fixed;
+    width: 80%;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    margin: 30px 10%;
+}
+
+.mod-gift>*{display: table-cell; vertical-align: middle; line-height: 20px; text-align: center; height: 40px;}
+.mod-gift>*:last-child{width: 100%; color: #fff; position: relative;}
+.mod-gift>p:before{position: absolute; right: 0; top:50%; margin: -10px 0 0 0; width: 20px; height: 20px; line-height: 20px; display: block; color: #666;}
+
+.mod-btn{
+    background: #3a3b3d;
+    border:1px solid #262729;
+    box-shadow: 1px 1px 0 #4b4c4e inset,-1px -1px 0 #4b4c4e inset;
+}
+.mod-btn:active,
+.mod-btn.active{background: #343537;}
+
+.btn-back{border-radius: 100000px; width:50px; height: 50px; position: fixed; bottom: 0; left: 50%; margin: 30px 0 30px -25px; text-align: center; line-height: 48px; color: #fff; font-size: 40px; z-index: 2;}
+
+.mod-date{line-height: 30px; padding: 0 10px; border-radius: 1000px; background: rgba(255,255,255,0.1); width: 40%; text-align: center; margin: 20px auto; color: #666;}
+
+.mod-result{line-height: 20px; color: #fff; padding: 0 20px; margin-bottom: 70px;}
+.mod-result p{margin: 10px 0; overflow: hidden; font-size: 16px;}
+.mod-result p>*{}
+.mod-result p>*:last-child{width: 100%;display: table-cell; vertical-align: middle;}
+.mod-result p>b{max-width: 100px; display: block; float: left;}
+.mod-result i{color: #fff57a; font-size: 14px; font-style:normal;}

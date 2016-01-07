@@ -1,0 +1,271 @@
+<% text_allow_blank ||= false %>
+<%= form_for @wx_reply, html: { id: 'wx_reply_form', class: "form width-800", role: "form" } do |f| %>
+    <%= f.hidden_field :event_type %>
+    <%= f.hidden_field :wx_mp_user_id %>
+    <div class="form-group">
+      <label class="">展现类型<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.select :reply_type, WxReply.reply_type_options, {} , class: "col-xs-6", data: {toggle: '', href: '', target:'', fn: ''}  %>
+      </div>
+    </div>
+
+    <div id="eventReply"></div>
+
+    <div class="form-group">
+        <div class="tab-content no-border no-padding" id="tab1">
+          <div class="tab-pane active" id="tab-1">
+            <div class="form-group">
+              <label class="">
+                文本内容
+                <% unless text_allow_blank %>
+                    <span class="required-star"> * </span>
+                <% end %>
+              </label>
+              <div class="clearfix">
+                <%= f.text_area :content, rows: 5, class: 'col-xs-6'%>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="tab-pane" id="tab-2">
+            <div class="form-group">
+              <label class="">选择活动<span class="required-star"> * </span></label>
+
+              <div class="clearfix">
+                <%= f.select :activity_id, current_user.activities.active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @wx_reply.try(:replyable_id) }, validate: true, class: "col-xs-6" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="tab-3">
+            <div class="form-group">
+              <label class="">图文资源<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @wx_reply.try(:replyable_id) }, validate: true, class: "col-xs-6" %>
+                <%= link_to "　管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %><br/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-8 no-padding">
+                <label class="pull-left">图文预览</label>
+              </div>
+
+              <div class="col-sm-8 no-padding">
+                <div class="warpVMS">
+                  <div class="vMicroShow">
+                    <div class="vMSHead">
+                      <span class="title">
+                        <%= @wx_reply.replyable.try(:title) rescue '素材标题' %>
+                      </span><br>
+                      <span class="grey">
+                        <%= @wx_reply.replyable.created_at.to_date rescue Date.today %>
+                      </span>
+                    </div>
+                    <div class="vMSImg" id="img-1" style="background: url('<%= @wx_reply.replyable.try(:pic).try(:large) rescue ''%>')">
+
+                    </div>
+                    <div class="vMSFoot"><p class="grey"><%= @wx_reply.replyable.try(:summary) rescue '' %></p></div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="tab-4">
+            <div class="form-group">
+              <label class="">图文资源<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @wx_reply.try(:replyable_id) }, validate: true, class: "col-xs-6" %>
+                <%= link_to "　管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %><br/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-8 no-padding">
+                <label class="pull-left">图文预览</label>
+              </div>
+
+              <div class="col-sm-8 no-padding">
+                <div class="warpVMS">
+                  <div class="vMicroShow">
+                    <div class="vMSHead">
+                      <span class="title">
+                        <%= @wx_reply.replyable.try(:title) rescue '素材标题' %>
+                      </span><br>
+                      <span class="grey">
+                        <%= @wx_reply.replyable.created_at.to_date rescue Date.today %>
+                      </span>
+                    </div>
+                    <div class="vMSImg" id="img-1" style="background: url('<%= @wx_reply.replyable.try(:pic).try(:large) rescue '' %>')">
+
+                    </div>
+                    <div class="vMSFoot"><p class="grey"><%= @wx_reply.replyable.try(:summary) rescue '' %></p></div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="tab-5">
+            <div class="form-group">
+              <label class="">选择语音<span class="required-star">*</span></label>
+
+              <div class="clearfix">
+                <%= f.select :audio_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @wx_reply.try(:replyable_id) }, validate: true, class: "col-xs-6" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="tab-9">
+            <div class="form-group">
+              <label class="">选择游戏<span class="required-star">*</span></label>
+
+              <div class="clearfix">
+                <%= f.select :game_assistant_id, (current_user.assistants.games.map{|m| [m.try(:name), m.try(:id)]}) , { selected: @wx_reply.try(:replyable_id)}, validate: true, class: "col-xs-6"  %>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="form-group">
+      <input type="submit" class="btn btn-primary btn-sm" value="保存" />
+    </div>
+
+<% end %>
+
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+
+        function select_wx_reply_type() {
+            $('#wx_reply_content').closest('.tab-pane').removeClass('active');
+            $('#wx_reply_single_material_id').closest('.tab-pane').removeClass('active');
+            $('#wx_reply_multiple_material_id').closest('.tab-pane').removeClass('active');
+            $('#preview_pic').closest('.tab-pane').removeClass('active');
+            $('#wx_reply_activity_id').closest('.tab-pane').removeClass('active');
+            $('#wx_reply_audio_id').closest('.tab-pane').removeClass('active');
+            $('#wx_reply_video_id').closest('.tab-pane').removeClass('active');
+            $('#wx_reply_game_assistant_id').closest('.tab-pane').removeClass('active');
+//        $('#faceTitle').show();
+            if ($('#wx_reply_reply_type').val() == 1 ) {
+                $('#wx_reply_content').closest('.tab-pane').addClass('active');
+                $('#faceTitle').show();
+                $('#wx_reply_content').focus();
+            } else if ( $('#wx_reply_reply_type').val() == 2 ) {
+                $('#wx_reply_activity_id').closest('.tab-pane').addClass('active');
+            } else if ( $('#wx_reply_reply_type').val() == 3 ) {
+                $('#wx_reply_single_material_id').closest('.tab-pane').addClass('active');
+                $('#wx_reply_single_material_id').change();
+//            $('#preview_pic').closest('.tab-pane').addClass('active');
+            } else if ( $('#wx_reply_reply_type').val() == 4 ) {
+                $('#wx_reply_multiple_material_id').closest('.tab-pane').addClass('active');
+                $('#wx_reply_multiple_material_id').change();
+//            $('#preview_pic').closest('.form-group').show();
+            } else if ( $('#wx_reply_reply_type').val() == 5 ) {
+                $('#wx_reply_audio_id').closest('.tab-pane').addClass('active');
+            } else if ( $('#wx_reply_reply_type').val() == 8 ) {
+                $('#wx_reply_video_id').closest('.tab-pane').addClass('active');
+            } else if ( $('#wx_reply_reply_type').val() == 9 ) {
+                $('#wx_reply_game_assistant_id').closest('.tab-pane').addClass('active');
+            }
+        }
+
+        $(function() {
+
+            // App.init();
+
+            $('#wx_reply_form input[type=submit]').click(function(event) {
+                // if ( $('#wx_reply_name').val() ) {
+                if ( $('#wx_reply_reply_type').val() == 1 && !$('#wx_reply_content').val() && '<%= text_allow_blank %>' == 'false') {
+                    showTip('warning','内容不能为空');
+                    return false;
+                } else if ( $('#wx_reply_reply_type').val() == 3 && !$('#wx_reply_single_material_id').val() ) {
+                    showTip('warning','请选择一条图文素材');
+                    return false;
+                } else if ( $('#wx_reply_reply_type').val() == 4 && !$('#wx_reply_multiple_material_id').val() ) {
+                    showTip('warning','请选择一条图文素材');
+                    return false;
+                } else if ( $('#wx_reply_reply_type').val() == 2 && !$('#wx_reply_activity_id').val() ) {
+                    showTip('warning','请选择活动');
+                    return false;
+                } else if ( $('#wx_reply_reply_type').val() == 5 && !$('#wx_reply_audio_id').val() ) {
+                    showTip('warning','请选择语音');
+                    return false;
+                } else if ( $('#wx_reply_reply_type').val() == 8 && !$('#wx_reply_video_id').val() ) {
+                    showTip('warning','warning','请选择视频');
+                    return false;
+                } else if ( $('#wx_reply_reply_type').val() == 9 && !$('#wx_reply_game_assistant_id').val() ) {
+                    showTip('warning','请选择游戏');
+                    return false;
+                }
+                // }
+            });
+
+            $('#wx_reply_single_material_id, #wx_reply_multiple_material_id').change( function() {
+                var self = $(this);
+                $.ajax({
+                    url: '/materials/'+$(this).val(),
+                    type: "get",
+                    dataType : "json",
+                    success : function (data){
+                        if(data){
+                            self.closest('.tab-pane').find('span.title').html(data['title']);
+                            self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
+                            self.closest('.tab-pane').find('p.grey').html(data['summary']);
+                            self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                        }
+                    }
+                });
+            });
+
+            // form face
+            window.onload = function(){
+//            $("#wx_reply_content").FormFace({ cid : "#eventReply", btn : "#button" , left : "0" , top : "0" });
+                select_wx_reply_type();
+            }
+
+            $('#wx_reply_reply_type').change( function() {
+                select_wx_reply_type();
+            });
+
+            $('#wx_reply_content').blur( function() {
+                $(this).closest('form').resetClientSideValidations();
+            });
+
+            // innser face to content of wx_reply_content
+            $('#wx_reply_content').bind('mousedown', function(e){
+//                e.stopPropagation();
+            });
+            $('#wx_reply_content').bind('focus', function(e){
+//                $(this).data('position', true);
+//                $(this).data('monitor', false);
+            });
+            $('body').bind('mousedown', function(){
+                var el = $('#wx_reply_content');
+                        // sel = el.getSelection(); // 本行代码报错
+
+//                if (el.data('monitor')) return;
+//
+//                el.data('pStart', sel.start);
+//                el.data('pEnd', sel.end);
+//                el.data('monitor', true);
+            });
+//        $('#wx_reply_content').setSelection(+$('#wx_reply_content').val().length, +$('#wx_reply_content').val().length);
+            $('#img-1').css('display', 'block');
+            $('#img-1').css('background-size', '100%');
+            $('#img-1').css('width', '100%');
+            $('#img-1').css('height', '200px');
+            $('#img-1').css('background-repeat', 'no-repeat no-repeat');
+
+        });
+    </script>
+<% end %>
+

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <link href="/assets/favicon.ico" rel="shortcut icon">
+  <title><%= content_for?(:title) ? yield(:title) : "微枚迪" %></title>
+  <meta name="keywords"  content="<%= content_for?(:meta_keywords) ? yield(:meta_keywords) : "微枚迪" %>"/>
+  <meta name="description"  content="<%= content_for?(:meta_description) ? yield(:meta_description) : "微枚迪" %>"/>
+  <%#= stylesheet_link_tag    "app", media: "all" %>
+  <%#= javascript_include_tag "app/app.js" %>
+
+  <%= yield :head %>
+  <%= csrf_meta_tags %>
+</head>
+<body id="page" class="<%= @body_class %>">
+  <%= render 'application/gb2big5' %>
+  <div class="html" id="<%= @html_class %>">
+    <div class="<%= @main_class || 'main' %>" id="<%= @main_id %>">
+      <%= yield %>
+    </div>
+  </div>
+  <%= render 'application/app_footer' %>
+
+  <%= yield :mod_pop if content_for? :mod_pop %>
+
+  <script type="text/javascript">
+        $(function(){
+            $('input[type=file]').each(function(){
+                $(this).attr('data-token', '<%= qiniu_pictures_upload_token%>');
+                $(this).attr('data-bucket', '<%= BUCKET_PICTURES %>');
+            });
+        });
+    </script>
+</body>
+</html>

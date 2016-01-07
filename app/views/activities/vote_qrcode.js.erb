@@ -1,0 +1,13 @@
+var html = '<%= j (render "activities/vote_qrcode", {activity: @activity}) %>';
+$('#qrocde-<%= @activity.id %>').html(html).show();
+clip = new ZeroClipboard($('#copy-button-<%= @activity.id %>'), {
+  moviePath: "/flash/ZeroClipboard.swf"
+});
+
+clip.on( "load", function(client) {
+  client.on( "complete", function(client, args) {
+    if(args['current_element_id'] == 'copy-button-<%= @activity.id %>'){
+      showTip('success', '路径已复制到剪贴板')
+    }
+  });
+});

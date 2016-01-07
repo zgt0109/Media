@@ -1,0 +1,23 @@
+<%= render "slider_full", {:has_slider_text => :yes} %>
+
+<div class="index tright" id="indexList">
+  <ul>
+    <% website_menus.in_groups_of(6, false).each do |sub_menus| %>
+        <li>
+          <% sub_menus.each do |menu| %>
+              <%= link_to menu_url(menu), class: "box mod-index" do %>
+                  <div class="p">
+                    <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                    <b><%= menu.title %></b>
+                    <i class="fa fa-angle-right ico"></i>
+                  </div>
+              <% end %>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :document_ready_js do %>
+    divSwipe("indexList");
+<% end %>

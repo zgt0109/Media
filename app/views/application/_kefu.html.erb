@@ -1,0 +1,3 @@
+<% if @supplier.try(:wx_mp_user).try(:kefu_js_code).present? %>
+  <%= raw @supplier.wx_mp_user.kefu_js_code %>
+<% end %>

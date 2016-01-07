@@ -1,0 +1,13 @@
+本地测试
+<form action='<%= payment_request_payments_url %>' method='post'>
+  商户ID: <input name="supplier_id" value="10052"size="30"></input><br/>
+  订单号: <input name="out_trade_no" value="11111"size="30"></input><br/>
+  商品名: <input name="subject" value="testsubjec"size="30"></input><br/>
+  notify_url: <input name="notify_url" value="http://ec.testing.winwemedia.com/payment/wxpay/notify"size="30"></input><br/>
+  callback_url: <input name="callback_url" value="http://www.baidu.com"size="30"></input><br/>
+  payment_type_id: <input name="payment_type_id" value="1"size="60"></input><br/>
+  金额: <input name="amount" value="0.01"size="60"></input><br/>
+  描述: <input name="body" value="testtest"size="30"></input><br/>
+  <input type='submit'/>
+  <!--<a href='<%#= wxpay_pay_url %>' class="submit">submit</a>-->
+</form>

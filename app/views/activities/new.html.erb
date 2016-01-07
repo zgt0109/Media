@@ -1,0 +1,36 @@
+<% unless ['微调研', '微投票'].include?(@activity.activity_type.try(:name)) %>
+  <% content_for :sidebar do %>
+    <%= render activity_sidebar_name %>
+  <% end %>
+
+  <% content_for :topbar do %>
+    <%= render 'topbar_activity_new' %>
+  <% end %>
+<%- end %>
+
+<%- unless [12, 15].include?(@activity.activity_type_id) %>
+  <%= render 'p_note' %>
+<%- end %>
+
+<% if @activity.fight?%>
+  <%= render 'fight_form' %>
+<% elsif @activity.vote? %>
+  <%
+    2.times do
+      @activity.activity_vote_items.build
+    end
+    @activity.activity_property ||= ActivityProperty.new(:activity_type_id => @activity.activity_type_id)
+  %>
+  <%= render 'vote_form' %>
+<% elsif @activity.surveys? %>
+  <%= render 'survey_form' %>
+<% else %>
+    <%= render :partial => 'form' %>
+<%end-%>
+
+<style>
+.form-row textarea { width: 95%; }
+</style>
+<script>
+	var activity_type = <%= @activity.activity_type_id %>
+</script>

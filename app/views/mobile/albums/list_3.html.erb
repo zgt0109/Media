@@ -1,0 +1,52 @@
+<% provide(:title, @album.try(:name)) %>
+<div class="cent">
+  <div class="list list2 clear">
+    <ul>
+      <% @album.photos.page(1).each do |photo| %>
+        <li>
+          <a href="<%= mobile_album_path(photo, supplier_id: photo.album.supplier_id) %>">
+            <img class="lazy" src="<%= photo.img_url %>"/>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    <div class="mod-load"><span class="tips">加载更多</span><span class="jiazai"><i class="fa fa-spinner fa-spin "></i> 正在加载...</span></div>
+  </div>
+</div>
+<script>
+  $(function(){
+    //延迟加载
+    $(".lazy").lazyload({
+      placeholder : "/assets/mobile/albums/load.gif",
+      effect  : "fadeIn"
+    });
+    var img_width=290;
+    var img_height=200;
+    var scale = 200/290;
+    autoHeight(".list2 li",scale)
+    bottomLoad(load)
+    var page = 2,
+        get_ajax = true;
+    function load(){
+      var get_url = "<%= load_more_photos_mobile_album_path(@album.supplier_id,@album) %>" + "?page=" + page;
+      if(get_ajax){
+        get_ajax = false;
+        $.getJSON(get_url, function(data) {
+          if(data.photos.length > 0){
+            page += 1;
+            var html = '';
+            for(i=0;i<data.photos.length;i++){
+              html += '<li><a href="'+data.photos[i].link_to+'"><img class="lazy" src="'+data.photos[i].img_url+'"/></a></li>';
+            }
+            $(html).appendTo($(".list ul"));
+            autoHeight(".list2 li",scale);
+            get_ajax = true;
+          }else{
+            $(".tips").html("没有数据啦");
+          }
+        });
+      }
+      $(".mod-load").removeClass("loading");
+    }
+  })
+</script>

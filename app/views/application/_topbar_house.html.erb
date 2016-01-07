@@ -1,0 +1,5 @@
+  <%= link_to '户型图信息设置', houses_url, class: "h1 #{controller_name == 'houses' ? 'pagecurrent' : 'uncurrent' }" %>
+  <%= link_to '户型设置', house_layouts_url, class: "h1 #{['house_layouts', 'house_pictures','house_layout_panoramas'].include?(controller_name) ? 'pagecurrent' : 'uncurrent' }" %>
+  <%= link_to '封面图管理', house_pictures_url, class: "h1 #{(controller_name == 'house_pictures' && !params[:house_layout_id]) ? 'pagecurrent' : 'uncurrent' }" %>
+
+	<%= link_to "返回", house_layouts_url, style: "float:right;margin-top:9px;" if ['house_pictures','house_layout_panoramas'].include? controller_name %>

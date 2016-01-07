@@ -1,0 +1,19 @@
+<%# booking_items.each do |booking_item|%>
+    <div class="list-li">
+      <div class="hd">
+        <% picture = booking_item.booking_item_pictures.first %>
+        <a href="<%= mobile_booking_item_path(supplier_id: @supplier.id, id: booking_item.id, anchor: "mp.weixin.qq.com") %>" class="<%=  picture.try(:pic?) ? "" : "img-null"%>">
+          <%= picture.try(:pic?) ? (image_tag picture.pic.try(:large)) : "暂无图片" %>
+        </a>
+      </div>
+      <div class="bd">
+        <a href="<%= mobile_booking_item_path(supplier_id: @supplier.id, id: booking_item.id, anchor: "mp.weixin.qq.com")%>">
+          <%= booking_item.name%>
+        </a>
+        <p>
+          <span class="fred">￥<%= f booking_item.price %></span>
+          <a href="<%= new_mobile_booking_comment_path(supplier_id: @supplier.id, booking_item_id: booking_item.id) %>" class="ico-comment fr"><%= booking_item.booking_comments.count %></a>
+        </p>
+      </div>
+    </div>
+<%# end %>

@@ -1,0 +1,3 @@
+var select_tag = '<%= j select_tag "shop_product[category_parent_id]", options_from_collection_for_select(@shop_categories, "id", "name"), prompt: "请选择分类编号", class: "col-xs-6", id: "first_level_categories" %>';
+$("#first_div").empty();
+$("#first_div").html(select_tag);

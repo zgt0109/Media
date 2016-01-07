@@ -1,0 +1,57 @@
+<div class="html theme-1 vip-bg padding-foot" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="vip-head">
+        <a href="<%= vip_packages_app_vips_path %>">
+          <img src="/assets/mobile/wcard/icon-right.png" alt="">
+        </a>
+        <h1><%= truncate_utf(@vip_package.name) %></h1>
+        <a href="javascript:;"></a>
+      </div>
+      <div class="list-box detail-box no-margin J-slider">
+        <% @vip_package.vip_package_items_vip_packages.each do |vpivp| %>
+        <dl>
+          <dt class="border">
+            <a class="icon-right vip-name" href="#">
+              <span><%= vpivp.vip_package_item.name %></span>
+              <span class="num vip-num"><%= vpivp.items_count == -1 ? "不限次" : "#{vpivp.items_count}次" %></span>
+            </a>
+          </dt>
+          <dd>
+            <div class="coupons vip-coupons c-normal">
+              <a href="javascript:void(0);">
+                <div class="coupons-l">
+                  <div class="c-name">
+                    <div class="coupons-img"></div>
+                    <%= vpivp.vip_package_item.name %>
+                  </div>
+                </div>
+                <div class="coupons-r">
+                  <div class="price"><small>&yen;</small><%= vpivp.vip_package_item.price %></div>
+                  <div class="old-price"></div>
+                  <p>有效期</p>
+                  <div class="c-time">购买起<%= @vip_package.expiry_num %>个月内</div>
+                </div>
+              </a>
+            </div>
+            <div class="coupons-d-box">
+              <div class="coupons-d-t"><a href="<%= shops_app_vips_path( ids: ( @vip_package.shop_branch_ids.join(',') if @vip_package.shop_branch_limited? ) ) %>">适用门店（<%= @vip_package.shop_branch_limited? ? @vip_package.shop_branches.count : "不限制" %>）</a></div>
+              <div class="coupons-d-m">
+                <div class="c-d-name">使用说明</div>
+                <%= vpivp.vip_package_item.description.to_s.html_safe %>
+              </div>
+            </div>
+          </dd>
+        </dl>
+        <% end %>
+      </div>
+      <div class="foot-btn-box">
+        <% if @vip_user.nil? %>
+          <%= link_to '立即购买', app_vips_url(vip_package_id: @vip_package.id), class: 'btn btn-yellow', confirm: '此套餐为会员专享，成为会员能够享受更多优惠，快快成为会员吧！' %>
+        <% else %>
+          <a href="<%= buy_vip_package_app_vips_path(id: @vip_package.id) %>" class="btn btn-yellow">立即购买</a>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</div>

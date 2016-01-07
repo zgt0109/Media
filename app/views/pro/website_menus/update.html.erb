@@ -1,0 +1,10 @@
+<%= javascript_include_tag 'jquery', 'main' %>
+
+<script type="text/javascript">
+	var $parent_doc = $(parent.document);
+	$parent_doc.find('.pop').fadeOut(function() { $(this).remove(); });
+	$parent_doc.find('.pop .btn-close').click();
+	$parent_doc.find('#menu-name-<%= @website_menu.id %>').text('<%= @website_menu.name %>');
+	parent.showTip('success', '操作成功');
+    window.parent.location.reload();
+</script>

@@ -1,0 +1,25 @@
+<% content_for :nav_section do %>
+    <section class="mod-navLine navLine-10">
+      <ul class="navLine-ul">
+        <% @nav_menus.each do |menu| %>
+            <%
+            operation_class_name = menu.operation_class_name
+            operation_class_name += " navLine-home" if operation_class_name == 'dev-index'
+            %>
+            <li>
+              <%= link_to menu.operation_class_name.present? && "javascript:;" || website_activity_link(menu), class: operation_class_name do %>
+                  <%if menu.font_icon.present? %>
+                      <i class="<%= menu.font_icon %>"></i>
+                  <% else %>
+                      <%= image_tag menu.icon %>
+                  <% end %>
+                  <% unless menu.operation_class_name == 'dev-index'%><small><%= menu.operation_title %></small><% end %>
+              <% end %>
+            </li>
+        <% end %>
+      </ul>
+    </section>
+    <% content_for :document_ready_js do %>
+        $("body").addClass("body-navLine-bottom");
+    <% end %>
+<% end if @nav_menus.present? %>

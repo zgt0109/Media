@@ -1,0 +1,33 @@
+<% title '展示详情' %>
+<div class="product-top">
+  <div class="product-title"><%= @article.title %></div>
+  <div class="product-summary">	</div>
+    <div class="product-tags ">
+      <% @taggings = @article.taggings %>
+      <% @taggings.each do |t| %>
+        <% tag = t.tag %>
+        <% next unless tag.parent_id.to_i == 0 %>
+        <% sub_tagging = @taggings.where(tag_id: tag.children.collect(&:id)).first %>
+        <span><%= tag.name %>:<%= sub_tagging.description.present? ? sub_tagging.description : sub_tagging.name %></span>
+      <% end %>
+   </div>
+</div>
+<div class="edit-box">
+  <div class="edit">
+    <%= raw @article.content %>
+  </div>
+</div>
+<div class="page-nav">
+  <% if @prev_article %>
+    <%= link_to '<i class="fa fa-angle-left"></i>上一条'.html_safe, mobile_website_article_url(@prev_article, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
+  <% else %>
+    <a href="javascript:;" class="disabled"><i class="fa fa-angle-left"></i>上一条</a>  
+  <% end %>
+  <%= link_to '返回列表', mobile_website_articles_url(supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
+  <% if @next_article %>
+    <%= link_to '下一条<i class="fa fa-angle-right"></i>'.html_safe, mobile_website_article_url(@next_article, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) if @next_article %>
+  <% else %>
+    <a href="javascript:;" class="disabled">下一条<i class="fa fa-angle-right"></i></a>
+  <% end %>
+</div>
+

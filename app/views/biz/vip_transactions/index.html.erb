@@ -1,0 +1,176 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '会员卡', vip_users_path %></li>
+      <li><%= link_to '会员营销', marketing_vip_cards_path %></li>
+      <li><%= link_to '核销密码设置', vip_transactions_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <% if @supplier_password.new_record? %>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <%= render 'biz/vip_packages/tab_card' %>
+
+        <div class="tab-content no-border padding-24">
+          <div class="tab-pane active">
+              <div class="alert alert-block alert-success"> <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                  <li>1、密码用于手机端核销礼品时使用；</li>
+                  <li>2、为了确保交易或者账户的安全性，建议您更改交易密码。</li>
+                </ul>
+              </div>
+            </div>
+
+              <div class="col-xs-12">
+                <%= form_for @supplier_password, url: vip_transactions_path, method: :post, validate: true, html: {id: "transaction_form", class: "form width-800"} do |f| %>
+                  <%= f.hidden_field :supplier_id %>
+                  <%= f.hidden_field :password_type, value: 1 %>
+                  <div class="form-group">
+                    <label class="control-label">邮箱地址<span class="required-star">*</span></label>
+                    <small class="help-inle test text-warning line-height-32"> 邮箱用于日后密码的丢失找回，请务必填写</small>
+                    <div class="clearfix">
+                      <%= f.text_field :email, class: 'col-xs-8', placeholder: '请输入你的常用邮箱地址' %>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">密码<span class="required-star">*</span><small class="help-inle test text-warning line-height-32"> 密码长度为6位数</small></label>
+
+                    <div class="clearfix">
+                      <%= f.password_field :password_digest, autocomplete: :off, maxlength: 6, class: 'col-xs-8' %>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">确认密码<span class="required-star">*</span></label>
+                    <div class="clearfix">
+                      <%= f.password_field :password_digest_confirmation, autocomplete: :off, maxlength: 6, class: 'col-xs-8' %>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">密保问题<small class="help-inle test text-warning line-height-32"> 为方便日后密码的丢失找回，建议设置密保问题</small></label>
+                    <div class="clearfix">
+                      <%= f.select :password_question_id, options_for_select(@supplier_password.password_question_arr.insert(0,["请选择密保问题",0]))%>
+                    </div>
+                    <div class="clearfix margin-top-10">
+                      <%= f.text_field :password_answer, class: 'col-md-8', placeholder: '请输入密保问题的答案' %>
+                    </div>
+                  </div>
+                  <div>
+                    <input type="button" class="btn btn-primary btn-sm" value="保存" onclick="save_submit()">
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  <% else %>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <%= render 'biz/vip_packages/tab_card' %>
+
+          <div class="tab-content no-border padding-24">
+            <div class="tab-pane active">
+              <div class="alert alert-block alert-success"> <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                  <li>1、密码用于手机端核销礼品时使用；</li>
+                  <li>2、为了确保交易或者账户的安全性，建议您更改交易密码。</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <%= form_for @supplier_password, url: vip_transaction_path(@supplier_password), method: :put, validate: true, html: {id: "transaction_form", class: "form width-800"} do |f| %>
+                <div class="form-group">
+                  <label class="control-label">旧密码<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= password_field_tag :old_password, nil, maxlength: 6, class: 'col-xs-8' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">新密码<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.password_field :password_digest, autocomplete: :off, maxlength: 6, class: 'col-xs-8' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">确认密码<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.password_field :password_digest_confirmation, autocomplete: :off, maxlength: 6, class: 'col-xs-8' %>
+                  </div>
+                </div>
+                <div>
+                  <input type="button" class="btn btn-primary btn-sm" value="确认" onclick="update_submit()">
+                  <input type="button" class="btn btn-default btn-sm" id="forget_pwd" data-toggle="modals" data-target="forgetPwd" data-title="找回密码" data-height="1000" data-iframe="<%= forget_password_vip_transactions_path %>" value="忘记密码">
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(function(){
+    <% if @notice %>
+      alert("<%= @notice %>");
+    <% end %>
+  });
+
+  function save_submit(){
+    if($('#supplier_password_email').val() == ""){
+      showTip('warning',"请设置邮箱地址！");
+      return false;
+    }else if(!$('#supplier_password_email').val().match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)){
+      showTip('warning',"邮箱地址不正确！");
+      return false;
+    }else if($('#supplier_password_password_question_id').val() != "0" && $('#supplier_password_password_answer').val() == ""){
+      showTip('warning',"请设置密保问题的答案！");
+      return false;
+    }else{
+      $('#transaction_form').submit()
+    }
+  }
+
+  var status;
+  $("#old_password").change(function(){
+    var set_url = "<%= check_password_vip_transactions_path %>" + "?old_password=" + $("#old_password").val();
+    jQuery.ajax({
+      type: "GET",
+      url: set_url,
+      dataType: "json",
+      success: function(data){
+        status = data.status;
+      }
+    });
+  });
+  function update_submit(){
+    if(<%= @supplier_password.err_num %> > 2 && status == "false"){
+      // $("body").append("<%#= escape_javascript(render :partial => "/biz/vip_transactions/back_password") %>");
+      $("#error_pwd").remove();
+      $("body").append('<button class="hide" id="error_pwd" data-toggle="modals" data-target="delModal" data-text="忘记密码！赶紧找回？<br><div class=\'text-center\'><a href=\'<%= j 'javascript:$(".close").click();$("#forget_pwd").click();' %>\' class=\'btn btn-sm btn-primary\'>忘记密码</a></div>">ddd</button>');
+      $("#error_pwd").click();
+    }else if($('#old_password').val().length == ""){
+      showTip('warning',"请设置旧密码！");
+      return false;
+    }else if($('#supplier_password_password_digest').val() == ""){
+      showTip('warning',"请设置新密码！");
+      return false;
+    }else if($('#supplier_password_password_digest').val().length != 6){
+      showTip('warning',"新密码长度不正确！");
+      return false;
+    }else if($('#supplier_password_password_digest').val() != $('#supplier_password_password_digest_confirmation').val()){
+      showTip('warning',"新密码与确认密码不一致！");
+      return false;
+    }else{
+      $('#transaction_form').submit()
+    }
+  }
+</script>
+<% end %>

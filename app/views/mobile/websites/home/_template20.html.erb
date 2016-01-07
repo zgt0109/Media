@@ -1,0 +1,20 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<% website_menus.in_groups_of(2, false).each do |menus| %>
+  <div class="index">
+    <%
+    class_names = ["box", "mod-index"]
+    class_names << "index-1" if menus.length == 1
+  %>
+    <% menus.each_with_index do |menu, index| %>
+      <%= link_to menu_url(menu), class: class_names.join(" ") do %>
+          <div class="index-img">
+            <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+          </div>
+          <div class="index-text">
+            <p><span><b><%= menu.title %></b></span></p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>

@@ -1,0 +1,84 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <%= link_wx_plot_url(:telephone, false, {navigation: true})%>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+
+          <%= form_for @search, html: {method: :get } do |f| %>
+          <div class="col-sm-12">
+            <div class="col-md-3 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">名称或电话：</span>
+                <%= f.text_field :name_or_phone_like, class: 'col-xs-12', placeholder: " 请输入组织（部门）名称 或 联系电话" %>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">类别：</span>
+                <%= f.select :wx_plot_category_id_eq, @categories.collect{|t| [t.name, t.id]}, {include_blank: '全部'}, class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <%= f.submit '查询', class: 'btn btn-primary btn-sm' %>
+            </div>
+            <div class="col-md-3">
+              <%= link_to '类别管理', 'javascript:;', class: 'btn btn-sm btn-primary', data: {toggle: 'modals', target: 'keywordModal', title: "#{@wx_plot.telephone}类别", width: '', height:"600", iframe: wx_plot_categories_path(category: 4)}%>
+              <%= link_to '新增', 'javascript:;', class: 'btn btn-sm btn-primary', data: {toggle: 'modals', target: 'keywordModal', title: "新增#{@wx_plot.telephone}", height:"600", width: '700', iframe: new_wx_plot_telephone_path }%>
+            </div>
+          </div>
+          <% end %>
+
+          <div class="col-sm-12">
+            <table id="" class="table table-striped table-bordered table-hover margin-top-20">
+              <thead>
+              <tr>
+                <th>
+                  组织（部门）名称
+                </th>
+                <th>
+                  类别
+                </th>
+                <th>
+                  联系电话
+                </th>
+                <th>
+                  操作
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @phones.each do |f| %>
+                <tr>
+                  <td><%= f.name %></td>
+                  <td><%= f.wx_plot_category.try(:name) %></td>
+                  <td><%= f.phone %></td>
+                  <td>
+                    <div class="table-tools">
+                      <%= link_to '编辑', 'javascript:;', data: {toggle: 'modals', target: 'keywordModal', title: '编辑',  height: '600', width: '700', iframe: edit_wx_plot_telephone_path(f)}%>
+                      <%= link_to '删除', wx_plot_telephone_path(f), data: {method: :delete, confirm: '确认删除？'} %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              <% if @phones.blank? %>
+                <tr><td colspan="4" class="green text-center">无记录</td></tr>
+              <% end %>
+              </tbody>
+            </table>
+            <div class="clearfix">
+              <%= paginate @phones %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

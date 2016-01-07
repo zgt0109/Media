@@ -1,0 +1,17 @@
+<% @vip_user_messages.each_with_index do |message, index| %>
+  <dl>
+    <dt data-mid="<%= message.id %>" data-read="<%= message.is_read %>" onclick="read_message($(this),<%= index %>)">
+      <a class="fa fa-chevron-right box-icon box-note">
+        <i class="fa fa-comment"></i>
+        <b><%= message.title %></b>
+        <% if !message.is_read %>
+          <em class="bg-red note-icon">New</em>
+        <% end %>
+        <small><%= message.created_at.to_date.to_s[5, 5] %></small>
+      </a>
+    </dt>
+    <dd class="">
+      <%= raw message.content %>
+    </dd>
+  </dl>
+<% end %>

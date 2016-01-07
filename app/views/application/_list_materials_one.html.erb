@@ -1,0 +1,12 @@
+<% materials.each do |material| %>
+<div class="warpVMS">
+  <div class="vMicroShow">
+    <div class="vMSHead"><span class="title material_list"><%= material.title %></span><br><span class="grey"><%= material.created_at.to_date %></span></div>
+    <div class="vMSImg"><%= image_tag material.pic_url, width: '340' if material.pic_url %></div>
+    <div class="vMSFootBtn">
+      <%= link_to [:edit, material] do %><i class="fa fa-pencil"></i><% end %>
+      <%= link_to material, method: :delete, confirm: '确定要删除图文吗？' do %><i class="fa fa-trash-o"></i><% end %>
+    </div>
+  </div>
+</div>
+<% end %>

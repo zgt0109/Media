@@ -1,0 +1,58 @@
+<div class="m-main">
+  <%= form_tag password_resets_path, id: "forget_form", remote: true do %>
+     <div class="m-form">
+       <div class="m-icon circle"><i class="fa fa-unlock-alt"></i></div>
+         <div class="m-title">找回密码</div>
+           <div class="m-input-text m-input-join-u">
+             <%= text_field_tag :nickname, params[:nickname], class: "input-focus radius-bl0 radius-br0 validate", data: {tip: "请输入您用户名"} %>
+           </div>
+           <div class="m-input-text m-input-join-d m-input-pass">
+             <%= text_field_tag :email, params[:email], class: "input-focus radius-tl0 radius-tr0 validate", data: {tip: "请输入您邮箱"}  %>
+           </div>
+           <div class="m-link-tip">
+             <a class="m-link-tip-rg" href="<%= sign_in_path %>">直接登录&gt;</a>
+           </div>
+           <div class="m-input-btn m-input-btn-ps">
+             <%= submit_tag "下一步", class: "m-input-btn-s", disabled: true, disable_with: "提交中..."%>
+           </div>
+       </div>
+     </div>
+  <% end %>
+</div>
+
+<%= content_for :custom_js do %>
+  <script>
+    $("#forget_form").bind("ajax:success", function(event, xhr, settings) {
+      checkInputDel($(".m-input-text"));
+      if(xhr["code"]==0){
+        location.href=xhr["url"];
+      }else{
+        checkInput($(".m-input-text").eq(xhr["num"]), xhr["status"], xhr["message"]);
+      }
+    });
+  </script>
+  <script>
+      $(function(){
+        $(".m-input-text input").Ztip({
+          exceptClass: ["validate"]
+        });
+      });
+      var input = $(".validate");
+      input.on("input", function() {
+        var flag = true;
+        input.each(function(i) {
+          var $val = $(this).val();
+          if (!$val || $val =="请输入您用户名" || $val =="请输入您邮箱") {
+            flag = false;
+            $(".m-input-btn-s").removeClass("m-input-btn-active").attr("disabled","true");
+            return false;
+          }
+        });
+        if(flag){
+          $(".m-input-btn-s").addClass("m-input-btn-active").removeAttr("disabled");
+        }
+      });
+  </script>
+<% end %>
+
+

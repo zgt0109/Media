@@ -1,0 +1,97 @@
+<header class="header-static">
+	<a class="ico-hd arr-hd" href="javascript:history.go(-1);"></a>
+	<h1>填写订单</h1>
+</header>
+<div class="contxt cont-artical">
+	<%= form_for @hotel_order, url: app_hotel_orders_path(aid: params[:aid], wxmuid: (session[:wx_mp_user_id]), room_type_id: params[:room_type_id], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date], time: Time.now.to_i), validate: true do |f| %>
+	<%= f.hidden_field :supplier_id %>
+	<%= f.hidden_field :wx_mp_user_id %>
+	<%= f.hidden_field :hotel_branch_id %>
+	<%= f.hidden_field :hotel_id %>
+	<%= f.hidden_field :wx_user_id %>
+	<%= f.hidden_field :hotel_room_type_id %>
+	<%= f.hidden_field :check_in_date, value: params[:check_in_date] %>
+	<%= f.hidden_field :check_out_date, value: params[:check_out_date] %>
+	<div class="box-cont box-order-info">
+		<div class="hd box-txt">
+			<b><%= @hotel_branch.try(:hotel).try(:name) %> <%= @hotel_branch.try(:name) %></b>
+			<p><span>入住日期</span><b><%= Date.parse(params[:check_in_date]).strftime("%m月%d日") %></b></p>
+			<p><span>离店日期</span><b><%= Date.parse(params[:check_out_date]).strftime("%m月%d日") %> </b><i> <%= (Date.parse(params[:check_out_date])-Date.parse(params[:check_in_date])).to_i %> 晚</i></p>
+		</div>
+		<div class="bd">
+			<p class="table"><span class="td">总价<em id="total_price">￥<%= @hotel_room_type.room_price * ((Date.parse(params[:check_out_date])-Date.parse(params[:check_in_date])).to_i) %></em></span></p>
+		</div>
+	</div>
+	<div class="box-cont box-form box-form-order">
+		<div class="hd">
+			<b><%= @hotel_room_type.try(:name) %></b>
+			<p class="box-op">				
+				<a class="op-minus" id="input-minus" data-min="1">-</a>
+				<%= f.text_field :qty, class:"input-number",id: "input-number", :data => {:max => "#{ @max_available_qty }", :min => '1'} %>
+				<a class="op-add" id="input-add" data-max="<%= @max_available_qty %>">+</a>
+			</p>
+		</div>
+		<p><label>入住人姓名：</label><%= f.text_field :name, placeholder: "请输入您的姓名" %></p>
+		<p><label>联系人手机：</label><%= f.text_field :mobile, placeholder: "请输入您的电话号码" %></p>
+	</div>
+	<div class="box-cont box-txt">
+		<p><span>支付方式：</span><b>门店支付</b></p>
+		<p><span>房间预留至：</span><b><%= (Time.now >  Time.parse("#{params[:check_in_date]}  #{@hotel_branch.hotel.obligate_time}")) ? '23:59' : @hotel_branch.hotel.obligate_time %></b></p>
+		<p class="hide"><span>请在此时间之前取消订单：</span><b><%= @hotel_branch.hotel.cancel_time %></b></p>
+	</div>
+	<div class="tcenter"><a class="btn btn-big submit form-submit" onclick="javascript:bookRoom();">提交订单</a></div>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+  var price = <%= @hotel_room_type.room_price %>,
+  days = <%= (Date.parse(params[:check_out_date])-Date.parse(params[:check_in_date])).to_i %>;
+  $(function(){
+		/*
+    $(".btn-big").bind('click',function(){
+      $hotel_order_name = $('#hotel_order_name');
+      $hotel_order_mobile = $('#hotel_order_mobile');
+      if(!$hotel_order_name || $hotel_order_name.val()==""){
+        alert('姓名不能为空');
+        $hotel_order_name.focus();
+      }else if(!test_mobile_number($hotel_order_mobile.val()) || $hotel_order_mobile.val()==""){
+        alert('手机号码格式不正确');
+        $hotel_order_mobile.focus();
+      }else{
+        $(this).hide();
+        $("form").submit();
+      }
+    });
+	*/
+  });
+	
+	function bookRoom(){
+      $hotel_order_name = $('#hotel_order_name');
+      $hotel_order_mobile = $('#hotel_order_mobile');
+      if(!$hotel_order_name || $hotel_order_name.val()==""){
+        alert('姓名不能为空');
+        $hotel_order_name.focus();
+      }else if(!test_mobile_number($hotel_order_mobile.val()) || $hotel_order_mobile.val()==""){
+        alert('手机号码格式不正确');
+        $hotel_order_mobile.focus();
+      }else{
+        //$(this).hide();
+        $("form").submit();
+      }
+		}
+
+  // 手机号码正则表达式
+  function test_mobile_number(mobile_number) {
+    if (mobile_number == undefined) {
+      return false;
+    }
+    var mobile_reg = /^\d{11}$/;
+    return mobile_reg.test(mobile_number);
+  }
+
+  function sum_price(qty){
+    var total_price = qty * price * days;
+    $('#total_price').text('￥ '+total_price);
+  }
+
+</script>

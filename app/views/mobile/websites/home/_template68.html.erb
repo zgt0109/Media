@@ -1,0 +1,20 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.in_groups_of(5, false).each do |menus| %>
+        <% menus.each_with_index do |menu, index| %>
+            <%= link_to menu_url(menu), class: "box mod-index" do %>
+                <% if index == 0 %>
+                    <small><%= menu.title %></small>
+                    <i class="fa fa-chevron-right"></i>
+                <% elsif index == 1 %>
+                    <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+                <% else %>
+                    <small><%= menu.title %></small>
+                <% end %>
+            <% end %>
+        <% end %>
+    <% end %>
+  </ul>
+</div>

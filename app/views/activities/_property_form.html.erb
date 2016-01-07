@@ -1,0 +1,74 @@
+<% ap.object.can_validate = true %>
+<div class="form-group">
+  <label>每人参与的总次数<span class="required-star">*</span><small class="help-inline text-warning line-height-32">-1表示不限制次数</small></label>
+  <div class="clearfix">
+    <%= ap.text_field :partake_limit, class: 'col-md-6', placeholder: "-1", validate: true %>
+  </div>
+</div>
+<div class="form-group">
+  <label>每人每天可参与次数<span class="required-star">*</span><small class="help-inline text-warning line-height-32">-1表示不限制次数</small></label>
+  <div class="clearfix">
+    <%= ap.text_field :day_partake_limit, class: 'col-md-6', placeholder: "-1", validate: true %>
+  </div>
+</div>
+<div class="form-group">
+  <label>每人中奖的总次数<span class="required-star">*</span><small class="help-inline text-warning line-height-32">-1表示不限制次数</small></label>
+  <div class="clearfix">
+    <%= ap.text_field :prize_limit, class: 'col-md-6', placeholder: "-1", validate: true %>
+  </div>
+</div>
+<div class="form-group">
+  <label>每人每天可中奖次数<span class="required-star">*</span><small class="help-inline text-warning line-height-32">-1表示不限制次数</small></label>
+  <div class="clearfix">
+    <%= ap.text_field :day_prize_limit, class: 'col-md-6"', placeholder: "-1", validate: true %>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>领奖提示语<span class="required-star">*</span><small class="help-inline text-warning line-height-32">不超过30字</small></label>
+  <div class="clearfix">
+    <%= ap.text_field :win_tip, class: 'col-md-6', value: ap.object.display_win_tip, validate: true, maxlength: 30 %>
+  </div>
+</div>
+
+<% if ap.object.activity.gua? %>
+<div class="form-group">
+  <label>未中奖设置<small class="help-inline text-warning line-height-32">默认未中奖提示文字为‘谢谢参与’，您可自行更改，每行1个，每个不要超过7个字，系统将随机抽取一个显示）</small></label>
+  <div class="clearfix">
+    <%= ap.text_area :no_prize_title, class: "col-md-6", rows: "5", validate: true %>
+  </div>
+</div>
+<% end %>
+
+<div class="form-group">
+  <div class="clearfix">
+    <label>
+      <%= ap.check_box :is_show_prize_qty, class: 'ace'%>
+      <span class="lbl">是否展示奖品数量</span>
+    </label>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>
+  <%= ap.check_box :vip_only, class: 'ace'%>
+    <span class="lbl">仅会员可参与</span>
+    <small class="text-warning">若不勾选则所有关注粉丝可参与</small>
+  </label>
+</div>
+
+<% if defined?(activity) && activity.object.wave? %>
+  <div class="form-group">
+    <div class="clearfix">
+      <label>
+        <%= ap.check_box :enable_prepare_settings, class: 'ace'%>
+        <span class="lbl">开启预热</span>
+        <small class="text-warning">开启后活动开始前可查看活动信息</small>
+      </label>
+      <div class='prepare_settings' style="display:none">
+        <span>开始预热时间<em style="color: red;">*</em></span>
+        <%= activity.text_field :ready_at, class: 'date-time input-sm', style: "width:20%;", readonly: true %>
+      </div>
+    </div>
+  </div>
+<%- end %>

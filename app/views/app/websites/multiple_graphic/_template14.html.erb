@@ -1,0 +1,30 @@
+<div class="box-list">
+  <a class="table" href="<%= material_type_url main_material, website_menu %>">
+    <% if main_material.pic? %>
+        <span class="fl td">
+            <b><%= image_tag main_material.pic.try(:large) %></b>
+            <!--<b style="background-image:url(<%#= main_material.pic.try(:thumb) %>)"></b>-->
+        </span>
+    <% end %>
+    <span class="<%= main_material.pic? ? "fr td" : "fw td"%>">
+        <b><%= main_material.title %></b>
+        <i><%= date_format_full_l(main_material.created_at)  %></i>
+        <em class="arrow"></em>
+    </span>
+  </a>
+  <% child_material.each do |child| %>
+      <a class="table" href="<%= material_type_url child, website_menu %>">
+        <% if child.pic? %>
+            <span class="fl td">
+              <b><%= image_tag child.pic.try(:large) %></b>
+              <!--<b style="background-image:url(<%#= child.pic.try(:thumb) %>)"></b>-->
+            </span>
+        <% end %>
+        <span class="<%= child.pic? ? "fr td" : "fw td"%>">
+            <b><%= child.title %></b>
+            <i><%= date_format_full_l(child.created_at)  %></i>
+            <em class="arrow"></em>
+        </span>
+      </a>
+  <% end %>
+</div>

@@ -1,0 +1,91 @@
+<% content_for(:topbar) do %>
+    <header>
+    <a href="<%= mobile_group_orders_path(supplier_id: @supplier.id) %>" class="ico-prev tleft"><img src="/assets/mobile/group/ico-back.png"/></a>
+    <h1>我的团购订单</h1>
+    </header><!-- header end -->
+<% end %>
+<section>
+<form>
+  <div class="box box-order">
+    <div class="box-list">
+      <% unless @group_item.new_record? %><a class="list-li" href="<%= mobile_group_item_path(supplier_id: @supplier.id, id: @group_item) %>"><% end %>
+        <% if @group_item.pic? %>
+          <div class="hd"><%= image_tag @group_item.pic %></div>
+        <% else %>
+            <div class="hd img-null">
+              暂无图片
+            </div>
+            <!-- hd end -->
+        <% end %>
+        <div class="bd">
+          <p class="li-name"><%= @group_item.name %></p>
+
+          <p class="li-intro"><%= @group_item.summary %></p>
+
+          <p class="li-sale">
+            <span class="fl"><b class="fred"><%= f @group_item.price %></b>元/<del><%= f @group_item.market_price%></del></span>
+          </p>
+        </div>
+        <!-- bd end -->
+      </a><!-- list-li end -->
+    </div><!-- box-list end -->
+    <dl>
+      <dd>
+        <div class="order-row">
+          <div class="fl"><b>订单SN码：<%= @group_order.code %></b></div>
+          <div class="fr"><small>有效期至：<%= date_format_full @group_item.end_at%></small></div>
+        </div>
+        <div class="order-row order-btn">
+          <div class="fl">状态： <%= @group_order.status_name %></div>
+          <div class="fr <%= @group_order.paid? ? '' : 'forange'%>">
+              <% if @group_order.paid? %>
+                <div class="fr">
+                  <%= link_to "确认消费", mobile_group_order_path(supplier_id: @supplier.id, id:@group_order), :class => 'btn', :method => :put, data: { comfirm: '确认要消费吗？' } %>
+                </div>
+              <% elsif @group_order.consumed? %>
+                <% if @group_order.group_comments.present? %>
+                    <span>已评价</span>
+                <% else %>
+                    <% unless @group_item.new_record? %><a href="<%= new_mobile_group_comment_path(supplier_id: @supplier.id, id: @group_order.group_item.id, group_order_id: @group_order.id) %>">去评价<i class="arrow"></i></a> <% end %>
+                <% end %>
+              <% elsif @group_order.canceled? %>
+                  <span>已取消</span>
+              <% elsif @group_order.expired? %>
+                  <span>已过期</span>
+              <% end %>
+          </div>
+        </div>
+      </dd>
+    </dl>
+    <dl>
+      <dd>
+        <div class="order-row">
+          <div class="fl"><b>订单信息</b></div>
+        </div>
+        <div class="order-row">
+          <p>订单编号：   <%= @group_order.order_no %><br/>
+            下单时间：   <%= @group_order.created_at %><br/>
+            支付方式：   <%= @group_order.payment_type.name %><br/>
+            <% if @group_order.consume_at? %>消费时间：   <%= @group_order.consume_at %><br/> <% end %>
+            手机号码：   <%= @group_order.mobile %><br/>
+            <% if @group_order.username.present? %>昵称： <%= @group_order.username %><br/><% end %>
+            商品单价：   <%= f @group_order.price %>元<br/>
+            商品数量：   <%= @group_order.qty %>个<br/>
+            商品总价：   <%= f @group_order.total_amount %>元
+          </p>
+        </div>
+      </dd>
+    </dl>
+    <p class="tcenter">
+      <% if @group_item.deleted? %>
+          <a class="btn btn-gray fr">此商品已下架，无法进行支付</a>
+          <%#= link_to "此商品已下架，无法进行支付", pay_mobile_group_order_path(supplier_id: @supplier.id, id: @group_order), :class => "btn" %>
+      <% else %>
+          <% if @group_order.pending? %>
+             <%= link_to "去支付", pay_mobile_group_order_path(supplier_id: @supplier.id, id: @group_order), :class => "btn", remote: "true" %>
+          <% end %>
+      <% end %>
+    </p>
+  </div>
+</form>
+</section><!-- section end -->

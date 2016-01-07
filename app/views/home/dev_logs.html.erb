@@ -1,0 +1,34 @@
+<div class="notes">
+  <% @dev_logs_hash.each do |year,dev_logs|%>
+    <a class="notes-year"><%= year%></a>
+    <% dev_logs.each_slice(2) do |dev_logs_pair|%>
+      <% left_dev_log = dev_logs_pair[0]%>
+      <% right_dev_log = dev_logs_pair[1]%>
+      <div class="notes-circle notes-l">
+         <div class="mod-note">
+             <b><%= left_dev_log.title %></b>
+             <small><%= left_dev_log.created_at.try(:to_date) %></small>
+             <p><%= "#{left_dev_log.content_text}".truncate(50) %></p>
+             <a class="note-more" href="<%= home_show_dev_log_path(id: left_dev_log.id)%>">[查看详情]</a>
+             <em></em>
+             <i></i>
+         </div>
+      </div>
+
+      <% if right_dev_log.present? %>
+        <div class="notes-circle notes-r">
+          <div class="mod-note">
+            <b><%= right_dev_log.title %></b>
+            <small><%= right_dev_log.created_at.try(:to_date) %></small>
+            <p><%= "#{right_dev_log.content_text}".truncate(50) %></p>
+            <a class="note-more" href="<%= home_show_dev_log_path(id: right_dev_log.id)%>">[查看详情]</a>
+            <em></em>
+            <i></i>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <div class="note-loading">结束了</div>
+</div>

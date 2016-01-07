@@ -1,0 +1,30 @@
+<%= content_for :step do %>
+  <div class="step-pane active" id="step4">
+    <%= render 'biz/slots/prizes' %>
+    <% if @activity.activity_prizes.count < 6 && !@activity.can_not_edit? %>
+      <div class="form-group">
+        <input type="button" class="btn btn-sm btn-primary" value="新增奖项"data-toggle="modals" data-title="新增奖品设置" data-height="1000" data-iframe="<%= new_activity_prize_path(activity_id: @activity.id) %>" />
+      </div>
+    <%- end %>
+    <div class="row-fluid center">
+      <a class="btn btn-prev btn-sm btn-primary" href='<%= edit_wave_path(@activity) %>'> <i class="icon-arrow-left"></i> 上一步 </a>
+      <a href="<%= edit_rule_settings_wave_path(@activity) %>" class="btn btn-primary btn-sm btn-next"><i class="icon-arrow-right icon-on-right"></i>下一步</a>
+      <a href="javascript:;" class="btn  btn-sm" data-toggle="div" data-target="#show_qrcode">预览</a>
+    </div>
+    <div class="hide" id="show_qrcode" style="margin-top: -260px;margin-left: 465px;">
+    <img src='<%= "http://qr.liantu.com/api.php?w=200&text=http://#{Settings.mhostname}/#{current_user.id}/waves?aid=#{@activity.try(:id)}&simulate=simulate" %>' alt=""/>
+    <div>扫描二维码预览</div>
+  </div>
+</div>
+<%- end %>
+<%= render 'main_content' %>
+<%- content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function() {
+      <%- if @activity.can_not_edit? %>
+        $('input,select,textarea').prop('disabled', true);
+        $('.wysiwyg-editor').attr('contenteditable', false);
+      <%- end %>
+    })
+  </script>
+<%- end %>

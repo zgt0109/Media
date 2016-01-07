@@ -1,0 +1,126 @@
+<% provide(:title, '我要订餐') if @shop_order.book_dinner? %>
+<% provide(:title, '我要叫外卖') if @shop_order.take_out? %>
+<body>
+<div class="html">
+  <div class="main">
+    <header>
+      <%= link_to menu_app_shop_order_url(@shop_order), class: "ico ico-prev" do %>
+        <img src="/assets/micro_stores/ico-prev.png"/>
+      <% end %>
+      <h1>确认订单信息</h1>
+    </header><!--header end-->
+
+    <section>
+      <div style="position:fixed;"></div>
+<% if @shop_order.total_qty == 0 %>
+      <div class="box menu-order">
+        <p class="box-null">您的购物车为空！<a href="menu.html" class="btn btn-blue">继续点菜</a></p>
+      </div>
+<% else %>
+      <div class="box menu-order">
+        <div class="hd">订单概要</div>
+          <div class="bd">
+            <div class="fl">
+              <%= form_for @shop_order, url: success_app_shop_order_path(anchor: "mp.weixin.qq.com"), method: :post do |f| %>
+                <p><b>总数量：</b><span id="total_number"><%= @shop_order.total_qty %>份</span></p>
+                <p><b>总价格：</b><span><b id="total_price"><%= f @shop_order.total_amount %></b>元</span></p>
+                <p>
+                  <b>您的电话：</b>
+                  <span>
+                    <%= f.text_field :mobile, id: "your_tel", value: @shop_order.try(:wx_user).try(:mobile) %>
+                  </span>
+                </p>
+                <% if @shop_order.take_out? %>
+                  <p>
+                    <b>送餐地址：</b>
+                    <span>
+                      <%= f.text_area :address, id: "your_address", value: @shop_order.try(:wx_user).try(:address), rows: 5 %>
+                    </span>
+                  </p>
+                <% end %>
+                <p><b>备注：</b><span>
+                <%= f.text_area :description, rows:5 %>
+                </span></p>
+              <% end %>
+            </div>
+            <div class="fr">
+              <a href="javascript:void(0)" class="btn confirm-btn">确认下单</a>
+              <%= link_to "继续点菜", menu_app_shop_order_url(@shop_order, anchor: "mp.weixin.qq.com"), method: :get, class: "btn btn-blue" %>
+            </div>
+        </div>
+      </div><!--menu-order end-->
+
+      <div class="box menu-order">
+        <div class="hd">菜单明细</div>
+        <div class="bd table">
+        <% @shop_branch.shop.shop_products.each do |product| %>
+
+          <% unless @shop_order.find_item_qty_by_product(product) == 0 %>
+              <p class="tr">
+                <em class="td"><%= product.name %></em>
+                <b class="td"><%= f product.price %><i>元/例</i></b>
+                <span class="td box-number">
+                  <%= link_to minus_app_shop_order_shop_order_item_path(@shop_order,product, anchor: "mp.weixin.qq.com"), remote:true, method: :post do %>
+                    <i>-</i>
+                  <% end %>
+
+                  <input id="current_product_sum_<%= product.id %>" type="text" value="<%= @shop_order.find_item_qty_by_product product %>"/>
+
+                  <%= link_to plus_app_shop_order_shop_order_item_path(@shop_order,product, anchor: "mp.weixin.qq.com"), remote:true, method: :post do %>
+                    <i>+</i>
+                  <% end %>
+                </span>
+              </p>
+          <% end %>
+
+        <% end %>
+        </div>
+      </div><!--menu-order end-->
+<% end %>
+    </section>
+
+  </div>
+</div>
+<%= render "application/app_footer" %>
+</body>
+<script type="text/javascript">
+  $(function(){
+    $(".confirm-btn").click(function(e){
+      if ($("#total_number").html().charAt(0)=='0'){
+        alert("订单不能为空!");
+        e.stopPropagation();
+        return false;
+      }else if ($("#your_tel").val() == ''){
+        alert("电话号码不能为空!");
+        e.stopPropagation();
+        return false;
+      }else if ($("#your_address") && $("#your_address").val() == ''){
+        alert("送餐地址不能为空!");
+        e.stopPropagation();
+        return false;
+      }else if (!test_mobile_number($("#your_tel").val())){
+        alert("手机号码格式不正确");
+        e.stopPropagation();
+        return false;
+      }else{
+        if (confirm("确认下单吗?")){
+          $("form").submit();
+          return true;
+        }
+        e.stopPropagation();
+        return false;
+      }
+    })
+  });
+  // 手机号码正则表达式
+  function test_mobile_number(mobile_number) {
+    if (mobile_number == undefined) {
+      return false;
+    }
+    var mobile_reg = /^\d{11}$/;
+    if (mobile_reg.test(mobile_number)){
+      return true;
+    };
+    return false;
+  }
+</script>

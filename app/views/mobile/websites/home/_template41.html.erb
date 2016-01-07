@@ -1,0 +1,21 @@
+<%= render "slider_full", {:has_slider_text => :yes} %>
+
+
+<div class="index-title table">
+  <div class="td">
+    <h1><%= @website.name %></h1>
+    <h2><%#= @website.summary %></h2>
+  </div>
+</div>
+
+<div class="index">
+  <ul class="navLine-ul">
+    <% website_menus.limit(4).each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu) do %>
+              <p><%= menu.title %></p>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>

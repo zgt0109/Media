@@ -1,0 +1,18 @@
+<div class="body box-article ckeditor_content">
+  <div class="hd">
+    <h3><%= website_menu.menuable.try(:title) %></h3>
+    <span><%= date_format_full_l(website_menu.menuable.created_at) %></span>
+  </div>
+  <div class="bd">
+    <% if website_menu.text? %>
+        <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? %>
+    <% else %>
+        <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? && website_menu.menuable.is_show_pic %>
+    <% end %>
+    <p><%= raw website_menu.menuable.try(:content) %></p>
+  </div>
+</div>
+
+<% content_for :pop_pop_share do %>
+    <%= render 'application/app_footer_template16' %>
+<% end %>

@@ -1,0 +1,74 @@
+body {
+	background: url(../../img/template3/bg.jpg) repeat-y;
+	background-size: contain;
+}
+/*box-book*/
+.box-book {
+	position: relative;
+	margin: 4% 2% 6% 2%;
+	height: 80px;
+	overflow:visible;
+	background:none;
+}
+.box-book .hd,
+.box-book .bd,
+.box-book .ft {
+	position: absolute;
+	width: 100%;
+}
+.box-book .hd {
+	height: 12px;
+	background: url(../../img/template3/bg-book-top.png) repeat-x;
+	background-size: contain;
+	top: -6px;
+	z-index:2;
+}
+.box-book .ft {
+	height: 30px;
+	background: #fff;
+	width:98%;
+	z-index: 0;
+	bottom: -6px;
+	left:1%;
+}
+.box-book .ft ,
+.box-book .bd{border-radius: 5px;box-shadow: 1px 1px 2px #d7d7d7;}
+.box-book .bd{
+	height:100%;
+	background-color: #e4e4e4;
+	background-repeat: repeat-x;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e4e4e4), to(#f3f3f3));
+	background: -webkit-linear-gradient(top, #f3f3f3, #e4e4e4);
+	background: -moz-linear-gradient(top, #f3f3f3, #e4e4e4);
+	background: -ms-linear-gradient(top, #f3f3f3, #e4e4e4);
+	background: -o-linear-gradient(top, #f3f3f3, #e4e4e4);
+	z-index:1;
+	overflow:hidden;
+}
+.box-book .bd .bg-arrow{ height:70%; width:92%; margin:5% 0 5% 2%;padding:0 15px 0 0;}
+.box-book .bd .bg-arrow.table{ width:97%; margin:4% 0 2% 2%; }
+.box-book .bd .bg-arrow .td.fr{ text-align:left;}
+.box-book .fw b,
+.box-book .fw i{ width:100%;}
+.box-book .fw b{color:#333; line-height:20px;}
+.box-book .fw i,
+.box-book .fr i{color:#9a9a9a;}
+.box-book .bd .fr b,
+.box-book .bd .fw b{ max-height:40px; overflow:hidden;text-overflow: ellipsis;}
+
+/*page*/
+.box-index .box-index-hd{ overflow:hidden; background:#fff; border-radius:5px; padding:1px; width:98%;}
+.box-index img{ width:100%;border-radius:5px;}
+.cont-index.box-book{ width:46%;margin: 4% 1.4% 3% 2.6%; float:left; min-height:140px;}
+.cont-index.box-book:nth-child(2n){margin: 4% 2.6% 3% 1.4%; }
+.cont-index.box-book .hd{ width:98%;}
+.cont-index.box-book .ft{ background:#c2b199; border:0; box-shadow:none;}
+.cont-index .box-index .box-index-hd{ height:100px;}
+.cont-index .box-index .box-index-bd{height:40px; line-height:40px; padding:0 5%; width:90%; text-align:center;}
+
+header .box-img{ height:170px;}
+@media screen and (orientation:landscape) {
+	.box-book {	margin: 3% 2% 4.5% 2%;}
+	.cont-index.box-book{ width:48%;margin: 2.5% 0.2% 2% 1.7%; float:left; min-height:140px;}
+	.cont-index.box-book:nth-child(2n){margin: 2.5% 0.8% 2% 1.2%; }
+}

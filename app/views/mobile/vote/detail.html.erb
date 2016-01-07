@@ -1,0 +1,96 @@
+<% provide(:title, '微投票') %>
+<%= javascript 'application' %>
+<header>
+  <div id="top" class="header hd-cont">
+    <div class="bd">
+      <div class="box-num">
+        <span>参与人数</span> <em><%= @activity.activity_user_vote_items.count('distinct(wx_user_id)') %></em>
+      </div>
+      <div class="box-title">
+        <%# time_diff_components = Time.diff(@activity.end_at, Time.now) %>
+        <h2>
+          <%= @activity.name %></h2>
+        <!--span class="ico-clock">
+          距离投票结束还有
+          <%# if time_diff_components[:day] == 0 && time_diff_components[:hour] == 0 %> <b>0</b>
+          天 <b>1</b>
+          小时
+          <b><%# else %>
+            <b><%#= time_diff_components[:day] %></b>
+            天
+            <b>
+              <%#= time_diff_components[:hour] %></b>
+            小时
+            <b>
+              <%# end %></span-->
+          </div>
+        </div>
+        <div class="ft"></div>
+      </div>
+    </header>
+
+    <div class="contxt">
+      <div class="cont-info">
+        <%= image_tag @activity.try(:pic_url) %>
+        <h2>
+          <%= @activity.description.to_s.html_safe %></h2>
+      </div>
+      <div class="cont-list lanmu-content">
+        <span>
+          *投票结束后才可以看到结果   最多选
+          <%= @activity.activity_property.get_limit_count %>项</span>
+        <ul>
+          <%= render partial: 'detail_li', collection: @activity_vote_items, as: :item %>
+        </ul>
+        <% if @activity_vote_items.next_page %>
+          <div class="loading"><%= link_to_next_page @activity_vote_items, '加载更多', remote: true %></div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= hidden_field_tag "name", @name %>
+    <%= hidden_field_tag "mobile", @mobile %>
+
+    <div style="width: 100%; overflow:hidden; text-align:center;">
+      <a class="btn submit form-submit" style="width: 90%;">
+        <span>确认投票</span>
+      </a>
+    </div>
+
+    <div id="mesg-vote" class="pop hide">
+      <div class="bd">
+        <p>投票成功</p>
+        <%= link_to mobile_vote_result_path(:aid =>
+        @activity.id), class:"btn confirm" do %>
+        <span>确认</span>
+        <% end %></div>
+      <div class="ft"></div>
+    </div>
+
+<script type="text/javascript">
+  $(".submit").click(function(){
+    $(this).attr('disabled',true);
+    var length = $("input:checked").length;
+    if (length > <%= @activity.activity_property.get_limit_count %>){
+      alert("选项不能超过<%= @activity.activity_property.get_limit_count %>个");
+      $(this).attr('checked',false);
+    } else if (length == 0){
+      alert("投票选项至少选择一个");
+      $(this).attr('checked',true);
+    } else{
+      var items  = $.map($("input:checked"), function(x) { return $(x).val(); });
+      var name   = $("#name").val();
+      var mobile = $("#mobile").val();
+      $.post('<%= mobile_vote_success_path %>', {items: items, name: name, mobile: mobile}, function(data) {
+         $("#mesg-vote").removeClass('hide');
+         $(".submit").unbind("click");
+         location.href="#top";
+      });
+    }
+    $(this).attr('disabled',false);
+  });
+
+  $(".confirm").click(function(){
+    $("#mesg-vote").addClass('hide');
+  });
+</script>

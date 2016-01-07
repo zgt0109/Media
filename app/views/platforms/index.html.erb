@@ -1,0 +1,139 @@
+<style>
+.bgf9f9f9{background:#f9f9f9 !important;}
+.pd10{padding:10px !important;}
+</style>
+<% content_for :main_content do %>
+<div class="main-content">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '公众平台绑定', platforms_url %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <% @allow_rebind = @wx_mp_user && (@wx_mp_user.binds_count <= 1) && !@wx_mp_user.froze? %>
+        <table id="" class="table table-striped table-bordered table-hover dataTable">
+          <tbody>
+            <tr>
+              <th colspan="5" class="">
+                <h5 class="text-info">
+                  公众平台绑定
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <td>公共账号</td>
+              <td>URL</td>
+              <td>Token</td>
+              <td width="10%">状态</td>
+              <td width="15%">操作</td>
+            </tr>
+            <tr>
+              <td><%= @wx_mp_user.try(:name) %></td>
+              <td><%= @wx_mp_user.try(:url) %></td>
+              <td><%= @wx_mp_user.try(:token) %></td>
+              <td><span class="blue"><%= @wx_mp_user.try(:status_name) %></span></td>
+              <td>
+                <%= link_to '重新绑定', bind_platforms_url, target: '_blank', id: 'rebind_link', data: {confirm: '<h4>警告：变更公众账号绑定，会导致会员卡和电商数据丢失！请谨慎操作！后果商家自负！</h4>'} %>
+                <% if current_user.wx_mp_user %><a class="margin-left-10" href="javascript:;" data-toggle="modals" data-height="350" data-iframe="<%= qrcode_wx_mp_users_url %>" data-title="二维码管理">二维码管理</a><% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- 此处更新了boostrap.min.css -->
+        <% if @wx_mp_user %>
+        <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTabletable table-striped table-bordered table-hover dataTable margin-top-20">
+          <h5 class="text-info">开发者信息设置</h5>
+          <hr>
+          <%= form_for @wx_mp_user, validate: true, :html => { :class => 'form-table  margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
+            <div class="row">
+              <div class="col-md-3 text-right">AppID(应用ID)：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.text_field :app_id, class: "form-control", size: 60 %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">AppSecret(应用密钥)：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.text_field :app_secret, class: "form-control", size: 60 %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">EncodingAESKey(消息加解密密钥)：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.text_field :encoding_aes_key, class: "form-control", size: 60 %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right"></div>
+              <div class="col-md-2">
+                <%= f.submit '保存', class: "btn btn-primary btn-sm" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTable margin-top-20">
+          <h5 class="margin-top-10 text-info">网页授权</h5>
+          <div class="alert alert-block alert-info margin-top-10">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、使用网页授权必须是开通高级接口的认证服务号，且设置了OAuth2.0网页授权回调页面域名；</li>
+              <li>2、在公众平台设置网页回调页面域名路径：开发者中心 &gt; 高级接口 &gt; OAuth2.0网页授权 &gt; 修改 &gt; 填写授权回调页面域名；</li>
+              <li>3、开启网页授权后，用户通过朋友圈分享出去的活动页面，未关注该公众平台的用户也可以直接使用， 建议开启并在公众平台正确配置。</li>
+            </ul>
+          </div>
+          <form role="form" class="form-table margin-top-10 margin-bottom-20">
+            <div class="row ">
+              <div class="col-md-4 ">
+                <div class="input-group input-group-sm input-group-text">
+                  <input type="text" class="col-xs-12" value="<%= Settings.mhostname %>">
+                  <span class="input-group-addon">
+                    <a href="javascript:void(0);" class="btn btn-primary btn-sm btn-filter" id="J-copy" data-clipboard-text="<%= Settings.mhostname %>">复制授权回调页面域名</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-4 ">
+                <label>网页授权开关：</label>
+                <label>
+                  <input name="switch-field-1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" <%= 'checked' if @wx_mp_user.is_oauth? %> <%#= 'disabled' unless @wx_mp_user.auth_service? %>>
+                  <span class="lbl"></span>
+                </label>
+              </div>
+            </div>
+          </form>
+          <%= link_to '', @wx_mp_user.is_oauth? ?  close_oauth_wx_mp_user_path(@wx_mp_user) : open_oauth_wx_mp_user_path(@wx_mp_user), method: :post, remote: true, id: 'ace-switch' %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(function(){
+    $('.ace-switch').click(function(){
+      $('#ace-switch').trigger('click');
+    });
+  });
+  var clip1 = new ZeroClipboard( document.getElementById("J-copy"), {
+    moviePath: "/flash/ZeroClipboard.swf"
+  });
+  clip1.on( "load", function(client) {
+    client.on( "complete", function(client, args) {
+      showTip("success","链接已复制到剪贴板");
+    });
+  });
+</script>
+<% end %>

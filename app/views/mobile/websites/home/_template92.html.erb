@@ -1,0 +1,11 @@
+<%= render "slider" %>
+
+<div class="index">
+  <%= render 'telphone'%>
+
+  <% website_menus.each do |menu| %>
+    <%= link_to menu_url(menu), class: 'box mod-index' do %>
+          <%= menu.pic_or_icon has_title: true, pic_type: "custom" %>
+    <% end %>
+  <% end %>
+</div>

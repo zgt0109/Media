@@ -1,0 +1,75 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li> <i class="icon-home home-icon"></i><%= link_to "首页", root_path %> </li>
+        <li> <%= link_to "微婚礼", weddings_path %> </li>
+        <li> <%= link_to "分享设置", wedding_qr_codes_path(@wedding) %> </li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="alert alert-block alert-success">
+            <strong class="pull-left">提示: </strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、方式一为系统默认，分享时的标题为系统默认选取微信消息标题。</li>
+              <li>2、方式二分享时的标题用户可自定义。</li>
+              <li>3、分享时的概要系统默认为婚礼举办地点</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <table id="vweddingTable" class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+            <tr>
+              <th>指定人姓名</th>
+              <!-- <th>消息题目</th> -->
+              <th>二维码</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+							<% @qr_codes.each do |it| %>
+								<tr>
+									<td><%= it.content %></td>
+									<!-- <td></td> -->
+									<td>
+										<div class="wedding_qrcode"></div>
+										<%#= image_tag RQRCode::QRCode.new(URI.encode("http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}&title=#{it.content}"), size: 14, level: :l).to_img.resize(100,100).to_data_url %>
+									</td>
+									<td class="">
+										<%= link_to '删除', wedding_qr_code_path(@wedding,it), data: {toggle: "modals", confirm: "确定要删除？", target: "delModel", url: wedding_qr_code_path(@wedding,it), method: "delete"}, method: :delete %>
+									</td>
+								</tr>
+							<% end %>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- /.page-content -->
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+	<script>
+
+		$(".wedding_qrcode").each(function(i, el){
+			var qrcode = new QRCode(el, {
+				width: 120,
+				height: 120,
+				colorDark : "#000000",
+				colorLight : "#ffffff",
+				correctLevel : QRCode.CorrectLevel.L
+			});
+
+			var txt = encodeURI($(el).parent().siblings().first().text());
+      var txt = encodeURI( '<%= "http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}&title=" %>' + $(el).parent().siblings().first().text() );
+			qrcode.makeCode(txt);
+
+		});
+	</script>
+<% end %>

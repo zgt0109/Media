@@ -1,0 +1,6 @@
+<% @ec_seller_cat_selects.each_with_index do |select, index|%>
+    <% value = index == 0 ? select[1].collect{|t| [t["name"], t["id"]]} : [['', '-1']] + select[1].collect{|t| [t["name"], t["id"]]}  rescue [[]] %>
+    <%#= select_tag "ec_seller_cat_id#{select[0]}", options_for_select(value, selected: @website_menu.menuable_id), class: "ec_seller_cat", rel: select[0]  %>
+    <%= select_tag "ec_seller_cat_id#{index}", options_for_select(value, selected: select[0]), class: "ec_seller_cat", rel: select[0]  %>
+<% end %>
+

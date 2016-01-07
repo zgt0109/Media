@@ -1,0 +1,370 @@
+<%= stylesheet_link_tag 'v5.1/platform', 'v5.1/iconfont' %>
+<%= javascript_include_tag 'v5.1/platform' %>
+<% content_for(:title) { '微信营销系列' } %>
+
+<div class="container pr">
+  <div class="float_bottom">
+    <div class="float_bg"></div>
+    <div class="w1200 bc clearfix pa float_content">
+      <p class="fl">多行业解决方案，强大的基础功能设置</p>
+      <a href="/spread?#new_supplier_apply" class="in_b fr tc agent">成为代理商</a>
+      <a href="<%= register_path %>" class="in_b fr reg tc">免费体验</a>
+    </div>
+  </div>
+  <section class="page page1">
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['hotel']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['hotel']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['car']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['car']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['food']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['food']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['wshop']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['wshop']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['hospital']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['hospital']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['house']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['house']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['wlife']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['wlife']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['edu']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['edu']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['wmall']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['wmall']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['trip']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['trip']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['marriage']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['marriage']['comment'] %></div>
+    </div>
+    <div class="p-txt p1-txt">
+      <h2 class="p-h2">多行业解决方案</h2>
+      <h4 class="p-h4"><%= @navigations['plots']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['plots']['comment'] %></div>
+    </div>
+    <div class="p1-show">
+      <img class="p1-show-bg" src="/assets/v5.1/micro_channel/section1_bg.jpg" alt="">
+
+      <div class="p1-show-phone">
+        <div class="p1-show-clip">
+          <ul>
+            <li><img src="<%= @navigations['hotel']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['car']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['food']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['wshop']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['hospital']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['house']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['wlife']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['edu']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['wmall']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['trip']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['marriage']['pic_url'] %>" width="229" height="327" alt=""></li>
+            <li><img src="<%= @navigations['plots']['pic_url'] %>" width="229" height="327" alt=""></li>
+          </ul>
+        </div>
+      </div>
+      <div class="p1-ballon-group">
+        <div class="p1-ballon p1-ballon1">
+          <div class="p1-ballon-hover"></div>
+          <div class="p1-ballon-wrapp">
+            <div class="p1-ballon-icon"></div>
+            <!-- <p class="p1-ballon-txt">微酒店</p> -->
+          </div>
+        </div>
+        <div class="p1-ballon p1-ballon2">
+          <div class="p1-ballon-hover"></div>
+          <div class="p1-ballon-wrapp">
+            <div class="p1-ballon-icon"></div>
+            <!-- <p class="p1-ballon-txt">微汽车</p> -->
+          </div>
+        </div>
+        <div class="p1-ballon p1-ballon3">
+          <div class="p1-ballon-hover"></div>
+          <div class="p1-ballon-wrapp">
+            <div class="p1-ballon-icon"></div>
+            <!-- <p class="p1-ballon-txt">微餐饮</p> -->
+          </div>
+        </div>
+        <div class="p1-ballon p1-ballon4">
+          <div class="p1-ballon-hover"></div>
+          <div class="p1-ballon-wrapp">
+            <div class="p1-ballon-icon"></div>
+            <!-- <p class="p1-ballon-txt">微电商</p> -->
+          </div>
+        </div>
+        <div class="p1-ballon p1-ballon5">
+          <div class="p1-ballon-hover"></div>
+          <div class="p1-ballon-wrapp">
+            <div class="p1-ballon-icon"></div>
+            <!-- <p class="p1-ballon-txt">微医疗</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-btns p1-btns">
+      <div class="p1-btns-wrapp">
+        <ul class="clearfix p1-btns-scroll">
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon11"></div>
+            <div class="p1-btns-txt transition">微酒店</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon12"></div>
+            <div class="p1-btns-txt transition">微汽车</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon13"></div>
+            <div class="p1-btns-txt transition">微餐饮</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon14"></div>
+            <div class="p1-btns-txt transition">微电商</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon15"></div>
+            <div class="p1-btns-txt transition">微医疗</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon1"></div>
+            <div class="p1-btns-txt transition">微房产</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon2"></div>
+            <div class="p1-btns-txt transition">微生活</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon3"></div>
+            <div class="p1-btns-txt transition">微教育</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon4"></div>
+            <div class="p1-btns-txt transition">微商圈</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon7"></div>
+            <div class="p1-btns-txt transition">微旅游</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon8"></div>
+            <div class="p1-btns-txt transition">微婚礼</div>
+          </li>
+          <li class="p1-btns-item">
+            <div class="p1-btns-icon p1-btns-icon9"></div>
+            <div class="p1-btns-txt transition">微小区</div>
+          </li>
+        </ul>
+      </div>
+      <div class="p1-btns-arrow p1-btns-arrow-l"></div>
+      <div class="p1-btns-arrow p1-btns-arrow-r"></div>
+    </div>
+  </section>
+  <section class="page page2">
+    <div class="p-txt p2-txt">
+      <h2 class="p-h2">强大的基础功能设置</h2>
+      <h4 class="p-h4"><%= @navigations['vip']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['vip']['comment'] %></div>
+    </div>
+    <div class="p-txt p2-txt">
+      <h2 class="p-h2">强大的基础功能设置</h2>
+      <h4 class="p-h4"><%= @navigations['website']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['website']['comment'] %></div>
+    </div>
+    <div class="p-txt p2-txt">
+      <h2 class="p-h2">强大的基础功能设置</h2>
+      <h4 class="p-h4"><%= @navigations['group']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['group']['comment'] %></div>
+    </div>
+    <div class="p-txt p2-txt">
+      <h2 class="p-h2">强大的基础功能设置</h2>
+      <h4 class="p-h4"><%= @navigations['pay']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['pay']['comment'] %></div>
+    </div>
+    <div class="p-txt p2-txt">
+      <h2 class="p-h2">强大的基础功能设置</h2>
+      <h4 class="p-h4"><%= @navigations['book']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['book']['comment'] %></div>
+    </div>
+    <div class="p-txt p2-txt">
+      <h2 class="p-h2">强大的基础功能设置</h2>
+      <h4 class="p-h4"><%= @navigations['kf']['title'] %></h4>
+
+      <div class="p-desp"><%= @navigations['kf']['comment'] %></div>
+    </div>
+    <div class="p2-show">
+      <div class="p2-show-phone">
+        <div class="p2-show-clip">
+          <ul>
+            <li><img src="<%= @navigations['vip']['pic_url'] %>" width="324" height="563" alt=""></li>
+            <li><img src="<%= @navigations['website']['pic_url'] %>" width="324" height="563" alt=""></li>
+            <li><img src="<%= @navigations['group']['pic_url'] %>" width="324" height="563" alt=""></li>
+            <li><img src="<%= @navigations['pay']['pic_url'] %>" width="324" height="563" alt=""></li>
+            <li><img src="<%= @navigations['book']['pic_url'] %>" width="324" height="563" alt=""></li>
+            <li><img src="<%= @navigations['kf']['pic_url'] %>" width="324" height="563" alt=""></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="p-btns p2-btns">
+      <ul class="clearfix">
+        <li class="p2-btns-items">
+          <div class="p2-btns-scroll">
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns1-icon1"></div>
+              <div class="p2-btns-txt">会员卡</div>
+            </div>
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns1-icon2"></div>
+              <div class="p2-btns-txt">会员卡</div>
+            </div>
+          </div>
+        </li>
+        <li class="p2-btns-items">
+          <div class="p2-btns-scroll">
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns2-icon1"></div>
+              <div class="p2-btns-txt">微官网</div>
+            </div>
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns2-icon2"></div>
+              <div class="p2-btns-txt">微官网</div>
+            </div>
+          </div>
+        </li>
+        <li class="p2-btns-items">
+          <div class="p2-btns-scroll">
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns3-icon1"></div>
+              <div class="p2-btns-txt">微团购</div>
+            </div>
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns3-icon2"></div>
+              <div class="p2-btns-txt">微团购</div>
+            </div>
+          </div>
+        </li>
+        <li class="p2-btns-items">
+          <div class="p2-btns-scroll">
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns4-icon1"></div>
+              <div class="p2-btns-txt">微支付</div>
+            </div>
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns4-icon2"></div>
+              <div class="p2-btns-txt">微支付</div>
+            </div>
+          </div>
+        </li>
+        <li class="p2-btns-items">
+          <div class="p2-btns-scroll">
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns5-icon1"></div>
+              <div class="p2-btns-txt">微预订</div>
+            </div>
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns5-icon2"></div>
+              <div class="p2-btns-txt">微预订</div>
+            </div>
+          </div>
+        </li>
+        <li class="p2-btns-items">
+          <div class="p2-btns-scroll">
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns6-icon1"></div>
+              <div class="p2-btns-txt">微客服</div>
+            </div>
+            <div class="p2-btns-blcok">
+              <div class="p2-btns-icon p2-btns6-icon2"></div>
+              <div class="p2-btns-txt">微客服</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="p2-shadow"></div>
+  </section>
+  <section class="page page3">
+    <div class="w1200 bc">
+      <h3>微枚迪管家 移动应用下载</h3>
+
+      <p>给予微枚迪平台的手机客户端，集接收客户订单、业务核销、会员交易、套餐发放等主要功能，支持扫描二维码帮助快速发放核销业务。</p>
+
+      <div class="plat_download clearfix">
+        <a href="http://www.winwemedia.com/uploads/WKLOrder.apk" class="in_b fl app"><i class="iconfont icon-pingguo"></i>APP下载</a>
+        <a href="https://itunes.apple.com/cn/app/wei-ke-lai-guan-jia/id931502732?l=en&mt=8" target="_blank" class="in_b fl android"><i class="iconfont icon-anzhuo"></i>安卓下载</a>
+      </div>
+    </div>
+  </section>
+  <section class="page page4">
+    <div class="center960 bc pr page_content">
+      <h2 class="tc">极具创意的吸粉神器</h2>
+
+      <p class="tc">微信打印机、微WiFi、小票机......上架必备吸粉器，有效连接消费者，体验式互动，建立粉丝社交营销新生态。</p>
+
+      <div class="circle1 pa"></div>
+      <div class="circle2 pa"></div>
+      <div class="circle3 pa"></div>
+      <div class="series1 pa"><img src="/assets/v5.1/micro_channel/series1.png" widt="87" height="87"/></div>
+      <div class="series2 pa"><img src="/assets/v5.1/micro_channel/series2.png" widt="72" height="72"/></div>
+      <div class="series3 pa"><img src="/assets/v5.1/micro_channel/series3.png" widt="49" height="49"/></div>
+      <div class="series4 pa"><img src="/assets/v5.1/micro_channel/series4.png" widt="66" height="66"/></div>
+      <div class="series5 pa"><img src="/assets/v5.1/micro_channel/series5.png" widt="72" height="72"/></div>
+    </div>
+  </section>
+</div>
+
+<% content_for :custom_js do %>
+    <!--[if lt IE 9]> 
+    <script type="text/javascript"> 
+        $(function(){
+           $(".circle1,.circle2,.circle3").css({"display":"none"});
+        })
+    </script> 
+    <![endif]-->
+<% end %>

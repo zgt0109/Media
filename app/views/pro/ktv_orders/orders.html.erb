@@ -1,0 +1,79 @@
+
+<% content_for :main_content do %>
+    <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微服务', bookings_path %></li>
+        <li><%= link_to 'ktv预定管理', ktv_orders_path %></li>
+        <li><%= link_to '预订管理', orders_ktv_orders_path %></li>
+      </ul>
+      <%= render partial: '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+    <div class="tabbable">
+    <ul class="nav nav-tabs padding-24 tab-size-bigger " id="myTab">
+      <li>
+        <%= link_to '基本信息', ktv_orders_path %>
+      </li>
+      <li  class="active">
+        <%= link_to '预订管理', orders_ktv_orders_path %>
+      </li>
+
+    </ul>
+    <div class="tab-content no-border padding-24">
+
+    <div id="tab-2" class="tab-pane fade active in">
+      <div class="row">
+        <div class="col-md-12 margin-top-20">
+          <table id="couponSNTable" class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+            <tr>
+              <th>序号</th>
+              <th>房间类型</th>
+              <th>姓名</th>
+              <th>手机号</th>
+              <th>饮料</th>
+              <th>人数</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @orders.each_with_index do |order| %>
+                <tr>
+                  <td><%= order.id %></td>
+                  <td><%= order.room_type_name  %></td>
+                  <td><%= order.username %></td>
+                  <td><%= order.phone %></td>
+                  <td><%= order.drinks_name %></td>
+                  <td><%= order.people_num %></td>
+                  <td><%= order.status_name %></td>
+                  <td>
+                    <%- if order.unchecked? %>
+                        <%= link_to '受理', toggle_status_ktv_order_path(order), method: :post %>
+                    <%- end %>
+                  </td>
+                </tr>
+            <% end %>
+            <% if @orders.blank? %>
+                <tr>
+                  <td colspan="8" class="green text-center">无记录</td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+          <%= paginate @orders %>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    </div>
+
+
+    </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

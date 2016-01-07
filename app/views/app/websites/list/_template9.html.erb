@@ -1,0 +1,47 @@
+<% website_menus =  Kaminari.paginate_array(website_menu.sub_menus).page(params[:page]).per(4)%>
+<div class="box box-list">
+  <% website_menus.each do |child| %>
+      <a href="<%= menu_url child %>" class="table">
+        <% if child.pic? %>
+          <span class="fl box-circle td">
+            <b style="background-image:url(<%= child.pic.try(:thumb) %>)"></b>
+          </span>
+        <% end %>
+        <span class="<%= child.pic? ? "fr td" : "fw td" %>">
+            <b><%= child.name %></b>
+            <!--<i><%#= date_format_full_l(child.created_at)  %></i>-->
+            <em class="arrow"></em>
+        </span>
+      </a>
+  <% end %>
+
+</div>
+<div class="box-page">
+  <a class="btn active" style="display: none;" id="previous1">上一页</a>
+  <%= link_to_previous_page website_menus, '上一页', class: "btn", id: "previous2", :params => { :anchor => "mp.weixin.qq.com" }  %>
+  <a class="btn active" style="display: none;" id="next1">下一页</a>
+  <%= link_to_next_page website_menus, '下一页', class: "btn", id: "next2", :params => { :anchor => "mp.weixin.qq.com" }  %>
+</div>
+<div class="box-nav">
+  <a href="javascript:history.go(-1);"><span class="ico-goback">返回</span></a>
+  <a href="javascript:history.go(+1);"><span class="ico-goto">前进</span></a>
+  <a href="<%= app_website_url(id: @website.id, aid: session[:activity_id], wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>"><span class="ico-home" >首页</span></a>
+  <a onclick="window.location.reload()"><span class="ico-refresh">刷新</span></a>
+</div>
+
+<% content_for :load_view_js do %>
+    <script type="text/javascript">
+        $(function() {
+            $previous = $("#previous2").length;
+            $next = $("#next2").length;
+            if($previous == 0 && $next == 0){
+                $("#previous1").hide();
+                $("#next1").hide()
+            }
+            else if($previous == 0)
+                $("#previous1").show();
+            else
+                $("#next1").show()
+        });
+    </script>
+<% end %>

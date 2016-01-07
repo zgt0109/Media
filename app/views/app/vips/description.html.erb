@@ -1,0 +1,101 @@
+<% provide(:title, '会员卡说明') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="J-slider" id="sec-index">
+      <!-- list box start -->
+      <% if @wx_mp_user %>
+        <div class="list-box">
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="javascript:;">
+                <i class="icon icon-8"></i>
+                <span>会员卡使用说明</span>
+              </a>
+            </dt>
+            <dd>
+              <% if @vip_card.description.present? %>
+                <pre><%= raw @vip_card.description %></pre>
+              <% else %>
+                暂无
+              <% end %>
+            </dd>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="javascript:;">
+                <i class="icon icon-13"></i>
+                <span>会员卡积分说明</span>
+              </a>
+            </dt>
+            <dd>
+              <% if @vip_card.points_description.present? %>
+                <pre><%= raw @vip_card.points_description %></pre>
+              <% else %>
+                暂无
+              <% end %>
+            </dd>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="javascript:;">
+                <i class="icon icon-14"></i>
+                <span>积分策略</span>
+              </a>
+            </dt>
+            <dd>
+              <% if @point_types.blank? || !@vip_card.is_open_points? %>
+                <p>暂无积分策略</p>
+              <% else %>
+                <% @point_types.each_with_index do |type,index| %>
+                  <p>
+                    <%= index + 1 %>.
+                    <% if type.category == 1 %>
+                      消费送积分：消费<%= f type.amount %>元送<%= type.points %>积分
+                    <% elsif type.category == 2 %>
+                      充值送积分：充值<%= f type.amount %>元送<%= type.points %>积分
+                    <% elsif type.category == 3 %>
+                      签到送积分：<%= "每次签到送#{type.points}积分;" if type.checkin_enabled %>
+                      <%= "连续#{type.succ_checkin_days}天签到送#{type.succ_checkin_points}积分" if type.succ_checkin_enabled %>
+                    <% elsif type.category == 4 %>
+                      领卡送积分：领卡送<%= type.points %>积分
+                    <% end %>
+                  </p>
+                  <p class="detail"><pre><%= type.description %></pre></p>
+                <% end %>
+              <% end %>
+            </dd>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="javascript:;">
+                <i class="icon icon-15"></i>
+                <span>会员卡等级</span>
+              </a>
+            </dt>
+            <dd>
+              <p>1.<%= @vip_card.init_grade_name %>：领卡后的用户</p>
+              <% @vip_grades.each_with_index do |grade,index| %>
+                <p>
+                  <%= index + 2 %>.<%= grade.name %>：
+                  <% if grade.category == 1 %>
+                    <%= vip_grades_time(grade.value) %>
+                  <% elsif grade.category == 2 %>
+                    积分满<%= grade.value %>用户
+                  <% elsif grade.category == 3 %>
+                    充值满<%= grade.value %>元用户
+                  <% elsif grade.category == 4 %>
+                    消费满<%= grade.value %>元用户
+                  <% end %>
+                </p>
+                <p class="detail"><pre><%= grade.description %></pre></p>
+              <% end %>
+            </dd>
+          </dl>
+        </div>
+      <% end %>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>

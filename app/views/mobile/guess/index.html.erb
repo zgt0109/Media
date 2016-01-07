@@ -1,0 +1,44 @@
+<div class="pageindex">
+  <div class="logo" style="height:60px !important"></div>
+  <div class="desc">
+    <h2>商家活动说明</h2>
+    <p><%= raw @activity.description %></p>
+    <p>活动时间：<%= @activity.start_at.try(:to_date) %> 至 <%= @activity.end_at.try(:to_date) %></p>
+  </div>
+  <div class="question-list">
+    <%- @questions.in_groups_of(2).each do |li| %>
+      <%- li.to_a.each do |guess_activity_question| %>
+        <%- next if guess_activity_question.blank? %>
+        <%- question = guess_activity_question.question %>
+        <div class="box">
+          <a href="<%= detail_mobile_guess_path(guess_activity_question_id: guess_activity_question.id, aid: @activity.id, wxmuid: @wx_mp_user.id, openid: @wx_user.try(:uid)) %>">
+          <span class="img">
+            <%= image_tag question.pic_url, style:'width: 100%;' %>
+          </span>
+          <p><%= question.title %></p>
+          <%- if guess_activity_question.over? %>
+            <div class="over"></div>
+          <%- end %>
+          </a>
+        </div>
+      <%- end %>
+     <%- end %>
+  </div>
+  <div class="footer">
+    你还剩<em><%= @wx_user.guess_left_count(@activity) %></em>次答题机会
+    <%- if @consumes.count > 0 %>
+      <a href="<%= prizes_mobile_guess_path(aid: @activity.id, wxmuid: @wx_mp_user.id, openid: @wx_user.try(:uid)) %>">我的奖品</a>
+    <%- end %>
+  </div>
+</div>
+<script>
+$(function(){
+  autoHeight(".question-list .img",23/27);
+});
+function autoHeight(el,scale){
+    var $elW = $(el).width(),
+        $elH = parseInt($elW*scale),
+        $img = $(el).find(".menu-img");
+    $(el).height($elH);
+}
+</script>

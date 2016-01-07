@@ -1,0 +1,109 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '一战到底', fights_activities_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li class="active">
+          <a href="<%= fights_activities_path %>">
+            一战到底
+          </a>
+        </li>
+        <li>
+          <a href="<%= fight_questions_path %>">
+            题库管理
+          </a>
+        </li>
+        <li>
+          <a href="<%= consumes_activities_path(activity_type_id: ActivityType::FIGHT) %>">
+            SN码管理
+          </a>
+        </li>
+        <li>
+          <a href="<%= report_activities_path(activity_type_id: ActivityType::FIGHT) %>">
+            一战到底报表
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-sm-12">
+              <%= form_for @search, url: {action: action_name}, class: 'box-form form-row', html: { method: :get } do |f| %>
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">活动名称：</span>
+                    <%= f.text_field :name_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">关键词：</span>
+                    <%= f.text_field :keyword_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3 row">
+                  <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                </div>
+              <% end %>
+              <div class="col-md-3 row pull-right">
+                <a class="btn btn-sm btn-primary pull-right" href="<%= new_activity_path(activity_type: ActivityType::FIGHT) %>">新增</a>
+              </div>
+            </div>
+            <div class="col-md-12 margin-top-20">
+              <table id="couponTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                  <tr>
+                    <th width="30%">活动名称</th>
+                    <th>关键词</th>
+                    <th>活动时间</th>
+                    <th>状态</th>
+                    <th width="25%">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @activities.each do |activity| %>
+                    <%# activity.complete_cupon if activity.pending? %>
+                    <tr>
+                      <td><%= truncate_u activity.name, length: 16 %></td>
+                      <td><%= activity.keyword %></td>
+                      <td>
+                        <%= activity.duration %>
+                      </td>
+                      <td>
+                        <%= show_activity_status(activity) %>
+                        <%= activity.setted? ? activity.activity_status_name : (activity.setting? ? "未设题" : activity.status_name) %>
+                      </td>
+                      <td class="tleft">
+                        <%= link_to '查看', activity if activity.stopped? || (activity.setted? && activity.activity_status != Activity::NOT_START) %>
+                        <%= link_to '修改', edit_activity_path(activity) if activity.setting? || (activity.setted? && activity.activity_status == Activity::NOT_START) %>
+                        <%#= link_to '停止', [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, if activity.setted? and activity.activity_status == Activity::UNDER_WAY %>
+                        <%#= link_to '删除', [:delete, activity], method: :post, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, if activity.setting? or activity.stopped? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::HAS_ENDED)) %>
+                        <%= link_to '停止', [:stop, activity], method: 'post', confirm: "确定要停止吗？", data: {height: 160, weight: 350} if activity.setted? && activity.activity_status == Activity::UNDER_WAY %>
+                        <%= link_to '删除', [:delete, activity], method: 'post', confirm: "确定要删除吗？", data: {height: 160, weight: 350} if activity.setting? || activity.stopped? || (activity.setted? && ([Activity::HAS_ENDED,Activity::NOT_START,Activity::SHOW_LIST].include?(activity.activity_status))) %>
+                        <%= link_to '题目设置', fight_papers_path( {activity_id: activity.id}) if activity.setting? || (activity.setted? && activity.activity_status == Activity::NOT_START) %>
+                        <%= link_to 'SN码管理', consumes_activities_path( {activity_id: activity.id}) unless activity.setting? || (activity.setted? && activity.activity_status == Activity::NOT_START ) unless  activity.activity_type.vote?  %>
+                        <a href="javascript:void(0);" data-height="800" data-width="1000" data-toggle="modals" data-title="<%= truncate_u activity.name, length: 16 %> > 用户数据" data-iframe="<%= user_data_fight_papers_path(aid: activity.id) %>">用户数据</a>
+                      </td>
+                    </tr>
+                  <% end.blank? %>
+                    <tr><td colspan="5" class="green text-center">还没有创建活动</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @activities %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

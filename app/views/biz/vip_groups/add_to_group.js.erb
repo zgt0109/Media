@@ -1,0 +1,7 @@
+$(".vipcard-list").html('<%= j render "users", vip_users: @vip_users %>');
+$(".vipcard-group").html('<%= j render "groups", vip_groups: @vip_groups %>');
+$("#add_to_group").val(<%= params[:origin_group] %>);
+$(".vipcard-r .J-check").attr('checked', false);
+$('#group-<%= params[:origin_group]%>').addClass("active").siblings().removeClass("active");
+$(".pagination").html('<%= j(paginate(@vip_users, :remote => true, :params => { :controller => "vip_groups", :action => "index"}).to_s)%>');
+showTip('success', '操作成功');

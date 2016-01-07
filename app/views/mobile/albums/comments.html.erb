@@ -1,0 +1,82 @@
+<% provide(:title, '图片评论') %>
+<div class="cent bg1 ">
+  <div class="padding10">
+    <div class="bgf">
+      <div class="comment_box">
+        <%= form_for @comment, url: create_comment_mobile_album_path(@supplier, @photo) do |f| %>
+          <ul>
+            <li><div class="comm_tit color-3">添加评论</div></li>
+            <li class="pad-m-10">
+              <%= f.text_field :nickname, placeholder: '请输入您的昵称', class: "inpt1" %>
+            </li>
+            <li class="pad-m-10">
+              <%= f.text_area :comment, maxlength: 140, rows: 5, placeholder: '请输入您的评论......', class: "inpt1 height120" %>
+              <p class="color-c">(最多可输入140字)</p>
+            </li>
+            <li class="pad-m-5 bordb">
+              <div class="left wid50">
+                <%= button_tag "发布评论", type: 'button', class: "btn1 sub left", data: { disable_with: "发布中..." } %>
+              </div>
+              <div class="right wid50">
+                <a class="right btn1 reset" href="<%= mobile_album_path(@photo, supplier_id: @photo.album.supplier_id) %>">取消</a>
+              </div>
+            </li>
+          </ul>
+        <% end %>
+      </div>
+      <div class="comment-list">
+        <ul>
+          <% if @comments.blank? %>
+            <li>还没有人发表过评论，快来抢占第一条吧！</li>
+          <% else %>
+            <% @comments.each do |c| %>
+              <li>
+                <p><strong class="color-3"><%= c.nickname %> </strong> <span class="f12"><%= c.created_at.to_date.to_s %></span></p>
+                <p><%= c.comment %></p>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $(".sub").click(function(event) {
+      if($("[name='comment[comment]']").val() == "") {
+          alert('评论不能为空');
+          event.preventDefault();
+      }else if($("[name='comment[nickname]']").val() == "") {
+          alert('昵称不能为空');
+          event.preventDefault();
+      }else {
+          $("form").submit();
+      }
+    });
+
+    //延迟加载
+    $(".lazy").lazyload({
+      placeholder : "/assets/mobile/albums/load.gif",
+      effect  : "fadeIn"
+    });
+    var u = navigator.userAgent;
+    if (u.indexOf('iPhone') > -1) {//苹果手机
+      $(".bg1").addClass("scrol")
+    }
+
+    bottomLoad(load)
+    var page = 1;
+    function load(){
+      page += 1;
+      var get_url = "<%= load_more_comments_mobile_album_path(@photo.album.supplier_id,@photo) %>" + "?page=" + page;
+      $.getJSON(get_url, function(data) {
+        var html = '';
+        for(i=0;i<data.comments.length;i++){
+          html += '<li><p><strong class="color-3">'+data.comments[i].nickname+' </strong> <span class="f12">'+data.comments[i].created_at+'</span></p><p>'+data[i].comment+'</p></li>';
+        }
+        $(html).appendTo($(".comment-list ul"));
+      });
+    }
+  })
+</script>

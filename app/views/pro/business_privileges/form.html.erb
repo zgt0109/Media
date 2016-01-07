@@ -1,0 +1,37 @@
+<style type="text/css">
+  .box-form .p .input-text { width: 100%; }
+</style>
+
+<p class="p-note">
+  提示：以下“ <em class="fred">*</em> ”均为必填项；
+</p>
+
+<%= form_for [@business_shop, @business_privilege], validate: true do |f| %>
+  <div class="box-form form-row fl">
+
+    <div class="p">
+      <span>优惠名称<em>*</em><span class="fgray"></span></span>
+      <%= f.text_field :name, class: "input-text" %>
+    </div>
+    
+    <div class="p">
+      <span>开始时间<em>*</em></span>
+      <%= f.text_field :start_at, class: "input-text datetimepicker start_time", readonly: true %>
+    </div>
+
+    <div class="p">
+      <span>结束时间<em>*</em></span>
+      <%= f.text_field :end_at, class: "input-text datetimepicker end_time", readonly: true %>
+    </div>
+  </div>
+
+  <div class="p">
+    <span>优惠内容<em>*</em></span>
+    <%= f.cktext_area :description, rows: 5, data: { title: '优惠内容' } %>
+  </div>
+
+  <div class="p">
+    <input type="submit" value="保存" class="btn btn-small btn-orange form-submit"/>
+  </div>
+
+<% end %>

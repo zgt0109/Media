@@ -1,0 +1,65 @@
+<div class="pop-bg" onclick="cancer_submit();"></div>
+<div class="pop-bd">
+  <div class="box-pop">
+    <div class="hd">
+      <b>恭喜你，中奖了！</b>
+    </div>
+    <div class="bd">
+      <p><b>奖品为<%= @activity_consume.try(:activity_prize).try(:title) %>，</b><br/>兑奖SN码：<%= @activity_consume.code %></p>
+      <p><%= @activity.activity_property.display_win_tip %></p>
+      <%= form_for  @activity_consume, :url => create_activity_consume_app_slots_path, :validate => true, :method => :post, html: { onsubmit: "return submit_mobile();" } do |form| %>
+          <%= form.hidden_field :id %>
+          <p><span>请输入您的手机号</span>
+        <%= form.text_field :mobile, :placeholder => "手机号码" , value: @wx_user.try(:related_mobile) %>
+      <p><%= form.submit "提交", :id => "btn-award", :class => "btn" %></p>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+    function error_message_alert(type,string){
+        var result=$("#pop-result");
+        var error_message = $("#error_message");
+        var h=$(document).height();
+        result.height(h);
+
+        if(type==0){
+            result.addClass("result-success");
+        }else{
+            result.addClass("result-fail");
+            error_message.css("color","red");
+        }
+        span = result.find("span");
+        span.html(string);
+        result.show();
+        setTimeout(function(){
+            result.fadeOut(1000);
+        },2000);
+    }
+
+    var submit_mobile = function(){
+        if($("#activity_consume_mobile").val() == ''){
+            error_message_alert(1,"手机号码不能为空");
+            return false;
+        }else if(!test_mobile_number($("#activity_consume_mobile").val())){
+            error_message_alert(1,"手机号码格式不正确");
+            return false;
+        }else{
+            $("#btn-award").submit();
+        }
+    };
+
+
+    // 手机号码正则表达式
+    function test_mobile_number(mobile_number) {
+        if (mobile_number == undefined) {
+            return false;
+        }
+        if (winwemedia_validators.mobile_reg.test(mobile_number)){
+            return true;
+        };
+        return false;
+    }
+ </script>
+
+

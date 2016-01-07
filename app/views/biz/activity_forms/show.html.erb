@@ -1,0 +1,267 @@
+<% content_for :main_content do %>
+  <style type="text/css">
+    .cieldon-file {float: none;}
+  </style>
+
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微报名', activity_forms_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+    
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述', wx_pic: (@activity.new_record? ? '/assets/activity_pics/10.jpg' : @activity.pic_url) %>
+
+          <div class="col-xs-12 col-md-6 col-lg-7">
+            <%= form_for @activity, url: (@activity.new_record? ? activity_forms_path : activity_form_path(@activity)), validate: true do |f| %>
+              <div class="form-group">
+                <label class="control-label">关键词<span class="required-star">*</span><span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content=" 用于公众账号中触发微报名，不能同其他关键字重复" title="" > </span></label>
+                <div class="clearfix">
+                  <%= f.text_field :keyword, class: "col-xs-6", validate: {presence: true, length: { maximum: 64 } }%>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微信消息标题<span class="required-star">*</span><span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息标题" > </span></label>
+                <div class="clearfix">
+                  <%= f.text_field :name, class: 'col-xs-6 activity_title', validate: true, id: 'wx_title' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">活动时间
+                  <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="活动时间活动开始和结束时间，非必填" data-original-title="" title=""> </span>
+                </label>
+
+                <div class="clearfix">
+                  <div class="input-daterange input-group col-xs-6 no-padding">
+                    <span class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                    <%= datetime_range_tag f %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微信消息图片<span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片" ></span></label>
+
+                <div class="clearfix">
+                  <div class="cieldon-file width-100px " data-name="activity[qiniu_pic_key]" data-img="<%= @activity.try(:pic_url) %>" data-key="<%= @activity.try(:qiniu_pic_key) %>" data-type="1" data-div="#img-1" data-height="200"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微信消息摘要<span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要" ></span></label>
+                <%= f.text_area :summary, maxlength: 128, placeholder: "不能超过128个字.", rows: 5, class: 'form-control activity_summary', id: 'wx_summary' %>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">活动说明<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="建议不要上传图片，如果希望有更加丰富的展示可以通过高级功能关联到微相册或微场景。"></span></label>
+                <div class="clearfix">
+                 <%= render "shared/form_rich_text", field_name: "description", obj: f.object, f: f, wrapper_html_options: {class: "form-control", placeholder: "建议不要上传图片，如果希望有更加丰富的展示可以通过高级功能关联到微相册或微场景。"} %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>模版选择</label>
+                <%= hidden_field_tag  "template_id", '1' %>
+                <div class="clearfix templates">
+                  <div class="pad10 left txtcent template_img" style="text-align: center;padding: 10px;float: left;"><a href="javascript:void(0)"><img src="/assets/vapply/mb1.jpg" width="160"></a>
+                    <p>
+                      <input style=" cursor: pointer; " type="radio"  name="template_id" value=1 checked="checked">
+                    </p>
+                  </div>
+
+                  <div class="pad10 left txtcent template_img" style="text-align: center;padding: 10px;float: left;"><a href="javascript:void(0)"><img src="/assets/vapply/mb2.jpg" width="160"></a>
+                    <p>
+                      <input style=" cursor: pointer; " type="radio" name="template_id" value=2 >
+                    </p>
+                  </div>
+
+                  <div class="pad10 left txtcent template_img" style="text-align: center;padding: 10px;float: left;"><a href="javascript:void(0)"><img src="/assets/vapply/mb3.jpg" width="160"></a>
+                    <p>
+                      <input style="cursor: pointer; " type="radio" name="template_id" value=3 >
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group ">
+                <a href="javascript:;" data-toggle="collapse" data-target="#gaoji" class="collapsed">高级报名设置</a>
+                <div id="gaoji" class="padding-top-10 collapse" style="height: 10px;">
+                  <div class="form-group ">
+                    <label>设置已报名人员提示文字</label><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="系统默认:已报名" data-original-title="" title=""></span>
+                    <div class="clearfix padding-top-10">
+                      <%= text_field_tag  "enrolled_tip", @activity.extend.enrolled_tip, maxlength: 20, style: 'width: 32%' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group ">
+                    <label>设置未报名人员提示文字</label><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="系统默认:您还未报名，左划进入报名页面" data-original-title="" title=""></span>
+                    <div class="clearfix padding-top-10">
+                      <%= text_field_tag  "unenrolled_tip", @activity.extend.unenrolled_tip, maxlength: 20, style: 'width: 32%' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group ">
+                    <label class="control-label">自定义背景<span class="help-inline text-warning line-height-32">友情提示：添加个建议尺寸640*1136，如果不是对应尺寸背景容易变形上传图片颜色尽量和选择模版颜色相近会有更好的展示效果</span></label>
+                    <div class="clearfix"></div>
+                    <div data-name="template_qiniu_key" data-img = "<%= @activity.template_url %>" data-key="<%= @activity.extend.template_qiniu_key %>" class="cieldon-file f24 g_padv10 cieldon-file-0" data-type="0"  data-height="240" data-width="160"></div>
+                      <span style="padding-top: 100px;display:inline-block;"><a href="javascript:;" class="remove_template_qiniu_key">删除</a>（删除上传图片会默认使用模版背景）</span>
+                  </div>
+
+                  <h6><label>详情页设置关联活动</label></h6>
+                  <div class="form-group clearfix padding-top-10">
+                    <label class="control-label">栏目类型</label>
+                    <div class="form-group clearfix">
+                      <div class="col-xs-6  no-padding">
+                      <%= select_tag :related_link_type, options_for_select([['请选择', 'none'], ['微官网', 'website'], ['微场景', 'scene'],['微相册', 'album']],selected: @activity.extend.related_link_type), class: "col-xs-6" %>
+                      </div>
+                    </div>
+
+                    <div class="form-group clearfix related_albums">
+                      <div class="col-xs-6  no-padding">
+                        <div class="form-group">
+                          <label class="control-label">选择相册</label>
+                          <%= select_tag :related_album_id, options_for_select(current_user.albums.show.order('albums.sort, albums.updated_at DESC').map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_album_id), class: 'col-xs-6' %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group clearfix related_websites">
+                      <div class="col-xs-6  no-padding">
+                        <div class="form-group">
+                          <label class="control-label">选择微官网</label>
+                          <%= select_tag :related_website_id, options_for_select(current_user.activities.website.show.map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_website_id), class: 'col-xs-6' %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group clearfix related_scenes">
+                      <div class="col-xs-6  no-padding">
+                        <div class="form-group">
+                          <label class="control-label">选择微场景</label>
+                          <%= select_tag :related_scene_id, options_for_select(current_user.activities.scene.show.map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_scene_id), class: 'col-xs-6' %>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label"><%= check_box_tag :allow_repeat_apply, 1, @activity.allow_repeat_apply?, class: "ace", name: 'activity[extend][allow_repeat_apply]' %><span class="lbl">允许重复报名<small class="help-inline text-warning">允许同一个微信帐号重复报名</small></span></label>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label"><%= f.check_box :require_wx_user, class: "ace" %><span class="lbl">未关注可参与</span></label>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-submit btn-primary btn-default">保存<% if @activity.new_record? %>&编辑报名字段<% end %></button>
+                <button type="reset" class="btn btn-sm btn-default margin-left-10" onclick="javascript: window.location.href ='<%= activity_forms_path %>'" >取消</button>
+              </div>
+
+              <%= f.hidden_field :activity_type_id %>
+
+              <% if @activity.new_record? %>
+                <%= f.hidden_field :wx_mp_user_id %>
+                <%= f.hidden_field :status, value: Activity::SETTED %>
+                <%#= f.hidden_field :ready_at, value: Time.now %>
+                <%= f.hidden_field :audited, value: false %>
+              <% end %>
+            <% end %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        <%- if @activity.persisted? && @activity.extend.template_id.present? %>
+          var template = $('.templates').find('input[value=<%= @activity.extend.template_id.to_i %>]').get(0);
+          template.checked = true;
+        <%- end %>
+
+        $(function(){
+            // $('form').on('input', '#wx_title', function(){
+            //     $('input[name="activity[name]"]').val($(this).val());
+            // });
+
+            // $('input[name=date-range-picker]').daterangepicker().prev().on(ace.click_event, function(){
+            //   $(this).next().focus();
+            // });
+        });
+
+        $('input[name=template_id]').on('click', function(){
+          $('#template_id').val($(this).val());
+        })
+
+        $('.template_img').on('click', function(){
+          var b = $(this).find('input').get(0);
+          b.checked = true;
+        })
+
+        $('.btn-submit').on('click', function(){
+          var content = $(".wysiwyg-editor").html();
+          $('#activity_description').html(content);
+
+          if ($('#related_link_type').val() == 'album'){
+            <%- if current_user.albums.show.blank? %>
+              showTip('warning', '请先创建相册')
+              return false;
+            <%- end %>
+          }
+
+           if ($('#related_link_type').val() == 'scene'){
+              <%- if current_user.activities.scene.show.blank? %>
+              showTip('warning', '请先创建微场景')
+              return false;
+            <%- end %>
+          }
+
+        })
+
+        $('.remove_template_qiniu_key').on('click', function(){
+          $('input[name=template_qiniu_key]').val('');
+          $('.file-img a').css('background-image', '');
+        })
+
+        $('#related_link_type').on('change', function(){
+          if ($(this).val() == 'album'){
+            $('.related_scenes').attr('disabled', true).hide();
+            $('.related_websites').attr('disabled', true).hide();
+            $('.related_albums').attr('disabled', false).show();
+          }
+          if ($(this).val() == 'website'){
+            $('.related_scenes').attr('disabled', true).hide();
+            $('.related_websites').attr('disabled', false).hide();
+            $('.related_albums').attr('disabled', true).hide();
+          }
+          if ($(this).val() == 'scene'){
+            $('.related_websites').attr('disabled', true).hide();
+            $('.related_albums').attr('disabled', true).hide();
+            $('.related_scenes').attr('disabled', false).show();
+          }
+          if ($(this).val() == 'none'){
+            $('.related_scenes').attr('disabled', true).hide();
+            $('.related_websites').attr('disabled', true).hide();
+            $('.related_albums').attr('disabled', true).hide();
+          }
+        })
+
+        $('#related_link_type').change();
+    </script>
+<% end %>

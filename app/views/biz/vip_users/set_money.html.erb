@@ -1,0 +1,138 @@
+<%= form_tag save_money_vip_user_path(@vip_user) do %>
+  <%= hidden_field_tag :direction, "" %>
+  <div class="modal-body">
+    <div class="alert alert-block alert-success">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li> 1、操作类型“金额调节”用于“充值”、“消费”操作错误时的金额调整，操作时不计算积分策略和特权的相关优惠；
+        </li>
+        <li> 2、可用金额：<b class="usable_amount"><%= f @vip_user.usable_amount %></b>元。</li>
+      </ul>
+    </div>
+    <div>
+      <div class="form-group">
+        <label>操作类型<span class="required-star">*</span></label>
+        <div class="OperaType">
+          <div class="radioTab">
+            <label>
+              <input name="direction_type" type="radio" class="ace" data-toggle="radioTab"
+              data-target="charge" checked="checked" value="1">
+              <span class="lbl">充值</span>
+            </label>
+            <label>
+              <input name="direction_type" type="radio" class="ace" data-toggle="radioTab"
+              data-target="consum" value="2">
+              <span class="lbl">消费</span>
+            </label>
+            <label>
+              <input name="direction_type" type="radio" class="ace" data-toggle="radioTab"
+              data-target="sum" value="3">
+              <span class="lbl">金额调节</span>
+            </label>
+          </div>
+          <div class="margin-top-10">
+            <div class="form-group">
+              <label>金额<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= text_field_tag :amount, nil, class: 'col-md-8', placeholder:"请输入金额数" -%>
+              </div>
+              <%- if @privileges.present? %>
+                <%- @privileges.each do |privilege| %>
+                  <%- if privilege.recharge? %>
+                    <%- privilege_class = "privilege privilege_1" %>
+                  <%- elsif privilege.consume? %>
+                    <%- privilege_class = "privilege privilege_2" %>
+                  <%- end %>
+                  <div class="privilege_list">
+                    <label class="middle privilege_item <%= privilege_class %>">
+                      <input class="ace" id="privilege<%= privilege.id %>" type="checkbox" disabled>
+                      <span class="lbl"><%= privilege.transaction_name %> </span>
+                    </label>
+                  </div>
+                <%- end %>
+              <%- end %>
+            </div>
+            <div class="form-group adjust_info">
+              <p>实际支付：<span id="pay_amount" class="red">0</span>元</p>
+              <p>获得积分：<span id="given_points" class="red">0</span>分</p>
+              <p>赠送金额：<span id="given_moneys" class="red">0</span>元</p>
+            </div>
+            <div class="form-group" id="payment_type_group">
+              <label>支付方式<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= select_tag :payment_type, options_for_select(VipUserTransaction.payment_type_options[0, 2]) %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>备注</label>
+              <div class="clearfix">
+                <%= text_area_tag :description, nil, placeholder: "备注有助于日后查看金额调节详情", rows: 5, class: 'col-xs-12' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <input type="button" value="确认充值" class="btn btn-sm btn-primary submit-1" onclick="sub_point(3)" data-disable-with="确认充值"/>
+    <input type="button" value="确认消费" class="btn btn-sm btn-primary submit-2" onclick="sub_point(4)" data-disable-with="确认消费"/>
+    <input type="button" value="增加" class="btn btn-sm btn-primary submit-3" onclick="sub_point(1)" data-disable-with="增加"/>
+    <input type="button" value="减少" class="btn btn-sm btn-primary submit-3" onclick="sub_point(2)" data-disable-with="减少"/>
+  </div>
+<%- end %>
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      $('input[type=radio]:first').trigger('click');
+    })
+    function sub_point(type){
+      if($("[name='amount']").val() == ""){
+        return showTip('warning',"请设置金额数！");
+      }
+
+      if(type == 2 || type == 4){
+        var usable_amount = parseFloat($('.usable_amount').text()),
+            amount = parseFloat($(type == 2 ? '#amount' : '#pay_amount').val());
+        if (amount > usable_amount){
+          return showTip('warning',"余额不足");
+        }
+      }
+
+      $("[name='direction']").val(type);
+      $('form').submit();
+
+    }
+
+    function showPrivileges(){
+      var direction_type = $('input[name=direction_type]:checked').val();
+      if(direction_type == 3){
+        $('.privilege_list, .adjust_info').hide();
+      }else{
+        $('.privilege_list, .adjust_info').show();
+        $('.privilege').hide();
+        $('.privilege_' + direction_type).show();
+      }
+      $('#payment_type_group')[direction_type == 2 ? 'show' : 'hide']();
+    }
+
+    $('#amount').on("input", function(){
+      var direction_type = $('input[name=direction_type]:checked').val();
+      var amount = parseFloat($(this).val());
+      if(amount > 0 && direction_type != 3){
+        $.get("<%= transaction_check_vip_user_path %>" + "?amount=" + amount + '&direction_type=' + direction_type );
+      }else{
+        $('.privilege_item').removeClass('selected');
+        $('#pay_amount      ,#given_points,#given_moneys').text(0);
+      }
+    });
+
+    $(document).on("click", 'input:radio', function(){
+      $('.btn').hide();
+      $(".submit-"+$(this).val()).show();
+      showPrivileges();
+      $('#amount').trigger('input');
+    });
+  </script>
+<% end %>

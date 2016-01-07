@@ -1,0 +1,401 @@
+<% if current_user %>
+<% parent_class, sub_class = 'open active', 'open active' %>
+
+<ul class="nav nav-list sly">
+  <li class="<%= parent_class if current_page?(console_path) %>">
+    <a href="<%= console_url %>"><i class="icon-home"></i><span class="menu-text">控制台</span></a>
+  </li>
+
+  <% if current_user.has_privilege_for?(1) %>
+  <li class="<%= controller_name == "flow_reports" || controller_path =~ /biz\/website/ ? parent_class:''%>">
+    <%= left_nav_dropdown 'icon-sitemap', '微官网' %>
+
+    <ul class="submenu" style="display: <%= controller_name == "flow_reports" || controller_path =~ /biz\/website/ ? 'block;' : 'none;'%>">
+      <%= link_to_left_nav( '微官网设置', websites_path, current_page?(websites_path) ) %>
+      <%= link_to_left_nav( '模板样式', website_settings_path, current_page?(website_settings_path) ) %>
+      <%= link_to_left_nav( '站点内容', website_menus_path, controller_name == 'website_menus' ) %>
+      <%= link_to_left_nav( '文章中心', website_articles_path(article_type: "as_article"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_article' || params[:category_type] == 'as_article') ) %>
+      <%= link_to_left_nav( '展示中心', website_articles_path(article_type: "as_product"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_product' || params[:category_type] == 'as_product') ) %>
+      <%= link_to_left_nav( '首页幻灯片', website_pictures_path, controller_name == 'website_pictures' ) %>
+      <%= link_to_left_nav( '首页背景图', bg_pic_website_settings_path, controller_name == 'website_settings' && action_name == 'bg_pic' ) %>
+      <%= link_to_left_nav( '导航菜单', website_popup_menus_path, controller_name == 'website_popup_menus' && @nav_type.is_a?(Array) ) %>
+      <%= link_to_left_nav( '快捷菜单', website_popup_menus_path(nav_type: WebsitePopupMenu::POPUP_MENU), controller_name == 'website_popup_menus' && !@nav_type.is_a?(Array) ) %>
+      <%= link_to_left_nav( '个性域名', qrcode_websites_path, controller_name == 'websites' && action_name == 'qrcode' ) %>
+    </ul>
+  </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(2) %>
+    <li class="<%= parent_class if controller_name =~ /vip|point_(gift|type)/ %>">
+      <%= left_nav_dropdown 'icon-user', '微会员卡' %>
+      <ul class="submenu" style="<%= 'display: block' if controller_name =~ /vip|point_(gift|type)/ %>">
+        <%= link_to_left_nav( '基础设置', vip_cards_path, vip_base_path? ) %>
+        <%= link_to_left_nav( '会员管理', vip_users_path, vip_admin_path? ) %>
+        <%= link_to_left_nav( '会员营销', marketing_vip_cards_path, vip_marketing_path?)  %>
+        <%= link_to_left_nav( '营销报表', point_vip_records_path, vip_report_path?) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(1000) %>
+    <li class="<%= controller_name.include?('materials') ? parent_class : ''%>">
+      <%= left_nav_dropdown 'fa fa-file-photo-o', '素材管理' %>
+      <ul class="submenu" style="display: <%= controller_name.include?('materials') ? 'block;' : 'none;'%>">
+        <%= link_to_left_nav( '单图文', materials_url, controller_name == 'materials' ) %>
+        <%= link_to_left_nav( '多图文', multiple_materials_url, controller_name == 'multiple_materials' ) %>
+        <%= link_to_left_nav( '语音素材', materials_audios_url, controller_name == 'materials_audios' ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(1010) %>
+    <li class=" <%= ( %w[wx_menus questions answers].include?(controller_name) || ['welcome', 'reply', 'oauth'].include?(action_name)) ? parent_class : '' %>">
+      <%= left_nav_dropdown 'icon-wrench', '微信基础设置' %>
+
+      <ul class="submenu" style="display: <%= ( %w[wx_menus questions answers].include?(controller_name) || ['welcome', 'reply', 'oauth'].include?(action_name)) ? 'block;' : 'none;'%>">
+
+        <%= link_to_left_nav( '首次关注', welcome_wx_mp_users_url, current_page?(welcome_wx_mp_users_path) ) %>
+        <%= link_to_left_nav( '自动回复', reply_wx_mp_users_url, current_page?(reply_wx_mp_users_path) ) %>
+        <%= link_to_left_nav( '关键字回复', questions_url, controller_name == 'questions' && action_name != 'reply' ) %>
+        <%= link_to_left_nav( '自定义菜单', wx_menus_url, controller_name == 'wx_menus' ) %>
+        <%#= link_to_left_nav( '网页授权', oauth_wx_mp_users_url, current_page?(oauth_wx_mp_users_url) ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(5000) %>
+    <li class="<%= parent_class if marketing_activities? %>">
+      <%= left_nav_dropdown 'icon-list', '微活动' %>
+
+      <ul class="submenu" style="<%= 'display: block' if marketing_activities? %>">
+        <%= link_to_left_nav( '我的营销互动', activities_path, activities_path? ) %>
+
+        <% if current_user.has_privilege_for?(62) %>
+          <%= link_to_left_nav( '优惠券', coupons_path, coupons_path? ) %>
+        <% end %>
+
+        <% if current_user.activities.consume.setted.count > 0 %>
+          <%= link_to_left_nav( '旧版优惠券', old_coupons_activities_path, old_coupons_path? ) %>
+        <% end %>
+
+        <% if current_user.product1? && [10631,13157,13536,14309,18476,14447,19168,25918,18955,18951,18948,18945,18352,17737,14578,11156,20598].include?(current_user.id) %>
+          <%= link_to_left_nav( '刮刮卡', guas_activities_path, guas_path? ) if current_user.has_privilege_for?(4) %>
+          <%= link_to_left_nav( '大转盘', wheels_activities_path, wheels_path? ) if current_user.has_privilege_for?(5) %>
+        <% end %>
+
+        <%= link_to_left_nav( '刮刮卡', guas_activities_path, guas_path? ) if current_user.has_privilege_for?(4) %>
+        <%= link_to_left_nav( '大转盘', wheels_activities_path, wheels_path? ) if current_user.has_privilege_for?(5) %>
+        <%= link_to_left_nav( '一战到底', fights_activities_path, fights_path? ) if current_user.has_privilege_for?(8) %>
+        <%= link_to_left_nav( '砸金蛋', hit_eggs_activities_path, hit_eggs_path? ) if current_user.has_privilege_for?(25) %>
+        <%= link_to_left_nav( '老虎机', slots_activities_path, slots_path? ) if current_user.has_privilege_for?(28) %>
+        <%= link_to_left_nav( '微助力', aids_activities_path, aids_path? ) if current_user.has_privilege_for?(82) %>
+        <%= link_to_left_nav( '摇一摇抽奖', waves_activities_path, waves_path? ) if current_user.has_privilege_for?(64) %>
+        <%= link_to_left_nav( '图片分享', share_photo_settings_path, controller_name =~ /share_photo/ ) if current_user.has_privilege_for?(33) %>
+        <%#= link_to_left_nav( '吸粉游戏', fans_games_path, controller_name =~ /fans_game/ ) if current_user.has_privilege_for?(67) %>
+        <%= link_to_left_nav( '拆包有奖', unfolds_activities_path, unfolds_path? ) if current_user.has_privilege_for?(71) %>
+        <%= link_to_left_nav( '推荐有奖', recommends_activities_path, recommends_path? ) if current_user.has_privilege_for?(70) %>
+        <%= link_to_left_nav( '美图猜猜', guesses_activities_path, guesses_path? ) if current_user.has_privilege_for?(75) %>
+        <%= link_to_left_nav( '微信卡包', wx_cards_path, wx_cards_path? ) if current_user.has_privilege_for?(76) %>
+        <%= link_to_left_nav( '全民经纪人', brokerage_settings_path, brokerages_path? ) if current_user.has_privilege_for?(77) %>
+        <%= link_to_left_nav( '节日礼包', red_packet_packets_path, red_packets_path? ) if current_user.has_privilege_for?(78) %>
+        <%= link_to_left_nav( '微红包', settings_red_packets_path, controller_name == "red_packets" ) if current_user.has_privilege_for?(83) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(38) || current_user.has_privilege_for?(55) %>
+    <li class="<%= parent_class if marketing_sites? %>">
+      <%= left_nav_dropdown 'icon-desktop', '微现场' %>
+
+      <ul class="submenu" style="<%= 'display: block' if marketing_sites? %>">
+        <%= link_to_left_nav( "微信墙", '/wx_walls', wx_walls_path? ) if current_user.has_privilege_for?(38) %>
+        <%= link_to_left_nav( '摇一摇', wx_shakes_path, controller_name == 'wx_shakes' ) if current_user.has_privilege_for?(55) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(6000) %>
+    <li class="<%= parent_class if interactions_path? && params[:type] != 'wx_plot' %>">
+      <%= left_nav_dropdown 'icon-rocket', '微互动' %>
+
+      <ul class="submenu" style="display: <%= interactions_path? && params[:type] != 'wx_plot' ? 'block' : 'none' %>;">
+        <%= link_to_left_nav( '微报名', '/activity_forms', enrolls_path? ) if current_user.has_privilege_for?(10) %>
+        <%= link_to_left_nav( '微投票', '/activities/votes', votes_path? ) if current_user.has_privilege_for?(12) %>
+        <%= link_to_left_nav( '微调研', '/activities/surveys', surveys_path? ) if current_user.has_privilege_for?(15) %>
+        <%= link_to_left_nav( '微相册', '/albums/activity', albums_path? ) if current_user.has_privilege_for?(19) %>
+        <%= link_to_left_nav( '微留言', '/leaving_messages/edit_activity', leaving_messages_path? ) if current_user.has_privilege_for?(24) %>
+        <%= link_to_left_nav( '微贺卡', '/greets/activity', greet_cards_path? ) if current_user.has_privilege_for?(37) %>
+        <%= link_to_left_nav( "微社区", '/wbbs_communities', wbbs_path? && params[:type] != 'wx_plot' ) if current_user.has_privilege_for?(49) %>
+        <%= link_to_left_nav( "微预定", reservations_path, reservations_path? ) if current_user.has_privilege_for?(63) %>
+        <%= link_to_left_nav( "微场景", scenes_path, scenes_path? ) if current_user.has_privilege_for?(73) %>
+        <%= link_to_left_nav( "360全景", panoramagrams_path, panoramagrams_path? ) if current_user.has_privilege_for?(74) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(11) %>
+    <li class="<%= parent_class if (controller_name =~ /micro_shop/i) %>">
+      <%= left_nav_dropdown 'icon-flag', '微门店' %>
+      <ul class="submenu" style="display: <%= (controller_name =~ /micro_shop/i) ? 'block;' : 'none;'%>">
+        <%= link_to_left_nav( '基础设置', micro_shops_path, (controller_name == 'micro_shops' && action_name == 'index') ) %>
+        <%= link_to_left_nav( '门店管理', micro_shop_branches_path, controller_name == 'micro_shop_branches' && action_name !~ /permission/ ) %>
+        <%= link_to_left_nav( '权限设置', permissions_micro_shop_branches_path, (controller_name == 'micro_shop_branches' && action_name =~ /permission/) ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(14) || current_user.has_privilege_for?(30) %>
+    <%= content_tag :li, class: (side_menu_group_status(%w(biz/groups biz/group_categories biz/group_items biz/group_orders),"open active") ||  side_menu_status(controller="activities",action="new_group", nil, active = "open active") || side_menu_status(controller="activities",action="groups", nil, active = "open active") || "#{@activity_type_id}".eql?("14") ? "open active" : false) do %>
+      <%= left_nav_dropdown 'icon-shopping-cart', '微团购' %>
+      <ul class="submenu">
+        <li class=<%= side_menu_status(controller="activities",action="groups", nil, active = "active") || side_menu_status(controller="activities",action="new_group", nil, active = "active") || "#{@activity_type_id}".eql?("14") ? "active" : false%>>
+          <%= link_to groups_activities_path do %>
+            <i class="icon-double-angle-right"></i>微团购
+          <% end %>
+        </li>
+        <li class=<%= side_menu_group_status(%w(biz/groups biz/group_categories biz/group_items biz/group_orders),"active")%>>
+          <%= link_to groups_path do %>
+            <i class="icon-double-angle-right"></i>微团购支付版
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(53) %>
+    <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
+      <%= left_nav_dropdown 'icon-camera', '微捐款' %>
+      <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
+        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(supplier_prints_path) || current_page?(supplier_print_clients_path)) ) %>
+        <%= link_to_left_nav( '项目管理', donations_path, current_page?(donations_path) ) %>
+        <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
+          <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
+        </li>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(1020) %>
+    <li class="<%= parent_class if (controller_name =~ /supplier_print|wifi/i) %>">
+      <%= left_nav_dropdown 'icon-camera', '微硬件' %>
+      <ul class="submenu" style="display: <%= (controller_name =~ /supplier_print|wifi/i || action_name == 'pos' || action_name == "shop_branch_print_template") ? 'block;' : 'none;' %>">
+        <%#= link_to_left_nav( '微WiFi', wifi_clients_path, current_page?(wifi_clients_path) ) %>
+        <%= link_to_left_nav( '微打印机', activities_supplier_prints_path, current_page?(activities_supplier_prints_path) || current_page?(supplier_prints_path) || current_page?(supplier_print_clients_path) ) %>
+        <%= link_to_left_nav( '微小票机', pos_shops_path, current_page?(pos_shops_path || action_name == "shop_branch_print_template") ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(1030) %>
+    <li class="<%= parent_class if ['helpers', 'games'].include?(action_name) %>">
+      <%= left_nav_dropdown 'icon-legal', '微插件' %>
+
+      <ul class="submenu" style="display: <%= ['helpers', 'games'].include?(action_name) ? 'block;' : 'none;' %>">
+        <%= link_to_left_nav( '生活助手', helpers_path, current_page?(helpers_path) ) %>
+        <%= link_to_left_nav( '休闲游戏', games_path, current_page?(games_path) ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(1040) %>
+    <li class="<%= parent_class if %w(channel_qrcodes channel_types channel_statistics).include?(controller_name) %>">
+      <%= left_nav_dropdown 'icon-qrcode', '二维码推广' %>
+      <ul class="submenu" style="display: <%= %w(channel_qrcodes channel_types channel_statistics).include?(controller_name) ? 'block;' : 'none;'%>">
+        <li class="<%= sub_class if controller_name == "channel_qrcodes" %>"><a href="<%= channel_qrcodes_path %>"> <i class="icon-double-angle-right"></i>二维码管理</a></li>
+        <li class="<%= sub_class if controller_name == "channel_types" %>"><a href="<%= channel_types_path %>"> <i class="icon-double-angle-right"></i>二维码分类</a></li>
+        <li class="<%= sub_class if controller_name == "channel_statistics" %>"><a href="<%= channel_statistics_path %>"> <i class="icon-double-angle-right"></i>统计推广</a></li>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10007) %>
+    <li>
+      <a href="<%= wshop_admin_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微电商</span>
+      </a>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(20001) %>
+    <li>
+      <a href="<%= wlife_admin_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微商圈</span>
+      </a>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(20002) %>
+    <li>
+      <a href="<%= wlife_website_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微生活</span>
+      </a>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10004) %>
+    <li class="<%= parent_class if cars_page? %>">
+      <%= left_nav_dropdown 'icon-plus', '微汽车' %>
+      <ul class="submenu" style="display: <%= cars_page? ? 'block;' : 'none;'%>">
+        <%= link_to_left_nav('我的4S店', car_shops_path, controller_name == 'car_shops') %>
+        <%= link_to_left_nav('车系管理', car_catenas_path, controller_name == 'car_catenas') %>
+        <%= link_to_left_nav('车型管理', car_types_path, %w(car_types car_pictures).include?(controller_name)) %>
+        <%= link_to_left_nav('保养预约', activity_notice_car_bespeaks_path(bespeak_type: 1), controller_name == 'car_bespeaks' && params[:bespeak_type].to_i == 1) %>
+        <%= link_to_left_nav('试驾预约', activity_notice_car_bespeaks_path(bespeak_type: 2), controller_name == 'car_bespeaks' && params[:bespeak_type].to_i == 2) %>
+        <%= link_to_left_nav('销售代表', activity_notice_car_sellers_path, controller_name == 'car_sellers') %>
+        <%= link_to_left_nav('车主关怀', car_owners_path, controller_name == 'car_owners') %>
+        <%= link_to_left_nav('实用工具', car_assistants_path, controller_name == 'car_assistants') %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10009) %>
+    <li class="<%= ["house_intros","house_pictures","house_layouts","house_layout_panoramas","house_bespeaks","house_sellers","house_impressions","house_reviews","house_live_photos"].include?(controller_name) ? parent_class : ''%>">
+      <%= left_nav_dropdown 'icon-plus', '微房产' %>
+      <ul class="submenu" style="display: <%= ["house_intros","house_pictures","house_layouts","house_layout_panoramas","house_bespeaks","house_sellers","house_reviews","house_live_photos","house_impressions","broches", "broche_photos"].include?(controller_name) ? 'block;' : 'none;'%>">
+        <li class="<%= current_page?(house_intros_path) ? sub_class : '' %>"><a href="<%= house_intros_path %>"> <i class="icon-double-angle-right"></i> 楼盘简介</a></li>
+        <li class="<%= (current_page?(house_layouts_path) or current_page?(house_pictures_path)) ? sub_class : '' %>"><a href="<%= house_layouts_path %>"> <i class="icon-double-angle-right"></i> 户型图设置</a></li>
+        <li class="<%= (current_page?(broches_path) or current_page?(broche_photos_path)) ? sub_class : '' %>"><a href="<%= broches_path %>"> <i class="icon-double-angle-right"></i> 微楼书</a></li>
+        <li class="<%= current_page?(house_bespeaks_path) ? sub_class : '' %>"><a href="<%= house_bespeaks_path %>"> <i class="icon-double-angle-right"></i> 预约看房查询</a></li>
+        <li class="<%= current_page?(activity_house_sellers_path) or current_page?(house_sellers_path) ? sub_class : '' %>"><a href="<%= activity_house_sellers_path %>"> <i class="icon-double-angle-right"></i> 销售顾问管理</a></li>
+        <li class="<%= current_page?(house_impressions_path) ? sub_class : '' %>"><a href="<%= house_impressions_path %>"> <i class="icon-double-angle-right"></i> 房友印象管理</a></li>
+        <li class="<%= current_page?(house_live_photos_path) ? sub_class : '' %>"><a href="<%= house_live_photos_path %>"> <i class="icon-double-angle-right"></i> 实景拍摄管理</a></li>
+        <li class="<%= current_page?(house_reviews_path) ? sub_class : '' %>"><a href="<%= house_reviews_path %>"> <i class="icon-double-angle-right"></i> 专家点评管理</a></li>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10010) %>
+    <%= content_tag :li, class: ( ["weddings"].include?(controller_name) ? "active" : false) do %>
+      <a href="/weddings">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微婚礼</span>
+      </a>
+    <% end %>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10001) %>
+    <li class="<%= parent_class if (%W(shops shop_branches shop_products shop_categories shop_orders shop_table_orders shop_table_settings book_rules shop_menus).include?(controller_name) and session[:current_industry_id] == 10001 ) %>">
+      <%= left_nav_dropdown 'icon-plus', '微餐饮' %>
+      <ul class="submenu" style="display: <%= (%W(shops shop_branches shop_products shop_categories shop_orders shop_table_orders shop_table_settings book_rules shop_menus).include?(controller_name) and session[:current_industry_id] == 10001 ) ? 'block;' : 'none;' %>">
+        <%= link_to_left_nav( '基本信息', shops_path(industry_id: 10001), current_page?(shops_path) && session[:current_industry_id] == 10001 ) %>
+        <%= link_to_left_nav( '规则设定', book_rules_path(rule_type: 1, industry_id: 10001), current_page?(book_rules_path) && session[:current_industry_id] == 10001 ) %>
+        <%= link_to_left_nav( '菜单管理', shop_menus_path(industry_id: 10001), %W(shop_products shop_categories shop_menus).include?(controller_name) && session[:current_industry_id] == 10001 ) %>
+        <%= link_to_left_nav( '订餐管理', shop_orders_path(industry_id: 10001), current_page?(shop_orders_path) && session[:current_industry_id] == 10001 ) %>
+        <%= link_to_left_nav( '订座管理', shop_table_orders_path(industry_id: 10001), current_page?(shop_table_orders_path) && session[:current_industry_id] == 10001 ) %>
+        <%= link_to_left_nav( '销售日报表', report_shop_orders_path(industry_id: 10001), current_page?(report_shop_orders_path) && session[:current_industry_id] == 10001 ) %>
+        <%= link_to_left_nav( '下单时间分析', graphic_shop_orders_path(industry_id: 10001), current_page?(graphic_shop_orders_path) && session[:current_industry_id] == 10001 ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10002) %>
+    <li class="<%= parent_class if (%W(shops shop_branches shop_products shop_categories shop_orders shop_table_orders shop_table_settings book_rules shop_menus).include?(controller_name) and session[:current_industry_id] == 10002 ) %>">
+      <%= left_nav_dropdown 'icon-plus', '微外卖' %>
+      <ul class="submenu" style="display: <%= (%W(shops shop_branches shop_products shop_categories shop_orders shop_table_orders shop_table_settings book_rules shop_menus).include?(controller_name) and session[:current_industry_id] == 10002) ? 'block;' : 'none;' %>">
+        <%= link_to_left_nav( '基本信息', shops_path(industry_id: 10002), current_page?(shops_path) ) %>
+        <%= link_to_left_nav( '规则设定', book_rules_path(rule_type: 3, industry_id: 10002), current_page?(book_rules_path) ) %>
+        <%= link_to_left_nav( '菜单管理', shop_menus_path(industry_id: 10002), %W(shop_products shop_categories shop_menus).include?(controller_name) ) %>
+        <%= link_to_left_nav( '外卖管理', shop_orders_path(industry_id: 10002), current_page?(shop_orders_path) ) %>
+        <%= link_to_left_nav( '销售日报表', report_shop_orders_path(industry_id: 10002), current_page?(report_shop_orders_path) ) %>
+        <%= link_to_left_nav( '下单时间分析', graphic_shop_orders_path(industry_id: 10002), current_page?(graphic_shop_orders_path) ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10006) %>
+    <%= content_tag :li, class: side_menu_group_status(['pro/trips', 'pro/trip_ticket_categories'],"open active") do %>
+      <%= left_nav_dropdown 'icon-plus', '微旅游' %>
+      <ul class="submenu">
+        <%= content_tag :li, class: side_menu_status(controller="pro/trips", action="index", nil, active = "active") do%>
+          <%= link_to trips_path do %>
+            <i class="icon-double-angle-right"></i>旅游服务
+          <% end %>
+        <% end %>
+        <%= content_tag :li, class: side_menu_status(controller="pro/trips",action="ticket", nil, active = "active") || side_menu_status(controller="pro/trips",action="show_ticket", nil, active = "active") || side_menu_status("pro/trip_ticket_categories", nil, nil, 'active') do%>
+          <%= link_to ticket_trips_path do %>
+            <i class="icon-double-angle-right"></i>门票管理
+          <% end %>
+        <% end %>
+
+        <%= content_tag :li, class: side_menu_status(controller="pro/trips",action="order", nil, active = "active") do%>
+          <%= link_to order_trips_path do %>
+            <i class="icon-double-angle-right"></i>预约管理
+          <% end %>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10013) %>
+    <li class="<%= parent_class if controller_name =~ /hospital|doctor_arranges|doctor_watches/ %>">
+      <%= left_nav_dropdown 'icon-plus', '微医疗' %>
+      <ul class="submenu" style="display: <%= ( controller_name =~ /hospital|doctor_arranges|doctor_watches/ ) ? 'block;' : 'none;'%>">
+        <%= link_to_left_nav( '基本信息', hospitals_url, controller_name == 'hospitals' ) %>
+        <%= link_to_left_nav( '医生管理', hospital_doctors_url, controller_name == 'hospital_doctors' ) %>
+        <%= link_to_left_nav( '排班管理', doctor_watches_url, controller_name =~ /doctor_arranges|doctor_watches/ ) %>
+        <%= link_to_left_nav( '科室管理', hospital_departments_url, controller_name == 'hospital_departments' ) %>
+        <%= link_to_left_nav( '预约管理', hospital_orders_url, controller_name == 'hospital_orders' ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10011) %>
+    <li class="<%= parent_class if controller_name =~ /college/ %>">
+      <%= left_nav_dropdown 'icon-plus', '微教育' %>
+      <ul class="submenu" style="<%= 'display: block' if controller_name =~ /college/ %>">
+        <%= link_to_left_nav( '基本信息', colleges_path, controller_name =~ /colleges|college_enrolls/ && action_name != 'intro' ) %>
+        <%= link_to_left_nav( '专业介绍', college_majors_path(current_user.college || 0), controller_name == 'college_majors' ) %>
+        <%= link_to_left_nav( '专业名师', college_teachers_path(current_user.college || 0), controller_name == 'college_teachers' ) %>
+        <%= link_to_left_nav( '学院环境', college_photos_path(current_user.college || 0), controller_name == 'college_photos' ) %>
+        <%= link_to_left_nav( '学院简介', intro_college_path(current_user.college || 0), controller_name == 'college_branches' || action_name == 'intro' ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10012) %>
+    <li class="<%= controller_name =~ /booking/ || controller_name =~ /ktv_order/ ? parent_class : '' %>">
+      <%= left_nav_dropdown 'icon-plus', '微服务' %>
+      <ul class="submenu" style="<%= 'display: block' if controller_name =~ /booking/ || controller_name =~ /ktv_order/ %>">
+        <%= link_to_left_nav( '基本信息', bookings_path, controller_name == 'bookings' ) %>
+        <%= link_to_left_nav( '轮播图片', booking_ads_path, controller_name == 'booking_ads' ) %>
+        <%= link_to_left_nav( '分类管理', booking_categories_path, controller_name == 'booking_categories' ) %>
+        <%= link_to_left_nav( '商品管理', booking_items_path, controller_name == 'booking_items' ) %>
+        <%= link_to_left_nav( '订单管理', booking_orders_path, controller_name == 'booking_orders' ) %>
+        <%= link_to_left_nav( 'ktv预定管理', ktv_orders_path, controller_name == 'ktv_orders' ) if current_user.try(:id) == 10540 %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10014) %>
+    <li class="<%= controller_name =~ /wx_plot/ || (wbbs_path? && params[:type] == 'wx_plot') ? parent_class : '' %>">
+      <%= left_nav_dropdown 'icon-plus', '微小区' %>
+      <ul class="submenu" style="<%= 'display: block' if controller_name =~ /wx_plot/%>">
+        <li class="<%= controller_name == 'wx_plots' ? sub_class : '' %>">
+          <%= link_to wx_plots_path do %><i class="icon-double-angle-right"></i>基本信息<% end %>
+        </li>
+        <%= link_wx_plot_url(:bulletin, controller_name == 'wx_plot_bulletins') %>
+        <%= link_wx_plot_url(:repair, controller_name == 'wx_plot_repair_complains' && params[:type] == 'repair') %>
+        <%= link_wx_plot_url(:complain, controller_name == 'wx_plot_repair_complains' && params[:type] == 'complain') %>
+        <%= link_wx_plot_url(:telephone, controller_name == 'wx_plot_telephones') %>
+        <%= link_wx_plot_url(:owner, controller_name == 'wx_plot_owners' || (wbbs_path? && params[:type] == 'wx_plot')) %>
+        <%= link_wx_plot_url(:life, controller_name == 'wx_plot_lives') %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_user.has_privilege_for?(10003) %>
+    <li class="<%= govs_path? ? parent_class : '' %>">
+      <%= left_nav_dropdown 'icon-plus', '微政务' %>
+
+      <ul class="submenu" style="<%= 'display: block' if govs_path? %>">
+        <%= link_to_left_nav  '信访大厅', govmails_path, govmails_path?  %>
+        <%= link_to_left_nav  '微信互动', govchats_path, govchats_path?  %>
+      </ul>
+    </li>
+  <% end %>
+
+</ul>
+<% end %>

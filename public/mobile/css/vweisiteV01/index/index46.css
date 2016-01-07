@@ -1,0 +1,46 @@
+body{ background: #100503;}
+.html:before{
+    position: absolute;
+    content: " ";
+    top:0;
+    left:0;
+    width: 100%;
+    height: 70px;
+    background: url(../../../img/vweisiteV01/46/bg-top.png) no-repeat center top;
+    background-size: 100% auto;
+    z-index: 10;
+}
+.slider-text{ display: none;}
+.box{padding: 15px 5px 15px 10px; overflow: hidden; display: block;}
+.mod-top{ height: 120px; background:url(../../../img/vweisiteV01/46/logo.png) no-repeat right bottom, url(../../../img/vweisiteV01/46/bg-logo.png) left bottom;  text-align: center; background-size:auto 100%, auto 100%; margin: -50px 0 0 0; position: relative; z-index: 10; vertical-align: text-bottom; padding: 0 20% 0 0;}
+.mod-top img{ max-height: 100%; vertical-align: bottom; max-width: 100%;}
+.index{
+    background:url(../../../img/vweisiteV01/46/bg-index.jpg);
+    background-size: 100% 100%;
+    overflow: hidden;
+    width: 100%;
+}
+.mod-index{width: 50%; float: left; display:block; color: #666; text-align: left; height: 100%;height:80px;}
+.mod-index >*{height: 50px; vertical-align: middle; display: table-cell;}
+.mod-index >*:last-child{width: 100%;}
+.mod-index .index-img i{ width: 50px; height: 50px; line-height: 50px; display: block; overflow: hidden;text-align: left;}
+.mod-index .index-text>*{font-weight: 100; line-height: 20px; padding-left: 10px; display: block;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index >*:first-child >*{ padding-left: 0;}
+.index-text b{ color: #cda286; font-weight: 100;max-height: 40px; overflow: hidden;}
+.index-text small{ font-size: 12px; color: #fff;}
+.mod-index img{ width: 100%; min-height: 100%;}
+.mod-index .fa{ font-size: 40px; color: #cda286;}
+
+.btn-up-1{ background: #1b0a03;}
+.btn-up-1 .fa{ background: #fff; color: #1b0a03;}
+.navPop-1 .navPop-btn{ background: #1b0a03;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #1b0a03;}
+.navPop-wrap>div a{
+    background: #1b0a03;
+    color: #fff;
+}
+
+@media screen and (orientation:landscape) {
+    .html:before{ background-size: 100% 100%;}
+    .mod-top{ height: 120px; background:url(../../../img/vweisiteV01/46/logo.png) no-repeat 70% bottom, url(../../../img/vweisiteV01/46/bg-logo.png) left bottom;  text-align: center; background-size:auto 100%, auto 100%; padding: 0 20% 0 0;}
+}

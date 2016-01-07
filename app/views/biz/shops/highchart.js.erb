@@ -1,0 +1,8 @@
+<%
+@categories, @data_pay_up, @data_pay_down, @data_pay_up_money, @data_pay_down_money, @start, @count_pay_up, @count_pay_down, @count_pay_up_money, @count_pay_down_money = chart_transaction_data_for_shop_branch(current_shop_branch,@date,@today)
+@chart, @chart_money = chart_transaction_base_line_for_shop_branch(@categories, @data_pay_up, @data_pay_down, @data_pay_up_money, @data_pay_down_money, VipUserTransaction::DATES[@date], true) if @categories.present?
+%>
+<%if @chart && @chart_money%>
+  $('#transactions_count').html("<%= escape_javascript(high_chart('chart_basic_line1', @chart)) -%>");
+  $('#transactions_money').html("<%= escape_javascript(high_chart('chart_basic_line2', @chart_money)) -%>");
+<%end%>

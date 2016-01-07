@@ -1,0 +1,49 @@
+body{ background:url("../../../img/vweisiteV01/50/bg.jpg") repeat; background-size: contain;}
+.box{overflow: hidden;display: inline-block; padding: 10px; margin: 0.5%;}
+.box,
+.box a{color:#fff;}
+.index{width:100%;text-align:center;overflow: hidden; margin: 2px auto;}
+.index a{ float: left; position: relative; height: 120px; text-align: center;}
+.mod-index:nth-child(7n+1){width:33%;}
+.mod-index:nth-child(7n+2){width:65%; padding: 0;}
+.mod-index:nth-child(7n+3),
+.mod-index:nth-child(7n+4),
+.mod-index:nth-child(7n+5){width: 32.33333%; color: #333; height: 30px; padding: 0;}
+.mod-index:nth-child(7n+6){width:65%; padding: 0; }
+.mod-index:nth-child(7n+7){width:33%; }
+.mod-index:nth-child(14n+1),
+.mod-index:nth-child(14n+2){ background: #0070bf;}
+.mod-index:nth-child(14n+3),
+.mod-index:nth-child(14n+4),
+.mod-index:nth-child(14n+5){ background: #fff;}
+.mod-index:nth-child(14n+6),
+.mod-index:nth-child(14n+7){background: #fb8f18;}
+.mod-index:nth-child(14n+8),
+.mod-index:nth-child(14n+9){background: #00a50b;}
+.mod-index:nth-child(14n+10),
+.mod-index:nth-child(14n+11),
+.mod-index:nth-child(14n+12){background: #fff;}
+.mod-index:nth-child(14n+13),
+.mod-index:nth-child(14n+14){ background: #ffc500;}
+
+.mod-index small{ font-size: 18px; line-height: 20px; display: block; width: 100%; font-size: 14px; overflow: hidden;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index:nth-child(7n+2) small,
+.mod-index:nth-child(7n+6) small{ position: absolute; left: 0; bottom: 0; background: rgba(0,0,0,0.8); height: 30px; line-height: 30px;text-overflow:ellipsis; white-space:nowrap; padding: 0 10px;}
+.mod-index:nth-child(7n+1) small,
+.mod-index:nth-child(7n+7) small{max-height: 40px;}
+.mod-index:nth-child(7n+3) small,
+.mod-index:nth-child(7n+4) small,
+.mod-index:nth-child(7n+5) small{ height: 30px; line-height: 30px;}
+.mod-index img{ width: 100%; min-height: 100%; vertical-align: top;}
+.mod-index .fa{ font-size: 50px;margin: 20px 0;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+
+}

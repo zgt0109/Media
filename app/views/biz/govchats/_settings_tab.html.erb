@@ -1,0 +1,40 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+      <li><%= link_to '微政务', govmails_path %></li>
+      <li><%= link_to '微信互动', govchats_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24" id="myTab">
+            <li class="<%= 'active' if action_name == 'index' %>">
+              <%= link_to '基本设置', govchats_path %>
+            </li>
+            <li class="<%= 'active' if action_name == 'conditions' %>">
+              <%= link_to '字段管理', conditions_govchats_path %>
+            </li>
+            <li class="<%= 'active' if action_name == 'complaints' %>">
+              <%= link_to '投诉管理', complaints_govchats_path(search: {status_eq: 1 }) %>
+            </li>
+            <li class="<%= 'active' if action_name == 'reports' %>">
+              <%= link_to '举报管理', reports_govchats_path(search: {status_eq: 1 }) %>
+            </li>
+            <li class="<%= 'active' if action_name == 'advises' %>">
+              <%= link_to '咨询管理', advises_govchats_path(search: {status_eq: 1 }) %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <%= yield :tab %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

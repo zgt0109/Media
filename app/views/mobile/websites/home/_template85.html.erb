@@ -1,0 +1,66 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <div class="navLine-img">
+    <% website_menus[0..3].each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box mod-index-img' do %>
+              <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+          <% end %>
+        </li>
+    <% end %>
+  </div>
+  <div class="mod-index">
+    <% website_menus[4..-1].to_a.each do |menu| %>
+        <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
+        <ul>
+          <% if menu.multiple_graphic? %>
+              <li>
+                <div class="img">
+                  <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                </div>
+
+
+                <div class="mod-title">
+                  <h1>
+                    <i class="fa fa-tags"></i>
+                    <%= menu.title %>
+                  </h1>
+                  <% main_material = menu.menuable %>
+                  <% if main_material.present? %>
+                      <span>
+                          <%= link_to main_material.title, material_type_url(main_material, menu) %>
+                      </span>
+                      <% main_material.children.each do |child| %>
+                        <span>
+                          <%= link_to child.title, material_type_url(child, menu) %>
+                        </span>
+                      <% end %>
+                  <% end %>
+                </div>
+
+              </li>
+          <% else %>
+              <li>
+                <div class="img">
+                  <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                </div>
+                <div class="mod-title">
+                  <h1>
+                    <i class="fa fa-tags"></i>
+                    <%= menu.title %>
+                  </h1>
+                  <% menu.sub_menus.each do |child| %>
+                      <span>
+                        <%= link_to child.name, menu_url(child) %>
+                      </span>
+                  <% end %>
+                </div>
+
+              </li>
+
+          <% end %>
+        </ul>
+    <% end %>
+  </div>
+</div>

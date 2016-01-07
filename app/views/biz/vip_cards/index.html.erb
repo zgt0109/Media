@@ -1,0 +1,150 @@
+<% content_for :tab do %>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="alert alert-block alert-success "> <strong class="pull-left">注意：</strong>
+        <ul class="vwebsiteHeadAlert">
+          <li>1、根据需求，设置以下内容；</li>
+          <li>2、当前页面设置会员卡的基础信息，请务必真确填写；</li>
+          <li>3、设置微信推送相关信息后，用户通过回复你设置的关键词调用会员卡功能。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <%= form_for @activity, validate: true do |f| %>
+        <%= f.hidden_field :status, value: Activity::SETTED %>
+        <%= f.fields_for :vip_card, @activity.vip_card do |card| %>
+        <%= card.hidden_field :status, value: 1 %>
+        <%= render "weixin_preview", wx_title: @activity_notice.try(:title) || '标题', wx_summary: @activity_notice.try(:summary) || '描述', wx_pic: (@activity.pic_url.blank? ? @activity.default_pic_url : @activity.pic_url) %>
+        <div class="col-xs-12 col-md-6 col-lg-7">
+          <div class="form-group">
+            <label class="control-label">商家名称<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= card.text_field :supplier_name, validate: true, class: 'col-xs-6', placeholder:'请输入商家名称' , id: 'supplier_name'%>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <label class="control-label">触发关键词<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :keyword, class: 'col-xs-6', placeholder: "请输入会员卡对应的关键字", id: 'keyword' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+            <div class="clearfix">
+              <div data-name="activity[qiniu_pic_key]" data-img = "<%= @activity.pic_url.blank? ? @activity.default_pic_url : @activity.pic_url %>" data-key="<%= @activity.qiniu_pic_key || "" %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
+              <small class="help-inline text-warning line-height-30">建议尺寸：宽720像素*高400像素</small>
+            </div>
+          </div>
+          <%= f.fields_for :ready_activity_notice do |ready_activity_notice| %>
+            <div class="form-group ">
+              <label class="control-label">未领卡微信消息标题<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的未领卡微信消息标题"></span></label>
+              <div class="clearfix">
+                <%= ready_activity_notice.text_field :title, maxlength: 64, class: 'col-xs-6', id: 'activity_name' %>
+                <div class="help-block  col-md-reset inline fontWarn spanWarn"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">未领卡微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的未领卡微信消息摘要"></span></label>
+              <%= ready_activity_notice.text_area :summary, maxlength: 255, placeholder: "限255字", rows: 3, class: "form-control", id: 'activity_summary' %>
+            </div>
+          <% end %>
+          <%= f.fields_for :active_activity_notice do |active_activity_notice| %>
+            <div class="form-group ">
+              <label class="control-label">领卡后微信消息标题</label>
+              <div class="clearfix">
+                <%= active_activity_notice.text_field :title, maxlength: 64, class: 'col-xs-6', placeholder: "请输入微信消息标题", id: 'wx_title' %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">领卡后微信消息摘要</label>
+              <%= active_activity_notice.text_area :summary, maxlength: 255, placeholder: "请输入微信消息摘要", rows: 3, class: "form-control", id: 'wx_summary' %>
+            </div>
+          <% end %>
+<!--
+          <div class="form-group ">
+            <label class="control-label">公司联系方式<span class="icon-question-sign "data-rel="popover" data-trigger="hover"data-placement="right"data-content="用于手机端一键拨号"></span></label>
+            <div class="clearfix">
+              <%= card.text_field :mobile, validate: true, class: 'col-xs-6' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">公司所在地区</label>
+            <div class="clearfix">
+              <%= address_select(@activity.vip_card, name_prefix: 'activity[vip_card_attributes]') %>
+            </div>
+          </div>
+          <div class="form-group ">
+              <div class="clearfix"><%= card.text_field :address, validate: true, class: 'col-xs-6', maxlength: 30 %></div>
+          </div>
+
+         <div class="form-group">
+            <label class="control-label">地址经纬度<small class="icon-question-sign "data-rel="popover" data-trigger="hover"data-placement="right"data-content="用于一键导航，请准确在地图上标注位置"></small></label>
+            <%= render 'shared/baidu_address', {f: card, obj: @activity.vip_card} %>
+          </div>
+
+          <div class="form-group">
+            <label><%= card.check_box :audited, id: 'audited', class: 'ace' %><span class="lbl">审核</span><span class="icon-question-sign font-size14" data-rel="popover" data-trigger="hover" data-placement="right" data-content="如勾选则客户在申请领卡后需要您审核后才能通过"></span></label>
+          </div>
+          <div class="form-group">
+            <label><%= card.check_box :sms_check, class: 'ace' %><span class="lbl"> 短信验证 </span><span class="icon-question-sign font-size14" data-rel="popover" data-trigger="hover" data-placement="right" data-content="取消勾选表示领卡时不需验证手机号码"></span></label>
+          </div>
+          <div class="form-group">
+            <label><%= card.check_box :open_card_sms_notify, class: 'ace' %><span class="lbl"> 领卡时短信提醒 </span><span class="icon-question-sign font-size14" data-rel="popover" data-trigger="hover" data-placement="right" data-content="取消勾选表示会员领卡成功卡时不会收到短信提醒"></span></label>
+          </div>
+          <div class="form-group">
+            <label><%= card.check_box :recharge_consume_sms_notify, class: 'ace' %><span class="lbl"> 充值/消费/金额调节时短信提醒 </span><span class="icon-question-sign font-size14" data-rel="popover" data-trigger="hover" data-placement="right" data-content="取消勾选表示充值、消费、金额调节时会员不会收到短信提醒"></span></label>
+          </div>
+-->
+          <div class="form-group">
+            <div class="clearfix">
+              <input type="button" class="btn btn-sm btn-primary save-start" value="保存">
+              <% if @vip_card.normal? %>
+                  <%= link_to '停用', [:stop, @activity.vip_card], class: 'btn btn-sm btn-info', method: :post %>
+              <%- else %>
+                  <%= link_to '启用', [:start, @activity.vip_card], class: 'btn btn-sm btn-info', method: :post %>
+              <% end %>
+            </div>
+          </div>
+
+        </div>
+      <% end %>
+      <% end %>
+    </div>
+  </div>
+<%- end %>
+<%= render 'biz/vip_cards/settings_tab' %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+$("#supplier_name, #keyword").focus(function(){
+  $(this).parent().find('.error-message').remove();
+}).blur(function(){
+  if($(this).val() == ""){
+    addErrorMessage($(this), '不能为空');
+  }
+});
+
+$('#address_keyword').on('keyup', function(){
+  address = $(this).val();
+  $('#search_button').click();
+})
+
+$('.save-start').click(function(){
+  <% if current_user.bqq_account? && !current_user.has_privilege_for?(3001) %>
+    alert('您的套餐类型无法使用该功能，请联系经销商升级高版本套餐');
+    return false;
+  <% end %>
+
+  if($("#supplier_name").val() == ""){
+    $("#supplier_name").focus();
+    addErrorMessage($("#supplier_name"), '不能为空');
+  }else if($("#keyword").val() == ""){
+    $("#keyword").focus();
+    addErrorMessage($("#keyword"), '不能为空');
+  }else{
+    $('form').submit()
+  }
+});
+</script>
+<% end %>

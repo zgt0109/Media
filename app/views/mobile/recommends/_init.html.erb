@@ -1,0 +1,84 @@
+<div class="body">
+    <div class="banner">
+      <img src="/assets/recommend-img.jpg" alt="">
+    </div>
+    <div class="main">
+     <div class="title-tag">活动说明</div>
+     <div class="text">
+      <%= raw @activity.description %>
+     </div>
+     <%- if !@subscribed %>
+      <div class="title-tag">关注说明</div>
+       <div class="text">
+        <%= raw @activity.activity_property.try(:subscribe_description)  %>
+      </div>
+    <%- end %>
+    <br>
+    <div class="title-tag">奖项说明</div>
+    <div class="r-table">
+      <table>
+        <thead>
+          <tr>
+            <th>奖项</th>
+            <th>奖品</th>
+            <%- if @activity.extend.show_prize_count_required == 'on' %>
+              <th>奖品数量</th>
+            <%- end %>
+            <th>推荐人数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- @activity.activity_prizes.active.each  do |prize| %>
+          <tr>
+            <td><span><%= prize.title %></span></td>
+            <td><span><b><%= prize.prize %></b></span></td>
+            <%- if @activity.extend.show_prize_count_required == 'on' %>
+              <td><span><%= prize.prize_count %></span></td>
+            <%- end %>
+            <td><span><%= prize.recommends_count %></span></td>
+          </tr>
+          <%- end %>
+        </tbody>
+      </table>
+    </div>
+    <% if @invites.present? %>
+    <div class="title-tag">我的推荐记录</div>
+      <div class="text">
+        <div class="prize-list r-table" style="margin:-10px 0;color:#333;line-height:0px;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>昵称</th>
+              <th>参与时间</th>
+            </tr>
+          </thead>
+          <tbody>
+           <%- @invites.each  do |invite| %>
+            <tr>
+              <td><span><%= invite.to_wx_user.try(:nickname) %></span></td>
+              <td><span><%= invite.created_at.try(:to_s) %></span></td>
+            </tr>
+          <%- end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% else %>
+    <div class="title-tag">我的推荐记录</div>
+    <div class="text">
+      你还尚未推荐，赶快去推荐吧！
+    </div>
+    <% end %>
+  </div>
+  <div class="btn-box">
+    <%- if ing %>
+        <%- if !@subscribed %>
+           <a onclick="showPop('#pop-share')" class="btn btn-bigest btn-red">关注此帐号</a>
+        <%- else %>
+          <a onclick="showPop('#pop-recommend')" class="btn btn-bigest btn-red">我要推荐</a>
+        <%- end %>
+    <%- else %>
+      <a class="btn btn-bigest">活动<%= @activity.stopped? ? @activity.status_name : @activity.activity_status_name %></a>
+    <% end %>
+  </div>
+  </div>

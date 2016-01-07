@@ -1,0 +1,91 @@
+<% provide :title, '微信互动' %>
+<section id="sec-index">
+    <div class="foot-btn-box">
+        <a  onclick="handleChat('my')" class="btn btn-red">我的反馈</a>
+    </div>
+    <div class="body">
+        <div class="text-box text-close J-slide">
+            <div class="text-title">
+                <span>互动公告</span>
+                <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="text-main">
+                <div class="text-info">
+                    <p><%= raw @activity.description %></p>
+                </div>
+            </div>
+        </div>
+        <div class="list-box margin-top">
+            <a  onclick="handleChat(0)" class="table">
+                <div class="box-stage">
+                    <p>微信投诉</p>
+                </div>
+                <div class="box-cell">
+                    <dl>
+                        <dt>投诉</dt>
+                        <dt><%= @activity.extend.complaints_basecount.to_i + @activity.govchats.complaint.roots.count %></dt>
+                    </dl>
+                    <dl>
+                        <dt>回复</dt>
+                        <dt><%= @activity.extend.complaints_replies_basecount.to_i + @activity.govchats.complaint.replies.count %></dt>
+                    </dl>
+                </div>
+                <div class="box-right">
+                    <span>我要投诉</span>
+                    <div class="fa fa-chevron-right"></div>
+                </div>
+            </a>
+            <a onclick="handleChat(1)" class="table">
+                <div class="box-stage">
+                    <p>微信举报</p>
+                </div>
+                <div class="box-cell">
+                    <dl>
+                        <dt>举报</dt>
+                        <dt><%= @activity.extend.reports_basecount.to_i + @activity.govchats.report.roots.count %></dt>
+                    </dl>
+                    <dl>
+                        <dt>回复</dt>
+                        <dt><%= @activity.extend.reports_replies_basecount.to_i + @activity.govchats.report.replies.count %></dt>
+                    </dl>
+                </div>
+                <div class="box-right">
+                    <span>我要举报</span>
+                    <div class="fa fa-chevron-right"></div>
+                </div>
+            </a>
+            <a onclick="handleChat(2)" class="table">
+                <div class="box-stage">
+                    <p>微信咨询</p>
+                </div>
+                <div class="box-cell">
+                    <dl>
+                        <dt>咨询</dt>
+                        <dt><%= @activity.extend.advises_basecount.to_i + @activity.govchats.advise.roots.count %></dt>
+                    </dl>
+                    <dl>
+                        <dt>回复</dt>
+                        <dt><%= @activity.extend.advises_replies_basecount.to_i + @activity.govchats.advise.replies.count %></dt>
+                    </dl>
+                </div>
+                <div class="box-right">
+                    <span>我要咨询</span>
+                    <div class="fa fa-chevron-right"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+function handleChat(chat_type) {
+    <%- if @wx_user.present? %>
+        if(chat_type == 'my') {
+             location.href= "<%= my_mobile_govchats_path(activity_id: @activity.id)%>"
+        }else{
+            location.href="<%= new_mobile_govchat_path %>?chat_type=" + chat_type;
+        }
+    <%- else %>
+        showTips('.J-guanzhu');
+    <%- end %>
+}
+</script>

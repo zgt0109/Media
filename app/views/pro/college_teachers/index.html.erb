@@ -1,0 +1,51 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+        <%= render 'pro/college_teachers/breadcrumbs' %>
+
+        <div class="page-content">
+            <div class="row">
+                <%= form_for @search, html: { method: :get } do |f| %>
+                <div class="col-sm-12">
+                    <div class="col-md-3 row">
+                      <div class="input-group input-group-sm input-group-text">
+                        <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入名师名称" %>
+                        <span class="input-group-addon">
+                          <button class="btn btn-sm btn-filter btn-primary">查询</button>
+                        </span>
+                      </div>
+                    </div>
+                    <%= link_to '新增', new_college_teacher_path(@college), class: "btn btn-primary btn-sm pull-right" %>
+                </div>
+                <% end %>
+                <div class="col-md-12 margin-top-20">
+                    <table id="teacherTable"
+                           class="table table-striped table-bordered table-hover dataTable ">
+                        <thead>
+                        <tr>
+                            <th>已登入的名师</th>
+                            <th>职称</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="colleges_body">
+                            <% if @teachers.each do |teacher| %>
+                              <tr>
+                                <td><%= teacher.name %></td>
+                                <td><%= teacher.position %></td>
+                                <td>
+                                  <%= link_to '编辑', edit_college_teacher_path(@college, teacher) %>
+                                  <%= link_to '删除', college_teacher_path(@college, teacher), method: :delete, confirm: '确定删除？' %>
+                                </td>
+                              </tr>
+                            <% end.blank? %>
+                              <tr>
+                                <td colspan="3" class="green text-center">无记录</td>
+                              </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

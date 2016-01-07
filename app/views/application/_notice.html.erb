@@ -1,0 +1,11 @@
+<% if flash[:notice] || flash[:alert] %>
+  <script type="text/javascript">
+    var parent_object = window.parent || window;
+    <% if flash[:notice] %>
+      parent_object.showTip("success","<%= flash[:notice] %>");
+    <% elsif flash[:alert] %>
+      parent_object.showTip("warning","<%= flash[:alert] %>");
+    <% end %>
+    <% flash.clear %>
+  </script>
+<% end %>

@@ -1,0 +1,49 @@
+  <%= form_for @wxredpacketpay, url: payment_setting_red_packets_path, method: 'POST', html: { class: 'form'} do |f| %>
+  <%= f.hidden_field :supplier_id %>
+  <%= f.hidden_field :payment_type_id %>
+  <div class="modal-body">
+    <div class="form-group">
+      <label>微信支付商户号MCHID<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :partner_id, placeholder: 'MCHID', class: 'form-control' %>
+        <!--<input type="text" class="form-control" placeholder="MCHID">-->
+      </div>
+    </div>
+    <div class="form-group">
+      <label>微信支付秘钥Key<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :partner_key, placeholder: 'Key', class: 'form-control' %>
+        <!--<input type="text" class="form-control" placeholder="Key">-->
+      </div>
+    </div>
+    <div class="form-group">
+      <label>微信公众平台公众号AppID<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :app_id, placeholder: 'AppID', class: 'form-control' %>
+        <!--<input type="text" class="form-control" placeholder="AppID">-->
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="fl ml20">
+        <div class="file-btn">
+          <a class="btn btn-primary btn-sm">apiclient_cert上传</a>
+          <%= f.file_field :api_client_cert, class: "btn btn-primary btn-sm"%>
+        </div>
+        <p class="mt10"><span class="required-star">*</span><span class="red">只针对微信红包</span></p>
+      </div>
+      <div class="fr mr20">
+        <div class="file-btn">
+          <a class="btn btn-primary btn-sm">apiclient_key上传</a>
+          <%= f.file_field :api_client_key, class: "btn btn-primary btn-sm"%>
+        </div>
+        <p class="mt10"><span class="required-star">*</span><span class="red">只针对微信红包</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary'%>
+    <!--<button type="button" class="btn btn-sm btn-primary" data-fn="submit">确定</button>-->
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>

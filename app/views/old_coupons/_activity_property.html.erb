@@ -1,0 +1,28 @@
+<%= f.fields_for :activity_property, validate: true do |activity_property| %>
+    <div class="form-group">
+        <label class="control-label">优惠券发放总数<span class="required-star">*</span></label>
+        <div class="clearfix">
+            <%= activity_property.text_field :coupon_count, validate: true, class: 'col-md-8' %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">优惠券每天允许发放总数</label>
+        <div class="clearfix">
+            <% activity_property.object.can_validate = true %>
+            <%= activity_property.hidden_field :can_validate, value: true %>
+            <%= activity_property.text_field :consume_day_allow_count,  class: 'col-md-8', validate: true %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">每人允许领取数<span class="required-star">*</span></label>
+        <div class="clearfix">
+            <%= activity_property.text_field :get_limit_count, validate: true, class: 'col-md-8' %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">重复抽奖时回复<span class="required-star">*</span><small class="help-inline text-warning line-height-32">超过允许领取数时，回复此内容</small></label>
+        <div class="clearfix">
+            <%= activity_property.text_field :repeat_draw_msg, validate: true, class: 'col-md-8', placeholder: "亲，抢券活动每人只能抽一次哦。" %>
+        </div>
+    </div>
+<% end %>

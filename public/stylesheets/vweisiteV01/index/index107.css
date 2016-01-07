@@ -1,0 +1,31 @@
+.html{padding:0;}
+.bg{width:100%;}
+.bg img{width:100%;}
+.nav{width:100%;position:absolute;top:30%;left:0;}
+.nav-menu{width:100%;height:100%;position:absolute;left:0;top:0;}
+.nav-menu a{font-size:15px;color:#5d6d83;text-align:center;position:absolute;background-size:100% auto;}
+.nav-menu a span{display:block;width:100%;height:100%;padding:50% 0;line-height:20px;margin-top:-10px;}
+.nav-menu a.active,
+.nav-menu a:hover{color:#fff;}
+.nav-1{width:28%;height:47%;left:3%;top:48%;background:url(/assets/mobile/vweisiteV01/107/nav-1.png);}
+.nav-1.active,
+.nav-1:hover{background-image:url(/assets/mobile/vweisiteV01/107/nav-1-hover.png);}
+.nav-2{width:26%;height:46%;left:17%;top:5.5%;background:url(/assets/mobile/vweisiteV01/107/nav-2.png);}
+.nav-2.active,
+.nav-2:hover{background-image:url(/assets/mobile/vweisiteV01/107/nav-2-hover.png);}
+.nav-3{width:26%;height:48%;left:32.5%;top:50%;background:url(/assets/mobile/vweisiteV01/107/nav-3.png);}
+.nav-3.active,
+.nav-3:hover{background-image:url(/assets/mobile/vweisiteV01/107/nav-3-hover.png);}
+.nav-4{width:19%;height:35%;left:55%;top:40%;background:url(/assets/mobile/vweisiteV01/107/nav-4.png);}
+.nav-4.active,
+.nav-4:hover{background-image:url(/assets/mobile/vweisiteV01/107/nav-4-hover.png);}
+.nav-5{width:27%;height:49%;left:64%;top:0;background:url(/assets/mobile/vweisiteV01/107/nav-5.png);}
+.nav-5.active,
+.nav-5:hover{background-image:url(/assets/mobile/vweisiteV01/107/nav-5-hover.png);}
+.nav-6{width:19%;height:32%;left:74%;top:55%;background:url(/assets/mobile/vweisiteV01/107/nav-6.png);}
+.nav-6.active,
+.nav-6:hover{background-image:url(/assets/mobile/vweisiteV01/107/nav-6-hover.png);}
+footer{position:fixed;bottom:0;}
+@media only screen and (max-width:1080px){}
+@media only screen and (min-width:1224px){}
+@media only screen and (max-width:320px){}

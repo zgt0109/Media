@@ -1,0 +1,133 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <%= link_wx_plot_url(:bulletin, false, {navigation: true})%>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+
+          <div class="col-sm-12">
+            <%= form_for @bulletin, validate: true, html: {class: 'form', role: 'role'} do |f| %>
+              <%= f.hidden_field :wx_plot_id %>
+              <%= f.hidden_field :status %>
+              <div class="form-group ">
+                <label class="control-label">公告标题<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :title, placeholder: '请输入公告标题', class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group  ">
+                <label class="control-label">公告描述</label>
+                <div class=" clearfix">
+                  <%= f.text_field :summary, placeholder: '', class: 'col-xs-6' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label" style="position: relative;">
+                  标题图
+                  <small class="help-inline text-warning line-height-32">没有更好的图片?微枚迪给你提供</small>
+                  <a href="javascript:;" class="btn btn-primary btn-sm btn-toggle" data-target=".icon-box" data-scroll="icon-tab-2">图片素材</a>
+                  <%= render 'biz/website_menus/font'%>
+                  <a href="javascript:;" class="btn btn-default btn-sm delete-img">删除</a>
+                  <%= f.hidden_field :is_delete_pic %>
+                  <%= f.hidden_field :font_icon %>
+                </label>
+
+                <div class="clearfix">
+                  <div class="cieldon-file width-100px" data-type="0" data-height="100" data-width="100" data-key="<%= f.object.read_attribute("pic") %>" data-name="wx_plot_bulletin[pic]" <% if f.object.font_icon.present? %> data-fa="<%= f.object.font_icon %>" <% else %> data-img="<%= f.object.pic %>" <% end %> data-callback="pic_dispose"></div>
+                </div>
+              </div>
+
+              <div class="form-group ">
+                <label class="control-label">详情页副标题</label>
+                <% WxPlotBulletin.subtitle_type_options.each_with_index do |subtitle_type, index| %>
+                    <div class="radio <%= index == 0 ? 'no-margin-top no-padding-left': 'no-padding-left' %>">
+                      <label class="control-label">
+                        <%= f.radio_button :subtitle_type, subtitle_type[1], class: 'ace' %><span class="lbl"><%= subtitle_type[0] %></span>
+                      </label>
+                      <%= f.text_field :subtitle, value: f.object.subtitle_type == WxPlotBulletin::SHOW_CONTENT ? f.object.subtitle : '' , class: "input-text", style: f.object.subtitle_type == WebsiteMenu::SHOW_CONTENT ? 'width: 42%;' : 'width: 42%;display:none;' if subtitle_type[1] == WebsiteMenu::SHOW_CONTENT %>
+                    </div>
+                <% end %>
+              </div>
+              <div class="form-group col-sm-8 no-padding-left">
+                <label class="control-label">内容<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <!--<div class="wysiwyg-editor" id="" data-BUCKET="v" data-token=""></div>-->
+                  <%= render "shared/form_rich_text", field_name: "content", obj: f.object, f: f, wrapper_html_options: {class: "form-control"}%>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="form-group ">
+                <%= f.submit '确定', class: 'btn btn-sm btn-primary' %>
+                <a href="javascript:;" class="btn btn-sm btn-default" onclick="javascript:history.go(-1);">返回</a>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      function pic_dispose(){
+          $('#wx_plot_bulletin_is_delete_pic').val('');
+          $('#wx_plot_bulletin_font_icon').val('');
+      }
+      $(function(){
+          $('.delete-img').click(function(){
+              var a = $(this).closest('.form-group').find('.file-btn a');
+              a.css({'width': 100, 'height': 100, 'background-image': 'url()', 'background-color': '', 'font-size': '', 'background-position': '', 'background-repeat': 'no-repeat', "background-size": "100% 100%"});
+              a.html('<p><i class="fa fa-plus"></i><small>上传图片</small></p>');
+              $(this).closest('.form-group').find('input[type="hidden"]').val('');
+              $(this).next().val(1);
+              $(this).closest('.form-group').find('.file-btn input[type="file"]').val('');
+          });
+
+          $('.icon-box i').click(function(){
+              $('.icon-box').hide();
+              var a = $(this).closest('.form-group').find('.file-btn a'), self = $(this);
+              $(this).closest('.form-group').find('.file-btn input[type="file"]').val('');
+              a.css({'width': 100, 'height': 100, 'background': '#1b6aaa', 'font-size': '30px'});
+              a.html('<p><i class="' + $(this).attr('class') + '"></i></p>')
+              self.closest('.form-group').find('input[type="hidden"]').each(function(){
+                  if($(this).attr('name') == 'wx_plot_bulletin[font_icon]'){
+                      $(this).val(self.attr('class'));
+                  }else{
+                      $(this).val('')
+                  }
+              });
+          });
+
+          $('input[name="wx_plot_bulletin[subtitle_type]"]').click(function(){
+              if($(this).val() == '2'){
+                  $('#wx_plot_bulletin_subtitle').show();
+              }else{
+                  $('#wx_plot_bulletin_subtitle').hide();
+              }
+          });
+
+          $('form input[type=submit]').click(function() {
+              if($('#wx_plot_bulletin_title').val() && !$('#wx_plot_bulletin_content').val()){
+                  showTip('warning',"请填写内容");
+                  return false;
+              }
+              if($('#wx_plot_bulletin_subtitle_type_2').is(":checked") && !$('#wx_plot_bulletin_subtitle').val()){
+                  showTip('warning',"请填写副标题");
+                  $('#wx_plot_bulletin_subtitle').focus();
+                  return false;
+              }
+          });
+      })
+    </script>
+<% end %>
+

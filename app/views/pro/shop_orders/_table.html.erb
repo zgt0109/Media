@@ -1,0 +1,125 @@
+<div class="body to_print" style="padding-left: 10px;">
+  <h2 style="margin-left: 35px;">欢迎光临</h2>
+  <table border="0">
+    <tr>
+      <td>订单编号：</td>
+      <td><%= @shop_order.order_no %></td>
+    </tr>
+    <tr>
+      <td>门　　店：</td>
+      <td><%= @shop_order.shop_branch.name %></td>
+    </tr>
+    <tr>
+      <td>手　　机：</td>
+      <td><%= @shop_order.mobile %> <%= @shop_order.wx_user.nickname %></td>
+    </tr>
+  </table>
+
+  <table border="0" class="table-border">
+    <tr>
+      <td >下单时间：</td>
+      <td><%= @shop_order.created_at.to_s %></td>
+    </tr>
+    <tr>
+      <% if @shop_order.take_out? %>
+      <td>外卖地址：</td>
+      <td style="text-align: left;"><%= @shop_order.address.to_s %></td>
+      <% else %>
+      <td>过期时间：</td>
+      <td style="text-align: left;"><%= @shop_order.expired_at.to_s %></td>
+      <% end %>
+    </tr>
+  </table>
+
+  <table class="table-border" border="0">
+    <tr>
+      <td>项目名称：</td>
+      <td style="padding-left:40px;">数量</td>
+      <td style="padding-left:60px;">小计</td>
+    </tr>
+    <% @shop_order.shop_order_items.each do |item| %>
+      <tr>
+        <td><%= item.product_name %></td>
+        <td style="text-align:right;padding-right:14px;"><%= item.qty %></td>
+        <td style="float:right;"><%= item.total_price %></td>
+      </tr>
+    <% end %>   
+  </table>
+
+  <table class="table-border" border="0">
+    <tr>
+      <td>小计：</td>
+      <td style="padding-left:85px;">
+        <%= @shop_order.shop_order_items.sum("qty") %>
+      </td>
+      <td style="padding-left:75px;">
+        <%= @shop_order.shop_order_items.sum("total_price") %>
+      </td>
+    </tr>
+    <tr>
+      <td>已付：</td>
+      <td style="padding-left:85px;">
+        <%= @shop_order.shop_order_items.sum("qty") %>
+      </td>
+      <td style="padding-left:75px;">0.00</td>
+    </tr>
+    <tr>
+      <td>待付：</td>
+      <td style="padding-left:85px;">
+        <%= @shop_order.shop_order_items.sum("qty") %>
+      </td>
+      <td style="padding-left:75px;">
+        <%= @shop_order.shop_order_items.sum("total_price") %>
+      </td>
+    </tr>
+  </table>
+  <p> <%= @shop_order.shop_branch.shop_branch_print_templates.try(:first).try(:content) %></p>
+
+  <table border="0" class="table-ft" style="margin-top:40px;width: 265px;">
+    <tr>
+      <th colspan="2" style="padding-bottom:10px;">时间：<%= @shop_order.created_at.to_s %></th>
+    </tr>
+    <tr>
+      <td>品名</td>
+      <td>数量</td>
+    </tr>
+    <% @shop_order.shop_order_items.each do |item| %>
+      <tr>
+        <td><%= item.product_name %></td>
+        <td><%= item.qty %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<style>
+ .to_print {
+  display: none;
+ }
+</style>
+
+
+<style media="print">    
+    .main-container{
+      display: none;
+    }
+     .to_print {
+      display: block;
+    }
+    .body{font-family: "宋体"; font-size:13pt;width:520pt}    
+    h2{ line-height: 0; text-align: left; font-size:20pt; padding-left:50px; margin-bottom: 30px;}
+    table{ margin: 0 0; 
+      text-align: left; 
+      padding: 0 0; 
+      line-height: 13pt;
+    }
+    @page {
+      margin: 8pt;
+    }
+    .table-border{border-bottom:1px dashed #000;}
+    .table-ft{border-top:1px dashed #000;}
+    .table-ft td{text-align: center;}
+    .table-ft tr td{border-bottom:1px dashed #000;}
+    .table-ft tr.last td{border:0;} 
+    .table-ft tr:last-child td {border: 0;}      
+</style>

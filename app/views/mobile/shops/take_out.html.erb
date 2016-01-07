@@ -1,0 +1,39 @@
+<% provide(:title, '我要叫外卖') %>
+<% provide(:title, '我要订餐') %>
+
+<div class="stage" id="stage">
+  <header>
+    <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
+    <h1>请选择外卖门店</h1>
+  </header>
+  <section id="sec-index">
+    <div class="body">
+      <div class="box-search">
+         <%= form_for @search, url: take_out_mobile_shops_url(supplier_id: session[:supplier_id]), method: :get, html: { class: 'fl' } do |f| %>
+           <%= f.search_field :name_like, id: 'in', class: "input fl", placeholder: '请输入要查找的门店' %>
+           <input type="submit" class="btn btn-small" value="搜索">
+         <% end %>
+        <div class="fr">
+          <%= link_to "我的外卖", mobile_shop_orders_url(supplier_id: session[:supplier_id], :order_type => 2, anchor: "mp.weixin.qq.com"), class: "fa fa-map-marker" %>
+        </div>
+      </div>
+      <div class="index">
+
+        <!-- begin list -->
+        <%= render :partial => 'shop_branch_take_out', :collection => @shop_branches, :as => :branch %>
+        <!-- end list -->
+        
+      </div>
+    </div>
+  </section>
+</div>
+<script type="text/javascript">
+    $(function() {
+        <% if flash[:notice] %>
+        alert("<%= flash[:notice] %>");
+        <% elsif flash[:alert] %>
+        alert("<%= flash[:alert] %>");
+        <% end %>
+        <% flash.clear %>
+    });
+</script>

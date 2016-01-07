@@ -1,0 +1,14 @@
+<form>
+  <div class="modal-body">
+    <p>预约者信息：</p>
+    <p>预约单号：<%= @doctor_arrange_item.order_no %></p>
+    <p>姓 　名：<%= @doctor_arrange_item.name %></p>
+    <p>手 　机：<%= @doctor_arrange_item.mobile %></p>
+    <p>医生信息：</p>
+    <p>姓 　名：<%= @doctor_arrange_item.hospital_doctor.try(:name) %></p>
+    <p>科 　室：<%= @doctor_arrange_item.hospital_department.try(:name) %></p>
+    <p>预约时间：<%= @doctor_arrange_item.doctor_watch.arrange_time %></p>
+    <p>下单时间：<%= @doctor_arrange_item.created_at %></p>
+    <p>就诊医院：<%= @doctor_arrange_item.shop_branch.try(:name) %></p>
+  </div>
+</form>

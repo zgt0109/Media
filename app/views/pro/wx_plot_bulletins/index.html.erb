@@ -1,0 +1,131 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <%= link_wx_plot_url(:bulletin, false, {navigation: true})%>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+
+          <%= form_for @search, html: {method: :get } do |f| %>
+              <div class="col-sm-12">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">公告标题：</span>
+                    <%= f.text_field :title_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">状态：</span>
+                    <%= f.select :status_eq, WxPlotBulletin.status_options, {include_blank: '全部'}, class: 'form-control' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <%= f.submit '查询', class: 'btn btn-primary btn-sm' %>
+                </div>
+                <div class="col-md-3">
+                  <a href="#focus_pic" data-toggle="modal" class="btn btn-sm btn-primary">列表焦点图</a>
+                  <%= link_to '新增', new_wx_plot_bulletin_path, class: 'btn btn-sm btn-primary' %>
+                </div>
+              </div>
+          <% end %>
+          <div class="col-sm-12">
+            <table id="" class="table table-striped table-bordered table-hover margin-top-20">
+              <thead>
+              <tr>
+                <th>
+                  公告标题
+                </th>
+                <th>
+                  创建时间
+                </th>
+                <th>
+                  状态
+                </th>
+                <th>
+                  操作
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+                <% @bulletins.each do |f| %>
+                    <tr>
+                      <td><%= f.title %></td>
+                      <td><%= f.created_at %></td>
+                      <td><%= f.status_name %></td>
+                      <td>
+                        <div class="table-tools">
+                          <%= link_to '编辑', edit_wx_plot_bulletin_path(f)%>
+                          <%= link_to '发布', done_wx_plot_bulletin_path(f), data: {method: :post, confirm: '确认发布？'} unless f.done?%>
+                          <%= link_to '删除', wx_plot_bulletin_path(f), data: {method: :delete, confirm: '确认删除？'}%>
+                        </div>
+
+                      </td>
+                    </tr>
+                <% end %>
+                <% if @bulletins.blank? %>
+                    <tr><td colspan="4" class="green text-center">无记录</td></tr>
+                <% end %>
+              </tbody>
+            </table>
+
+            <%= paginate @bulletins %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="focus_pic">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">列表焦点图</h4>
+          </div>
+          <%= form_for @wx_plot, html: {class: 'form', role: 'form', id: 'form-1'} do |f| %>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="control-label">
+                  <small class="help-inline text-warning line-height-32">栏目焦点图非必须，如果不想显示，点击</small>
+                  <input type="button" class="btn btn-default btn-sm delete-img" value="删除"/>
+                  <%= f.hidden_field :is_delete_cover_pic %>
+                </label>
+
+                <div class="clearfix">
+                  <div class="cieldon-file pull-left width-100px" data-type="0" data-width="100" data-height="100" data-img="<%= f.object.cover_pic %>" data-name="wx_plot[cover_pic]" data-key="<%= f.object.read_attribute("cover_pic") %>" data-callback="cover_pic_dispose"></div>
+                  <small class="text-warning pull-left margin-left-10 margin-top-20">建议尺寸:720*400px</small>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <%= f.submit '确定', class: 'btn btn-primary btn-sm'%>
+              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+            </div>
+          <% end %>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        function cover_pic_dispose(){
+            $('#wx_plot_is_delete_cover_pic').val('');
+        }
+        $(function(){
+            $('.delete-img').click(function(){
+                var a = $(this).closest('.form-group').find('.file-btn a');
+                a.css({'width': 100, 'height': 100, 'background-image': 'url()', 'background-color': '', 'font-size': '', 'background-position': '', 'background-repeat': 'no-repeat', "background-size": "100% 100%"});
+                a.html('<p><i class="fa fa-plus"></i><small>上传图片</small></p>');
+                $(this).closest('.form-group').find('input[type="hidden"]').val('');
+                $(this).next().val(1);
+                $(this).closest('.form-group').find('.file-btn input[type="file"]').val('');
+            });
+        });
+    </script>
+<% end %>

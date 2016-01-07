@@ -1,0 +1,28 @@
+<div class="list">
+  <ul>
+    <% @bulletins.each do |child| %>
+        <li>
+          <a href="<%= bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com') %>">
+            <div class="hd">
+              <b><%= child.title %></b>
+              <span> <%= child.summary.present? ? child.summary : child.done_date_at %></span>
+            </div>
+
+            <% if child.pic? || child.font_icon.present? %>
+                <div class="bd">
+                  <% if child.pic.present? %>
+                      <%= image_tag child.pic %>
+                  <% else %>
+                      <i class="<%= child.font_icon %>"></i>
+                  <% end %>
+                </div>
+            <% end %>
+            <div class="ft">
+              查看全文
+            </div>
+          </a>
+        </li>
+    <% end %>
+  </ul>
+</div>
+

@@ -1,0 +1,62 @@
+.partner .part-banner{width: 100%;height: 450px;}
+.partner .banner1{width:100%;height: 100%;; background: url(/assets/v5/partner/banner1.jpg) no-repeat center center;background-size:cover;}
+.partner .banner1 .center960{position: relative;height: 450px;margin: 0 auto;}
+.partner .banner1-text{position: absolute;left:0px;top:130px}
+.partner .p-text{font-size: 18px;color: #5b5b5b;margin: 12px 0 28px 0px;}
+.partner .p-tel{width: 215px;height: 27px;margin: 0px 0 30px 0px;}
+.partner .official-btn{display: block;width: 178px;height: 50px;background: #3396d1;border-radius: 3px;
+	 font-size: 18px;color: #fff;line-height: 50px;text-align: center;}
+.partner .official-btn:hover{background: #767f93;color: #fff;}
+
+
+.part-main-a{width: 100%;position: relative;padding-bottom: 30px;}
+.part-title{font-size: 30px;color: #767f93;text-align: center;line-height: 30px;margin: 40px 0 30px;}
+.part-main-a li{width: 432px;height: 264px;border: 1px solid #d4d4d4;float: left;margin:0 20px 21px 0;padding: 25px 18px 10px;overflow-x: hidden; text-overflow: ellipsis;}
+.partner .i-box{width: 100px;height: 100px;border-radius: 100px;background: #77b3d3;margin: 0 auto;}
+.partner .i-box2{background: #b089ba;}
+.partner .i-box3{background: #f38c5f;}
+.partner .i-box4{background: #afcd74;}
+.partner .i-box5{background: #f67270;}
+.partner .i-box6{background: #acacac;}
+.part-main-a i{width: 100px;height: 100px;line-height: 100px;text-align: center;color: #fff;font-size: 40px;}
+.partner .i-box3 i{font-size: 45px;}
+.part-main-a h4{font-size: 24px;color: #505050;line-height: 24px;text-align: center;margin-top: 10px;}
+.part-main-a p{font-size: 13px;color: #999;line-height: 23px;margin-top: 13px;  }
+
+.part-main-b{width: 100%;height:326px;color: #505050;position: relative;padding-top: 40px;background: url(/assets/v5/partner/main_b_bg.jpg) no-repeat center center;background-size:cover;}
+.partner .main-box{width: 960px;height: 220px;position: relative;margin: 0 auto;overflow: hidden;}
+.partner .main-ul{width: 10000px;height: 220px;position: absolute;left:0;top:0;}
+.partner .main-ul li{width: 960px;height: 220px;float: left;position: relative;overflow: hidden;}
+.part-main-b .part-title{margin: 0px 0 25px;}
+.partner .com-text{width: 736px;margin: 0 auto;color: #666;font-size: 16px;text-align: center;line-height: 26px;}
+.partner .head-pic{width: 72px;height: 72px;display: block;margin: 20px auto;border-radius: 30px;}
+.partner .username,.partner .about{text-align: center;margin-bottom: 10px;}
+.partner .circle-grounp{height: 30px;position: absolute;bottom:20px;margin-left:50%;}
+.partner .circle-ul{width: 215px;height: 30px;}
+.partner .circle-ul li{width: 16px;height: 16px;background: url(/assets/v5/b-circle.png) no-repeat;float: left;margin: 0px 13px;cursor: pointer;}
+.partner .circle-ul li.cur .circle{width: 8px;height: 8px;background: #fff;border-radius: 10px;margin-left: 4px;margin-top: 4px;}
+
+.partner .part-main-c{width: 100%;position: relative;padding-bottom: 60px;}
+.partner .c-left{width: 358px;float: left;color: #505050;font-size: 13px;border-radius:5px;border:1px solid #ccc;margin: 0 20px 0 69px;padding: 30px 20px 4px 30px;}
+.partner .c-left li{margin-bottom: 40px;}
+.partner .c-left .contact{margin-bottom: 3px;height: 19px;}
+.partner .area{color: #999;margin-left: 5px;}
+.partner .c-tel{float: left;margin-right: 30px;font-size: 14px;}
+.partner .c-qq{font-size: 14px;}
+.partner .c-left i{width: 20px;height: 20px;font-size: 18px;text-align: center;line-height: 20px;margin-right: 3px;color: #ccc;}
+.partner .c-right{position: relative;/*float: left;*/}
+.partner .m-input-btn-ps{position: static; margin-left: 0px;margin-top: 16px;}
+
+
+
+
+
+.partner .part-banner{width: 100%;height: 450px;}
+.partner .banner1{width:100%;height: 100%;; background: url(/assets/v5/partner/banner1.jpg) no-repeat center center;background-size:cover;}
+.partner .banner1 .center960{position: relative;height: 450px;margin: 0 auto;}
+.partner .banner1-text{position: absolute;left:0px;top:130px}
+.partner .p-text{font-size: 18px;color: #5b5b5b;margin: 12px 0 28px 0px;}
+.partner .p-tel{width: 215px;height: 27px;margin: 0px 0 30px 0px;}
+.partner .official-btn{display: block;width: 178px;height: 50px;background: #3396d1;border-radius: 3px;
+	 font-size: 18px;color: #fff;line-height: 50px;text-align: center;}
+.partner .official-btn:hover{background: #767f93;color: #fff;}

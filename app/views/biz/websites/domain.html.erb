@@ -1,0 +1,56 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_websites' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:void(0)" class="h1 pagecurrent">个性化域名</a>
+  <%= render 'biz/websites/qrcode'%>
+<% end %>
+
+<p class="p-note">
+  提示：1、拥有个性化域名有助于推广您的公众号，也可以提升您产品和企业的品牌；<br/>
+  　　　2、个性化域名只允许设定一次，设定好以后将不能再进行修改；
+</p>
+
+<p> 原始域名： </p>
+<p>
+  <% url = "http://#{APP_SUB_DOMAIN}.winwemedia.com/#{current_user.try(:id)}" %>
+  <span><%= link_to url, url, :target => "_blank" %></span>
+</p>
+
+<%= form_tag custom_domain_websites_url, :method => :post do %>
+
+  <% if @website.domain.present? %>
+    <p>个性化域名：</p>
+    <% url = "http://#{APP_SUB_DOMAIN}.winwemedia.com/#{@website.domain}" %>
+    <p><span><%= link_to url, url, :target => "_blank" %></span></p>
+  <% else %>
+    <p>请设定个性化域名：</p>
+    <p><%= "http://#{APP_SUB_DOMAIN}.winwemedia.com/" %><%= text_field_tag "name", "", class: "input-text", :maxlength => 20 %>　例如: zai_17</p>
+    <p><%= submit_tag "保存", class: "btn btn-small form-submit" %></p>
+  <% end %>
+
+<% end %>
+    
+    <script type="text/javascript">
+      $(function() {
+        $('.form-submit').click(function(event) {
+          var reg1 = /^\d+$/,
+          reg2 = /^[A-Za-z][\w]*\.?[\w]*[\w]$/,
+          name = $('#name').val();
+          if(name){
+            if(reg1.test(name)){
+              showTip('warning','个性化域名不能全为数字');
+              return false;
+            }else if(!reg2.test(name)){
+              showTip('warning','个性化域名只能包含数字、字母、下划线和一个点（.）!');
+              return false;
+            }
+          }else{
+            showTip('warning','个性化域名不能为空!');
+            $('#name').focus();
+            return false;
+          }
+        });
+      });
+    </script>

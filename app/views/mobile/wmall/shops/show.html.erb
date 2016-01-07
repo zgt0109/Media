@@ -1,0 +1,169 @@
+<section>
+  <div class="body" id="body">
+  </div>
+</section><!--main section end -->
+
+<script id='ractive_shop_template' type='text/ractive'>
+  <div class="mod-member">
+    <div class="mod-card">
+      <div class="card-box">
+        <% if false%>
+          <img src="{{card_pic_url}}" alt="">
+          <div class="card-name">
+            <span>VIP</span>
+          </div>
+          <p>
+            <span class="tright">普通会员</span>
+            <span class="tright">{{card_number}}</span>
+          </p>
+        <% else %>
+          <img src="{{card_pic_url}}" alt="">
+          <div class="card-icon">
+          </div>
+          <div class="card-btn" style="display: block;">
+            <a class="btn btn-red" href="#nogo">立即领取会员卡</a>
+          </div>
+        <% end %>
+      </div><!-- card-box end -->
+    </div><!-- mod-card end -->
+    <p class="card-p" id="card-p"><span>使用时向服务员出示此卡</span></p>
+  </div><!-- mod-member end -->
+
+  <div class="item-box index-item">
+    <div class="item">
+      <a href="#nogo" class="following_link">
+        {{#follow_status}}
+        <span><i class="fa fa-minus"></i>关注</span>
+        {{/follow_status}}
+        {{^follow_status}}
+        <span><i class="fa fa-plus"></i>关注</span>
+        {{/follow_status}}
+      </a>
+    </div>
+    <div class="item">
+      <a href="javascript:void(0);">
+        <span><i class="fa fa-phone fa-rotate-20"></i>电话</span>
+      </a>
+    </div>
+  </div>
+  <div class="mod-box J-slide">
+    {{#activities:i}}
+      <dl>
+        <dt>
+          <a class="fa fa-chevron-right box-icon box-note {{slide_active}}">
+            <i class="fa fa-tag"></i><b>{{name}}</b>
+          </a>
+        </dt>
+        <dd class="show mod-detail" style='{{slide_detail_style}}'>
+
+          {{& description}}
+        </dd>
+      </dl>
+    {{/activities}}
+  </div>
+  <div class="mod-box J-slide">
+    <dl>
+      <dt>
+        <a class="fa fa-chevron-right box-icon box-note fa-chevron-down">
+          <i class="fa fa-home"></i><b>店铺简介</b>
+        </a>
+      </dt>
+      <dd class="show mod-detail">
+        <div class="detail-p">
+          {{description}}
+        </div>
+      </dd>
+    </dl>
+  </div>
+  <div class="mod-box">
+    <dl>
+      <dt>
+        <a class="fa fa-chevron-right box-icon">
+          <i class="fa fa-map-marker"></i><b>{{address}}</b>
+        </a>
+      </dt>
+    </dl>
+    <dl>
+      <dt>
+        <a class="fa fa-chevron-right box-icon" href="tel:400">
+          <i class="fa fa-phone"></i><b>电话：{{phone}}</b>
+        </a>
+      </dt>
+    </dl>
+  </div>
+  <div class="mod-box">
+    <dl>
+      <dt>
+        <%= link_to show_env_mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "fa fa-chevron-right box-icon" do%>
+          <i class="fa fa-picture-o"></i><b>环境照片</b>
+        <% end %>
+      </dt>
+    </dl>
+    <dl>
+      <dt>
+        <%= link_to products_mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "fa fa-chevron-right box-icon" do%>
+          <i class="fa fa-bookmark"></i><b>推荐商品</b>
+        <% end %>
+      </dt>
+    </dl>
+    <dl>
+      <dt>
+        <%= link_to comments_mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "fa fa-chevron-right box-icon" do%>
+          <i class="fa fa-comment"></i><b>店铺点评</b>
+        <% end %>
+      </dt>
+    </dl>
+  </div>
+</script>
+
+<script>
+  $(function(){
+    var path = "/api/wmall/shops/<%= params[:id] %>" + ".json";
+    $shop = fetch_wmall_data({path: path}, <%= raw auth_params.to_json %>, options = {})
+
+    $shop.activities.map(function (element, index) {
+      if (index == 0) {
+        element["slide_active"] = "fa-chevron-down"
+        element["slide_detail_style"] = "display: block"
+      } else {
+        element["slide_detail_style"] = "display: none"
+      }
+    })
+
+    $ractive_shop = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#body',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_shop_template',
+
+      // Here, we're passing in some initial data
+      data: $shop
+    });
+    showSlider(".J-slide dl");
+  })
+
+  $(function(){
+    $(".following_link").bind("click", function() {
+      fetch_wmall_data(
+        {
+          path: "/api/wmall/shops/<%= params[:id] %>" + "/follow_switching"
+        },
+        <%= raw auth_params.to_json %>,
+        options = {
+          type: "post",
+          success: function(data){
+            if(data.code == 0){
+              $ractive_shop.set("follow_status", data.follow_status)
+            }
+          },
+          error: function(data) {
+            // console.log("operate failure")
+          }
+        }
+      )
+    })
+
+  })
+</script>

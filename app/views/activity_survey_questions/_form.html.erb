@@ -1,0 +1,211 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微调研', surveys_activities_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+
+    <div class="page-content">
+      <div class="col-sm-12">
+        <%= form_for @activity_survey_question, validate: true, html: {class: 'form', role: 'form'} do |f| %>
+          <%= hidden_field_tag :activity_id, @activity.id %>
+          <%= f.hidden_field :activity_id %>
+          <div class="form-group">
+            <label class="control-label">题目名称</label>
+            <div class="clearfix">
+              <%= f.text_field :name, class: 'col-xs-6' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">选择调研模式</label>
+            <div class="clearfix" data-toggle="radioTab">
+              <% ActivitySurveyQuestion::survey_question_type_options.each do |m| %>
+                <label class="col-sm-2" data-target="#radio-<%= m[1] %>">
+                  <%= f.radio_button :survey_question_type, m[1], class: 'ace survey_question_type', info: m[0] %>
+                  <span class="lbl"><%= m[0] %></span>
+                </label>
+              <% end %>
+            </div>
+          </div>
+
+          <%
+            survey_question_choices = f.object.survey_question_choices.order(:position)
+            size = survey_question_choices.size
+            1.upto(2){|m| survey_question_choices << f.object.survey_question_choices.new } if size.zero?
+          %>
+
+          <div class="radio-tab">
+            <% ActivitySurveyQuestion::survey_question_type_options.each do |m| %>
+              <%= render "survey_question_type#{m[1]}", {f: f, size: size, survey_question_choices: survey_question_choices, survey_question_type: m[1]} %>
+            <% end %>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">答案个数</label>
+            <div class="clearfix">
+              <% size = 2 if size.zero? %>
+              <%= f.select :limit_select, (1..size).to_a.map{|f| ["#{f}个", f]}, {}, class: 'J-answer' %>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <!-- <input type="submit" value="确定" class="btn btn-sm btn-primary"> -->
+            <a href="javascript:;" class="btn btn-sm btn-primary submit">确定</a>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(function(){
+
+    $('.radio-tab .clearfix .clearfix').addClass('form-group');
+
+    //$("[data-toggle=radioTab]").on("click","label",function(){
+    $('input[type=radio]').on('click', function(){
+      var $this = $(this),
+          $target = $this.closest("label").attr("data-target"),
+          $panel = $($target);
+
+      $panel.removeClass("hide").siblings().addClass("hide");
+
+      var $oIndex = $panel.children('.form-group:visible').length,
+          $select = $(".J-answer"),
+          $option = "";
+
+      for(var i = 1;i<$oIndex;i++){
+        $option +='<option value="'+i+'">'+i+'个</option>';
+      }
+      $select.html($option);
+    });
+    $("[data-toggle=addOption]").on("click",function(){
+      var $this = $(this),
+          sType= $this.attr("data-type"),
+          $parent = $this.closest(".form-group"),
+          tool = $parent.siblings(':visible').last(),
+          oIndex = $parent.siblings(':visible').length + 1,
+          template = $('[template='+sType+']'),
+          $select = $(".J-answer");
+      if(oIndex > 6){
+        return false;
+      }
+
+      var new_template = template.clone(true).insertAfter(tool).removeClass('hide').removeAttr('template').show(),
+          uuid = Date.now();
+      new_template.find('label.control-label').text('选项'+oIndex);
+      new_template.find('.file-img .file-btn a').css('background-image', "url('')");
+      $.each(new_template.find('input'), function(i, e){
+        var name = $(e).attr('name'), type = $(e).attr('type');
+        if(!name){return true;}
+        if(type == 'text' || type == 'hidden'){$(e).val('');}
+        var arr = name.split('$uuid$');
+        if(arr.length > 0){
+          $(e).attr('name', arr[0]+uuid+arr[1]);
+        }
+      });
+
+      $select.append("<option value="+oIndex+">"+oIndex+"个</option>");
+      if(oIndex >= 6){
+        $this.removeClass("btn-primary");
+        //$this.off("click");
+      }
+
+    });
+    $(document).on("click","[data-toggle=delet]",function(){
+      var $this = $(this),
+          $parent = $this.closest(".survey-question-options"),
+          $panel = $parent.parent(),
+          $addOption = $panel.find("[data-toggle=addOption]");
+      $parent.addClass('hide');
+      $parent.find('input[type=checkbox]').prop("checked",true);
+      $select = $(".J-answer");
+      $panel.find(".form-group label.control-label:visible").each(function(i){
+        oIndex = i+1;
+        $(this).text("选项"+oIndex);
+      });
+      $addOption.addClass("btn-primary");
+      $select.find("option").last().remove();
+    });
+
+    $('a.submit').click(function(){
+
+      if(!$('#activity_survey_question_name').val()){
+        addErrorMessage($('#activity_survey_question_name'), "题目名称不能为空!");
+        showTip('warning', "题目名称不能为空!");
+        return false;
+      }
+
+      var texts = $('.radio-tab .form-group:visible input[type=text]'),
+          imgs = $('.radio-tab .form-group:visible .file-img .file-btn input[type=hidden]'),
+          formValid = true,
+          o = {},
+          length = texts.length == 0 ? imgs.length : texts.length;
+
+      for(var i=0;i<length;i++){
+        var text = texts.eq(i), img = imgs.eq(i), oIndex = i + 1;
+
+        if(img.length > 0){
+          if(img.val() == ""){
+            addErrorMessage(img, "选项"+oIndex+"图片不能为空!");
+            showTip('warning', "选项"+oIndex+"图片不能为空!");
+            formValid = false;
+            break;
+          }
+          if(!(o[img.val()])){
+            o[img.val()] = true;
+          }else{
+            addErrorMessage(img, "选项"+oIndex+"图片不能和别的选项图片重复!");
+            showTip('warning', "选项"+oIndex+"图片不能和别的选项图片重复!");
+            formValid = false;
+            break;
+          }
+        }
+
+        if(text.length > 0){
+          if(text.val() == ""){
+            addErrorMessage(text, "选项"+oIndex+"内容不能为空!");
+            showTip('warning', "选项"+oIndex+"内容不能为空!");
+            text.focus();
+            formValid = false;
+            break;
+          }
+
+          if(!(o[text.val()])){
+            o[text.val()] = true;
+          }else{
+            addErrorMessage(text, "选项"+oIndex+"内容不能和别的选项内容重复!");
+            showTip('warning', "选项"+oIndex+"内容不能和别的选项内容重复!");
+            text.focus();
+            formValid = false;
+            break;
+          }
+        }
+
+      }
+
+      if(formValid){
+        $.each($('.radio-tab input[type=checkbox]:hidden'), function(i, e){
+          $panel = $(e).closest(".form-group").parent();
+          if($panel.is(':hidden')){
+            $(e).prop("checked",true);
+          }
+        });
+        $('form').submit();
+      }else{
+        return false;
+      }
+
+    });
+});
+</script>
+<% end %>

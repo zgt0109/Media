@@ -1,0 +1,66 @@
+<%= form_for @prize, validate: true do |f| %>
+<%= hidden_field_tag :activity_id, @activity.id %>
+<%= f.hidden_field :activity_id, value: @activity.id %>
+<div class="modal-body">
+  <div class="form-group">
+    <label>奖项说明<span class="required-star">*</span><small class="text-warning line-height-32">不能超过5个字</small></label>
+    <div class="clearfix">
+      <%= f.text_field :title, class: 'col-md-8', maxlength: 5, validate: true, style: 'width: 218px;' %>
+    </div>
+  </div>
+  <div class="form-group normal_prize">
+    <label>奖品名称<span class="required-star">*</span><small class="text-warning line-height-32">不能超过50个字</small></label><br>
+    <% ActivityPrize::PRIZE_TYPES.each do |prize_type, prize_type_name| %>
+      <% next if prize_type == "redpacket_prize" && f.object.activity.activity_type_id != 64%>
+      <label class="control-label">
+        <%= f.radio_button :prize_type, prize_type, class: "ace" %>
+        <span class="lbl"><%= prize_type_name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </label>
+    <% end %>
+    <div class="clearfix normal_prize prizes">
+      <%= f.text_field :prize, class: 'col-md-8', maxlength: 50, validate: true, placeholder: '请输入奖品名称，不超过50个字' %>
+    </div>
+    <div class="clearfix point_prize prizes">
+      <%= f.text_field :points, class: 'col-md-8', maxlength: 50, validate: true, placeholder: '请输入积分值' %>
+    </div>
+    <div class="clearfix redpacket_prize prizes">
+      <%= f.text_field :prize_value, class: 'col-md-8', maxlength: 50, validate: true, placeholder: '请输入1.00~200.00元的红包金额' %>   元
+    </div>
+  </div>
+  <div class="form-group">
+    <label>奖品数量<span class="required-star">*</span></label>
+    <div class="clearfix">
+      <%= f.text_field :prize_count, class: 'col-md-8', placeholder: 0, validate: true, value: (@prize.prize_count.presence || 0 ) %>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-sm btn-primary">确定</button>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+<%- end %>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function() {
+      <%- if @activity.can_not_edit? %>
+        $('input,select,textarea').prop('disabled', true);
+        $('.wysiwyg-editor').attr('contenteditable', false);
+      <%- end %>
+
+      function togglePrizeType(prizeType) {
+        $('.prizes').hide();
+        $('.' + prizeType).show();
+      }
+
+      togglePrizeType('<%= @prize.prize_type %>');
+
+      $('input[name="activity_prize[prize_type]"]').click(function (event) {
+        var prizeType = $(this).val();
+        togglePrizeType(prizeType);
+      });
+    })
+  </script>
+<% end %>

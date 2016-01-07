@@ -1,0 +1,81 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+        微捐款
+      </li>
+      <li>项目管理</li>
+    </ul>
+    <!-- .breadcrumb -->
+    <div class="pull-right">
+      <span class="green lighter ShowQRCodeTxt">扫描预览二维码</span>
+      <div class="showQRCode">
+        <i class="i-qrcode icon-qrcode icon-3x"></i>
+        <div class="QRCode">
+          <img src="/assets/qr.jpg">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- PAGE CONTENT BEGINS -->
+      </div>
+      <div class="col-sm-12">
+        <div class="col-md-3 row">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">活动名称：</span>
+            <input class="col-xs-12" type="text" autocomplete="off">
+          </div>
+        </div>
+        <div class="col-md-3 row">
+          <button class="btn btn-primary btn-sm btn-filter">查询</button>
+        </div>
+        <%=link_to "新增", new_donation_url, class: "btn btn-primary btn-sm btn-filter pull-right" %>
+      </div>
+      <div class="col-md-12 margin-top-20">
+        <table id="actTable" class="table table-striped table-bordered table-hover dataTable ">
+          <thead>
+            <tr>
+              <th>活动名称</th>
+              <th>所属类别</th>
+              <th width="30%">目标金额</th>
+              <th>捐款人数</th>
+              <th>募集金额</th>
+              <th>状态</th>
+              <th width="15%">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <% @donations.each do |donation| %>
+            <tr>
+              <td><%= donation.name %></td>
+              <td><%= donation.activity.try(:name) %></td>
+              <td><%= donation.target_money %></td>
+              <td><%= donation.donation_orders.paid.count + donation.donation_orders.confirmed.count + donation.init_number %></td>
+              <td><%= donation.donation_orders.paid.sum(:fee) + donation.donation_orders.confirmed.sum(:fee) + donation.init_fee %></td>
+              <td><%= donation.status_name %></td>
+              <td>
+		<%= link_to "查看项目", edit_donation_path(donation) %>
+          	<%= link_to "开启", start_donation_path(donation), method: :post, remote: true, id: "#{donation.id}-btn" if donation.status == -1%>
+	        <%= link_to "停止", stop_donation_path(donation), method: :post, remote: true, id: "#{donation.id}-btn" if donation.status == 1 %>
+		<%= link_to '删除', donation_path(donation), method: :delete, confirm: "确定要删除？", data: {height: 160, weight: 350} %>
+              </td>
+            </tr>
+            <% end %>
+
+          </tbody>
+        </table>
+
+        <%= paginate @donations %>
+      </div>
+    </div>
+  </div>
+  <!-- /.page-content -->
+</div>

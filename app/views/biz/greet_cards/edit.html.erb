@@ -1,0 +1,78 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <%= render "breadcrumb" %>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <%= form_for @card,validate: true do |f| %>
+            <%= f.hidden_field :greet_id %>
+            <div class="form-group">
+              <label class="control-label">贺卡标题<span class="required-star">*</span><small class="help-inline text-warning line-height-32">标题字数建议在5个汉字以内为最佳</small></label>
+              <div class="clearfix">
+                <%= f.text_field :title, class: "col-xs-6" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">贺卡类型
+                  <span class="required-star">*</span>
+                </label>
+                <div class="clearfix">
+                  <label class="control-label">
+                    <%= f.radio_button :card_type, 1, class: "ace" %>
+                      <span class="lbl">语音（贺卡中包含语音）</span>
+                    </label>
+                    <label class="margin-left-10">
+                      <%= f.radio_button :card_type, 2, class: "ace" %>
+                        <span class="lbl">文字（贺卡中不包含语音）</span>
+                      </label>
+                    </div>
+                  </div>
+                  <%= render "card_pics", f: f, label: "title_pic" %>
+                  <%= render "card_pics", f: f, label: "card_pic" %>
+                  <div class="form-group">
+                    <label class="control-label">贺卡内容<span class="required-star">*</span><small class="help-inline text-warning line-height-32">不能超过150个字</small></label>
+                    <div class="clearfix">
+                      <%= f.text_area :content, rows: 5, maxlength: 255, class: "col-xs-6" %>
+                      </div>
+                    </div>
+                    <div class="form-group" id="material_form_group">
+                      <label class="control-label">贺卡背景音乐<small class="help-inline text-warning line-height-32">仅文字贺卡可选</small></label>
+                      <div class="clearfix">
+                        <%= f.select :material_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }.unshift(["不使用背景音乐", 0]), { selected: f.object.try(:material_id) } %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">保存</button>
+                      <button type="button" class="btn btn-sm cancel" data-dismiss="modals">取消</button>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% content_for :custom_js do %>
+          <script type="text/javascript">
+            $(function(){
+
+              var update_material_form_group = function(){
+                if ($("#greet_card_card_type_1, #greet_card_card_type_2").filter(":checked").val() == "1")
+                  $("#material_form_group").hide();
+                else
+                  $("#material_form_group").show();
+              }
+
+              $("#greet_card_card_type_1, #greet_card_card_type_2").click(function(){
+                update_material_form_group();
+              });
+
+              $("button.cancel").click(function(){
+                window.open("/greet_cards", "_self");
+              });
+
+              update_material_form_group();
+
+            });
+          </script>
+        <% end %>

@@ -1,0 +1,24 @@
+<% provide(:title, "我的订单") %>
+<% content_for :topbar do %>
+  <header>
+    <%= link_to image_tag('mobile/wshop/ico-back.png'), member_mobile_ec_shops_path(supplier_id: @supplier.id) %>
+    <h1>全部订单</h1>
+  </header>
+<% end %>
+
+<section>
+  <% if @orders.each do |order| %>
+    <a href="<%= mobile_ec_order_path(order.supplier_id, order) %>" class="box-p">
+      <p class="p-title"><b>订单号：</b><span><%= order.order_no %></span></p>
+      <p><b>收货人：</b><span><%= order.username %></span></p>
+      <p><b>下单时间：</b><span><%= order.created_at.to_s[0..18] %></span></p>
+      <p><b>订单状态：</b><span><%= order.status_name %></span></p>
+      <i class="arrow"></i>
+    </a>
+  <% end.blank? %>
+  <br>
+  <p style="text-align: center;">还没有订单记录</p>
+  <% end %>
+</section>
+
+<a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>

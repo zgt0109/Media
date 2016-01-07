@@ -1,0 +1,49 @@
+<%= form_for(@house_expert) do |f| %>
+  <% if @house_expert.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@house_expert.errors.count, "error") %> prohibited this house_expert from being saved:</h2>
+
+      <ul>
+      <% @house_expert.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :supplier_id %><br />
+    <%= f.number_field :supplier_id %>
+  </div>
+  <div class="field">
+    <%= f.label :wx_mp_user_id %><br />
+    <%= f.number_field :wx_mp_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :house_id %><br />
+    <%= f.number_field :house_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :intro %><br />
+    <%= f.text_field :intro %>
+  </div>
+  <div class="field">
+    <%= f.label :pic %><br />
+    <%= f.text_field :pic %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.number_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

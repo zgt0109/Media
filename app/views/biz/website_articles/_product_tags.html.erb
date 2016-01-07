@@ -1,0 +1,26 @@
+<div class="form-group">
+  <label class="control-label col-sm-12 no-padding-left">展示内容标签</label>
+  <div class="col-md-6 no-padding-left no-padding-right" id="tagshow">
+    <% f.object.tags.each do |tag| %>
+      <div class="margin-b-10">
+        <label class="col-md-4 no-padding-left">
+          <%= f.check_box :tag_ids, {name: 'website_article[tag_ids][]', class: 'ace'}, tag.id, false %>
+          <span class="lbl"><%= tag.name %></span>
+        </label>
+        <div class="col-lg-3 col-md-3 col-sm-3 no-padding-right">
+          <select  name="product_category_map_category_id_2" id="product_category_map_category_id_6" class="form-control form-select-2">
+            <option value="">标签分类</option>
+          </select>
+          <% options = tag.children.pluck(:name, :id) %>
+          <%= f.select :tag_children_ids, [current_user.wx_mp_user].map{|wx_mp_user|[wx_mp_user.name,wx_mp_user.id]}, {name: 'website_article[tag_ids][]', class: 'form-control form-select-2'} %>
+        </div>
+        <div class="input-group input-group-text col-md-5 no-padding-right">
+          <span class="input-group-addon">具体描述：</span>
+          <input type="text" class="col-xs-12">
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    <% end %>
+  </div>
+  <div class="clearfix"></div>
+</div>

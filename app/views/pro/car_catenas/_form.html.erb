@@ -1,0 +1,28 @@
+<%= form_for @car_catena, validate: true do |f| %>
+  <div class="alert alert-block alert-info" style="margin-bottom: 0px;">
+    <strong class="pull-left">提示：</strong>
+    <ul class="vwebsiteHeadAlert">
+      <li>1、以下<span class="required-star">* </span>均为必填项；</li>
+    </ul>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label  class="control-label">车系名称<span class="required-star">*</span><small class="text-warning">不能超过16个字</small></label>
+    <div class="clearfix">
+      <%= f.text_field :name, class: 'input-text', placeholder: '请输入车系名称', maxlength: 16 %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label">车系图片<span class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</span></label>
+    <div class="clearfix">
+      <div class="cieldon-file width-180px" data-type="0" data-height="100" data-width="180" data-name="car_catena[qiniu_pic_key]" data-img="<%= @car_catena.pic_url %>" data-key="<%= @car_catena.qiniu_pic_key %>">
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <input  type="submit" class="btn btn-sm btn-primary" value="确定">
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<%- end %>

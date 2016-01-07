@@ -1,0 +1,106 @@
+<% title "#{@wx_plot[params[:type]]}详情" %>
+<div class="foot">
+  <% if @wx_plot["#{params[:type]}_phone"].present? %>
+      <p>
+        <span>如情况紧急，请联系：<%= @wx_plot["#{params[:type]}_phone"] %></span>
+        <%= link_to "tel:#{@wx_plot["#{params[:type]}_phone"]}" do %><i class="icon fa fa-phone"></i><% end %>
+      </p>
+  <% end %>
+  <div class="btn-box" style="<%= 'padding: 32px 0;' unless @wx_plot["#{params[:type]}_phone"].present? %>">
+    <div class="btn-cell cell-small">
+      <%= link_to '返回', repair_complains_mobile_wx_plots_url(type: params[:type], anchor: 'mp.weixin.qq.com'), class: 'btn' %>
+    </div>
+    <div class="btn-cell cell-default">
+      <a href="javascript:void(0);" class="btn btn-primary J-addMessage">在线留言</a>
+    </div>
+    <div class="btn-cell cell-small">
+      <%= link_to '取消申请', cancel_repair_complain_mobile_wx_plot_url(id: @repair_complain.id, type: params[:type]), data: {confirm: '确认取消申请？', method: :post}, class: 'btn' %>
+    </div>
+  </div>
+</div>
+<div class="body">
+  <form class="mod-form form-hor">
+    <div class="bd">
+      <div class="form-li">
+        <div class="li-l"><b>申请类型</b></div>
+        <div class="li-r">
+          <span><%= @repair_complain.category_name %></span>
+        </div>
+      </div>
+      <div class="form-li">
+        <div class="li-l"><b>类别</b></div>
+        <div class="li-r"><span><%= @repair_complain.wx_plot_category.try(:name) %>&nbsp;</span></div>
+      </div>
+      <div class="form-li">
+        <div class="li-l"><b>如何称呼</b></div>
+        <div class="li-r">
+          <span><%= @repair_complain.nickname %>    <%#= @repair_complain.gender_name %></span>
+        </div>
+      </div>
+      <div class="form-li">
+        <div class="li-l"><b>联系方式</b></div>
+        <div class="li-r"><span><%= @repair_complain.phone %></span></div>
+      </div>
+      <div class="form-li">
+        <div class="li-l"><b>房间号</b></div>
+        <div class="li-r"><span><%= @repair_complain.room_no %></span></div>
+      </div>
+      <div class="form-li">
+        <div class="li-l"><b>说明</b></div>
+        <div class="li-r">
+          <span><%= @repair_complain.content %></span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="form-state">
+    <span><%= @repair_complain.status_name %></span>
+  </div>
+  <div class="message">
+    <ul>
+      <% @repair_complain.messages.each do |f| %>
+          <% next if f.new_record? %>
+          <li class="message-time"><%= f.created_at %></li>
+          <li class="<%= f.messageable.try(:is_a?, Supplier) ? 'service' : 'self'%>">
+            <%= f.content %>
+          </li>
+      <% end %>
+    </ul>
+  </div>
+  <%= form_for @message, url: repair_complain_message_mobile_wx_plot_url(supplier_id: @supplier.id, id: @repair_complain.id, type: params[:type]) do |f| %>
+      <%= f.hidden_field :messageable_id %>
+      <%= f.hidden_field :messageable_type %>
+      <div class="edit-message">
+        <%= f.text_area :content, class: 'input', cols: nil, rows: nil %>
+        <div class="btn-box">
+          <div class="btn-cell cell-default">
+            <a href="javascript:void(0);" class="btn btn-primary J-ok">留言</a>
+          </div>
+          <div class="btn-cell cell-small">
+            <a href="javascript:void(0);" class="btn J-cancel">取消</a>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".J-addMessage").on("click",function(){
+            $(".edit-message").animate({"bottom": 0},500);
+        });
+        $(".J-cancel").on("click",function(){
+            $(".edit-message").animate({"bottom": "-180px"},500);
+        });
+        $(".J-ok").on("click",function(){
+            var message = $(".edit-message"),
+                val = message.find("textarea").val();
+            if(!val){
+                alert("请输入留言内容");
+                return false;
+            }else{
+                //$(".edit-message").animate({"bottom": "-180px"},500);
+                $('form').submit();
+            }
+        });
+    });
+</script>

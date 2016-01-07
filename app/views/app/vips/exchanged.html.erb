@@ -1,0 +1,97 @@
+<% provide(:title, '已兑换礼品列表') %>
+<style type="text/css">
+  .pagination li{display: none;}
+</style>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="J-slider" id="sec-index">
+      <!-- tab box start -->
+      <div class="tab-box">
+        <%= link_to '全部礼品', gifts_app_vips_path(wxmuid: session[:wx_mp_user_id]) %>
+        <%= link_to '已兑换礼品', exchanged_app_vips_path(wxmuid: session[:wx_mp_user_id]), class: "cur"%>
+      </div>
+      <!-- tab box end -->
+      <!-- list box start -->
+      <% if @point_gift_exchanges.present? %>
+        <div class="list-box">
+          <% @point_gift_exchanges.each do |exchanged| %>
+            <% point_gift = exchanged.point_gift %>
+            <dl id="exchanged_<%= exchanged.id %>">
+              <dt class="border">
+                <a class="icon-right" href="#">
+                  <i class="icon icon-3"></i>
+                  <span><%= point_gift.name %></span>
+                  <div class="num"><%= exchanged.used? ? '已' : '未' %>领取</div>
+                </a>
+              </dt>
+              <dd>
+                <p><%= image_tag point_gift.pic_url %></p>
+                <p>
+                  <span class="c-6">兑换所需积分：</span>
+                  <span class="c-orange"><%= point_gift.points %>分</span>
+                </p>
+                <% if point_gift.shop_branches_count > 0 %>
+                  <p>
+                    <span class="c-6">使用门店：</span>
+                    <span><a class="c-blue underline" href="<%= shops_app_vips_path( ids: ( point_gift.shop_branch_ids.join(',') if point_gift.shop_branch_limited? ) ) %>"><span><%= point_gift.shop_branches_count %>家</span></a></span>
+                  </p>
+                <% end %>
+                <% if exchanged.consume %>
+                  <p>
+                    <span class="c-6">领取截止日期：</span>
+                    <%= exchanged.consume.expired_at || '不限制' %>
+                  </p>
+                <% end %>
+                <p>
+                  <span class="c-6">礼品兑换说明：</span>
+                </p>
+                <p><%= point_gift.description %></p>
+                <%= link_to '立即使用', use_gift_app_vips_path(id: exchanged.id), class: 'btn btn-biger mt' if exchanged.usable? %>
+              </dd>
+            </dl>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="nothing">暂无礼品</div>
+      <% end %>
+      <div class="loading"><img src="/assets/albums/loading.gif"/></div>
+      <div class="hide">
+        <%= paginate @point_gift_exchanges %>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+    $(function(){
+      //底部上拉刷新
+      document.addEventListener("touchstart",function(e){
+          var t=e.touches[0],
+              y=t.pageY;
+          $documentH = $(document).height();
+          $("body").attr("data-y",y);
+      });
+      var urls = [];
+      document.addEventListener("touchmove",function(e){
+          var nextA = $('.pagination .next');
+          var url = nextA.attr('href');
+          var t=e.touches[0],
+              startY=parseInt($("body").attr("data-y")),
+              pageY=(startY - t.pageY);
+          $touchT = $(window).scrollTop() + $(window).height() +pageY;
+          if($touchT>=$documentH){
+              if (url && urls.indexOf(url) == -1) {
+                  urls.push(url);
+                  $(".loading").show();
+                  var nextPage = parseInt(/page=(\d+)/.exec(url)[1]) + 1;
+                  nextA.attr('href', url.replace(/page=(\d+)/, "page=" + nextPage));
+                  return $.getScript(url);
+              }
+          }
+      });
+      document.addEventListener("touchend",function(e){
+          // var t=e.touches[0];
+      });
+    });
+</script>

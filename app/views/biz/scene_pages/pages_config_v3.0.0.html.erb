@@ -1,0 +1,159 @@
+<%= content_for :breadcrumb_li do %>
+  <%- if @activity.nil? %>
+    <li><%= link_to '新增微场景', new_scene_path %></li>
+  <%- else %>
+    <li><%= link_to  '微场景设置', pages_config_scene_pages_path(activity_id: @activity.id) %></li>
+  <%- end %>
+<%- end %>
+
+<%= content_for :tab do %>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/vscene_3.0.0/vscene.css">
+	<style type="text/css">
+		.enroll, .link, .vote, .reservation, .surveys, .tel{display: none;}
+	</style>
+
+	<!-- vscene start -->
+	<div class="xmain xclearfix">
+		<div class="xleft">
+			<div class="xpage xborder xradius">
+				<div class="xpage-head">页面管理</div>
+				<ul class="xpage-list xnoselection"></ul>
+				<div class="xpage-add xcursor-pointer xtransition">+新增页面</div>
+			</div>
+			<div class="xpage-save xradius xcursor-pointer xtransition">保存场景</div>
+		</div>
+		<div class="xright xborder xradius">
+			<div class="xwidget xradius">
+				<ul class="xwidget-list xclearfix">
+					<li class="xtransition xcursor-move xwidget-item">
+					<div class="xwidget-icon xwidget-icon-img"></div>
+					<div class="xwidget-text">图片</div>
+					</li>
+					<li class="xtransition xcursor-move xwidget-item">
+					<div class="xwidget-icon xwidget-icon-txt"></div>
+					<div class="xwidget-text">文本</div>
+					</li>
+					<li class="xtransition xcursor-move xwidget-item">
+					<div class="xwidget-icon xwidget-icon-btn"></div>
+					<div class="xwidget-text">按钮</div>
+					</li>
+					<li class="xtransition xcursor-move xwidget-item">
+						<div class="xwidget-icon xwidget-icon-video"></div>
+						<div class="xwidget-text">视频</div>
+					</li>
+				</ul>
+				<div class="xwidget-helper-wrapp"></div>
+			</div>
+			<div class="xcontainer xclearfix">
+				<div class="xscene">
+					<div class="xscene-phone">
+						<div class="xscene-view xtransition"></div>
+						<div class="xscene-phone-microphone"></div>
+						<div class="xscene-phone-homekey"></div>
+					</div>
+					<div class="xscene-setting xborder xradius">
+						<ul class="xscene-setting-list">
+							<li class="xcursor-pointer xtransition xscene-setting-item xscene-setting-bg">背景图</li>
+							<li class="xcursor-pointer xtransition xscene-setting-item xscene-setting-tpl">页面模板</li>
+							<li class="xcursor-pointer xtransition xscene-setting-item xscene-setting-qrcode">二维码预览</li>
+						</ul>
+					</div>
+				</div>
+				<div class="xpanel"></div>
+			</div>
+		</div>
+	</div>
+	<!-- vscene end -->
+<% end %>
+
+<%= render "biz/scenes/header" %>
+
+<% content_for :insert_to_html do %>
+	<div class="modal fade modal-iframe">
+		<div class="btn-style">
+			<ul>
+				<li><button class="p-btn p-btn-primary">样式一</button></li>
+				<li><button class="p-btn p-btn-warning">样式二</button></li>
+				<li><button class="p-btn p-btn-default">样式三</button></li>
+				<li><button class="p-btn p-btn-danger">样式四</button></li>
+				<li><button class="p-btn p-btn-success">样式五</button></li>
+				<li><button class="p-btn p-btn-inverse">样式六</button></li>
+				<li><button class="p-btn p-btn-info">样式七</button></li>
+				<li><button class="p-btn disabled">样式八</button></li>
+			</ul>
+		</div>
+	</div>
+<% end %>
+
+
+<% content_for :custom_js do %>
+	<%= javascript_tag do %>
+
+		;(function(obj){
+		    if(!obj.xsceneDesp) obj.xsceneDesp = [];
+		})( window.xconfig = window.xconfig ? window.xconfig : {} );
+
+		window.xconfig.saveScene = function(data){
+			$.ajax({
+				url: "/scene_pages/save_json?activity_id=<%=@activity.id%>",
+				method: 'POST',
+				data: {page_json: JSON.stringify(data)},
+				success: function(){ $.xmodal({ msg: '场景已保存' }) },
+				error: function(data){ $.xmodal({ msg: '场景保存失败' }) }
+			});
+		};
+
+		window.xconfig.xsceneDesp = <%=raw @scene_html.content %>;
+		window.xconfig.xscenePreviewUrl = '<%=j @activity.scene_url %>';
+		window.xconfig.xsceneLinks = <%=raw @scene_links.to_json %>;
+	<% end %>
+
+	<!-- 替代上面异步加载的js和css ==========start========== -->
+	<!-- <script src="/javascripts/lib/jquery.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/bootstrap.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/bootstrap&#45;colorpicker.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/pnotify.custom.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/fuelux/fuelux.wizard.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/date&#45;time/moment.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/date&#45;time/bootstrap&#45;clockpicker.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/date&#45;time/bootstrap&#45;datepicker.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/date&#45;time/daterangepicker.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/date&#45;time/bootstrap&#45;datetimepicker.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/date&#45;time/datepicker.zh.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/jquery.hotkeys.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/bootstrap&#45;wysiwyg.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/vue.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/highcharts.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/imgUpload.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/lib/iscroll.js" type="text/javascript"></script> -->
+	<script src="/javascripts/lib/bootstrap-calendar.js" type="text/javascript"></script>
+	<!-- <script src="/javascripts/lib/jquery.slimscroll.js" type="text/javascript"></script> -->
+	<script src="/javascripts/lib/mock.js" type="text/javascript"></script>
+	<!-- <script src="/javascripts/map/jquery&#45;jvectormap&#45;1.2.2.min.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/map/jquery&#45;jvectormap&#45;cn&#45;merc&#45;cn.js" type="text/javascript"></script> -->
+	<script src="/javascripts/app.js" type="text/javascript"></script>
+	<!-- <script src="/javascripts/application.js" type="text/javascript"></script> -->
+	<!-- <script src="/javascripts/layout.js"></script> -->
+	<!-- 替代上面异步加载的js和css ==========end========== -->
+
+	<script src="/javascripts/lib/jquery-ui.js" type="text/javascript"></script>
+	<script src="http://api.map.baidu.com/api?key=&v=1.1&services=true" type="text/javascript"></script>
+	<script src="/ueditor/ueditor.config.js" type="text/javascript"></script>
+	<script src="/ueditor/ueditor.all.min.js" type="text/javascript"></script>
+
+	<!-- vscene 3.0.0 start -->
+	<script src="/javascripts/vscene_3.0.0/jquery.qiniuUploadImg.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/jquery.qrcode.min.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/jquery.slimscroll.min.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/xmodal.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/xutils.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/xsceneDespTpl.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/xpanelsControls.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/xelemModule.js" type="text/javascript"></script>
+	<!-- <script src="/javascripts/vscene_3.0.0/xsceneData.js" type="text/javascript"></script> -->
+	<script src="/javascripts/vscene_3.0.0/xsceneTplList.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/xsceneTplData.js" type="text/javascript"></script>
+	<script src="/javascripts/vscene_3.0.0/vscene.js" type="text/javascript"></script>
+	<!-- vscene 3.0.0 end -->
+<% end %>
+

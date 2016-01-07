@@ -1,0 +1,41 @@
+<% if lottery_type == "1" %>
+<tr>
+  <td><%= index + 1 %></td>
+  <td>
+    <div class="form-input col-12">
+      <input class="input-text" id="wx_wall_wx_wall_winning_users_attributes_<%= index %>_vip_user_id" name="wx_wall[wx_wall_winning_users_attributes][<%= index %>][vip_user_id]" size="30" type="text" />
+    </div>
+  </td>
+  <td>
+    <a class="J-awards-del">删除</a>
+    <input id="wx_wall_wx_wall_winning_users_attributes_<%= index %>_status" name="wx_wall[wx_wall_winning_users_attributes][<%= index %>][status]" type="hidden" value="1" />
+  </td>
+</tr>
+<% else %>
+<tr>
+  <td><%= index + 1 %></td>
+  <td>
+    <div class="form-input col-12">
+      <input class="input-text" id="wx_wall_wx_wall_prizes_attributes_<%= index %>_grade" name="wx_wall[wx_wall_prizes_attributes][<%= index %>][grade]" size="30" type="text" />
+    </div>
+  </td>
+  <td>
+    <div class="form-input col-12">
+      <input class="input-text" id="wx_wall_wx_wall_prizes_attributes_<%= index %>_name" name="wx_wall[wx_wall_prizes_attributes][<%= index %>][name]" size="30" type="text" />
+    </div>
+  </td>
+  <td>
+    <%= render "upload_image_div", preview_dev_id: "img_preview_#{index + 1}", name: "wx_wall[wx_wall_prizes_attributes][#{index}][pic]", key: "", img: "", width: 150 %>
+  </td>
+  <td>
+    <div class="form-input col-12">
+      <input class="input-text" id="wx_wall_wx_wall_prizes_attributes_<%= index %>_num" name="wx_wall[wx_wall_prizes_attributes][<%= index %>][num]" size="30" type="text" />
+    </div>
+  </td>
+  <td>
+    <a class="J-awards-del">删除</a>
+    <input id="wx_wall_wx_wall_prizes_attributes_<%= index %>_status" name="wx_wall[wx_wall_prizes_attributes][<%= index %>][status]" type="hidden" value="1" />
+  </td>
+</tr>
+<!-- <input id="wx_wall_wx_wall_prizes_attributes_<%= index %>_id" name="wx_wall[wx_wall_prizes_attributes][<%#= index %>][id]" type="hidden" value="946" /> -->
+<% end %>

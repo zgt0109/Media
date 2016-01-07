@@ -1,0 +1,24 @@
+<div class="index" id="indexList">
+  <div class="index-wrap">
+    <% website_menus.each do |menu| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+        <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render "iscroll", {:selector => "#indexList"} %>
+
+<% content_for :document_ready_js do %>
+    fade2("#animate-2");
+
+    var h=$(".html").height();
+    $(".body").css({"min-height":h+"px"});
+
+    <% if @website_setting.bg_image.present? %>
+        // 静态背景图
+        //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+    <% end %>
+
+<% end %>

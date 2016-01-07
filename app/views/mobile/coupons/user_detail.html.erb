@@ -1,0 +1,34 @@
+<script>
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+      WeixinJSBridge.call('hideOptionMenu');
+    });
+  </script>
+<%= stylesheet_link_tag "mobile/qcode" %>
+<%= javascript_include_tag "mobile/qcode" %>
+<section id="sec-index">
+  <header>
+      <%= link_to image_tag('/mobile/img/coupons/ico-left.png'),
+                my_mobile_coupons_path %>
+    <h1>优惠券详情</h1>
+    <a href="javascript:;" class="tright"></a>
+  </header>
+  <div class="body">
+    <div class="coupons-t"><%= @consume.is_a?(Consume) ? @consume.coupon_name : '优惠券' %></div>
+      <div class="coupons-list">
+          <%= render 'consume', consume: @consume  %>
+      </div>
+       <div class="qcode">
+          <div class="qcode-img">
+              <%= image_tag @consume.rqrcode, size: '160x160' %>
+          </div>
+          <div class="qcode-sn">SN码：<%= @consume.code %></div>
+          <div class="qcode-text">点二维码可收起</div>
+      </div>
+      <%- if @consume.is_a?(Consume) %>
+        <%= render 'info', coupon: @consume.coupon, consume_type: 'Consume' %>
+      <%- else %>
+        <%= render 'info',  coupon: nil, consume_type: 'ActivityConsume' %>
+      <%- end %>
+    </div>
+  </div>
+</section>

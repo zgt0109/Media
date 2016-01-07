@@ -1,0 +1,96 @@
+<% provide(:title, '会员充值') %>
+<div class="html theme-<%= @vip_card.template_id %> <%= "no-card" if !@vip_user.try :normal? %> <%= "add-nav" if @vip_card.template_id == 2 %>" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="mod-form">
+        <%= form_for @vip_user.vip_recharge_orders.new, url: recharge_app_vips_url, validate: true do |f| %>
+          <div class="form-list">
+            <dl class="form-li">
+              <dd><%= f.number_field :amount, class: "input", min: 0.1, maxlength: 6, placeholder: "请输入充值金额" %></dd>
+            </dl>
+            <%- @privileges.to_a.each do |privilege| %>
+              <dl class="form-li">
+                <dd>
+                  <div class="privilege_item" id="privilege<%= privilege.id %>">
+                    <%= privilege.recharge_name %>
+                    <i class="img img-3"></i>
+                  </div>
+                </dd>
+              </dl>
+            <%- end %>
+            <dl class="form-li">
+              <dt>
+                实际支付：<span class="c-orange" id="pay_amount">0</span>元
+              </dt>
+              <dt>
+                获得积分：<span class="c-orange" id="given_points">0</span>
+              </dt>
+              <dt>
+                赠送金额：<span class="c-orange" id="given_moneys">0</span>元
+              </dt>
+            </dl>
+            <%= f.hidden_field :pay_amount %>
+            <%= f.hidden_field :given_points %>
+            <dl class="form-li">
+              <dd>
+                <select class="input" name="vip_recharge_order[pay_type]">
+                  <%- payment_settings = @supplier.enabled_payment_types %>
+                  <%- if payment_settings.include?('支付宝') %>
+                    <option value="1">充值方式：支付宝支付</option>
+                  <%- end %>
+                  <%- if payment_settings.include?('微信支付V2')  %>
+                    <option value="2">充值方式：微信支付</option>
+                  <%- end %>
+                  <%- if payment_settings.include?('微信支付V3') %>
+                    <option value="4">充值方式：微信支付</option>
+                  <%- end %>
+                  <%- if payment_settings.include?('财付通') %>
+                    <option value="3">充值方式：财付通支付</option>
+                  <%- end %>
+                </select>
+              </dd>
+            </dl>
+            <div class="form-btn">
+              <dt>
+                <a class="btn btn-biger confirm_recharge">确认充值</a>
+              </dt>
+            </div>
+          <%- end %>
+        </div>
+      </div>
+    </section><!--main section end -->
+  </div><!--.stage end-->
+</div><!--.html end-->
+<script>
+  function confirmRecharge(e){
+    var pay_amount = $('#vip_recharge_order_pay_amount').val();
+    if(pay_amount >= 1){
+      $('#new_vip_recharge_order').submit();
+    }else{
+      alert('支付金额至少为1元');
+      $('.privilege_item').removeClass('selected');
+      $('#vip_recharge_order_pay_amount').val(0);
+      $('#vip_recharge_order_given_points').val(0);
+      $('#pay_amount').text(0);
+      $('#given_points').text(0);
+      $('#given_moneys').text(0);
+    }
+  }
+
+  $('#vip_recharge_order_amount').on("input", function(){
+    $('.confirm_recharge').unbind('click');
+    var amount = $(this).val();
+    if(amount > 0){
+      $.get("<%= recharge_check_app_vips_path %>" + "?amount=" + amount);
+    }else{
+      $('.privilege_item').removeClass('selected');
+      $('#vip_recharge_order_pay_amount').val(0);
+      $('#vip_recharge_order_given_points').val(0);
+      $('#pay_amount').text(0);
+      $('#given_points').text(0);
+      $('#given_moneys').text(0);
+    }
+  });
+
+  $('.confirm_recharge').on('click', confirmRecharge);
+</script>

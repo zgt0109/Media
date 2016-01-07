@@ -1,0 +1,108 @@
+<% provide :title, '我要反馈' %>
+<section id="sec-index">
+  <form class="mod-form form-hor">
+  <%= form_for @chat do |f|%>
+    <div class="bd">
+      <%- @activity.custom_fields.normal.visible.order(:position).each do |field|%>
+          <%= render "field", field: field %>
+      <%- end %>
+      <div class="form-li">
+        <p>内容<span style="color:red">*</span></p>
+        <textarea class="input is_required field" name="body" data-name="内容" ></textarea>
+      </div>
+    </div>
+    <div class="ft">
+      <input type="button" value="提交" class="btn btn-red J-submit form-submit" onclick="submitGov()">
+    </div>
+  <%- end %>
+</section>
+<script type="text/javascript">
+    $(function(){
+    $( ".date" ).datepicker({
+      yearRange: "-100:+50",
+      changeMonth: true,
+      changeYear: true,
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    $( ".mindate" ).datepicker({
+      yearRange: "-100:+0",
+      changeMonth: true,
+      changeYear: true,
+      minDate: "+0d",
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    $( ".maxdate" ).datepicker({
+      yearRange: "0:+100",
+      changeMonth: true,
+      changeYear: true,
+      maxDate: "+0d",
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    if ($('.multiple')){
+      $('.multiple').each(function(){
+        $(this).val($(this).data('value').split(','));
+      });
+    }
+  });
+
+  function submitGov() {
+    var required_done = 1;
+
+    $('.is_required').each(function(){
+      var value = $(this).val();
+      var name = $(this).data('name');
+      if (!value){
+        alert(name + '不能为空');
+        required_done = 0;
+        return false;
+      }
+    });
+
+    if ($('#phone') && $('#phone').val() && !(/^1[3|4|5|8][0-9]\d{8}$/.test($('#phone').val()))) {
+      alert('请输入正确的手机号码');
+      $('#phone').focus();
+      return false;
+    }
+
+    if(required_done == 0){
+      return false;
+    }else{
+      $("input.form-submit").attr('disabled', true);
+      var field_params = "";
+
+      $('.field').each(function(){
+        var name = $(this).attr('name');
+        var value = $(this).val();
+        param = ('&' + name + '=' + value)
+        field_params += param
+      });
+      field_params += ('&chat_type=<%= params[:chat_type] %>' );
+      var url = window.encodeURI("/<%= session[:supplier_id] %>/govchats?" + field_params + '&' + Math.random() +'#mp.weixin.qq.com')
+      success= function (data) {
+        if (data.ajax_msg && data.ajax_msg.status == 1) {
+            $(".mod-pop").fadeIn();
+            setTimeout(function(){
+              location.href = data.ajax_msg.url;
+             }, 2000);
+        }
+        $("input.form-submit").attr('disabled', false);
+      }
+      $.post(url, {}, success, 'json');
+    }
+  }
+</script>

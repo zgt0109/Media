@@ -1,0 +1,54 @@
+<%= form_tag confirm_withdraw_supplier_withdraws_path  do %>
+    <div class="modal-body">
+      <div><p>申请成功后，我们会在5个工作日内将钱款结算至您指定的账户</p></div>
+      <div class="font-size16">
+        <p>收款银行：<%= @supplier_account.bank_name %></p>
+        <p>收款账户：<%= @supplier_account.bank_account %></p>
+        <p>开户行：<%= @supplier_account.bank_branch %></p>
+        <p>可提现金额：<span class="red bolder">￥<%= @supplier_account.balance %>元</span></p>
+        <p>请输入提现金额：<input name="resquest_amount" type="text" style="float: none;" class="resquest_amount col-xs-3 float-none">元</p>
+        <p>转账手续费：<span class="red">￥<b class="service_charge">0.00</b></span><span data-content="计算比例为：金额1万以下收取5元，1至10万收取10元，10至50万收取15元，50至100万收取20元，100万以上收取汇款金额的千分之0.02收取，最高收取200元。" data-placement="right" data-trigger="hover" data-rel="popover" class="icon-question-sign font-size14" data-original-title="" title=""></span></p>
+        <p>到账金额：<span class="red">￥<b class="withdrawed_amount">0.00</b></span></p>
+      </div>
+    </div>
+  <%= render 'partials/modalFooter' %>
+<%- end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $('.form-submit').on('click', function(){
+    <%- if @supplier_account.freeze? %>
+          showTip('warning', '您的微枚迪支付已冻结');
+          return false;
+    <%- end %>
+    var resquest_amount = $('.resquest_amount').val();
+    var float_reg = /^\d+(\.\d+)?$/
+    if(resquest_amount){
+      if(float_reg.test(resquest_amount) && resquest_amount >= 1000.00) {
+        var balance = parseFloat(<%= @supplier_account.balance %>);
+        if(balance < resquest_amount){
+          showTip('warning', '提现金额必须是小于等于可提现金额的数字');
+          return false;
+        }
+      }else{
+        showTip('warning', '提现金额必须是大于等于1000的数字');
+        return false;
+      }
+    }else{
+      showTip('warning', '请输入提现金额');
+      return false;
+    }
+  })
+   $('.resquest_amount').on("input", function(){
+      var resquest_amount = parseFloat($(this).val());
+      if(resquest_amount >= 1000.00){
+        $.get("<%= service_recharge_supplier_withdraws_path %>",{resquest_amount: resquest_amount }, function(result){
+          $('.service_charge').text(result.fee);
+          $('.withdrawed_amount').text(result.withdrawed_amount);
+        });
+      }else{
+        $('.service_charge').text(0.0);
+        $('.withdrawed_amount').text(0.0);
+      }
+    });
+</script>
+<% end %>

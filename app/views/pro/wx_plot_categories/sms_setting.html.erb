@@ -1,0 +1,170 @@
+<%= form_for @wx_plot, validate: false do |f| %>
+  <div class="modal-body">
+    <%= f.fields_for :supplier, @wx_plot.supplier do |s| %>
+        <%= s.fields_for :system_message_settings, @system_message_setting do |sms|%>
+            <%= sms.hidden_field :system_message_module_id %>
+            <div class="form-group">
+              <label>顶部通知</label>
+              <div class="clearfix">
+                <label class="margin-right-20">
+                  <%= sms.check_box :is_open, class: 'ace'%><span class="lbl"> 开启 </span>
+                </label>
+                <label>
+                  <%= sms.check_box :is_open_voice, class: 'ace'%><span class="lbl"> 使用提示音 </span>
+                </label>
+              </div>
+            </div>
+        <% end %>
+    <% end %>
+    <div class="form-group">
+      <label>短信通知设置</label>
+      <div class="clearfix">
+        <label>
+          <%= f.check_box "is_open_#{params[:type]}_sms", class: 'ace'%>
+          <span class="lbl"> 开启 </span>
+        </label>
+        <a href="javascript:;" class="line-height-32 add"><i class="icon-plus-sign"></i> 添加</a>
+      </div>
+      <%= f.fields_for :sms_settings, @sms_settings do |s| %>
+          <div class="row">
+            <%= s.hidden_field :wx_plot_id, value: @wx_plot.id %>
+            <%= s.check_box '_destroy', style:'display:none' %>
+            <div class="col-xs-3">
+              <%= s.text_field :phone, class: 'col-xs-12', placeholder: '请输入手机号' %>
+            </div>
+            <div class="col-xs-4">
+              <div class="input-group">
+                <%= s.text_field :start_at, class: 'timepicker input-sm form-control', readonly: 'readonly' %>
+                <span class="input-group-addon">-</span>
+                <%= s.text_field :end_at, class: 'timepicker input-sm form-control', readonly: 'readonly' %>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <%= s.select :wx_plot_category_id, @categories.collect{|t| [t.name, t.id]}, {include_blank: '请选择类别'}, class: 'col-xs-12' %>
+            </div>
+            <div class="col-xs-2"><a class="line-height-32 delete" href="javascript:;">删除</a></div>
+          </div>
+
+      <% end %>
+    </div>
+  </div>
+
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+      <%= f.submit '确定', class: 'btn btn-sm btn-primary form-submit', data: {fn: 'submit'} %>
+      <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+    </div>
+<% end %>
+
+<div class="row" data-template="true" style="display: none;">
+  <input type="hidden" value="<%= @wx_plot.id %>">
+  <input style="display:none" type="checkbox" value="1">
+  <div class="col-xs-3">
+    <input class="col-xs-12" placeholder="请输入手机号" size="30" type="text">
+  </div>
+  <div class="col-xs-4">
+    <div class="input-group">
+      <input class="" readonly="readonly" size="30" type="text">
+      <span class="input-group-addon">-</span>
+      <input class="" readonly="readonly" size="30" type="text">
+    </div>
+  </div>
+  <div class="col-xs-3">
+    <%= select_tag 'wx_plot_category_id', options_for_select([['请选择类别', '']] + @categories.collect{|t| [t.name, t.id]}), class: 'col-xs-12' %>
+  </div>
+  <div class="col-xs-2"><a class="line-height-32 delete" href="javascript:;">删除</a></div>
+</div>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('.add').click(function(){
+              var template = $("[data-template='true']");
+              var tool =  $('form .row:visible:last');
+              var uuid = Date.now();
+              var new_template = template.clone(true).insertAfter(tool).show();
+              new_template.attr('data-template', '');
+              new_template.find('select').attr('name', 'wx_plot[sms_settings_attributes]['+uuid+'][wx_plot_category_id]');
+              new_template.find('input[type=hidden]').attr('name', 'wx_plot[sms_settings_attributes]['+uuid+'][wx_plot_id]');
+              new_template.find('input[type=text]').eq(0).attr('name', 'wx_plot[sms_settings_attributes]['+uuid+'][phone]');
+              new_template.find('input[type=text]').eq(1).attr('name', 'wx_plot[sms_settings_attributes]['+uuid+'][start_at]');
+              new_template.find('input[type=text]').eq(2).attr('name', 'wx_plot[sms_settings_attributes]['+uuid+'][end_at]');
+              new_template.find('input[type=text]').eq(1).attr('class', 'timepicker input-sm form-control');
+              new_template.find('input[type=text]').eq(1).attr('readonly', 'readonly').clockpicker({
+                  autoclose: true
+              });
+              new_template.find('input[type=text]').eq(2).attr('class', 'timepicker input-sm form-control');
+              new_template.find('input[type=text]').eq(2).attr('readonly', 'readonly').clockpicker({
+                  autoclose: true
+              });
+              new_template.find('input[type=checkbox]').attr('name', 'wx_plot[sms_settings_attributes]['+uuid+'][_destroy]');
+          });
+          $('.delete').click(function(){
+            if($('form .row:visible').length <=1){
+                showTip('warning', '至少要有一条通知设置');
+                return false;
+            }
+            $(this).closest('.row').hide();
+            $(this).closest('.row').find('input[type=checkbox]').attr('checked',true);
+          });
+          $('input[type="submit"]').click(function(){
+              var mobile_reg = /^\d{11}$/, flag = true, o = {};
+              $.each($('form .row:visible'), function(){
+                  var phone = $(this).find('input[type=text]').eq(0),
+                      start_at = $(this).find('input[type=text]').eq(1),
+                      end_at = $(this).find('input[type=text]').eq(2),
+                      select = $(this).find('select');
+                  if(!phone.val() && !start_at.val() && !end_at.val() && !select.val()){
+                      $(this).closest('.row').find('input[type=checkbox]').attr('checked',true);
+                  }else{
+                      if(!phone.val()){
+                          showTip('warning', '请输入手机号码');
+                          flag = false;
+                          phone.focus();
+                          return false;
+                      }
+                      if (!mobile_reg.test(phone.val())){
+                          showTip('warning', '手机号码格式不正确');
+                          phone.focus();
+                          flag = false;
+                          return false;
+                      }
+                      if(!start_at.val()){
+                          showTip('warning', '请输入开始时间');
+                          start_at.focus();
+                          flag = false;
+                          return false;
+                      }
+                      if(!end_at.val()){
+                          showTip('warning', '请输入结束时间');
+                          end_at.focus();
+                          flag = false;
+                          return false;
+                      }
+                      if(start_at.val() > end_at.val()){
+                          showTip('warning', '开始时间不能大于结束时间');
+                          start_at.focus();
+                          flag = false;
+                          return false;
+                      }
+                      if(!select.val()){
+                          showTip('warning', '请选择类别');
+                          select.focus();
+                          flag = false;
+                          return false;
+                      }
+                      if(!(o[phone.val()+start_at.val()+end_at.val()+select.val()])){
+                          o[phone.val()+start_at.val()+end_at.val()+select.val()] = true;
+                      }else{
+                          showTip('warning', "通知设置不能重复!");
+                          phone.focus();
+                          flag = false;
+                          return false;
+                      }
+                  }
+              });
+              return flag;
+          });
+      })
+    </script>
+<% end %>

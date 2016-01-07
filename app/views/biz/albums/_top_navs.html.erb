@@ -1,0 +1,25 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger">
+  <li action-name="activity">
+    <a href="/albums/activity">
+      基础信息
+    </a>
+  </li>
+  <li action-name="index">
+    <a href="/albums">
+      相册管理
+    </a>
+  </li>
+  <li action-name="comments">
+    <a href="/albums/comments">
+      评论管理
+    </a>
+  </li>
+</ul>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      $("ul.nav-tabs li[action-name=<%= action_name %>]").addClass("active");
+    });
+  </script>
+<% end %>

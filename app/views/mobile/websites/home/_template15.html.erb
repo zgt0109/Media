@@ -1,0 +1,17 @@
+<div class="index">
+  <%
+  @colors = ["", "", "", "", "#361d00", "",  "", "", "", ""]
+  @bg_colors = ["#c26700", "#5e5a59", "#73603d", "#bf8a49", "#f2ca80", "#361d00", "#114243", "#0b674f", "#9c853e", "#69510b"]
+  @menu_index = 0
+%>
+
+  <%i = 0%>
+  <%([5, 9] * 5).each do |limit|%>
+    <%= render("menus_3", {:website_menus => website_menus[i..(i + limit - 1)], :limit => limit}) if website_menus[i, i + limit - 1].present?%>
+    <%i = i + limit%>
+  <%end%>
+</div>
+
+<% content_for :document_ready_js do %>
+  $("a.box[style='background: #f2ca80']").css("color", "#73603d");
+<% end %>

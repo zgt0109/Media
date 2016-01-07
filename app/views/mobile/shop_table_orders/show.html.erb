@@ -1,0 +1,78 @@
+<% provide(:title, '我要订座') %>
+<div class="stage" id="stage">
+  <header>
+      <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
+      <%= link_to book_table_mobile_shops_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "ico ico-prev" do %>
+      <!-- <img src="/assets/micro_stores/ico-prev.png"/> -->
+      <% end %>
+      <h1>订座详情</h1>
+         <a href="tel:<%= @shop_table_order.shop_branch.book_table_rule.book_phone %>" class="fa fa-phone fr"></a>
+    </header>
+
+    <section id="sec-index">
+      <div class="body">
+        <div class="order">
+          <div class="mod-order">
+            <div class="mod-form form-hor">
+              <div class="bd">
+                <div class="form-li">
+                  <div class="li-l"><b>订单号：</b></div>
+                  <div class="li-r"><span class="text-red"><%= @shop_table_order.order_no %></span></div>
+                </div>
+                <div class="form-li">
+                  <div class="li-l"><b>您的姓名：</b></div>
+                  <div class="li-r">
+                    <span><%= @shop_table_order.username %></span>
+                  </div>
+                </div>
+                <div class="form-li">
+                  <div class="li-l"><b>您的电话：</b></div>
+                  <div class="li-r"><%= @shop_table_order.mobile %></div>
+                </div>
+                <div class="form-li">
+                  <div class="li-l"><b>订座时间：</b></div>
+                  <div class="li-r"><span><%= @shop_table_order.booking_at %></span></div>
+                </div>
+                <a class="form-li" href="http://api.map.baidu.com/marker?location=<%= @shop_table_order.shop_branch.location_y%>,<%= @shop_table_order.shop_branch.location_x%>&title=<%=@shop_table_order.shop_branch.address%>&content=<%= @shop_table_order.shop_branch.address%>&output=html">
+                  <div class="li-l"><b>
+                   预定门店：
+                  </b></div>
+                  <div class="li-r mod-fa fa fa-location-arrow"><span><%= @shop_table_order.shop_branch.name %> <%= @shop_table_order.shop_branch.ditu_address %></span></div>
+                </a>
+                <div class="form-li">
+                  <div class="li-l"><b>备注：</b></div>
+                  <div class="li-r"><span><%= @shop_table_order.description %></span></div>
+                </div>
+              </div>
+
+              <div class="ft">
+
+                <div class="food-shopcar">
+                  <div class="hd">
+                    <div class="shopcar-btn active">
+                     
+                      <span class="">
+                        <b>用餐人数：<i><%= @shop_table_order.booking_count %></i>
+                        <span style="width: 10px"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         座位选择: <%= @shop_table_order.table_type %></b>
+                      </span>
+               
+                    </div>
+                    <div class="tcenter">
+                      <%= link_to "取消订单", mobile_shop_table_order_path(supplier_id: session[:supplier_id], id: @shop_table_order.id), method: :delete , data: { confirm: '确定要取消订单？' }, class: "btn btn-blue" %>
+                      <a class="btn" href="/<%= session[:supplier_id] %>/shop_table_orders/new?shop_branch_id=<%= @shop_table_order.shop_branch_id %>">再次下单</a>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>

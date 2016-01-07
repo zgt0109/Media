@@ -1,0 +1,48 @@
+<% if photo %>
+<% 
+  if photo.is_a?(GreetCard)
+    pic_name = photo.title
+    thumb_pic_url = photo.title_pic_url
+    delete_url = greet_card_path(photo)
+    edit_url = edit_greet_card_path(photo)
+    edit_mode = "window"
+  elsif photo.is_a?(QiniuPicture)
+    pic_name = ""
+    thumb_pic_url = photo.thumb_pic_url
+    delete_url = "/wx_walls/destroy_qiniu_keys?qiniu_picture_id=#{photo.id}"
+    edit_url = ""
+    edit_mode = "iframe"
+  else
+    pic_name = photo.name
+    thumb_pic_url = photo.thumb_pic_url
+    delete_url = album_photo_path(album_id, photo)
+    edit_url = delete_url
+    edit_mode = "iframe"
+  end
+%>
+  <li class="photo-li">
+    <a href="javascript:;" title="<%= pic_name %>" data-rel="colorbox">
+      <%= image_tag(thumb_pic_url) %>
+      <div class="text">
+        <div class="inner"><%= pic_name %></div>
+      </div>
+    </a>
+    <div class="tools">
+      <%= link_to delete_url, id: "delete#{photo.id}", data: { remote: true, method: :delete, confirm: '确定删除该图片？', callback: "removePhoto(#{photo.id})" } do %><i class="icon-trash btn-fa btn-remove"></i><% end %>
+      <% if edit_url.present? %>
+        <% if edit_mode == "iframe" %>
+          <%= modal_to('<i class="icon-pencil btn-fa" data-toggle="modal" data-target="#editPhotoModal"></i>'.html_safe, edit_url, title: "编辑图片", width: 800, height: 500) %>
+        <% else %>
+          <%= link_to '<i class="icon-pencil btn-fa"></i>'.html_safe, edit_url %>
+        <% end %>
+      <% end %>
+      <% if photo.is_a?(GreetCard) %>
+        <% if photo.status == 1 %>
+          <%= link_to "<i id='view_hidden_#{photo.id}' class='icon-eye-open btn-fa'></i>".html_safe, "/greet_cards/#{photo.id}/hidden", remote: true, title: "点击隐藏贺卡", method: "post" %>
+        <% else %>
+          <%= link_to "<i id='view_hidden_#{photo.id}' class='icon-eye-close btn-fa'></i>".html_safe, "/greet_cards/#{photo.id}/view", remote: true, title: "点击显示贺卡", method: "post" %>
+        <% end %>
+      <% end %>
+    </div>
+  </li>
+<% end %>

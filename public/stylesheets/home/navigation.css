@@ -1,0 +1,14 @@
+/*layout*/
+.left{width:160px;float:left;padding-bottom:50px;}
+.right{width:790px;float:left;padding:30px 0 0 50px;}
+/*subnav*/
+.first-block{background:#f6faf0;border-bottom:4px solid #83b62b;}
+.first-block h1{background:#83b62b;}
+.first-block a:hover{color:#83b62b;text-decoration:underline;}
+.last-block{background:#edf6f8;border-bottom:4px solid #0083a1;}
+.last-block h1{background:#0083a1;}
+.subnav{width:158px;margin-top:10px;}
+.subnav h1{height:36px;line-height:36px;text-align:center;color:#fff;font-size:16px;}
+.subnav a{display:inline-block;margin:5px 14px;font-size:14px;color:#333;white-space:nowrap;}
+/*edit*/
+.more-btn{position:absolute;width:135px;height:53px;background:url(/images/home_upload/more.png) no-repeat;margin:15px 0 0 500px;}

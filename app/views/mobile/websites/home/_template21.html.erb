@@ -1,0 +1,9 @@
+<%= render "slider_full", {:has_slider_text => :yes, :show_slider_span => :no} %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus[0..3].each_with_index do |menu, index| %>
+      <li><%= link_to menu.title, menu_url(menu), class: 'box mod-index'%></li>
+    <% end %>
+  </ul>
+</div>

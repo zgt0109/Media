@@ -1,0 +1,35 @@
+<% content_for :website_top_pic do %>
+    <header>
+      <a href="javascript:history.go(-1);"><img src="/assets/website/template15/ico-prev.png"/></a>
+      <a href="<%= app_website_url(id: @website.id, aid: session[:activity_id], wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>"><img src="/assets/website/template15/ico-home.png"/></a>
+      <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#" %>"><img src="/assets/website/template15/ico-phone.png"/></a>
+      <a class="ico-list"><img src="/assets/website/template15/ico-list.png"/></a>
+    </header>
+<% end %>
+
+<% website_menu.sub_menus.each do |child| %>
+      <a class="box-list box" href="<%= menu_url(child) %>">
+          <b><%= child.name %></b>
+          <span><%= date_format_full_l(child.created_at)  %></span>
+          <%= image_tag child.is_a?(Assistant) ? child.pic.try(:thumb) : child.pic.try(:large) if child.pic? %>
+          <b>查看全文</b>
+      </a>
+<% end %>
+
+
+<% content_for :pop_pop_share do %>
+    <div class="pop-nav pop">
+      <div class="pop-bg"></div>
+      <div class="pop-bd">
+        <div class="hd"><span>取消</span></div>
+        <div class="bd">
+          <% @website.website_menus.root.order(:sort).each do |menu| %>
+              <dl>
+                <dt><a href="<%= menu_url(menu) %>"><span><%= menu.name %></span><i class="ico ico-angle-right fr"></i></a></dt>
+                <dd></dd>
+              </dl>
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>

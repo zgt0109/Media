@@ -1,0 +1,82 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <%= render "breadcrumb" %>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+
+
+          <%= form_for @search, url: wx_wall_user_prizes_path, html: { method: :get } do |f| %>
+            <%= hidden_field_tag :id, @wx_wall.id %>
+            <div class="col-md-3 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">昵称：</span>
+                <%= f.text_field :nickname_like, class: 'col-xs-12' %>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">奖品名称：</span>
+                  <%= f.text_field :wx_wall_prize_name_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">状态：</span>
+                    <% options = [['全部',''],["未领奖",1],["已领奖",2]] %>
+                    <%= f.select :status_eq, options_for_select(options, @status), {}, class: 'col-xs-12' %>
+                    </div>
+                  </div>
+                  <div class="col-md-3 row pull-right">
+                    <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                    <!-- modal_trophy -->
+                    <%= modal_to "奖品兑换", edit_wx_wall_user_prize_path(@wx_wall.id), height: 500, class: "btn btn-primary btn-sm pull-right" %>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="col-md-12 margin-top-20">
+                  <table id="wallTable" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                      <tr>
+                        <th>头像</th>
+                        <th>昵称</th>
+                        <th>奖品名称</th>
+                        <th>中奖时间</th>
+                        <th>状态</th>
+                        <th>SN码</th>
+                      </tr>
+                    </thead>
+                    <tbody id="wx_wall_tbody">
+                      <% if @wx_wall_prizes_wx_wall_users.each do |prize_user| %>
+                        <tr>
+                          <td>
+                            <%= image_tag prize_user.avatar_url, width: 150 if prize_user.avatar_url.present? %>
+                          </td>
+                          <td><%= prize_user.nickname %></td>
+                          <td><%= prize_user.wx_wall_prize.try(:name) %></td>
+                          <td><%= prize_user.created_at %></td>
+                          <td><%= prize_user.status_name %></td>
+                          <td><%= prize_user.sn_code if prize_user.awarded? %></td>
+                        </tr>
+                      <% end.blank? %>
+                          <tr>
+                            <td colspan="6" class="green text-center">没有记录</td>
+                          </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+
+                  <%= paginate @wx_wall_prizes_wx_wall_users %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% content_for :custom_js do %>
+          <script>
+            $(document).ready(function(){
+              $("ul.breadcrumb").append("<li>中奖管理</li>");
+            });
+          </script>
+        <% end %>

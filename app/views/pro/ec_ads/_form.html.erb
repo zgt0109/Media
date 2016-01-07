@@ -1,0 +1,206 @@
+<p class="p-note">
+  提示：1、图片建议尺寸：720像素*400像素，可支持上传格式为：jpg、png、bmp、gif；<br>
+  　　　2、以下“<span class="fred"> * </span>”均为必填项；
+</p>
+
+
+<%= form_for @picture, validate: true do |f| %>
+
+    <%= f.hidden_field :ec_shop_id %>
+
+    <div class="box-form form-row">
+
+      <div class="p">
+        <span>图片标题</span>
+        <%= f.text_field :title, class: 'input-text' %>
+      </div>
+
+      <div class="p">
+        <span>分类</span>
+        <%= f.select :menu_type, EcAd.menu_type_options %>
+      </div>
+
+      <div class="p" id="selects">
+        <span>商品类别<em>*</em></span>
+        <% @ec_seller_cat_selects.each do |select|%>
+            <%= select_tag "ec_seller_cat_id#{select[0]}", options_for_select(select[1].collect{|t| [t.name, t.id]}, selected: params["ec_seller_cat_id#{select[0]}".to_sym]), class: "ec_seller_cat", rel: select[0]  %>
+        <% end %>
+        <%= f.hidden_field :seller_cid, class: 'hidden_ec_seller_cat_id', id: 'ec_seller_cat_id' %>
+      </div>
+
+      <div class="p">
+        <span>商品ID<em>*</em></span>
+        <%= f.text_field :ec_item_id, class: 'input-text' %>
+      </div>
+
+      <div class="p">
+        <span>链接<em>*</em></span>
+        <%= f.text_field :url, class: "input-text", validate: true %>　
+      </div>
+
+      <div class="p">
+        <span>选择活动<em>*</em></span>
+        <%= f.select :activity_id, current_user.activities.active.starting.map{|m| [truncate_u(m.name), m.id] }, { selected: f.object.try(:menuable_id) } %>
+      </div>
+
+      <div class="box-upload not_null_errors">
+        <span>图片<em>*</em></span>
+        <div class="upload-img upload-preview-img">
+          <span><%= f.object.pic? ? image_tag(f.object.pic.large, id: 'preview_shop_logo', class: 'view') : "<img src='/assets/bg_fm.jpg' alt='微信消息图片' id='preview_shop_logo' class='view'/>".html_safe %></span>
+          <!-- <i>点击查看示意图</i> -->
+        </div>
+        <div class="upload-btn">
+          <div class="box-file">
+            <%= f.file_field :pic, rel: 'preview_shop_logo', class: 'img_preview', id: 'shop_product_pic_url', validate: true, data: {width: 720, height: 400} %>
+            <a class="btn btn-big">上传图片</a>
+          </div>
+          <span class="p-file"></span>
+        </div>
+      </div>
+
+      <div class="hd" >
+        <p><input type="submit" value="保存" class="btn btn-small form-submit btn-orange" /></p>
+      </div>
+    </div>
+
+
+
+
+<% end %>
+<script type="text/javascript">
+    $(function() {
+
+//        $('.view').one('load',function() {
+//                var img = new Image();
+//                img.src=$(this).closest('.box-upload').find('img').attr('src');
+//
+//                if((img.width != 720 || img.height!= 400) && $(this).closest('.box-upload').find('img').attr('src') != '/assets/bg_fm.jpg'){
+//                    $(this).closest('.box-upload').find('.show_pic_advice').show();
+//                    $(this).closest('.box-upload').find('.upload_pic').text('重新上传');
+//                    $(this).closest('.box-upload').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+//                }
+//        });
+
+
+
+        select_ec_ad_menu_type();
+
+        $('#ec_ad_menu_type').change( function() {
+            select_ec_ad_menu_type();
+        });
+
+        function select_ec_ad_menu_type(){
+            if ( $('#ec_ad_menu_type').val() == 0 ) {
+                $('#ec_seller_cat_id').parent().hide();
+                $('#ec_ad_ec_item_id').parent().hide();
+                $('#ec_ad_url').parent().hide();
+                $('#ec_ad_activity_id').parent().hide();
+            } else if ( $('#ec_ad_menu_type').val() == 1 ) {
+                $('#ec_seller_cat_id').parent().show();
+
+                if($("#ec_seller_cat_id_2").html() == '') {$("#ec_seller_cat_id_2").hide();}
+                if($("#ec_seller_cat_id_3").html() == '') {$("#ec_seller_cat_id_3").hide();}
+
+                $('#ec_seller_cat_id').val($('#ec_seller_cat_id').parent().find('select:visible:last').val());
+
+
+                $('#ec_ad_ec_item_id').parent().hide();
+                $('#ec_ad_url').parent().hide();
+                $('#ec_ad_activity_id').parent().hide();
+            } else if ( $('#ec_ad_menu_type').val() == 3 ) {
+                $('#ec_seller_cat_id').parent().hide();
+                $('#ec_ad_ec_item_id').parent().show();
+                $('#ec_ad_url').parent().hide();
+                $('#ec_ad_activity_id').parent().hide();
+            } else if ( $('#ec_ad_menu_type').val() == 6 ) {
+                $('#ec_seller_cat_id').parent().hide();
+                $('#ec_ad_ec_item_id').parent().hide();
+                $('#ec_ad_url').parent().show();
+                $('#ec_ad_activity_id').parent().hide();
+            } else if ( $('#ec_ad_menu_type').val() == 2 ) {
+                $('#ec_seller_cat_id').parent().hide();
+                $('#ec_ad_ec_item_id').parent().hide();
+                $('#ec_ad_url').parent().hide();
+                $('#ec_ad_activity_id').parent().show();
+            }
+        }
+
+        $(".form-submit").click(function() {
+            var url_reg = /^(http|https):\/\/[a-zA-Z0-9].+$/
+            var number_reg = /^\+?[1-9][0-9]*$/;
+            if ( $('#ec_ad_menu_type').val() == 1 && !$('#ec_seller_cat_id').parent().find('select:visible:last').val()) {
+                showTip("warning", "请选择商品类别");
+                return false;
+            }else if ( $('#ec_ad_menu_type').val() == 3 && !$("#ec_ad_ec_item_id").val()) {
+                showTip("warning", "请填写商品ID");
+                return false;
+            }else if( $('#ec_ad_menu_type').val() == 3 && !number_reg.test($('#ec_ad_ec_item_id').val())){
+                showTip("warning", "商品ID必须为大于0的正整数");
+                return false;
+            }else if ( $('#ec_ad_menu_type').val() == 6 && !$("#ec_ad_url").val()) {
+                showTip('warning','请填写链接地址');
+                return false;
+            }else if ( $('#ec_ad_menu_type').val() == 6 && !url_reg.test($('#ec_ad_url').val())) {
+                showTip('warning','地址格式不正确，必须以http(s)://开头');
+                return false;
+            }else if ( $('#ec_ad_menu_type').val() == 2 && !$('#ec_ad_activity_id').val()) {
+                showTip('warning','请选择活动');
+                return false;
+            }
+        });
+        $(".hidden_ec_seller_cat_id").val($('.ec_seller_cat:visible:last').val());
+        $("#selects").on("change", ".ec_seller_cat", function(){
+            if($(this).val() == "-1"){
+            }
+            else{
+                $.ajax({
+                    type: "GET",
+                    url: "/ec_seller_cats/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=1',
+                    success: function(data) {
+                        return false;
+                    },
+                    error: function() {
+                        return false;
+                    }
+                });
+            }
+        });
+//        $('.ec_seller_cat').change(function(){
+//            if($(this).val() == "-1"){
+//                if($(this).attr('id') == 'ec_seller_cat_id_1'){$("#ec_seller_cat_id_2").html("<option value='0'>不限</option>");}
+//                $("#ec_seller_cat_id_3").html("<option value='0'>不限</option>");
+//                $("#ec_seller_cat_id").val('');
+//            }
+//            else{
+//                if($(this).attr('id') == 'ec_seller_cat_id_3'){
+//                    $("#ec_seller_cat_id").val($(this).val());
+//                }else{
+//                    $.ajax({
+//                        type: "GET",
+//                        url: "/ec_seller_cats/" + $(this).val() + "?template_id=" + ($(this).attr('rel'))+ '&&type=new',
+//                        success: function(data) {
+//                            return false;
+//                        },
+//                        error: function() {
+//                            return false;
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//        $("#shop_product_pic_url").change(function(){
+//            var file = $(this)
+//            var img = new Image();
+//            setTimeout(function(){
+//                img.src = file.closest('.box-upload').find('img').attr('src');
+//                if(img.width != 720 || img.height!= 400){
+//                    file.closest('.box-upload').find('.show_pic_advice').show();
+//                    file.closest('.box-upload').find('.upload_pic').text('重新上传');
+//                    file.closest('.box-upload').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+//                }else{
+//                    file.closest('.box-upload').find('.show_pic_advice').hide();
+//                }
+//            }, 1000)
+//        });
+    });
+</script>

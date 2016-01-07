@@ -1,0 +1,38 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+        <li><%= link_to '微活动', activities_path %></li>
+        <li><%= link_to '微助力', aids_activities_path %></li>
+      </ul>
+      <%= render partial: '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="fuelux-wizard" data-target="#step-container">
+            <ul class="wizard-steps">
+              <li class="<%= 'active' if %w(new show edit edit_rule_settings edit_prize_settings).include?(action_name) %>">
+                <span class="step">1</span>
+                <span class="title">活动开始设置</span>
+              </li>
+              <li class="<%= 'active' if %w(edit_rule_settings edit_prize_settings).include?(action_name) %>">
+                <span class="step">2</span>
+                <span class="title">活动规则设置</span>
+              </li>
+              <li class="<%= 'active' if action_name == 'edit_prize_settings' %>">
+                <span class="step">3</span>
+                <span class="title">活动奖品设置</span>
+              </li>
+            </ul>
+          </div>
+          <hr>
+          <div class="step-content row-fluid position-relative" id="step-container">
+            <%= yield :step %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

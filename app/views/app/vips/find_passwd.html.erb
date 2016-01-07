@@ -1,0 +1,22 @@
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+    <div class="stage" id="stage">
+        <!-- 会员卡首页 start -->
+        <section id="sec-index">
+            <div class="top-tips">
+                请输入邮箱地址获取重置密码
+            </div>
+            <%= form_tag('', class: "mod-roem form-ver") do |f| %>
+                <div class="form-li">
+                    邮箱地址
+                </div>
+                <div class="form-li">
+                    <%= text_field_tag :password_email, '', placeholder: '请输入邮箱地址', class: 'input' %>
+                </div>
+                <div class="form-btn">
+                    <input type="submit" value="确认提交" class="btn btn-biger"/>
+                </div>
+            <% end %>
+        </section>
+        <!-- 会员卡首页 end -->
+    </div>
+</div>

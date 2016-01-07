@@ -1,0 +1,51 @@
+<section id="sec-index">
+  <div class="full-list">
+    <ul>
+      <% @panoramagrams.each do |panoramagram| %>
+        <li>
+          <a href="<%= panorama_mobile_panoramagram_path(supplier_id: @supplier.id, id: panoramagram.id) %>#mp.weixin.qq.com">
+            <%= image_tag panoramagram.pic_url %>
+            <p class="full-txt"><%= panoramagram.name %></p>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    <div class="mod-load"><span class="tips"><%= "加载更多" if @panoramagrams.total_pages > 1 %></span><span class="jiazai"><i class="fa fa-spinner fa-spin "></i> 正在加载...</span></div>
+  </div>
+</section>
+<script>
+  
+  itemBottomLoad(load)
+
+  var page = 2;
+  function load(){
+    var get_url = "<%= load_more_items_mobile_panoramagrams_path(@supplier) %>" + "?page=" + page;
+    $.getJSON(get_url, function(data) {
+      if(data.items.length > 0){
+        page += 1;
+        var html = '';
+        for(i=0;i<data.items.length;i++){
+          html += '<li><a href="'+data.items[i].link_to+'"><img src="'+data.items[i].img_url+'"/><p class="full-txt">'+data.items[i].txt+'</p></a></li>';
+        }
+        $(html).appendTo($(".full-list ul"));
+        $(".mod-load").removeClass("loading");
+      }else{
+        $(".mod-load").removeClass("loading");
+        $(".tips").html("没有数据啦");
+      }
+    });
+  }
+  
+  function itemBottomLoad(callBack){
+    $(window).scroll(function(){
+      var scrollTop = $(this).scrollTop();               //滚动条距离顶部的高度
+      var scrollHeight = $(document).height();          //当前页面的总高度
+      var windowHeight = $(this).height();               //当前可视的页面高度
+  
+      if(scrollTop + windowHeight >= scrollHeight){        //距离顶部+当前高度 >=文档总高度 即代表滑动到底部
+        $(".mod-load").addClass("loading");
+        callBack();
+      }
+    });
+  }
+</script>

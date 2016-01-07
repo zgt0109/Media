@@ -1,0 +1,6 @@
+<% if @is_s %>
+	showTip('success','更新成功');
+	location.reload();
+<% else %>
+	showTip('warning','有重复排班.');
+<% end %>

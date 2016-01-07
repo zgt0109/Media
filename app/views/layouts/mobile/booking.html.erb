@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link href="/assets/favicon.ico" rel="shortcut icon">
+  <title><%= yield(:title) || '微官网' %></title>
+  <link type="text/css" rel="stylesheet" href="/assets/mobile/main.css"/>
+  <%= stylesheet_link_tag "mobile/wserver", media: "all" %>
+  <%= javascript_include_tag "mobile/wserver" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body class="<%= mobile_booking_body_class %>">
+  <%= render 'application/gb2big5' %>
+  
+  <div class="html">
+    <div class="main">
+      <%= yield :booking_top_pic %><!--head-->
+      <section>
+        <%= yield %>
+      </section>
+
+    </div>
+  </div>
+
+
+  <%= render 'application/app_footer' %>
+  <a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>
+
+  <%= yield(:pop) %>
+
+  <script type="text/javascript">
+      <% if flash[:notice] || flash[:alert] %>
+          alert("<%= flash[:notice] || flash[:alert] %>");
+      <% end %>
+  </script>
+</body>
+</html>

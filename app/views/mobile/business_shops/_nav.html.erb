@@ -1,0 +1,52 @@
+<% if @template_id == 1 %>
+  <header class="box">
+    <div class="mod-nav">
+      <ul class="navLine-ul">
+        <li>
+          <%= link_to '简介', mobile_business_shop_path(@supplier.id, @business_shop.id), class: "#{ 'current' if action_name == 'show' }" %>
+        </li>
+        <% unless @supplier.try(:id) == 10957 || !@business_shop.enable_vip_card? %>
+          <li>
+            <%= link_to '优惠', privileges_mobile_business_shop_path(@supplier.id, @business_shop), class: "#{ 'current' if action_name == 'privileges' }" %>
+          </li>
+        <% end %>
+        <li>
+          <%= link_to '商品', items_mobile_business_shop_path(@supplier.id, @business_shop), class: "#{ 'current' if action_name =~ /item/ }" %>
+        </li>
+        <li>
+          <%= link_to '环境', pictures_mobile_business_shop_path(@supplier.id, @business_shop), class: "#{ 'current' if action_name =~ /pictures|flashshow/ }" %>
+        </li>
+        <li>
+          <%= link_to '评价', comments_mobile_business_shop_path(@supplier.id, @business_shop), class: "#{ 'current' if action_name == 'comments' }" %>
+        </li>
+      </ul>
+    </div>
+  </header>
+<% else %>
+  <header class="box">
+    <div class="mod-nav">
+      <% if action_name =~ /leave_comment|create_comment/ %>
+        <%= link_to comments_mobile_business_shop_path(@supplier.id, @business_shop.id), class: "tleft" do %>
+          <%= image_tag "/assets/mobile/wbusiness/icon-back.png" %>
+        <% end %>
+      <% else %>
+        <%= link_to mobile_business_shop_path(@supplier.id, @business_shop.id), class: "tleft" do %>
+          <%= image_tag "/assets/mobile/wbusiness/icon-back.png" %>
+        <% end %>
+      <% end %>
+      <span>
+        <%= 
+          case action_name
+          when /privileges/ then '优惠信息'
+          when /item/ then '推荐商品'
+          when /pictures|flashshow/ then '环境信息'
+          when /comment/ then '评价'
+          end
+         %>
+      </span>
+      <%= link_to leave_comment_mobile_business_shop_path(@supplier, @business_shop.id), class: "tright" do %>
+          <%= image_tag "/assets/mobile/wbusiness/icon-edit.png" %>
+      <% end if action_name =~ /comment/ && action_name != "leave_comment" %>
+    </div>
+  </header>
+<% end %>

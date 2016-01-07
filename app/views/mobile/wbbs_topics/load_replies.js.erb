@@ -1,0 +1,8 @@
+<% if @wbbs_replies.count > 0 %>
+  var html = "<%= j( render partial: 'wbbs_reply', collection: @wbbs_replies, locals: { wbbs_topic: @wbbs_topic } ) %>";
+  $('#comment-<%= @wbbs_topic.id %>').append( html );
+  $('#more-comment-<%= @wbbs_topic.id %>').data('id', <%= @wbbs_replies.last.id %>);
+<% end %>
+<% if @wbbs_replies_count <= WbbsReply::PAGE_SIZE %>
+  $('#comment-<%= @wbbs_topic.id %>').next('.mod-more').remove();
+<% end %>

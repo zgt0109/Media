@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>公众号支付测试网页</title>
+</head>
+<body>
+
+        <table border="1">
+            <tr>
+                <th>商户ID</th>
+            <th><%= @supplier.id%></th>    
+            </tr>
+            <tr>
+                 <th>商品名</th>
+            <th><%= @payment.subject %></th>    
+            </tr>
+            <tr>
+                <th>总金额(分)</th>
+            <th><%= (@payment.amount * 100).to_i %></th>    
+            </tr>
+            <tr>
+                <th>订单类型</th>
+            <th><%= @payment.paymentable_type %></th>    
+            </tr>
+        </table>
+        <br/>
+    <div class="WCPay">
+        <% @wx_user = WxUser.where(id: session[:wx_user_id]).first%>
+        <h2><%= link_to "去支付", payment_wxpay_pay_url(supplier_id: params[:supplier_id], out_trade_no: @payment.out_trade_no, openid: @wx_user.try(:uid) || params[:openid]) %>
+        </h2>
+    </div>
+
+</body>
+</html>

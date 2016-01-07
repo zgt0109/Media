@@ -1,0 +1,17 @@
+<li>
+  <a href="javascript:;" title="<%= trip_ad.title%>" data-rel="colorbox">
+    <%= image_tag trip_ad.pic_url, alt: "150x150"%>
+    <div class="text">
+      <%= form_for trip_ad, url: up_ad_title_trips_path, html: { class: "inner"}, remote: true do |f|%>
+        <%= f.hidden_field :id%>
+        <%= f.text_field :title, class: "col-xs-12"%>
+      <%end%>
+    </div>
+  </a>
+  <div class="tools">
+    <%= link_to "", del_ad_trips_path(id: trip_ad.id), class: "icon-trash btn-fa btn-remove", data: {toggle: "modals", confirm: "确认要删除吗？", target: "delModel", url: del_ad_trips_path(trip_ad), method: "get"}%>
+    <a href="#">
+      <i class="icon-pencil btn-fa" data-toggle="modal" data-target="#editPhotoModal"></i>
+    </a>
+  </div>
+</li>

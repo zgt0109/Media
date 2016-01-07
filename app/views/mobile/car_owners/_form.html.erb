@@ -1,0 +1,165 @@
+<section id="sec-index">
+  <%= render '/mobile/car_shops/footer' %>
+  <div class="body">
+    <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/><%= @car_owner.new_record? ? "添加" : "修改" %>爱车信息</div>
+    <%= form_for @car_owner, url: @form_url[0], method: @form_url[1] do |f| %>
+      <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+      <%= f.hidden_field :supplier_id, value: @supplier.id %>
+      <%= f.hidden_field :wx_mp_user_id, value: @supplier.wx_mp_user.id %>
+      <%= f.hidden_field :car_shop_id, value: @car_shop.id %>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>添加车型</b>
+            </a>
+          </dt>
+          <dd class="show">
+            <div class="mod-form form-ver">
+              <div class="form-li">
+                <% options = @supplier.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+                <%= f.select :car_catena_id, options_for_select(options.insert(0,["选择车系",""]), @car_owner.try(:car_catena_id)), {}, class: "input" %>
+              </div>
+              <div class="form-li" id="car_type">
+                <% if @car_owner.new_record? %>
+                  <%= f.select :car_type_id, options_for_select([["选择车型",""]]), {}, class: "input" %>
+                <% else %>
+                  <% options = @supplier.car_shop.car_types.where(car_catena_id: @car_owner.car_catena_id).order(:sort).pluck(:name, :id) %>
+                  <%= f.select :car_type_id, options_for_select(options.insert(0,["选择车型",""]), @car_owner.try(:car_type_id)), {}, class: "input" %>
+                <% end %>
+              </div>
+              <div class="form-li">
+                <%= f.text_field :car_full_name, placeholder: '或者您可以直接输入', class: "input" %>
+              </div>
+            </div>
+          </dd>
+        </dl>
+      </div>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>基本信息</b>
+            </a>
+          </dt>
+          <dd class="show">
+            <div class="mod-form form-hor">
+              <div class="form-li">
+                <div class="li-l"><b>车牌号码：</b></div>
+                <div class="li-r"><%= f.text_field :car_license_no, class: "input" %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>车主姓名：</b></div>
+                <div class="li-r"><%= f.text_field :car_owner, class: "input" %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>上牌时间：</b></div>
+                <div class="li-r"><%= f.text_field :car_license_time, class: "input date", readonly: true, value: @car_owner.car_license_time.try(:to_date) %></div>
+              </div>
+            </div>
+          </dd>
+        </dl>
+      </div>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>保险信息</b>
+            </a>
+          </dt>
+          <dd class="show">
+            <div class="mod-form form-hor">
+              <div class="form-li">
+                <div class="li-l"><b>上次保险日期：</b></div>
+                <div class="li-r"><%= f.text_field :last_insurance_time, class: "input date", readonly: true, value: @car_owner.last_insurance_time.try(:to_date) %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>上次保险费用：</b></div>
+                <div class="li-r"><%= f.text_field :last_insurance_charge, type: "number", class: "input" %></div>
+              </div>
+            </div>
+          </dd>
+        </dl>
+      </div>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>保养信息</b>
+            </a>
+          </dt>
+          <dd class="show">
+            <div class="mod-form form-hor">
+              <div class="form-li">
+                <div class="li-l"><b>上次保养里程：</b></div>
+                <div class="li-r"><%= f.text_field :last_maintenance_mile, type: "number", class: "input" %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>上次保养时间：</b></div>
+                <div class="li-r"><%= f.text_field :last_maintenance_time, class: "input date", readonly: true, value: @car_owner.last_maintenance_time.try(:to_date) %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>上次保养费用：</b></div>
+                <div class="li-r"><%= f.text_field :last_maintenance_charge, type: "number", class: "input" %></div>
+              </div>
+            </div>
+          </dd>
+        </dl>
+      </div>
+      <div class="mod-btn">
+        <input type="button" value="确认" data-input="submit" class="btn btn-bigest" id="save_owner" readonly/>
+      </div>
+    <% end %>
+  </div>
+</section>
+<script>
+$(function(){
+  $( ".date" ).datepicker({
+    autoSize: true,
+    dateFormat: 'yy-mm-dd',
+    dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+    monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+    monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+  });
+  focusForm("header",function(){
+      $("header").css({"margin-bottom":"0"});
+  },function(){
+      $("header").css({"margin-bottom":"-120px"});
+  });
+});
+
+  $("[name='car_owner[car_catena_id]']").change(function(){
+    var set_url = "<%= select_type_mobile_car_owners_url(supplier_id: @supplier.id) %>" + "?car_catena_id=" + $("[name='car_owner[car_catena_id]']").val() + "&name=car_owner";
+    jQuery.ajax({
+      type: "GET",
+      url: set_url,
+      dataType: "json",
+      success: function(data){
+        $('#car_type').html(data.html);
+      }
+    });
+  });
+
+  $("#save_owner").click(function(){
+    if($("[name='car_owner[car_license_no]']").val() == ""){
+      alert("请填写车牌号码！");
+    }else if($("[name='car_owner[car_owner]']").val() == ""){
+      alert("请填写车主姓名！");
+    }else if($("[name='car_owner[car_license_time]']").val() == ""){
+      alert("请填写上牌时间！");
+    }else if($("[name='car_owner[last_insurance_time]']").val() == ""){
+      alert("请填写上次保险日期！");
+    }else if($("[name='car_owner[last_insurance_charge]']").val() == ""){
+      alert("请填写上次保险费用！");
+    }else if($("[name='car_owner[last_maintenance_mile]']").val() == ""){
+      alert("请填写上次保养里程！");
+    }else if($("[name='car_owner[last_maintenance_time]']").val() == ""){
+      alert("请填写上次保养时间！");
+    }else if($("[name='car_owner[last_maintenance_charge]']").val() == ""){
+      alert("请填写上次保养费用！");
+    }else{
+      $(this).attr("disabled", "disabled");
+      $('form').submit()
+    }
+  });
+</script>

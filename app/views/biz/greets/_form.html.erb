@@ -1,0 +1,9 @@
+<%= form_for @greet, validate: true do |f| %>
+<span>贺卡名称<em>*</em></span>
+<%= f.text_field :name, class: 'input-text' %>
+<%= f.submit '保存', class: 'btn btn-small form-submit btn-orange' %>
+<span style="color:#999; float:none;font-size:12px; width:auto;">图片建议尺寸：720像素*400像素</span>
+<% end %>
+<div class="box-photo fl" id="photoList">
+  <%= render "list" %>
+</div>

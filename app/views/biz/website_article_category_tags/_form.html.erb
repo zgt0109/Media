@@ -1,0 +1,102 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微官网', websites_path %></li>
+        <li><%= link_to '标签管理', website_article_category_tags_url(category_type: params[:category_type]) %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="col-xs-12">
+        <div class="pull-left margin-right-20 font-size16">标签编辑</div>
+      </div>
+
+      <div class="clearfix"></div>
+      <hr/>
+
+      <div class="col-xs-12">
+        <%= form_for @tag, url: @tag.new_record? ? website_article_category_tags_url : website_article_category_tag_url(id: @tag.id), method: @tag.new_record? ? 'post' : 'put', html: {class: 'form', role: 'form'} do |f| %>
+          <%= hidden_field_tag :category_type, params[:category_type] %>
+          <%= hidden_field_tag :category_id, params[:category_id] %>
+          <div class="form-group">
+            <label class="control-label">标签名称</label>
+      <div class="clearfix">
+              <%= f.text_field :name, class: 'col-xs-6' %>
+            </div>
+          </div>
+          
+          <%= f.fields_for :taggings, @tag.taggings.select{|t| t.taggable_id == @category.id && t.taggable_type == @category.class.to_s}.flatten do |tg| %>
+            <%= tg.hidden_field :taggable_id, value: params[:category_id] %>
+            <%= tg.hidden_field :taggable_type, value: 'WebsiteArticleCategory' %>
+          <% end %>
+
+          <%= render 'children', f: f if params[:category_type] == 'as_product' %>
+          
+          <div class="form-group ">
+            <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
+            <%= link_to '返回', website_article_category_tags_url(category_type: params[:category_type], category_id: params[:category_id]), class: 'btn btn-sm btn-default' %>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    var tag_names = <%= raw JSON.pretty_generate(@category.tags.where("tags.id <> ?", @tag.try(:id).to_i).collect(&:name).compact) %>;
+
+    $(function () {
+      $('.tag_childrens').on('click', '#add', function(){
+        var template = $('.tag_children[template=true]'),
+            tool =  $('.tag_childrens .tag_children:last'),
+            uuid = Date.now(),
+            new_template = template.clone(true).insertAfter(tool).show();
+
+        tool.find('#add').attr({'id': 'delete', 'value': '删除'});
+        new_template.attr('template', 'false');
+        new_template.find('input[type=text]').attr('name', 'tag[children_attributes]['+uuid+'][name]'); 
+        new_template.find('input[type=checkbox]').attr('name', 'tag[children_attributes]['+uuid+'][_destroy]'); 
+      });
+
+      $('.tag_childrens').on('click', '#delete', function(){
+        $(this).closest('.tag_children').hide();
+        $(this).closest('.tag_children').find('input[type=checkbox]').prop('checked', true);
+      });
+
+      // $('input[type=submit]').click(function(){
+      $('.page-content').on('click', 'input[type=submit]', function(){
+        if(!$('#tag_name').val()){
+          showTip('warning', '标签名称不能为空');
+          return false;
+        }
+        if($.inArray($('#tag_name').val(),tag_names) != -1){
+          showTip('warning', '名为'+$('#tag_name').val()+'的标签已存在');
+          return false;
+        }
+        var flag = false, o={};
+        $.each($('.tag_childrens input[type=text]:visible'), function(i, e){
+          if(!$(e).val()){
+            showTip('warning', '标签项不能为空');
+            $(e).focus();
+            return flag = true;  
+          }
+          if(!(o[$(e).val()])){
+            o[$(e).val()] = true;
+          }else{
+            showTip('warning', '标签项不能重复');
+            $(e).focus();
+            return flag = true;
+          }
+        });
+        
+        if(flag){return false;}
+      });
+
+    });
+  </script>
+<% end %>

@@ -1,0 +1,173 @@
+<%= content_for :tab do %>
+<div class="step-pane active" id="step2">
+  <div class="row">
+    <%= form_for @activity, :url => unfold_path(@activity), validate: true do |activity| %>
+      <%= activity.hidden_field :status, value: 1 %>
+      <%= hidden_field_tag :redirect_to,  unfolds_activities_path %>
+    <div class="form-group">
+      <label>奖品设置<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <div class="row">
+          <label class="col-xs-2 line-height-32">
+             <%= radio_button_tag :prize_type, 'coupon', @activity.extend.prize_type == 'coupon' , disabled: @coupons.blank?, class: 'ace prize_type prize_coupons' %>
+            <span class="lbl"> 优惠券</span>
+          </label>
+          <div class="col-xs-3">
+            <select class="col-xs-12 coupon_id" name="coupon_id" id="coupon_id">
+              <%- if @coupons.present? %>
+                   <%- @coupons.each do |coupon| %>
+                    <option value="<%= coupon.id %>" data-start="<%= coupon.use_start.try(:to_s)  %>" data-end="<%= coupon.use_end.try(:to_s)  %>" data-count="<%= coupon.limit_count_avaliable - coupon.consumes.size %>"><%= coupon.name %>(<span class="coupon_num"><%= coupon.limit_count_avaliable - coupon.consumes.size %>)</span>
+                    </option>
+                  <%- end %>
+             <%- else %>
+                <option>无可用优惠券</option>
+             <%- end %>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-xs-2 line-height-32">
+            <%= radio_button_tag :prize_type, 'custom', @activity.extend.prize_type == 'custom', class: 'ace prize_type prize_custom' %>
+            <span class="lbl"> 其他</span>
+          </label>
+          <div class="col-xs-3">
+            <%= text_field_tag "prize_name", @activity.extend.prize_name, class: 'col-xs-12', validate: true %>
+          </div>
+          <span class="help-inline text-warning line-height-32">该方式系统无法自动发放奖品，请在领奖说明中将兑奖方式告知粉丝</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>奖品发放数量</label>
+      <div class="clearfix">
+         <%= text_field_tag "prize_count", @activity.extend.prize_count, class: 'col-xs-8', validate: true, maxlength: 10 %>
+      </div>
+    </div>
+    <div class="form-group consume_duration">
+      <label>有效使用时间<span class="help-inline text-warning line-height-32">不填为不限制</span></label>
+      <div class="clearfix">
+        <div class="col-md-8 no-padding">
+          <div class="input-group">
+            <%= text_field_tag "prize_start", @activity.extend.prize_start, class: 'date-time input-sm form-control', validate: true, readonly: true %>
+            <span class="input-group-addon">-</span>
+            <%= text_field_tag "prize_end", @activity.extend.prize_end, class: 'date-time input-sm form-control', validate: true, readonly: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>获奖限制<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= text_field_tag "invites_count", @activity.extend.invites_count, class: 'col-xs-1', validate: true %>
+        <span class="pull-left line-height-32"> 位好友拆开礼包可获得奖品</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>领奖说明</label>
+      <div class="clearfix">
+        <%= activity.fields_for :activity_property, validate: true do |ap| %>
+          <%= ap.hidden_field :activity_type_id, value: @activity.activity_type_id %>
+          <%= ap.text_area "prize_description", id: 'prize_description', :style => "height:100px;width: 67%;" %>
+        <%- end %>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <a href="<%= edit_unfold_path(@activity) %>" class="btn btn-prev btn-sm">
+        <i class="icon-arrow-left"></i>
+        上一步
+      </a>
+      <%- if @activity.can_not_edit? %>
+      <a href="/activities/unfolds"  class="btn btn-sm btn-success">完成</a>
+    <%- else %>
+      <button class="btn btn-success btn-sm form-submit" type="submit">完成</button>
+    <%- end %>
+    </div>
+    <%- end %>
+  </div>
+</div>
+<% end %>
+<%= render 'settings_tab' %>
+<% content_for :custom_js do %>
+<script>
+  $(function() {
+      <%- if @activity.extend.prize_id.present? %>
+      $('#coupon_id').val('<%=  @activity.extend.prize_id %>')
+    <%- end %>
+
+    <%- if @activity.setting? %>
+        $('input[name=prize_type]:last').click();
+    <%- else %>
+      $('input[name=prize_type]:checked').click();
+    <%- end %>
+
+    <%- if @activity.can_not_edit? %>
+    $('input,select,textarea').prop('disabled', true);
+    $('.wysiwyg-editor').attr('contenteditable', false);
+    <%- end %>
+    $('form').validate();
+  });
+  $('input[name=prize_type]').on('click', function(){
+    if($('input[name=prize_type]:checked').val() == 'coupon'){
+      $('#coupon_id').attr('disabled', false)
+      $('#prize_name').attr('disabled', true)
+      applyPrizeTime();
+    }else{
+      $('#prize_name').attr('disabled', false)
+      $('#coupon_id').attr('disabled', true)
+      $('#prize_start').val('<%= @activity.extend.prize_start %>');
+      $('#prize_end').val('<%= @activity.extend.prize_end %>');
+    }
+  });
+
+  $('#coupon_id').on('change', function(){
+    applyPrizeTime();
+    $('.prize_coupons').get(0).checked = true;
+  });
+
+  $('#prize_name').on('change', function(){
+    $('.prize_custom').get(0).checked = true;
+  });
+
+  var applyPrizeTime = function(){
+    var start = $('#coupon_id option:checked').data('start');
+    var end = $('#coupon_id option:checked').data('end');
+    $('#prize_start').val(start);
+    $('#prize_end').val(end);
+  }
+
+  $('.form-submit').on('click', function(){
+    var has_coupon = ($('input[name=prize_type]:checked').val() == 'coupon' && $('#coupon_id').val());
+    var has_prize = ($('input[name=prize_type]:checked').val() == 'custom' && $('#prize_name').val());
+    var invites_count = parseInt($('#invites_count').val());
+    var prize_count_blank = !$('#prize_count').val();
+    var prize_count = parseInt($('#prize_count').val());
+     if(!has_coupon && !has_prize){
+      showTip('warning', '奖品设置不能为空');
+      return false;
+    }
+    if (prize_count_blank){
+      showTip('warning', '奖品发放数量必须为大于0的数字');
+        return false;
+    }else{
+     if(prize_count && prize_count < 1 ){
+        showTip('warning', '奖品发放数量必须为大于0的数字');
+        return false;
+      }
+    }
+    if(has_coupon){
+      var coupon_count = parseInt($('#coupon_id :checked').data('count'));
+      if (!prize_count || prize_count > coupon_count){
+        showTip('warning', '奖品数量不能大于优惠券剩余的数量');
+        return false;
+      }
+    }
+    if(!invites_count || invites_count < 1){
+      showTip('warning', '获奖限制必须为大于0的数字');
+      return false;
+    }
+    $(this).attr('disbaled', true)
+  })
+
+</script>
+<% end %>

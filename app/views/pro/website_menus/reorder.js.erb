@@ -1,0 +1,10 @@
+showTip('success', '操作成功');
+
+function swapPosition (menu1, menu2) {
+	var html1 = menu1[0].outerHTML;
+	var html2 = menu2[0].outerHTML;
+	menu1.replaceWith(html2);
+	menu2.replaceWith(html1);
+}
+
+swapPosition($('#parent-menu-<%= @website_menu.id %>'), $('#parent-menu-<%= @sibling.id %>'));

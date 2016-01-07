@@ -1,0 +1,107 @@
+<section>
+  <div class="boutique">
+    <div class="top-bar" id='ractive_product_categories_nav_container'>
+    </div>
+    <div class="goods-list" id="ractive_category_products_container">
+    </div>
+  </div>
+</section>
+<script id='ractive_product_categories_nav_template' type='text/ractive'>
+  <div class="swipe-box" id="topBar">
+    <div class="top-bar-cont">
+      {{#product_categories}}
+        <a href="{{url}}" class="{{active}}">{{name}}</a>
+      {{/product_categories}}
+    </div>
+  </div>
+</script>
+
+<script id='ractive_category_products_template' type='text/ractive'>
+  <ul>
+    {{#products:i}}
+    <li>
+      <a class="gl-box" href="{{url}}">
+        <div class="goods-list-img">
+          <img src="{{pic_url}}">
+        </div>
+        <div class="goods-list-info">
+          <span class="name">{{name}}</span>
+          <span>{{shop_name}}</span>
+          <span class="price">&yen;{{price}}</span>
+        </div>
+      </a>
+    </li>
+    {{/products}}
+  </ul>
+</script>
+
+<script>
+  $(function(){
+
+    function get_products(category) {
+      return products = fetch_wmall_data({path: "/api/wmall/products/list.json"}, {supplier_id: <%= session[:supplier_id] %>, category: category}, options = {})
+    }
+
+    function get_category(url) {
+      if (typeof(url) == "undefined") { url = window.location.href }
+      return $.parseParams(url)["category"] || "全部"
+    }
+
+    products = get_products(get_category())
+
+    var ractive_category_products = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_category_products_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_category_products_template',
+
+      // Here, we're passing in some initial data
+      data: {products: products}
+    });
+
+
+    var product_categories = fetch_wmall_data({path: "/api/wmall/products/categories.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+
+    var ractive_product_categories = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_product_categories_nav_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_product_categories_nav_template',
+
+      // Here, we're passing in some initial data
+      data: {product_categories: product_categories}
+    });
+
+    function active_category(element) {
+      var current = $(element);
+      category = get_category(current.attr("href"))
+      products = get_products(category)
+
+      ractive_category_products.set("products", products)
+
+      $(".top-bar-cont a.active").removeClass('active');
+      current.addClass('active')
+    }
+
+    $(".top-bar-cont a").bind("click", function (e) {
+      var current = $(this);
+      e.preventDefault();
+
+      active_category(this)
+    })
+
+    $(".top-bar-cont a").map(function (i,e) {
+      current_category = get_category()
+      if ($.parseParams(e.href)["category"] == current_category) {
+        active_category(e)
+      }
+    })
+
+  })
+
+
+</script>

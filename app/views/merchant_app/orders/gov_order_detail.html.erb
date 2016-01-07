@@ -1,0 +1,114 @@
+<% title "信箱留言" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="hide=true"<% end %>
+<% content_for :header do %>
+  <header>
+    <%= link_to gov_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <span class="text">信箱留言</span>
+    <a href="javascript:;"></a>
+  </header>
+  <div class="mod-foot">
+    <div class="cell" ng-hide="hide">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(2)">归档</a>
+    </div>
+    <div class="cell" ng-hide="hide">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(3)">回复</a>
+    </div>
+    <div class="cell" ng-hide="hide">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(0)">删除</a>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="mod-list">
+  <dl>
+    <dd>
+      <p>姓名：{{order['姓名']}}</p>
+      <p>手机号：{{order['电话']}}</p>
+      <p>类型：{{order.category}}</p>
+      <p ng-repeat="(key,value) in order" ng-hide="key == 'category' || key == 'body' || key == '姓名' || key == '电话'">{{key }}：{{value}}</p>
+      <p>内容：{{order.body}}</p>
+      <p style="margin-top: 20px;">回复：</p>
+      <p><textarea id="reply_content" style="width: 100%;height: 110px;"></textarea></p>
+    </dd>
+  </dl>
+</div>
+
+<script>
+var app = angular.module('app', []);
+function customersController($scope,$http) {
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders/#{params[:id]}?role=supplier&model=#{params[:model]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    .success(function(response) {
+        if(response.result == 'success'){
+ 	  $scope.order = response.data;
+        $scope.created_at = response.created_at;
+        $scope.status_name = response.status_name;
+          $scope.set_visable($scope.order.status, false);
+        }
+        else{
+          console.log(response);
+        }
+
+    })
+    .error(function(response) {
+      console.log(response);
+    });
+
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=#{params[:model]}&source=winwemedia_gov&is_read=1" %>')
+    .success(function(response) {
+	console.log(response);
+    })
+    .error(function(response) {
+        console.log(response);
+    });
+
+    $scope.change_status = function(status) {
+      var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders/#{params[:id]}?role=supplier&model=#{params[:model]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status;
+      var reply_content = document.getElementById('reply_content').value;
+      if(status == 3){
+        // reply_content=
+        if(reply_content){
+          url += ('&reply_content=' + reply_content);
+        }else{
+          alert('请输入回复内容');
+          return false;
+        }
+      }
+      if(confirm('确认是否执行此操作？')){
+        $http.post(url)
+        .success(function(response) {
+      if(response.result == 'success'){
+             $scope.set_visable(status, true);
+           }
+           else{
+             console.log(response);
+             alert('操作失败');
+           }
+        })
+        .error(function(response) {
+          console.log(response);
+          alert('操作失败');
+        });
+      }
+    };
+
+    $scope.set_visable = function(status, flag) {
+      if(flag){
+        window.location.href = '<%= raw gov_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) %>'
+      }
+      else{
+        switch(status){
+          case 0:
+          $scope.hide = true;
+          break;
+          default:
+            $scope.hide = false;
+            break;
+        }
+      }
+    }
+}
+
+customersController.inject = ['$scope', '$http'];
+app.controller('customersController', customersController);
+</script>

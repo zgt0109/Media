@@ -1,0 +1,17 @@
+$('#console_data').replaceWith("<%= escape_javascript(render('console_data')) %>");
+
+<% if @subscribe_data.present? %>
+  $('#chart-1').html("<%= escape_javascript(high_chart('chart_basic_line1', chart(@subscribe_categories, @subscribe_data.values, title: '日增关注数', serie_name: '新增数'))) -%>");
+<% end %>
+
+<% if @vip_user_data.present? %>
+  $('#chart-2').html("<%= escape_javascript(high_chart('chart_basic_line2', chart(@vip_user_categories, @vip_user_data, title: '日增会员卡数', serie_name: '新增数'))) -%>");
+<% end %>
+
+<% if @pv_data.present? %>
+  $('#chart-3').html("<%= escape_javascript(high_chart('chart_basic_line3', chart(@pv_categories, @pv_data, title: '浏览量（PV）', serie_name: '浏览量'))) -%>");
+<% end %>
+
+<% if @uv_data.present? %>
+  $('#chart-4').html("<%= escape_javascript(high_chart('chart_basic_line4', chart(@uv_categories, @uv_data, title: '访客数（UV）', serie_name: '访客量'))) -%>");
+<% end %>

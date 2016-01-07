@@ -1,0 +1,95 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微医疗', hospitals_url %></li>
+      <li><%= link_to '科室管理', hospital_departments_url %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+       <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+         <div class="widget-box transparent" id="menu">
+           <div class="widget-header">
+             <h4>
+              <i class="icon icon-cogs"></i>科室管理
+            </h4>
+
+            <div class="widget-toolbar no-border">
+              <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-title="新增科室" data-height="300" data-parent-id>
+                <i class="icon-plus"></i>   新增科室
+              </a>
+            </div>
+          </div>
+          <div class="widget-body">
+           <div id="tree1" class="tree tree-selectable">
+            <%= render :partial=> "sub_menu", :collection => @hospital_departments.root.order(:sort), :as =>:sub_menu %>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6 margin-top-10" id="form"></div>
+    
+  </div>
+</div>
+</div>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+
+<script type="text/javascript">
+
+  $(function () {
+    $(document).on("click",".tree-add, .menu-category",function(){
+      var parent_id = $(this).closest('.current').attr("data-id");
+      var url = "<%= new_hospital_department_path %>" + "?parent_id="
+      if(parent_id){url += parent_id}
+        $.get(url,function(html){
+          $('#form').html(html);
+          $("#hospital_department_name").focus();
+        });
+    });
+    $(document).on("click",".ico-delete",function(){
+      var self = $(this),
+      p=self.parent().parent()[0].tagName;
+      if(p=="DT"||p=="dt"){
+        self.parents("dl").remove();
+      }else{
+        self.parents(p).remove();
+      }
+    });
+
+    $(".tree-folder-header, .tree-item", function () {
+      $(this).find(".tree-btn").hide();
+    });
+    $('#tree1').on("mouseenter", ".tree-folder-header, .tree-item", function () {
+      $(this).find(".tree-btn").show();
+    });
+    $('#tree1').on("mouseleave", ".tree-folder-header, .tree-item", function () {
+      $(this).find(".tree-btn").hide();
+    });
+    $('#tree1').on("click", ".fa-plus-square", function () {
+      $(this).closest('.current').find('.tree-folder-content').toggle();
+    });
+
+    $('.tree-tools').on('click', 'a', function(){
+      var content = $(this).closest('.current').find('.tree-folder-content');
+      if(content.is(':hidden')){
+        content.hide();
+      }else{
+        content.show();
+      }
+    });
+
+    $('.ace-switch-4').click(function(){
+      $(this).next().next().click();
+    });
+  });
+</script>
+<% end %>

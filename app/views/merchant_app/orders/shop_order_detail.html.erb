@@ -1,0 +1,113 @@
+<% title "详情" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="hide=true"<% end %>
+<% content_for :header do %>
+  <header>
+    <%= link_to shop_orders_merchant_app_orders_url(role: params[:role], role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <span class="text">详情</span>
+    <a href="javascript:;"></a>
+  </header>
+  <div class="mod-foot">
+    <div class="cell" ng-hide="hide">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(2)">完成</a>
+    </div>
+    <div class="cell" ng-hide="hide">
+      <a href="javascript:;" class="btn btn-biger btn-primary" ng-click="change_status(-1)">流单</a>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="mod-list">
+  <dl>
+    <dd>
+      <p>订单号：{{order.order_no}}</p>
+      <p>门店：{{order.branch_name}}</p>
+      <p>姓名：{{order.username}}</p>
+      <p>手机号：{{order.mobile}}</p>
+      <p>下单时间：{{order.created_at}}</p>
+      <p>就餐时间：{{order.book_at}}</p>
+      <p>总价：{{order.total_amount}}</p>
+      <p>订单状态：{{order.status}}</p>
+      <p>备注：{{order.description}}</p>
+      <p>外送地址: {{order.address}}</p>
+      <p>菜品详情: </p>
+      <p id="raw">
+      {{order.items}}
+      </p>
+    </dd>
+  </dl>
+</div>
+
+<script>
+var app = angular.module('app', []);
+function customersController($scope,$http) {
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/shop_orders/#{params[:id]}?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>').success(function(response) {
+        if(response.result == 'success'){
+          $scope.order = response.data;
+          $scope.set_visable($scope.order.status, false);
+          console.log(response);
+          var a = $("#raw").text();
+          $("#raw").html(a);
+        }
+        else{
+          console.log(response);
+        }
+        var a = $("#raw").text();
+        $("#raw").html(a);
+    }).error(function(response) {
+      console.log(response);
+    });
+
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ShopOrder&source=winwemedia_shop_order&is_read=1" %>').success(function(response) {
+      var a = $("#raw").text();
+      $("#raw").html(a);
+      console.log(response);
+    })
+    .error(function(response) {
+      console.log(response);
+    });
+    var a = $("#raw").text();
+    $("#raw").html(a);
+    $scope.change_status = function(status) {
+        if(confirm('确认是否执行此操作？')){
+          $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/shop_orders/#{params[:id]}?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status).success(function(response) {
+            if(response.result == 'success'){
+              $scope.set_visable(status, true);
+              var a = $("#raw").text();
+              $("#raw").html(a);
+            }else{
+                console.log(response);
+                alert('操作失败');
+            }
+            }).error(function(response) {
+                console.log(response);
+                alert('操作失败');
+            });
+        }
+    };
+
+    $scope.set_visable = function(status, flag) {
+      if(flag){
+        window.location.href = '<%= raw shop_orders_merchant_app_orders_url(role: params[:role], role_id: @login_user.id, token: @login_user.auth_token) %>'
+      }
+      else{
+        switch(status){
+          case 0:
+          $scope.hide = true;
+          break;
+          default:
+            $scope.hide = false;
+            break;
+        }
+      }
+    }
+}
+customersController.inject = ['$scope', '$http'];
+app.controller('customersController', customersController);
+
+$(function(){
+
+var a = $("#raw").text();
+          $("#raw").html(a);
+        })
+</script>

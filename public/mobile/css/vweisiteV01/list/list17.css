@@ -1,0 +1,57 @@
+.box{overflow: hidden;display: inline-block; padding: 10px;}
+.box,
+.box a{color:#fff;}
+.index li{width: 50%; float: left; height: 180px; padding: 5px; list-style: none;}
+.index li a{width: 100%; height: 100%; display:block; float: left; border-radius: 5px; color: #fff; text-align: center;}
+.index li small{
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+.index li img{width: 100%; min-height: 100%;}
+.index li:nth-child(4n+1) a img,
+.index li:nth-child(4n+4) a img{width: auto; max-height: 40px; min-height: 40px;}
+.index li:nth-child(4n+1) a{ background: #5ebddd; display: table-cell; vertical-align: middle;}
+.index li:nth-child(4n+2) a{ background: #fff; position: relative; color: #5ebddd; padding: 0;}
+.index li:nth-child(4n+3) a{background: #fff; position: relative; color: #feb455; padding: 0;}
+.index li:nth-child(4n+4) a:first-child{ background: #feb455; vertical-align: middle; margin-bottom: 10px; height: 80px;}
+.index li:nth-child(4n+4) a:last-child{ background: #a1da7b; vertical-align: middle; height: 80px;}
+.index li:nth-child(4n+1) a i{ height: 80px; line-height: 80px;}
+.index li:nth-child(4n+1) .fa,
+.index li:nth-child(4n+4) .fa{ font-size: 40px;}
+.index li:nth-child(4n+2) .fa,
+.index li:nth-child(4n+3) .fa{ font-size: 80px; line-height: 140px;}
+.index li:nth-child(4n+2) a small,
+.index li:nth-child(4n+3) a small{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding:0 10px;
+    width: 100%;
+}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+
+}
+@media only screen and (max-width:320px){
+
+}
+@media only screen and (min-width:1224px){
+
+}
+@media only screen and (max-width:1080px){
+
+}

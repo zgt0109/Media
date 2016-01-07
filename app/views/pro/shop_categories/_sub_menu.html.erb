@@ -1,0 +1,60 @@
+<% if sub_menu.has_children? %>
+   <script>
+    // alert("<%= sub_menu.id %>:<%= sub_menu.name %> has children");
+   </script>
+    <div class="tree-folder tree-li current" data-id="<%= sub_menu.id %>" data-name="<%= sub_menu.name %>" data-parent-id="<%= sub_menu.parent_id %>">
+      <div class="tree-folder-header" data-level="<%= sub_menu.parent_id == 0 ? 0 : 1%>" >
+        <i class="tree-fa fa fa-plus-square" id="square-parent-id-<%= sub_menu.id %>"></i>
+        <div class="tree-folder-name"><%= sub_menu.name %></div>
+        <div class="tree-tools" data-id="<%= sub_menu.id %>">
+          <% if sub_menu.parent_id == 0 %>
+          <div>
+            <%= link_to '', new_shop_category_path( parent_id: sub_menu.id), remote: true,  class: 'fa fa-plus tree-add' %>
+          </div>
+          <% end %>
+          <div>
+            <%= link_to "", edit_shop_category_path(sub_menu), remote: true, class: "fa fa-pencil tree-edit" %>
+          </div>
+          <div>
+            <%= link_to "", sub_menu, method: :delete, remote: true,  class: "fa fa-times tree-remove", confirm: "确认删除？" %>
+          </div>
+          <div>
+            <%= link_to "", up_shop_category_path(sub_menu),method: :post, remote: true,   class: "fa fa-long-arrow-up tree-up" %>
+          </div>
+          <div>
+            <%= link_to "", down_shop_category_path(sub_menu),method: :post, remote: true,   class: "fa fa-long-arrow-down tree-down" %>
+          </div>
+        </div>
+
+      </div>
+      <div class="tree-folder-content" style="display: none;">
+        <%= render :partial=> "pro/shop_categories/sub_menu", :collection => sub_menu.children.order(:sort), :as =>:sub_menu %>
+      </div>
+    </div>
+<% else %>
+
+    <div class="tree-item tree-li current" data-id="<%= sub_menu.id %>" data-name="<%= sub_menu.name %>" data-parent-id="<%= sub_menu.parent_id %>" data-level="<%= sub_menu.parent_id == 0 ? 0 : 1 %>">
+      <i class="tree-fa fa fa-circle"></i>
+      <div class="tree-item-name"><%= sub_menu.name %></div>
+      <div class="tree-tools" data-id="<%= sub_menu.id %>">
+        <% if sub_menu.parent_id == 0 %>
+            <div>
+              <%= link_to '', new_shop_category_path( parent_id: sub_menu.id), remote: true,  class: 'fa fa-plus tree-add' %>
+            </div>
+        <% end %>
+        <div>
+          <%= link_to "", edit_shop_category_path(sub_menu), remote: true, class: "fa fa-pencil tree-edit" %>
+        </div>
+        <div>
+          <%= link_to "", sub_menu, method: :delete, remote: true, class: "fa fa-times tree-remove", confirm: "确认删除？" %>
+        </div>
+        <div>
+          <%= link_to "", up_shop_category_path(sub_menu),method: :post, remote: true,   class: "fa fa-long-arrow-up tree-up" %>
+        </div>
+        <div>
+          <%= link_to "", down_shop_category_path(sub_menu),method: :post, remote: true,   class: "fa fa-long-arrow-down tree-down" %>
+        </div>
+
+      </div>
+    </div>
+<% end %>

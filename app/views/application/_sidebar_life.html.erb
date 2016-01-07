@@ -1,0 +1,20 @@
+<ul class="box-nav box important">
+  <li class="<%= (controller_name =~ /websites/i) ? "current pagecurrent" : '' %>">
+    <%= link_to pro_websites_path do %><span>基本信息</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /website_menus/i) ? "current pagecurrent" : '' %>">
+    <%= link_to pro_website_menus_path do %><span>菜单管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /website_popup_menus/i) ? "current pagecurrent" : '' %>">
+    <%= link_to pro_website_popup_menus_path do %><span>弹出菜单</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /website_pictures/i) ? "current pagecurrent" : '' %>">
+    <%= link_to pro_website_pictures_path do %><span>轮播图片</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /website_articles/i) ? "current pagecurrent" : '' %>">
+    <%= link_to pro_website_articles_path do %><span>文章管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /website_assistants/i) ? "current pagecurrent" : '' %>">
+    <%= link_to pro_website_assistants_path do %><span>生活小助手</span> <i></i><% end %>
+  </li>
+</ul>

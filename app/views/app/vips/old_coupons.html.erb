@@ -1,0 +1,80 @@
+<% provide(:title, '我的优惠券') %>
+<div class="html">
+  <div class="main">
+    <header>
+      我的优惠券
+      <i></i>
+    </header>
+    <section>
+      <div class="box box-list">
+        <div class="hd box-form" id="search">
+          <form>
+            <p><%= select_tag :status, options_for_select(@status_options, @status) %></p>
+            <p><input type="submit" class="btn" value="查询"/></p>
+          </form>
+
+        </div>
+      </div>
+      <% @activity_consumes.each_with_index do |consume, i| %>
+      <div class="box <%= 'active' if i==0 %>">
+        <div class="hd" id="consume_<%= consume.id %>">
+          <b>SN码：<%= consume.code %></b>
+          <span>有效期至：<%= consume.activity.try(:activity_type).try(:consume?) ? consume.activity.try(:end_at).try(:to_date) : ''%></span>
+          <em class="arrow"></em>
+        </div>
+        <div class="bd">
+          <p><%= consume.activity.try(:activity_type).try(:consume?) ? raw(consume.activity.active_activity_notice.try(:description)) : '' %></p>
+          <br>
+          <% if (consume.activity.try(:activity_type).try(:consume?) and consume.used?)  %>
+          <b>已使用</b>
+          <%end%>
+        </div>
+      </div>
+      <%end if @activity_consumes %>
+    </section>
+  </div>
+</div>
+<%= javascript_include_tag "mobile/main" %>
+<script>
+$(function(){
+  $(".box .hd").click(function(){
+    if($(this).attr('id') === 'search'){
+    }else{
+      openFold($(this), '.bd');
+    }
+  });
+  <%- if params[:init_id].present? %>
+    $('#consume_<%= params[:init_id].to_i %>').click();
+  <%- end %>
+});
+
+function use(id, sn){
+  if(confirm("确定要立即使用吗?")){
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      url: '/app/vips/old_coupons?id=' +id + '&sn=' + sn + '&' + Math.random(),
+      dataType: 'json',
+      timeout:30000,
+      success: function (data) {
+        if (data.ajax_msg) {
+          if(data.ajax_msg.status == 1){
+            alert('使用成功');
+            window.location.reload();
+          }else if(data.ajax_msg.status == 0){
+            alert('使用失败！');
+            window.location.reload();
+          }else{
+            alert('使用失败！');
+          }
+        }else {
+          alert('网络出现故障，请稍后重试');
+        }
+      },
+      error: function(e){
+      }
+    });
+
+  }
+}
+</script>

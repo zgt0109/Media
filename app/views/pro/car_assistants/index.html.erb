@@ -1,0 +1,108 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微汽车', car_shops_path %></li>
+      <li><%= link_to '车主关怀', car_assistants_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li class="active">
+          <a data-toggle="tab" href="#tab-1">
+            微信消息设置
+          </a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#tab-2">
+            实用工具
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div id="tab-1" class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-xs-12">
+              <!-- PAGE CONTENT BEGINS -->
+
+              <div class="alert alert-block alert-info">
+                <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                  <li>1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到实用工具；</li>
+                  <li>2、以下“<span class="required-star">* </span>”均为必填项；</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-xs-12 margin-top-20">
+              <%= form_for @car_activity_notice, validate: true do |f| %>
+                <%= f.hidden_field :supplier_id %>
+                <%= f.hidden_field :wx_mp_user_id %>
+                <%= f.hidden_field :car_shop_id %>
+                <%= f.hidden_field :notice_type %>
+                <%= f.fields_for :activity do |activity| %>
+                  <%= activity.hidden_field :supplier_id %>
+                  <%= activity.hidden_field :wx_mp_user_id %>
+                  <%= activity.hidden_field :activity_type_id %>
+                  <%= activity.hidden_field :status %>
+                  <%= activity.hidden_field :ready_at %>
+                  <%= activity.hidden_field :start_at %>
+                  <%= activity.hidden_field :end_at %>
+                  <%= render "weixin_preview", wx_title: @car_activity_notice.activity.try(:name) || '标题', wx_summary: @car_activity_notice.activity.try(:summary) || '描述' %>
+                  <div class="col-xs-12 col-md-6 col-lg-7">
+                    <%= render "weixin_setting", activity: activity, data_img: @car_activity_notice.activity.pic_url, pic_data_name:"car_activity_notice[activity_attributes][qiniu_pic_key]", pic_data_key: @car_activity_notice.activity.qiniu_pic_key %>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                    </div>
+                  </div>
+                <% end %>
+              <%- end %>
+            </div>
+          </div>
+        </div>
+        <div id="tab-2" class="tab-pane fade">
+          <div class="row">
+            <div class="col-md-12 margin-top-20">
+              <table id="gatesTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                <tr>
+                  <th>工具名称</th>
+                  <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <% @assistants.each do |assistant| %>
+                    <tr>
+                      <td><%= assistant.name %></td>
+                      <td>
+                        <label>
+                          <input data-id="<%= assistant.id %>" name="switch-field-<%= assistant.id %>" class="ace ace-switch ace-switch-4" type="checkbox" <%= 'checked' if @assistants_suppliers.include?(assistant.id) %> >
+                          <span class="lbl"></span>
+                        </label>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.page-content -->
+</div>
+<%- end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function () {
+          $('.ace-switch').on('change', function(){
+            var id = $(this).data('id');
+            $.post('/assistant_suppliers/toggle?id=' + id);
+          })
+        });
+    </script>
+<% end %>

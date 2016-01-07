@@ -1,0 +1,53 @@
+<%= form_for @vip_importing, validate: true do |f| %>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>会员卡号<span class="required-star">*</span></label>
+            <div class="clearfix"><%= @vip_importing.user_no %></div>
+        </div>
+
+        <div class="form-group">
+            <label>姓名<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :name, class: 'col-xs-12' %></div>
+        </div>
+
+        <div class="form-group">
+            <label>手机号码<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :mobile, class: 'col-xs-12' %></div>
+        </div>
+
+        <div class="form-group">
+            <label>等级<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <%= f.select :vip_grade_name, @vip_importing.vip_grades.vip_grade_names.map{|m| [m, m] } %>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>充值总额<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :total_recharge_amount, class: 'col-xs-12' %></div>
+        </div>
+
+        <div class="form-group">
+            <label>消费总额<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :total_consume_amount, class: 'col-xs-12' %></div>
+        </div>
+
+        <div class="form-group">
+            <label>可用余额<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :usable_amount, class: 'col-xs-12' %></div>
+        </div>
+
+        <div class="form-group">
+            <label>历史总积分<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :total_points, class: 'col-xs-12' %></div>
+        </div>
+
+        <div class="form-group">
+            <label>可用积分<span class="required-star">*</span></label>
+            <div class="clearfix"><%= f.text_field :usable_points, class: 'col-xs-12' %></div>
+        </div>
+
+    </div>
+</div>
+<%= render 'partials/modalFooter' unless @view_only %>
+<% end %>

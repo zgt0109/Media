@@ -1,0 +1,72 @@
+<dl class="active">
+  <dt>奖品设置<span class="fr">查看</span></dt>
+  <dd>
+    <div class="wrap-part">
+      <div class="box-table fl">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              <th>奖项说明</th>
+              <th>奖品名称</th>
+              <th>奖品数量</th>
+              <th>中奖几率%</th>
+              <th>当天次数</th>
+              <th>每人总次数</th>
+              <th>每人每天次数</th>
+              <% if action_name != 'show' %>
+              <th>操作</th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody id="prizes_body">
+            <% @activity.activity_prizes.each_with_index do |prize, i| %>
+              <tr id="prize-<%= prize.id %>">
+                <td><%= prize.title %></td>
+                <td><%= prize.prize %></td>
+                <td><%= prize.prize_count %></td>
+                <td><%= f prize.prize_rate %></td>
+                <td><%= prize.day_limit_count %></td>
+                <td><%= prize.people_limit_count %></td>
+                <td><%= prize.people_day_limit_count %></td>
+                <% if action_name != 'show' %>
+                <td>
+                  <a class="fgreen" onclick="popUrl(this)" data-name="<%= prize.id %>" data-w="800" data-h="500" data-title="编辑奖品设置" data-url="<%= activity_prize_path(prize, activity_id: @activity.id) %>">编辑</a>
+                  <% if i > 2 %>
+                  <%= link_to '删除', activity_prize_path(prize, activity_id: @activity.id), class: 'fgray', method: :delete, remote: true, confirm: '确定删除？' %>
+                  <% end %>
+                </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <p class="tleft">
+        <% if action_name != 'show' %>
+        <a id="add_prize" class="btn btn-big  btn-orange" onclick="popUrl(this)" data-name="new" data-w="800" data-h="500" data-title="新增奖品设置" data-url="<%= new_activity_prize_path(activity_id: @activity.id) %>" style="display: <%= 'none' if @activity.activity_prizes.count >= 6 %>">新增奖项</a>
+        <% end %>
+      </p>
+    </div>
+  </dd>
+</dl>
+
+<script id="prize_setting_template" type="text/x-handlebars-template">
+  <td>{{title}}</td>
+  <td>{{prize}}</td>
+  <td>{{prize_count}}</td>
+  <td>{{prize_rate}}</td>
+  <td>{{day_limit_count}}</td>
+  <td>{{people_limit_count}}</td>
+  <td>{{people_day_limit_count}}</td>
+  <td>
+    <a class="fgreen" onclick="popUrl(this)" data-name="{{id}}" data-w="800" data-h="500" data-title="编辑奖品设置" data-url="/activity_prizes/{{id}}?activity_id={{activity_id}}">编辑</a>
+    {{#unless fixed}}
+    <a href="/activity_prizes/{{id}}?activity_id={{activity_id}}" class="fgray" data-confirm="确定删除？" data-method="delete" data-remote="true" rel="nofollow">删除</a>
+    {{/unless}}
+  </td>
+</script>
+
+<script type="text/javascript">
+	var source   = $("#prize_setting_template").html();
+	var prize_tr = Handlebars.compile(source);
+</script>

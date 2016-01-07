@@ -1,0 +1,6 @@
+<% content_for :topbar do %>
+  <%= link_to_activities_by_type(8, class: 'h1 uncurrent') %>
+  <%= link_to '题库管理', fight_questions_path, class: 'h1 pagecurrent' %>
+  <%= link_to 'SN码管理',  consumes_activities_path(activity_type_id: 8), class: 'h1 uncurrent' %>
+  <%= link_to_activities_reports_by_type(8, class: 'h1 uncurrent') %>
+<% end %>

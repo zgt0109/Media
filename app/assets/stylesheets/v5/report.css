@@ -1,0 +1,36 @@
+@charset "utf-8";
+.report body{background-color: #f1f1f1;}
+.rep-c-3396d1{color: #3396d1;}
+
+.rep-header{padding: 42px 0px 24px; border-bottom: 1px #e1e1e1 solid; background: url(/assets/v5/report/report_detail_header_bg.png) center center no-repeat;}
+.rep-tit{font-size: 36px; color: #77c04b; text-align: center;}
+.rep-nav{height: 24px; line-height: 24px; margin-top: 25px; text-align: center; font-size: 0;}
+.rep-nav-item{display: inline-block; margin: 0px 4px;}
+.rep-nav-link{display: block; padding: 0px 18px; font-size: 13px; -webkit-border-radius: 7px;
+-moz-border-radius: 7px;
+-o-border-radius: 7px;
+border-radius: 7px; color: #fff;}
+.rep-nav-link:hover, .rep-nav-link.active{background-color: #024c6f; color: #fff; -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 37, 56, 0.75) inset;
+-moz-box-shadow: 0px 1px 3px 0px rgba(0, 37, 56, 0.75) inset;
+-o-box-shadow: 0px 1px 3px 0px rgba(0, 37, 56, 0.75) inset;
+box-shadow: 0px 1px 3px 0px rgba(0, 37, 56, 0.75) inset;}
+.rep-bread{height: 38px; line-height: 38px; background-color: #ffffff; border-bottom: 1px #e1e1e1 solid;}
+.rep-center{width: 960px; margin: 0px auto;}
+.rep-bread-txt{padding-left: 21px; background: url(/assets/v5/report/report_icon_home.png) 0px center no-repeat;}
+.rep-bread-link{color: #505050;}
+.rep-bread-curr{color: #999999;}
+.rep-art{width: 960px; margin: 0px auto 30px; padding: 46px 0px;  background-color: #fff;}
+.rep-art-center{width: 920px; margin: 0px auto; overflow: hidden;}
+.rep-art-tit{font-size: 30px; text-align: center; color: #767f93;}
+.rep-art-stit{color: #999999; text-align: center; margin-top: 12px;}
+.rep-art-sitem{padding: 0px 6px;}
+.rep-art-body{width: 700px; margin: 34px auto 0px; font-size: 14px; line-height: 1.6em;}
+
+.rep-list{width: 960px; margin: 30px auto; position: relative;}
+.rep-list-item{display: none; width: 310px; position: absolute; margin-bottom: 14px; border-bottom: 2px #dfdfdf solid; background-color: #fff; line-height: 1.6em;}
+.rep-list-wrapp{padding: 0px 18px 30px 22px;}
+.rep-list-tit{font-size: 16px; color: #767f93; font-weight: bold; margin-top: 28px;}
+.rep-list-desp{margin-top: 12px;}
+.rep-list-detail{margin-top: 12px;}
+.rep-list-item img{width: 310px; height: auto; display: block;}
+.rep-loading{opacity: 0; width: 960px; height: 40px; line-height: 40px; text-align: center; margin: 0px auto 30px; background: url(/assets/v5/loading.gif) center center no-repeat;}

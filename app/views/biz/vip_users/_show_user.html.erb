@@ -1,0 +1,18 @@
+<div id="vipInfo" class="tab-pane active">
+    <h3 class="text-info">基本信息</h3>
+    <p><span>会员卡号：<%= @vip_user.user_no %></span></p>
+    <p><span>等级：<%= @vip_user.vip_grade_name %></span></p>
+    <p><span>余额：<%= f @vip_user.usable_amount %></span></p>
+    <p><span>积分：<%= @vip_user.usable_points %></span></p>
+    <p><span>领卡日期：<%= @vip_user.created_at %></span></p>
+    <h3 class="text-info">领卡时填写信息</h3>
+    <% if @custom_fields.present? %>
+      <% @custom_fields.each do |field| %>
+        <%- next if %w(姓名 电话).include?(field.name) %>
+        <% value = field.custom_values.where(vip_user_id: @vip_user.id).first %>
+        <p><span><%= field.name %>：</span><%= value.value rescue nil %></p>
+      <% end %>
+    <% else %>
+      <p><span>暂无信息</span></p>
+    <% end %>
+</div>

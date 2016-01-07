@@ -1,0 +1,74 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微调研', surveys_activities_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+
+    <div class="page-content">
+      <%= form_for @search, url: activity_survey_questions_path, html: { method: :get } do |f| %>
+      <div class="col-sm-12">
+        <div class="col-md-3 row">
+          <div class="input-group input-group-text col-xs-12 row">
+            <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入题目名称" %>
+            <%= hidden_field_tag :activity_id, @activity.id %>
+          </div>
+        </div>
+        <div class="col-md-3 row">
+          <%= f.submit '查询', class: 'btn btn-primary btn-sm btn-filter'%>
+        </div>
+        <div class="col-md-3 row pull-right">
+          <!-- <a class="btn btn-primary btn-sm pull-right btn-filter" href="javascript:;" data-toggle="modals" data-target="addQuestion" data-height="600" data-title="新增题目" data-iframe="<%#= new_activity_survey_question_path(activity_id: params[:activity_id]) %>">新增题目</a> -->
+          <%= link_to '新增题目', new_activity_survey_question_path(activity_id: @activity.id), class: 'btn btn-primary btn-sm pull-right btn-filter' %>
+        </div>
+      </div>
+      <% end %>
+      <div class="col-md-12 margin-top-20">
+        <table id="questionTable" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th width="50%">题目排序</th>
+              <th>题目名称</th>
+              <th width="20%">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @activity_survey_questions.each_with_index do |question, index| %>
+              <tr>
+                <td>第<%= (@activity_survey_questions.current_page - 1) * @activity_survey_questions.limit_value + index + 1 %>题</td>
+                <td><%= question.name %></td>
+                <td>
+                  <!-- <a class="fgreen" href="javascript:;" data-toggle="modals" data-target="addQuestion" data-height="600" data-title="编辑题目" data-iframe="<%#= edit_activity_survey_question_path(question, activity_id: params[:activity_id]) %>">编辑</a> -->
+                  <%= link_to '编辑', edit_activity_survey_question_path(question, activity_id: params[:activity_id]), class: 'fgreen' %>
+                  <%= link_to '上移', update_sorts_activity_survey_questions_url(activity_id: @activity.id, id: question.id, type: 'up') unless question.first? %>
+                  <%= link_to '下移', update_sorts_activity_survey_questions_url(activity_id: @activity.id, id: question.id, type: 'down') unless question.last? %>
+                  <%= link_to "删除", activity_survey_question_path(question, activity_id: @activity.id), class: "fgreen", method: "delete", confirm: "是否确定要删除这道题目？" %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @activity_survey_questions.blank? %>
+              <tr><td colspan="3">无记录</td></tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @activity_survey_questions %>
+      </div>
+
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          <% if params[:type] == 'new' %>
+            $('a[data-target="addQuestion"]').click();
+          <% end %>
+      });
+    </script>
+<% end %>

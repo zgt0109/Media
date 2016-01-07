@@ -1,0 +1,20 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li>
+        <i class="icon-home home-icon"></i>
+        <a href="/">首页</a>
+    </li>
+
+    <% @current_titles.each do |t|%>
+      <li>
+        <% if t.is_a?(Hash) %>
+          <%= link_to t[:title], t[:href]%>
+        <% else %>
+          <%= link_to "#{t}", ""%>
+        <% end %>
+      </li>
+    <% end if @current_titles.present? %>
+  </ul>
+  <!-- .breadcrumb -->
+  <%= render '/layouts/qrcode' %>
+</div>

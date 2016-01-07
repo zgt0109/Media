@@ -1,0 +1,161 @@
+<%= javascript_include_tag "mobile/group/idangerous.swiper.min" %>
+
+<% provide(:title, @group_item.name) %>
+
+<% content_for :body_class do  %>bggrey<% end %>
+
+<%= content_tag :div, class: 'swiper-container' do %>
+  <div class="swiper-wrapper">
+    <% @group_item_pictures.each do |p| %>
+      <div class="swiper-slide ">
+        <%= image_tag p.pic %>
+      </div>
+    <% end %>
+  </div>
+  <div class="pagination"></div>
+<% end if @group_item_pictures.present? %>
+
+<div class="buy_bar bgf bordb">
+  <div class="left price1">
+    <strong class=""> <%= f @group_item.price %>元</strong> <span class="del"><%= f @group_item.market_price %>元</span>
+  </div>
+  <% if @group_item.selling? && @group_item.out_sell_time %>
+    <%#= link_to  '立即购买', order_mobile_group_item_url(supplier_id: @supplier.id, id: @group_item.id), class: 'buy_btn right' %>
+    <%= link_to  '立即购买', new_mobile_group_order_url(supplier_id: @supplier.id, group_item_id: @group_item.id), class: 'buy_btn right' %>
+  <% elsif @group_item.deleted? %>
+    <%= link_to  '此商品已下架', 'javascript:;', class: 'buy_btn right' %>
+  <% elsif @group_item.end_at < Time.now %>
+    <%= link_to  '团购已结束', 'javascript:;', class: 'buy_btn right' %>
+  <% end %>
+</div>
+
+<div class="info_cont ckeditor_content">
+  <div class="h6 bordb2"><i class="com_icon icon1"></i><%= @group_item.name %></div>
+  <%= raw @group_item.description %>
+  <p>团购时间：<br>
+    <%= date_format_full_l @group_item.start_at %> ~ <%= date_format_full_l @group_item.end_at %></p>
+</div>
+
+<% @groupable = @group_item.groupable %>
+<% if @groupable.present? %>
+  <div class=" info_cont info_comment  mart5 goods-item">
+    <!--div class="shop_name  bordb2">
+      <div class="">
+        <div class="h6 ">
+          <a href="#">
+            <i class="com_icon icon2 left mart7"></i>
+            <div class="auto overhidden ">宫尚品宫尚品宫(锦绣华府店)</div>
+          </a>
+        </div>
+        <p><i class="com_icon icon3 left"></i><span class="auto  inline-block">宣城市宣州区敬亭路华邦锦绣华府C2-1幢1号</span></p>
+      </div>
+      <div class="  wid50">
+        <a class="right fa fa-phone" href="tel:11111111"></a>
+      </div>
+    </div-->
+    <!--div class="h6 f14"><i class="com_icon2 arrow right"></i><strong><a class="red inline-block" href="list.html">查看全部分店</a></strong> </div-->
+  </div>
+<% end %>
+
+<div class="info_cont info_comment  mart5">
+  <div class="h6 bordb2"><i class="com_icon icon4"></i>套餐说明</div>
+  <div class="bordb2 tips ckeditor_content">
+    <%= raw @group_item.package_description %>
+  </div>
+  <!--div class="h6 f14">
+    <i class="com_icon2 arrow right"></i><strong><a class="red inline-block" href="pictxt.html">查看图文详情</a></strong> 
+  </div-->
+</div>
+
+<div class="info_cont info_comment  mart5">
+  <div class="h6 bordb2 "><i class="com_icon icon5"></i>特别提醒</div>
+    <div class="ckeditor_content">
+      <%= raw @group_item.special_warn %>
+    </div>
+</div>
+
+<div class="info_cont info_comment mart5" >
+  <a name="comment_tag"></a>
+  <%= form_for @comment, url: mobile_group_comments_url(supplier_id: @supplier.id), method: :post, validate: true do |f| %>
+    <%= hidden_field_tag "id", @group_item.id  %>
+    <%= f.hidden_field :wx_user_id %>
+    <%= f.hidden_field :group_order_id %>
+    <div class="h6 bordb2 clear"><i class="com_icon icon6"></i>商品评价(<%= @group_item.group_comments.count %>)<span class="right comment_btn">添加评论</span></div>
+    <div class="comment_cont hide">
+      <p>
+        <%= f.text_area :content, placeholder: '请输入您的评论......', maxlength: 140, rows: 4, class: 'comment_txtare' %>
+        <span class="grey">(最多可输入140字)</span>
+      </p>
+      <p>
+        <%= f.text_field :name, placeholder: '请输入您的昵称', class: 'comment_input' %>
+      </p>
+    </div>
+  <% end %>
+  <ul class="comment_list">
+    <% @group_item.group_comments.each do |c| %>
+      <li>
+        <p><span class="red"><%= c.name %></span>  <%= c.created_at %></p>
+        <p><%= c.content %></p>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+
+<% content_for :document_ready_js do  %>
+  <script>
+    $(".ckeditor_content img").css({"width":"auto","height":"auto"});
+    $(function () {
+      <% if @groupable.present? %>
+            $.ajax({
+                type: "GET",
+                url: "<%= WMALL_HOST %>/wxapi/shops/<%= @groupable.id%>.json?supplier_id=<%= @supplier.id%>",
+                dataType: "json",
+                success: function(data){
+                  var html = '<div class="shop_name  bordb2">\
+                                <div class="">\
+                                  <div class="h6 ">\
+                                    <a href="<%= WMALL_HOST%>/wx/wxshop/toShopDetail?shopId=<%= @groupable.id %>&supplier_id=<%= session[:supplier_id] %>&wx_user_open_id=<%= session[:openid]%>&wx_mp_user_open_id=<%=@supplier.try(:wx_mp_user).try(:uid)%>">\
+                                      <i class="com_icon icon2 left mart7"></i>\
+                                      <div class="auto overhidden ">'+data['name']+'</div>\
+                                    </a>\
+                                  </div>\
+                                  <p><i class="com_icon icon3 left"></i><span class="auto  inline-block">'+data['address']+'</span></p>\
+                                </div>\
+                                <div class="  wid50">\
+                                  <a class="right fa fa-phone" href="tel:'+ data['phone'] + '"></a>\
+                                </div>\
+                              </div>';
+                   $(".goods-item").html(html);
+                }
+            });
+        <% end %>
+     
+
+      $('.buy_bar').positionSticky();
+      var mySwiper = new Swiper('.swiper-container', {
+          pagination: '.pagination',
+          paginationClickable: true,
+      });
+      $('form').on('click', '.right.comment_btn', function(){
+        if($(this).text() == '发布评论'){
+          if(!$('#group_comment_content').val()){
+            alert('评论不能为空！');
+            $('#group_comment_content').focus();
+            return false;
+          }
+          if(!$('#group_comment_name').val()){
+            alert('昵称不能为空！');
+            $('#group_comment_name').focus();
+            return false;
+          }
+          $('form').submit();
+        }
+      });
+    });
+  </script>
+<% end %>
+<% content_for :ckeditor_css do  %>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/life/ckeditor_content.css"/>
+<% end %>
+

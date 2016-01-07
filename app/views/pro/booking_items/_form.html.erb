@@ -1,0 +1,235 @@
+<%= form_for @booking_item, validate: true, html: {id: 'pro_booking_item'} do |f| %>
+    <%= f.hidden_field :supplier_id %>
+    <%= f.hidden_field :wx_mp_user_id %>
+
+    <div class="col-xs-12">
+
+      <div class="form-group">
+        <label class="control-label">分类<span class="required-star">*</span></label>
+        <div class="col-xs-12 row" id="selects">
+          <% @booking_categories_selects.each do |select|%>
+              <%= select_tag "booking_category_id#{select[0]}", options_for_select(select[1].collect{|t| [t.name, t.id]}, selected: params["booking_category_id#{select[0]}".to_sym]), class: "col-xs-2 margin-right-5 booking_category", rel: select[0]  %>
+          <% end %>
+          <%= f.hidden_field :booking_category_id, class: 'hidden_booking_category_id' %>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">名称<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.text_field :name, class: "col-md-6"%>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">价格<span class="required-star">*</span><small class="text-warning">价格必须大于0</small></label>
+        <div class="clearfix">
+          <%= f.text_field :price, class: "col-md-6" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">库存<span class="required-star">*</span><small class="text-warning">库存必须大于0</small></label>
+        <div class="clearfix">
+          <%= f.text_field :qty, class: "col-md-6" %>
+        </div>
+      </div>
+
+      <div class="VCFields">
+        <label class="control-label">订单接收设置<span class="required-star">*</span></label>
+        <div class="radioTab">
+          <% BookingItem.limit_type_options.each do |m| %>
+              <% next if m[1] == 4 %>
+              <label class="control-label">
+                <%= f.radio_button :limit_type, m[1], id: "no_limit", data: {toggle: 'radioTab', target: "radioTab#{m[1]}" }, class: 'ace'  %>
+                <span class="lbl"><%= m[0] %></span>
+              </label>
+          <% end %>
+        </div>
+
+        <div class="radio-tab-content">
+          <div id="radioTab1" class="radio-tab-pane <%= 'hide' unless f.object.limit_type == BookingItem::NO_LIMIT %>">
+          </div>
+          <div id="radioTab2" class="radio-tab-pane <%= 'hide' unless f.object.limit_type == BookingItem::TIME_LIMIT %>">
+            <div class="clearfix">
+              <div class="input-group col-xs-6 no-padding">
+                <%= f.text_field :start_at, class: 'date-time input-sm form-control active' %>
+                <span class="input-group-addon"> - </span>
+                <%= f.text_field :end_at, class: 'date-time input-sm form-control' %>
+              </div>
+            </div>
+          </div>
+          <div id="radioTab3" class="radio-tab-pane <%= 'hide' unless f.object.limit_type == BookingItem::DAY_QTY_LIMIT %>">
+            <div class="clearfix">
+              <%= f.text_field :limit_qty, class: 'col-xs-6' %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">图片<span class="required-star">*</span><small class="text-warning">图片建议尺寸：640像素*640像素</small></label>
+        <div class="clearfix">
+          <div class="cieldon-file" data-type="6" data-width="160" data-height="160" data-imgs-type="booking_item_pictures" data-img="<%= f.object.booking_item_pictures.map(&:pic).map(&:to_s).join(',') %>"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">详情<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= render "shared/form_rich_text", field_name: "description", obj: f.object, f: f, wrapper_html_options: {class: "form-control"}%>
+        </div>
+      </div>
+
+      <div class="form-group ">
+        <%= f.submit '确定', class: 'btn btn-sm btn-primary' %>
+        <a href="javascript:;" class="btn btn-sm btn-default" onclick="javascript:history.go(-1);">返回</a>
+      </div>
+
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        function set_info(element){
+            var html = '<div class="modal fade modal-text" id="popup-confirm" style="display: block;">' +
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
+                    '<h4 class="modal-title">系统提示</h4>' +
+                    '</div><form role="form" action="" method="">';
+
+            html += '<div class="modal-body">' +
+                    '<p class="text-center">确认删除图片</p></div>' +
+                    '<div class="clearfix"></div>';
+
+            html += '<div class="modal-footer">';
+            html += '<a href="javascript:;" class="btn btn-sm btn-primary" id="pop-confrim-submit">确定</a>';
+            html += '<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">取消</button>';
+            html += '</div></form>';
+            html += '</div>';
+
+            html += '</div></div></div>';
+            $('#popup-confirm').remove();
+            $("body").append(html);
+            $('#popup-confirm').modal('show');
+            $('#popup-confirm').on('click', 'button[data-dismiss="modal"], .btn-primary', function(){
+                var dc = $(parent.document),
+                    $modal = dc.find('.modal'),
+                    $modalBg = dc.find(".modal-backdrop")
+                $modal.attr('aria-hidden', true).removeClass('in');
+                $modalBg.remove();
+                $(parent.document.body).removeClass('modal-open');
+                $modal.remove();
+                if($(this).hasClass('btn-primary')){
+                    $(element).next().val(1);
+                    $(element).closest('.file-img').hide();
+                }
+            });
+            return false;
+        }
+
+        $(function(){
+            var imgs = $('.file-img');
+            <% @booking_item.booking_item_pictures.each_with_index do |m, i| %>
+                <% uuid = UUIDTools::UUID.random_create.to_s[0,6] %>
+                imgs.eq(parseInt('<%= i + 1%>')).append('<input class="destroy" name="booking_item[booking_item_pictures_attributes][<%= uuid %>][_destroy]" type="hidden">')
+                imgs.eq(parseInt('<%= i + 1%>')).append('<input class="destroy" name="booking_item[booking_item_pictures_attributes][<%= uuid %>][id]" type="hidden" value="<%= m.id %>">')
+            <% end %>
+
+
+            $('.cieldon-file').on('click', '.file-del', function(){
+                set_info($(this));
+            });
+            $(".hidden_booking_category_id").val($('.booking_category:visible:last').val());
+            $("#selects").on("change", ".booking_category", function(){
+                if($(this).val() == "-1"){
+                }
+                else{
+                    $.ajax({
+                        type: "GET",
+                        url: "/booking_categories/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=1',
+                        success: function(data) {
+                            return false;
+                        },
+                        error: function() {
+                            return false;
+                        }
+                    });
+                }
+            });
+
+            $('#pro_booking_item input[type=submit]').click(function() {
+                var tel_reg = /^(-|\+)?\d+(\.\d+)?$/;
+                var now = new Date().format("yyyy-MM-dd");
+                if(!$('#booking_item_booking_category_id').val()){
+                    showTip("warning", "请选择商品分类");
+                    $('.booking_category:visible:first').focus();
+                    return false;
+                }
+                if(!$("#radioTab2").hasClass('hide')){
+                    if(!$("#booking_item_start_at").val()){
+                        showTip("warning", "请填写限定开始时间");
+                        $("#booking_item_start_at").focus();
+                        return false;
+                    }
+//                else if($("#booking_item_start_at").val() < now){
+//                    showTip("warning", "限定开始时间不能小于当前时间");
+//                    $("#booking_item_start_at").focus();
+//                    return false;
+//                }
+                    else if(!$("#booking_item_end_at").val()){
+                        showTip("warning", "请填写限定结束时间");
+                        $("#booking_item_end_at").focus();
+                        return false;
+                    }
+//                else if($("#booking_item_end_at").val() < now){
+//                    showTip("warning", "限定结束时间不能小于当前时间");
+//                    $("#booking_item_end_at").focus();
+//                    return false;
+//                }
+                    else if($("#booking_item_end_at").val() < $("#booking_item_start_at").val()){
+                        showTip("warning", "限定结束时间不能小于限定开始时间");
+                        $("#booking_item_end_at").focus();
+                        return false;
+                    }
+
+                }
+                if(!$("#radioTab3").hasClass('hide')){
+                    if(!$("#radioTab3 #booking_item_limit_qty").val()){
+                        showTip("warning", "请输入限定数量");
+                        $("#radioTab3 #booking_item_limit_qty").focus();
+                        return false;
+                    }else if(!tel_reg.test($("#radioTab3 #booking_item_limit_qty").val())){
+                        showTip("warning", "限定数量必须是数字");
+                        $("#radioTab3 #booking_item_limit_qty").focus();
+                        return false;
+                    }else if(parseInt($("#radioTab3 #booking_item_limit_qty").val()) <= 0){
+                        showTip("warning", "限定数量必须大于0");
+                        $("#radioTab3 #booking_item_limit_qty").focus();
+                        return false;
+                    }else if(parseInt($("#booking_item_limit_qty").val()) > parseInt($("#booking_item_qty").val())){
+                        showTip("warning", "限定数量不能大于库存");
+                        $("#booking_item_limit_qty").focus();
+                        return false;
+                    }
+                }
+
+                if($('.file-img:visible').length < 2){
+                    showTip("warning", "请上传商品图片");
+                    return false;
+                }
+                if(!$('#booking_item_description').val()){
+                    showTip('warning','详情不能为空');
+                    return false;
+                }
+
+            });
+
+        });
+
+
+
+    </script>
+<% end %>

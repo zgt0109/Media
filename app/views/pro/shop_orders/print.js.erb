@@ -1,0 +1,4 @@
+var html = '<%= j (render :partial => 'pro/shop_orders/table', :object => @shop_order, :as => :shop_order) %>'
+$(".to_print").remove();
+$("body").append(html);
+window.print();

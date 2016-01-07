@@ -1,0 +1,119 @@
+<% content_for :breadcrumb_li do %>
+    <li><%= link_to_activities_by_type(@activity_type_id) %></li>
+<% end %>
+
+<% content_for :tab_content do %>
+    <div id="tab-1" class="tab-pane fade active in">
+        <div class="row">
+            <div class="col-sm-12">
+                <%= form_for @search, url: {action: action_name}, class: 'box-form form-row', html: { method: :get } do |f| %>
+                <div class="col-md-3 row">
+                    <div class="input-group input-group-text">
+                        <span class="input-group-addon">活动名称：</span>
+                        <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入活动名称" %>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-text">
+                        <span class="input-group-addon">关键词：</span>
+                        <%= f.text_field :keyword_like, class: 'col-xs-12', placeholder:"请输入关键词" %>
+                    </div>
+                </div>
+                <div class="col-md-3 row">
+                    <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                </div>
+                <% end %>
+                <% if @activity_type_id.present? %>
+                <div class="col-md-3 row pull-right">
+                    <%- if slots_path? %>
+                        <%= link_to '新增', new_slot_path, class: "btn btn-sm btn-primary pull-right" %>
+                    <%- elsif aids_path? %>
+                        <%= link_to '新增', new_aid_path, class: "btn btn-sm btn-primary pull-right" %>
+                    <%- elsif unfolds_path? %>
+                        <%= link_to '新增', new_unfold_path, class: "btn btn-sm btn-primary pull-right" if current_user.wx_mp_user.auth_service? %>
+                    <%- elsif recommends_path? %>
+                        <%= link_to '新增', new_recommend_path, class: "btn btn-sm btn-primary pull-right" if current_user.wx_mp_user.auth_service? %>
+                    <%- elsif guesses_path? %>
+                        <%= link_to '新增', new_guess_path, class: "btn btn-sm btn-primary pull-right" %>
+                    <%- elsif waves_path? %>
+                        <%= link_to '新增', new_wave_path, class: "btn btn-sm btn-primary pull-right" %>
+                    <%- elsif action_name == 'old_coupons' %>
+                        <%#= link_to '新增', new_coupon_path, class: "btn btn-sm btn-primary pull-right" %>
+                    <%- else %>
+                        <%= link_to '新增', new_activity_path(activity_type: @activity_type_id), class: "btn btn-sm btn-primary pull-right" %>
+                    <%- end %>
+                </div>
+                <% end %>
+            </div>
+            <div class="col-md-12 margin-top-20">
+                <table id="couponTable" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                        <tr>
+                            <th width="30%">活动名称</th>
+                            <th>关键词</th>
+                            <th>活动时间</th>
+                            <th>状态</th>
+                            <th width="25%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if @activities.each do |activity| %>
+                        <% activity.complete_cupon if activity.pending? %>
+                        <tr>
+                            <td><%= truncate_u activity.name, length: 16 %></td>
+                            <td><%= activity.keyword %></td>
+                            <td><%= activity.duration %></td>
+                            <td><%= show_activity_status(activity) %></td>
+                            <td>
+                                 <%- if action_name == "slots" %>
+                                    <%= link_to '查看', slot_path(activity) if activity.allow_show? %>
+                                    <%= link_to '设置', edit_slot_path(activity) if activity.allow_edit? %>
+                                 <%- elsif aids_path? %>
+                                    <%= link_to '查看', aid_path(activity) if activity.allow_show? %>
+                                    <%= link_to '设置', edit_aid_path(activity) if activity.allow_edit? %>
+                                 <%- elsif waves_path?  %>
+                                    <%= link_to '查看', wave_path(activity) if activity.allow_show? %>
+                                    <%= link_to '设置', edit_wave_path(activity) if activity.allow_edit? %>
+                                 <%- elsif guesses_path?  %>
+                                    <%= link_to '查看', guess_path(activity) if activity.allow_show? %>
+                                    <%= link_to '设置', edit_guess_path(activity) if activity.allow_edit? %>
+                                <%- elsif unfolds_path?  %>
+                                    <%= link_to '查看', unfold_path(activity) if activity.allow_show? %>
+                                    <%= link_to '设置', edit_unfold_path(activity) if activity.allow_edit? %>
+                                <%- elsif recommends_path?  %>
+                                    <%= link_to '查看', recommend_path(activity) if activity.allow_show? %>
+                                    <%= link_to '设置', edit_recommend_path(activity) if activity.allow_edit? %>
+                                <%- else %>
+                                    <%= link_to '查看', activity if activity.allow_show? %>
+                                    <%= link_to '设置', [:edit, activity] if activity.allow_edit? %>
+                                <%- end %>
+                                <%= link_to '停止', [:stop, activity], method: :post, data: { confirm: t('.confirm', default: t("helpers.links.confirm", default: 'Are you sure?')) }  if activity.allow_stop? %>
+                                <%= link_to '删除', activity, method: :delete, data: { confirm: t('.confirm', default: t("helpers.links.confirm", default: 'Are you sure?')) } if activity.setting? or activity.stopped? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::HAS_ENDED)) %>
+                                <%= link_to '开启', [:active, activity], method: :post if activity.allow_active? %>
+                                 <%- if unfolds_path?  %>
+                                    <%= link_to 'SN码管理', consumes_unfolds_path(activity_id: activity.id) unless activity.setting? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::WARM_UP)) %>
+                                <%- elsif guesses_path? %>
+                                     <%= link_to 'SN码管理', consumes_guesses_path(activity_id: activity.id) unless activity.setting? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::WARM_UP)) %>
+                                <%- elsif recommends_path? %>
+                                     <%= link_to 'SN码管理', consumes_recommends_path(activity_id: activity.id) unless activity.setting? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::WARM_UP)) %>
+                                <%- else %>
+                                    <%= link_to 'SN码管理', consumes_activities_path(activity_id: activity.id) unless activity.setting? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::WARM_UP)) %>
+                                <%- end %>
+                                <%#- if unfolds_path?  %>
+                                    <%#= link_to '统计', chart_unfolds_path(id: activity.id) unless activity.setting? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::WARM_UP)) %>
+                                <%#- end %>
+                            </td>
+                        </tr>
+                        <% end.blank? %>
+                        <tr><td colspan="5" class="green text-center">没有活动</td></tr>
+                        <% end %>
+                    </tbody>
+                </table>
+                <%= paginate @activities %>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<%= render 'activities/main_content' %>
+

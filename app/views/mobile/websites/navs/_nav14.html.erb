@@ -1,0 +1,59 @@
+<% content_for :nav_section do %>
+  <% website_menus = website_menus[0..5] %>
+  <% if website_menus.length > 0  %>
+
+    <section class="mod-navLine navLine14">
+      <div class="navLine-menu" id="navLine-menu">
+        <ul class="p1">
+          <li class="s1"><a>菜单</a>
+            <ul class="p2">
+              <% website_menus.each_with_index do |menu, index| %>
+                <%
+                    menus = []
+                    if menu.has_sub_menus?
+                      menus = menu.sub_menus[0..5]
+                    elsif menu.multiple_graphic?
+                      main_material = menu.menuable
+                      if main_material.present?
+                        menus << main_material
+                        menus << main_material.children
+                        menus = menus.flatten[0..5]
+                      end
+                    end
+
+                %>
+                <li class="s2">
+                  <%# menus = menu.sub_menus[0..5] %>
+                  <% if menus.present? %>
+                    <a><span><%= menu.title %></span></a>
+                    <ul class="p3 a<%= menus.length %>">
+                      <% menus.each_with_index do |sub_menu, index| %>
+                        <li>
+                          <% if sub_menu.class.to_s == "Material" %>
+                              <%= link_to sub_menu.title, material_type_url(sub_menu, menu) %>
+                          <% else %>
+                              <%= link_to sub_menu.title, menu_url(sub_menu) %>
+                          <% end %>
+
+                        </li>
+                      <% end  %>
+                    </ul>
+                  <% else %>
+                    <%= link_to "<span>#{menu.title}</span>".html_safe, menu_url(menu) %>
+                  <% end %>
+                </li>
+              <% end  %>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  <% end  %>
+<% end %>
+
+<% content_for :document_ready_js do %>
+  navLineSwipe=divSwipe("navLine-menu");
+<% end %>
+
+

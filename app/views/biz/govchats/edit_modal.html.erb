@@ -1,0 +1,55 @@
+<%= form_tag update_activity_basecount_govchats_path(activity_id: @activity) do %>
+<%- if params[:chat_type] == "advise" %>
+	<div class="modal-body">
+		<div class="form-group">
+			<label>咨询总数显示</label>
+			<div class="clearfix">
+				<%= text_field_tag "advises_basecount", @activity.extend.advises_basecount, class: 'col-xs-9' %>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>回复总数显示</label>
+			<div class="clearfix">
+				<%= text_field_tag "advises_replies_basecount", @activity.extend.advises_replies_basecount, class: 'col-xs-9' %>
+			</div>
+		</div>
+	</div>
+<%- elsif  params[:chat_type] == "complaint" %>
+	<div class="modal-body">
+		<div class="form-group">
+			<label>投诉总数显示</label>
+			<div class="clearfix">
+				<%= text_field_tag "complaints_basecount", @activity.extend.complaints_basecount, class: 'col-xs-9' %>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>回复总数显示</label>
+			<div class="clearfix">
+				<%= text_field_tag "complaints_replies_basecount", @activity.extend.complaints_replies_basecount, class: 'col-xs-9' %>
+			</div>
+		</div>
+	</div>
+<%- elsif params[:chat_type] == "report" %>
+	<div class="modal-body">
+		<div class="form-group">
+			<label>举报总数显示</label>
+			<div class="clearfix">
+				<%= text_field_tag "reports_basecount", @activity.extend.reports_basecount, class: 'col-xs-9' %>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>回复总数显示</label>
+			<div class="clearfix">
+				<%= text_field_tag "complaints_replies_basecount", @activity.extend.reports_replies_basecount, class: 'col-xs-9' %>
+			</div>
+		</div>
+	</div>
+<%- end %>
+<div class="clearfix"></div>
+<div class="modal-footer">
+  <input type="submit" class="btn btn-sm btn-primary" value="确定"></input>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+<%- end %>
+<% content_for :custom_js do %>
+<% end %>

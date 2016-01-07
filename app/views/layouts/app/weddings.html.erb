@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%=  content_for?(:title) ? yield(:title) : "微婚礼" %></title>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/weddings/common.css"/>
+  <script type="text/javascript" src="/javascripts/jquery-1.8.2.min.js"></script>
+
+  <%= yield :head %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+  <%= render 'application/gb2big5' %>
+<div class="html">
+  <div class="main">
+<header>
+  <div class="top-nav">
+    <% if params[:controller] == "app/weddings" && params[:action] == "map" %>
+        <a class="ico-prev" href="<%= address_app_weddings_path(anchor: "mp.weixin.qq.com") %>"></a>
+    <% else %>
+        <a class="ico-prev" href="<%= app_weddings_path(anchor: "mp.weixin.qq.com") %>"></a>
+    <% end %>
+        <!--<a class="ico-prev" href="javascript:history.go(-1);"></a>-->
+    <span class="ico-logo"></span>
+    <a class="ico-music active" onclick="open_or_colse_music();" id="music_id"></a>
+      <audio loop="loop" id="audio" src="<%= @wedding.music_url%>">
+       <!-- <source src="<%#= @wedding.music_url%>" type="audio/mp3" >-->
+        Your browser does not support the audio element.
+      </audio>
+
+  </div>
+  <% unless params[:controller] == "app/weddings" && params[:action] == "map" %>
+  <div class="top-title">
+    <span class="title-man"><img src="/assets/weddings/ico-man.png"/><%= @wedding.groom %></span>
+    <span class="title-ring"><img src="/assets/weddings/ico-ring.png"/></span>
+    <span class="title-woman"><%= @wedding.bride  %><img src="/assets/weddings/ico-woman.png"/></span>
+    <span class="ico-bottom"></span>
+  </div>
+  <% end %>
+</header>
+<%= yield %>
+</div><!-- main end -->
+</div><!-- html end -->
+<%= render "application/app_footer" %>
+</body>
+
+</html>
+<script>
+    function open_or_colse_music(){
+        var audio = document.getElementById('audio');
+        if(audio.paused){
+            audio.play();
+            $("#music_id").removeClass("active");
+            //$("#music_id").addClass("ico-music");
+        }else if(audio.play){
+            audio.pause();
+            //$("#music_id").removeClass("ico-music");
+            $("#music_id").addClass("active");
+        };
+    }
+</script>

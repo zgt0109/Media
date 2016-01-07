@@ -1,0 +1,22 @@
+<%= form_tag update_user_prize_wx_wall_user_prize_path(@wx_wall), :method => :post do %>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="form-group">
+          <%= hidden_field_tag :user_prize_id, @wx_wall_prizes_wx_wall_user.id %>
+          <p><span>获奖人：<%= @wx_wall_prizes_wx_wall_user.nickname %></span></p>
+          <% if @wx_wall_prize %>
+            <p><span>奖品：<%= @wx_wall_prize.grade %>（<%= @wx_wall_prize.name %>）</span></p>
+          <% end %>
+          <p><span>中奖时间：<%= @wx_wall_prizes_wx_wall_user.created_at %></span></p>
+          
+        </div>
+        <div class="form-group text-center">
+          <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确认兑换</button>
+        </div>
+      
+    </div>
+  </div>
+</div>
+<% end %>

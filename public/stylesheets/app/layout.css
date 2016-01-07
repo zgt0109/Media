@@ -1,0 +1,10 @@
+#detail { padding: 15px; }
+#detail div.cover { margin-bottom: 10px; }
+#detail div.content p { line-height: 24px; table-layout: fixed; word-wrap: break-word; word-break: break-all; font-size: 14px; }
+img { max-width: 100% !important; }
+#menulist a { display: block; z-index: 1; color: #222222; border-bottom: 1px solid #DDDDDD; font-weight: bold; text-decoration: none; background: #F9F9F9; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; position: relative; padding: 8px 8px 10px; overflow: hidden; }
+#menulist a h2 { font-size: 18px; color: #2f2f2f; font-weight: normal; height: 24px; font-weight: normal; line-height: 24px; padding: 4px 0 8px; max-width: 100%; text-overflow: ellipsis; white-space: nowrap !important; white-space: normal; overflow: hidden; }
+#menulist a .img { width: 75px; height: 55px; float: left; margin: 0 10px 5px 0; display: inline; overflow: hidden; }
+#menulist a img { width: 75px; float: left; }
+#menulist a p { display: block; font-size: 14px; color: #808080; line-height: 20px; font-weight: normal; margin: 0; overflow: hidden; text-overflow: ellipsis; padding-right: 2px; height: 60px; }
+#detail .title { font-size: 20px; color: #000; word-break: normal; word-wrap: break-word; line-height: 30px; margin-bottom: 8px; }

@@ -1,0 +1,253 @@
+<% website = current_user.website || current_user.wx_mp_user.create_activity_for_website.website %>
+
+<% if params[:task_menu_id] && website_menu = WebsiteMenu.where(id: params[:task_menu_id]).first %>
+  <% data_uri = Base64.encode64(website.rqrcode(menu_url(website_menu)).to_blob).gsub(/\n/, "") rescue nil %>
+  <% @website_menu_qrcode_image_src = "data:image/jpeg;base64,#{data_uri}" if data_uri %>
+<% end %>
+<% if params[:task_name] == 'coupon' && coupon_menu = website.website_menus.where(name: '优惠券').first %>
+  <% data_uri = Base64.encode64(website.rqrcode(menu_url(coupon_menu)).to_blob).gsub(/\n/, "") rescue nil %>
+  <% @coupon_qrcode_image_src = "data:image/jpeg;base64,#{data_uri}" if data_uri %>
+<% end %>
+<!--mission框架代码块 -->
+<div class="mission_cont"> 
+  <!--任务一默认弹出-->
+  <div class="mission_box mission_box1">
+    <div class="mission_box_div">
+      <div class="mission_tit2">微枚迪欢迎您 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="/assets/novice_tasks/winwemedia_p1.jpg"/></span>
+          <div class="auto mission_txt"> 首先，通过四个新手任务快速了解微枚迪，完成新手任务可以帮助您更好地使用微枚迪完善您的公众平台。</div>
+        </div>
+        <div align="center"><a href="javascript:;" class="mission_btn mission_next">下一步</a></div>
+      </div>
+    </div>
+
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务一</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <p class="mission_name">为您的微官网取个名字</p>
+          <%= form_for website, remote: true, html: { class: 'g_padv50' } do |f| %>
+            <%= f.text_field :name, value: current_user.try(:nickname), class: 'form-control', placeholder: '微官网名称' %>
+          <% end %>
+        </div>
+        <div align="center"><a href="javascript:;" class="mission_btn mission_submit">下一步</a></div>
+      </div>
+    </div>
+
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务一已完成 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="<%= website.try(:pic_url) %>" width="142" height="142"/></span>
+          <div class="auto mission_txt"> 用手机扫描左侧二维码查看您的微官网，进行互动体验吧！ </div>
+        </div>
+        <div align="center"><a href="/" class="mission_btn">查看下一个任务</a></div>
+      </div>
+    </div>
+  </div>
+  
+  <!--4个任务 任务 一 -->
+  <div class="mission_box mission_box2"> <a href="javascript:;" class="fa fa-times mission_close"></a>
+    <div class="mission_box_div">
+      <div class="mission_tit2">微枚迪欢迎您 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="/assets/novice_tasks/winwemedia_p1.jpg"/></span>
+          <div class="auto mission_txt"> 首先，通过四个新手任务快速了解微枚迪，完成新手任务可以帮助您更好地使用微枚迪完善您的公众平台。</div>
+        </div>
+        <div align="center"><a href="javascript:;" class="mission_btn miss_step1">下一步</a></div>
+      </div>
+    </div>
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务一已完成 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="<%= website.try(:pic_url) %>" width="142" height="142"/></span>
+          <div class="auto mission_txt"> 用手机扫描左侧二维码查看您的微官网，进行互动体验吧！ </div>
+        </div>
+        <div align="center"><a href="/" class="mission_btn">查看任务二</a></div>
+      </div>
+    </div>
+  </div>
+  <!--任务二-->
+  <div class="mission_box mission_box2"> <a href="javascript:;" class="fa fa-times mission_close"></a>
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务二</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="/assets/novice_tasks/winwemedia_p2.jpg"/></span>
+          <div class="auto mission_txt">下面设置您的微官网的站点内容和结构，进入管理后台：微官网 - 站点内容，新建一个新的一级站点。 </div>
+        </div>
+        <div align="center"><a href="javascript:;" class="mission_btn miss_step2">进入站点内容模块</a></div>
+      </div>
+    </div>
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务二已完成 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="<%= @website_menu_qrcode_image_src || website.try(:pic_url) %>" width="142" height="142"/></span>
+          <div class="auto mission_txt">您已经新建了一个一级站点，扫描左侧二维码，进入手机端进行互动体验吧！</div>
+        </div>
+        <div align="center"><a href="/" class="mission_btn">查看下一个任务</a></div>
+      </div>
+    </div>
+  </div>
+  <!--任务三-->
+  <div class="mission_box mission_box2"> <a href="javascript:;" class="fa fa-times mission_close"></a>
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务三</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="/assets/novice_tasks/winwemedia_p3.jpg"/></span>
+          <div class="auto mission_txt">营销活动，首先从优惠券开始。进入管理后台：微活动 - 电子优惠券，新建一个优惠券。</div>
+        </div>
+        <div align="center"><a href="javascript:;" class="mission_btn miss_step3">进入电子优惠券模块</a></div>
+      </div>
+    </div>
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务三已完成 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="<%= @coupon_qrcode_image_src || website.try(:pic_url) %>" width="142" height="142"/></span>
+          <div class="auto mission_txt">您新建了一张优惠券，手机扫描左侧二维码，进入优惠券页面，查看您新建的优惠券吧。</div>
+        </div>
+        <div align="center"><a href="/" class="mission_btn">查看下一个任务</a></div>
+      </div>
+    </div>
+  </div>
+  <!--任务四-->
+  <div class="mission_box mission_box2"> <a href="javascript:;" class="fa fa-times mission_close"></a>
+    <div class="mission_box_div">
+      <div class="mission_tit2">任务四</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="/assets/novice_tasks/winwemedia_p4.jpg"/></span>
+          <div class="auto mission_txt">进入管理后台：微信基础设置 - 首次关注，选择【活动】-【我的微官网】，把您的微官网设置为首次关注，用户首次关注您的公众号即可看到微官网内容。</div>
+        </div>
+        <div align="center"><a href="javascript:;" class="mission_btn miss_step4">进入微信基础设置</a></div>
+      </div>
+    </div>
+    <div class="mission_box_div">
+      <div class="mission_tit2">新手任务完成 ！</div>
+      <div class="mission_boxcont">
+        <div class="auto">
+          <span class="miss_leftpic"><img src="/assets/novice_tasks/succes.jpg" /></span>
+          <div class="auto mission_txt">恭喜您完成了新手任务！点击右上角的问号图标可以进入操作帮助，帮助您更好了解后台功能。</div>
+        </div>
+        <div align="center"><a href="/" class="mission_btn">我知道了</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='shadow'></div>
+
+<script type="text/javascript">
+$(function(){
+  //第一次显示 任务一
+  <% if session[:first_sign_in] && current_user.can_show_introduce? && current_user.try(:task0?) %>
+    $(".shadow").show();   //背景显示
+    $(".mission_cont").show();
+    $(".mission_box1").show();
+    $(".mission_box1").find(".mission_box_div").eq(0).show();
+
+    $('.mission_submit').click( function() {
+      $(this).closest('.mission_boxcont').find('form').submit();
+    });
+  <% end %>
+  
+  //任务下一步点击
+  $(".mission_next").click(function(){
+    $(this).parents(".mission_box_div").hide();
+    $(this).parents(".mission_box_div").next(".mission_box_div").show();
+  });
+  
+  //点击进行中的按钮可通过.miss_active 的index找到对应的.mission_box2 
+  
+  $(".miss_active").click(function(){
+    var inx= $(".miss_active").index(".mission_bar li");
+  
+    $("body").addClass("scrollno");
+    $(".mission_box_div").hide();
+    $(".mission_cont").show();
+    $(".mission_box2").eq(inx).show().find(".mission_box_div").eq(0).show();
+    $(".shadow").show();
+  });
+  
+  
+  // var mission_off= false; 点击背景可关闭
+  /*
+  $(".shadow").click(function(){
+    if(mission_off){
+      $(this).fadeOut();
+      $(".mission_cont").hide();
+      $("body").removeClass("scrollno") 
+    } 
+  })  
+  */
+  //关闭按钮
+  $(".mission_close").click(function(){
+    $(this).parents(".mission_cont").hide();
+    $(".mission_box_div").hide();
+    $(".shadow").fadeOut();
+    $("body").removeClass("scrollno");
+  });
+  
+  //任务一 点击步骤js  
+  $(".miss_step1").click(function(){
+    miss_start();
+    $(".menu-text").eq(1).parents("a").addClass("highcolor").click(function(){         //添加高亮样式 点击微官网
+      $(this).removeClass("highcolor");               
+      $(this).siblings("ul").find("li").eq(0).children("a").addClass("highcolor");          //点击微官网设置 加高亮样式
+    });
+  });
+  
+  //任务二 点击步骤js  
+  $(".miss_step2").click(function(){
+    miss_start();
+    $(".menu-text").eq(1).parents("a").addClass("highcolor").click(function(){                //添加高亮样式 点击微官网
+      $(this).removeClass("highcolor");               
+      $(this).siblings("ul").find("li").eq(2).children("a").addClass("highcolor");        //点击站点内容 加高亮样式
+      $(this).siblings("ul").find("li").eq(2).children("a").attr('href','/website_menus?next_task=2');
+    });
+  });
+  
+  //进入 vsite/vwebsite_manage 添加js代码
+  
+  //任务三 点击步骤js  
+  $(".miss_step3").click(function(){
+    miss_start();
+    $(".menu-text").eq(5).parents("a").addClass("highcolor").click(function(){              //添加高亮样式 点击微活动
+      $(this).removeClass("highcolor");               
+      $(this).siblings("ul").find("li").eq(1).children("a").addClass("highcolor");    //点击进入优惠券 加高亮样式 
+      $(this).siblings("ul").find("li").eq(1).children("a").attr('href','/coupons?next_task=3');
+    });
+  });
+  //进入 vactivity/act_coupon_new
+  
+  //vactivity/act_coupon_new 进入这个页面需要显示的js  先注释
+  /*
+  $(".shadow").show();    // 添加蒙板
+  $(".tab-content").css({"z-index":"auto"})
+  $(".mission_addbtn").addClass("highcolor step_tip2");  //新增高亮  按钮样式 需在页面中添加.mission_addbtn
+  */
+  
+  //任务四 点击步骤js  
+  $(".miss_step4").click(function(){
+    miss_start();
+    $(".menu-text").eq(4).parents("a").addClass("highcolor").click(function(){            //微信基础设置
+      $(this).removeClass("highcolor");               
+      $(this).siblings("ul").find("li").eq(0).children("a").addClass("highcolor");        //点击首次关注 加高亮样式
+    });
+  });
+  
+});
+
+function miss_start(){
+  $(".mission_cont").hide();                                    //关闭 任务框
+  $(".mission_box_div").hide();                                 //关闭 任务框
+  $("#sidebar").addClass("zindx");                                //设置定位 层级  后期关闭蒙板 需要去掉此样式
+  $(".slimScrollDiv,.sly,.nav-list li .submenu").addClass("overauto");              //设置显示  后期关闭蒙板 需要去掉此样式  
+}
+</script>

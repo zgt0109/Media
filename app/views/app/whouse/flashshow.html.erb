@@ -1,0 +1,41 @@
+<header>
+	<a class="ico-prev" href="javascript:history.go(-1);"></a>
+	<h1>微房产相册展示</h1>
+</header>
+<script type="text/javascript">
+(function(window, PhotoSwipe){
+	document.addEventListener('DOMContentLoaded', function(){
+		var
+		options = {
+			preventHide: true,
+			getImageSource: function(obj){
+				return obj.url;
+			},
+			getImageCaption: function(obj){
+				return obj.caption;
+			}
+		},
+		instance = PhotoSwipe.attach( 
+			[
+<% @cover_house_pictures.each_with_index do |picture, i| %>
+			{ url: '<%= picture.path %>'},
+<% end %>
+			], 
+			options 
+		);
+		instance.show(<%= params[:flash].present? ? params[:flash] : 0 %>);
+	}, false);
+}(window, window.Code.PhotoSwipe));
+</script>
+
+<div class="contxt cont-flashshow">
+	<div class="box-cont cont-img" style=" height:300px;">
+		<div class="flashshow">
+			<div class="flashCont" id="flashshow">
+				<% @cover_house_pictures.each_with_index do |picture, i| %>
+				<a id="flashshow<%= i %>" href="#" <%= 'class=current' if ((params[:flash].present? and params[:flash].to_i == i) or (params[:flash].blank? and i == 0)) %>><%= image_tag picture.path %></a>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,66 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activities_path %></li>
+        <li><%= link_to '360全景', panoramagrams_path %></li>
+        <li><%= link_to '全景图管理', list_panoramagrams_path %></li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li>
+          <a href="<%= panoramagrams_path %>">
+            基础设置
+          </a>
+        </li>
+        <li class="active">
+          <a href="<%= list_panoramagrams_path %>">
+            全景图管理
+          </a>
+        </li>
+      </ul>
+      <div class="alert alert-block alert-info ">
+        <strong class="pull-left">提示：</strong>
+        <ul class="vwebsiteHeadAlert">
+          <li>1、 添加全景图图片，参考 如何制作一个360度全景？</li>
+          <li>2、若您不需要全景图列表页则无需配置列表页缩略图和列表中显示顺序两项。</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div align="right">
+            <%= link_to "新增", new_panoramagram_path, class: "btn btn-primary btn-sm" %>
+          </div>
+          <div class="tab margin-top-10">
+            <table class="table table-striped table-bordered table-hover">
+              <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>操作</th>
+              </tr>
+              <% if @panoramagrams.each do |panoramagram| %>
+                <tr>
+                  <td><%= panoramagram.sort %></td>
+                  <td><%= panoramagram.name %></td>
+                  <td>
+                    <%= link_to '编辑', edit_panoramagram_path(panoramagram) %>
+                    <%= link_to '配置微信消息', item_activity_panoramagram_path(panoramagram) %>
+                    <%= link_to '删除', panoramagram_path(panoramagram), data: { method: :delete, remote: true, confirm: '确定要删除该全景图？' } %>
+                  </td>
+                </tr>
+              <% end.blank? %>
+                <tr><td colspan="3" class="green text-center">暂无数据</td></tr>
+              <% end %>
+            </table>
+            <%= paginate @panoramagrams %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

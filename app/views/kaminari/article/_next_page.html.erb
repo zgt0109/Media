@@ -1,0 +1,1 @@
+<%= link_to current_page.last? ? 'javascript:void(0);' : url, class: current_page.last? ? 'next disabled' : 'next', :rel => 'next', :remote => remote do %>下一页<i class="fa fa-angle-right"></i><% end %>

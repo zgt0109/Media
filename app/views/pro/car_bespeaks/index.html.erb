@@ -1,0 +1,115 @@
+ <% content_for :main_content do %>
+ <div class="main-content">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微汽车', car_shops_path %></li>
+      <li><%= link_to @page, @link %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <% if params[:bespeak_type].to_i == CarBespeak::TEST_DRIVE %>
+          <li class="<%= action_name == 'activity_notice' ? 'active' : '' %>">
+            <%= link_to '试驾预约微信设置', activity_notice_car_bespeaks_path(bespeak_type: 2) %>
+          </li>
+          <li class="<%= action_name == 'index' ? 'active' : '' %>">
+            <%= link_to '试驾预约查询', car_bespeaks_path(bespeak_type: 2) %>
+          </li>
+        <%- else %>
+          <li class="<%= action_name == 'activity_notice' ? 'active' : '' %>">
+            <%= link_to '保养预约微信设置', activity_notice_car_bespeaks_path(bespeak_type: 1) %>
+          </li>
+          <li class="<%= action_name == 'index' ? 'active' : '' %>">
+            <%= link_to '保养预约查询', car_bespeaks_path(bespeak_type: 1) %>
+          </li>
+        <%- end %>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div id="tab-1" class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-sm-12">
+                <%= form_for @search, url: car_bespeaks_url(bespeak_type: params[:bespeak_type]), html: { method: :get } do |f| %>
+                  <div class="col-md-2 row">
+                      <div class="input-group input-group-text col-xs-12 row">
+                          <%= select_tag :query_type_key, options_for_select(@query_type_options, @query_type_key), :class => "col-xs-12" %>
+                      </div>
+                  </div>
+                  <div class="col-md-2">
+                      <div class="input-group input-group-text col-xs-12 row">
+                          <%= text_field_tag :query_type_value, params[:query_type_value], maxlength: 50, class: 'col-xs-12' %>
+                      </div>
+                  </div>
+                  <%= hidden_field_tag :bespeak_type, params[:bespeak_type] %>
+                  <div class="col-md-2">
+                    <input type="submit" class="btn btn-sm btn-primary" value="查询">
+                  </div>
+                <%- end %>
+            </div>
+            <div class="col-md-12 margin-top-20">
+              <table id="gatesTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                  <tr>
+                    <th>预约时间</th>
+                    <th>车系</th>
+                    <th>车型</th>
+                    <th>联系电话</th>
+                    <th>姓名</th>
+                    <th>状态</th>
+                    <th style=" width: 210px;">备注</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <% @car_bespeaks.each do |bespeak| %>
+                  <tr>
+                    <td><%= bespeak.bespeak_date %></td>
+                    <td><%= bespeak.car_catena.try(:name) %></td>
+                    <td><%= bespeak.car_type.try(:name) %></td>
+                    <td><%= bespeak.mobile %></td>
+                    <td><%= bespeak.name %></td>
+                    <td><%= bespeak.bespeak_status %></td>
+                    <td><%= bespeak.description %></td>
+                    <td>
+                      <% if bespeak.test_drive? %>
+                        <a href="javascript:;" data-toggle="modals" data-title="详情" data-height="1300" data-iframe="<%= car_bespeak_path(bespeak, bespeak_type: params[:bespeak_type]) %>">详情</a>
+                      <% end %>
+                      <%= link_to '确认上门', [:visit, bespeak], method: :post, confirm: "确认此预约已上门吗？" if bespeak.unvisit? %>
+                      <%= link_to '删除', bespeak, method: :delete, :data => { :confirm => "确认删除此预约吗？" } %></td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+                <%= paginate @car_bespeaks %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- end %>
+<%= content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      $('#query_type_key').trigger('change');
+      $('#query_type_value').val('<%= params[:query_type_value] %>');
+    })
+    $('#query_type_key').on('change', function(){
+      $('#query_type_value').val('');
+      if($(this).val() == 4){
+        $('#query_type_value').attr('readonly', 'readonly').datepicker({
+          todayBtn: "linked",
+          autoclose:true,
+          format:"yyyy-mm-dd"
+        });
+      }else{
+        $('#query_type_value').datepicker('remove');
+      }
+    })
+  </script>
+<%- end %>

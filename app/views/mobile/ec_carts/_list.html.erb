@@ -1,0 +1,54 @@
+<section>
+  <% if @carts.present? %>
+      <%= form_tag update_cart_mobile_ec_carts_path(supplier_id: @supplier.id), :id => "ec_cart", onsubmit: "return select_all_items();"  do %>
+          <dl class="box-shopcar">
+            <dt>
+              <input type="checkbox" id="input-all" checked = "checked" onclick="select_all_check_box();"/>
+              <span>总金额：<b id="cart_price">￥<%= f EcCart.show_total_price @carts %></b></span>
+              <input class="btn btn-red fr" id="gobuy" type="submit" value="去结算"/>
+            </dt>
+            <dd>
+              <ul class="shopcar-list table">
+                <% @carts.each do |cart| %>
+                    <% item = cart.ec_item %>
+                    <li class="tr">
+                      <div class="td">
+                        <%= check_box_tag "items[]", item.id, (params[:items].present? ? params[:items].map{|i| i.to_i}.include?(item.id) : true), :id => "item_#{item.id}", :onclick => "select_check_box();" %>
+                      </div>
+
+                      <div class="shopcar-info td">
+                        <% if item.main_picture.try(:pic?) %>
+                            <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="info-fl"><%= image_tag item.main_picture.pic.thumb  %></a>
+                        <% else %>
+                            <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="img-null info-fl">暂无<br/>图片</a>
+                        <% end %>
+                        <p><b><%= item.title %></b>
+                        <span class="box-number">
+                           <span class="fl"><em>数量：</em><i onclick="update_cart(<%= item.id%>,1, <%= @carts.map(&:id)%>);">-</i><%= text_field_tag "qty", cart.qty, :id => "item_value_#{item.id}", :onkeyup => "only_num(this,this.onkeyup);", :onblur => "default_num(this, #{item.id});",:maxlength => 4, :onchange => "ajax_submit_price(#{item.id},#{ @carts.map(&:id)});" %><i onclick="update_cart(<%= item.id%>, 2,<%= @carts.map(&:id)%>);">+</i></span>
+                        </span>
+                          <span>小计：<span class="fred">￥<span id="price_<%=item.id %>" style="color: #d10000"><%= f cart.price %></span></span></span></span>
+                        </p>
+                      </div>
+                    </li>
+                <% end %>
+              </ul>
+            </dd>
+          </dl>
+      <% end %>
+  <% else %>
+      <ul class="shopcar-list table">
+        <li class="tr">
+          <p><b style="padding: 10px;color: #888888;">您的购物车还是空的</b></p>
+          </a>
+        </li>
+      </ul>
+  <% end %>
+</section><!-- section end -->
+
+<script>
+  $('#gobuy').click(function() {
+    $('#ec_cart').attr('action', '<%= new_mobile_ec_order_path %>').attr('method', 'get')
+    $('#ec_cart').submit();
+    return false;
+  })
+</script>

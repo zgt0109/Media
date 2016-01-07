@@ -1,0 +1,62 @@
+<% if website_menu.cover_pic? %>
+    <div class="mod-slider slider-hor" id="index">
+      <ul class="slider-list">
+        <li><a><%= image_tag website_menu.cover_pic.custom %></a></li>
+      </ul>
+      <div class="slider-text">
+        <span class="fl slider-span" id="slider-span"><%= website_menu.name %></span>
+      </div>
+    </div>
+<% end %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% if main_material %>
+        <%
+           arr = []
+           arr << main_material
+           arr << child_material
+        %>
+        <% arr.flatten.in_groups_of(9, false).each do |childs|%>
+            <li>
+              <% childs.each do |child| %>
+                  <%= link_to material_type_url(child, website_menu), class: 'box mod-index' do %>
+                      <div class="p">
+                        <i><%= image_tag child.pic.large if child.pic? %></i>
+                        <b><%= child.title %></b>
+                      </div>
+                  <% end %>
+              <% end %>
+            </li>
+        <% end %>
+    <% else %>
+        <% website_menu.sub_menus.in_groups_of(9, false).each do |childs| %>
+            <li>
+              <% childs.each do |child| %>
+                  <%= link_to menu_url(child), class: 'box mod-index' do %>
+                      <div class="p">
+                        <% if child.pic? or child.font_icon.present? %>
+                            <% if child.pic? %>
+                                <i><%= image_tag child.pic.large %></i>
+                            <% elsif child.font_icon.present? %>
+                                <i class="<%= child.font_icon %>"></i>
+                            <% else %>
+                                <i></i>
+                            <% end %>
+                        <% else %>
+                            <i></i>
+                        <% end %>
+                        <b><%= child.title %></b>
+                      </div>
+                  <% end %>
+              <% end %>
+            </li>
+        <% end %>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :document_ready_js do %>
+    mySwipe("indexList",true);
+    setSlide("#indexList");
+<% end %>

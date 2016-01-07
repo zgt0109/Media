@@ -1,0 +1,7 @@
+<% if @shop_product_comment.save %>
+alert("评论成功!");
+$(".comment-list").append('<%= j render @shop_product_comment %>');
+$("textarea").val('');
+<% else %>
+alert("内容不能为空")
+<% end %>

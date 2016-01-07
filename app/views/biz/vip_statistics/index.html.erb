@@ -1,0 +1,75 @@
+<% content_for :vip_breadcrumb do %>
+  <li><%= link_to '会员卡统计', vip_statistics_path %></li>
+<% end %>
+
+<% content_for :tab do %>
+  <div class="tab-pane fade active in">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>通过表格的方式统计每日新增的会员卡领取数量以及累计会员卡领卡数量。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li class="active">
+            <a  href="<%= vip_statistics_path %>">统计报表</a>
+          </li>
+          <li>
+            <a  href="<%= show_chart_vip_statistics_path %>">趋势图</a>
+          </li>
+        </ul>
+        <div class="tab-content no-border  margin-top-20">
+          <div class="col-xs-12">
+            <%= form_for @search, url: vip_statistics_url, :html => { :method => :get } do |f| %>
+              <div class="col-xs-4 row">
+                <div class="input-group input-group-sm input-group-text">
+                  <div class="input-group">
+                    <%= f.text_field :created_at_gte, class: 'datepicker input-sm form-control', value: (params[:search][:created_at_gte].try(:to_date) if params[:search]) %>
+                    <span class="input-group-addon input-group-addon-text">
+                       -
+                    </span>
+                    <%= f.text_field :created_at_lte, class: 'datepicker input-sm form-control', value: (params[:search][:created_at_lte].try(:to_date) if params[:search]) %>
+                  </div>
+                  <span class="input-group-addon">
+                    <button class="btn btn-sm btn-filter btn-primary" type="submit">查询</button>
+                  </span>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <%= link_to '导出EXCEL', vip_statistics_path(:format => :xls,:search => params[:search]) , class: 'btn btn-primary btn-sm btn-filter' %>
+              </div>
+            <% end %>
+          </div>
+          <div class=" col-sm-12 margin-top-20">
+            <table id="staticTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>日开卡数</th>
+                  <th>开卡总数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if @vip_users.each do |vip_user| %>
+                  <tr>
+                    <td><%= vip_user.created_date %></td>
+                    <td><%= vip_user.count %></td>
+                    <td><%= vip_user[:total_count] %></td>
+                  </tr>
+                <% end.blank? %>
+                  <tr><td colspan="3" class="green text-center">没有记录</td></tr>
+                <% end %>
+              </tbody>
+            </table>
+            <%= paginate @vip_users %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<%= render 'biz/vip_users/admin' %>

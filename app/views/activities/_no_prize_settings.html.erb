@@ -1,0 +1,24 @@
+<dl class="active">
+  <dt>未中奖设置<span class="fr">查看</span></dt>
+
+  <dd>
+    <div class="wrap-part">
+      <%= form_for(@activity, validate: true) do |f| %>
+        <%= f.fields_for :activity_property, validate: true do |ap| %>
+          <div class="box-form form-row">
+            <%#= render 'property_form', ap: ap %>
+            <div class="p">
+              <span>未中奖提示文字</span>
+              <%= ap.text_area :no_prize_title, style: 'height: 120px;', validate: true %>
+              <span class="fgray">（默认未中奖提示文字为‘谢谢参与’，您也可以自行更改，每行1个，每个不要超过7个字，系统将随机抽取一个显示）</span>
+              <i class="day-prize-limit-message red"></i>
+            </div>
+          </div>
+        <% end %>
+
+        <%= render 'form_submit' %>
+      <% end %>
+    </div>
+  </dd>
+
+</dl>

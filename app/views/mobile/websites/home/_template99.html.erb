@@ -1,0 +1,31 @@
+<%= render "slider" %>
+
+<div class="nav-list">
+  <ul>
+    <% website_menus[0..3].each do |menu| %>
+        <li>
+          <%= link_to menu.title, menu_url(menu)%>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="banner-list">
+  <ul>
+    <% website_menus[4..-1].to_a.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box' do %>
+            <div class="banner-img">
+              <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+            </div>
+            <small><%= menu.title %></small>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+  <div class="logo">
+    <a href="#" class="box">
+      <%= image_tag website.logo if website.logo? %>
+    </a>
+  </div>
+</div>

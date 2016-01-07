@@ -1,0 +1,355 @@
+/*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+html {
+    font-size: 14px;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+dd {
+    -webkit-margin-start: 0;
+}
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between images, videos, audio and canvas and the bottom of
+ * their containers: h5bp.com/i/440
+ */
+
+audio,
+canvas,
+img,
+video {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Browse Happy prompt
+   ========================================================================== */
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+body{
+    background: #f8f8f8;
+}
+.header{height: 70px; background: #97c13c; overflow: hidden;}
+.logo{height: 60px; width: 270px; display: block; margin: 5px auto; background: url(/assets/home/winwemedia.png) no-repeat 0 -60px;}
+.notes{position: relative; top:0; left: 50%; width: 50px; margin: 10px 0 10px -25px; overflow: visible; background: url(/assets/home/bg-line.png) repeat-y center 0;}
+.notes-year{width: 50px; height: 50px; border-radius: 1000px; background:url(/assets/home/arrow-down.png) no-repeat center bottom #97c13c; color: #fff; display: block; text-align: center; line-height: 40px; margin-bottom: 40px;}
+.notes-circle{width: 10px; height: 10px; margin: 140px auto; border-radius: 1000px; background: #97c13c; border:4px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.25); position: relative; overflow: visible;}
+.mod-note{border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.1); width: 458px; height: 108px; padding: 20px; background: #fff; position:absolute; top:-10px; border:1px solid #ccc;}
+.notes-l .mod-note{left: -520px;}
+.notes-r .mod-note{right: -520px;}
+.mod-note>*{display: block;}
+.mod-note .note-more{text-align: right; font-size: 12px; color: #0083a1; text-decoration: none;}
+.mod-note b{font-weight: normal; font-size: 18px; line-height: 30px; height: 30px; overflow: hidden;text-overflow: ellipsis;
+    white-space: nowrap; margin-top: -10px; color: #666;}
+.mod-note small{line-height: 20px; color: #999;}
+.mod-note p{margin: 0; line-height: 20px; max-height: 60px; overflow: hidden; color: #999;}
+.mod-note em,
+.mod-note i{
+    position: absolute;
+    display: block;
+    font-style: normal;
+    width: 0;
+    height: 0;
+    border-width: 6px 8px;
+    border-style: solid;
+    top:10px;
+}
+.notes-l .mod-note em,
+.notes-l .mod-note i{right: -14px;}
+.notes-l .mod-note em{
+    border-color: transparent transparent transparent #ccc;
+    right: -16px;
+}
+.notes-l .mod-note i{
+    border-color: transparent transparent transparent #fff;
+}
+.notes-r .mod-note em,
+.notes-r .mod-note i{left: -14px;}
+.notes-r .mod-note em{
+    border-color: transparent #ccc transparent transparent;
+    left: -16px;
+}
+.notes-r .mod-note i{
+    border-color: transparent #fff transparent transparent;
+}
+.note-loading{width: 50px; height: 50px; line-height: 50px; text-align: center; margin: 140px auto 0 auto; background: #f3f3f3; border-radius: 1000px; color: #666;}
+.wrap-note{background: #fff; color: #666; line-height: 20px; border:1px solid #ccc; box-shadow:0 0 5px rgba(0,0,0,0.1); padding: 20px; width: 958px; margin: 40px auto; border-radius: 5px; position: relative; overflow: visible;}
+.wrap-note img{max-width: 100%; margin: 5px 0;}
+.note-title{color: #333; font-size: 24px; line-height: 30px; text-align: center;}
+.note-time{font-size: 12px; color: #999; font-size: 12px; margin: -10px 0 0 0; display: block; text-align: center;}
+.btn-goback{position: absolute; width: 40px; height: 40px; padding: 5px; line-height: 20px; text-align: center; display: block; border-radius: 1000px; background: #97c13c; color: #fff; text-decoration: none; left: 50%; margin: 0 0 0 -25px;}
+.note-top{top:-30px;}
+.note-bottom{bottom: -30px;}
+.note-page{width: 100px; background-image:url("/assets/home/winwemedia.png"); background-repeat: no-repeat; height: 40px; line-height: 20px; position: fixed; top:50%; margin: -15px 0 0 0; padding-left: 40px; text-decoration: none; display: block;}
+.note-page>*{display: block; color: #999999;}
+.note-page:hover>*{color: #519000;}
+.page-prev{background-position: left -844px; left:10px;}
+.page-next{background-position: right -844px; right:10px;}
+.page-prev:hover{background-position: left -926px;}
+.page-next:hover{background-position: right -926px;}
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Image replacement
+ */
+
+.ir {
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    /* IE 6/7 fallback */
+    *text-indent: -9999px;
+}
+
+.ir:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+    *zoom: 1;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+(-o-min-device-pixel-ratio: 5/4),
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}

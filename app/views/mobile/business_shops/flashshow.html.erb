@@ -1,0 +1,32 @@
+<%= stylesheet_link_tag 'mobile/photoswipe' %>
+<%= javascript_include_tag 'mobile/lib/klass' %>
+<%= javascript_include_tag 'mobile/lib/photoswipe' %>
+<script type="text/javascript">
+(function(window, PhotoSwipe){
+
+  document.addEventListener('DOMContentLoaded', function(){
+
+    var
+    options = {
+      preventHide: false,
+      getImageSource: function(obj){
+        return obj.url;
+      },
+      getImageCaption: function(obj){
+        return obj.caption;
+      }
+    },
+    instance = PhotoSwipe.attach( 
+      [ <%= @pictures.map(&:as_json).join(',').html_safe %> ],
+      options 
+      );
+
+    instance.show(0);
+
+  }, false);
+
+}(window, window.Code.PhotoSwipe));
+function closeShow(){
+  window.location.href="<%= pictures_mobile_business_shop_path(@supplier.id, @business_shop) %>";
+}
+</script>

@@ -1,0 +1,58 @@
+<div class="vcsection">
+  <div class="vcsection-header">
+    <div class="vcsection-header-txt">会员卡审核验证 & 短信提醒</div>
+    <div class="vcsection-header-btn">
+      <input type="button" class="btn btn-sm btn-primary" value="保存" id="audit_and_sms_save_btn"></div>
+  </div>
+  <div class="vcsection-body clearfix">
+    <%= form_for @activity, validate: true, html:{id: 'audit_and_sms_form', class: 'form col-md-12 margin-top-30'} do |f| %>
+    <%= f.fields_for :vip_card, @activity.vip_card do |card| %>
+      <div class="clearfix">
+        <div class="vcindent-80">领卡验证：</div>
+        <div class="vcmargin-80">
+          <div class="form-group">
+            <label>
+              <%= card.check_box :audited, id: 'audited', class: 'vertical-correct' %>审核
+            </label>
+            <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选后，用户领卡时需审核才可通过" data-original-title="" title=""></span>
+          </div>
+          <div class="form-group">
+            <label>
+              <%= card.check_box :sms_check, class: 'vertical-correct' %>短信验证
+            </label>
+            <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选后，用户领卡时需验证手机号码" data-original-title="" title=""></span>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="clearfix">
+        <div class="vcindent-80">短信提醒：</div>
+        <div class="vcmargin-80">
+          <div class="form-group">
+            <label>
+              <%= card.check_box :open_card_sms_notify, class: 'vertical-correct' %>领卡时短信提醒
+            </label>
+            <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选后，用户领卡成功时会发送手机短信提醒" data-original-title="" title=""></span>
+          </div>
+          <div class="form-group">
+            <label>
+              <%= card.check_box :recharge_consume_sms_notify, class: 'vertical-correct' %>充值/消费/金额调节时短信提醒
+            </label>
+            <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选后，用户在进行会员卡充值、消费、金额调整等操作时会发送手机短信提醒" data-original-title="" title=""></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for(:custom_js) do %>
+<script type="text/javascript" charset="utf-8">
+    $(function() {
+        $('#audit_and_sms_save_btn').click(function() {
+            $('#audit_and_sms_form').submit();
+        });
+    })
+</script>
+<% end %>

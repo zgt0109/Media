@@ -1,0 +1,10 @@
+$("#search_shop_category_id_eq").empty();
+<% @shop_categories.each do |c| %>
+    $("#search_shop_category_id_eq").append('<option value="<%= c.id %>"><%= c.name %></option>');
+<% end %>
+
+if( $("#search_shop_category_id_eq").find('option').length == 0 ){
+	$("#search_shop_category_id_eq").closest('.col-md-3').hide();
+}else{
+	$("#search_shop_category_id_eq").closest('.col-md-3').show();
+}

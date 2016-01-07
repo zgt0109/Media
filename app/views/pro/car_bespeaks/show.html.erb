@@ -1,0 +1,11 @@
+<form>
+<div class="modal-body">
+<p>预约时间： <%= @car_bespeak.bespeak_date.try(:to_date) %></p>
+<p>车系： <%= @car_bespeak.car_catena.try(:name) %></p>
+<p>车型：<%= @car_bespeak.car_type.try(:name) %></p>
+<p>联系电话：<%= @car_bespeak.mobile %></p>
+<p>姓名：<%= @car_bespeak.name %></p>
+<p>状态：<%= @car_bespeak.bespeak_status %></p>
+<p>备注：<%= @car_bespeak.description %></p>
+</div>
+</form>

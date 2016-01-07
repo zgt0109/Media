@@ -1,0 +1,9 @@
+<%= form_for @wx_mp_user, html: { role: 'form' } do |f| %>
+  <%= hidden_field_tag :type, 'qrcode' %>
+  <div class="modal-body">
+    <div class="col-xs-12">
+    <div class="cieldon-file" data-type="0" data-height="200" data-width="200" data-name="wx_mp_user[qrcode_key]" data-img="<%= @wx_mp_user.qrcode_url %>" data-key="<%= @wx_mp_user.qrcode_key %>"></div>
+    </div>
+  </div>
+  <%= render 'partials/modalFooter' %>
+<% end %>

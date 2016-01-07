@@ -1,0 +1,10 @@
+var html = '<%= j (render :partial => 'booking_items', :collection => @booking_items, :as => :booking_item) %>'
+$(".box-list").append(html);
+$(".tcenter").remove();
+<% if (link_to_next_page @booking_items, '点击加载更多', :remote => true).present? %>
+    $(".list-li:last").append('<p class="tcenter"><span class="loading"><%= link_to_next_page @booking_items, '点击加载更多', :remote => true %></span></p>');
+<% else %>
+    $(".loading").remove();
+<% end %>
+
+//$(".tcenter").removeClass("isloading")

@@ -1,0 +1,34 @@
+<form class="form">
+  <div class="modal-body">
+    <div class="form-group list-info">
+      <p><span>入住人姓名：</span><%= @hotel_order.name %></p>
+
+      <p><span>联系人电话：</span><%= @hotel_order.mobile %></p>
+
+      <p><span>订单状态：</span><%= @hotel_order.real_status_name %></p>
+
+      <p><span>订单号码：</span><%= @hotel_order.order_no %></p>
+
+      <p><span>入住日期：</span><%= @hotel_order.check_in_date %></p>
+
+      <p><span>离店日期：</span><%= @hotel_order.check_out_date %></p>
+
+      <p><span>预定房型：</span><%= @hotel_order.hotel_room_type.try(:name) %>＊<%= @hotel_order.qty %></p>
+
+      <p><span>预定价格：</span><%= f @hotel_order.price %></p>
+
+      <p><span>订单总金额：</span><%= f @hotel_order.total_amount %></p>
+
+      <p><span>预定门店：</span><%= @hotel_order.hotel_branch.try(:name) %></p>
+
+      <!--<p><span>描述：</span><%#= @hotel_order.description %></p>-->
+
+    </div>
+
+    <div class="clearfix"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" data-fn="submit" onclick="$('.modal-backdrop', window.parent.document).remove();$('.modal-iframe', window.parent.document).remove();">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+</form>

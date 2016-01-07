@@ -1,0 +1,132 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%= content_for?(:title) ? yield(:title) : "婚礼请帖" %></title>
+  <%= stylesheet_link_tag "mobile/wedding", media: "all" %>
+  <%= javascript_include_tag "mobile/wedding" %>
+</head>
+<body class="<%= @body_class%>" onload="renderBody(0);">
+  <%= render 'application/gb2big5' %>
+<div class="html">
+  <div class="main">
+    <%= yield %>
+  </div><!-- main end -->
+</div><!-- html end -->
+<% @share_image = @activity.pic_display_url%>
+<%= render 'application/app_footer' %>
+<div class="pop" id="pop-share" onclick="hidePop('#pop-share')">
+  <p class="note-share"></p>
+</div>
+<%= yield :wedding_wish %>
+<%= yield :custom_js %>
+</body>
+</html>
+<script>
+    <% if flash[:notice] || flash[:alert] %>
+    alert("<%= flash[:notice] || flash[:alert] %>");
+    <% flash[:notice]= nil; flash[:alert] = nil %>
+    <% end %>
+
+    $().ready(function(){
+        playbox.init("playbox");
+        $("#playbox")[0].className = 'ico-music close';
+
+        var video = document.getElementById('video');
+        video.addEventListener('click',function(){
+            if(video.paused){
+                video.play();
+            }else if(video.play){
+                video.pause();
+            };
+        },false);
+    });
+
+    $("#guest_submit").click(function(){
+        if($("#wedding_guest_username").val() == ''){
+            alert("姓名不能为空!");
+            $("#wedding_guest_username").focus();
+            return false;
+        }else if(($("#wedding_guest_phone").length != 0) && $("#wedding_guest_phone").val() == ''){
+            alert("手机号不能为空!");
+            $("#wedding_guest_phone").focus();
+            return false;
+        }else if(($("#wedding_guest_phone").length != 0) &&  !test_mobile_number($("#wedding_guest_phone").val()) ){
+            alert("手机号码格式不正确!");
+            $("#wedding_guest_phone").focus();
+            return false;
+        }else if($("#wedding_guest_people_count").val() == ''){
+                alert("人数不能为空！");
+                $("#wedding_guest_people_count").focus();
+                return false;
+        }else if( !validate_people_count($("#wedding_guest_people_count").val()) ){
+            alert("人数只能是正数字！");
+            $("#wedding_guest_people_count").focus();
+            return false;
+        }else{
+            //$("guest_form").submit();
+            $.ajax({
+                        type: "post",
+                        url:"<%= create_guest_mobile_weddings_path(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>",
+                        data:$("#guest_form").serialize(),
+                        success: function(data) {
+                            alert("提交成功!");
+                            $("#guest_form")[0].reset();
+							$(".btn-zf").animate({ left:"0px" });
+                        }
+                    }
+            )
+            hideDiv('#order-go');
+        }
+
+    })
+
+    $("#wish_submit").click(function(){
+        if($("#wedding_wish_username").val() == ''){
+            alert("姓名不能为空!");
+            $("#wedding_wish_username").focus();
+						$(".btn-zf").animate({ left:"0px" });
+            return false;
+        }else if($("#wall-txt").val() == ''){
+            alert("祝福不能为空！");
+            $("#wall-txt").focus();
+						$(".btn-zf").animate({ left:"0px" });
+            return false;
+        }else{
+            //$("guest_form").submit();
+            $.ajax({
+                        type: "post",
+                        url:"<%= create_wish_mobile_weddings_path(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>",
+                        data:$("#wish_form").serialize(),
+                        success: function(data) {
+                          $(".box-list").prepend("<p> <span>"+data.content.replace("\n","<br/>")+"</span> <b>"+data.username+" "+data.created_at+"</b> </p>");
+                            alert("提交成功!");
+                            $("#wish_form")[0].reset();
+                            document.body.scrollTop = document.documentElement.scrollTop = 0;
+                        },
+												complete: function() {
+														$(".btn-zf").animate({ left:"0px" });
+												}
+                    }
+            )
+            hideDiv2('#order-bless');
+        }
+
+    })
+// 手机号码正则表达式
+function test_mobile_number(mobile_number) {
+    if (mobile_number == undefined) {
+        return false;
+    }
+    if (winwemedia_validators.mobile_reg.test(mobile_number)){
+        return true;
+    };
+    return false;
+}
+</script>

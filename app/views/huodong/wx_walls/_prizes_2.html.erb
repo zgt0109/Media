@@ -1,0 +1,231 @@
+<% count = @wx_wall_prizes_wx_wall_users.count %>
+<section class="stage J-mark-3">
+	<div class="main">
+		<div class="new-luck">
+			<div class="luck-part text-center">
+				<div class="part-head">
+					<h1>现场抽奖</h1>
+					<p>参加抽奖人数<span id="user_count"><%= @wx_wall_users.count-count %></span></p>
+				</div>
+				<div class="part-user">
+					<div class="part-user-img">
+						<img src="/assets/wx_wall/user-img2.jpg">
+					</div>
+					<div class="part-user-name">... ...</div>
+				</div>
+				<div class="part-tool">
+					<div>
+						<span>一次抽取 </span>
+						<div class="part-select">
+							<%= select_tag "count", options_for_select((1..10).to_a) %>
+							<span></span>
+						</div>
+						<span>人</span>
+					</div>
+					<div class="luck-btn">
+						<span>开始抽奖</span>
+						<div class="lottery-btn"></div>
+					</div>
+				</div>
+			</div>
+			<div class="luck-part">
+				<div class="list-t">
+					<span></span>
+				</div>
+				<div class="list-m">
+					<div class="list-head">
+						<b>获奖名单</b>
+						<div>获奖人数 <span id="win_user_count"><%= count %></span></div>
+					</div>
+					<div>
+						<div class="list-th">获奖序号</div>
+						<div class="list-th">用户昵称</div>
+						<div class="list-box" id="scroll-box">
+							<ul>
+								<% @wx_wall_prizes_wx_wall_users.each do |user| %>
+									<li>
+										<div class="list-num"><%= count %></div>
+										<div class="list-img"><img src="<%= user.avatar_url %>"></div>
+										<div class="list-name"><%= user.nickname %></div>
+										<div class="list-del" data-id="<%= user.id %>">X</div>
+									</li>
+									<% count -= 1 %>
+								<% end %>
+							</ul>
+						</div>
+						<a href="javascript:;" class="reset-btn">重新抽奖</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<% content_for :custom_js do %>
+<script>
+var tempJsion=[], html='', url, name;
+
+$(function(){
+	$(".part-select select").on("change",function(){
+		$(this).blur();
+	});
+	iScroll("#scroll-box");
+	// 删除
+	$("#scroll-box").on("click",".list-del",function(){
+		if(confirm("确定删除？")){
+			var wx_wall_user_id = $(this).attr("data-id"),
+				  $this = $(this).parents("li");
+			$.getJSON("/wx_walls/<%= @wx_wall.id %>/delete_prize_user?wx_wall_user_id="+wx_wall_user_id, function(data) {
+        if(data.status){
+					$this.slideUp(function(){
+						$this.remove();
+						$("#win_user_count").html($("#scroll-box li").length);
+						resetSort();
+						scrollBox.refresh();
+					});
+				}
+      });
+		}
+	});
+	// reset
+	$(".reset-btn").on("click",function(){
+		if(confirm("重置抽奖后，中奖用户将会重新放入奖池，确定要重置吗？")){
+			$.getJSON("/wx_walls/<%= @wx_wall.id %>/delete_prize_user?delete_all=1", function(data) {
+        if(data.status){
+					$("#scroll-box ul").html("");
+				}
+      });
+		}
+	});
+	// 抽奖
+	$(".luck-btn").on("click",function(){
+		var $this = $(this);
+		if(!$this.attr("disabled")){
+			if(!$this.hasClass("playing")){
+				lottery_user();
+			}else{
+				lottery.stop();
+			}
+		}
+	});
+});
+
+function addMsg(html){
+	if(html != "" && parseInt($("#user_count").html()) > $("#scroll-box li").length ){
+		var obj = $(html);
+		$("#scroll-box ul").prepend(obj);
+		$("#win_user_count").html($("#scroll-box li").length);
+		obj.slideDown(function(){
+			resetSort();
+			scrollBox.refresh();
+		});
+	}
+}
+function resetSort(){
+	var box = $("#scroll-box ul"),
+		len = box.find("li").length;
+		box.find("li").each(function(i){
+		$(this).find(".list-num").text(len-i);
+	});
+}
+var scrollBox;
+function iScroll(id){
+    scrollBox = new IScroll(id, {
+        scrollbars: true,
+        mouseWheel: true,
+        scrollY: true,
+        interactiveScrollbars: true,
+        shrinkScrollbars: 'scale',
+        fadeScrollbars: true,
+        click: true
+    });
+    var DOM = $(id)[0];
+    DOM.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+}
+var lottery_box = $(".part-user");
+var lottery = {
+	img:lottery_box.find(".part-user-img img"),
+	user:lottery_box.find(".part-user-name"),
+	num:"",
+	setTime:"",
+	stopTime:3000,
+	i:0,
+	start:function (num){
+		var len = tempJsion.length,
+				tmp_url = tempJsion[lottery.i]["url"],
+				tmp_name = tempJsion[lottery.i]["name"];
+		lottery.i++;
+		if(lottery.i>=len)lottery.i=0;
+		lottery.img.attr("src",tmp_url);
+		lottery.user.text(tmp_name);
+		lottery.setTime = setTimeout(function(){
+			lottery.start(num);
+		},100);
+		$(".luck-btn").addClass("playing");
+		$(".luck-btn span").text("停止");
+		if(num > 0){
+			lottery.stopTime -= 100;
+			if(lottery.stopTime<=0){
+				lottery.stopTime = 3000;
+				lottery.stop();
+			}
+		}
+	},
+	stop:function(){
+		clearTimeout(lottery.setTime);
+		lottery.img.attr("src",url);
+		lottery.user.text(name);
+		$(".luck-btn").removeClass("playing");
+		if(lottery.num > 1){
+			lottery.num--;
+			$(".luck-btn").attr("disabled","disabled");
+			$(".luck-btn span").text("抽奖("+lottery.num+")");
+			setTimeout(function(){
+				lottery_user(lottery.num);
+			},2000);
+		}else{
+			$(".luck-btn").removeAttr("disabled");
+			$(".luck-btn span").text("开始抽奖");
+		}
+		addMsg(html);
+	}
+}
+
+function lottery_user(num){
+	$.ajax({
+    type: "GET",
+    url: '<%= lottery_wx_wall_path(@wx_wall) %>',
+    dataType: 'json',
+    // timeout:30000,
+    success: function (data) {
+      if ( data.user_html == "" ) {
+      	url = "/assets/wx_wall/user-img2.jpg";
+      	name = "... ...";
+      	html = "";
+      	alert("参与者已抽完，抽奖结束");
+				$(".luck-btn").removeAttr("disabled");
+				$(".luck-btn span").text("开始抽奖");
+      } else {
+      	tempJsion = data.temp;
+        url = data.user_url;
+      	name = data.user_name;
+      	html = data.user_html;
+      	if(num){
+      		lottery.start(lottery.num);
+      	}else{
+      		lottery.start();
+					lottery.num = $(".part-select select").val();
+      	}
+      } 
+    },
+    error: function(e){
+    	url = "/assets/wx_wall/user-img.jpg";
+    	name = "... ...";
+    	html = "";
+    	alert("抽奖失败");
+			$(".luck-btn").removeAttr("disabled");
+			$(".luck-btn span").text("开始抽奖");
+    }
+  });
+}
+</script>
+<% end %>

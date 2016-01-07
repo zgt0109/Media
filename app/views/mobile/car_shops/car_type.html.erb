@@ -1,0 +1,20 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-slider slider-hor" id="index">
+      <ul class="slider-list">
+          <li><a><img src="<%= @car_catena.pic_url || '/assets/mobile/wcar/bg2.jpg' %>"/></a></li>
+      </ul><!--slider-list end-->
+    </div><!--mod-slider end-->
+    <div class="mod-title">
+      <img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/><%= @car_catena.name %>
+    </div>
+    <div class="mod-list">
+      <% @car_types.each_with_index do |type,index| %>
+        <a href="<%= mobile_car_shop_path(type, supplier_id: @supplier.id) %>" class="mod-fa fa fa-chevron-right">
+          <b><%= type.name %></b><small><%= f type.price %>万元</small>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</section>

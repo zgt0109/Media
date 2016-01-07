@@ -1,0 +1,120 @@
+<%
+  @categories, @data_pay_up, @data_pay_down, @data_pay_up_money, @data_pay_down_money, @start, @count_pay_up, @count_pay_down, @count_pay_up_money, @count_pay_down_money = chart_transaction_data_for_shop_branch(@shop_branch,@date,@today)
+  
+  @chart, @chart_money = chart_transaction_base_line_for_shop_branch(@categories, @data_pay_up, @data_pay_down, @data_pay_up_money, @data_pay_down_money, VipUserTransaction::DATES[@date]) if @categories.present?
+%>
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微门店', micro_shops_url %></li>
+      <li><%= link_to '门店管理', micro_shop_branches_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class=" col-md-12 ">
+        <div class="clearfix">
+          <%{"最近7天" => "one_weeks", "最近一月" => "one_months", "最近半年" => "six_months", "最近一年" => "twelve_months"}.each do |key, value|%>
+            <a href="<%= highchart_micro_shop_branch_path(@shop_branch,created_date: value) %>" class="btn btn-primary btn-filter btn-filter-tab <%= "active" if @date == value %>"><%= key %></a>
+          <%end%>
+        </div>
+        <% if @chart && @chart_money %>
+          <div class="chart margin-top-20">
+            <div class="col-md-8 highCharts">
+              <div class="chart" id="transactions_count"></div>
+              <div>
+                <span><%= @start %></span>
+                <span class="margin-left-10">到</span>
+                <span class="margin-left-10"><%= @today %></span>
+                <span class="margin-left-20">共消费 <%= @count_pay_down %> 次</span>
+                <span class="margin-left-20">共充值 <%= @count_pay_up %> 次</span>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="well">
+                <div class="chartInfoHead">消费次数</div>
+                <div class="chartInfoCon1 text-warning">
+                  <b><%= @today_transactions.pay_down.count %></b>
+                  <span>今日消费次数</span>
+                </div>
+                <div class="chartInfoCon2 text-info ">
+                  <b><%= @yesterday_transactions.pay_down.count %></b>
+                  <span>昨日消费次数</span>
+                </div>
+                <div class="chartInfoHeadFooter">目前消费共计<%= @total_transactions.pay_down.count %>次</div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="well">
+                <div class="chartInfoHead">充值次数</div>
+                <div class="chartInfoCon1 text-warning">
+                  <b><%= @today_transactions.pay_up.count %></b>
+                  <span>今日充值次数</span>
+                </div>
+                <div class="chartInfoCon2 text-info ">
+                  <b><%= @yesterday_transactions.pay_up.count %></b>
+                  <span>昨日充值次数</span>
+                </div>
+                <div class="chartInfoHeadFooter">目前充值共计<%= @total_transactions.pay_up.count %>次</div>
+              </div>
+            </div>
+          </div>
+          <div class="chart margin-top-20">
+            <div class="col-md-8 highCharts">
+              <div class="chart" id="transactions_money"></div>
+              <div>
+                <span><%= @start %></span>
+                <span class="margin-left-10">到</span>
+                <span class="margin-left-10"><%= @today %></span>
+                <span class="margin-left-20">共消费 <%= @count_pay_down_money %> 元</span>
+                <span class="margin-left-20">共充值 <%= @count_pay_up_money %> 元</span>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="well">
+                <div class="chartInfoHead">消费金额</div>
+                <div class="chartInfoCon1 text-warning">
+                  <b><%= @today_transactions.pay_down.sum(:amount) %></b>
+                  <span>今日消费金额</span>
+                </div>
+                <div class="chartInfoCon2 text-info ">
+                  <b><%= @yesterday_transactions.pay_down.sum(:amount) %></b>
+                  <span>昨日消费金额</span>
+                </div>
+                <div class="chartInfoHeadFooter">目前消费共计<%= @total_transactions.pay_down.sum(:amount) %>元</div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="well">
+                <div class="chartInfoHead">充值金额</div>
+                <div class="chartInfoCon1 text-warning">
+                  <b><%= @today_transactions.pay_up.sum(:amount) %></b>
+                  <span>今日充值金额</span>
+                </div>
+                <div class="chartInfoCon2 text-info ">
+                  <b><%= @yesterday_transactions.pay_up.sum(:amount) %></b>
+                  <span>昨日充值金额</span>
+                </div>
+                <div class="chartInfoHeadFooter">目前充值共计<%= @total_transactions.pay_up.sum(:amount) %>元</div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    <% if @chart && @chart_money %>
+      $('#transactions_count').append("<%= escape_javascript(high_chart('chart_basic_line1', @chart)) -%>");
+      $('#transactions_money').append("<%= escape_javascript(high_chart('chart_basic_line2', @chart_money)) -%>");
+    <% end %>
+  });
+</script>
+<% end %>

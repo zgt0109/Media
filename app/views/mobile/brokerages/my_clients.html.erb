@@ -1,0 +1,81 @@
+<div class="content">
+	<div class="my-client">
+		<section>
+			<div class="my-content lanmu-content">
+				<ul class="lanmu-list">
+					<li class="fc">
+						<p>
+							<span class="state type">全部状态<img src="/assets/mobile/brokerage/about-all.png" /> </span>
+							<span class="name">姓名</span>
+							<span class="phone">电话</span>
+						</p>
+					</li>
+					<%= render partial: 'my_clients', collection: @my_clients, as: :client %>
+				</ul>
+				<% if @my_clients.next_page %>
+	        <%= link_to_next_page @my_clients, '查看更多 ↓', remote: true, class: "listmore" %>
+	      <% end %>
+			</div>
+		</section>
+	</div>
+</div>
+<div class="footer">
+	<span class="btn-state" id="btn-state"><a href="#">状态说明</a></span>
+	<span class="btn-clear"><a href="<%= commission_list_mobile_brokerages_path(@supplier) %>">结算明细</a></span>
+	<% types = @supplier.brokerage_commission_types.enabled %>
+	<div class="tips">
+		<% type_names = types.map{|t| t.mission_type_name} %>
+		<% if type_names.include?("新客户") %>
+			<h3>新客户：</h3>
+			<p>经纪人推荐的新客户，商户未做电话回访；</p>
+		<% end %>
+		<% if type_names.include?("无意向") %>
+			<h3>无意向：</h3>
+			<p>对客户做电话回访，表示无意向消费；</p>
+		<% end %>
+		<% if type_names.include?("有意向") %>
+			<h3>有意向：</h3>
+			<p>对客户做电话回访，仅表明有意向消费；</p>
+		<% end %>
+		<% if type_names.include?("已到访") %>
+			<h3>已到访：</h3>
+			<p>客户已成功预约并到访；</p>
+		<% end %>
+		<% if type_names.include?("已订购") %>
+			<h3>已订购：</h3>
+			<p>客户预定，并交付消费定金；</p>
+		<% end %>
+		<% if type_names.include?("已购买") %>
+			<h3>已购买：</h3>
+			<p>客户付全款，成功购买；</p>
+		<% end %>
+		<div class="cl15"></div>
+		<div class="closed"></div>
+	</div>
+</div>
+<div class="float">
+	<div class="blank10"></div>
+	<p><%= link_to "全部", my_clients_mobile_brokerages_path(@supplier) %></p>
+	<% types.map{|t| [t.mission_type,t.mission_type_name]}.each_with_index do |type,index| %>
+	<p class="<%= 'bn' if index == (types.length-1) %>"><%= link_to type[1], my_clients_mobile_brokerages_path(@supplier, mission_type: type[0]) %></p>
+	<% end %>
+</div>
+<div class="black"></div>
+<script type="text/javascript">
+$(document).bind("click",function(e){ 
+  var target  = $(e.target); 
+  if(target.closest(".type").length == 0){ 
+    $(".float").hide(); 
+  }else{ 
+  	$(".float").show(); 
+	} 
+});
+$("#btn-state").click(function(){
+	$(".tips").show();
+	$(".black").show();
+});
+$(".closed").click(function(){
+	$(".tips").hide();
+	$(".black").hide();
+})
+</script> 

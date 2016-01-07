@@ -1,0 +1,24 @@
+<% materials.each_with_index do |material| %>
+  <div class="warpVMS">
+    <div class="vMicroShow">
+      <div class="vMSHd">
+        <div class="vMSImg" id="img-0"><%= image_tag material.pic_url, width: '338' if material.pic_url %></div>
+        <p class="vMSTitle"><%= material.title %></p>
+      </div>
+      
+      <div class="vMSList">
+      <% material.children.graphic_select.each do |child| %>
+        <div class="vMSli">
+          <span class="pull-left"><%= child.title %></span>
+          <span class="pull-right" id="img-2"><%= image_tag child.pic_url, size: '70x70' if child.pic_url %></span>
+        </div>
+      <% end %>
+      </div>
+      
+      <div class="vMSFootBtn">
+        <%= link_to edit_multiple_material_url(material) do %><i class="fa fa-pencil"></i><% end %>
+        <%= link_to material, method: :delete, confirm: '确定要删除图文吗？' do %><i class="fa fa-trash-o"></i><% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

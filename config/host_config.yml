@@ -1,0 +1,43 @@
+defaults: &defaults
+  wshop_host:        "http://ec.winwemedia.com"
+  wmall_host:        "http://testhotel.winwemedia.com"
+  wlife_host:        "http://wlife.winwemedia.com"
+  hotel_host:        "http://testhotel.winwemedia.com"
+  recommend_host:    "http://recommend.winwemedia.com"
+  oa_host:           "http://testhotel.winwemedia.com"
+  faye_host:         "http://faye.service.winwemedia.com:9393"
+  merchant_app_host: "http://api.winwemedia.com"
+
+development:
+  <<: *defaults
+  wshop_host:        "http://127.0.0.1:3000"
+  wmall_host:        "http://127.0.0.1:3002"
+  wlife_host:        "http://127.0.0.1:3001"
+  recommend_host:    "http://192.168.1.154"
+  merchant_app_host: "http://api.winwemedia.local:3006"
+
+test:
+  <<: *defaults
+  wshop_host:     "http://ec.testing.winwemedia.com"
+  wmall_host:     "http://testhotel.winwemedia.com"
+
+staging:
+  <<: *defaults
+  wshop_host:        "http://staging.ec.winwemedia.com"
+  wmall_host:        "http://staging.vcoolife.winwemedia.com"
+  wlife_host:        "http://wlife.winwemedia.com"
+  hotel_host:        "http://staging.winwemedia.com"
+  oa_host:           "http://staging.winwemedia.com"
+  recommend_host:    "http://staging.winwemedia.com"
+  merchant_app_host: "http://api.winwemedia.com"
+
+production:
+  <<: *defaults
+  wshop_host:        "http://ec.winwemedia.com"
+  wmall_host:        "http://vcoolife.winwemedia.com"
+  wlife_host:        "http://life.winwemedia.com"
+  hotel_host:        "http://hotel.winwemedia.com"
+  oa_host:           "http://oa.winwemedia.com"
+  recommend_host:    "http://lifeboat.winwemedia.com"
+  faye_host:         "http://faye.service.winwemedia.com:9393"
+  merchant_app_host: "http://api.winwemedia.com"

@@ -1,0 +1,26 @@
+<section id="sec-index">
+  <div class="body">
+    <%- if @orders.blank? %>
+      <div class="mod-null">
+        暂无记录
+      </div>
+     <%- else %>
+        <%- @orders.each do |order| %>
+          <div class="list">
+            <a href="<%= detail_mobile_reservation_path(id: order.id, activity_id: @reservation.id) %>" class="fa fa-angle-right">
+              <p><%= order.activity.try(:extend).try(:service) %></p>
+              <p><span><%= order.nickname %></span><span><%= order.reservation_date %></span><span class="pull-right"><%= order.status_name %></span></p>
+            </a>
+          </div>
+        <%- end %>
+      <%- end %>
+    <div class="mod-btn" style="position: fixed; bottom: 0; left:0; width: 100%; z-index: 10;">
+      <%- if @wx_user.present? %>
+        <a class="btn btn-blue btn-big" href="<%= new_mobile_reservation_path(activity_id: @reservation.id) %>">我要预定</a>
+      <%- else %>
+        <a class="btn btn-gray btn-big" href="#">关注微信账号预定</a>
+      <%- end %>
+      <a class="btn btn-green btn-big" href="tel:<%= @reservation.extend.mobile %>"><i class="fa fa-phone"></i><%= @reservation.extend.mobile  %></a>
+    </div>
+  </div>
+</section>

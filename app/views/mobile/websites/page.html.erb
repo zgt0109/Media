@@ -1,0 +1,19 @@
+<% title @website.try(:name) %>
+<% stylesheet "/stylesheets/vweisiteV01/list/list#{@template_id}.css" %>
+
+<% if @website_menu.has_children? or @website_menu.games? %>
+  <%= render "mobile/websites/channel/template#{@template_id}", { website_menu: @website_menu } %>
+<% elsif @website_menu.multiple_graphic? %>
+  <%- main_material = @website_menu.menuable -%>
+  <%= render "mobile/websites/channel/template#{@template_id}", { website_menu: nil, main_material: main_material, child_material: main_material.children.order(:sort) } if main_material %>
+<% elsif @website_menu.single_graphic? || @website_menu.text? %>
+  <%= render "mobile/websites/detail/template#{@template_id}", { website_menu: @website_menu } if @website_menu.menuable %>
+<% elsif @website_menu.url? %>
+  <script>
+    window.location = '<%= raw @website_menu.url %>';
+  </script>
+<% elsif @website_menu.activity? %>
+  <script>
+    window.location = '<%= raw website_activity_link(@website_menu) %>';
+  </script>
+<% end %>

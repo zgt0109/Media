@@ -1,0 +1,162 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+	<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+      <li><%= link_to '微枚迪支付', supplier_accounts_path %></li>
+      <li><%= link_to '支付申请', supplier_accounts_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+	<div class="page-content">
+    <div class="col-sm-10 font-size16">
+      <p class="font-size30"><b>申请微枚迪支付的流程及条件</b></p>
+      <p class="font-size16"><b>A、微枚迪支付申请条件</b></p>
+      <p>1、必须是企业商户</p>
+      <p>2、行业、经营范围必须在微枚迪支付可申请的行业内；</p>
+      <p>3、必须缴纳保证金1000元整。</p>
+      <p class="font-size16"><b>B、申请详细流程说明</b></p>
+      <p>1、与商户签订微枚迪支付合作协议，并将协议邮寄至微枚迪上海总部，总部确认后，将盖有公章协议回寄商户；</p>
+      <p>2、请务必提供以下扫描件复印件，邮寄送至微枚迪上海总部<span class="red">(总部地址：上海浦东新区郭守敬路498弄22号305室支付资质审核部收)</span>；</p>
+      <p>加盖公章的对应资质扫描件【详见各行业资质材料表】。</p>
+      <p>b、企业营业执照副本<span class="red">（加盖公司公章）</span>扫描件</p>
+      <p>c、组织机构代码证<span class="red">（加盖公司公章）</span>扫描件</p>
+      <p>d、税务登记证<span class="red">（加盖公司公章）</span>扫描件</p>
+      <p>e、法人或业务经办人身份证<span class="red">（加盖公司公章）</span>扫描件。<span class="red">（身份证一张A4纸正反面）</span></p>
+      <p>3、微枚迪审核人员对签署的协议及相关资质进行审核及开通确认，对符合申请条件的商户，进行微枚迪支付功能开通。</p>
+      <p class="font-size30"><b>资费标准</b></p>
+      <p>1、微枚迪支付的费率：2%；</p>
+      <p>2、提现手续费：金额1万以下收取5元，1至10万收取10元，10至50万收取15元，50至100万收取20元，最高收取200元，另外：原先支持打通支付宝和易宝两种支付方式，自2015年2月6日起支付宝停用，现只支持打通易宝支付；</p>
+      <p>3、微枚迪支付费率及结算周期,详细见合作协议。</p>
+      <p class="font-size30"><b>微枚迪支付开放的类目和资质</b></p>
+      <div class="table">
+        <table class="table table-striped table-bordered text-center dataTable " id="vcfieldTable">
+          <thead>
+          <tr>
+            <th class="text-center">经营行业类目</th>
+            <th class="text-center">基本资质</th>
+            <th class="text-center">资质要求</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>综合商城</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>服饰鞋包</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>数码家电</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>鲜花礼品</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>美容护肤</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《化妆品生产许可证》</td>
+          </tr>
+          <tr>
+            <td>团购</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>机票旅游</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《中国民用航空运输销售代理业务资格认可证书》航空运输企业资质</td>
+          </tr>
+          <tr>
+            <td>商务办公</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>文体用品</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>图书音像</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《出版许可证》、《音像制品经营许可证》</td>
+          </tr>
+          <tr>
+            <td>家居装潢</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>母婴儿童</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《企业经营许可证》</td>
+          </tr>
+          <tr>
+            <td>食品饮料</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《食品卫生许可证》、《酒类流通备案登记表》</td>
+          </tr>
+          <tr>
+            <td>资讯杂志</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《出版物经营许可证》、《杂志出版许可证》</td>
+          </tr>
+          <tr>
+            <td>教育咨询</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《办学许可证》</td>
+          </tr>
+          <tr>
+            <td>金融保险理财</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td>《经营保险业务许可证》、《保险代理业务许可证》、《保险经纪业务许可证》、《保险公估业务许可证》</td>
+          </tr>
+          <tr>
+            <td>社交爱好</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>娱乐休闲</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>社区论坛</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>社会公益</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>其他行业</td>
+            <td>参见申请说明（b、c、d、e）</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="red">注明：古玩、珠宝等奢侈品、投资类行业无法申请</td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-center">
+        <a href="<%= supplier_accounts_path %>" class="btn btn-primary">立即申请</a>
+      </p>
+    </div>
+	</div>
+</div>
+<% end %>

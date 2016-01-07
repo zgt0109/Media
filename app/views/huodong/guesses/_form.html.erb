@@ -1,0 +1,123 @@
+<%= content_for :tab do %>
+<div class="col-sm-12">
+  <%= render 'application/weixin_preview', wx_title: @activity.name, wx_summary: @activity.summary %>
+  <%= form_for @activity, url: @activity.new_record? ? guesses_path : guess_path(@activity), validate: true, html: { class: 'form col-sm-7', role: :form } do |f| %>
+  <%- if @activity.persisted? %>
+      <%= hidden_field_tag :return_url, settings_guess_path(@activity)%>
+  <%- end %>
+  <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+  <%= f.hidden_field :activity_type_id, value: ActivityType::GUESS %>
+  <%= render "weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key, include_activity_date: 3, include_description: 2 %>
+  <%= f.fields_for :guess_setting, (@activity.guess_setting || @activity.build_guess_setting) do |guess_setting_form| %>
+  <%
+  [
+    ['用户每天可答题数', :user_day_answer_limit],
+    ['用户总计答题数目', :user_total_answer_limit]
+    ].each do |label_name, field_name, selection_values| %>
+    <div class="form-group">
+      <div class="clearfix">
+        <label class="col-sm-8 row line-height-32">
+          <span class="lbl"><%= label_name %></span>
+          <small class="help-inline text-warning line-height-32">-1表示不限制次数</small>
+        </label>
+        <%= guess_setting_form.text_field field_name, class: 'col-sm-8', placeholder: "-1", validate: true  %>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="form-group">
+      <% Guess::Setting.user_type_options.each do |user_type_name, user_type_value| %>
+      <label class="line-height-32 margin-right-10">
+        <%= guess_setting_form.radio_button :user_type, user_type_value, class: "ace user_type_name" %>
+        <span class="lbl"><%= user_type_name %></span>
+      </label>
+      <% end %>
+    </div>
+    <div class="form-group">
+      <p>中奖提交信息设置</p>
+      <% Guess::Setting::USER_INFO_COLUMNS.each do |column, column_name| %>
+      <label class="line-height-32 margin-right-10">
+        <%- checked_flag = (@activity.guess_setting.user_info_columns.to_a.include?(column)) || column_name == '手机'  %>
+        <%- disabled_flag = (column_name == '手机') %>
+
+        <%= check_box_tag :user_info_columns, column, checked_flag, name: 'activity[guess_setting_attributes][user_info_columns][]', disabled: disabled_flag, class: :ace, id: column  %>
+        <span class="lbl"><%= column_name %></span>
+      </label>
+      <% end %>
+    </div>
+    <div class="form-group">
+      <div class="clearfix">
+        <label class="line-height-32 margin-right-20">
+          <%= guess_setting_form.check_box :use_points, class: :ace, id: 'use_points', disabled: true  %>
+          <span class="lbl"> 积分猜图活动</span>
+        </label>
+        <span>每次答题消耗积分</span>
+        <%= guess_setting_form.text_field :answer_points, class: 'width-100px', id: 'answer_points', maxlength: 5, disabled: true %>
+      </div>
+    </div>
+    <% end %>
+    <div class="form-group">
+      <%- if @activity.can_not_edit? || @activity.stopped? %>
+        <a class="btn btn-success btn-sm btn-next" href="<%= settings_guess_path(@activity) %>">下一步<i class="icon-arrow-right icon-on-right"></i></a>
+      <%- else %>
+        <button type="submit" class="btn form-submit btn-success btn-sm btn-next">
+          下一步<i class="icon-arrow-right icon-on-right"></i>
+        </button>
+      <%- end %>
+
+      <a href="javascript:void(0);" class="btn btn-sm">返回</a>
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+  <%= render "header" %>
+  <% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      <%- @activity.guess_setting.user_info_columns.each do |column| %>
+      var dom = document.getElementById('<%= column %>');
+      dom.checked = true;
+      <%- end %>
+
+      <%- if @activity.can_not_edit? || @activity.stopped?  %>
+        $('input,select,textarea').prop('disabled', true);
+        $('.wysiwyg-editor').attr('contenteditable', false);
+      <% end %>
+
+    })
+
+    $('#use_points').on('click', function(){
+      if ($(this).get(0).checked){
+        $('#answer_points').attr('disabled', false);
+      }
+      else{
+        $('#answer_points').attr('disabled', true)
+      }
+    })
+
+    $('#answer_points').on('change', function(){
+      $(this).val(parseInt($(this).val()));
+    })
+
+    $('.user_type_name').on('click', function(){
+      var user_type = $('.user_type_name:checked').val();
+      if(user_type == '3'){
+        $('#use_points').attr('disabled', false);
+        $('#answer_points').attr('disabled', false);
+      }else{
+        $('#use_points').attr('disabled', true);
+        $('#answer_points').attr('disabled', true);
+        $('#use_points').get(0).checked = false;
+      }
+    })
+
+    $('.form-submit').on('click', function(){
+      var need_points = (document.getElementById('use_points').checked),
+      use_points = parseInt(document.getElementById('answer_points').value);
+      if ((need_points && use_points <= 0) || isNaN(use_points)){
+        showTip('warning', '请输入每次答题消耗积分,且积分为正整数')
+        return false;
+      }
+    })
+  </script>
+  <% end %>

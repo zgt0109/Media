@@ -1,0 +1,107 @@
+<div class="convert">
+  <h2 class="convert-tit"><%= "恭喜您！已获得" + @prize.try(:title).to_s + "!" %></h2>
+  <div class="convert-qrcode">
+    <%= image_tag "#{@activity_consume.rqrcode}", size: "324x324", class: "img-full", alt: "" %>
+    <p class="convert-qrcode-tit">兑奖二维码</p>
+  </div>
+  <div class="convert-sn">兑奖SN码：<%= @activity_consume.code %></div>
+  <div class="convert-btn">
+    <a href="javascript:;" class="btn main-btn main-btn-full main-btn-convertprize">密码兑换</a>
+  </div>
+</div>
+
+<%= render 'dialog_form' %>
+
+<%= content_for :custom_js do %>
+  <script typt="text/javascript">
+    function enableSubmit() {
+      $submit = $('.dialog-form2 .dialog-btn');
+
+      $submit.css({'pointer-events': 'auto'});
+      $submit.text("提交");
+    }
+  
+    function disableSubmit() {
+      $submit = $('.dialog-form2 .dialog-btn')
+
+      $submit.css({'pointer-events': 'none'});
+      $submit.text("提交中...");
+    }
+
+    function showAccepteErrorInfo(errInfo)
+    {
+      $formSectionObj = $('.dialog-form2');
+      $wpError = $('.dialog-form-error', $formSectionObj);
+      $wpError.text(errInfo);
+    }
+
+    function hideAccepteErrorInfo()
+    {
+      $formSectionObj = $('.dialog-form2');
+      $wpError = $('.dialog-form-error', $formSectionObj);
+      $wpError.text('');
+    }
+    
+    // acceptance prize
+    function getPasswordAndShop(){
+      $dialog = $(".dialog-form-main");
+      $password = $(".input-password", $dialog);
+      $shop = $(".input-shop:checked", $dialog);
+     
+      return {
+        password: $password.val(),
+        shop: $shop.val()
+      } 
+    }
+
+    function form2Submit(){
+      hideAccepteErrorInfo();
+
+      disableSubmit();
+
+      if ((this.promise_) && (this.promise_.state() == 'pending')) {
+        this.promise_.abort();
+      }
+
+      this.promise_ = $.ajax({
+        url: "<%= acceptance_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>",
+        type: "post",
+        data: getPasswordAndShop(),
+        dataType: "json",
+        success: function (data, textStatus, jqXhr) {
+          //alert("acceptance success: errcode = " + data.errcode + ", errmsg = " + data.errmsg); 
+          //console.log("acceptance prize successfully");
+          if (data.errcode == 0) {
+            if (data.prize_type == 'point_prize') { // 积分奖特殊处理
+              if (data.status == <%= ActivityConsume::USED %>) { // 积分奖充值, 回到主页
+                window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>";
+              }
+              else {
+                showAccepteErrorInfo('会员未注册或无效会员');
+              }
+            }
+            else { // 普通奖, 回到主页
+              window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>";
+            }
+          }
+          else {
+            //alert(data.errmsg);
+            showAccepteErrorInfo(data.errmsg);
+          }
+
+          enableSubmit();
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          //alert("acceptance error: " + errorThrown); 
+          //console.log("acceptance prize error");
+          //showAccepteErrorInfo(errorThrown);
+
+          var data = $.parseJSON(jqXhr.responseText);
+          showAccepteErrorInfo(data.errmsg);
+          enableSubmit();
+        }
+      });
+    }
+
+  </script>
+<% end %>

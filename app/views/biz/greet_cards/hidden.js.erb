@@ -1,0 +1,3 @@
+var tag_li = $("#view_hidden_<%= @card.id %>");
+tag_li.removeClass('icon-eye-open').addClass('icon-eye-close');
+tag_li.closest("a").attr("title", "点击显示贺卡").attr("href", "/greet_cards/<%= @card.id %>/view");

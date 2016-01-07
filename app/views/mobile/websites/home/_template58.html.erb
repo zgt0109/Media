@@ -1,0 +1,68 @@
+<div class="mod-slider slider-ver" id="index">
+  <ul class="slider-list">
+    <% website_menus.each do |menu| %>
+        <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
+        <li>
+          <div class="index">
+            <div class="hd">
+              <a class="fa fa-chevron-circle-left" onclick="indexSwipe.prev()"></a>
+              <h1><%= menu.title %></h1>
+              <a class="fa fa-chevron-circle-right" onclick="indexSwipe.next()"></a>
+            </div>
+            <% if menu.pic? || menu.font_icon.present? %>
+                <div class="bd">
+                  <% if menu.pic? %>
+                      <%= image_tag menu.pic.custom %>
+                  <% elsif menu.font_icon.present? %>
+                      <i class="<%= menu.font_icon %>"></i>
+                  <% end %>
+                </div>
+            <% end %>
+            <div class="ft">
+              <% if menu.multiple_graphic? %>
+                  <% main_material = menu.menuable %>
+                  <%= link_to material_type_url(main_material, menu), class: 'box mod-index' do %>
+                      <i><%= image_tag main_material.pic.large if main_material.pic? %></i>
+                      <small><%= main_material.title %></small>
+                  <% end if main_material.present? %>
+                  <% main_material.children.each do |child| %>
+                      <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
+                          <i><%= image_tag main_material.pic.large if main_material.pic? %></i>
+                          <small><%= child.title %></small>
+                      <% end %>
+                  <% end if main_material.present? %>
+              <% else %>
+                  <% menu.sub_menus.each do |child| %>
+                      <%= link_to menu_url(child), class: 'box mod-index' do %>
+                          <% if child.pic? %>
+                              <%= image_tag child.pic.thumb %>
+                          <% else %>
+                              <i class="<%= child.font_icon %>"></i>
+                          <% end %>
+                          <small><%= child.try(:name) %></small>
+                      <% end %>
+                  <% end %>
+              <% end %>
+            </div>
+          </div>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+
+<% content_for :document_ready_js do %>
+    indexSwipe=divSwipe("index");
+    $(".index .hd, .index .bd").on({
+        touchstart:function(){
+            var self=$(this),
+            $index=self.parents(".index");
+            $index.addClass("active");
+        },
+        touchend:function(){
+            var self=$(this),
+            $index=self.parents(".index");
+            $index.removeClass("active");
+        }
+    });
+<% end %>

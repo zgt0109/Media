@@ -1,0 +1,26 @@
+<%
+limit ||= 4
+show_image ||= :yes
+%>
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.each_with_index do |menu, index| %>
+      <%if index % limit == 0%><li><%end%>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <% if show_image == :yes %>
+              <% if menu.pic? %>
+                <i><%= image_tag menu.pic.thumb %></i>
+              <% else %>
+                <i class="fa <%= menu.font_icon %>"></i>
+              <% end %>
+            <% end %>
+            <small><%= menu.title %></small>
+          <%end%>
+          <%if index % limit == (limit - 1)%></li><%end%>
+      <%end%>
+    </ul>
+  </div>
+
+  <% content_for :document_ready_js do %>
+    divSwipe("indexList");
+  <% end %>

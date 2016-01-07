@@ -1,0 +1,123 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微服务', bookings_path %></li>
+          <li><%= link_to '商品管理', booking_items_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+
+        <div class="row">
+
+          <%= form_tag booking_items_path, :method => :get do %>
+              <div class="col-sm-12">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">商品编号：</span>
+                    <%= text_field_tag :id, params[:id], class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">商品名称：</span>
+                    <%= text_field_tag :name, params[:name], class: 'col-xs-12' %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 margin-top-10">
+                <div class="col-md-6 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">商品分类：</span>
+                    <div class="col-xs-12 row" id="selects">
+                      <% @booking_categories_selects.each do |select|%>
+                          <div class="col-xs-4">
+                            <%= select_tag "booking_category_id#{select[0]}", options_for_select([['不限','-1']] + select[1].collect{|t| [t.name, t.id]}, selected: params["booking_category_id#{select[0]}".to_sym]), class: "col-xs-12 row booking_category", rel: select[0]  %>
+                          </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <%= hidden_field_tag :booking_category_id, params[:booking_category_id], class: 'hidden_booking_category_id' %>
+                <div class="col-md-3">
+                  <button class="btn btn-primary btn-sm btn-filter">查询</button>
+                </div>
+                <div class="col-md-3 row pull-right">
+                  <%= link_to '新增', new_booking_item_path, class: 'btn btn-sm btn-primary btn-filter pull-right' %>
+                </div>
+              </div>
+          <% end %>
+
+          <div class="col-md-12 margin-top-20">
+            <table id="goodsTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+              <tr>
+                <th>编号</th>
+                <th>分类</th>
+                <th>商品名</th>
+                <th>价格</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody id="colleges_body">
+              <% @booking_items.each do |item| %>
+                  <tr>
+                    <td><%= item.id %></td>
+                    <td><%= item.booking_category.try(:com_str, [item.booking_category.try(:name)])  %></td>
+                    <td><%= item.name %></td>
+                    <td><%= f item.price %></td>
+                    <td class="txt-left-align">
+                      <%= link_to '编辑', edit_booking_item_path(item) %>
+                      <%= link_to '删除', booking_item_path(item), data: {method: :delete, confirm: '确定要删除吗？'} %>
+                    </td>
+                  </tr>
+              <% end %>
+              <% if @booking_items.blank? %>
+                <tr><td colspan="5">无记录</td></tr>
+              <% end %>
+              </tbody>
+            </table>
+            <%= paginate @booking_items %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            if($('.booking_category:visible:last').val() != '-1') $(".hidden_booking_category_id").val($('.booking_category:visible:last').val());
+            $("#selects").on("change", ".booking_category", function(){
+                if($(this).val() == "-1"){
+                    var select = $(this)
+                    $.each($('.booking_category'), function(){
+                        if(parseInt($(this).attr('rel')) > parseInt(select.attr('rel'))){
+                            $(this).html('<option value="-1">不限</option>');
+                        }else{
+                            if(parseInt(select.attr('rel')) == 1){
+                                $(".hidden_booking_category_id").val('');
+                            }else{
+                                $(".hidden_booking_category_id").val($(".booking_category[rel=" + (parseInt(select.attr('rel')) - 1) + "]").val());
+                            }
+                        }
+                    });
+                }
+                else{
+                    $.ajax({
+                        type: "GET",
+                        url: "/booking_categories/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=2',
+                        success: function(data) {
+                            return false;
+                        },
+                        error: function() {
+                            return false;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+<% end %>

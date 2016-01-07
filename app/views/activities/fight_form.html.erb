@@ -1,0 +1,136 @@
+<% content_for :main_content do %>
+<% @activity_notice = @activity.active_activity_notice %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '一战到底', fights_activities_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render "weixin_preview", wx_title: @activity_notice.try(:title) || '标题', wx_summary: @activity_notice.try(:summary) || @activity_notice.try(:description) %>
+        <% @activity.can_validate = true %>
+        <%= form_for @activity, validate: true, :html => { :class => 'form col-sm-7' } do |f| %>
+          <%= f.hidden_field :activity_type_id, value: @activity.activity_type_id %>
+          <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+          <div class="form-group">
+            <label class="control-label">活动触发关键词<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :keyword, class: 'col-xs-6', validate: true %>
+            </div>
+          </div>
+
+          <%= f.fields_for :active_activity_notice do |active_activity_notice| %>
+            <%= active_activity_notice.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+            <div class="form-group">
+              <label class="control-label">活动名称<span class="required-star">*</span><small class="help-inline text-warning line-height-32">不能超过12个字</small></label>
+              <div class="clearfix">
+                <%= active_activity_notice.text_field :title, id: 'wx_title', class: 'col-xs-6', validate: true, rel: 'ready_activity_title' %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">微信消息图片<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <div data-name="activity[active_activity_notice_attributes][qiniu_pic_key]" data-img = "<%= @activity_notice.pic_url %>" data-key="<%= @activity_notice.qiniu_pic_key || "" %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
+                <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">微信消息摘要</label>
+              <div class="clearfix">
+                <%= active_activity_notice.text_area :summary, maxlength: 500, id: 'wx_summary', class: "col-xs-6", rows: 6, rel: 'ready_activity_notice_summary' %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="form-group">
+            <label class="control-label">活动说明<span class="required-star">*</span><small class="help-inline text-warning line-height-32">不能超过2000个字</small></label>
+            <div class="clearfix">
+              <%#= f.text_area :description, class: 'col-xs-6', rows: 5, validate: true %>
+              <%= render "shared/form_rich_text", field_name: "description", obj: f.object, f: f, wrapper_html_options: {class: "col-md-11"}%>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">活动时间<span class="required-star">*</span><span class="help-inline text-warning line-height-32">保存后不能修改，请确保结束时间大于开始时间，活动持续时间不能超过7天</span></label>
+            <div class="clearfix">
+                <div class="input-daterange input-group col-xs-6 no-padding">
+                  <%= datetime_range_tag f, options: {class: 'required datetimerange col-sm-12', disabled: @activity.persisted?} %>
+                </div>
+            </div>
+          </div>
+
+          <%= f.fields_for :activity_property do |activity_property| %>
+            <%= activity_property.hidden_field :activity_type_id, value: @activity.activity_type_id %>
+            <div class="form-group">
+              <label>
+              <%= activity_property.check_box :vip_only, class: 'ace'%>
+                <span class="lbl">仅会员可参与</span>
+                <small class="text-warning">若不勾选则所有关注粉丝可参与</small>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="control-label">活动规则<span class="required-star">*</span><small class="help-inline text-warning line-height-32">同样积分者，按答题速度优先的用户排名为先，不能超过2000个字</small></label>
+              <div class="clearfix">
+                <%#= activity_property.text_area :special_warn, class: 'col-xs-6', rows: 5, validate: true %>
+                <%= render "shared/form_rich_text", field_name: "special_warn", obj: activity_property.object, f: activity_property, wrapper_html_options: {class: "col-md-11"}%>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">每道题目分值<span class="required-star">*</span><small class="help-inline text-warning line-height-32">默认为10分，不能超过1000分，如需修改请同步修改活动说明</small></label>
+              <div class="clearfix">
+                <%= activity_property.text_field :question_score, maxlength: 4, class: 'col-xs-6', validate: true %>
+              </div>
+            </div>
+          <% end %>
+
+          <%= f.fields_for :activity_prizes do |activity_prize| %>
+            <%= activity_prize.hidden_field :title, value: activity_prize.object.title %>
+            <div class="form-group">
+              <label class="control-label"><%= activity_prize.object.title %>奖品设置<span class="required-star">*</span><small class="help-inline text-warning line-height-32">不能超过50个字</small></label>
+              <div class="clearfix">
+                <%= activity_prize.text_field :prize, class: 'fight-activity-prize-prize col-xs-6', validate: true %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label"><%= activity_prize.object.title %>奖品数量<span class="required-star">*</span><small class="help-inline text-warning line-height-32">首次设置后不能修改，数量为0～500，0表示无<%= activity_prize.object.title %></small></label>
+              <div class="clearfix">
+                <%= activity_prize.text_field :prize_count, class: 'col-xs-6 remove-last-dot fight-activity-prize-prize-count', validate: true %>
+              </div>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <label class="control-label">榜单公示期<small class="help-inline text-warning line-height-32">（默认为活动结束后7天）</small></label>
+            <div class="clearfix">
+              <%= text_field_tag "extend_show_list_day", @activity.extend.show_list_day, class: 'col-xs-6', validate: true %>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <% if !current_page?("/activities/#{@activity.id}") %>
+              <%= f.submit '保存', class: 'btn btn-sm btn-primary form-submit', id: 'add_activity_validate' %>
+            <% end %>
+            <%= link_to '取消', 'javascript:history.go(-1);', class: "btn btn-sm btn-default" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  <% if action_name == "show" %>
+    $('input,textarea').prop('disabled', true);
+    $('input[type=submit]').attr('disabled',false);
+  <% elsif action_name == "edit" %>
+    $('.date-time').prop('disabled', true);
+  <% end %>
+  $('form').validate();
+});
+</script>
+<% end %>

@@ -1,0 +1,185 @@
+<section>
+  <div class="mod-slider slider-hor" id="ractive_slide_container" >
+  </div>
+  <div class="index-box">
+    <div class="index-title">
+      <i class="icon icon-1"></i>
+      <span>热门活动</span>
+      <%= link_to mobile_wmall_activities_path(supplier_id: session[:supplier_id]),class: "more" do %>
+        更多<span>&gt;</span>
+      <% end %>
+    </div>
+    <div class="sub-banner" id="ractive_banner_activities_container">
+    </div>
+    <div class="hot-list" id="ractive_common_activities_container">
+    </div>
+  </div>
+  <div class="index-box">
+    <div class="index-title">
+      <i class="icon icon-2"></i>
+      <span>最新精品</span>
+      <%= link_to mobile_wmall_products_path(supplier_id: session[:supplier_id]),class: "more" do %>
+        更多<span>&gt;</span>
+      <% end %>
+    </div>
+    <div class="boutique-list" id="ractive_hot_products_container">
+    </div>
+  </div>
+  <div class="index-box">
+    <div class="index-title">
+      <i class="icon icon-3"></i>
+      <span>热门品牌</span>
+      <%= link_to mobile_wmall_shops_path(supplier_id: session[:supplier_id]),class: "more" do %>
+        更多<span>&gt;</span>
+      <% end %>
+    </div>
+    <div class="banner-list" id="ractive_hot_shops_container">
+    </div>
+  </div>
+</section><!--main section end -->
+
+<script id='ractive_slide_template' type='text/ractive'>
+  <ul class="slider-list" >
+  {{#slide_pictures:i}}
+    <li><a href="{{link_value}}"><img src="{{pic_url}}"></a></li>
+  {{/slide_pictures}}
+  </ul><!--slider-list end-->
+
+  <div class="slider-text">
+    <div id="pagenavi" class="fr slider-page">
+      {{#slide_pictures:i}}
+        <a href="#{{i}}" class="{{active}}">{{i}}</a>
+      {{/slide_pictures}}
+    </div><!--slider-page end-->
+  </div><!--slider-text end-->
+</script>
+
+<script id='ractive_banner_activities_template' type='text/ractive'>
+  <a href="{{url}}"><img src="{{pic_url}}"></a>
+</script>
+
+<script id='ractive_common_activities_template' type='text/ractive'>
+  <ul>
+    {{#common_activities:i}}
+    <li>
+      <a class="index-link" href="{{url}}">
+        <div class="goods-img">
+          <img src="{{pic_url}}">
+        </div>
+        <div class="goods-name">
+          <b>{{name}}</b>
+          <span>{{description}}</span>
+        </div>
+      </a>
+    </li>
+    {{/common_activities}}
+  </ul>
+</script>
+
+
+<script id='ractive_hot_products_template' type='text/ractive'>
+  <ul>
+    {{#hot_products:i}}
+      <li>
+        <a class="banner-box" href="{{url}}">
+          <img src="{{pic_url}}" title="{{name}}">
+        </a>
+      </li>
+    {{/hot_products}}
+  </ul>
+</script>
+
+<script id='ractive_hot_shops_template' type='text/ractive'>
+  <ul>
+    {{#hot_shops:i}}
+      <li>
+        <a class="banner-box" href="{{url}}">
+          <img src="{{pic_url}}" title="{{name}}">
+        </a>
+      </li>
+    {{/hot_shops}}
+  </ul>
+</script>
+
+<script>
+  $(function(){
+    var slide_pictures = fetch_wmall_data({path: "/api/wmall/slide_pictures.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    slide_pictures[0]["active"] = "active"
+    var ractive_slide_pictures = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_slide_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_slide_template',
+
+      // Here, we're passing in some initial data
+      data: {slide_pictures: slide_pictures}
+    });
+    indexSwipe("ractive_slide_container",[]);
+  })
+
+  $(function(){
+    var hot_activities = fetch_wmall_data({path: "/api/wmall/activities.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+
+    var banner_activities = [], common_activities = [];
+    hot_activities.map(function(x) {
+      if (x.category == "banner") {banner_activities.push(x)}
+      if (x.category == "common") {common_activities.push(x)}
+    })
+
+    var ractive_banner_activities = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_banner_activities_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_banner_activities_template',
+
+      // Here, we're passing in some initial data
+      data: banner_activities[0]
+    });
+
+    var ractive_common_activities = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_common_activities_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_common_activities_template',
+
+      // Here, we're passing in some initial data
+      data: {common_activities: common_activities}
+    });
+  })
+
+  $(function(){
+    var hot_products = fetch_wmall_data({path: "/api/wmall/products.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    var ractive_hot_products = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_hot_products_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_hot_products_template',
+
+      // Here, we're passing in some initial data
+      data: {hot_products: hot_products}
+    });
+  })
+
+  $(function(){
+    var hot_shops = fetch_wmall_data({path: "/api/wmall/shops.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    var ractive_hot_shops = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_hot_shops_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_hot_shops_template',
+
+      // Here, we're passing in some initial data
+      data: {hot_shops: hot_shops}
+    });
+  })
+</script>

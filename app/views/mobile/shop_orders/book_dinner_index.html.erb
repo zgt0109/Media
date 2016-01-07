@@ -1,0 +1,31 @@
+<% provide(:title, '我要订餐') %>
+
+<div class="stage" id="stage">
+    <header>
+        <!-- <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a> -->
+        <%= link_to book_dinner_mobile_shops_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" do %>
+        <% end %>
+        <h1>我的订餐</h1>
+    </header>
+    <section id="sec-index">
+        <div class="body">
+            <div class="list">
+                <div class="mod-block">
+                    <%= render :partial => 'book_dinner_order', :collection => @shop_orders, :as => :order %>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+        <% if flash[:notice] %>
+        alert("<%= flash[:notice] %>");
+        <% elsif flash[:alert] %>
+        alert("<%= flash[:alert] %>");
+        <% end %>
+        <% flash.clear %>
+    });
+</script>

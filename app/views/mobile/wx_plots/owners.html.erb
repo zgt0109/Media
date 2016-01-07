@@ -1,0 +1,11 @@
+<% title @wx_plot.try(:owner) %>
+<div class="body">
+  <div class="index-list">
+    <% @owners.each do |f| %>
+        <%= link_to mobile_wbbs_topics_url(supplier_id: @supplier.id, aid: f.activity.id, wxmuid: @supplier.wx_mp_user.try(:id)), class: 'box' do %>
+            <i><%= image_tag f.logo_url %></i>
+            <span><%= f.name %></span>
+        <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+$("#form").html("<%= escape_javascript(render :partial => 'form') %>");
+
+$('#hospital_department_content').blur( function() {
+  $(this).closest('form').resetClientSideValidations();
+});
+
+$('#hospital_department_form').enableClientSideValidations();

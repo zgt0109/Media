@@ -1,0 +1,36 @@
+<% title "评论一览" %>
+<% content_for :booking_top_pic do %>
+    <header>
+      <a href="<%= mobile_booking_item_url(@booking_item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev">
+        <img src="/assets/mobile/wserver/ico-back.png"/>
+      </a>
+      <h1>评论</h1>
+      <a href="<%= new_mobile_booking_comment_path(supplier_id: @supplier.id, booking_item_id: @booking_item.id) %>">
+        <img src="/assets/mobile/wserver/ico-comment.png"/>
+      </a>
+    </header>
+<% end %>
+
+<div class="box-comment">
+  <div class="ft-comment">
+    <% @booking_comments.each do |booking_comment| %>
+        <div class="ft-list">
+          <div class="fl">
+            <span class="bd-img">
+                <%= image_tag "/assets/life/user_logo.png" %>
+            </span>
+          </div>
+          <div class="fr">
+            <p><%= booking_comment.content %></p>
+            <span>
+                <i class="fl"><%= booking_comment.wx_user.try(:nickname) %> </i>
+                <i class="fr"><%= booking_comment.created_at.to_date %></i>
+            </span>
+          </div>
+        </div>
+    <% end %>
+    <% if @booking_comments.blank? %>
+      <p class="tcenter ft-null">该商品还没有评论，赶紧评论吧！</p>
+    <% end %>
+  </div>
+</div>

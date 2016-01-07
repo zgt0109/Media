@@ -1,0 +1,17 @@
+<%- if params[:from_head] == 'true' %>
+  //popResult(0,"已加载到最新留言","","");
+  $('#messages').html('<%= j render(:partial => "leaving_message", :locals => {:messages => @messages}) %>');
+  <% if @messages.try(:last_page?) %>
+    $('.page').remove();
+  <% else %>
+    $('.page').replaceWith('<%= j paginate(@messages) %>');
+  <% end %>
+<%- else %>
+  $('#messages').append('<%= j render(:partial => "leaving_message", :locals => {:messages => @messages}) %>');
+  <% if @messages.try(:last_page?) %>
+    $('.page').remove();
+  <% else %>
+    $('.page').replaceWith('<%= j paginate(@messages) %>');
+  <% end %>
+  $(".foot-loading").removeClass("isloading").fadeOut();
+<% end %>

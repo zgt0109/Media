@@ -1,0 +1,31 @@
+<%= stylesheet_link_tag "mobile/qcode" %>
+<%= javascript_include_tag "mobile/qcode" %>
+<div class="html theme-1 vip-bg" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="qcode">
+          <div class="qcode-img">
+              <%= image_tag @item_consume.rqrcode, size: '160x160' %>
+          </div>
+          <div class="qcode-sn">SN码：<%= @item_consume.sn_code %></div>
+          <div class="qcode-text">点二维码可收起</div>
+      </div>
+      <div class="service-box">
+        <div class="coupons-d-box">
+          <div class="coupons-d-t"><a href="<%= shops_app_vips_path( ids: ( @vip_package.shop_branch_ids.join(',') if @vip_package.shop_branch_limited? ) ) %>">适用门店（<%= @vip_package.shop_branch_limited? ? @vip_package.shop_branches.count : "不限制" %>）</a></div>
+          <div class="coupons-d-m">
+            <p><span>所属套餐：</span><%= truncate_utf(@vip_package.name) %></p>
+            <p><span>服务项目：</span><%= @item_consume.package_item_name %></p>
+            <p><span>总次数：</span><%= @total_count == -1 ? "不限" : @total_count %>次</p>
+            <p><span>有效剩余：</span><%= @item_consume.use_count(@count,@item_consume.vip_package_item_id) %></p>
+            <p><span>过期时间：</span><%= @item_consume.vip_packages_vip_user.expired_at.to_date %></p>
+            <p><span>使用说明：</span></p>
+            <div class="edit">
+              <%= @item_consume.vip_package_item.description.html_safe %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

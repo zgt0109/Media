@@ -1,0 +1,18 @@
+__filename = "优惠券核销记录报表.xls"
+sheet1 = xls.create_worksheet
+system_header = ['优惠券名称', '优惠内容','SN码', '手机号码', '领取时间', '使用时间', '使用门店']
+sheet1.row(0).concat(system_header)
+row_number = 1
+@consumes_all.page(params[:page_exl]).per(EXPORTING_COUNT).each do |consume|
+  row_content = [
+    consume.consume_coupon_name,
+    coupon_info(consume.consume_value_by, consume.consume_value),
+    consume.code,
+    consume.mobile,
+    consume.consume_created_at.to_s,
+    consume.used_at.to_s,
+    consume.shop_name || '商户总部'
+  ]
+  sheet1.row(row_number).replace(row_content)
+  row_number += 1
+end

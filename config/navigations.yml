@@ -1,0 +1,203 @@
+#多行业解决方案
+plots:
+  title: "微小区——拉近邻里距离，方便业主生活"
+  comment: "在这里，开启邻里生活的微时代，专为小区物业管理打造的移动解决平台：小区公告及时报，物业维修马上到，周边商户全知晓，邻里之间没隔阂。超强的小区生活服务站，为业主打造社区移动智能小区。"
+  pic_url: "/images/home/function/plots.jpg"
+  alt: "微小区"
+  class: "page1"
+car:
+  title: "微汽车——选车、预约驾驶，目标客户锁定营销 "
+  comment: "商家通过微汽车实现车型管理、销售管理、车主关怀、实用工具等功能，客户不用进入4S店就可以进行保养预约与试驾预约，在微信上打造专业服务，提升企业核心竞争力。"
+  pic_url: "/images/home/function/car.jpg"
+  alt: "微汽车"
+  class: "page1"
+hotel:
+  title: "微酒店——看环境、选房间、在线预约，全新体验"
+  comment: "掌上酒店新体验，微酒店营销全新模式！在线预约，房型展示，订单管理，微信支付！一步到位，住房就是这么简单！ "
+  pic_url: "/images/home/function/hotel.jpg"
+  alt: "微酒店"
+  class: "page1"
+trip:
+  title: "微旅游——图文攻略、线路规划，风景时刻靠近 "
+  comment: "主要针对旅行社、旅行网站、地方景区、旅游局等组织，特定开发的为旅行者提供景区介绍、景区图片、游玩攻略、经验分享等功能模块，从而增加人气，改善服务体验，为用户提供丰富的 经验分享和图文介绍内容。 "
+  pic_url: "/images/home/function/trip.jpg"
+  alt: "微旅游"
+  class: "page1"
+house:
+  title: "微房产——360度看房、预约看房，品牌楼盘实力俱显 "
+  comment: "主要针对新开楼盘销售、房产中介，商务楼租赁等业务，特定开发了预约看房，图片展示，户型介绍，专家测评等模块，解决房产企业客源的问题，引导用户预约看房。 "
+  pic_url: "/images/home/function/house.jpg"
+  alt: "微房产"
+  class: "page1"
+edu:
+  title: "微教育——课程试听报名，提高学员转化 "
+  comment: "主要针对特长培训、驾校、英语等教育类企业，将学院、课程、老师进行在线管理，及时与学员互动，更好的为会员服务，并通过会员将品牌口碑传播出去，带来新学员。 "
+  pic_url: "/images/home/function/edu.jpg"
+  alt: "微教育"
+  class: "page1"
+hospital:
+  title: "微医疗——预约挂号服务明细，提升医院形象 "
+  comment: "要针对牙医、诊所、美容、专科类医院，面向目标用户群体定向营销，为客户提供专业资讯、行业专刊、预约挂号等服务内容，提升品牌形象和用户口碑。 "
+  pic_url: "/images/home/function/hospital.jpg"
+  alt: "微医疗"
+  class: "page1"
+wmall:
+  title: "微商圈——社会化媒体时代商业新模式，O2O聚财新体验"
+  comment: "微商圈，是基于公众平台，面向商业广场、商品城、商贸城等商业CBD提供一站式微营销解决方案，可作为商户联盟的线上信息发布、商户产品分类，线下店铺导航等功能，栏目完全自定义规划，实现统一入口接入线上商铺，针对商圈内用户进行精准的联合营销的综合信息门户。 "
+  pic_url: "/images/home/function/wmall.jpg"
+  alt: "微商圈"
+  class: "page1"
+wshop:
+  title: "微电商——掌商时代! 将品牌旗舰店植入微信，提供多种支付服务"
+  comment: "主要针对电子商务企业，根据电商行业特性、商品多、图片精美、购买方便等特色，开发出了新品推荐，人气产品，市场活动，以及连接在线支付等功能。将品牌旗舰店开进7亿手机用户的微信朋友圈，商机无限。 "
+  pic_url: "/images/home/function/wshop.jpg"
+  alt: "微电商"
+  class: "page1"
+wlife:
+  title: "微生活——吃喝玩乐购，本地化时尚慢生活信息门户"
+  comment: "微生活平台，是面向移动智能终端社交平台时尚用户群（如微信、易信、微博等）推出的城市生活信息门户，集吃喝玩乐、新闻趣事、娱乐八卦、热门商户、团购优惠信息于一体的资讯平台。为新一代社交网络时尚青年充分利用碎片化的时间，提供更丰富的新鲜信息、更方便快捷的享受时尚、休闲慢生活。"
+  pic_url: "/images/home/function/wlife.jpg"
+  alt: "微生活"
+  class: "page1"
+food:
+  title: "微餐饮——订座、点餐节约时间，有效提高客流量"
+  comment: "主要针对连锁型、外卖型、品牌型餐饮企业，特别定制开发出餐桌管理、订餐点餐、取号等号，预约、门店等管理模块，解决餐饮企业流程上的效率问题，并提升客户体验，提高客人到店率和翻台率，为企业带来实际经济效益。 "
+  pic_url: "/images/home/function/food.jpg"
+  alt: "微订餐"
+  class: "page1"
+marriage:
+  title: "微婚礼——创意喜帖引爆人气，新婚体验惊喜不断"
+  comment: "主要针对婚纱摄影、影楼、婚礼策划等企业，量身定订做的产品介绍、人气团购，作品展示，店长推荐等功能模块，满足企业吸引客户，展现品牌形象的需求，为企业带来忠实的客户。"
+  pic_url: "/images/home/function/marriage.jpg"
+  alt: "微婚礼"
+  class: "page1"
+
+#强大的基础功能设置
+vip:
+  title: "微会员——SCRM会员管理系统，查消费、兑积分、看特权 "
+  comment: "微枚迪通过微信植入会员卡，查消费、兑积分、看特权，帮助企业建立集品牌推广、会员管理、营销活动、统计报表于一体的微信会员管理平台。 "
+  pic_url: "/images/home/function/vip.jpg"
+  alt: "会员卡"
+  class: "page2"
+website:
+  title: "微官网——快速建立企业微信官网，全方位展现企业品牌"
+  comment: '5分钟快速搭建微网站，更多功能随意组合，选择更丰富，变换更随心； 作为业内首家网站流量分析的平台，微枚迪通过在不同时段内针对PV、UV、IP、跳出率、访问时长等维度进行分析统计，方便快捷监控信息。'
+  pic_url: "/images/home/function/website.jpg"
+  alt: "微官网"
+  class: "page2"
+group:
+  title: "微团购——微信团购，留住您的客户，反复消费 "
+  comment: "通过微信公众账号团购，替代传统团购网站，积累人气，留住一次性团购用户，引导二次消费。"
+  pic_url: "/images/home/function/group.jpg"
+  alt: "微团购"
+  class: "page2"
+pay:
+  title: "微枚迪支付——为微信服务提供支付支持，完成O2O移动社交服务闭环"
+  comment: "微枚迪支付时商户委托微枚迪代为收取消费者支付的相应服务款（贷款），经结算系统结算并查验后结算给商户的代收代付产品，支持的支付有：支付宝、微信支付、财付通支付、易宝支付"
+  pic_url: "/images/home/function/pay.jpg"
+  alt: "微支付"
+  class: "page2"
+book:
+  title: "微预定 ——万能预订、 完美支持各行各业的在线预订需求"
+  comment: "企业可设置多种预约预定服务功能，方便服务型产品进行展示，并进行有效管理，可有效验证手机号码，保证预订的真实性，更有自定义表单帮助您定义需要用户提交的内容。预订成功后、可以短信和小票机提醒商家."
+  pic_url: "/images/home/function/book.jpg"
+  alt: "微预定"
+  class: "page2"
+kf:
+  title: "微客服——提升企业形象，创造无限商机"
+  comment: "在线微信客服系统，及时与访客互动，提升企业形象，让商家与微信7亿用户实时沟通，创造无限商机。 "
+  pic_url: "/images/home/function/kf.jpg"
+  alt: "微客服"
+  class: "page2"
+
+#丰富的营销互动模式
+aa:
+  title: "拆包有礼——强大加粉利器，便捷营销增粉活动"
+  comment: ""
+  pic_url: "/images/home/function/aa.jpg"
+  alt: "拆包有礼"
+  class: "page3"
+bb:
+  title: "大转盘——挑战概率，调整幸运，挑战大奖"
+  comment: ""
+  pic_url: "/images/home/function/bb.jpg"
+  alt: "大转盘"
+  class: "page3"
+cc:
+  title: "美图猜猜——简易答题模式，拉近商家和用户间的距离的营销活动"
+  comment: ""
+  pic_url: "/images/home/function/cc.jpg"
+  alt: "美图猜猜"
+  class: "page3"
+dd:
+  title: "推荐有奖——粉丝裂变式增长，嗨遍朋友圈"
+  comment: ""
+  pic_url: "/images/home/function/dd.jpg"
+  alt: "推荐有奖"
+  class: "page3"
+ee:
+  title: "微报名——市场活动、会议课程等快速报名，人气火爆"
+  comment: "一键轻松报名，把活动程序化繁为简，及时透明贴心服务客户，迅速收集到用户的个人信息客户报名数据。"
+  pic_url: "/images/home/function/ee.jpg"
+  alt: "微报名"
+  class: "page3"
+ff:
+  title: "微场景——酷炫的动态效果，多样的展示形式，展示不一样的公众帐号"
+  comment: ""
+  pic_url: "/images/home/function/ff.jpg"
+  alt: "微场景"
+  class: "page3"
+gg:
+  title: "微信墙——活跃现场气氛，让粉丝涨起来"
+  comment: "微信墙主要在展会、会议、培训、年会、沙龙、婚礼、赛事、演出等各类活动聚会中大显身手，支持文字、图片、投票，现场抽奖随意控制，既可随机抽取，亦可内定中奖人。"
+  pic_url: "/images/home/function/gg.jpg"
+  alt: "微信墙"
+  class: "page3"
+hh:
+  title: "微投票——问卷调查、投票，贴近用户优化企业服务和体验"
+  comment: "问卷调查、在线投票，贴近用户优化企业服务和体验，根据统计对营销活动效果作出判断，及时调整市场行为。"
+  pic_url: "/images/home/function/hh.jpg"
+  alt: "微投票"
+  class: "page3"
+ii:
+  title: "老虎机——刺激的累计奖池，大奖等你来取"
+  comment: ""
+  pic_url: "/images/home/function/ii.jpg"
+  alt: "老虎机"
+  class: "page3"
+jj:
+  title: "一战到底——挑战最强大脑，做最智慧的网络达人"
+  comment: ""
+  pic_url: "/images/home/function/jj.jpg"
+  alt: "一战到底"
+  class: "page3"
+kk:
+  title: "砸金蛋——轻松赢大奖,幸运砸金蛋"
+  comment: ""
+  pic_url: "/images/home/function/kk.jpg"
+  alt: "砸金蛋"
+  class: "page3"
+ll:
+  title: "微相册——活动、产品、环境等实景图展示、存储、分享"
+  comment: "酷炫照片，轻松发布，助力商家开展活动。"
+  pic_url: "/images/home/function/ll.jpg"
+  alt: "微相册"
+  class: "page3"
+mm:
+  title: "摇一摇——最易上手，现场氛围飙升神器"
+  comment: "手机摇一摇即可参与互动；直白：得分高低排序一目了然；好玩：人人参与，引爆全场气氛。"
+  pic_url: "/images/home/function/mm.jpg"
+  alt: "摇一摇"
+  class: "page3"
+oo:
+  title: "摇一摇抽奖——摇起来，摇起来，大奖一摇就出来"
+  comment: ""
+  pic_url: "/images/home/function/oo.jpg"
+  alt: "摇一摇抽奖"
+  class: "page3"
+pp:
+  title: "节日礼包——契合节日营销，打造简单易用的强大节日营销利器"
+  comment: ""
+  pic_url: "/images/home/function/pp.jpg"
+  alt: "节日礼包"
+  class: "page3"

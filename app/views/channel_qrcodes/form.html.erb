@@ -1,0 +1,105 @@
+<%= form_for @channel_qrcode, validate: true, html: { role: 'form' } do |f| %>
+  <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="control-label">二维码名称<span class="required-star">*</span><small class="text-warning">不要和其它二维码重复</small></label>
+      <div class="clearfix">
+        <%= f.text_field :name, class: 'col-xs-6', validate: true %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">二维码分类<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <% options = current_user.channel_types.normal.pluck(:name, :id) %>
+        <%= f.select :channel_type_id, options_for_select(options.insert(0,["请选择",""]), @channel_qrcode.channel_type_id.presence || 1), {}, :class => "col-xs-6" %>
+      </div>
+    </div>
+    <div class="form-group no-margin-bottom">
+      <label class="control-label">推广类型<span class="required-star">*</span><small class="text-warning">用于标识这个二维码所要投放的方式</small></label>
+      <div class="clearfix">
+        <div>
+          <div class="radioTab">
+            <label class="control-label"> 
+              <%= f.radio_button :channel_way, 1, class: "ace", data: {toggle: "radioTab", target: "tab_1"}, checked: @channel_qrcode.new_record? ? true : @channel_qrcode.online? %> 
+              <span class="lbl">线上</span>
+            </label>
+            <label class="control-label"> 
+              <%= f.radio_button :channel_way, 2, class: "ace", data: {toggle: "radioTab", target: "tab_2"}, checked: @channel_qrcode.offline? %> 
+              <span class="lbl">线下</span> 
+            </label>
+            <label class="control-label"> 
+              <%= f.radio_button :channel_way, 3, class: "ace", data: {toggle: "radioTab", target: "tab_3"}, checked: @channel_qrcode.other? %> 
+              <span class="lbl">其它</span> 
+            </label>
+          </div>
+          <div class="radio-tab-content">
+            <div id="tab_2" class="radio-tab-pane">
+              <div class="form-group">
+                <label id="label" style="display:<%= @channel_qrcode.other? ? 'none;' : 'block;' %>">
+                  <% if @channel_qrcode.online? %>
+                    URL
+                  <% elsif @channel_qrcode.offline? %>
+                    地址
+                  <% end %>
+                </label>
+                <div class="clearfix" id="address" style="display:<%= @channel_qrcode.offline? ? 'block;' : 'none;' %>">
+                  <%= address_select(ChannelQrcode.new(province_id: @channel_qrcode.province_id, city_id: @channel_qrcode.city_id, district_id: @channel_qrcode.district_id)) %>
+                </div>
+                <div class="clearfix margin-top-10">
+                  <%= f.text_field :way_content, class: "col-xs-6" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.hidden_field :logo, value: "" %>
+      <label class="control-label">二维码</label>
+      <div class="clearfix">
+        <div style="background:url(<%= @channel_qrcode.new_record? ? '/assets/qr.jpg' : @channel_qrcode.pic_url %>) no-repeat 0 0; background-size: 100% 100%; width:100px; height: 100px; float: left; margin-right: 10px; position: relative;">
+            <div id="img-qrcode" style="width: 20px; height: 20px; position: absolute; top:50%; left: 50%; margin: -10px 0 0 -10px;"></div>
+        </div>
+        <div style="float: left; margin-top: 66px; width: 60%;">
+          <div class="cieldon-file width-100px margin-right-10" data-type="8" data-div="#img-qrcode" data-height="20" data-width="20" data-img=""></div>
+          <span class="help-inline text-warning line-height-34">建议尺寸：宽260像素＊高260像素</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">备注</label>
+      <div class="clearfix">
+        <%= f.text_area :description, cols: 3, rows: 3, placeholder:"如有特殊说明可在此备注，方便下次查看详情", class: "form-control" %>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <!--input type="submit" value="保存" class="btn btn-big btn-close btn-orange">　　 　
+    <input type="reset" class="btn btn-big btn-close" value="取消" onclick="$(parent.document).find('.pop').fadeOut(function() { $(this).remove(); });"-->
+    <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(function () {
+    $('input[type=radio]').on('click', function () {
+      var $self = $(this);
+      if($self.val() == "1"){
+        $('#label').html("URL");
+        $('#label').show();
+        $('#address').hide();
+      }else if($self.val() == "2"){
+        $('#label').html("地址");
+        $('#label').show();
+        $('#address').show();
+      }else if($self.val() == "3"){
+        $('#label').hide();
+        $('#address').hide();
+      }
+    });
+  });
+</script>
+<% end %>

@@ -1,0 +1,83 @@
+@charset "utf-8";
+/* CSS Document */
+
+a.btn-mini{cursor:pointer}
+.btn-mini{vertical-align:top; line-height:21px;}
+.btn-mini .i-sn{vertical-align:baseline; margin-right:2px;}
+
+.wrap{margin-bottom:0;}
+
+.in-lt-bn{left:-1px; top:-1px;}
+.in-lr-bn{right:-1px; top:-1px;}
+.in-bl-bn{left:-1px; bottom:-1px;}
+.in-br-bn{right:-1px; bottom:-1px;}
+
+.share-tool .in-bl-bn,
+.share-tool .in-br-bn,
+.share-tool-bar .btn-mini .in-bl-bn,
+.share-tool-bar .btn-mini .in-br-bn{bottom:-2px;}
+
+.in-lt-mk{left:-1px; top:-1px;}
+.in-lr-mk{right:-1px; top:-1px;}
+.in-bl-mk{left:-1px; bottom:-1px;}
+.in-br-mk{right:-1px; bottom:-1px;}
+
+.btn-session .in-lr-mk,
+.btn-session .in-br-mk{right:-2px;}
+
+.btn-secondary .in-bl-mk{bottom:-2px;}
+.btn-secondary .in-br-mk{bottom:-2px;}
+
+.in-lt-acn{left:-1px; top:-1px;}
+.in-lr-acn{right:-2px; top:-1px;}
+.in-bl-acn{left:-1px; bottom:-2px;}
+.in-br-acn{right:-2px; bottom:-2px;}
+
+.in-lt-blu{left:-1px; top:-1px;}
+.in-lr-blu{right:-2px; top:-1px;}
+.in-bl-blu{left:-1px; bottom:-1px;}
+.in-br-blu{right:-2px; bottom:-1px;}
+
+.in-bl-blu{bottom:-2px;}
+.in-br-blu{bottom:-2px;}
+
+.in-lt{left:-1px; top:-1px;}
+.in-lr{right:-1px; top:-1px;}
+.in-bl{left:-1px; bottom:-1px;}
+.in-br{right:-1px; bottom:-1px;}
+
+.in-lt-g{left:-1px; top:-1px;}
+.in-lr-g{right:-1px; top:-1px;}
+.in-bl-g{left:-1px; bottom:-1px;}
+.in-br-g{right:-1px; bottom:-1px;}
+
+.in-lt-err{left:0; top:0;}
+.in-lr-err{right:0; top:0;}
+.in-bl-err{left:0; bottom:0;}
+.in-br-err{right:0; bottom:0;}
+.in-close{right:14px; top:11px;}
+
+.i-usr-like{vertical-align:top; position:relative; top:0;}
+.i-usr-comment{vertical-align:top; position:relative; top:0;}
+
+.btn-report-abuse .in-lr-bn,
+.btn-report-abuse .in-br-bn{right:-2px;}
+
+.bubble-share-cartoon{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_share_thanks.png',sizingMethod='scale');}
+.bubble-comment{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_have_comment.png',sizingMethod='scale');}
+
+.bubble-add-comment .link-box a{position:relative;}
+
+.persist-bottom{
+  position:absolute;
+  top: expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop +(documentElement.clientHeight-this.clientHeight) : document.body.scrollTop +(document.body.clientHeight-this.clientHeight));
+}
+
+.p-account-button{cursor:pointer;}
+.p-instant-login{text-align:left; padding-left:395px;}
+.persist-bottom{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_persist.png',sizingMethod='scale');}
+.p-arrow{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_persist_arrow.png',sizingMethod='scale');}
+.p-qq{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_persist_qq.png',sizingMethod='scale');}
+.p-qq-weibo{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_persist_qq_weibo.png',sizingMethod='scale');}
+.p-sina{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_persist_weibo.png',sizingMethod='scale');}
+.p-douban{background:none !important; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/bg_persist_douban.png',sizingMethod='scale');}

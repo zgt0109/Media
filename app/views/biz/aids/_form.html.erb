@@ -1,0 +1,45 @@
+<%
+  if @activity.present? && @activity.active_activity_notice.present? 
+    data_img =  @activity.active_activity_notice.pic_url.present? ? @activity.active_activity_notice.pic_url : "/assets/mobile/aids/global_small_banner.jpg"
+    pic_data_key = @activity.active_activity_notice.qiniu_pic_key.present? ? @activity.active_activity_notice.qiniu_pic_key : "FmkcCvuv-qfnVgT3prcxrkHCFYds"
+  else
+    data_img = "/assets/mobile/aids/global_small_banner.jpg"
+    pic_data_key = "FmkcCvuv-qfnVgT3prcxrkHCFYds"
+  end
+%>
+<%= content_for :step do %>
+  <div class="step-pane active" id="step1">
+    <div class="row">
+      <%= render 'weixin_preview', wx_title: @activity.active_activity_notice.try(:title), wx_summary: @activity.active_activity_notice.try(:summary) %>
+      <%= form_for @activity, url: @activity.new_record? ? aids_path : aid_path(@activity), validate: true, html: {class: 'form col-sm-7'} do |activity| %>
+        <%= hidden_field_tag :redirect_to, edit_rule_settings_aid_path(@activity) unless @activity.new_record? %>
+        <%= activity.fields_for :active_activity_notice do |notice| %>
+          <%= render 'active_notice', notice: notice, activity: activity, pic_data_key: pic_data_key, data_img: data_img %>
+        <% end %>
+        <div class="row-fluid">
+          <%- if @activity.can_not_edit? %>
+            <a href="<%= edit_rule_settings_aid_path(@activity) %>" class="btn btn-prev btn-sm"><i class="icon-arrow-right icon-on-right"></i>下一步</a>
+          <%- else %>
+            <button class="btn btn-success btn-sm btn-next" data-last="完成">
+              下一步
+              <i class="icon-arrow-right icon-on-right"></i>
+            </button>
+          <%- end %>
+          <a href="/activities/aids" class="btn btn-sm">返回</a>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<%= render 'main_content' %>
+<%= content_for :custom_js do %>
+  <script>
+    $(function() {
+      <%- if @activity.can_not_edit? %>
+        $('input, select, textarea').prop('disabled', true);
+        $('.wysiwyg-editor').attr('contenteditable', false);
+      <% end %>
+      $('form').validate();
+    })
+  </script>
+<% end %>

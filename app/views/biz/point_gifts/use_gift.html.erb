@@ -1,0 +1,90 @@
+<%= form_tag update_consumes_point_gift_path(@gift) do %>
+  <%= hidden_field_tag :code, nil %>
+  <div class="modal-body">
+    <div class="alert alert-block alert-info ">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li>请输入SN码，并选择使用的门店确认使用。</li>
+      </ul>
+    </div>
+    <div class="form-group">
+      <label>请输入SN码<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= text_field_tag :search_code, nil, class: "col-xs-8", placeholder: "请输入SN码" %>
+        <a href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+      </div>
+      <div class="margin-top-10 user_info" style="display:none">
+        <table class="text-info">
+          <tr>
+            <td>礼品券名称:</td>
+            <td class="point_gift_name"></td>
+          </tr>
+          <tr>
+            <td>SN码:</td>
+            <td class="sn"></td>
+          </tr>
+          <tr>
+            <td>兑换日期:</td>
+            <td class="created_at"></td>
+          </tr>
+          <tr>
+            <td>有效日期:</td>
+            <td class="expired_at"></td>
+          </tr>
+          <tr>
+            <td>状态:</td>
+            <td class="status">有效</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary vip_gift" disabled="true">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+//礼品核销
+$(document).on("change", '#search_code', function(){
+  var form = $(this).closest("form");
+  var action = form.data('action');
+  var get_url = "<%= exchange_info_point_gift_path(@gift) %>" + "?code=" + form.find('#search_code').val();
+  $.get(get_url, function(data) {
+    if(data.find_status == 1){
+      form.find('.form-group').removeClass('has-error');
+      form.find('.form-group .help-block').remove();
+      form.find('#code').val(data.gift_code);
+      form.find('.point_gift_name').html(data.point_gift_name);
+      form.find('.sn').html(data.gift_code);
+      form.find('.created_at').html(data.created_at);
+      form.find('.expired_at').html(data.expired_at);
+      form.find('.user_info').show();
+      form.find('button').attr('disabled', false);
+      form.find('.modal-footer').show();
+    }else{
+      form.find('.form-group .help-block').remove();
+      form.find('#code').val("");
+      form.find('.user_info').hide();
+      form.attr("action","");
+      form.find('button').attr('disabled', true);
+      form.find('.form-group').addClass('has-error');
+      form.find('.form-group').append('<div class="help-block">SN码无效或已被使用</div>');
+      form.find('.modal-footer').hide();
+    }
+  });
+});
+
+$('.vip_gift').on("click", function(e){
+  if($('#code').val() == ""){
+    showTip("warning", "SN码无效或已被使用");
+    e.preventDefault();
+    return false;
+  }else{
+    $('form').submit();
+  }
+});
+</script>
+<% end %>

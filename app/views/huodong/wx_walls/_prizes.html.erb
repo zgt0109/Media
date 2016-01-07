@@ -1,0 +1,134 @@
+<section class="stage J-mark-3">
+  <div class="main">
+    <div class="luck-draw">
+      <ul class="J-list">
+        <% 12.times do |i| %>
+          <% prize = @wx_wall_prizes[ i % @wx_wall_prizes.size ] %>
+          <li class="li-<%= i + 1 %> prize_<%= prize.id %>">
+            <%= image_tag prize.try(:pic_url) || '/assets/bg_fm.jpg' %>
+          </li>
+        <% end %>
+      </ul>
+      <div class="operation">
+        <div class="o-left text-center">
+          <h1>幸运抽奖</h1>
+          <a href="javascript:void(0);" class="btn btn-start" id="goT"><span></span></a>
+          <a href="javascript:void(0);" class="btn btn-show"><span></span></a>
+        </div>
+        <div class="o-right">
+          <h1><span id="user_count"><%= @wx_wall_users.count %></span>人参加</h1>
+          <div class="user-list" id="user-list">
+            <ul id="users-ul" data-last-id="<%= @wx_wall_users.first.try(:id) %>">
+              <%= render 'users' %>
+              <% if @wx_wall_users.present? && @wx_wall_users.length < 4 %>
+                <li></li><li></li><li></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pop-list">
+    <div class="pop-bg"></div>
+      <div class="pop-bd">
+        <div class="pop-bd-bg"></div>
+        <div class="pop-main">
+          <a href="javascript:void(0);" class="J-close"><i class="icon icon-12"></i></a>
+          <div class="pop-title">
+            <span>中奖名单</span>
+          </div>
+          <div class="pop-content">
+            <%= render 'winner_list' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+//抽奖
+var time,
+  speed = 1050,
+  enabled = true,
+  rotateRun;
+$(function(){
+  $(".btn-start").on("click",function(){
+    var self = $(this);
+    var $list = $(".J-list"),
+      $this = $list.find(".cur").length ? $list.find(".cur") : $list.find("li").eq(0);
+    var $index = $this.index();
+    if(enabled){
+      enabled = false;
+      $.ajax({
+        type: "GET",
+        url: '<%= lottery_wx_wall_path(@wx_wall) %>',
+        dataType: 'json',
+        // timeout:30000,
+        success: function (data) {
+          if ( data.prize_id == null ) {
+            self.mouseup();
+            self.addClass('disabled');
+            alert('奖品已抽完，抽奖结束');
+            $('#goT').addClass('btn-end');
+          } else if ( data.user_id == 0 ) {
+            self.mouseup();
+            alert('还没有人参与活动');
+            enabled = true;
+          } else if ( data.user_id == null ) {
+            self.mouseup();
+            alert('参与的用户已经全部中奖并且本次活动不允许重复抽奖');
+            enabled = true;
+          } else {
+            var num = $('.prize_'+data.prize_id).eq(0).index() + 1;
+            time  = 1100 + (num+11-$index) * 50;
+            self.addClass("btn-rotation");
+            $("#user-list ul").find("li").removeClass("cur");
+            $("#user-list ul").find("li").eq(0).before(data.html);
+            $(".luck-draw").addClass("rotated");
+            rotate($this);
+          }
+        },
+        error: function(e){enabled = true;}
+      });
+    }
+    return false;
+  });
+});
+var temp = 0;
+function rotate(el,num){
+  var $this = $(el),
+    num = num*50;
+  $this.addClass("cur").siblings().removeClass("cur");
+  $this = $this.next("li").length>0 ? $this.next("li") : $this.parent().find("li:eq(0)");
+  if(time <= 0){
+    if(speed<1000){
+      speed = speed*1.25;
+      run(speed);
+    }
+    else{
+      enabled = true;
+      $("#goT").mouseup();
+      $("#user-list ul li:eq(1)").addClass("cur");
+      $(".btn-start").removeClass("btn-rotation");
+      clearTimeout(rotateRun);
+    }
+  }else{
+    if(speed > 50){
+      temp += speed;
+      speed =speed*0.75;
+    }else{
+      time -= speed;
+      speed = 50;
+    }
+    run(speed);
+  }
+  function run(speed){
+    rotateRun = setTimeout(function(){
+      rotate($this);
+    },speed);
+  }
+}
+
+</script>
+<% end %>

@@ -1,0 +1,53 @@
+<% content_for :website_top_pic do %>
+    <header>
+      <a href="javascript:history.go(-1);" class="nav-1">
+        <img src="/assets/website/template11/nav1.png"/>
+      </a>
+      <a href="<%= mobile_root_url(supplier_id: @website.supplier_id,id: @website.id, aid: session[:activity_id], wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>" class="nav-2">
+        <img src="/assets/website/template11/nav2.png"/>
+      </a>
+      <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#" %>" class="nav-3">
+        <img src="/assets/website/template11/nav3.png"/>
+      </a>
+      <a class="nav-4 last ico-list">
+        <img src="/assets/website/template11/nav4.png"/>
+      </a>
+    </header>
+<% end %>
+
+<div class="body box-article box-fc ckeditor_content">
+  <div class="hd">
+    <p class="fl">
+      <b style="background-image:url(<%= website_menu.menuable.try(:pic) %>)"></b>
+    </p>
+    <div class="fr">
+      <h3><%= website_menu.menuable.try(:title) %></h3>
+      <span><%= date_format_full_l(website_menu.menuable.created_at) %></span>
+    </div>
+  </div>
+  <div class="box bd">
+    <% if website_menu.text? %>
+        <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? %>
+    <% else %>
+        <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? && website_menu.menuable.is_show_pic %>
+    <% end %>
+    <p><%= raw website_menu.menuable.try(:content) %></p>
+  </div>
+</div>
+
+<% content_for :pop_pop_share do %>
+    <div class="pop-nav pop">
+      <div class="pop-bg"></div>
+      <div class="pop-bd">
+        <div class="hd"><span>取消</span></div>
+        <div class="bd">
+          <% @website.website_menus.root.each do |menu| %>
+              <dl>
+                <dt><a href="<%= menu_url(menu) %>"><span><%= menu.name %></span><i class="ico ico-angle-right fr"></i></a></dt>
+                <dd></dd>
+              </dl>
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>

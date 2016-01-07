@@ -1,0 +1,18 @@
+<% 
+	if value == "微投票"
+		options = current_user.activities.show.vote.order('id DESC').pluck(:name, :id)
+		name = "vote_id"
+	elsif value == "摇一摇"
+		options = current_user.activities.show.shake.order('id DESC').pluck(:name, :id)
+		name = "shake_id"
+	elsif value == "微报名"
+		options = current_user.activities.show.enroll.order('id desc').pluck(:name, :id)
+		name = "enroll_id"
+	end
+%>
+<% if options %>
+	<div class="col-sm-6 input-group input-group-text">
+		<span class="input-group-addon">选择<%= value %></span>
+		<%= wall.select name.to_sym, options, { selected: @wx_wall.try(name.to_sym), include_blank: '请选择' }, class: "col-xs-12" %>
+	</div>
+<% end %>

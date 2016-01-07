@@ -1,0 +1,77 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="header">
+    <p>
+      <a href="<%= compare_mobile_car_shop_path(supplier_id: @supplier.id, car_type_id: @car_type.id) %>">车型比较</a>
+      <a href="<%= car_seller_mobile_car_shops_path(supplier_id: @supplier.id) %>#mp.weixin.qq.com">联系销售</a>
+      <a href="<%= car_bespeak_mobile_car_shops_path(supplier_id: @supplier.id, bespeak_type: 2, car_type_id: @car_type.id, car_catena_id: @car_type.car_catena.id) %>">预约试驾</a>
+    </p>
+  </div>
+  <div class="body">
+    <div class="mod-title">
+      <img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/><%= @car_type.name %>
+    </div>
+    <div class="mod-detail">
+      <div class="detail-img">
+        <a href="<%= photo_mobile_car_shops_path(supplier_id: @supplier.id, car_type_id: @car_type.id) %>">
+          <img src="<%= @generals.present? ? @generals.first.pic_url : '/assets/mobile/wcar/2.jpg' %>"/>
+        </a>
+      </div>
+      <div class="detail-text">
+        <span>最新报价：<b><%= f @car_type.dealer_price %>万</b></span>
+        <span>官方指导价：<%= f @car_type.price %>万</span>
+      </div>
+    </div>
+    <div class="mod-table">
+      <div class="hd">基本参数</div>
+      <div class="bd">
+        <table>
+          <tr>
+            <td width="100">级别：</td>
+            <td width="100"><%= @car_type.level %></td>
+          </tr>
+          <tr>
+            <td>年款：</td>
+            <td><%= @car_type.year %></td>
+          </tr>
+          <tr>
+            <td>发动机：</td>
+            <td><%= @car_type.engine %></td>
+          </tr>
+          <tr>
+            <td>变速箱：</td>
+            <td><%= @car_type.gear_box %></td>
+          </tr>
+          <tr>
+            <td>排量(ml)：</td>
+            <td><%= @car_type.output_volumne %></td>
+          </tr>
+          <tr>
+            <td>长*宽*高(mm)：</td>
+            <td><%= @car_type.car_size %></td>
+          </tr>
+          <tr>
+            <td>车身结构：</td>
+            <td><%= @car_type.structure %></td>
+          </tr>
+          <tr>
+            <td>百公里加速(s)：</td>
+            <td><%= @car_type.accelerate %></td>
+          </tr>
+          <tr>
+            <td>最高车速(Km/h)：</td>
+            <td><%= @car_type.speed %></td>
+          </tr>
+          <tr>
+            <td>油耗(L)：</td>
+            <td><%= @car_type.oil %></td>
+          </tr>
+          <tr>
+            <td>整车质保：</td>
+            <td><%= @car_type.warranty %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

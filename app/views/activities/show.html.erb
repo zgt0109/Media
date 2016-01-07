@@ -1,0 +1,42 @@
+<% unless ['微调研', '微投票'].include?(@activity.activity_type.try(:name)) %>
+  <% content_for :sidebar do %>
+    <%= render activity_sidebar_name %>
+  <% end %>
+
+  <% content_for :topbar do %>
+    <%= link_to_activities_by_type(@activity_type_id, class: 'h1 pagecurrent') %>
+    <%= link_to '题库管理', fight_questions_path, class: 'h1 uncurrent' if @activity_type_id.to_i == 8 %>
+    <%= link_to 'SN码管理', consumes_activities_path(activity_type_id: @activity_type_id), class: 'h1 uncurrent' %>
+    <%= link_to_activities_reports_by_type(@activity_type_id, class: 'h1 uncurrent') %>
+  <% end %>
+<%- end %>
+
+<% if @activity.activity_type_id == 8 %>
+  <%= render 'fight_form' %>
+<% elsif @activity.groups? %>
+  <div class="form-box newwar">
+    <% if @activity.activity_property.nil? %>
+     <% @activity.activity_property = ActivityProperty.new(activity_type_id: 14) %>
+    <% end %>
+    <%= render 'group_form' %>
+  </div>
+<% elsif @activity.vote? %>
+  <%= render 'vote_form' %>
+<% elsif @activity.surveys? %>
+  <%= render 'survey_form' %>
+<% elsif @activity.guess?  %>
+  <%= render 'huodong/guesses/form' %>
+<% else %>
+  <%= render 'setting_form' %>
+<% end %>
+
+<script>
+  $('input').attr('disabled',true)
+  $('input[type=submit]').attr('disabled',false);
+  $('input[type=hidden]').attr('disabled',false);
+  $('input[type=reset]').attr('disabled',false);
+  $('#activity_keyword').attr('disabled',false);
+  $('#activity_pic').attr('disabled',false);
+  $('#activity_summary').attr('disabled',false);
+  $('#activity_name').attr('disabled',false);
+</script>

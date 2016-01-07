@@ -1,0 +1,9 @@
+<%= render "slider" %>
+
+<div class="index">
+  <% website_menus.each do |menu| %>
+      <%= link_to menu_url(menu), class: 'box mod-index' do %>
+          <span><%= menu.title %></span>
+      <% end %>
+  <% end %>
+</div>

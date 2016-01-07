@@ -1,0 +1,24 @@
+ <% @payment_settings.each do |payment_setting| %>
+  <%- payment_setting = payment_setting.reload unless payment_setting.new_record? %>
+  <% payment_type_name = payment_setting.payment_type_id_name %>
+  <tr>
+    <td>
+      <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+        <% unless current_user.trial_account? || current_user.industry_free? %>
+          <%- if payment_setting.wxpay? || payment_setting.weixinpay? || payment_setting.yeepay? || payment_setting.alipay? %>
+            <a href="javascript:;" data-toggle="modals" data-height="500" data-iframe="<%= payment_setting.new_record? ? new_payment_setting_url(payment_type_id: payment_setting.payment_type_id) : edit_payment_setting_url(payment_setting) %>" data-title="<%= payment_type_name %>设置">编辑</a>
+          <%- end %>
+
+          <% unless payment_setting.new_record? || payment_setting.tenpay? %>
+            <%= link_to disable_payment_setting_url(payment_setting), method: :post, remote: true do %><i class="icon-pause bigger-120 JS-icon-play"></i><% end if payment_setting.enabled? %>
+
+            <%= link_to enable_payment_setting_url(payment_setting), method: :post, remote: true do %><i class="icon-play bigger-120 JS-icon-play"></i><% end if payment_setting.disabled? %>
+          <% end %>
+        <% end %>
+      </div>
+    </td>
+    <td><%= payment_type_name %><%= '（暂停使用）' if payment_setting.tenpay? %></td>
+    <td><%= payment_setting.sort %></td>
+    <td><%= payment_setting.new_record? ? '未使用' : payment_setting.status_name %></td>
+  </tr>
+<% end %>

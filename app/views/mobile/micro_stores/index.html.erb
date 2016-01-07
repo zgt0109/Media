@@ -1,0 +1,26 @@
+<% content_for(:title, @supplier.shop.name || '门店列表') %>
+<section id="sec-index">
+  <header>
+    <a></a>
+    <h1><%= @supplier.shop.name %></h1>
+    <a></a>
+  </header>
+  <div class="body">
+    <div class="search">
+      <%= form_for @search, url: mobile_micro_stores_path, method: :get, html: { class: 'form' } do |f| %>
+          <div class="search-box">
+            <i></i>
+            <%= f.search_field :name_like, id: 'in', placeholder: '请输入门店名称' %>
+          </div>
+          <input type="submit" value="搜索" class="btn"/>
+      <% end %>
+      <a href="<%= @shop_branches.blank? ? "javascript:;" : map_mobile_micro_stores_path(supplier_id: session[:supplier_id]) %>" class="near">我的周边</a>
+    </div>
+    <div class="list-box">
+      <%= render partial: 'shop_branches', collection: @shop_branches, as: :branch %>
+      <% if (link_to_next_page @shop_branches, '点击加载更多', remote: true).present? %>
+        <p class="tcenter"><span class="loading"><%= link_to_next_page @shop_branches, '点击加载更多', remote: true, params: { search: params[:search] } %></span></p>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link type="text/css" rel="stylesheet" href="/stylesheets/website/main.css"/>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/website/template<%= @website.template_id %>.css"/>
+  <%= csrf_meta_tags %>
+  <title><%= yield(:title) || '微官网' %></title>
+</head>
+<body class="<%= show_class_with_website %>">
+  <%= render 'application/gb2big5' %>
+
+  <%= yield :website_full_screen %>
+
+<div class="html">
+  <div class="main">
+    <%= yield :website_top_pic %>
+    <div class="body">
+      <%= yield %>
+    </div>
+    <% if @website.template4? && (@website.tel? || @website.address?)%>
+        <div class="box-ft">
+          <% if @website.tel? %><a href="tel:<%= @website.tel %>" class="<%= @website.address? ? "box-ft-a1" : "box-ft-a2"%>"><span class="ico-phone"><%= @website.tel %></span></a><% end %>
+          <% if @website.address? %><a href="<%= mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) %>" class="<%= @website.tel? ? 'box-ft-a1' : 'box-ft-a2'%>"><span class="ico-address">我们在这里</span></a><% end %>
+        </div>
+      <% end %>
+    </div><!-- main end -->
+  </div><!-- html end -->
+
+  <%= show_app_website_footer unless @website.template16? %>
+
+  <%= render :partial => "application/app_footer_template13" if @website.template13? %>
+
+  <%= render :partial => "application/app_footer_template14" if @website.template14? %>
+
+  <%= show_app_website_btn_up unless @website.template16? %>
+
+  <% if @website.is_open_popup_menu? and @website_popup_menus.present? and @website_popup_menus.count > 0 and !@website.template16? %>
+    <%= show_app_website_plug_phone %>
+  <% end %>
+
+  <%= yield :pop_pop_share %>
+
+<script type="text/javascript" src="/javascripts/jquery-1.8.2.min.js"></script>
+<script src="/javascripts/app/website/weisite.js"></script>
+<script src="/javascripts/app/website/swipe.js"></script>
+<script src="/javascripts/app/website/main.js"></script>
+<%= yield :load_end_js %>
+<%= yield :load_view_js %>
+<script type="text/javascript">
+    //var slider=new TouchSlider({id:'slider', speed:600, timeout:6000});
+    <% if @website_pictures.present? %>
+    $(function(){
+        var texts=<%= @website_pictures.map(&:title).to_s.html_safe %>;
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $("#pagenavi").children();
+                lis.removeClass("active").eq(this.index).addClass("active");
+                $("#slider-span").html(texts[this.index]);
+            }
+        });
+    });
+    <% end %>
+</script>
+
+<%= render "application/mobile_footer" %>
+
+</body>
+</html>

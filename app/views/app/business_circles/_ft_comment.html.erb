@@ -1,0 +1,18 @@
+<% @comments.each do |comment| %>
+  <div class="ft-list">
+    <div class="fl">
+      <span class="bd-img">
+        <%= image_tag "mobile/sculpture－1.png" %>
+      </span>
+    </div>
+    <div class="fr">
+      <b><%= comment.name %></b>
+        <span>
+          <i class="fl"><%= date_format_full(comment.created_at) %> </i>
+        </span>
+      <p><%= comment.content %></p>
+      <!--<p class="hide">123</p>
+      <a class="btn-show">显示更多</a>-->
+    </div>
+  </div>
+<% end %>

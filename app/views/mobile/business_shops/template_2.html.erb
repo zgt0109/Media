@@ -1,0 +1,140 @@
+<% if @business_shop.enable_vip_card? %>
+    <div class="mod-member">
+      <div class="mod-card">
+        <div class="card-box">
+          <%= image_tag @vip_card_pic %>
+          <div class="card-icon">
+            <% if @vip_card.logo? %>
+              <img src="<%= @vip_card.logo %>"/>
+            <% end %>
+          </div>
+          <div class="card-name">
+              <span class="tright" style="color:#<%= @vip_card.name_bg_color.presence %>;"><%= @vip_card.try(:name) %></span>
+          </div>
+          <p style="color:#<%= @vip_card.card_bg_color.presence %>;">
+              <span class="tright"><%= @vip_user.try(:user_no) %></span>
+              <span class="tright"><%= @vip_user.try(:vip_grade_name) %></span>
+          </p>
+        </div>
+      </div>
+      <% if @vip_card.stopped? %>
+        <a class="btn btn-red">商家已停用会员卡</a>
+      <% elsif @vip_user %>
+        <% if @vip_user.pending? %>
+          <p class="card-p card-disnormal" id="card-p"><span class="fred">您的会员卡正在审核中</span></p>
+        <% elsif @vip_user.rejected? %>
+          <p class="card-p card-disnormal" id="card-p"><span class="fred">您的会员卡申请已被拒绝</span></p>
+        <% elsif @vip_user.freeze? %>
+          <p class="card-p card-disnormal" id="card-p"><span class="fred">您的会员卡已被冻结</span></p>
+        <% else %>
+          <p class="card-p" id="card-p"><span>使用时向服务员出示此卡</span></p>
+        <% end %>
+      <% else %>
+        <div class="card-btn">
+          <a class="btn btn-red" onclick="toggleToClass('#html','dirL');resize('#transitionRight','dirL')">立即领取会员卡</a>
+        </div>
+      <% end %>
+    </div>
+<% end %>
+<!-- 优惠信息 -->
+<div class="mod-box J-slide">
+    <% @privileges.each_with_index do |privilege, i| %>
+        <dl>
+            <dt>
+                <a class="fa fa-chevron-right box-icon box-note<%= ' fa-chevron-down' if i == 0 %>">
+                    <i class="fa fa-tag"></i>
+                    <b><%= privilege.name %></b>
+                </a>
+            </dt>
+            <dd class="show mod-detail" style="display:  <%= 'none' if i > 0 %>;">
+                <div class="detail-p">
+                    <%= privilege.description.to_s.html_safe %>
+                </div>
+            </dd>
+        </dl>
+    <% end %>
+</div>
+
+<!-- 店铺简介 -->
+<div class="mod-box J-slide">
+    <dl>
+        <dt>
+            <a class="fa fa-chevron-right box-icon box-note fa-chevron-down">
+                <i class="fa fa-home"></i><b>店铺简介</b>
+            </a>
+        </dt>
+        <dd class="show mod-detail">
+            <div class="detail-p">
+                <%= @business_shop.description.to_s.html_safe %>
+            </div>
+        </dd>
+    </dl>
+</div>
+
+<div class="mod-box">
+    <dl class="J-slide-dl">
+        <% if @business_shop.location_none? %>
+            <dt>
+                <a class="fa box-icon">
+                    <i class="fa fa-map-marker"></i><b>地址：<%= @business_shop.address %></b>
+                </a>
+            </dt>
+        <% elsif @business_shop.location_normal? %>
+            <dt>
+                <a class="fa fa-chevron-right box-icon" href="http://api.map.baidu.com/marker?location=<%= @business_shop.location_y%>,<%= @business_shop.location_x%>&title=<%= @business_shop.address%>&content=<%= @business_shop.address%>&output=html">
+                    <i class="fa fa-map-marker"></i><b>地址：<%= @business_shop.address %></b>
+                </a>
+            </dt>
+        <% elsif @business_shop.location_picture? %>
+            <dt>
+                <a class="fa fa-chevron-right box-icon box-note">
+                    <i class="fa fa-map-marker"></i><b>地址：<%= @business_shop.address %></b>
+                </a>
+            </dt>
+            <dd class="mod-detail">
+                <div class="detail-p">
+                    <%= image_tag((@business_shop.location_pic.presence || '/assets/bg_fm.jpg')) %>
+                </div>
+            </dd>
+        <% end %>
+    </dl>
+    <dl>
+        <dt>
+            <a class="fa box-icon" href="tel:<%= @business_shop.tel %>">
+                <i class="fa fa-phone"></i><b>电话：<%= @business_shop.tel %></b>
+            </a>
+        </dt>
+    </dl>
+</div>
+<div class="mod-box">
+    <dl>
+        <dt>
+            <a class="fa fa-chevron-right box-icon" href="<%= pictures_mobile_business_shop_path(@supplier.id, @business_shop) %>">
+                <i class="fa fa-picture-o"></i><b>环境照片（<%= @business_shop.business_shop_pictures.recent.size %>张）</b>
+            </a>
+        </dt>
+    </dl>
+    <dl>
+        <dt>
+            <a class="fa fa-chevron-right box-icon" href="<%= items_mobile_business_shop_path(@supplier.id, @business_shop) %>">
+                <i class="fa fa-bookmark"></i><b>推荐商品（<%= @business_shop.business_items.size %>个）</b>
+            </a>
+        </dt>
+    </dl>
+    <dl>
+        <dt>
+            <a class="fa fa-chevron-right box-icon" href="<%= comments_mobile_business_shop_path(@supplier.id, @business_shop) %>">
+                <i class="fa fa-comment"></i><b>店铺点评（<%= @business_shop.comments.latest.size %>条）</b>
+            </a>
+        </dt>
+    </dl>
+</div>
+
+<% content_for :custom_js do %>
+    <script>
+    $(function(){
+        showSlider(".J-slide dl, .J-slide-dl");
+    })
+    </script>
+<% end %>
+

@@ -1,0 +1,52 @@
+<div id="festival" class="tab-pane active">
+    <div class="alert alert-block alert-success">
+        <strong class="pull-left">提示：</strong>
+        <ul class="vwebsiteHeadAlert">
+            <li>会员：<%= @vip_user.name %>，可用金额：<%= f @vip_user.usable_amount %></li>
+        </ul>
+    </div>
+
+    <%= form_for @search, url: vip_user_path(@vip_user), html: { method: :get } do |f| %>
+      <%= hidden_field_tag :type, params[:type] %>
+      <div class="table-filter">
+        <div class="filter-form pull-right">
+            <%= f.submit '查询', class: 'btn btn-primary btn-sm' %>
+        </div>
+        <div class="filter-form pull-right">
+            <%= f.text_field :created_at_gte, class: 'input-date datepicker', placeholder: "选择日期范围" %> -
+            <%= f.text_field :created_at_lte, class: 'input-date datepicker', placeholder: "选择日期范围" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="margin-top-20 ">
+        <table id="festivalTable"
+               class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+              <tr>
+                <th width="20%">时间</th>
+                <th width="15%">原本等级</th>
+                <th width="15%">调整后等级</th>
+                <th>说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @vip_grade_logs.each do |log| %>
+                <tr>
+                  <td><%= log.created_at.to_s[0..15] %></td>
+                  <td><%= log.old_vip_grade_name %></td>
+                  <td><%= log.now_vip_grade_name %></td>
+                  <td>
+                    <%= log.description.presence %>
+                  </td>
+                </tr>
+              <% end.blank? %>
+                <tr><td colspan="4" class="green text-center">还没有等级调节记录</td></tr>
+              <% end %>
+            </tbody>
+        </table>
+        <%= paginate @vip_grade_logs %>
+    </div>
+</div>
+
+

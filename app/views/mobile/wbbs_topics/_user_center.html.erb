@@ -1,0 +1,104 @@
+<% if @wx_user %>
+    <div class="mod-pop" id="pop-more">
+      <div class="pop-bg" onclick="hidePop('#pop-more')"></div>
+      <div class="pop-body">
+        <div class="pop-hd pop-ul">
+          <%= link_to '我的话题', "#{mobile_wbbs_topics_path(@supplier, activity_id: @activity.id)}?my" %>
+          <a href="<%= wbbs_notifications_mobile_wbbs_topics_path(@supplier, activity_id: @activity.id) %>" class="mod-tip-number">我的消息<i><%= @notifications_count %></i></a>
+          <%= link_to '我的空间', "#{mobile_wbbs_topics_path(@supplier, receiver_id: @wx_user.try(:id), activity_id: @activity.id)}" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mod-pop" id="pop-tools">
+      <div class="pop-bg" onclick="hidePop('#pop-tools')"></div>
+      <div class="pop-body">
+        <div class="pop-hd pop-ul">
+        </div>
+      </div>
+    </div>
+
+    <div class="mod-pop" id="pop-nichen">
+      <div class="pop-bg" onclick="hidePop('#pop-nichen')"></div>
+      <div class="pop-body">
+        <div class="pop-hd">
+          <form class="mod-form form-ver">
+            <p>请设定您在社区的头像和昵称</p>
+            <div class="form-li">
+              <p>上传头像</p>
+              <div class="mod-uoload">
+                <a class="upload-btn upload-img">
+                  <input type="file" class="headimgurl" name="file" accept="image/*" single="" data-callback="show_headimgurl">
+                  <img id='previewhead' style="display:none">
+                  <%= hidden_field_tag :headimg_key %>
+                </a>
+                <div class="fl">
+                  <p>昵称：</p>
+                  <input type="text" name="nickname"   id="nickname" placeholder="输入您在社区的昵称" class="input"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-btn">
+              <span></span>
+              <span></span>
+              <a class="btn btn-gray" href="javascript:;" onclick="hidePop('#pop-nichen')">取消</a>
+              <a class="btn btn-gray submitinfo" href="javascript:;">确定</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <% content_for :head do %>
+        <%= javascript_include_tag 'jquery-fileupload/basic' %>
+    <% end %>
+
+    <script type="text/javascript">
+
+        function show_headimgurl(key, imgUrl){
+            $('#headimg_key').val(key);
+            $('#previewhead').attr('src', imgUrl+'?imageView/2/w/60/h/60').show();
+//            $('.upload-btn:before, .upload-btn:after').css('position', 'fixed')
+        }
+
+        $(function(){
+            $('.submitinfo').on('click', function(){
+                var headimgurl = $('#headimg_key').val();
+                var nickname = $('#nickname').val();
+                if(nickname){
+                    <%- if @wx_user.nickname.blank? %>
+                    var exists_nicknames = <%= raw @wbbs_community.wx_users.pluck(:nickname).to_json %>;
+                    <%- else %>
+                    var exists_nicknames = <%= raw @wbbs_community.wx_users.where("id != ?", @wx_user.try(:id)).pluck(:nickname).to_json %>;
+                    <%- end %>
+                    if ($.inArray(nickname, exists_nicknames) >= 0){
+                        alert('昵称重复，请重新选择昵称');
+                        $('#nickname').focus();
+                    }else{
+                        $.post('/<%= @supplier.id %>/wbbs_topics/set_user_info', {nickname: nickname, headimgurl: headimgurl});
+                    }
+                }else{
+                    if(!nickname){
+                        alert('请填写昵称');
+                        $('#nickname').focus();
+                    }
+                }
+            });
+
+//            $(".headimgurl").fileupload({
+//                paramName: 'file',
+//                type: 'post',
+//                url: "http://up.qiniu.com",
+//                formData: {token: "<%#= qiniu_pictures_upload_token %>"},
+//                dataType: 'json',
+//                replaceFileInput: true,
+//                done: function(e,data){
+//                    var imageKey = data.result.key;
+//                    $('#headimg_key').val(imageKey);
+//                    $('#previewhead').attr('src', 'http://<%#= BUCKET_PICTURES %>.<%#= QINIU_DOMAIN %>/'+imageKey+'?imageView/2/w/60/h/60').show();
+//                    $('.upload-btn:before, .upload-btn:after').css('position', 'fixed')
+//                }
+//            });
+        });
+    </script>
+<% end %>

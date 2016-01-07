@@ -1,0 +1,22 @@
+<% if @website_pictures.present? %>
+    <div class="banner" id="banner">
+      <ul class='clearfix'>
+        <% @website_pictures.each do |picture| %>
+            <li>
+              <%= link_to picture.menu_type.present? ? menu_url(picture) : 'javascript:;' do %><%= image_tag picture.pic.large, class: 'img' if picture.pic? %><% end %>
+            </li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<script>
+  $(function(){
+    indexSwipe("banner", <%= raw @website_setting.is_wp_open_bottom%>, 3000);
+    bannerSet({
+            background: "#<%= @website_setting.wp_bottom_color %>",
+            opacity: "<%= @website_setting.wp_bottom_opacity%>",
+            color: "#<%= @website_setting.wp_font_color %>"
+    });
+  });
+</script>
+

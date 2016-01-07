@@ -1,0 +1,6 @@
+<% if @hospital_job_title.deleted? %>
+  $("#job_title_a_<%= @hospital_job_title.id %>").remove();
+  $("#title_lable input:checkbox[value=<%=@hospital_job_title.id%>]").remove();
+<% else %>
+  showTip('warning','删除失败');
+<% end %>

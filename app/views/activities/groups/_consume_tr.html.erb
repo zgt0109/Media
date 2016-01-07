@@ -1,0 +1,24 @@
+<tr>
+  <td title="<%= activity_consume.activity.try(:name) %>"><%= truncate_u activity_consume.activity.try(:name), length: 6 %></td>
+  <td><%= activity_consume.code %></td>
+  <td>
+    <%= activity_consume.status_text %>
+  </td>
+  <td><%= activity_consume.activity_group.try(:name) %></td>
+  <td><%= activity_consume.activity_group.try(:mobile) %></td>
+  <td><%= activity_consume.activity_group.try(:item_qty) %></td>
+  <td>
+    <%= activity_consume.created_at.try(:to_date) %>
+  </td>
+  <td id="consume-useat-<%= activity_consume.id %>">
+    <%= activity_consume.use_at.try(:to_date) %>
+  </td>
+  <td id="consume-branch-<%= activity_consume.id %>" >
+    <%= activity_consume.shop_branch.try(:name) %>
+  </td>
+  <td id="consume-operation-<%= activity_consume.id %>">
+    <% if activity_consume.unused? %>
+      <%= modal_to '立即使用', activity_consume_path(activity_consume), title: '使用SN码' if activity_consume.unused? %>
+    <% end %>
+  </td>
+</tr>

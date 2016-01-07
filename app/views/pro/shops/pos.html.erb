@@ -1,0 +1,44 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+       微硬件
+     </li>
+     <li>微小票机</li>
+   </ul>
+   <%= render '/layouts/qrcode' %>
+ </div>
+ <div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+
+    <!-- 电商的打印机 -->
+    <div class="col-xs-6 col-sm-4 col-md-3 margin-top-10">
+      <div class="tab-content text-center">
+        <h4>微电商小票打印</h4>
+        <div class="margin-top-10">
+          <%= link_to "打印设置", config_ec_print_shop_branch_print_templates_path, class: "btn btn-sm btn-primary" %>
+        </div>
+      </div>
+    </div>
+
+     <% @shop_branches.each do |branch| %>
+     <div class="col-xs-6 col-sm-4 col-md-3 margin-top-10">
+      <div class="tab-content text-center">
+        <h4><%= branch.name %></h4>
+        <div class="margin-top-10">
+          <%= link_to "打印设置", config_print_shop_branch_print_template_path(branch), class: "btn btn-sm btn-primary" %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+</div>
+</div>
+<% end %>

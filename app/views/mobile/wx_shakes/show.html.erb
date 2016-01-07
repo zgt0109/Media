@@ -1,0 +1,17 @@
+<%= stylesheet_link_tag 'mobile/addgetma' %>
+<section id="sec-index">
+  <div class="body">
+    <div class="mod-date"><%= Date.today %></div>
+    <div class="mod-result">
+      <% if @wx_shake_prizes.each do |prize| %>
+        <p><b>第<%= prize.user_rank %>名：</b><span><%= @wx_shake.name %>第<%= prize.wx_shake_round.shake_round %>轮<br><i>兑换码：<%= prize.sn_code %></i>(<%= prize.status_name %>)</span><a class="addgetma" href="javascript:;" data-ma="<%=prize.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></p>
+      <% end.blank? %>
+        <p class="tcenter">暂未中奖</p>
+      <% end %>
+    </div>
+    <a href="<%= mobile_wx_shakes_path(supplier_id: @supplier.id) %>" class="mod-btn btn-back">
+      <i class="fa fa-angle-left"></i>
+    </a>
+  </div>
+</section>
+<%= javascript_include_tag 'mobile/qcode' %>

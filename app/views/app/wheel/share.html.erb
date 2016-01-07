@@ -1,0 +1,25 @@
+<% title '大转盘活动说明' %>
+<%= stylesheet_link_tag 'mobile/game', 'mobile/rotor' %>
+<%= javascript_include_tag 'mobile/lib/jquery', 'mobile/game/main' %>
+<section class="sec-game">
+  <div class="sec-share" id="sec-share">
+    <div class="share-img"><img src="/assets/app/rotor/share.jpg"/> </div>
+    <a class="share-btn" onclick="showShare()"></a>
+  </div><!--#scene-start end-->
+</section>
+<section class="sec-info sec-bg-top">
+  <% @activity && @activity.activity_prizes.each do |prize| %>
+    <p><b><%= prize.title %><% if @activity.activity_property.is_show_prize_qty? %>（共<%= prize.prize_count %>个）<% end %></b><span><%= prize.prize %></span></p>
+  <% end %>
+  <i>兑奖说明:</i>
+</section>
+<section class="sec-text sec-bg-bottom">
+  <em></em>亲，中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
+</section>
+<section class="sec-detail sec-bg-top sec-bg-bottom">
+  <i>兑奖说明:</i>
+  <em></em>
+  <div class="mod-cke">
+    <%= raw @activity_notice.description rescue '' %>
+  </div>
+</section>

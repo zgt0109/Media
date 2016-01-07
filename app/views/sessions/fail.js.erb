@@ -1,0 +1,4 @@
+alert('帐号或密码错误');
+if (3 <= <%= session[:add_login_wrong_count] %>){
+  location.href = '/sessions/new';
+}

@@ -1,0 +1,88 @@
+<audio id="system_messages_play_music" src=""></audio>
+
+<%= javascript_include_tag "http://#{FAYE_HOST}/faye.js" %>
+
+<script type="text/javascript">
+    function system_message_detail(){
+        //单个消息点击
+        $('.check_system_message_detail').click(function(){
+            if($(this).attr('target') == '_self'){
+                window.location.href = '/system_messages/'+$(this).attr('data-id')+'/read'
+            }else if($(this).attr('target') == '_blank'){
+                var self = $(this);
+                if($(this).attr('data-is-read') == 'false'){
+                    $.ajax({
+                        url: '/system_messages/'+$(this).attr('data-id')+'/ajax_update',
+                        type: "post",
+                        success : function (data){
+                            if(data == 'succeed'){
+                                self.attr('data-is-read', 'true');
+                            }
+                        }
+                    });
+                }
+                window.open(self.attr('url'));
+                return false;
+            }
+        });
+    }
+    function play_music(data){
+        if(data['music']){
+            var audio = document.getElementById('system_messages_play_music');
+            audio.src = data['music']
+            audio.play();
+        }
+    }
+    $(function(){
+        system_message_detail();
+        var faye = new Faye.Client('http://<%= FAYE_HOST %>/faye');
+        faye.subscribe("/system_messages/change/<%= current_user.id %>", function(data){
+            var ul = $('.system_message_ul'),
+                ul_count = $('.system_message_ul .system_message_count'),
+                ui_li = $('.system_message_ul .system_message_ui_li'),
+                ui_li_ul = $('.system_message_ul .system_message_ui_li_ul');
+            if(data['operate'].trim() == 'add'){
+                if(ul_count.length == 0){
+                    ui_li.find('a').attr('data-toggle', 'dropdown');
+                    ui_li.find('a').attr('href', '#');
+                    ui_li.find('a').append('<span class="badge badge-pink system_message_count">1</span>');
+                    ui_li.find('a').after('<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close system_message_ui_li_ul"><li id="system_message_ui_li_ul_li_'+data['id']+'" class="system_message_ui_li_ul_li"><a href="#" class="check_system_message_detail" data-id="'+data['id']+'" data-is-read="'+data['is_read']+'" target="'+data['target']+'" url="'+data['url']+'"><span class="msg-body"><span class="msg-title"><span class="blue">'+data['content']+'</span></span></span></a></li><li><a href="/system_messages/read_all" data-method="post" rel="nofollow">查看所有<span class="red system_message_count">1</span>条未读消息</a></li></ul>')
+                }else{
+                    ul_count.each(function(){$(this).html(parseInt($(this).html())+1)});
+                    ui_li_ul.find('.system_message_ui_li_ul_li').eq(0).before('<li id="system_message_ui_li_ul_li_'+data['id']+'" class="system_message_ui_li_ul_li"><a href="#" class="check_system_message_detail" data-id="'+data['id']+'" data-is-read="'+data['is_read']+'" target="'+data['target']+'" url="'+data['url']+'"><span class="msg-body"><span class="msg-title"><span class="blue">'+data['content']+'</span></span></span></a></li>');
+                    $('.system_message_ui_li_ul_li').eq(5).hide();
+                }
+                $('.icon-info-sign').removeClass('icon-animated-vertical');
+                $('.icon-info-sign').addClass('icon-animated-vertical');
+                play_music(data);
+                system_message_detail();
+                scrollTitle('（新消息）' + "<%= current_user.bqq_account? ? '移动版网站' : "微枚迪 客户ID: #{current_user.try(:id)}" %>");
+            }
+            else if(data['operate'].trim() == 'delete'){
+                var li = ui_li_ul.find('li#system_message_ui_li_ul_li_'+data['id'])
+                if(li.length > 0){
+                    li.remove();
+                    if(ui_li_ul.find('.system_message_ui_li_ul_li').length == 0){
+                        ui_li.find('a').attr('data-toggle', '');
+                        ui_li.find('a').attr('href', '<%= system_messages_url %>');
+                        ul_count.remove();
+                        ui_li_ul.remove();
+                    }else{
+                        $('.system_message_ui_li_ul_li').eq(4).show();
+                        ul_count.each(function(){$(this).html(parseInt($(this).html())-1)});
+                    }
+                }
+            }
+            else if(data['operate'].trim() == 'delete_all'){
+                ui_li.find('a').attr('data-toggle', '');
+                ui_li.find('a').attr('href', '<%= system_messages_url %>');
+                ul_count.remove();
+                ui_li_ul.remove();
+            }
+            else if(data['operate'].trim() == 'play'){
+                play_music(data);
+            }
+            // console.log(data);
+        });
+    });
+</script>

@@ -1,0 +1,12 @@
+<% if photo %>
+<li class="upphoto" id="photo_<%= photo.id %>">
+	<img alt="150x150" src="<%= photo.thumb_pic_url %>">
+  <div class="check1 ">
+  	<input type="checkbox" class="ace check1" value="<%= photo.id %>">
+    <i class="lbl"></i>
+  </div>
+  <div class="text">
+  	<%= link_to "设为封面", is_cover_album_photo_path(photo, album_id: album_id), remote: true %>
+  </div>
+</li>
+<% end %>

@@ -1,0 +1,289 @@
+.chose_content {
+	padding: 2%;
+	display:table;
+	width:97%;
+	margin:0 auto;
+}
+.chose_content a {
+	display:table-row;
+	width:97%;
+	min-height:44px;
+}
+.chose_content a p {
+	font-size: 12px;
+	display:table-cell;
+	vertical-align:middle;
+	border: 1px solid #c2c2c2;
+	padding:5px 5px 5px 20px;
+}
+.chose_content a p span,
+.chose_content a p b{ display:inline-block;}
+
+.chose_content a p.name {
+	color: #444;
+	width:30%;
+	background: url(/assets/micro_stores/bg_left.png) no-repeat 8px center #FFF;
+	background-size: auto 35px;
+	border-radius:5px 0 0 5px;
+	border-right:0;
+}
+.chose_content a p.name span{ width:100%;}
+.chose_content a p.num {
+	color: #888;
+	width:63%;
+	border-left: 1px dotted #c2c2c2;
+	background:url(/assets/micro_stores/bg_ico_gored.png) no-repeat 97% center #fff;
+	background-size: auto 12px;
+	border-radius:0 5px 5px 0;
+	padding:5px 20px 5px 10px;
+}
+.chose_content a p.num b{ width:22%; float:left;}
+.chose_content a p.num span{ width:78%; float:left;}
+
+.chose_content a:hover p.name{
+	background: url(/assets/micro_stores/bg_left.png) no-repeat 8px center #e8645a;
+	background-size: auto 12px;
+}
+.chose_content a:hover p.num{
+	background: url(/assets/micro_stores/bg_ico_gowri.png) no-repeat 97% center #e8645a;
+	background-size: auto 12px;
+}
+.chose_content a:hover p {
+	color: #fff;
+}
+.margin{ width:100%; height:5px;}
+
+.details_content {
+	
+}
+.details-title{ background:#c7cfd0; color:#444; height:26px; line-height:26px; padding:0 10px;}
+.details_content .tall {
+	background: #fff;
+	border-radius: 5px 5px;
+	padding: 10px;
+	position: relative;
+	overflow: hidden;
+}
+.details_content .tall p {
+	padding: 5px 0;
+	font-size: 12px;
+	line-height: 12px;
+}
+.details_content .tall p span {
+	display: inline-block;
+	color: #444;
+}
+.details_content .tall p span.pre {
+	width: 30%;
+	white-space: pre;
+	color: #666;
+}
+.details_content .tall p span.red {
+	color: #e8645a;
+}
+.details_content .tall a.cal {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+.details_content .tall a.cal img {
+	max-height: 30px;
+}
+.details_content .list {
+	background: #fff;
+	margin: 10px 0 0;
+	border-radius: 5px 5px;
+	padding: 10px;
+	overflow: hidden;
+}
+.details_content .list p {
+	padding: 15px 0;
+	border-top: 2px dotted #c2c2c2;
+	font-size: 12px;
+	line-height: 14px;
+	color: #888;
+}
+.details_content .list p:first-child {
+	border: none;
+}
+.details_content .list p span {
+	display: inline-block;
+}
+.details_content .list p span.left {
+	width: 40%;
+}
+.details_content .list p span.midd {
+	width: 40%;
+}
+.details_content .list p span.midd em {
+	color: #444;
+	font-style: normal;
+}
+.reserve {
+	background: #fff;
+}
+.reserve_content {
+	padding: 2%;
+	width:96%;
+	float:left;}
+.reserve_content .topimg{ position:relative;}
+.reserve_content .topimg img{max-width: 100%;}
+.reserve_content .topimg p{ position: absolute; left: 0; bottom: 0; width: 100%; height: 7px; background: url(/assets/micro_stores/bg_but_bg.png) repeat-x; background-size: contain;}
+.reserve_content .list{ width: 100%; margin: 10px auto;}
+.reserve_content .list p,.reserve_content .list a{ display: block; border-bottom: 2px dotted #c2c2c2; padding: 15px 20px 15px 30px; white-space: nowrap; color: #666; font-size: 12px; line-height: 12px;}
+.reserve_content .list p span,.reserve_content .list a span{ color: #888;}
+.reserve_content .list a.adress{background: url(/assets/micro_stores/bg_ico_adress.png) no-repeat 10px center, url(/assets/micro_stores/bg_ico_gored.png) no-repeat 490px center; background-size: 14px auto;}
+.reserve_content .list a.phone{background: url(/assets/micro_stores/bg_ico_phone.png) no-repeat 10px center, url(/assets/micro_stores/bg_ico_gored.png) no-repeat 490px center; background-size: 14px auto;}
+.reserve_content .list p.time{background: url(/assets/micro_stores/bg_ico_time.png) no-repeat 10px center; background-size: 14px auto;}
+
+.reserve_content .form{ width: 80%;
+	margin: 20px auto;
+	padding: 0 10%;
+	text-align:center;}
+.reserve_content .form p.inp{ height: 28px;
+	width: 256px;
+	background: url(/assets/micro_stores/bg_inp_01.png) no-repeat center center;
+	overflow: hidden;
+	background-size: contain;
+	display:inline-block;}
+.reserve_content .form p.inp input.text{ display: inline-block;
+	border: none;
+	margin: 0;
+	padding: 0;
+	width: 200px;
+	color: #333;
+	padding: 0 10px 0 10px;
+	font-size: 12px;
+	line-height: 12px;
+	vertical-align: middle;
+	height: 28px;
+	background: none;
+	float: left;}
+.reserve_content .form p.inp input.reset{display: inline-block; border: none; margin: 0; padding: 0; width: 10%;height: 100%; background: none; cursor: pointer; float: right;}
+.reserve_content .form p.sub{ margin: 10px auto;}
+.reserve_content .form p.sub input{ max-height: 35px;}
+
+.details_content{ padding: 2%; width:96%; float:left;}
+.details_content .tall{ background: #fff;border-radius: 5px 5px; padding:10px; position: relative; margin: 0 auto;}
+.details_content .tall p{ font-size: 12px; line-height: 13px; color: #444; position: relative; padding: 10px 0 10px 70px; border-bottom: 2px dotted #c2c2c2;}
+.details_content .tall p.phone{padding: 10px 0 10px 80px; position: relative;}
+.details_content .tall p.phone img{ position: absolute; right: 20px; top: 20px; z-index: 1;}
+.details_content .tall p.phone input{ margin: 0; padding: 0; line-height: 16px; font-size: 12px; color: #999; width: 100%; border: none; background: none; position: relative; z-index: 3;}
+.details_content .tall p span{ color: #444; position: absolute; left: 5px; top: 10px;}
+.details_content .tall p.bot{position: absolute; left: 0; bottom: -4px; width: 100%; height: 7px; background: url(/assets/micro_stores/bg_but_bgf.png) repeat-x; padding: 0; border: none; background-size: contain;}
+.details_content .tall textarea{ width: 90%; height: 60px; font-size: 12px; line-height: 15px; color: #999;}
+.details_content .but{ padding: 15px 0 0; width: 100%; margin: 0 auto;}
+.details_content .but input{ max-width: 100%;}
+
+
+
+
+.map_content{padding: 15% 0 0;}
+.map_content .mapbox{ width: 99%; margin: 0 auto;}
+#dituContent {
+	border: 1px solid #ccc;
+	width: 100%;
+	position:fixed;
+	height:100%;
+}
+.map-info{ position:fixed; width:100%; left:0; bottom:0;}
+.map-title{ height:45px; color:#fff; font-size:12px; padding:5px 10px; overflow:hidden; position:relative;}
+.map-title h1{ font-size:14px; line-height:25px;}
+.box-bd{ z-index:100; position:absolute;}
+.box-bg{ position:absolute; background:#000; z-index:10; width:100%; height:100%; top:0; left:0;opacity:0.6;
+filter:alpha(opacity=60);
+-moz-opacity:0.6;
+-khtml-opacity:0.6;}
+.map-list{ background:#fff;}
+.map-list p{ height:35px; line-height:35px; padding:0 10px; border-bottom:1px dashed #c2c2c2; background:url(/assets/micro_stores/bg_ico_gored.png) no-repeat 96% center;}
+.map-list p:last-child{ border:0;}
+.map-list img{ max-width:14px; vertical-align:middle; padding:0 5px 0 0;}
+.map-list p,
+.map-list a{color:#666; }
+
+.order_content{padding: 2%; width:96%; float:left;}
+.order_content .list{border-top: 2px solid #c2c2c2; border-bottom: 2px solid #c2c2c2;}
+.order_content a{ display: block; overflow: hidden; line-height: 20px; font-size: 12px; color: #888; background: url(/assets/micro_stores/bg_ico_gored.png) no-repeat 90% center #fff;border-top: 2px dotted #c2c2c2; padding: 10px 0;}
+.order_content a:first-child{ border: none;}
+.order_content a:hover{ color: #fff; background: url(/assets/micro_stores/bg_ico_gowri.png) no-repeat 600px center #e8645a;}
+.order_content a p{ float: left;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+.order_content a p.top{ width: 90%; padding: 0 0 0 20px;}
+.order_content a p.bot{ width: 90%; padding: 0 0 0 20px;}
+
+.success_content{padding: 2% 0; width:100%; float:left;}
+.success_content .mess{width: 90%; background: #fff; border-radius: 5px 5px; margin: 0 auto; padding: 10px; position: relative;}
+.success_content .mess p.name{ font-size: 12px; color: #444; line-height: 12px; vertical-align:middle;border-bottom: 2px dotted #c2c2c2; padding: 0 0 10px 0;}
+.success_content .mess p.name span{ font-size: 16px; color: #e8645a;line-height: 16px;}
+.success_content .mess p.use{ font-size: 12px; color: #888; line-height: 16px; vertical-align:middle;border-bottom: 2px dotted #c2c2c2; padding: 15px 0;}
+.success_content .mess p.rule{font-size: 12px; color: #888; line-height: 16px; vertical-align:middle;border-bottom: 2px dotted #c2c2c2; padding: 15px 0;}
+.success_content .mess p.rule span{ display: block; color: #444;}
+.success_content .mess p.bot{position: absolute; left: 0; bottom: -3px; width: 100%; height: 7px; background: url(/assets/micro_stores/bg_but_bgf.png) repeat-x; padding: 0; border: none;background-size:contain;}
+
+.success_content .mess p.map{ width: 100%; height: 175px; padding: 15px 0 0;}
+.success_content .mess p.map img{max-width: 100%;}
+.success_content .but{padding: 30px 0 0; width:96%; margin: 0 auto; }
+.success_content .but input{ max-width: 100%;}
+
+
+.desk_content{padding: 16% 0 0; position: relative;}
+.desk_content .form{ width: 85%; padding: 16px 16px 30px; background: #fff; border-radius: 5px 5px; margin: 0 auto;}
+.desk_content .form .title{ font-size: 14px; line-height: 16px; color: #444; padding: 0 0 0 0;}
+.desk_content .form .time{ padding: 20px 0 2px 0; background: url(/assets/micro_stores/bg_line_bot01.png) no-repeat bottom; background-size: contain;}
+.desk_content .form .time p{display: inline-block; margin: 0 0 10px 0;}
+.desk_content .form .time p.day{ height: 24px; width: 80%; padding: 0 0 0 50px; background: url(/assets/micro_stores/bg_ico_day.png) no-repeat left 0; color: #888; line-height: 23px; background-size: contain;}
+.desk_content .form .time p.day select{ display: block; border: 1px solid #c5c5c5; border-radius: 10px; background: #f5f5f5; padding: 0 10px; height: 23px; width: 80%; font-size: 12px;  line-height: 23px; color: #666;}
+.desk_content .form .time p.shi{ height: 24px; width: 80%; padding: 0 0 0 50px; background: url(/assets/micro_stores/bg_ico_shi.png) no-repeat left center; color: #888; line-height: 23px;background-size: contain;}
+.desk_content .form .time p.shi select{ display: inline-block; border: 1px solid #c5c5c5; border-radius: 10px; background: #f5f5f5; padding: 0 15px; height: 23px; width: 40%; font-size: 12px;color: #666; line-height: 23px;}
+.desk_content .form .time p.shi span{ font-size: 19px; display: inline-block;}
+.desk_content .form .time p.shi img{ max-width: 3px; margin: 6px 5px 0 5px;}
+.desk_content .form .titles{ font-size: 14px; line-height: 16px; color: #444; padding: 15px 0 10px 0;}
+.desk_content .form .whe{ overflow: hidden;}
+.desk_content .form .whe label{ display: inline-block; font-size: 14px; line-height: 16px; height: 16px; padding:10px 0; width: 300px; color: #888;vertical-align: middle;}
+.desk_content .form .whe label.f{ width: 70%;}
+.desk_content .form .whe label input[type="radio"] { margin: 0 15px 0 0; position: relative; }
+.desk_content .form .but{ text-align: center; padding: 15px 0 0;}
+.desk_content .form .but input{max-height: 35px;}
+.desk_content .form .numbox{ position: relative; width: 100%; margin: 0 auto;}
+.desk_content .form .numbox span.getnum_span{ display: block; height: 41px; width: 41px;  background: url(/assets/micro_stores/bg_but_hover.png) no-repeat; position: absolute; left: 50%; top:0; margin: -7px 0 0 -20px; border: none; z-index: 5; line-height: 41px; font-size: 18px; color: #fff; font-weight: bold; text-align: center;background-size: contain;}
+.desk_content .form .numbox p.left{ position: absolute; left: -6px; top: -6px; z-index: 5; cursor: pointer; height: 30px; text-align: left; width: 20px; padding: 5px 0 0 5px;}
+.desk_content .form .numbox p.right{ position: absolute; right: 1px; top: -6px; z-index: 5; cursor: pointer; height: 30px; text-align: right;width: 20px; padding: 5px 5px 0 0;}
+.desk_content .form .numbox p.left img,
+.desk_content .form .numbox p.right img{ max-height: 100%;}
+.desk_content .form .num{ height: 25px; width: 100%; position: relative; margin: 0 auto; overflow: hidden; border: 1px solid #c5c5c5; border-radius: 30px 30px; cursor: pointer; background: #f5f5f5; box-shadow: inset 3px 3px 3px 0 #ccc; }
+.desk_content .form .num ul{line-height: 25px; font-size: 12px; color: #6d7173; position: absolute; left: 0; top: 0; width: 2500px;}
+.desk_content .form .num ul li{ float: left; width: 30px; text-align: center;}
+.desk_content .form select.a{ display: block; height: 25px; width: 25px; border-radius: 5px 5px; border: 1px solid #222;background: #f5f5f5;}
+.desk_content .chose_time{ position: absolute; width: 640px;  top: 250px; left: 0; z-index: 10;line-height: 18px; font-size: 16px; color: #666; margin: 0; background: #d2d1cd; padding: 20px 0; text-align: center; display: none;}
+.desk_content .chose_time select{ display: inline-block; height: 16px; line-height: 16px; font-size: 14px; color: #666; margin: 0;}
+.desk_content .chose_time p{ width: 120px; border: 1px solid #999; background: #eee; border-radius: 10px; font-size: 12px; line-height: 16px; height: 16px; margin: 15px auto 0; }
+
+@media screen and (orientation:landscape) {
+.chose_content {
+	padding: 1%;
+}
+.chose_content a p {
+	padding: 10px 3%;
+}
+.chose_content a p.name {
+	width: 20%;
+}
+.chose_content a p.num {
+	width: 30%;
+}
+.chose_content a p.phone {
+	width: 30%;
+}
+.map_content {
+	padding: 10% 0 0;
+}
+.desk_content{padding: 11% 0 0; }
+.desk_content .form{ width: 90%; }
+.desk_content .form .numbox{ width:63%;}
+.details_content {
+	padding: 1.5%;
+	width:97%;
+}
+.success_content{padding: 1.5% 0;}
+.success_content .mess{width: 93%;}
+}
+

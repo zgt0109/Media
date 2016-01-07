@@ -1,0 +1,88 @@
+<body class="list">
+<div class="html">
+  <div class="main">
+    <header>
+      <a class="ico ico-arrow-left" href="<%= page_app_life_path(@article.website_menu, anchor: "mp.weixin.qq.com") %>"></a>
+      <h1 class="ellipsis"><%= @article.title %></h1>
+      <a class="ico ico-home" href="<%= app_lives_path(id:@website.id, anchor: "mp.weixin.qq.com") %>"></a>
+    </header><!-- header end -->
+    <section>
+      <div class="box box-index box-list box-detail">
+        <div class="hd">
+          <b><%= @article.title %></b>
+          <i><%= date_format_full(@article.created_at) %></i>
+        </div>
+        <div class="bd">
+          <div class="detail-row">
+            <p><%= image_tag @article.pic.large %></p>
+            <div class="ckeditor_content" style="text-align: left"><%= @article.content.to_s.html_safe %></div>
+          </div>
+          <div class="bd-share detail-row">
+            <a class="btn-share first"><span class="ico-share">发送给朋友</span></a>
+            <a class="btn-share last"><span class="ico-pyq">分享到朋友圈</span></a>
+          </div>
+          <div class="bd-btn detail-row">
+            <a class="btn" href="<%= comment_app_life_path(@article, anchor: "mp.weixin.qq.com") %>">我要评论</a>
+          </div>
+        </div>
+        <%= render :partial=> "comment", :object => @comments %>
+      </div>
+    </section><!-- section end -->
+  </div><!-- main end -->
+</div><!-- html end -->
+
+<div class="pop pop-share">
+  <div class="pop-bg"></div>
+  <div class="pop-bd">
+    <p class="note-share"></p>
+  </div>
+</div>
+<script>
+    $(function(){
+        $(".btn-share").on("click",function(){
+            $(".pop-share").show();
+        });
+        $(".pop-share").on("click",function(){
+            $(".pop-share").hide();
+        });
+    });
+$(".ckeditor_content img").css({"width":"auto","height":"auto"})
+</script>
+</body>
+<style type="text/css">
+.bd-share .btn-share.first{
+    margin: 0 2.5% 0 0;
+}
+.bd-share .btn-share.last{margin: 0;}
+
+.ckeditor_content ol,
+.ckeditor_content ul{
+    /*float:left;*/
+    display:block;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 20px;
+}
+.ckeditor_content ul,
+.ckeditor_content ol,
+.ckeditor_content li{word-spacing: normal;
+    word-break: normal;
+    word-break: break-all;}
+.ckeditor_content p{width:100%;
+    margin:0;
+    word-spacing: normal;
+    word-break: normal;
+    word-break: break-all;}
+.ckeditor_content img{ max-width:100%;}
+.ckeditor_content ol li{list-style:decimal outside none;margin-left: 30px;}
+.ckeditor_content ul li{list-style:disc outside none;margin-left: 30px;}
+.ckeditor_content i,
+.ckeditor_content em,
+.ckeditor_content b,
+.ckeditor_content label{font-style:oblique;width:auto !important;}
+.ckeditor_content span{display: inline;}
+/*.ckeditor_content em, span{width:auto !important}*/
+
+</style>

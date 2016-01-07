@@ -1,0 +1,19 @@
+<% if @activity.fight? %>
+  <a href="###" class="active">&nbsp;&nbsp;一战到底&nbsp;&nbsp;</a>
+  <a href="<%= fight_questions_path %>">题库管理</a>
+<% elsif @activity.vote? %>
+  <%= link_to "微投票", votes_activities_path, class: 'h1 pagecurrent' %>
+  <%= link_to "统计图表", votes_diagram_activities_path, class: 'h1 uncurrent' %>
+  <%= link_to "用户数据", votes_user_data_activities_path, class: 'h1 uncurrent' %>
+<% elsif @activity.surveys? %>
+  <%= link_to "微调研", surveys_activities_path, class: 'h1 pagecurrent' %>
+  <%= link_to "题目设置", activity_survey_questions_path , class: 'h1 uncurrent'%>
+  <%= link_to "统计图表", diagram_activity_survey_questions_path , class: 'h1 uncurrent'%>
+  <%= link_to "用户数据", user_data_activity_survey_questions_path, class: 'h1 uncurrent' %>
+<% else %>
+  <% if @activity.groups? %>
+    <a href="###" class="active">我的团购</a>
+  <% else %>
+    <a href="###" class="active">新建活动</a>
+  <% end %>
+<%end-%>

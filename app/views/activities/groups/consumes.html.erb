@@ -1,0 +1,80 @@
+<div class="tabbable">
+  <%= render "activities/groups/top_nav_tabs"%>
+  <div class="tab-content no-border padding-24">
+    <div id="tab-2">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                        <li> SN码总数<span class="required-star"><%= @total%> </span>张
+                          已领取<span class="required-star"> <%= @total_count%></span>张
+                          已消费<span class="required-star"><%= @total_used_count%> </span>张
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <%= form_for @search, url: consumes_activities_url, html: { method: :get } do |f| %>
+                <%= hidden_field_tag :activity_id, @activity.id if @activity && params[:activity_id].present? %>
+                <%= hidden_field_tag :activity_type_id, @activity_type_id %>
+                <%= hidden_field_tag 'search_type', value: 1 %>
+                <div class="col-sm-12">
+                    <div class="col-md-3 row">
+                        <div class="input-group input-group-text">
+                            <span class="input-group-addon">选择活动：</span>
+                            <%= f.select :activity_id_eq, current_user.activities.show.where(activity_type_id: @activity_type_id).pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-text">
+                            <span class="input-group-addon">SN码：</span>
+                            <%= f.text_field :code_like, class: "col-xs-12", placeholder: '请输入SN码' %>
+                        </div>
+                    </div>
+                    <div class="col-md-3 row">
+                        <input type="submit" class="btn btn-primary btn-sm btn-filter form-submit" value="查询" data-url="<%= consumes_activities_url %>">
+                        <%= link_to '导出Excel', 'javascript: void(0);', data: { url: consumes_activities_url( format: :xls ) }, class: 'btn btn-primary btn-sm btn-filter margin-left-5 export_excel' %>
+                    </div>
+                </div>
+            <% end %>
+
+            <div class="col-md-12 margin-top-20">
+                <table id="grouponSNTable" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>活动名称</th>
+                        <th>SN码</th>
+                        <th>状态</th>
+                        <th>姓名</th>
+                        <th>手机号码</th>
+                        <th>数量</th>
+                        <th>领取时间</th>
+                        <th>使用时间</th>
+                        <th>门店</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <%= render partial: "activities/groups/consume_tr", collection: @activity_consumes, as: :activity_consume%>
+                   </tbody>
+                </table>
+                <%= paginate @activity_consumes %>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+<% content_for :custom_js do %>
+<script>
+  $(function () {
+    $('.export_excel').click(function(event) {
+      $('form').attr( 'action', $(this).data('url') ).submit();
+    });
+    $('.form-submit').click(function(event) {
+      $('form').attr( 'action', $(this).data('url') );
+    });
+  })
+</script>
+<% end %>

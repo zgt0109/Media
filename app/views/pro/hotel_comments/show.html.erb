@@ -1,0 +1,22 @@
+<%= form_for @hotel_comment, validate: true, html: {class: 'form'} do |f| %>
+  <%= f.hidden_field :status, value: HotelComment::REPLYED %>
+  <div class="modal-body">
+    <div class="form-group list-info">
+      <p><span>姓名：</span><%= @hotel_comment.name %></p>
+
+      <p><span>电话：</span><%= @hotel_comment.mobile %></p>
+
+      <p><span>评论内容：</span><%= @hotel_comment.content %></p>
+    </div>
+    <div class="form-group">
+      <div class="clearfix">
+        <%= f.text_area :reply_content, placeholder: '回复内容(限200字)', maxlength: 200, rows: 5, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary', data: {fn: 'submit'}%>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>

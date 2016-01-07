@@ -1,0 +1,90 @@
+<div class="m-main">
+    <%- if @expired %>
+      <form>
+        <div class="m-form">
+          <div class="m-icon circle"><i class="fa fa-unlock-alt"></i></div>
+          <div class="m-successful">抱歉，你的链接已失效，您可以重新申请密码重置邮件，<span id="b" class="m-title">5</span>秒后页面将自动跳转，感谢您对微枚迪的支持！</div>
+        </div>
+      </form>
+    <%- else %>
+      <%= form_for @supplier, url: password_reset_path(params[:id]),  html: {id: "reset_form"}, remote: true do |f| %>
+        <div class="m-form">
+          <div class="m-icon circle"><i class="fa fa-unlock-alt"></i></div>
+          <div class="m-title">重置密码</div>
+          <div class="m-input-text m-input-join-u m-input-pass">
+            <%= f.password_field :password, class: "input-focus radius-bl0 radius-br0 validate", data: {tip: "输入新密码"} %>
+          </div>
+          <div class="m-input-text m-input-join-d m-input-pass">
+            <%= f.password_field :password_confirmation, class: "input-focus radius-tl0 radius-tr0 validate", data: {tip: "请确认密码"} %>
+          </div>
+          <div class="m-link-tip"></div>
+          <div class="m-input-btn m-input-btn-ps">
+            <%= f.submit "提交", class: "m-input-btn-s", id: "btn-submit", disabled: true, disable_with: "提交中..."%>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+</div>
+
+<%= content_for :custom_js do %>
+  <script>
+    $(function(){
+      <%- if @expired %>
+        var st = parseInt($('#b').html());
+        var turn;
+        turn = setInterval(function(){
+            st--;
+            $('#b').html(st);
+            if(st==0){
+                clearInterval(turn);
+                window.location.href = "<%= root_url %>";
+            }
+        },1000);
+      <%- end %>
+    });
+
+    $(function(){
+      $(".m-input-text input").Ztip({
+        exceptClass: ["validate"]
+      });
+    });
+    var input = $(".validate");
+    input.on("input", function() {
+      var flag = true;
+      input.each(function(i) {
+        var $val = $(this).val();
+        if (!$val || $val =="输入新密码" || $val =="请确认密码") {
+          flag = false;
+          $(".m-input-btn-s").removeClass("m-input-btn-active").attr("disabled","true");
+          return false;
+        }
+      });
+      if(flag){
+        $(".m-input-btn-s").addClass("m-input-btn-active").removeAttr("disabled");
+      }
+    });
+  </script>
+
+  <script>
+    $("#btn-submit").on('click',function() {
+        checkInputDel($(".m-input-text"));
+        var password = $("#supplier_password").val(),
+            password_confirmation = $("#supplier_password_confirmation").val(),
+            password_length = password.length;
+        if(password_length < 6 || password_length > 20){
+            checkInput($(".m-input-text").eq(0), 0, "密码长度为6~16位数字和字符组成");
+            return false;
+        } else if(password != password_confirmation){
+            checkInput($(".m-input-text").eq(1), 0, "密码不一致");
+            return false;
+        }
+    });
+    $("#reset_form").bind("ajax:success", function(event, xhr, settings) {
+      if(xhr["code"]==0){
+        location.href=xhr["url"];
+      }else{
+        $(".login-tips").html('<div class="li-error" style="width: 50%;">' + xhr["message"] + '</div>')
+      }
+    });
+  </script>
+<% end %>

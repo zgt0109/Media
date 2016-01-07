@@ -1,0 +1,44 @@
+<% content_for :header do %>
+    <header></header>
+<% end %>
+<div class="list" id="list">
+  <ul class="list-wrap">
+    <% if main_material %>
+        <li>
+          <%= link_to material_type_url(main_material, website_menu) do %>
+              <% if main_material.children.count % 2 == 0 %>
+                <img src="/assets/mobile/vweisiteV01/42/img-null.png"/>
+              <% else %>
+                  <%= image_tag main_material.pic.large if main_material.pic? %>
+              <% end %>
+          <% end %>
+        </li>
+        <% main_material.children.each do |child| %>
+            <li>
+              <%= link_to material_type_url(child, website_menu) do %>
+                  <%= image_tag child.pic.large %>
+              <% end %>
+            </li>
+        <% end %>
+    <% else %>
+        <% count = website_menu.sub_menus.count %>
+        <% website_menu.sub_menus.each_with_index do |child, index| %>
+            <li>
+              <%= link_to menu_url(child) do %>
+                  <% if count.odd? && index == 0 %>
+                      <img src="/assets/mobile/vweisiteV01/42/img-null.png"/>
+                  <% elsif child.is_a?(Assistant) %>
+                      <%= image_tag child.pic_url if child.pic? %>
+                  <% elsif child.pic? %>
+                      <%= image_tag child.pic.custom %>
+                  <% else %>
+                      <i class="<%= child.font_icon %>"></i>
+                  <% end %>
+              <% end %>
+            </li>
+        <% end %>
+    <% end %>
+  </ul>
+</div>
+
+<%= render "iscroll", {:selector => "#list"} %>

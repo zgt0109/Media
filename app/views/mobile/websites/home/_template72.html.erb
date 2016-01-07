@@ -1,0 +1,16 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% website_menus.each do |menu| %>
+      <%= link_to menu_url(menu), class: "box mod-index" do %>
+          <div class="index-text">
+            <p>
+              <span>
+                <!--<small>副标题</small>-->
+                <b><%= menu.title %></b>
+              </span>
+            </p>
+          </div>
+      <% end %>
+  <% end %>
+</div>

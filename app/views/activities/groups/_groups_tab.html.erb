@@ -1,0 +1,46 @@
+<div id="tab-1" class="tab-pane active">
+  <div class="col-sm-12 ">
+    <%= form_for @search, url: groups_activities_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+      <div class="col-md-3 row">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">活动名称：</span>
+          <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入活动名称" %>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">关键词：</span>
+          <%= f.text_field :keyword_like, class: 'col-xs-12', placeholder:"请输入关键词" %>
+          <% if Activity::OPERATION_TYPE_IDS.include?(@activity_type_id) %>
+            <span >状态：</span>
+            <%= f.select :status_eq,  Activity.status_options_by_type_id(@activity_type_id), placeholder:"请选择状态" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-md-3 row">
+        <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+      </div>
+
+      <%= link_to "新增", new_group_activities_path, class: "btn btn-primary btn-sm pull-right"%>
+    <% end %>
+  </div>
+
+  <div class="col-md-12 margin-top-20 ">
+    <table id="grouponTable" class="table table-striped table-bordered table-hover dataTable ">
+      <thead>
+      <tr>
+        <th width="30%">活动名称</th>
+        <th>关键词</th>
+        <th>团购状态</th>
+        <th>活动时间</th>
+        <th>状态</th>
+        <th width="25%">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "activities/groups/group_tr", collection: @activities, as: :activity%>
+      </tbody>
+    </table>
+    <%= paginate @activities %>
+  </div>
+</div>

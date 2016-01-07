@@ -1,0 +1,232 @@
+<%= form_for book_rule, validate: true, :html => {:class => 'form col-sm-12'} do |f| %>
+  <% if can_see? %>
+  <div class="form-group">
+    <label>门店：</label>
+    <div class="clearfix">
+      <%= f.select :shop_branch_id, current_user.shop_branches.used.pluck(:name, :id), {}, class: "col-xs-3 js-branch-id" %>
+
+      <%= link_to "复制规则", assign_book_rule_path(book_rule), remote: true, class: "btn btn-primary btn-sm margin-left-10" %>
+
+    </div>
+  </div>
+  <% end %>
+  <div class="form-group">
+    <label>门店订座电话：</label>
+    <div class="clearfix">
+      <%= f.text_field :book_phone, class: "col-xs-3" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>可提前预定天数：</label>
+    <div class="clearfix">
+      <label class="margin-b-10 margin-right-20">
+        <%= f.radio_button :is_limit_day, false %>
+        <span class="lbl">不限</span>
+      </label>
+      <label class="margin-b-10">
+        <%= f.radio_button :is_limit_day, true %>
+        <span class="lbl">只限预定</span>
+      </label>
+      <div class="radio-form" id="rule_time_3">
+        <div class="input-group input-group-text input-group-sm">
+          <%= f.text_field :preview_day %>
+          <span class="input-group-addon">天内（如限 7天，即 18日最多只能预定25日）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>可预定时间段：</label>
+    <div class="clearfix">
+      <label class="margin-b-10 margin-right-20">
+        <%= f.radio_button :is_limit_time, false %>
+        <span class="lbl">不限</span>
+      </label>
+      <label class="margin-b-10">
+        <%= f.radio_button :is_limit_time, true %>
+        <span class="lbl">时间段</span>
+      </label>
+      <br>
+      <div class="radio-form mod-add-cancel" id="rule_time_range_2">
+        <a href="javascript:;" class="fa fa-plus text-primary btn-add-i">添加时间段</a>
+
+        <%= f.fields_for :book_time_ranges do |range| %>
+        
+
+          <div class="input-group input-group-text input-group-sm margin-b-10" id="item-<%= range.object.id %>">
+            <%= range.check_box '_destroy', style:'display:none', class: "hidden_delete", id: "delete-#{range.object.id}" %>
+            <%= range.text_field :start_time, class: "timepicker", readonly: true %>
+            <span class="input-group-btn">　~　</span>
+            <%= range.text_field :end_time, class: "timepicker", readonly: true %>
+            <span class="input-group-btn">
+              <button class="btn btn-cancel" type="button" onclick="ddd(<%= range.object.id %>)">删除</button>
+            </span>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+<!--   <div class="form-group">
+    <label>用户手机验证：</label>
+    <div class="clearfix">
+      <label class="margin-b-10 margin-right-20">
+        <%= f.check_box :is_send_captcha, class: "ace" %>
+        <span class="lbl">发送手机验证码来验证用户手机号</span>
+      </label>
+    </div>
+  </div> -->
+  <div class="form-group">
+    <label>订座说明：<span class="help-inline text-warning line-height-32">在订单结果页面显示</span></label>
+    <div class="clearfix">
+      <%= f.text_area :description, class: "col-xs-6", rows: "3" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>门店桌位预定控制：</label>
+    <div class="clearfix">
+      <label class="margin-b-10 margin-right-20">
+        <%= f.check_box :is_open_hall %>
+        <span class="lbl">开放大厅</span>
+      </label>
+      <label class="margin-b-10 margin-right-20">
+        <%= f.check_box :is_open_loge %>
+        <span class="lbl">开放包厢</span>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>门店桌位预定规则：</label>
+    <div class="clearfix">
+      <label class="margin-b-10 margin-right-20">
+        <%= f.radio_button :is_limit_money, false %>
+        <span class="lbl">不限</span>
+      </label>
+      <label class="margin-b-10">
+        <!-- <input type="radio" id="rule_price_yes_3" class="ace" data-toggle="div" data-target="#rule_price_3" name="rule_price_3"> -->
+        <%= f.radio_button :is_limit_money, true %>
+        <span class="lbl">订座时需要用户必须订餐</span>
+      </label>
+      <br>
+      <div class="radio-form" id="rule_price_3">
+        <div class="input-group input-group-text input-group-sm">
+          <span class="input-group-addon">大厅预定消费金额：</span>
+          <!-- <input type="text" placeholder="消费金额，0元为不限"> -->
+          <%= f.text_field :hall_limit_money, placeholder: "消费金额，0元为不限" %>
+          <span class="input-group-addon">元</span>
+          <span style="display:inline-block;width:10"></span>
+          <span class="input-group-addon">包厢预定消费金额：</span>
+          <!-- <input type="text" placeholder="消费金额，0元为不限"> -->
+          <%= f.text_field :loge_limit_money, placeholder: "消费金额，0元为不限" %>
+          <span class="input-group-addon">元</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>订座取消规则：</label>
+    <div class="clearfix">
+      <label class="margin-b-10 margin-right-20">
+        <%= f.radio_button :cancel_rule, -1, class: "ace" %>
+        <span class="lbl">不限</span>
+      </label>
+      <label class="margin-b-10 margin-right-20">
+        <%= f.radio_button :cancel_rule, -2, class: "ace" %>
+        <span class="lbl">不可取消</span>
+      </label>
+      <label class="margin-b-10">
+         <%= f.radio_button :cancel_rule, -3, class: "ace" %>
+        <span class="lbl">订座时间</span>
+      </label>
+      <div class="radio-form">
+        <div class="input-group input-group-text input-group-sm">
+          <%= f.text_field :created_minute, class: "w80", placeholder: "分钟数" %>
+          <span class="input-group-addon">分钟内，不可取消</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= f.hidden_field :rule_type, value: "2" %>
+  <div class="form-group">
+    <input type="submit" class="btn btn-primary btn-sm" value="保存">
+  </div>
+<% end %>
+
+
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $(".btn-add-i").click(function(){
+
+    var html = '<div class="input-group input-group-text input-group-sm margin-b-10"><input class="hidden_delete" id="delete-'+Date.now()+'" name="book_rule[book_time_ranges_attributes]['+Date.now()+'][_destroy]" style="display:none" type="checkbox" value="1"><input size="30" class="timepicker timeFrom" id="book_rule_book_time_ranges_attributes_'+Date.now()+'_start_time" name="book_rule[book_time_ranges_attributes]['+Date.now()+'][start_time]" readonly="readonly"  type="text"><span class="input-group-btn">　~　</span><input class="timepicker timeTo" size="30" id="book_rule_book_time_ranges_attributes_'+Date.now()+'_end_time" name="book_rule[book_time_ranges_attributes]['+Date.now()+'][end_time]" readonly="readonly"  type="text"><span class="input-group-btn"><button class="btn btn-cancel" type="button">删除</button></span></div>'
+
+    $("#rule_time_range_2").append(html);
+    $('.timepicker').attr('readonly', 'readonly').clockpicker({
+        autoclose: true
+    });
+  });
+  
+  render_hidden_div();
+
+  $("input[type=radio]").click(function(){
+    render_hidden_div();
+  });
+
+  $('#rule_time_range_2').on('click', '.btn.btn-cancel', function(){
+    if($('#rule_time_range_2 .input-group:visible').length > 1){
+      $(this).closest('.input-group').find('input[type=checkbox]').prop("checked", true);
+      $(this).closest('.input-group').hide();
+    }else{
+      showTip('warning', '至少保留一个');
+    }
+  });
+});
+
+function render_hidden_div(){
+  render_preview_day();
+  render_min_money();
+  render_time_range();
+  render_double_min_money();
+}
+
+function render_preview_day(){
+  if($("#book_rule_is_limit_day_true").prop("checked") == true){
+    $("#rule_time_3").show();
+  }else{
+    $("#rule_time_3").show();
+    // $("#rule_time_3").hide();
+  }
+}
+
+function render_time_range(){
+  if($("#book_rule_is_limit_time_true").prop("checked") == true){
+    $("#rule_time_range_2").show();
+  }else{
+    // $("#rule_time_range_2").show();
+    $("#rule_time_range_2").hide();
+  }
+}
+
+function render_min_money(){
+  if($("#book_rule_is_limit_money_true").prop("checked") == true){
+    $("#keyuding").show();
+  }else{
+    $("#keyuding").show();
+    // $("#keyuding").hide();
+  }
+}
+
+function render_double_min_money(){
+  if($("#book_rule_is_limit_money_true").prop("checked") == true){
+    $("#rule_price_3").show();
+  }else{
+    $("#rule_price_3").show();
+    // $("#rule_price_3").hide();
+  }
+}
+
+function ddd(id){
+  //$("#delete-"+id).prop("checked", true);
+}
+</script>
+<% end %>

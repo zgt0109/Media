@@ -1,0 +1,45 @@
+<% provide(:title, '我的会员卡号') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="J-slider" id="sec-index">
+      <div class="mod-top c-6">
+        卡号：<%= @vip_user.try(:user_number) %>
+      </div>
+      <!-- list box start -->
+      <%if @vip_user %>
+        <div class="list-box">
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="javascript:;">
+                <i class="icon icon-5"></i>
+                <span>扫描二维码</span>
+              </a>
+            </dt>
+            <dd>
+              <p class="tcenter"><%= image_tag @vip_user.try(:rqrcode).try(:to_data_url), size: '160x160' %></p>
+            </dd>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="javascript:;">
+                <i class="icon icon-18"></i>
+                <span>扫描一维码</span>
+              </a>
+            </dt>
+            <dd>
+              <p class="tcenter"><%= @vip_user.try(:barcode_data).to_s.html_safe %></p>
+            </dd>
+          </dl>
+        </div>
+      <% end %>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>
+<script>
+    $(function(){
+        showSlider(".mod-box dl");
+    });
+</script>

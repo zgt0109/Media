@@ -1,0 +1,30 @@
+<% provide(:title, '我要叫外卖') %>
+
+<div class="stage" id="stage">
+    <header>
+        <%= link_to take_out_mobile_shops_url(supplier_id: session[:supplier_id],anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" do %>
+        <% end %>
+        <h1>我的外卖</h1>
+    </header>
+    <section id="sec-index">
+        <div class="body">
+            <div class="list">
+                <div class="mod-block">
+                    <%= render :partial => 'take_out_order', :collection => @shop_orders, :as => :order %>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript" id="haha">
+    $(function() {
+        <% if flash[:notice] %>
+        alert("<%= flash[:notice] %>");
+        <% elsif flash[:alert] %>
+        alert("<%= flash[:alert] %>");
+        <% end %>
+        <% flash.clear %>
+        $("#haha").remove();
+    });
+</script>

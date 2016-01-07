@@ -1,0 +1,5 @@
+<% content_for :topbar do %>
+  <%= link_to '店铺管理', business_shops_path, class: "h1 #{request.path == business_shops_path ? 'pagecurrent' : 'uncurrent'}" %>
+  <%= link_to '评论管理', comments_business_shops_path, class: "h1 #{request.path == comments_business_shops_path ? 'pagecurrent' : 'uncurrent'}" %>
+  <%= link_to '模板管理', set_template_business_shops_path, class: "h1 #{request.path == set_template_business_shops_path ? 'pagecurrent' : 'uncurrent'}" %>
+<% end %>

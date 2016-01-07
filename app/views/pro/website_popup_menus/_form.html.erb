@@ -1,0 +1,204 @@
+<style>
+    #faceButton {
+        margin-left: 25px;
+        color: black;
+    }
+    .upload-img .upload-img-span img {
+        height: 90px;
+        width: 160px;
+    }
+    .form-col span { text-align: left; padding: 0; }
+    .box-form select, .box-form input[type=text]{width: 75%;}
+</style>
+
+
+<% content_for :sidebar do %>
+  <%= render 'sidebar_life' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent"><%= @menu.new_record? ? '新增菜单' : '编辑菜单' %></a>
+<% end %>
+
+<p class="p-note">
+  <span>提示：以下“ <em style="color: #ff0000; padding: 0 3px;">*</em> ”均为必填项；</span>
+</p>
+
+<div class="box-form form-row tleft">
+<%= form_for [:pro, @menu], validate: true, :html => { id: 'website_popup_menu_form' } do |f| %>
+
+      <div class="p">
+        <span>图片：<em>*</em></span>
+        <div class="box-upload">
+          <div class="margin">
+            <div class="box-file">
+              <%= f.file_field :icon, rel: 'preview_shop_logo', class: 'img_preview', data: { width: 79, height: 79 } %>
+              <a class="btn btn-big">上传照片</a>
+            </div>
+            <span class="p-file fgray">图片建议尺寸：79像素*79像素</span>
+          </div>
+          <div class="upload-img">
+            <span style="width: 160px; height: 89px; line-height:89px; padding: 0;" class="upload-img-span">
+              <%= image_tag(@menu.icon? ? @menu.icon : '/assets/bg_fm.jpg', alt: '', id: "preview_shop_logo", class: 'view') %>
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="p form-address" style="margin-top: 10px;">
+        <span>类型：<em>*</em></span>
+        <%= f.select :menu_type, WebsitePopupMenu.menu_type_options[0..3] %>
+      </div>
+
+      <div class="p form-address">
+        <span>选择活动：<em>*</em></span>
+        <%= f.select :activity_id, current_user.activities.active.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id) }, validate: true %>
+      </div>
+
+      <div class="p form-address">
+        <span>图文资源：<em>*</em></span>
+        <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id), include_blank: true }, validate: true %>
+        <%= link_to "管理图文资源", materials_url, class: 'gl', target: '_blank' %>
+      </div>
+
+      <div class="p form-address">
+        <span>图文资源：<em>*</em></span>
+        <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id), include_blank: true }, validate: true %>
+        <%= link_to "管理图文资源", materials_url, class: 'gl', target: '_blank' %>
+      </div>
+
+
+      <div class="p" id="preview_pic">
+        <span>图文预览：</span>
+        <div class="box-upload">
+          <div class="margin">
+            <% if @menu.single_graphic?# or @menu.multiple_graphic? %>
+                <strong><%= @menu.menuable.try(:title) %></strong><br/>
+                <label><%= @menu.menuable.created_at.to_date rescue Date.today %></label>
+            <% else %>
+                <strong>素材标题</strong><br/>
+                <label><%= Date.today %></label>
+            <% end %>
+          </div>
+          <div class="upload-img">
+              <span style="width: 318px; height: 165px; line-height:89px; padding: 0;">
+                <% if @menu.single_graphic?# or @menu.multiple_graphic? %>
+                    <%= image_tag(@menu.menuable.try(:pic), size: '318x165', alt: '') %>
+                <% else %>
+                    <img src='/assets/bg_fm.jpg'  width='318' height='165'/>
+                <% end %>
+              </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p">
+        <span>链接：<em>*</em></span>
+        <%= f.text_field :url, class: 'input-text' %>
+      </div>
+      <div class="p">
+        <span>电话：<em>*</em></span>
+        <%= f.text_field :tel, class: 'input-text'  %>
+      </div>
+      <div class="p" style="margin-top: 10px;">
+        <span>排序：<span class="fgray"> （值越小越排在前面）</span><em>*</em></span>
+        <%= f.text_field :sort, maxlength: 5, class: 'input-text', size: 30 %>
+      </div>
+
+      <!--<div class="tcenter">-->
+      <p>
+        <input class="btn btn-small form-submit btn-orange" type="submit" value="保存" name="commit" style="float:none;margin-bottom:20px;">
+      </div>
+<% end %>
+</div>
+
+<script>
+  select_website_popup_menu_type();
+
+  $('#website_popup_menu_menu_type').change( function() {
+    select_website_popup_menu_type();
+  });
+
+  function select_website_popup_menu_type() {
+    if ( $('#website_popup_menu_menu_type').val() == 2 ) {
+      $('#website_popup_menu_single_material_id').parent().hide();
+      $('#website_popup_menu_multiple_material_id').parent().hide();
+      $('#preview_pic').hide();
+      $('#website_popup_menu_activity_id').parent().show();
+      $('#website_popup_menu_url').parent().hide();
+      $('#website_popup_menu_tel').parent().hide();
+    } else if ( $('#website_popup_menu_menu_type').val() == 3 ) {
+      $('#website_popup_menu_single_material_id').parent().show();
+      $('#website_popup_menu_multiple_material_id').parent().hide();
+      $('#preview_pic').show();
+      $('#website_popup_menu_activity_id').parent().hide();
+      $('#website_popup_menu_url').parent().hide();
+      $('#website_popup_menu_tel').parent().hide();
+    } else if ( $('#website_popup_menu_menu_type').val() == 4 ) {
+      $('#website_popup_menu_single_material_id').parent().hide();
+      $('#website_popup_menu_multiple_material_id').parent().show();
+      $('#preview_pic').hide();
+      $('#website_popup_menu_activity_id').parent().hide();
+      $('#website_popup_menu_url').parent().hide();
+      $('#website_popup_menu_tel').parent().hide();
+    } else if ( $('#website_popup_menu_menu_type').val() == 6 ) {
+      $('#website_popup_menu_single_material_id').parent().hide();
+      $('#website_popup_menu_multiple_material_id').parent().hide();
+      $('#preview_pic').hide();
+      $('#website_popup_menu_activity_id').parent().hide();
+      $('#website_popup_menu_url').parent().show();
+      $('#website_popup_menu_tel').parent().hide();
+    } else if ( $('#website_popup_menu_menu_type').val() == 7 ) {
+      $('#website_popup_menu_single_material_id').parent().hide();
+      $('#website_popup_menu_multiple_material_id').parent().hide();
+      $('#preview_pic').hide();
+      $('#website_popup_menu_activity_id').parent().hide();
+      $('#website_popup_menu_url').parent().hide();
+      $('#website_popup_menu_tel').parent().show();
+    }
+  }
+
+  $(function() {
+    $('#website_popup_menu_form .form-submit').click(function(event) {
+       if ( $("#website_popup_menu_sort").val()  ) {
+        var url_reg = /^(http|https):\/\/[a-zA-Z0-9].+$/
+        if ( $('#website_popup_menu_menu_type').val() == 3 && !$('#website_popup_menu_single_material_id').val() ) {
+          showTip('warning','请选择一条图文素材');
+          return false;
+        } else if ( $('#website_popup_menu_menu_type').val() == 4 && !$('#website_popup_menu_multiple_material_id').val() ) {
+          showTip('warning','请选择一条图文素材');
+          return false;
+        } else if ( $('#website_popup_menu_menu_type').val() == 2 && !$('#website_popup_menu_activity_id').val() ) {
+          showTip('warning','请选择活动');
+          return false;
+        } else if ( $('#website_popup_menu_menu_type').val() == 6 && !$('#website_popup_menu_url').val() ) {
+          showTip('warning','请填写链接地址');
+          return false;
+        } else if ( $('#website_popup_menu_menu_type').val() == 6 && !url_reg.test($('#website_popup_menu_url').val())){
+            showTip('warning','地址格式不正确，必须以http(s)://开头');
+            return false;
+        } else if ( $('#website_popup_menu_menu_type').val() == 7 && !$('#website_popup_menu_tel').val() ) {
+          showTip('warning','请填写联系电话');
+          return false;
+        }
+       }
+    });
+
+    $('#website_popup_menu_single_material_id, #website_popup_menu_multiple_material_id').change( function() {
+      $.ajax({
+        url: '/materials/'+$(this).val(),
+        type: "get",
+        dataType : "json",
+        success : function (data){
+          if(data){
+            $('#preview_pic .margin strong').html(data['title']);
+            $('#preview_pic .margin label').html(data['created_at'].slice(0,10));
+            $('#preview_pic .upload-img img').attr('src', data['pic']['large']['url']);
+          }
+        }
+      });
+    });
+
+  });
+</script>

@@ -1,0 +1,76 @@
+<div class="html theme-<%= @vip_card.template_id %> <%= "add-nav" if @vip_card.template_id == 2 %>" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="sign-top">
+        <span>累积签到积分</span>
+        <b><%= @vip_user.point_transactions.in.sum(:points) rescue nil %></b>
+      </div>
+      <div class="sign-btn <%= (!@vip_card.is_open_points? || @signined) ? 'signed' : 'sign-in' %>">
+        <div class="box-1"></div>
+        <div class="box-2"></div>
+        <div class="box-3"></div>
+        <div class="box-4"></div>
+        <% if !@vip_card.checkin_enabled? %>
+          <div class="box-btn"><span>已停用</span><i></i></div>
+        <% elsif @signined %>
+          <div class="box-btn"><span>明天再来</span><i></i></div>
+        <%else%>
+          <div class="box-btn signin"><span>点我签到</span><i></i></div>
+        <%end%>
+      </div>
+      <% if @point_type %>
+        <div class="sign-tips">
+          <%= "每次签到送#{@point_type.points}积分" if @point_type.checkin_enabled %>
+          <% if @point_type.succ_checkin_enabled %>
+            <br />连续<%= @point_type.succ_checkin_days %>天签到送<%= @point_type.succ_checkin_points %>积分
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+  <%= render 'footbar' %>
+</div>
+<script>
+$(function(){
+  // var is_sign = false;
+  <% if @vip_user.nil? %>
+      $('.signin').click(function (event) {
+          event.preventDefault();
+          if(confirm('开通会员可以签到送积分，赶紧去开通吧！')) {
+              location.href = '<%= app_vips_path %>';
+          }
+        return false;
+      })
+  <%- else %>
+    $(".signin").on("click",function(){
+      // if(is_sign){return false;}
+      // is_sign = true;
+      var $this = $(this);
+      $this.addClass("animate").off("click");
+      setTimeout(function(){
+        $this.removeClass("animate sign-in").addClass("signed").find("span").fadeOut(function(){
+          $(this).text("明天再来").fadeIn();
+          $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: '/app/vips/signin?' + Math.random() +'#mp.weixin.qq.com',
+            dataType: 'json',
+            timeout:30000,
+            success: function (data) {
+              if (data.error) {
+                alert(data.message);
+              }
+              window.location.reload();
+            },
+            error: function(e){
+              alert("签到失败");
+              window.location.reload();
+            }
+          });
+        });
+      },2000);
+    });
+<% end %>
+});
+
+</script>

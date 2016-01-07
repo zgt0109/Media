@@ -1,0 +1,68 @@
+<form>
+  <div class="modal-body">
+    <p>
+      <span> <b>订单号：</b>
+      </span>
+      <span><%= @booking_order.order_no %></span>
+    </p>
+    <p>
+      <span> <b>联系人：</b>
+      </span>
+      <span><%= @booking_order.username %></span>
+    </p>
+    <p>
+      <span>
+          <b>手机号码：</b>
+      </span>
+      <span><%= @booking_order.tel %></span>
+    </p>
+    <p>
+      <span>
+          <b>订单状态：</b>
+      </span>
+      <span><%= @booking_order.status_name %></span>
+    </p>
+
+    <% if @booking_order.is_flow_supplier %>
+        <p>
+          <span>
+              <b>地址：</b>
+          </span>
+          <span><%= @booking_order.address %></span>
+        </p>
+    <% else %>
+        <p>
+          <span>
+              <b>预定时间：</b>
+          </span>
+          <span><%= @booking_order.booking_at %></span>
+        </p>
+    <% end %>
+    <p>
+      <span>
+          <b>下单时间：</b>
+      </span>
+      <span><%= @booking_order.created_at %></span>
+    </p>
+
+    <% unless @booking_order.is_flow_supplier %>
+        <p>
+          <span>
+              <b>数量：</b>
+          </span>
+          <span><%= @booking_order.qty %></span>
+        </p>
+        <p>
+          <span>
+              <b>备注：</b>
+          </span>
+          <span><%= @booking_order.description %></span>
+        </p>
+    <% end %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" data-fn="submit" onclick="$('.modal-backdrop', window.parent.document).remove();$('.modal-iframe', window.parent.document).remove();">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+</form>

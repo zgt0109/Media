@@ -1,0 +1,9 @@
+__filename = "节日礼包SN码报表.xls"
+sheet1 = xls.create_worksheet
+sheet1.row(0).concat(['活动名称', 'sn码', '状态', '红包金额', '中奖人手机','领取时间','使用时间'])
+@search.page(params[:page_exl]).per(EXPORTING_COUNT).each_with_index do |release, i|
+  if release.consume
+    system_values = [release.activity.name, release.consume.code, release.consume.status_text, release.award_amount, release.consume.mobile, release.consume.created_at.try(:to_date), release.consume.used_at.try(:to_date)]
+    sheet1.row(i + 1).replace(system_values)
+  end
+end

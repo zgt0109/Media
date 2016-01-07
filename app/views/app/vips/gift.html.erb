@@ -1,0 +1,72 @@
+<% provide(:title, '礼品详情') %>
+<div class="html">
+  <div class="main">
+    <section>
+      <div class="box-img">
+        <img src="/assets/wmember/exchange.jpg"/>
+      </div>
+      <% if @gift %>
+      <div class="box box-exchanged exchange-des">
+        <div class="exchange-hd">
+          <span class="list-img">
+            <%= image_tag @gift.pic_url %>
+          </span>
+          <b><%= @gift.name %></b>
+          <p class="fl"><b>兑换积分：</b><span><b><%= @gift.points %>分</b></span></p>
+          <!-- <p class="fl"><b>市场价：</b><span>300元</span></p> -->
+          <% if @gift.online? %>
+          <p class="fw"><b>兑换数量：</b><input id="exchange_num_input" value="1" /></p>
+          <a class="btn btn-exchange">我要兑换礼品</a>
+          <%end%>
+          <h1>礼品信息</h1>
+        </div>
+        <div class="exchange-bd">
+          <%= @gift.description %>
+        </div>
+      </div>
+      <%end%>
+    </section>  
+  </div>
+</div>
+
+<div class="pop pop-form">
+  <div class="pop-bg"></div>
+  <div class="pop-bd" style="margin: -15% 0 0 -45%;">
+    <div class="hd">
+      <b>积分兑换礼品</b>
+      <a class="btn-close"></a>
+    </div>
+    <div class="bd box-form">
+      <p>是否确定兑换此礼品？</p>
+    </div>
+    <div class="ft">
+      <input type="submit" value="确定" class="btn btn-submit" id="exchange_gift_submit" />
+      <input type="button" value="取 消" class="btn btn-cancel"/>
+    </div>
+  </div>
+</div>
+
+<script>
+$(function(){
+  var is_exchange = false;
+  $(".btn-exchange").click(function(){
+    $(".pop-form").fadeIn();
+  });
+  $(".pop .btn-cancel").click(function(){
+    $(".pop-form").fadeOut();
+  });
+
+  $('#exchange_gift_submit').click(function() {
+    $(".pop-form").fadeOut(function() {
+      if(is_exchange){return false;}
+      is_exchange = true;
+      $.ajax({
+        url: '<%= exchange_gift_app_vips_path(id: @gift.try(:id)) %>',
+        type: 'POST',
+        dataType: 'script',
+        data: { qty: $('#exchange_num_input').val() }
+      });
+    });
+  });
+});
+</script>

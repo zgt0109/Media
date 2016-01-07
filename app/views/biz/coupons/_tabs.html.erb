@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+  <%= link_to_li '基础设置', edit_activity_coupons_path, class: "#{'active' if action_name == 'edit_activity' || controller_name == 'activities'}" %>
+  <%= link_to_li '优惠券管理', coupons_path %>
+  <%= link_to_li '核销记录',  consumes_coupons_path %>
+  <%= link_to_li '优惠券报表', reports_coupons_path %>
+</ul>

@@ -1,0 +1,8 @@
+<%= render "form" %>
+<script type="text/javascript">
+  $(function(){
+  	<% if @new_field.present? %>
+  		$("tbody",window.parent.document).append('<%= j ( render :partial => "/biz/custom_fields/new_tr") %>')
+  	<% end %>
+  });
+</script>

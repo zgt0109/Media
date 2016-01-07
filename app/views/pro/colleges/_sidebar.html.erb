@@ -1,0 +1,18 @@
+<% college = college.try(:id) || 1 %>
+<ul class="box-nav box">
+  <li class="<%= "pagecurrent current" if [colleges_path, college_path(college), college_college_enrolls_path(college), message_colleges_path].include?(request.path) %>"><%= link_to colleges_path do %><span>基本信息</span><% end %></li>
+  <li class="<%= "pagecurrent current" if request.path =~ /#{college_majors_path(college)}/i %>"><%= link_to college_majors_path(college) do %><span>专业介绍</span><% end %></li>
+  <li class="<%= "pagecurrent current" if request.path =~ /#{college_teachers_path(college)}/i %>"><%= link_to college_teachers_path(college) do %><span>专业名师</span><% end %></li>
+  <li class="<%= "pagecurrent current" if request.path =~ /#{college_photos_path(college)}/i %>">
+    <%= link_to college_photos_path(college) do %><span>学院环境</span><% end %>
+  </li>
+  <li class="<%= "pagecurrent current" if request.path == intro_college_path(college) %>">
+    <%= link_to intro_college_path(college) do %><span>学院简介</span><% end %>
+  </li>
+  <!--li class="<%#= "pagecurrent current" if request.path == college_branches_path(college) %>">
+    <%#= link_to college_branches_path(college) do %><span>学院地址</span><%# end %>
+  </li>
+  <li class="<%#= "pagecurrent current" if request.path == security_college_path(college) %>">
+    <%#= link_to security_college_path(college) do %><span>就业保障</span><%# end %>
+  </li-->
+</ul>

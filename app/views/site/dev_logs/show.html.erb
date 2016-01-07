@@ -1,0 +1,18 @@
+<div class="wrap-note">
+  <h4 class="note-title"><%= @dev_log.title || "公告" %></h4>
+
+  <small class="note-time"><%= @dev_log.created_at%></small>
+
+  <%=raw @dev_log.content%>
+
+  <a href="<%= @list_url %>" class="btn-goback note-top">返回<br>列表</a>
+  <a href="<%= @list_url %>" class="btn-goback note-bottom">返回<br>列表</a>
+
+  <% if @pre_def_log_id.present? %>
+    <a href="<%= site_dev_log_path(id: @pre_def_log_id)%>" class="note-page page-prev"><b>上一页</b><small>Previous</small></a>
+  <% end %>
+
+  <% if @next_def_log_id.present? %>
+    <a href="<%= site_dev_log_path(id: @next_def_log_id)%>" class="note-page page-next"><b>下一页</b><small>Next</small></a>
+  <% end %>
+</div>

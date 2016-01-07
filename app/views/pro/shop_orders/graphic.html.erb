@@ -1,0 +1,67 @@
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <% if can_see? %>
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li>
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+                <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+                <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+          <li><%= link_to "下单时间分析", graphic_shop_orders_path(industry_id:  session[:current_industry_id]) %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+        <% end %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <%= form_for @search, url: graphic_shop_orders_url, :html => { :method => :get } do |f| %>
+              <div class="col-sm-12">
+                <% if can_see? %>
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">选择门店：</span>
+                    <%= f.select :shop_branch_id_eq, current_user.shop_branches.used.pluck(:name, :id), {include_blank: '全部'}, class: "col-xs-12" %>
+                  </div>
+                </div>
+                <% end %>
+                <div class="col-md-4 margin-left-20">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">下单日期：</span>
+                    <div class="input-group col-xs-12  no-padding">
+		<span class="input-group-addon">
+                  <i class="icon-calendar"></i>
+		</span>
+
+                      <%= f.text_field :created_at_gte, value: @search.created_at_gte.try(:to_date), class: "datepicker input-sm form-control" %>
+                      <span class="input-group-addon">
+                  <i class="">-</i>
+		</span>
+
+                      <%= f.text_field :created_at_lte, value: @search.created_at_lte.try(:to_date), class: "datepicker input-sm form-control" %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-primary btn-sm btn-filter margin-left-5">查询</button>
+                </div>
+              </div>
+          <% end %>
+
+          <div class="col-sm-12 margin-top-20">
+            <div class="col-sm-8" id="basic_line_test" style="height: 420px">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% content_for :custom_js do %>
+    <script>
+        $(function(){
+            $('#basic_line_test').append("<%= escape_javascript(high_chart('chart_basic_line1', @chart_test)) -%>");
+        });
+    </script>
+<% end %>

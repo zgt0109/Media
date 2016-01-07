@@ -1,0 +1,45 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%= content_for?(:title) ? yield(:title) : "节日礼包" %></title>
+  <script>
+      document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+          WeixinJSBridge.call('hideOptionMenu');
+      });
+  </script>
+  <%= stylesheet_link_tag "mobile/red_packet" %>
+  <%= javascript_include_tag "mobile/red_packet" %>
+  <%= csrf_meta_tags %>
+</head>
+<body <%= 'scroll="no"' if action_name=="show" %>>
+<div class="black"></div>
+<%= render 'application/gb2big5' %>
+<div class="bg" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+        <%= yield %>
+    </section>
+  </div>
+</div>
+
+<a href="javascript:scroll(0,0)" class="btn-pop btn-up"><i class="fa fa-arrow-up"></i></a>
+<div class="loading fixed-top"></div>
+<script type="text/javascript">
+    $(function(){
+        // topRefresh(300);
+        //showBtnUp(100);
+
+        <% if flash[:notice] || flash[:alert] %>
+        alert('<%= flash[:notice] || flash[:alert] %>');
+        <% end %>
+    });
+</script>
+</body>
+</html>

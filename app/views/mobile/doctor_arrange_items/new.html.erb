@@ -1,0 +1,102 @@
+<section id="index">
+  <header>
+    <div class="wrap">
+      <a href="javascript:history.go(-1);" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"></a>
+      <h1>预约挂号</h1>
+   <!--    <a class="ico-member" href="order-list.html"><img src="/assets/mobile/whospital/ico-member.png"></a> -->
+       <%= link_to my_items_mobile_doctor_arrange_items_path, class: "ico-member" do %>
+          <img src="/assets/mobile/whospital/ico-member.png">
+        <% end %>
+    </div>
+  </header><!-- header end -->
+  <div class="body">
+
+    <%= form_for [:mobile, @doctor_arrange_item] do |f| %>
+    <div class="box box-order">
+      <dl>
+	<dt>专家信息</dt>
+	<dd>
+	  <div class="order-row">
+	    <div class="fl">科室：</div>
+	    <div class="fr"><span><%= @doctor_watch.doctor_arrange.hospital_department.name %></span></div>
+	  </div>
+	  <div class="order-row">
+	    <div class="fl">专家：</div>
+	    <div class="fr"><span><%= @doctor_watch.doctor_arrange.hospital_doctor.name %></span></div>
+	  </div>
+	  <div class="order-row">
+	    <div class="fl">预约时间：</div>
+	    <div class="fr">
+	      <span><%= @doctor_watch.arrange_time %></span>
+	    </div>
+	  </div>
+	</dd>
+      </dl>
+      <dl>
+	<dt>医院信息</dt>
+	<dd>
+	  <div class="order-row">
+	    <div class="fl">就诊医院：</div>
+	    <div class="fr"><span><%= @doctor_watch.shop_branch.name %></span></div>
+	  </div>
+	  <div class="order-row">
+	    <div class="fl">医院地址：</div>
+	    <div class="fr">
+	     <a href="http://api.map.baidu.com/marker?location=<%= @doctor_watch.doctor_arrange.shop_branch.location_y%>,<%= @doctor_watch.doctor_arrange.shop_branch.location_x%>&title=<%= @doctor_watch.doctor_arrange.shop_branch.address%>&content=<%= @doctor_watch.doctor_arrange.shop_branch.address%>&output=html">
+	     <span><%= @doctor_watch.shop_branch.address %></span></a>
+	    </div>
+	  </div>
+	  <div class="order-row">
+	    <div class="fl">联系电话：</div>
+	    <div class="fr">
+	    <% unless @doctor_watch.shop_branch.tel.blank? %>
+	    	<a href="tel:<%=@doctor_watch.doctor_arrange.shop_branch.tel%>"><span><%= @doctor_watch.doctor_arrange.shop_branch.tel %></span></a>
+	      <% end %>
+	    </div>
+	  </div>
+	  <div class="order-row">
+	    <div class="fl">诊室路线：</div>
+	    <div class="fr">
+	      <span><%= @doctor_watch.doctor_arrange.hospital_department.road %></span>
+	    </div>
+	  </div>
+	</dd>
+      </dl>
+      <dl>
+	<dt>个人信息</dt>
+	<dd>
+	  <div class="order-row">
+	    <div class="fl">联系人：</div>
+	    <div class="fr">
+	      <%= f.text_field :name, class: "js-name" %>
+	    </div>
+	  </div>
+	  <div class="order-row">
+	    <div class="fl">手机：</div>
+	    <div class="fr">
+	      <%= f.text_field :mobile, class: "js-mobile" %>
+	    </div>
+	  </div>
+	</dd>
+      </dl>
+      <%= f.hidden_field :doctor_watch_id %>
+      <p class="tcenter">
+	<%= f.submit "提交订单", class: "btn fw js-s" %>
+      </p>
+    </div>
+
+    <% end %>
+  </div><!-- body end -->
+</section>
+<script>
+$(function(){
+  $(".js-s").click(function(){
+    var n = $(".js-name").val();
+    var m = $(".js-mobile").val();
+    if (n == "" || m == ""){
+      alert("姓名和电话必填");
+      return false;
+    }
+  })
+})
+</script>

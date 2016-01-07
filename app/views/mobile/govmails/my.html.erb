@@ -1,0 +1,38 @@
+<% provide :title, '我的信访' %>
+<section id="sec-index">
+  <div class="msg-list">
+    <%- if @mails.each do |mail|%>
+      <div class="msg-box">
+        <div class="msg-main">
+          <div class="msg-time"><%= mail.created_at.to_s %></div>
+          <div class="msg-self">
+            <div class="msg-text">
+              <p><%= mail.body %></p>
+            </div>
+          </div>
+          <%- if mail.reply.present? %>
+            <div class="msg-time"><%= mail.reply.created_at.to_s %></div>
+            <div class="msg-reply">
+              <div class="msg-text">
+                <p><%= mail.reply.body %></p>
+              </div>
+            </div>
+           <%- else %>
+             <div class="msg-nothing">
+                <span>暂无回复</span>
+              </div>
+          <%- end %>
+        </div>
+      </div>
+    <%- end.blank? %>
+    <div class="msg-box"
+      <div class="msg-main">
+            <div class="no-msg">
+                <p>暂无信访记录</p>
+                <p>您还未给我们写信,我们欢迎与您的互动</p>
+            </div>
+        </div>
+     </div>
+    <%- end %>
+  </div>
+</section>

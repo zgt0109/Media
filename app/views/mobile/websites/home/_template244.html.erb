@@ -1,0 +1,16 @@
+<% unless @website_menus.size.zero? %>
+    <div class="list9 clearfix">
+      <% @website_menus.in_groups_of(4, false).each do |menus| %>
+          <% menus.each do |menu| %>
+              <%= link_to menu_url(menu), class: 'box' do %>
+                  <div class="img-box">
+                    <%= menu.pic_or_icon has_title: false, pic_type: "custom", pic_wrap_tag_i: :no, show_picture_material: :no, class: 'img' %>
+                  </div>
+                  <div class="text-box">
+                    <div class="text-title"><%= menu.title %></div>
+                  </div>
+              <% end %>
+          <% end %>
+      <% end %>
+    </div>
+<% end %>

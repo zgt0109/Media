@@ -1,0 +1,29 @@
+<%= javascript_include_tag "/javascripts/kf.js", media: "all" %>
+<% if Rails.env.production? %>
+  <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+<% end %>
+<script>
+  BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 4000365711, selector: 'BizQQWPA'});
+</script>
+<div id="BizQQWPA1" class="first_show">
+  <div id="kfpopupDiv" style="display:none;z-index: 2147483648 !important; color: rgb(0, 0, 0); font-size: 12px; height: 190px; width: 370px; margin: -95px 0 0 -185px;position: fixed; top:50%; left: 50%; ">
+    <div style="float:left; height:190px; width:8px; background-image:url(/assets/qq/bg_1.jpg);"></div>
+    <div style="font-family:Tahoma; text-align:left; float:left; height:190px; width:354px; background-image:url(/assets/qq/bg_2.jpg); background-repeat:repeat-x;">
+      <div>
+        <h1 style="float:left; width:310px; height:28px; line-height:28px; padding:2px 20px 0 2px; margin:0 0 9px 0; font-size:16px; color:#333; display:block; background:none; border:none; position:static;">微枚迪（微信营销行业解决方案领导者）</h1>
+        <a href="javascript:void(0);" onclick="kf_hidekfpopup();$('#qq_script').remove();$.cookie('close_qq', 'true', { expires: 7, path: '/' });return false;" style="background-image: url(/assets/qq/close.png); background-repeat:no-repeat; float:right; height:14px; width:14px; margin:7px 7px 7px 0;" onmouseover="javascript:this.style.backgroundPosition='bottom'" onmouseout="javascript:this.style.backgroundPosition='top'"></a>
+      </div>
+      <div style="height:148px; padding:0 0 0 2px; clear:both; background:#fcfefd;">
+        <div style="background-image:url(/assets/qq/face.png); background-repeat:no-repeat; background-position:center center; height:148px; width:160px; float:left;"></div>
+        <p style="font-family:Tahoma; font-size:14px; line-height:24px; width: 150px; margin:0px; padding: 20px 0 24px 12px; display:block; float:left; margin-top:2px; word-wrap:break-word;">
+          <b style="font-size:20px; color:#1bba9a;">尊敬的用户：</b>
+          <br>您好，请问有什么可以帮到您？</p>
+        <div>
+          <a onclick="kf_hidekfpopup();$('#qq_script').remove();return false;" href="javascript:void(0);" style="float:right; background-image:url(/assets/qq/btn_1.png); margin:0 0 0 5px; padding:0px; border:0px; height:23px; width:66px;"></a>
+          <a id="BizQQWPA" href="javascript:void(0);" style="float:right; background-image:url(/assets/qq/btn_2.png); margin:0; padding:0px; border:0px; height:23px; width:62px;"></a>
+        </div>
+      </div>
+    </div>
+    <div style="float:left; height:190px; width:8px; background-image:url(/assets/qq/bg_1.jpg); background-position:right;"></div>
+  </div>
+</div>

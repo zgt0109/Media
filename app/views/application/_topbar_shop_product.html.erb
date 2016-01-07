@@ -1,0 +1,5 @@
+<% if action_name == 'new' %>
+  <a href="javascript:void(0);" class="pagecurrent h1">新增菜单</a>
+<% end %>
+<%= link_to '菜单设置', shop_products_url, class: "h1 #{controller_name == 'shop_products' && action_name != 'new' ? 'pagecurrent' : 'uncurrent' }" %>
+<%= link_to '菜单分类', [@shop, :shop_categories], class: "h1 #{controller_name == 'shop_categories' ? 'pagecurrent' : 'uncurrent' }" %>

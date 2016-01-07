@@ -1,0 +1,29 @@
+<div class="box-nav-ft table">
+
+  <% if action_name == "page"%>
+      <%
+         if @website_menu.present? && @website_menu.parent and @website_menu.parent.parent_id != 0
+           url = menu_url @website_menu.parent
+         else
+           url = mobile_root_url(supplier_id: @website.supplier_id, anchor: "mp.weixin.qq.com")
+         end
+      %>
+      <a class="td" href="<%= url %>"><span style="background-image:url(/assets/website/template14/ico-goback.png)">返回</span></a>
+      <a class="td" href="<%= @website.address? ? mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) : ""%>"><span style="background-image:url(/assets/website/template14/ico-location.png)">地址</span></a>
+      <a class="td" href="<%= @website.tel? ? "tel:#{@website.tel}" : "#"%>"><span style="background-image:url(/assets/website/template14/ico-phone.png)">电话</span></a>
+      <a class="td" href="<%= mobile_root_url(supplier_id: @website.supplier_id, anchor: "mp.weixin.qq.com") %>"><span style="background-image:url(/assets/website/template14/ico-home.png);padding:0 0 0 30px;">首页</span></a>
+  <% else %>
+    <a class="td" href="<%= @website.tel? ? "tel:#{@website.tel}" : "#"%>"><span style="background-image:url(/assets/website/template14/ico-phone.png)">电话</span></a>
+    <a class="td" href="<%= @website.address? ? mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) : ""%>"><span style="background-image:url(/assets/website/template14/ico-location.png)">地址</span></a>
+    <% if @website.supplier_id == 10615 %>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+    <% elsif @website.supplier_id == 10606 %>
+      <a class="td" href="http://www.fdsm.fudan.edu.cn/mobile/embaapply/?from=cellphoneapplication"><span style="background-image:url(/assets/website/template14/ico-card.png); padding:0 0 0 30px;">在线报名</span></a>
+    <% else %>
+      <a class="td" href="<%= app_vips_url(wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com")%>"><span style="background-image:url(/assets/website/template14/ico-card.png); padding:0 0 0 30px;">会员卡</span></a>
+    <% end %>
+  <% end %>
+
+
+
+</div>

@@ -1,0 +1,278 @@
+<% provide(:title, '我要订座') %>
+<% book_table_rule =  @shop_table_order.shop_branch.book_table_rule %>
+<body>
+<div class="html">
+<div class="main">
+  <header>
+    <%= link_to book_table_mobile_shops_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "ico ico-prev" do %>
+      <img src="/assets/micro_stores/ico-prev.png"/>
+    <% end %>
+    <h1><%= @shop_table_order.shop_branch.name %></h1>
+    <% ref_order = ShopOrder.where(id: @shop_table_order.ref_order_id).first %>
+  </header>
+  <section>
+    <div style="position:fixed;"></div>
+    <%= form_for @shop_table_order, url: confirm_mobile_shop_table_orders_url(supplier_id: session[:supplier_id]) do |f|%>
+      <%= f.hidden_field :shop_branch_id %>
+      <%= f.hidden_field :ref_order_id %>
+      <% if ref_order %>
+      <%= f.hidden_field :username, value: ref_order.username %>
+      <% end %>
+      <div class="box box-order">
+        <div class="hd">
+          <b>预订时间</b>
+          <p id="time">
+            <span class="fl">
+              <img src="/assets/micro_stores/ico-day.png"/>
+            </span>
+            <span class="fr">
+              <input type="hidden" name="day" value=""/>
+              <% if ref_order && ref_order.book_at %>
+              <select class="input-time" name="book_date" id="select_date">
+                <option value="<%= ref_order.book_at.strftime("%Y-%m-%d") %>">
+                  <%= ref_order.book_at.strftime("%Y-%m-%d") %>
+                </option>
+              </select>
+              <% else %>
+              <select class="input-time" name="book_date" id="select_date">
+                <option value="-1">选择日期</option>
+                <%= book_table_rule.generate_date_range.html_safe %>
+              </select>
+              <% end %>
+            </span>
+          </p>
+          <p>
+            <span class="fl">
+              <img src="/assets/micro_stores/ico-time.png"/>
+            </span>
+            <span class="fr">
+             <% if ref_order && ref_order.book_at %>
+             <select class="input-time" name="book_time" id="select_time">
+              <option value="<%= ref_order.book_at.strftime("%H:%M") %>"><%= ref_order.book_at.strftime("%H:%M") %></option>
+             </select>
+             <% else %>
+             <select class="input-time" name="book_time" id="select_time">
+              <option value="-1">选择时间</option>
+             </select>
+             <% end %>
+            </span>
+          </p>
+        </div>
+        <div class="bd">
+          <b>餐桌选择</b>
+          <% if book_table_rule.is_open_loge %>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::LOGE_TABLE %>
+            </span>
+            <span class="fr">
+              <i>只要包厢</i>
+            </span>
+          </label>
+          <% end %>
+           <% if book_table_rule.is_open_loge && book_table_rule.is_open_hall %>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::LOGE_TABLE_FIRST %>
+            </span>
+            <span class="fr">
+              <i>优先包厢，大厅也可</i>
+            </span>
+          </label>
+          <% end %>
+          <% if book_table_rule.is_open_hall %>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::HALL_TABLE %>
+            </span>
+            <span class="fr">
+              <i>只要大厅</i>
+            </span>
+          </label>
+          <% end %>
+          <% if book_table_rule.is_open_loge && book_table_rule.is_open_hall %>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::HALL_TABLE_FIRST %>
+            </span>
+            <span class="fr">
+              <i>优先大厅，包厢也可</i>
+            </span>
+          </label>
+          <% end %>
+        </div>
+          <div class="ft">
+            <b>用餐人数</b>
+            <p>
+              <%= f.number_field :booking_count, class: "select-num", value: 1 %>
+            </p>
+          </div>
+           <div class="ft">
+            <b>您的姓名</b>
+            <p>
+            <% if ref_order %>
+              <%= f.text_field :username, value: ref_order.username,  class: "", readonly: true %>
+            <% else %>
+              <%= f.text_field :username, class: "", value: @wx_user.try(:nickname)  %>
+            <% end %>
+            </p>
+          </div>
+          <div class="ft">
+            <b>联系电话</b>
+            <p>
+              <% if ref_order %>
+              <%= f.text_field :mobile, placeholder: '请输入电话', value: ref_order.mobile, readonly: true  %>
+              <% else %>
+              <%= f.text_field :mobile, placeholder: '请输入电话', value: @wx_user.try(:mobile)  %>
+              <% end %>
+            </p>
+            <p>
+              <input class="btn form-submit" type="submit" value="确认订座"/>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </section>
+</div><!-- main end -->
+</div><!-- html end -->
+
+<%= render "application/app_footer" %>
+
+<script>
+$(function(){
+  $(".form-submit").click(function(){
+
+  })
+})
+</script>
+
+  <script type="text/javascript">
+    $(function(){
+      $('.form-submit').click(function() {
+        if ($("#select_date").val() == -1){
+          alert("请选择订座时间");
+          return false;
+        }
+        if ($("input[type=radio]:checked").length == 0){
+          alert("请选择餐桌");
+          return false;
+        }
+        $shop_table_order_mobile = $('#shop_table_order_mobile');
+        if ( !$shop_table_order_mobile.val() ) {
+          $shop_table_order_mobile.focus();
+          return false;
+        } else if ( !test_mobile_number($shop_table_order_mobile.val()) ) {
+          alert('手机号码格式不正确');
+          $shop_table_order_mobile.focus();
+          return false;
+        } else if ( !check_description() ) {
+          return false;
+        }
+      });
+
+      function numbox(){
+        var left = 0;
+        $( "#numbox p.left" ).on( "click", swipeleftHandler );
+        $( "#numbox p.right" ).on("click",swiperightHandler)
+        function swipeleftHandler( event ){
+          if(left<=-122){
+            return false
+          }
+          left -=30;
+          $("#numbox").find('ul').clearQueue().stop().animate({'left':-left});
+          $('#getnum').val(parseInt($('#getnum').val())-1)
+          $('#getnumspan').html(parseInt($('#getnumspan').html())-1)
+
+        }
+        function swiperightHandler( event ){
+          if(left>=213){
+            return false
+          }
+          left +=30;
+          $("#numbox").find('ul').clearQueue().stop().animate({'left':-left});
+          $('#getnum').val(parseInt($('#getnum').val())+1)
+          $('#getnumspan').html(parseInt($('#getnumspan').html())+1)
+        }
+      }
+      numbox()
+
+      function addday(){
+        var xq = ['日','一','二','三','四','五','六']
+        var dayth = [31,29,31,30,31,30,31,31,30,31,30,31]
+        var daytime = new Date()
+        if(daytime.getFullYear()%4){
+          dayth[1]=28;
+        }
+        var text = '';
+        getmonth = daytime.getMonth()
+        getday = daytime.getDate()
+        gethours = daytime.getHours()
+        getxq = daytime.getDay()
+
+        if((getday+15)>dayth[getmonth]){
+          for(var i=getday;i<=dayth[getmonth];i++){
+            text +='<option value="'+daytime.getFullYear()+'-'+(getmonth+1)+'-'+i+'">'+(getmonth+1)+'-'+i+'</option>';
+          }
+
+          for(var i=1;i<(getday+15-dayth[getmonth]);i++){
+            text +='<option value="'+daytime.getFullYear()+'-'+(getmonth+2)+'-'+i+'">'+(getmonth+2)+'-'+i+'</option>';
+          }
+        }else{
+          for(var i=getday;i<(getday+15);i++){
+            text +='<option value="'+daytime.getFullYear()+'-'+(getmonth+1)+'-'+i+'">'+(getmonth+1)+'月'+i+'号</option>';
+          }
+        }
+
+        $('#time').find('select[name="day"]').append(text)
+      }
+      addday();
+
+    });
+
+    // 手机号码正则表达式
+    function test_mobile_number(mobile_number) {
+      if (mobile_number == undefined) {
+        return false;
+      }
+      if (winwemedia_validators.mobile_reg.test(mobile_number)){
+        return true;
+      };
+      return false;
+    }
+
+  </script>
+  <script>
+  $(function(){
+    $("#select_date").change(function(){
+
+      var selected_date = new Date($(this).val());
+     
+      if((selected_date.getTime() > new Date().getTime())){
+        render_full_order_time();
+      }else{
+        render_bigger_order_time();
+      }
+    });
+  });
+
+  function render_full_order_time(){
+    $("#select_time").empty();
+    <% book_table_rule.generate_time_range(true).each do |t|%>
+    $('#select_time')
+    .append($("<option></option>")
+      .attr("value","<%= t %>")
+      .text("<%= t %>"));
+    <% end %>
+  }
+  function render_bigger_order_time(){
+    $("#select_time").empty();
+    <% book_table_rule.generate_time_range(false).each do |t|%>
+    $('#select_time')
+    .append($("<option></option>")
+      .attr("value","<%= t %>")
+      .text("<%= t %>"));
+    <% end %>
+  }
+  </script>
+
+</body>

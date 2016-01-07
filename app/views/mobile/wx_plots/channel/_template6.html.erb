@@ -1,0 +1,16 @@
+<div class="list">
+  <!--<div class="hd"><a class="ico-location fr"></a></div>-->
+  <div class="bd">
+    <% @bulletins.each do |child| %>
+        <a href="<%= bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com') %>">
+          <% if child.pic.present? %>
+              <%= image_tag child.pic %>
+          <% else %>
+              <i class="<%= child.font_icon %>"></i>
+          <% end %>
+          <h1><%= child.title %></h1>
+        </a>
+    <% end %>
+  </div>
+</div>
+

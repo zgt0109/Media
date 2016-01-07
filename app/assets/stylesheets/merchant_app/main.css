@@ -1,0 +1,93 @@
+*{margin:0;padding:0;outline:0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+*,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+html,body{height:100%;}
+body{position:relative;overflow-x:hidden;font-size:14px;font-family:arial,"\5FAE\8F6F\96C5\9ED1";}
+body,p,form,h1,h2,h3,h4,h5,h6,ul,ol,li,section,div,*{padding:0;margin:0}
+img{border:0;-ms-interpolation-mode:bicubic;vertical-align:middle;display:inline-block;}
+a{text-decoration:none;}
+video{display:inline-block;width:100%;background:#000;}
+::-moz-selection{}
+::selection{}
+dl,ul,p{-webkit-margin-before:0em;-webkit-margin-after:0em;}
+p{margin:0;}
+iframe{border:0;}
+body{max-width:640px;margin:0 auto;}
+.hide{display:none;}
+.show{display:inline-block;}
+.clearfix{}
+.clearfix:after,
+.box:after{content:"";display:table;clear:both;}
+.img{width:100%;min-height:100%;}
+.box{display:block;width:100%;height:100%;}
+.main{width:100%;min-height:100%;padding-bottom:40px;background:#f0eff4;}
+.btn{display:inline-block;height:44px;padding:0 10px;font-size:16px;border-radius:5px;line-height:44px;border:none;text-align:center;color:#fff;background:#ccc;}
+.btn-primary{background:#00c3b5;}
+.btn-big{width:60%;}
+.btn-biger{width:100%;}
+
+.icon-right.new{padding-right:62px;}
+.new:before{content:"";width:34px;height:16px;display:block;background:url(/assets/merchant_app/img/new.png) no-repeat;-webkit-background-size:100% 100%;background-size:100% 100%;position:absolute;right:28px;top:11px;}
+
+.mod-load{display:none;width:100%;height:30px;line-height:30px;text-align:center;color:#666;}
+.mod-load.loading{display:block;}
+
+footer{width:100%;text-align:center;line-height:40px;color:#999;margin-top:-40px;}
+footer a{color:#999;}
+/* header */
+header{width:100%;height:39px;display:table;background:#fff;}
+.back{display:block;width:27px;height:27px;background:url(/assets/merchant_app/img/back.png) no-repeat;-webkit-background-size:100% 100%;background-size:100% 100%;}
+.filter{display:block;width:27px;height:27px;background:url(/assets/merchant_app/img/loudou.png) no-repeat;-webkit-background-size:100% 100%;background-size:100% 100%;}
+header a{width:40px;height:39px;display:block;float:left;padding:6px 3px;}
+header .text{display:table-cell;width:100%;text-align:center;color:#000;font-size:16px;padding:0 10px;vertical-align:middle;}
+/* search-box */
+.search-box{padding:8px;background:#c9c9ce;}
+.search{height:28px;border-radius:5px;padding-left:29px;background:#fff;position:relative;overflow:hidden;}
+.s-icon{display:block;position:absolute;width:13px;height:13px;background:url(/assets/merchant_app/img/search.png) no-repeat;-webkit-background-size:100% 100%;background-size:100% 100%;left:10px;top:8px;}
+.search input{width:100%;height:100%;font-size:10px;color:#8f8e93;border:none;}
+
+/* list */
+.mod-list{margin-bottom:20px;border-top:1px solid #dfdfdf ;border-bottom:1px solid #dfdfdf ;padding-left:10px;background:#fff;}
+.mod-list dt{width:100%;font-size:16px;border-bottom:1px solid #dfdfdf ;overflow:hidden;}
+.mod-list dt a{display:block;width:100%;height:100%;padding:10px 0;color:#333;}
+.mod-list dt span{display:block;font-size:12px;color:#999;margin-top:10px;line-height:12px;}
+.mod-list dd{color:#666;padding:10px 10px 10px 0;line-height:24px;}
+.icon-right{position:relative;padding-right:28px;}
+.icon-right:after{display:block;content:"";width:14px;height:14px;position:absolute;right:8px;top:12px;background:url(/assets/merchant_app/img/jinru.png) no-repeat;-webkit-background-size:100% 100%;
+background-size:100% 100%;}
+.icon-view{position:relative;padding-right:45px;}
+.icon-view:after{display:block;content:"";width:27px;height:27px;position:absolute;right:10px;top:9px;background:url(/assets/merchant_app/img/camera.png) no-repeat;-webkit-background-size:100% 100%;
+background-size:100% 100%;}
+
+/* form */
+.mod-form{font-size:16px;margin-bottom:20px;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding-left:45px;background:#fff;}
+.mod-form dl{display:table;width:100%;border-bottom:1px solid #ccc;position:relative;}
+.mod-form dl:last-child{border-bottom:none;}
+.mod-form dt{width:90px;line-height:45px;float:left;}
+.mod-form dd{display:table-cell;width:100%;vertical-align:top;}
+.mod-form input{width:100%;height:100%;font-size:14px;border:none;text-align:right;}
+.mod-form select{width:100%;height:100%;font-size:14px;border:none;-webkit-appearance:none;}
+.icon{display:block;position:absolute;width:20px;height:20px;background-repeat:no-repeat;-webkit-background-size:20px 20px;background-size:20px 20px;left:-35px;top:12px;}
+.icon-1{background-image:url(/assets/merchant_app/img/wuliugongsi.png);}
+.icon-2{background-image:url(/assets/merchant_app/img/wuliudingdan.png);}
+.mod-foot{position:fixed;display:table;width:100%;height:60px;padding:0 10px;border-top:1px solid #ccc;background:#fff;left:0;bottom:0;text-align:center;z-index:99;}
+.mod-foot .cell{display:table-cell;padding:0 10px;vertical-align:middle;}
+.mod-foot .cell-sm{width:40%;}
+.mod-foot+.body{padding-bottom:20px;}
+
+/* updeta */
+.up-main{padding:10px;box-shadow:inset 0 2px 3px #e5e5e5;}
+.up-title{font-size:15px;line-height:30px;color:#333;}
+.up-time{font-size:12px;color:#999;}
+.edit{width:100%;font-size:14px;color:#333;line-height:1.5;margin-top:20px;overflow:hidden;}
+.edit *{max-width:100%;overflow:hidden;}
+
+/* confirm */
+.mod-pop{display:none;position:absolute;width:100%;height:100%;padding-top:39px;left:0;top:0;}
+.mod-bg{width:100%;height:100%;background:rgba(0,0,0,.6);}
+.mod-body{display:none;width:100%;border-top:1px solid #ccc;background:#fff;position:absolute;z-index:2;left:0;top:39px;}
+.mod-body ul{list-style:none;padding-left:38px;}
+.mod-body li{height:35px;line-height:34px;border-bottom:1px solid #ccc;position:relative;}
+.mod-body li:before{display:block;width:14px;height:14px;position:absolute;left:-26px;top:10px;content:"";-webkit-background-size:100% 100%;background-size:100% 100%;}
+.mod-body .active:before{background-image:url(/assets/merchant_app/img/right.png);}
+.mod-body li:last-child{border-bottom:none;}
+.mod-body a{color:#666;font-size:15px;}

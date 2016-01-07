@@ -1,0 +1,70 @@
+<% content_for :website_top_pic do %>
+    <header>
+      <div class="box-img" id="slider">
+        <ul class="box-img-list" >
+          <% website_pictures.each do |w| %>
+              <li>
+                <% if w.url.present? %>
+                    <a href="<%= w.url%>"><%= image_tag w.pic.try(:large)%></a>
+                <% else %>
+                    <%= image_tag w.pic.try(:large)%>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+        <div class="box-text">
+          <span class="box-bd ellipsis fl" id="slider-span"><%= website_pictures.first.title %></span>
+          <div id="pagenavi" class="fr box-img-page">
+            <% website_pictures.each_with_index do |w, index| %>
+                <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>">
+                  <% index + 1 %>
+                </a>
+            <% end %>
+          </div>
+          <div class="box-bg"></div>
+        </div>
+      </div>
+    </header>
+<% end if website_pictures.present? %>
+
+<%
+   colors = [
+             ["#f3c16f", "#ebb85a", "#d8a148"],
+             ["#40bfcf", "#00b4cb", "#0195a9"],
+             ["#b8da85", "#a3d05e", "#86b343"],
+             ["#84bbce", "#6a9fb1", "#5295ac"],
+             ["#fab3b3", "#fb9d9e", "#ff8788"],
+             ["#8276d6", "#655fb7", "#5a54b9"],
+             ["#f0b938", "#f0b938", "#dd7d33"],
+             ["#50c6f8", "#50c6f8", "#1796cb"],
+             ["#aec559", "#aec559", "#8a9d43"],
+             ["#c79ddc", "#b587c8", "#a174b5"],
+            ]
+%>
+
+  <% sum  = 0 %>
+  <% website_menus.each_with_index do |menu,index| %>
+
+      <% if menu.has_children? %>
+        <div class="box-index">
+          <div class="hd"><%= menu.name %></div>
+          <div class="bd">
+            <% if menu.children.count % 2 == 0 && menu.children.count % 3 != 0 && menu.children.count % 3 == 2 %>
+                <% groups = menu.children.order(:sort).in_groups_of(3, false) %>
+            <% else %>
+                <% groups = menu.children.order(:sort).in_groups_of(3, false) %>
+            <% end %>
+            <% groups.each_with_index do |group_menus, group_index| %>
+                <% group_menus.each_with_index do |child, child_index|%>
+                    <a class="<%= group_menus.count == 2 ? "index-half": (group_menus.count == 1? "index-one" : "")%>" href="<%= menu_url child %>" style="background:<%= colors[sum % 10][child_index % 3] %>;">
+                      <b><%= image_tag child.pic.thumb if child.pic? %></b>
+                      <span><%= child.name %></span>
+                    </a>
+                <% end %>
+                <% sum += 1%>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+  <% end %>

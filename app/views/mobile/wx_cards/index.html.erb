@@ -1,0 +1,95 @@
+<section class="transitions">
+  <div class="package-list">
+    <% @wx_cards.each do |wx_card| %>
+      <% if wx_card.sku_quantity > wx_card.consumes.show.count %>
+        <div class="list-item c-<%= Wx::Card::COLORS.index(wx_card.try(:color)).to_i+1 %>">
+          <div class="business">
+            <% if wx_card.qiniu_logo_url.present? %>
+            <div class="logo">
+              <img src="<%= wx_card.qiniu_logo_url %>" alt="">
+            </div>
+            <% end %>
+            <div class="b-name">
+              <%= wx_card.brand_name %>
+            </div>
+          </div>
+          <div class="p-name">
+            <%= wx_card.title %>
+          </div>
+          <div class="p-summary">
+            <%= wx_card.sub_title %>
+          </div>
+          <div class="p-time">
+            有效期：<%= wx_card.wx_card_type %>
+          </div>
+          <% if wx_card.get_limit > wx_card.consumes.show.where(wx_user_id: @wx_user.id).count %>
+            <a href="javascript:;" class="btn btn-biger btn-white batchAddCard" data-card-json="<%= wx_card.basic_card_info(@wx_user).to_json %>">立即领取</a>
+          <% else %>
+            <a href="javascript:;" class="btn btn-biger btn-white">不可领取</a>
+          <% end %>
+          <div class="state"></div>
+        </div>
+      <% end %>
+    <% end %>
+    <div class="mod-load"><span class="tips"><%= "加载更多" if @wx_cards.total_pages > 1 %></span><span class="jiazai"><i class="fa fa-spinner fa-spin "></i> 正在加载...</span></div>
+  </div>
+</section>
+<script>
+
+  itemBottomLoad(load);
+
+  var page = 2;
+  function load(){
+    var get_url = "<%= mobile_wx_cards_path(@supplier) %>" + "?page=" + page;
+    $.getJSON(get_url, function(data) {
+      if(data.wx_cards.length > 0){
+        page += 1;
+        var html = '';
+        for(i=0;i<data.wx_cards.length;i++){
+          html += '<div class="list-item c-'+data.wx_cards[i].color+'"><div class="business"><div class="logo"><img src="<%= @activity.logo_url %>" alt=""></div><div class="b-name"><%= @activity.page_title %></div></div><div class="p-name">'+data.wx_cards[i].title+'</div><div class="p-summary">'+data.wx_cards[i].sub_title+'</div><div class="p-time">有效期：'+data.wx_cards[i].wx_card_type+'</div><a href="javascript:;" class="btn btn-biger btn-white batchAddCard"  data-card-json="'+data.wx_cards[i].basic_card_info+'">立即领取</a><div class="state"></div></div>'
+        }
+        $(html).appendTo($(".package-list"));
+        $(".mod-load").removeClass("loading");
+      }else{
+        $(".mod-load").removeClass("loading");
+        $(".tips").html("没有数据啦");
+      }
+    });
+  }
+  
+  function itemBottomLoad(callBack){
+    $(window).scroll(function(){
+      var scrollTop = $(this).scrollTop();               //滚动条距离顶部的高度
+      var scrollHeight = $(document).height();          //当前页面的总高度
+      var windowHeight = $(this).height();               //当前可视的页面高度
+  
+      if(scrollTop + windowHeight >= scrollHeight){        //距离顶部+当前高度 >=文档总高度 即代表滑动到底部
+        $(".mod-load").addClass("loading");
+        callBack();
+      }
+    });
+  }
+  
+  var readyFunc = function onBridgeReady() { 
+    $(document).on('click', '.batchAddCard',
+      function(e) {
+        var browserVersionReg = /MicroMessenger\/\d+(.\d+)/;
+        if(browserVersionReg.test(navigator.userAgent) && parseFloat(navigator.userAgent.match(browserVersionReg)[0].split('/')[1]) >= 6.0){
+          WeixinJSBridge.invoke('batchAddCard', { 
+            "card_list": $(this).data("card-json")
+          },
+          function(res) {
+            // TODO
+          });
+        }else{
+          alert("领取失败，请使用微信6.0及以上版本！");
+        }
+      }); 
+  }
+  if(typeof WeixinJSBridge === "undefined"){ 
+    document.addEventListener('WeixinJSBridgeReady', readyFunc, false);
+  }else{
+    readyFunc();
+  }
+  
+</script>

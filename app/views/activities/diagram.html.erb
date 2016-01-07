@@ -1,0 +1,122 @@
+<% content_for :main_content do %>
+    <div class="main-content">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微投票', votes_activities_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2 class="blue"> 活动名称：<%= @activity.try(:name) %></h2>
+          </div>
+          <% if @activity_vote_items.present? %>
+          <div class="col-sm-12 margin-top-20">
+            <a href="javascript:;" class="btn btn-primary btn-sm pull-right margin-left-5" id="change-vote">票数调整</a>
+            <a href="javascript:;" id="cancel" class="btn btn-default btn-sm hide pull-right">取消</a>
+          </div>
+          <% end %>
+          <%= form_for @activity, url:  update_vote_items_activity_path(id: @activity.id), method: :post do |f| %>
+              <div class="col-sm-12 margin-top-10">
+                <table id="vote_stats" class="table table-striped table-bordered table-hover dataTable ">
+                  <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>选项</th>
+                    <th>比例</th>
+                    <th>实际票数</th>
+                    <th width="200px">调整票数</th>
+                    <th>总票数</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% if @activity_vote_items.present? %>
+                      <% @activity_vote_items.each_with_index do |item, index| %>
+                          <%= f.fields_for :activity_vote_items, item do |m| %>
+                              <tr>
+                                <td><%= index + 1%></td>
+                                <td><%= image_tag item.pic.large, size: '40x40' if item.pic? %>&nbsp;&nbsp;<%= item.name %></td>
+                                <td><%= f item.per(@activity.vote_items_count) %>%</td>
+                                <td><%= item.activity_user_vote_items_count %></td>
+                                <td><%= item.adjust_votes %></td>
+                                <td style="display: none;"><%= m.text_field :adjust_votes %></td>
+                                <td><%= item.select_count %></td>
+                              </tr>
+                          <% end %>
+                      <% end %>
+                  <% else %>
+                      <tr>
+                        <td colspan="6" class="green text-center">无记录</td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          var temp=[];
+          $('#change-vote').on('click', function () {
+              var $self = $(this);
+              var text = $self.text();
+              if (text == "票数调整") {
+                  $('table#vote_stats').find('tbody tr').each(function () {
+                      var td = $(this).find('td').eq(4), value = td.text();
+                      temp.push(td.text());
+                      td.hide();
+                      td.next().show();
+                  });
+                  $('#cancel').removeClass('hide');
+                  $('table#vote_stats').find('tbody tr:eq(0) td:eq(5) input[type=text]').focus();
+                  $self.text("保存");
+              }
+              else {
+                  var flag = true, reg= /^[0-9]*$/;
+                  $('table#vote_stats').find('tbody tr').each(function () {
+                      var input = $(this).find('td').eq(5).find('input[type=text]');
+                      if(!input.val()){
+                          showTip('warning', '调整票数不能为空');
+                          input.focus();
+                          flag = false;
+                          return flag;
+                      }
+                      if(!reg.test(input.val())){
+                          showTip('warning', '调整票数必须为数字');
+                          input.focus();
+                          flag = false;
+                          return flag;
+                      }
+                      if(parseInt(input.val()) < 0){
+                          showTip('warning', '调整票数必须大于或等于0');
+                          input.focus();
+                          flag = false;
+                          return flag;
+                      }
+                  });
+                  if(!flag){return false;}
+                  $('form').submit();
+              }
+          });
+          $('#cancel').on('click', function () {
+              $('table#vote_stats').find('tbody tr').each(function (i) {
+                  var td = $(this).find('td').eq(4);
+                  td.text(temp[i]);
+                  td.show();
+                  td.next().hide();
+              });
+              $('#change-vote').text("票数调整");
+              $(this).addClass('hide');
+          });
+      });
+    </script>
+<% end %>

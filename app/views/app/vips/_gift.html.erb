@@ -1,0 +1,61 @@
+<% @gifts.each do |gift| %>
+  <dl>
+    <dt class="border">
+      <a class="icon-right" href="#">
+        <i class="icon icon-3"></i>
+        <span><%= gift.name %></span>
+        <% if @vip_user %><div class="num"><%= @vip_user.point_gift_exchanged?(gift) ? '已' : '未' %>兑换</div><% end %>
+      </a>
+    </dt>
+    <dd>
+      <p><%= image_tag gift.pic_url %></p>
+      <p>
+        <span class="c-6">库存数量：</span>
+        <span class="c-orange"><%= point_gift_sku_to_human gift.exchangeable_num %></span>
+      </p>
+      <p>
+        <span class="c-6">适用范围：</span>
+        <span class="c-orange"><%= gift.vip_grade_names %></span>
+      </p>
+      <p>
+        <span class="c-6">兑换所需积分：</span>
+        <span class="c-orange"><%= gift.points %>分</span>
+      </p>
+      <% if @vip_user %>
+          <p>
+            <span class="c-6">可用积分：</span>
+            <span class="c-orange"><%= @vip_user.usable_points %></span>
+          </p>
+      <% end %>
+      <% if @vip_user %>
+          <p>
+            <span class="c-6">可兑换次数：</span>
+            <%= gift.limit_count_name( @vip_user ) %>
+          </p>
+      <% end %>
+      <% if gift.shop_branches_count > 0 %>
+        <p>
+          <span class="c-6">使用门店：</span>
+          <span><a class="c-blue underline" href="<%= shops_app_vips_path( ids: ( gift.shop_branch_ids.join(',') if gift.shop_branch_limited? ) ) %>"><span><%= gift.shop_branches_count %>家</span></a></span>
+        </p>
+      <% end %>
+      <p>
+        <span class="c-6">有效期：</span>
+        <%= gift.exchange_start_at.try(:to_date) %>  至 <%= gift.exchange_end_at.try(:to_date) %>
+      </p>
+      <p>
+        <span class="c-6">礼品兑换说明：</span>
+      </p>
+      <p><%= gift.description %></p>
+      <%= link_to '立即兑换', get_gift_app_vips_path(wxmuid: session[:wx_mp_user_id], id: gift.id), id: "gift-exchange-#{gift.id}", class: 'btn btn-biger mt btn-exchange', data: { 'gift-id' => gift.id, 'gift-point' => gift.points, 'gift-limit-count' => @vip_user ? gift.limit_count_for(@vip_user) : 0, 'people-limit-count' => gift.people_limit_count } %>
+      <% if gift.exchangeable_num <= 0 && gift.exchangeable_num != -1 %>
+      <script>
+        $("#gift-exchange-<%= gift.id %>").css({'background-color': '#ccc'}).addClass('disabled').click(function(event) {
+          event.preventDefault();
+          return false;
+        });
+      </script>
+      <% end %>
+    </dd>
+  </dl>
+<% end %>

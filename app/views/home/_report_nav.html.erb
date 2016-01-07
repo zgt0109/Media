@@ -1,0 +1,10 @@
+<div class="rep-header">
+    <div class="rep-tit">“羊”帆起航，智赢2015！</div>
+    <nav class="rep-nav">
+        <ul class="clearfix">
+            <li class="rep-nav-item"><a class="rep-nav-link <%= 'active' if current_page?(about_path) %>" href="<%= about_path %>">微枚迪介绍</a></li>
+            <li class="rep-nav-item"><a class="rep-nav-link <%= 'active' if current_page?(joins_path) %>" href="<%= joins_path %>">加入微枚迪</a></li>
+            <li class="rep-nav-item"><a class="rep-nav-link <%= 'active' if controller_name == 'news' %>" href="/news/company?display=dashboard">媒体报道</a></li>
+        </ul>
+    </nav>
+</div>

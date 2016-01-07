@@ -1,0 +1,53 @@
+<%= form_tag save_point_vip_user_path(@vip_user) do %>
+  <%= hidden_field_tag :direction_type, "" %>
+  <div class="modal-body">
+    <div class="alert alert-block alert-success">
+      <strong class="pull-left">可用积分：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li class="usable_points"><%= @vip_user.usable_points %></li>
+      </ul>
+    </div>
+    <div>
+      <div class="form-group">
+        <label>积分<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= text_field_tag :points, nil, class: 'col-md-8', placeholder:"请输入调节的积分数" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>备注</label>
+        <div class="clearfix">
+          <%= text_area_tag :description, nil, placeholder:"备注有助于日后查看积分调节详情", class: "col-xs-12" %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <input type="button" class="btn btn-primary btn-sm" data-fn="submit" onclick="sub_point(1)"  value="增加" data-disable-with="增加">
+    <input type="button" class="btn btn-primary btn-sm" data-fn="submit" onclick="sub_point(2)"  value="减少" data-disable-with="减少">
+  </div>
+<%- end %>
+<% content_for :custom_js do %>
+  <script>
+    function sub_point(type){
+      if($("[name='points']").val() == ""){
+        showTip('warning',"请设置积分！");
+        return false;
+      }
+
+      if (type == 2){
+        var usable_points = parseFloat($('.usable_points').text()),
+        points = parseFloat($('#points').val());
+        if (points > usable_points){
+          showTip('warning',"积分不足");
+          return false;
+        }
+      }
+
+      $("[name='direction_type']").val(type);
+      $('form').submit();
+
+    }
+  </script>
+<% end %>

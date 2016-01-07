@@ -1,0 +1,37 @@
+development:
+  # Configure available database sessions. (required)
+  sessions:
+    # Defines the default session. (required)
+    default:
+      # Defines the name of the default database that Mongoid can connect to.
+      # (required).
+      database: winwemedia_staging
+      # Provides the hosts the default session can connect to. Must be an array
+      # of host:port pairs. (required)
+      hosts:
+        - test1.winwemedia.com:27017
+      options:
+
+staging:
+  sessions:
+    default:
+      database: winwemedia_staging
+      hosts:
+        - 10.221.20.140:27017
+      options:
+        consistency: :strong
+        max_retries: 1
+        retry_interval: 0
+
+production:
+  sessions:
+    default:
+      database: winwemedia
+      hosts:
+        - 10.221.20.140:27017
+      options:
+        consistency: :strong
+        # In the test environment we lower the retries and retry interval to
+        # low amounts for fast failures.
+        max_retries: 2
+        retry_interval: 1

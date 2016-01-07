@@ -1,0 +1,19 @@
+<div class="index" id="index">
+  <% website_menus[0..4].each_with_index do |menu, index| %>
+    <%= link_to menu_url(menu), class: index == 0 ? 'box mod-index index-main' : 'box mod-index' do %>
+          <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+    <% end %>
+  <% end %>
+  <a class="mod-logo">
+    <i>
+      <%= image_tag website.logo.big if website.logo? %>
+    </i>
+  </a>
+</div>
+
+<% content_for :document_ready_js do %>
+    <% if @website_setting.bg_image.present? %>
+        // 静态背景图
+        //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+    <% end %>
+<% end %>

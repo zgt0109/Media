@@ -1,0 +1,143 @@
+<%
+  if @activity.present? && @activity.micro_aid_rule.present? && @activity.micro_aid_rule.banner_pic_url.present? 
+    data_img = qiniu_img_url(@activity.micro_aid_rule.banner_pic_url)
+    pic_data_key = @activity.try(:micro_aid_rule).try(:banner_pic_url)
+  else
+    data_img = "/assets/mobile/aids/global_banner.gif"
+    pic_data_key = "Fkx_H02MWNRBIGJyzQgoHXWId-Ud"
+  end
+%>
+
+<%= content_for :step do %>
+  <div class="step-pane active" id="step2">
+    <%= form_for @activity, url: aid_path(@activity) do |f| %>
+      <%= hidden_field_tag :redirect_to, edit_prize_settings_aid_path(@activity) %>
+      <%= f.fields_for :rule, @rule do |r| %>
+      <div class="form-group">
+        <%= r.label '活动模式: 排行榜模式（活动持续增长，有效控制奖品消耗' %>
+      </div>
+      <div class="form-group">
+        <%= r.label '助力基数:' %>
+        <label>
+          <%= r.radio_button :model, @rule.class.const_get(:MODEL_RANDOM), checked: true, class: "radio-model" %>随机基数，基数最多不超过
+          <%= r.text_field   :base_points, class: "radio-model-random", placeholder: '请输入最大助力基数, 最大为1000' %>
+          <%= r.radio_button :model, @rule.class.const_get(:MODEL_FIXED), class: "radio-model" %>固定基数，基数
+          <%= r.text_field   :base_points, class: "radio-model-fixed", placeholder: '请输入固定阻力基数, 最大为1000' %>
+        </label>
+      </div>
+
+      <div class="form-group vhpler-mb-20">
+        <label>企业宣传banner：<span class="required-star">*</span>
+          <small class="text-warning">建议尺寸:320*125px</small>
+        </label>
+        <div class="clearfix">
+          <div data-name="activity[rule][banner_pic_url]" data-img = "<%= data_img %>" data-key="<%= pic_data_key %>" class="cieldon-file width-220px" data-width="320" data-height="125" data-type="0"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= r.label '兑奖信息', class: "control-label" %>
+        <%= check_box_tag 'activity[rule][prize_model][]', @rule.class.const_get(:PRIZE_USER_MOBILE_MASK), false, class: "prize-user-mobile-mask" %>手机号码
+        <%= check_box_tag 'activity[rule][prize_model][]', @rule.class.const_get(:PRIZE_USER_NAME_MASK), false, class: "prize-user-name-mask" %>姓名
+        <%= r.label '是否需要短信验证', class: "control-label" %>
+        <%= r.radio_button :is_sms_validation, @rule.class.const_get(:SMS_VERIFICATION_TRUE) %>是
+        <%= r.radio_button :is_sms_validation, @rule.class.const_get(:SMS_VERIFICATION_FALSE) %>否
+      </div>
+
+      <!-- <div class="form&#45;group"> -->
+      <!--   <%# <%= r.label '兑奖密码', class: "control&#45;label" %> -->
+      <!--   <%# <%= r.text_field :password, class: "input&#45;password", placeholder: '请输入密码, 6至10个字符' %> -->
+      <!-- </div> -->
+      <!-- <div class="form&#45;group"> -->
+      <!--   <%# <%= r.label '确认密码', class: "control&#45;label" %> -->
+      <!--   <%# <%= r.text_field :password, class: "input&#45;confirm&#45;password", name: 'activity[rule][confirm_password]', placeholder: '请输入密码, 6至10个字符' %> -->
+      <!-- </div> -->
+      <% end %>
+
+      <div class="row-fluid center">
+        <a class="btn btn-prev btn-sm" href='<%= aid_path(@activity) %>'> <i class="icon-arrow-left"></i> 上一步 </a>
+        <%- if @activity.can_not_edit? %>
+          <a href="<%= edit_prize_settings_aid_path(@activity) %>" class="btn btn-prev btn-sm"><i class="icon-arrow-right icon-on-right"></i>下一步</a>
+        <%- else %>
+          <button class="btn btn-success btn-sm btn-next next_step btn-submit" data-last="完成">
+            <i class="icon-arrow-right icon-on-right"></i>下一步
+          </button>
+        <%- end %>
+        <a class="btn btn-sm" href="/activities/aids">返回</a>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render 'main_content' %>
+<%= content_for :custom_js do %>
+  <script>
+    $(function () {
+     <% if @rule.model.to_i == @rule.class.const_get(:MODEL_FIXED) %>
+       $('.radio-model-fixed').val(<%= @rule.base_points %>);
+       $('.radio-model-random').val(null);
+       $('.radio-model-random').disableInput();
+       $('.radio-model-fixed').enableInput();
+     <% else %>
+       $('.radio-model-random').val(<%= @rule.base_points %>);
+       $('.radio-model-fixed').val(null);
+       $('.radio-model-fixed').disableInput();
+       $('.radio-model-random').enableInput();
+     <% end %>
+
+     $('.prize-user-mobile-mask').attr('checked', false);
+     $('.prize-user-name-mask').attr('checked', false);
+     <% if ((@rule.prize_model.to_i & @rule.class.const_get(:PRIZE_USER_MOBILE_MASK)) != 0) %>
+       $('.prize-user-mobile-mask').attr('checked', true);
+     <% end %>
+     <% if ((@rule.prize_model.to_i & @rule.class.const_get(:PRIZE_USER_NAME_MASK)) != 0) %>
+       $('.prize-user-name-mask').attr('checked', true);
+     <% end %>
+    });
+  </script>
+  <script>
+    $(function () {
+      $('.radio-model').on('click', function(event) {
+        $this = $(this);
+     
+        if ($this.val() == <%= @rule.class.const_get(:MODEL_RANDOM) %>) {
+          $('.radio-model-fixed').disableInput();
+          $('.radio-model-random').enableInput();
+        } else {
+          $('.radio-model-random').disableInput();
+          $('.radio-model-fixed').enableInput();
+        } 
+      });  
+    }); 
+/*
+    $('.btn-submit').on('click', function(event) {
+      $inputPassword = $('.input-password');
+      $inputConfirmPassword = $('.input-confirm-password');
+
+      if ($inputPassword.val() != $inputConfirmPassword.val()) {
+        $errorTip = $('.password-error-tip');
+        $errorTip.text('密码输入不一至').show();
+   //     return false;
+      }
+    });
+*/
+  </script>
+
+  <script>
+    <% if @activity.can_not_edit? %>
+      $('input, select, textarea').prop('disabled', true);
+      $('wysiwyg-editor').attr('contenteditable', false);
+    <% end %>
+  </script>
+
+  <script>
+    $.fn.extend({
+      disableInput: function() {
+        $(this).prop('disabled', true);
+      },
+      enableInput: function() {
+        $(this).prop('disabled', false);
+      }
+    });
+  </script>
+<%- end %>

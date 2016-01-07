@@ -1,0 +1,45 @@
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="recharge-box">
+        <%= form_tag exchange_gift_app_vips_path(id: @gift.id), id: 'exchange_form', data: { url: exchange_gift_app_vips_path } do |f| %>
+          <%= hidden_field_tag :qty, 1 %>
+          <%= hidden_field_tag :vip_given_id %>
+          <h1 class="tcenter">兑换此礼品需要<span id="need_point"><%= @gift.points %></span>积分</h1>
+          <div class="used-main">
+            <% @vip_user.vip_givens.point.usable.each do |vip_given| %>
+              <label>
+                <input type="checkbox" value="<%= vip_given.id %>" data-point="<%= vip_given.value %>"/>
+                <%= vip_given.vip_care.name %>： <%= vip_given.value %>积分
+              </label>
+            <% end %>
+            <p>使用账户积分：<span id="account_points" data-point="<%= @gift.points %>"><%= @gift.points %></span></p>
+          </div>
+          <div>
+            <input type="submit" id="form-submit" value="确认兑换" class="btn btn-big J-close">
+          </div>
+        <% end %>
+      </div>
+    </section><!--main section end -->
+  </div><!--.stage end-->
+</div><!--.html end-->
+
+<script>
+    var $exchange_form      = $('#exchange_form'),
+        $account_point_span = $('#account_points'),
+        $vip_given_hidden   = $('#vip_given_id');
+
+    $('.used-main input[type="checkbox"]').on('click', function(event) {
+        $this = $( this );
+        var giftPoint = parseInt( $this.data('point') );
+        if ( $this.is(':checked') ) {
+            $('.used-main input[type="checkbox"]').not(this).attr('checked', false);
+            var point = parseInt( $account_point_span.data('point') ) - giftPoint;
+            $account_point_span.text( point > 0 ? point : 0 );
+            $vip_given_hidden.val( $this.val() );
+        } else {
+            $account_point_span.text( parseInt( $account_point_span.data('point') ) );
+            $vip_given_hidden.val( '' );
+        }
+    });
+</script>

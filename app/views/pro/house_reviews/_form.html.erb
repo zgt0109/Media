@@ -1,0 +1,105 @@
+<% content_for :main_content do %>
+	<div class="main-content ">
+
+		<div class="breadcrumbs" id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li> <i class="icon-home home-icon"></i> <%= link_to "首页", root_path %> </li>
+				<li> <%= link_to "微房产", house_layouts_path %> </li>
+				<li><%= link_to "专家点评管理", house_reviews_path %></li>
+			</ul>
+			<%= render '/layouts/qrcode' %>
+		</div>
+		<div class="page-content">
+			<div class="row">
+				<div class="col-md-12">
+					<%= form_for @review, validate: true,html: {class: 'form'} do |f|%>
+						<div class="form-group">
+							<label class="control-label">标题<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= f.text_field :title, validate: true, class: 'col-xs-6', placeholder: '请输入点评标题' %>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">作者<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= f.text_field :author, validate: true, class: 'col-xs-6', placeholder: '请输入作者' %>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">作者头像<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= content_tag :div, nil, class: "cieldon-file", data: {type: "0", name: "house_review[avatar_key]", img: "#{@review.avatar_url}", width: "100", height: "100"} %>
+							</div>
+
+						</div>
+						<div class="form-group">
+							<label class="control-label">作者职称<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= f.text_field :author_title, validate: true, class: 'col-xs-6', placeholder: '请输入作者职称' %>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">作者简介<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= f.text_area :author_description, validate: true, rows: 3, class: 'col-xs-6', placeholder: '请输入作者简介' %>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">显示方式<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<label class="control-label">
+									<%= f.radio_button :display_mode, 1, class: "ace" %>
+									<span class="lbl">置顶显示</span>
+								</label>
+								<label class="margin-left-10">
+									<%= f.radio_button :display_mode, 2, checked: (@review.display_mode.nil? or @review.display_mode.eql?(2)), class: "ace" %>
+									<span class="lbl">显示</span>
+								</label>
+								<label class="margin-left-10">
+									<%= f.radio_button :display_mode, 3, class: "ace" %>
+									<span class="lbl">不显示</span>
+								</label>
+							</div>
+
+						</div>
+						<div class="form-group">
+							<label class="control-label">内容编辑<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= f.text_area :content, validate: true, class: 'col-xs-6', placeholder: '请输入楼盘简介', rows: 6 %>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">显示顺序<span class="required-star">*</span></label>
+							<div class="clearfix">
+								<%= f.number_field :position, class: 'col-xs-6', placeholder: '' %>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<input type="submit" class="btn btn-sm btn-primary" value="确定"/>
+							<input type="reset" class="btn btn-sm btn-default" value="取消"/>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+		<!-- /.page-content -->
+	</div>
+<% end %>
+
+<% content_for :custom_js do %>
+	<script>
+		$('input[type=submit]').click(function(){
+				if("<%= @review.avatar_url.present? %>" == 'false' && $('input[name="house_review[avatar_key]"]').val().length<10){
+					showTip('warning', '请上传头像');
+					// addErrorMessage($('input[name="house_review[avatar_key]"]').eq(0), '图片不能为空');
+					return false;
+				}
+		}); 
+	</script>
+<% end %>

@@ -1,0 +1,51 @@
+<% provide(:title, '我要订座') %>
+
+
+<div class="stage" id="stage">
+  <header>
+    <%= link_to book_table_mobile_shops_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" do %>
+    <% end %>
+    <h1>我的订座</h1>
+  </header>
+  <section id="sec-index">
+    <div class="body">
+      <div class="list">
+        <div class="mod-block">
+          <% @shop_table_orders.each do |order| %>
+          <%= link_to mobile_shop_table_order_path(supplier_id: session[:supplier_id], id: order.id, anchor: "mp.weixin.qq.com"), class: "mod-food fa fa-angle-right" do %>
+          <p>
+            <b>订座编号：</b>
+            <span><%= order.order_no %></span>
+          </p>
+          <p>
+            <b>门　　店：</b>
+            <span><%= order.shop_branch.name %></span>
+          </p>
+          <p>
+            <b>订座时间：</b>
+            <span><%= order.booking_at %></span>
+          </p>
+          <p>
+            <b>状　　态：</b>
+            <span><%= order.status_name %> 未支付</span>
+            <!-- <span>未处理　支付失败</span> -->
+          </p>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+        <% if flash[:notice] %>
+        alert("<%= flash[:notice] %>");
+        <% elsif flash[:alert] %>
+        alert("<%= flash[:alert] %>");
+        <% end %>
+        <% flash.clear %>
+    });
+</script>

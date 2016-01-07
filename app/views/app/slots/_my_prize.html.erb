@@ -1,0 +1,36 @@
+<%= stylesheet_link_tag 'mobile/addgetma' %>
+<div class="box-page">
+  <div class="hd">我的奖品  （<%= @activity_consumes.count%>）<a class="btn-back">返回</a></div>
+  <div class="bd">
+    <ul class="box-list">
+      <% if @activity_consumes.present? %>
+      <% @activity_consumes.each do |activity_consume| %>
+      <li>
+        <p>
+          <b><%= activity_consume.try(:activity_prize).try(:title) %>：<%= activity_consume.try(:activity_prize).try(:prize) %></b>
+          <span>SN码：<%= activity_consume.code %><a class="addgetma" href="javascript:;" data-ma="<%= activity_consume.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></span>
+          <span>中奖时间：<%= date_format_full activity_consume.created_at%>
+          <span>状态：<%= activity_consume.mobile_status %></span>
+          <%= link_to "马上领取",get_prize_app_slots_path(:acid => activity_consume.id, activity_id: @activity.id), :remote => true, :class => "btn btn_link" unless activity_consume.mobile %>
+        </p>
+      </li>
+      <% end %>
+      <% else %>
+          <style>
+              .box-page .bd{width: 100%;}
+          </style>
+         <li><p><span style="text-align: center">您还没中过奖哦！</span></p></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<style>
+  .box-list span{padding: 2px;}
+</style>
+<%= javascript_include_tag 'mobile/qcode' %>
+
+<script type="text/javascript">
+  $(".btn-back").click(function(){
+      $("#sec-result").fadeOut();
+  });
+</script>

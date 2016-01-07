@@ -1,0 +1,17 @@
+<% provide(:title, '学院地址') %>
+<div class="box box-padding">
+  <div class="hd college_title">学院地址</div>
+  <div class="bd list-adress">
+    <% if @branches.present?  %>
+        <% @branches.each do |b| %>
+            <a href="<%= map_app_educations_path(:id => b.id, anchor: "mp.weixin.qq.com") %>">
+              <b>学院名称: <%= b.name  %></b>
+              <span>地址：<%= b.address%></span>
+              <i class="arrow arr-small"></i>
+            </a>
+        <% end %>
+    <% else %>
+        <span>没有地址！</span>
+    <% end %>
+  </div>
+</div>

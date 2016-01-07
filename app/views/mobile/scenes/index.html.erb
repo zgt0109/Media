@@ -1,0 +1,56 @@
+<div class="html theme-1" id="html">
+  <div class="stage" id="stage">
+     <%= raw @activity.scene_html.content rescue '' %>
+  </div>
+  <%- if @activity.extend.introduce_url.present? %>
+    <a href="<%= @activity.extend.introduce_url %>" class="home-page"></a>
+  <%- end %>
+</div>
+<%= javascript_include_tag 'mobile/scenes' %>
+<script type="text/javascript">
+  $(function(){
+    var url_exp = /[a-zA-z]+:\/\/[^\s]*/;
+
+    $(".stage .page").on("click",function(e){
+      var url = $(this).attr("data-href"),
+        type = $(this).attr("data-link"),
+        is_tel = (type == 'tel');
+      if(!type || (!url_exp.test(url) && !is_tel)){
+        return false;
+      }else{
+        window.location.href = url;
+      }
+    });
+
+    $(".stage a").on("click",function(e){
+      var url = $(this).attr('href'),
+        type = $(this).parent('.moduled').attr("data-link"),
+        is_tel = (type == 'tel');
+      if(!type || (!url_exp.test(url) && !is_tel)){
+        return false;
+      }else{
+        window.location.href = url;
+      }
+    });
+
+    $.each($('.stage .page'),  function(e,i){
+      var url = $(this).attr("data-href"),
+      type = $(this).attr("data-link");
+      if(type == 'tel' && url) {
+        $(this).attr('data-href', 'tel:' + url)
+      }
+    })
+
+    $.each($('.stage a'),  function(e,i){
+      var url = $(this).attr('href'),
+      type = $(this).parent('.moduled').attr("data-link");
+      if(type == 'tel' && url) {
+        $(this).attr('href', 'tel:' + url)
+      }
+    })
+
+  })
+
+  // 初始化页面
+  var pages = new window.pages();
+</script>

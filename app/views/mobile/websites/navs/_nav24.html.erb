@@ -1,0 +1,46 @@
+<% content_for :nav_section do %>
+    <section class="mod-navLine navLine-24 ft-3">
+      <% nav_index = 1 %>
+      <% website_menus.each do |menu| %>
+          <% next if nav_index > 5 %>
+          <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
+          <% next if menu.multiple_graphic? && menu.menuable.blank? %>
+          <% nav_index += 1 %>
+          <%= link_to menu_url(menu) do %>
+            <%= menu.title %>
+          <% end unless menu.multiple_graphic? || menu.has_sub_menus? %>
+
+
+          <p>
+            <img src="/assets/mobile/vweisiteV01/16/bg-nav-ft.png"/>
+            <%= menu.title %>
+            <span>
+                <i></i>
+                <em></em>
+                <% if menu.has_sub_menus? %>
+                    <% menu.sub_menus[0..7].to_a.each do |child| %>
+                        <%= link_to menu_url(child) do %>
+                            <%= child.title %>
+                        <% end %>
+                    <% end %>
+                <% else %>
+                    <% main_material = menu.menuable %>
+                    <%= link_to material_type_url(main_material, menu) do %>
+                        <%= main_material.title %>
+                    <% end %>
+                    <% main_material.children[0..6].to_a.each do |child| %>
+                        <%= link_to material_type_url(child, menu) do %>
+                            <%= child.title %>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            </span>
+          </p>
+      <% end %>
+    </section>
+<% end %>
+
+<% content_for :document_ready_js do %>
+    $("body").addClass("body-navLine-bottom");
+    navLinePop(".navLine-24 p",".navLine-8 a");
+<% end %>

@@ -1,0 +1,45 @@
+<div class="widget-box transparent">
+  <div class="widget-header widget-header-flat">
+    <h4><%= shop_category.new_record? ? '新增分类' : '编辑分类' %></h4>
+  </div>
+  <div class="widget-body">
+    <%= form_for shop_category, validate: true, remote: true, html: { id: 'shop_category_form', class: 'form', role: 'form' } do |f| %>
+        <%#= f.hidden_field :parent_id %>
+        <div class="form-group margin-top-10">
+          <%= f.hidden_field :shop_menu_id %>
+
+          <select id="songyang" name="shop_category[parent_id]">
+           <option value="0"><%= shop_category.shop_menu.menu_no %></option>
+           <% shop_category.shop_menu.shop_categories.root.each do |c| %>
+           <option value="<%= c.id %>"><%= c.name %></option>
+           <% end %>
+          </select>
+          <script type="text/javascript">
+          // to init value
+            <% if shop_category.is_root %>
+            var current_value = "-1";
+            <% else %>
+            var current_value = "<%= shop_category.parent_id %>";
+            <% end %>
+            $("#songyang").val(current_value);
+          </script>
+
+          <br/>
+
+          <label class="control-label">分类名称：<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.text_field :name, class: 'col-xs-8', placeholder: "" %>
+          </div>
+
+          <label class="control-label">排序：<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.text_field :sort, maxlength: 5, class: 'col-xs-8', placeholder: "" %>
+          </div>
+        </div>
+        <div class="text-left">
+          <input type="submit" class="btn btn-primary btn-sm" value="保存">　　
+          <input type="reset" class="btn btn-default btn-sm" value="取消" onclick="javascript:location.href='<%= shop_categories_path %>'">
+        </div>
+    <% end %>
+  </div>
+</div>

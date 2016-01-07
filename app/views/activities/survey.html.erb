@@ -1,0 +1,127 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微调研', surveys_activities_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-xs-12 ">
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微调研；</li>
+              <li>2、以下“<span class="required-star">*</span>”均为必填项；</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-xs-12">
+          <%= form_for @activity, url: @activity_url, validate: true do |activity| %>
+              <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述', wx_pic: @activity.pic_url %>
+              <div class="col-xs-12 col-md-6 col-lg-7">
+                <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key,
+                           include_activity_date: 1, include_description: 2, include_extend_closing_note: 2 %>
+
+
+                <div class="form-group">
+
+                  <%= activity.fields_for :activity_setting, @activity.activity_setting ? @activity.activity_setting : @activity.build_activity_setting do |activity_setting| %>
+
+                  <label>
+                    <%= activity_setting.check_box :is_associated_activity, class: 'ace' %>
+                    <span class="lbl">关联活动：</span>
+                  </label>
+                 
+                  <% activity_type_id = activity.object.associated_activity.try(:activity_type_id) || 4 %>
+                  <%= select_tag :activity_setting_associated_activity, options_for_select([['刮刮卡', 4], ['大转盘', 5], ['砸金蛋', 25], ['摇一摇', 64]], activity_type_id), class: "margin-left-10" %>
+
+                 
+                  <%= activity_setting.select :associated_activity_id, current_user.activities.show.unexpired.where(activity_type_id: activity_type_id).map{|f|[f.name, f.id]}, {include_blank: '选择已创建的活动'}, class: 'margin-left-10' %>
+                  
+                  <% 
+                    url = {
+                      4 => '/activities/new?activity_type=4', 
+                      5 => '/activities/new?activity_type=5', 
+                      25 => '/activities/new?activity_type=25',
+                      64 => '/waves/new'
+                    }[activity_type_id]
+                  %>
+                  
+                  <%= link_to '新建活动', url || 'javascript:;' , class: 'margin-left-10', target: '_blank' %>
+
+                 <% end %>
+
+                </div>
+
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" <%if @activity.allow_show_user_tel? %> checked <% end %> class="ace allow_show_user_tel">
+                    <span class="lbl">调研时需要用户填写姓名、手机号</span><small class="help-inline text-warning line-height-32"></small></label>
+                    <%= hidden_field_tag :allow_show_user_tel, @activity.allow_show_user_tel? ? 0 : 1, name: 'activity[extend][allow_show_user_tel]' %>
+                </div>
+                 <div class="form-group">
+                  <label class="control-label"><%= activity.check_box :require_wx_user, class: "ace" %><span class="lbl">未关注可参与</span></label>
+                </div>
+
+                <div class="form-group ">
+                  <%= activity.hidden_field :activity_type_id  %>
+                  <%= activity.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
+                  <%= activity.submit "#{activity.object.new_record? ? '保存&题目设置' : '保存'}", class: 'btn btn-sm btn-primary' %>
+                  <input type="button" class="btn btn-sm btn-default" value="取消" onclick="window.location.href='<%= surveys_activities_url %>'" />
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            $('.allow_show_user_tel').click(function(){
+                if($(this).is(':checked')){
+                    $('#allow_show_user_tel').val(0);
+                }else{
+                    $('#allow_show_user_tel').val(1);
+                }
+            });
+            $('#activity_setting_associated_activity').change(function(){
+              var self = $(this), 
+                  select = $('#activity_activity_setting_attributes_associated_activity_id')
+                  urls = {
+                    '4': '/activities/new?activity_type=4', 
+                    '5': '/activities/new?activity_type=5', 
+                    '25': '/activities/new?activity_type=25',
+                    '64': '/waves/new'
+                  };
+              self.nextAll('a').attr('href', urls[self.val()]);
+              $.ajax({
+                type: "GET",
+                url: "/activities/associated_activities?activity_type_id=" + self.val(),
+                success: function(result) {
+                  select.find('option').remove();
+                  select.append('<option value>选择已创建的活动</option>');
+                  $.each(result['data'], function(i, e){
+                    select.append('<option value='+e['id']+'>'+e['name']+'</option>');
+                  });
+                  return false;
+                },
+                error: function() {
+                  showTip("warning","操作失败");
+                  return false;
+                }
+              });
+            });
+
+        });
+    </script>
+<% end %>

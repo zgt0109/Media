@@ -1,0 +1,37 @@
+<ul class="box-nav box important">
+  <li class="<%= ['shops'].include?(controller_name) ? "current pagecurrent" : '' %>">    
+    <%= link_to shops_path do %><span>基本信息</span> <i></i><% end %>
+  </li>
+  <li class="<%= ['shop_branches'].include?(controller_name) ? "current pagecurrent" : '' %>">    
+    <%= link_to shop_branches_path do %><span>分店管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= ['shop_categories', 'shop_products', 'shop_menus'].include?(controller_name) ? "current pagecurrent" : '' %>">
+    <%= link_to shop_products_path do %><span>菜单管理</span> <i></i><% end %>
+  </li>
+
+<% if current_user.has_industry_for?(10001) %>
+  <li class="<%= controller_name == 'shop_orders' and !['report', 'graphic'].include?(action_name) ? "current pagecurrent" : '' %>">
+    <%= link_to shop_orders_path do %><span>订餐管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= controller_name == 'shop_table_orders' ? "current pagecurrent" : '' %>">
+    <%= link_to shop_table_orders_path do %><span>订座管理</span> <i></i><% end %>
+
+  </li>
+  <li class="<%= controller_name == 'shop_table_settings' ? "current pagecurrent" : '' %>">
+    <%= link_to shop_table_settings_path do %><span>餐桌管理</span> <i></i><% end %>
+  </li>
+<% end %>
+
+<% if current_user.has_industry_for?(10002) %>
+  <li class="<%= current_page?(shop_orders_url) ? "current pagecurrent" : '' %>">
+    <%= link_to shop_orders_path do %><span>外卖管理</span> <i></i><% end %>
+  </li>
+<% end %>
+
+	<li class="<%= current_page?(report_shop_orders_url) ? "current pagecurrent" : '' %>">
+    <%= link_to report_shop_orders_url do %><span>销售日报表</span> <i></i><% end %>
+  </li>
+	<li class="<%= current_page?(graphic_shop_orders_url) ? "current pagecurrent" : '' %>">
+    <%= link_to graphic_shop_orders_url do %><span>下单时间分析</span> <i></i><% end %>
+  </li>
+</ul>

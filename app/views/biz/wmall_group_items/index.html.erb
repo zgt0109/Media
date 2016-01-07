@@ -1,0 +1,82 @@
+<div class="tabbable">
+  <%= render "/biz/wmall_groups/top_nav_tabs"%>
+
+  <div class="tab-content no-border padding-24">
+    <div class="row">
+      <% if current_user.mall%>
+        <div class="col-sm-12">
+          <a href="<%= groups_path(:anchor => 'tab-3' ) %>" class="btn btn-link btn-sm btn-filter">标准</a>
+          <a href="javascript:;" class="btn btn-primary btn-sm btn-filter">关联微客生活圈</a>
+        </div>
+      <% end %>
+        <div class="col-md-12 margin-top-10">
+            <%= form_tag wmall_group_items_path, {method: :get, class: 'box-form form-row'} do %>
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">商品(ID)：</span>
+                    <%= text_field_tag :name, params[:name], class: 'col-xs-12', placeholder: "请输入商品名或ID"  %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">商户(ID)：</span>
+                    <%= text_field_tag :mall_name, params[:mall_name], class: 'col-xs-12', placeholder: "请输入商户名或ID"  %>
+                  </div>
+                </div>
+
+                <div class="col-md-3 pull-left">
+                  <button class="btn btn-primary btn-sm btn-filter" type="submit">查询</button>
+                </div>
+
+            <% end %>
+
+            <%= link_to "新增", new_wmall_group_item_path, class: "btn btn-primary btn-sm pull-right"%>
+        </div>
+    </div>
+
+    <div class="col-sm-12 margin-top-20 no-padding">
+    <table class="table table-striped table-bordered table-hover dataTable ">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th>商品名</th>
+        <th>所属商家</th>
+        <th>价格</th>
+        <th>团购总数</th>
+        <th>已支付数</th>
+        <th>状态</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if @wmall_group_items.blank? %>
+          <tr><td colspan="8" style="text-align: center;">还没有商品哦！</td></tr>
+      <% else %>
+          <% @wmall_group_items.each do |item| %>
+              <tr>
+                <td><%= item.id%></td>
+                <td><%= item.try(:name)%></td>
+                <td><%= item.try(:groupable).try(:name)%></td>
+                <td><%= item.try(:price)%></td>
+                <td><%= item.group_orders.count %></td>
+                <td><%= item.group_orders.paid_or_consumed.count %></td>
+                <td><%= item.status_name %></td>
+                <td class="txt-left-align">
+                  <%= link_to "编辑", edit_wmall_group_item_path(item), class: "fgreen"%>
+                  <% if item.deleted? %>
+                      <%= link_to "上架", wmall_group_item_path(item), data: {toggle: "modals", confirm: "确认上架？", target: "delModel", url: group_item_path(item), method: "delete"}%>
+                  <% else %>
+                      <%= link_to "下架", wmall_group_item_path(item), data: {toggle: "modals", confirm: "确认下架？", target: "delModel", url: group_item_path(item), method: "delete"}%>
+                  <% end %>
+                  <%= link_to "#{item.recommend? ? '取消' : ''}推荐", recommend_switch_wmall_group_item_path(item), class: "fgreen",remote: true, id: "item_#{item.id}"%>
+                </td>
+              </tr>
+          <% end %>
+      <% end %>
+      </tbody>
+    </table>
+    <%= paginate @wmall_group_items, :param_name => :item_page, :params => { :anchor => 'tab-3' } %>
+    </div>
+  </div>
+</div>
+

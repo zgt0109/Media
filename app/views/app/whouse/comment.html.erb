@@ -1,0 +1,48 @@
+<header>
+	<a class="ico-prev" href="javascript:history.go(-1);"></a>
+	<h1>评论</h1>
+</header>
+<%= form_for(@house_comment, validate: true) do |f| %>
+<div class="contxt">
+	<div class="box-cont cont-comment">
+		<div class="form-input">
+			<p><%= f.text_field :name, placeholder: "请输入您的姓名...", maxlength: 10 %></span></p>
+			<p><%= f.telephone_field :mobile, placeholder: "请输入您的手机号码...", maxlength: 16 %></span></p>
+		</div>
+		<div class="form-textarea">
+			<%= f.text_area :content, placeholder: "请输入您要分享的文字... 限300字", maxlength: 300,  rows: "5" %>
+		</div>
+		<div class="form-btn">
+			<a class="btn" id="btn-comment">发表评论</a>
+		</div>
+	</div>
+</div>
+<% end %>
+<div class="pop" id="pop-comment">
+	<div class="pop-bd">
+		<p>评论成功</p>
+		<p><a class="btn" href="/app/whouse/impress?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>">确认</a></p>
+	</div>
+	<div class="pop-bg"></div>
+</div>
+<script type="text/javascript">
+function post_comment(){
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url: "/app/whouse/comment?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&name="+$('#house_comment_name').val()+"&mobile="+$('#house_comment_mobile').val()+"&content="+$('#house_comment_content').val(),
+		dataType: 'json',
+		timeout:30000,
+		success: function (data) {
+			if(data.status == 1){
+				$("#pop-comment").show();
+			}else{
+				alert('评论失败')
+			}
+		},
+		error: function(e){
+			//alert(JSON.stringify(e));
+		}
+	});
+}
+</script>

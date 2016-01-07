@@ -1,0 +1,22 @@
+<tr>
+  <td><%= truncate_u activity.name, length: 16 %></td>
+  <td><%= activity.keyword %></td>
+  <td><%= activity.deal_status_name %></td>
+  <td>
+   <%= activity.duration %>
+  </td>
+  <td>
+    <%= show_activity_status(activity) %>
+  </td>
+  <td class="tleft">
+    <%if activity.activity_type.is_show?%>
+      <%= link_to '查看', show_group_activity_path(activity) %>
+      <%= link_to '开启', active_activity_path(activity), method: :post if activity.allow_active? %>
+      <%= link_to '停止', [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },  class:"" if activity.allow_stop? %>
+      <%= link_to '设置', edit_group_activity_path(activity), class:"" if activity.setting? or (activity.setted? and activity.activity_status == Activity::NOT_START)  %>
+      <%= link_to '删除', activity, method: :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },  class:"" if activity.setting? %>
+      <%= link_to 'SN码管理', consumes_activities_path( {activity_id: activity.id}),  class:"" unless activity.setting? or (activity.setted? and (activity.activity_status == Activity::NOT_START or activity.activity_status == Activity::WARM_UP) or activity.activity_type.vote? or activity.activity_type.surveys?) %>
+    <% end %>
+    <%= link_to '成团', [:deal_success, activity], method: :post, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, class:"" if (activity.setted? and activity.deal_status != Activity::DEAL_SUCCESS and Time.now >= activity.start_at) %>
+  </td>
+</tr>

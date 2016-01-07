@@ -1,0 +1,38 @@
+<div class="sidebar">
+  <div class="consultation">
+    <% if Rails.env.production? %>
+      <% if agent_name == "顶享微客" %>
+      <a href="tencent://Message/?Menu=YES&Uin=2315682923&websiteName=im.qq.com" tel="4000365711">
+        <image  src="/assets/qq/qq.png"/>
+      </a>
+      <% else %>
+      <script charset="utf-8" type="text/javascript" src="http://wpa.b.qq.com/cgi/wpa.php?key=XzkzODAxMDc5Ml8xMDcyMTRfNDAwMDM2NTcxMV8"></script>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="hot-line">
+    <% if agent_name == "顶享微客" %>
+      <a href="">028-87026951</a>
+      <a href="">028-87026952</a>
+    <% else %>
+      <a href="">4000-365-711</a>
+    <% end %>
+  </div>
+  <% unless agent_name == "顶享微客" %>
+  <div class="agent">
+    <a href="/spread">申请代理</a>
+  </div>
+  <% end %>
+</div>
+
+<style>
+/*sidebar*/
+.sidebar{width:100px;padding-bottom:10px;text-align:center;background:#0083a1;position:fixed;top:20%;right:0;z-index:999;}
+.consultation{padding:25px 0;background:#00b9e3;text-align:center;}
+.hot-line{padding:15px 0;background:#a1c93c;}
+.hot-line a{font:bold 14px "microsoft yahei";color:#fff;}
+.hot-line:before{display:block;content:"";width:38px;height:24px;margin:0 auto 10px;background:url(/images/home/main.png) -60px 0 no-repeat;}
+.agent{padding:20px 0;background:#00b9e3;}
+.agent a{display:inline-block;width:50px;margin:0 auto;font:bold 22px "microsoft yahei";color:#fff;}
+.agent:after{display:inline-block;width:9px;height:14px;vertical-align:top;margin-top:25px;content:"";background:url(/images/home/main.png) -100px 0 no-repeat;}
+</style>

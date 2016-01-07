@@ -1,0 +1,1 @@
+<%= link_to current_page.first? ? 'javascript:void(0);' : url, class: current_page.first? ? 'prev disabled' : 'prev', :rel => 'prev', :remote => remote do %><i class="fa fa-angle-left"></i>上一页<% end %>

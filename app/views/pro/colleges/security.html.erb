@@ -1,0 +1,16 @@
+<%= content_for :sidebar do %>
+  <%= render partial: 'pro/colleges/sidebar', locals: { college: @college } %>
+<% end %>
+
+<%= content_for :topbar do %>
+  <h1 class="pagecurrent">就业保障</h1>
+<% end %>
+
+<%= form_for(@college) do |f| %>
+<div class="p">
+  <span>就业保障</span>
+  <%= f.cktext_area :security, ckeditor: { toolbar: "mini", height: 300 } %>
+</div>
+<p></p>
+<p><%= f.submit '保存', class: 'btn btn-small form-submit btn-orange' %></p>
+<% end %>

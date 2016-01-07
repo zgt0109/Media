@@ -1,0 +1,142 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微酒店', hotels_path %></li>
+          <li><%= link_to '我的微酒店', hotels_path %></li>
+          <li><%= link_to '分店管理', hotel_branches_path %></li>
+          <li><%= @hotel_branch.new_record? ? '新增分店' : '编辑分店'%></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+
+          <div class="col-sm-12">
+            <%= form_for @hotel_branch, validate: true, html: {class: 'form width-1000', role: 'form'} do |f| %>
+                <%= f.hidden_field :supplier_id %>
+                <%= f.hidden_field :wx_mp_user_id %>
+                <%= f.hidden_field :hotel_id %>
+
+                <div class="form-group">
+                  <label>分店名称<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :name, maxlength: 64, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>所在地区<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= address_select(f.object)%>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>详细地址<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :address, maxlength: 100, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>联系电话<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :tel, maxlength: 13, class: "col-sm-8", placeholder: '固话' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>分机号</label>
+                  <div class="clearfix">
+                    <%= f.text_field :tel_extension, placeholder: "如无分机可不填写", maxlength: 13, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>手机号码</label>
+                  <div class="clearfix">
+                    <%= f.text_field :mobile, maxlength: 18, class: "col-sm-8", placeholder: "用于接收短信通知" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>商圈<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :business_district, maxlength: 64, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>
+                    <%= f.check_box :is_default, class: 'ace' %>
+                    <span class="lbl">默认分店</span>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
+                  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals" onclick="javascript:history.go(-1);">返回</button>
+                </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function() {
+            $('#hotel_branch_tel, #hotel_branch_mobile').on('blur', function(){
+                if ($(this).val()){
+                    var reg = /^[0-9_\-]*$/;
+                    if (!reg.test($(this).val())){
+                        addErrorMessage($(this), '电话或手机号码格式不正确，请重新填写。');
+                    }else{
+                        removeErrorMessage($(this));
+                    }
+                }
+            });
+            $('#hotel_branch_tel_extension').on('blur', function(){
+                if ($(this).val()){
+                    if (isNaN($(this).val())){
+                        addErrorMessage($(this), '分机号码格式不对');
+                    }else{
+                        removeErrorMessage($(this));
+                    }
+                }
+            });
+
+            $('input[type=submit]').click(function(){
+                var reg = /^[0-9_\-]*$/;
+                if($('#hotel_branch_tel').val()){
+                    if (!reg.test($('#hotel_branch_tel').val())){
+                        addErrorMessage($('#hotel_branch_tel'), '电话或手机号码格式不正确，请重新填写。');
+                        return false;
+                    }else{
+                        removeErrorMessage($('#hotel_branch_tel'));
+                    }
+                }
+                if($('#hotel_branch_mobile').val()){
+                    if (!reg.test($('#hotel_branch_mobile').val())){
+                        addErrorMessage($('#hotel_branch_mobile'), '电话或手机号码格式不正确，请重新填写。');
+                        return false;
+                    }else{
+                        removeErrorMessage($('#hotel_branch_mobile'));
+                    }
+                }
+                if($('#hotel_branch_tel_extension').val()){
+                    if (isNaN($('#hotel_branch_tel_extension').val())){
+                        addErrorMessage($('#hotel_branch_tel_extension'), '分机号码格式不对');
+                        return false;
+                    }else{
+                        removeErrorMessage($('#hotel_branch_tel_extension'));
+                    }
+                }
+            });
+        });
+    </script>
+<% end %>

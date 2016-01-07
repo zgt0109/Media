@@ -1,0 +1,85 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微门店', micro_shops_url %></li>
+      <li><%= link_to '权限设置', permissions_micro_shop_branches_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、勾选的项表示各分店可见的操作权限。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <%= form_tag permission_micro_shop_branches_path, role: :form, class: :form do %>
+          <div class="form-group">
+            <label class="control-label">分店选择</label>
+
+            <div class="clearfix">
+              <%= select_tag :sub_account_id, options_for_select(@account_names, @sub_account.try(:id)), {class: 'col-xs-3'} %>
+            </div>
+          </div>
+
+          <div class="clearfix"></div>
+          <div class="form-group" id="choselist">
+            <% SubAccount.permissions_hash.each do |key, hash| %>
+              <% if has_permission_of?(key) %>
+                <div class="input-group">
+                  <label class="first permission-first">
+                    <%= check_box_tag '', '', @sub_account.try(:all_permissions?, key), class: 'ace' %>
+                    <span class="lbl"><%= SubAccount.permission_name(key) %></span>
+                  </label>
+
+                  <div class="input-group margin-left-25 permission-secondary">
+                    <% hash.each do |permission, permission_name| %>
+                    <label class="block">
+                      <%= check_box_tag 'permissions[]', permission, @sub_account.try(:has_permission?, permission), class: :ace %>
+                      <span class="lbl"><%= permission_name %></span>
+                    </label>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="form-group ">
+            <input type="submit" id="save_permissions" class="btn btn-sm btn-primary" value="保存">
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript" charset="utf-8">
+        $(function () {
+            $('.permission-first > :checkbox').click(function () {
+                $(this).parent().next('div').find('input').prop('checked', $(this).is(':checked'));
+            });
+            $('.permission-secondary').on('click', ':checkbox', function () {
+                var closestSecondary = $(this).closest('.permission-secondary')
+                var allChecked = closestSecondary.find(':checkbox').length === closestSecondary.find(':checkbox:checked').length
+                closestSecondary.prev('.permission-first').find(':checkbox').prop('checked', allChecked);
+            });
+
+            <% if @account_names %>
+            $('#save_permissions').click(function (e) {
+                if(!$('#sub_account_id').val()) {
+                    showTip('warning', '请选择一个分店');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            <% end %>
+        })
+    </script>
+<% end %>

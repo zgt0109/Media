@@ -1,0 +1,14 @@
+<div class="html theme-<%= @vip_card.template_id %> <%= "no-card" if !@vip_user.try :normal? %> <%= "add-nav" if @vip_card.template_id == 2 %>" id="html">
+  <div class="stage index" id="stage">
+    <!-- 会员卡首页 start -->
+    <section id="sec-index">
+        <%= render "app/vips/partials/vip_card_cover" %>
+        <div class="card_check">
+            <em><%= image_tag "mobile/wcard/cardcheck.png" %></em>
+            <h1>我们将尽快审核您的会员卡申请!</h1>
+        </div>
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+  <%= render 'footbar' %>
+</div>

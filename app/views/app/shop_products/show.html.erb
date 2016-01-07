@@ -1,0 +1,61 @@
+<% provide(:title, '菜品详情') %>
+
+<body>
+  <div class="html">
+    <div class="main">
+      <header>
+        <a href="javascript:history.go(-1);" class="ico ico-prev">
+          <img src="/assets/micro_stores/ico-prev.png"/>
+        </a>
+        <h1><%= @shop_product.name %></h1>
+      </header>
+
+      <section>
+        <div style="position:fixed;"></div>
+        <div class="box box-ck">
+         <%= @shop_product.try(:description).try(:html_safe) %>
+         <div class="box-line"></div>
+       </div><!--box-list end-->
+       <div class="box menu-comment">
+        
+      <%= form_for @shop_product_comment, url:app_shop_product_comments_url, remote: true do |f| %>
+        <div class="hd">评论</div>
+        <%= f.hidden_field :shop_product_id %>
+        <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+        <div class="bd">
+          <%= f.text_area :content, class: "", cols: "30", rows: "5" %>
+        </div>
+        <div class="ft">
+          <%= f.submit "提交", class: "btn" %>
+        </div>
+      <% end %>
+      
+       </div><!--menu-order end-->
+       <div class="box comment-list">
+        <div class="hd">评论列表</div>
+        <div class="bd table">
+
+          <% ShopProductComment.where(shop_product_id: @shop_product.id).each do |comment| %>
+          <p class="tr">
+            <em class="td"><%= comment.wx_user.nickname ||= "匿名" %></em>
+            <b class="td"><%= comment.content %></b>
+            <span class="td"><%= comment.created_at.strftime("%H:%M %m-%d") %></span>
+          </p>
+          <% end %>
+        </div>
+      </div><!--menu-order end-->
+
+    </section>  
+  </div><!-- main end -->
+</div><!-- html end -->
+<%= render "application/app_footer" %>
+
+<script>
+  $(function(){
+    $(".ico-menu").click(function(){
+      $(this).toggleClass("active");
+    });
+  });    
+</script>
+
+</body>

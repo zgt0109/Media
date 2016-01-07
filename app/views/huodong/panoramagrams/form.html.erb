@@ -1,0 +1,87 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微互动', activities_path %></li>
+      <li><%= link_to '360全景', panoramagrams_path %></li>
+      <li><%= link_to '全景图管理', list_panoramagrams_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="alert alert-block alert-info ">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li>1、 添加全景图图片，参考&nbsp;<%=link_to "如何制作一个360度全景?", "/htmls/house/panorama.html", target: "_blank"%></li>
+        <li>2、若您不需要全景图列表页则无需配置列表页缩略图和列表中显示顺序两项。</li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-lg-7">
+        <%= form_for @panoramagram, validate: true, class: 'form width-800' do |f| %>
+          <div class="form-group">
+            <label class="control-label">全景图名称<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :name, class: 'required col-md-6' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">全景图片<span class="required-star">*</span>（请按顺序上传六张图片,每次上传一张）</label>
+            <div class="cieldon-file" data-type="6" data-name="picture" data-imgs-type="panoramagram" data-width="140" data-height="105" data-img="<%= @item_urls %>" data-img-ids="<%= @item_ids %>"></div>
+            <div id="items">
+              <% @panoramagram.items.each do |item| %>
+                <%= f.fields_for 'items_attributes', item, index: item.id do |item_form| %>
+                  <%= item_form.hidden_field :id %>
+                  <%= item_form.hidden_field :_destroy %>
+                  <%= item_form.hidden_field :qiniu_pic_key %>
+                  <%= item_form.hidden_field :sort  %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">列表页缩略图<span class="required-star">*</span>（缩略图显示在360全景图列表页）</label>
+            <div class="clearfix">
+              <%= render "upload_image_div", name: "panoramagram[qiniu_pic_key]", key: @panoramagram.qiniu_pic_key, img: (@panoramagram.pic_url || '/assets/bg_fm.jpg'), width: 157, height: 70,  suggest: "建议尺寸：宽628像素 * 高280像素" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">列表中显示顺序（此项为全景图的缩略图在列表页中的显示顺序）</label>
+            <div class="clearfix">
+              <%= f.text_field :sort, maxlength: 5, class: 'required col-md-3' %>
+              <label class="margin-top-5 margin-left-5">数字越小越靠前</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="button" value="保存" class="btn btn-sm btn-primary save_form">
+            <input type="reset" value="取消" class="btn btn-sm btn-default" onclick="javascript:location.href='<%= list_panoramagrams_path %>'">
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(document).on('click', '.file-del', function(){
+    var item = $(this).parents('.file-img'),
+        item_id = item.find('.file-btn a').attr('img-id');
+    
+    $("[name='panoramagram[items_attributes]["+item_id+"][_destroy]']").val("1");
+    item.remove();
+  });
+  $(document).on('click', '.save_form', function(){
+    if($(".file-del").length == 0){
+      showTip('warning', '请上传全景图片');
+      return false;
+    }else if($("[name='panoramagram[qiniu_pic_key]']").val() == ""){
+      showTip('warning', '请上传列表页缩略图');
+      return false;
+    }else{
+      $('form').submit();
+    }
+  });
+</script>
+<% end %>

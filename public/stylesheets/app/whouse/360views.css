@@ -1,0 +1,8 @@
+@charset "utf-8";
+@import url("reset.css");
+/*360 review*/
+.main{max-width:640px;height:100%;margin:0 auto;background:url(../imgs/bg_1.jpg) top center;-webkit-background-size:auto auto;background-size:100% 100%;position:relative;}
+.list{width:90%;position:absolute;top:50%;left:5%;}
+.list ul{margin:0 auto;font-size:0;padding:15px 5px;background:rgba(0,0,0,0.6);margin-top:-50%;}
+.list li{display:inline-block;font-size:14px;width:70px;height:20px;padding:10px 5px;margin:10px 5px;text-align:center;line-height:20px;background:#4eb3d7;box-shadow:3px 2px 0 rgba(0,0,0,0.8);}
+.list a{color:#fff;}

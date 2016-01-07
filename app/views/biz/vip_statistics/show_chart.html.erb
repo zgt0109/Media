@@ -1,0 +1,67 @@
+<% content_for :tab do %>
+  <% if @chart %>
+    <div class="tab-pane fade active in">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-block alert-success">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>通过图表的方式统计每日新增的会员卡领取数量以及累计会员卡领卡数量。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger">
+            <li>
+              <a href="<%= vip_statistics_path %>">统计报表</a>
+            </li>
+            <li class="active">
+              <a href="<%= show_chart_vip_statistics_path %>">趋势图</a>
+            </li>
+          </ul>
+          <div class="tab-content no-border  margin-top-20">
+          <div class=" col-md-12 ">
+            <div class="clearfix">
+              <%{"最近7天" => "one_weeks", "最近一月" => "one_months", "最近半年" => "six_months", "最近一年" => "twelve_months"}.each do |key, value|%>
+                <a href="<%= show_chart_vip_statistics_path(created_date: value) %>" class="btn btn-primary btn-filter btn-filter-tab <%= "active" if @date == value %>"><%= key %></a>
+              <% end %>
+            </div>
+            <div class="chart margin-top-20">
+              <div class="col-md-8 highCharts">
+                <div class="chart" id="basic_line_test"></div>
+                <div>
+                  <span><%= @start %></span>
+                  <span class="margin-left-10">到</span>
+                  <span class="margin-left-10"><%= @today %></span>
+                  <span class="margin-left-20">共新增 <%= @count %> 名会员</span>
+                </div>
+              </div>
+              <div class="well" style="margin-left: 5px;">
+                <div class="chartInfoHead">新增会员</div>
+                <div class="chartInfoCon1 help-inle test text-warning line-height-32">
+                  <b><%= @today_counts %></b>
+                  <span>今日新增会员</span>
+                </div>
+                <div class="chartInfoCon2 text-info ">
+                  <b><%= @yesterday_counts %></b>
+                  <span>昨日新增会员</span>
+                </div>
+                <div class="chartInfoHeadFooter">目前会员共计<%= @total_counts %>人</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+<%= render 'biz/vip_users/admin' %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    <%if @chart%>
+      $('#basic_line_test').append("<%= escape_javascript(high_chart('chart_basic_line1', @chart)) -%>");
+    <%end%>
+  });
+</script>
+<% end %>

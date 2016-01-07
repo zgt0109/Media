@@ -1,0 +1,87 @@
+<style type="text/css">
+  .box-form select, .box-form input[type=text], textarea{width: 70%;}
+</style>
+<% content_for :sidebar do %>
+  <%= render 'sidebar_life' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent">文章管理</a>
+<% end %>
+
+<p class="p-note">
+  <span>提示：以下“ <em style="color: #ff0000; padding: 0 3px;">*</em> ”均为必填项；</span>
+</p>
+
+<% @website_article.can_validate = true if @website_article.new_record? %>
+<%= form_for [:pro, @website_article], validate: true, :html => {id: "website_article_form"} do |f| %>
+  <div class="box-form fl">
+    <%= f.hidden_field :supplier_id, value: current_user.id %>
+    <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+    <%= f.hidden_field :website_id, value: @website.id %>
+
+    <div class="p form-address">
+      <span>分类：　</span>
+      <%= f.select :website_menu_id, website_article_with_layer_show(@website.website_menus), {} %>
+    </div>
+
+    <div class="p">
+      <span>顺序：　</span>
+      <%= f.text_field :sort, maxlength: 5, class: "input-text" %>
+      <em>*</em>
+    </div>
+
+    <div class="p form-check hide">
+      <span>推荐：　</span>
+      <%= f.check_box :is_recommend, style: "width:auto" %>
+    </div>
+
+    <div class="p">
+      <span>图片：　</span>
+      <div class="box-upload">
+        <div class="margin">
+          <div class="box-file">
+            <%= f.file_field :pic, rel: 'preview_shop_logo', class: 'img_preview', data: { width: 720, height: 400 }, validate: @website_article.new_record? && @website_article.pic_cache.blank? %>
+            <%= f.hidden_field :pic_cache %>
+            <a class="btn btn-big">上传照片</a>
+          </div>
+          <em>*</em>
+          <span class="p-file fgray">图片建议尺寸：720像素*400像素 </span>
+        </div>
+        <div class="upload-img">
+          <span style="width: 160px; height: 89px; line-height:89px; padding: 0;">
+            <%= image_tag((@website_article.pic.presence || '/assets/bg_fm.jpg'), class: 'view', id: 'preview_shop_logo') %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="p" style="margin-top: 10px;">
+      <span>标题：　</span>
+      <%= f.text_field :title, class: "input-text" %>
+      <em>*</em>
+    </div>
+  </div>
+
+  <div class="p box-ck">
+    <span>内容：<em>*</em></span>
+    <!--<div style="width: 70%;margin-left: 60px;">-->
+    <div>
+    <%= f.cktext_area :content, ckeditor: { toolbar: "mini", height: 300 } %>
+    </div>
+  </div>
+
+  <!--<p class="tcenter">-->
+    <p>
+    <input type="submit" class="btn btn-small form-submit btn-orange save_article" value="保存">
+  </p>
+<% end %>
+<script type="text/javascript">
+  $('.save_article').click(function(event) {
+   if (CKEDITOR.instances['website_article_content'] && !CKEDITOR.instances['website_article_content'].getData() ) {
+      showTip('warning','正文不能为空');
+      CKEDITOR.instances['website_article_content'].focus();
+      event.preventDefault();
+    }
+  });
+</script>

@@ -1,0 +1,13 @@
+__filename = "优惠券报表.xls"
+sheet1 = xls.create_worksheet
+system_header = ['日期', '领取数', '使用数', '总优惠金额（元）']
+sheet1.row(0).concat(system_header)
+row_number = 1
+@consumes_all.each do |consume|
+  row_content = [
+    consume[:day], consume[:consume_created],
+    consume[:consume_used], consume[:discount]
+  ]
+  sheet1.row(row_number).replace(row_content)
+  row_number += 1
+end

@@ -1,0 +1,57 @@
+body{background: #e8e8e8;}
+.box{overflow: hidden; display: block;}
+.index{overflow: hidden;margin: 3px;
+    position: relative;
+    min-height: 350px;}
+.mod-index{float:left; display:block; width:45%; margin:10px 1% 10px 3%; position:relative; height:100px; background-size:cover !important; color: #666; background: #fff; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.25);}
+.index-img,
+.index-text,
+.index-text p,
+.index-img i{width: 100%; height: 100%; position: absolute; top: 0; display: block;}
+.index-img{left:0; z-index:1;}
+.index-text{width:100%; right:0; z-index: 2;word-spacing:normal; word-break:normal; word-break:break-all;}
+.index-text:before{
+    background-color:#f9f9f9;
+    background-repeat:repeat-x;
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#cecece),to(#f9f9f9));
+    background:-webkit-linear-gradient(top,#f9f9f9,#cecece);
+    background:-moz-linear-gradient(top,#f9f9f9,#cecece);
+    background:-ms-linear-gradient(top,#f9f9f9,#cecece);
+    background:-o-linear-gradient(top,#f9f9f9,#cecece);
+}
+.mod-index:nth-child(6n+1) .index-text:before{background: #e67258;}
+.mod-index:nth-child(6n+2) .index-text:before{background: #58dae0;}
+.mod-index:nth-child(6n+3) .index-text:before{background: #fbc34c;}
+.mod-index:nth-child(6n+4) .index-text:before{background: #f26132;}
+.mod-index:nth-child(6n+5) .index-text:before{background: #7a4b81;}
+.mod-index:nth-child(6n+6) .index-text:before{background: #66d071;}
+.index-text:before{ content:""; position: absolute; width: 200%; height: 100%; top: -10%; left:-10%;-webkit-transform:rotate(10deg); z-index:2;}
+.mod-index:nth-child(2n) .index-text:before{-webkit-transform:rotate(-10deg); top:-10%; left: auto; right: -10%;}
+.index-text p{ z-index: 3; display: table; padding:10px 10px 20px 50%; text-align: right;}
+.mod-index:nth-child(2n) .index-text p{padding:10px 50% 20px 10px; text-align: left;}
+.index-text p span{ display: table-cell; width: 100%; height: 100%; vertical-align: middle;}
+.index-text p span > *{ display: block; overflow: hidden;}
+.index-text b{color:#666;font-weight: 300; max-height: 30px;line-height: 30px; font-size: 20px; color: #fff;}
+.index-text small{color:#666; height: 15px; margin-top:5px;}
+.index-img{ text-align:left; background:#fff;}
+.index-img img{ max-width: 100%;}
+.index-img .fa{ font-size: 40px; line-height: 80px; padding-left: 10px;}
+
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+
+.mod-ft{ width:100%; background: #063f70;border-top:1px solid #444d56;text-align:center; padding:5px 2%;}
+.mod-ft a{display: inline-block; height:30px; line-height:30px; color:#fff; background:#0c5595; border-top:1px solid #4d7fab; box-shadow:0 0 3px rgba(0,0,0,0.25); width:48.8%; margin:0; text-align: left; padding: 0 0 0 6%;}
+.mod-ft a:first-child{ margin:0 1% 0 0;}
+.mod-ft .fa{ font-size: 18px; margin: 0 5px 0 0;}
+.mod-ft .fa-mobile{ font-size: 20px;}
+
+@media screen and (orientation:landscape) {
+    .mod-index:nth-child(2n) .index-text:before{}
+}

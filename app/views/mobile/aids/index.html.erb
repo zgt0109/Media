@@ -1,0 +1,326 @@
+<%= content_for :title do %>
+  微助力活动
+<% end %>
+
+<input type="hidden" class="weixin-custom-event" id="weixin-custom-event-id">
+<%= render 'main' %>
+
+<div class="msg">
+  <div class="msg-header">
+    <a href="javascript:;" class="msg-header-item">排行榜</a>
+    <a href="javascript:;" class="msg-header-item active">奖品信息</a>
+    <a href="javascript:;" class="msg-header-item">给力好友</a>
+  </div>
+
+  <%= render 'ranking_list' %>
+  <%= render 'prize_info' %>
+  <%= render 'aid_friends' %>
+</div> 
+
+<%= render 'activity_info' %>
+
+<div class="division3"></div>
+
+<%= render 'dialog_form' %>
+
+<%= content_for :custom_js do %>
+
+  <script type="text/javascript">
+    function convertCurrencyToNumber(currency){
+        var currencyString = currency.split(',').join('');
+        return parseInt(currencyString)
+    }
+
+    function convertNumberToCurrency(number){
+        var numberString = number + '';
+        return numberString.split('').reverse().join('').replace(/(\d{3})/g,'$1,').replace(/\,$/,'').split('').reverse().join('');
+    }
+
+    // 分享提示
+    $('.main-btn-share').on('click', function(){
+        $('.share').fadeIn(400);
+    });
+
+    $('.share').on('click', function(){
+        $('.share').fadeOut(400);
+    })
+
+    // 给好友助力
+    function aid_friend(points, rank, isRankReached){
+        var wpCount = $('.main-count-strong'),
+            wpRank = $('.main-rank-strong'),
+            wpEffect = $('.main-effect');
+            $tip = $('.main-praise');
+
+        // 将助力按钮变为邀请好友助力按钮
+        $('.main-btn-help').hide().siblings('.main-btn-share').css({ display: 'block' });
+
+        var numberTxt = $.trim(wpCount.text());
+        if (!numberTxt) {
+           numberTxt = '0';
+        } 
+        var numberNow = convertCurrencyToNumber(numberTxt),
+            numberPlus = points;
+            numberLast = numberNow + numberPlus;
+
+        // 更新助力数和排名
+        wpCount.text( convertNumberToCurrency(numberLast) );
+        wpRank.text(rank);
+        if (isRankReached) {
+          $tip.text('干的漂亮');
+        }
+        else {
+          $tip.text('继续努力');
+        }
+
+        // 助力动画
+        wpEffect.text("+" + numberPlus);
+        $('.main-effect').addClass('main-effect-show');
+    }
+
+    $mainHelpBtn = $('.main-btn-help');  
+    $mainHelpBtn.on('ajax:success', function (event, data, textStatus, jqXhr) {
+      if (data.errcode == 0) {
+        //alert("助力成功: points = " + data.points);
+        aid_friend(data.points, data.rank, data.rank_reached);
+      }
+      else {
+        //alert("助力失败: " + data.errmsg);
+      }
+    });
+
+  </script>
+  <script type="text/javascript">
+
+    function enableSubmit() {
+      $submit = $('.dialog-form1 .dialog-btn');
+
+      $submit.css({'pointer-events': 'auto'});
+      $submit.text("提交");
+    }
+
+    function disableSubmit() {
+      $submit = $('.dialog-form1 .dialog-btn')
+
+      $submit.css({'pointer-events': 'none'});
+      $submit.text("提交中...");
+    }
+
+    function showReceiveErrorInfo(errInfo)
+    {
+      $formSectionObj = $('.dialog-form1');
+      $wpError = $('.dialog-form-error', $formSectionObj);
+      $wpError.text(errInfo);
+    }
+
+    function hideReceiveErrorInfo()
+    {
+      $formSectionObj = $('.dialog-form1');
+      $wpError = $('.dialog-form-error', $formSectionObj);
+      $wpError.text('');
+    }
+
+    // receive prize
+    function getNameAndMobile(){
+      $dialog = $(".dialog-form-main");
+      $name = $(".input-name", $dialog);
+      $mobile = $(".input-mobile", $dialog);
+     
+      return {
+        name: $name.val(),
+        mobile: $mobile.val()
+      } 
+    }
+
+    function form1Submit(){
+      disableSubmit();
+
+      if ((this.promise_) && (this.promise_.state() == 'pending')) {
+        this.promise_.abort();
+      }
+
+      this.promise_ = $.ajax({
+        url: "<%= receive_mobile_aids_url(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>",
+        type: "post",
+        data: getNameAndMobile(),
+        dataType: "json",
+        success: function (data, textStatus, jqXhr) {
+          //alert("receive success: errcode = " + data.errcode + ", errmsg = " + data.errmsg);
+          //console.log("receive prize successfully");
+          enableSubmit();
+          if (data.errcode == 0) {
+            if (data.prize_type == 'point_prize') { // 积分奖特殊处理
+              if (data.status == <%= ActivityConsume::AUTO_USED %>) { // 积分奖自动充值, 回到主页
+                window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>";
+              }
+              else {
+                showReceiveErrorInfo('会员未注册或无效会员');
+              }
+            }
+            else { // 普通奖, 跳到兑奖页面
+              window.location.href = "<%= award_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>" + "&consume_id=" + data.consume_id;
+            }
+          }
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+          //alert("receive error: " + errorThrown);
+          //console.log("receive prize error");
+
+          var data = $.parseJSON(jqXhr.responseText);
+          showReceiveErrorInfo(data.errmsg);
+
+          enableSubmit();
+        }
+      });
+    }
+
+    // 获取短信验证码
+    function getVerification() {
+      $.ajax({
+        url: "<%= verification_mobile_aids_path(supplier_id: @activity.supplier_id) %>", 
+        type: "get",
+        dataType: "json",
+        data: getNameAndMobile(),
+        success: function (data, textStatus, jqXhr) {
+          //alert("Sms verification successfully: code = " + data.code);
+          localStorage.setItem('sms_code', data.code);
+        },
+        error: function (jqXhr, textStatus, errThown) {
+          //alert("Sms Verivifaction error: error = ", errThown);
+        }
+      });
+    }
+
+    
+  </script>
+
+  <script type="text/javascript">
+     function updateRankAndPointsAndTip(rank, points, isRankReached) {
+       //alert("rank = " + rank + " points = " + points);
+       $rank = $('.main-rank > .main-rank-strong');
+       $points = $('.main-count > .main-count-strong');
+       $tip = $('.main-praise');
+
+       if (rank) $rank.text(rank);
+       if (points) $points.text(convertNumberToCurrency(points));
+
+       if (isRankReached) {
+         $tip.text('干的漂亮');
+       }
+       else {
+         $tip.text('继续努力');
+       }
+     }
+
+     function updateAidFriends(aidFriends) {
+       var html = '';
+       for(var i = 0; i < aidFriends.length; i++) {
+         html += '<li class="msg-list-item">';
+         headimageurl = aidFriends[i].headimgurl ? aidFriends[i].headimgurl : "/assets/mobile/aids/global_portrait.png";
+         html += '<img src=' + headimageurl + ' class="img-full msg-rank-portrait" width="60" height="60" alt="">';  
+         html += '<div class="msg-rank-helper">';
+         html += '<span class="msg-rank-nickname">' + aidFriends[i].nickname + '</span>';
+         html += '<span class="msg-rank-count">' + convertNumberToCurrency(aidFriends[i].points) + '</span>';
+         html += '</div>';
+         html += '</li>'
+       }
+
+       return html;
+     }
+
+     function getAidFriends() {
+       if ((this.promise_) && (this.promise_.state() == 'pending')) {
+         this.promise_.abort();
+       }
+
+       this.promise_ = $.ajax({
+         url: '<%= params[:owner_openid].present? ? aid_friends_mobile_aids_path(activity_id: @activity.id, owner_openid: params[:owner_openid]) : aid_friends_mobile_aids_path(activity_id: @activity.id) %>', 
+         type: 'get',
+         dataType: 'json',
+         success: function (data, textStatus, jqXhr) {
+           if (data.errcode == 0) {
+             html = updateAidFriends(data.aid_friends);
+             $('.msg-list.msg-friend').html(html);
+             updateRankAndPointsAndTip(data.rank, data.points, data.rank_reached);
+           }
+         }
+       });
+     }
+
+     function updateRankList(rankList) {
+       var html = '';
+       for(var i = 0; i < rankList.length; i++) {
+         html += '<li class="msg-list-item">';
+         html += '<span class="msg-rank-num">' + rankList[i].order + '</span>';
+         headimageurl = rankList[i].headimgurl ? rankList[i].headimgurl : "/assets/mobile/aids/global_portrait.png";
+         html += '<img src = ' + headimageurl + ' class="img-full msg-rank-portrait" width="60" height="60" alt="">';  
+         html += '<div class="msg-rank-helper">';
+         html += '<span class="msg-rank-nickname">' + rankList[i].nickname + '</span>';
+         html += '<span class="msg-rank-count">' + convertNumberToCurrency(rankList[i].points) + '</span>';
+         html += '</div>';
+         html += '</li>'
+       }
+
+       return html;
+     }
+
+     function getRankList() {
+       if ((this.promise_) && (this.promise_.state() == 'pending')) {
+         this.promise_.abort();
+       }
+
+       this.promise_ = $.ajax({
+         url: '<%= params[:owner_openid].present? ? rank_list_mobile_aids_path(activity_id: @activity.id, owner_openid: params[:owner_openid]) : rank_list_mobile_aids_path(activity_id: @activity.id) %>', 
+         type: 'get',
+         dataType: 'json',
+         success: function (data, textStatus, jqXhr) {
+           if (data.errcode == 0) {
+             html = updateRankList(data.rank_list);
+             $('.msg-list.msg-rank').html(html);
+             updateRankAndPointsAndTip(data.rank, data.points, data.rank_reached);
+           }
+         }
+       });
+     }
+
+  </script>
+
+  <script type="text/javascript">
+    $weixin_target = $("#weixin-custom-event-id");
+    $weixin_target.on("Weixin:onMenuShareTimeline:success", shareSuccess); 
+    $weixin_target.on("Weixin:onMenuShareAppMessage:success", shareSuccess); 
+    $weixin_target.on("Weixin:onMenuShareTimeline:fail", shareFail); 
+    $weixin_target.on("Weixin:onMenuShareAppMessage:fail", shareFail); 
+
+    function updateNicknameAndPortrait(nickname, headImgUrl) {
+      if (headImgUrl) {
+        $('.main-portrait > .head-image').attr('src', headImgUrl);
+      }
+
+      if (nickname) {
+        $('.main-name').text(nickname);
+      }
+    }
+
+    function shareSuccess(res) {
+      // console.log("Weixin menu share successful");
+
+      $.ajax({
+        url: "<%= params[:owner_openid].present? ? invite_friends_mobile_aids_path(activity_id: @activity.id, owner_openid: params[:owner_openid]) : invite_friends_mobile_aids_path(activity_id: @activity.id) %>", 
+        type: "post",
+        dataType: "json",
+        success: function(data, textStatus, jqXhr) {
+          updateNicknameAndPortrait(data.nickname, data.headimgurl);
+          // console.log("share: " + data.errmsg);
+        },
+        error: function(jqXhr, textStatus, errorThrown) {
+          // console.log("share fail:" + errorThrown);
+        }
+      });
+    } 
+
+    function shareFail() {
+      // console.log("weixin menu share fail");
+    }
+  </script>
+<% end %>

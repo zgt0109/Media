@@ -1,0 +1,57 @@
+<% provide :title, '信访大厅' %>
+<section id="sec-index">
+  <div class="body">
+    <header>
+     <div class="head-info">
+       <i class="fa fa-envelope"></i>
+       <span>共<%= @boxes.sum(:incomes_basecount) + @boxes.map(&:govmails).map(&:roots).flatten.count %> 条来信</span>
+     </div>
+     <a  onclick="handleMail('my')" class="head-btn">我的信访</a>
+   </header>
+   <div class="text-box text-close J-slide">
+    <div class="text-title">
+      <span>信箱须知</span>
+      <i class="fa fa-chevron-down"></i>
+    </div>
+    <div class="text-main">
+      <div class="text-info">
+        <p><%= raw @activity.description %></p>
+      </div>
+    </div>
+  </div>
+  <div class="list-box margin-top">
+    <%- @boxes.each do |box| %>
+    <a  onclick="handleMail(<%= box.id %>)" class="table">
+      <div class="box-left">
+        <img src="<%= box.logo_url %>">
+      </div>
+      <div class="box-cell">
+        <h1><%= box.name %></h1>
+        <dl>
+          <dt>收信</dt>
+          <dd><%= box.display_incomes %></dd>
+          <dt>回复</dt>
+          <dd><%= box.display_replies %></dd>
+        </dl>
+      </div>
+      <div class="box-right">
+        <div class="fa fa-chevron-right"></div>
+      </div>
+    </a>
+    <%- end %>
+  </div>
+</div>
+</section>
+<script type="text/javascript">
+function handleMail(mail_type) {
+    <%- if @wx_user.present? %>
+        if(mail_type == 'my') {
+             location.href= "<%= my_mobile_govmails_path(activity_id: @activity.id)%>"
+        }else{
+            location.href="<%= new_mobile_govmail_path %>?box="+ mail_type;
+        }
+    <%- else %>
+        showTips('.J-guanzhu');
+    <%- end %>
+}
+</script>

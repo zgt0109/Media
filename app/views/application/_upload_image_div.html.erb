@@ -1,0 +1,18 @@
+<%
+  if @img_preview_id
+    @img_preview_id += 1
+  else
+    @img_preview_id = 1
+  end
+  name ||= "img_name"
+  key ||= ""
+  img ||= ""
+  suggest ||= ""
+  data_type ||= 1
+  width ||= 100
+  height ||= 100
+  preview_dev_id ||= "img_preview_#{@img_preview_id}"
+%>
+<div class="pull-left" id="<%= preview_dev_id %>"></div>
+<div class="cieldon-file width-100px margin-left-10 margin-top-20" data-name="<%= name %>" data-key="<%= key %>" data-img="<%= img %>" data-type="<%= data_type %>" data-div="#<%= preview_dev_id %>" data-width="<%= width %>" data-height="<%= height %>"></div>
+<% if suggest.present? %><small class="help-inline text-warning line-height-32 pull-left margin-top-20"><%= suggest %></small><% end %>

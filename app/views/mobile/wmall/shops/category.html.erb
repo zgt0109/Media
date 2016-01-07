@@ -1,0 +1,51 @@
+<section>
+  <div class="index-box" id='ractive_category_shops_container'>
+  </div>
+</section>
+
+<script id='ractive_category_shops_template' type='text/ractive'>
+  {{#category}}
+  <div class="index-title">
+    <i class="icon icon-1"></i>
+    <span>{{name}}</span>
+  </div>
+  {{/category}}
+  <div class="banner-swipe-list">
+    <div>
+      {{#shops}}
+      <ul>
+        <li>
+          <a class="banner-swipe-box" href="{{url}}">
+            <div>
+              <img src="{{pic_url}}">
+              <i></i>
+            </div>
+            <span>{{name}}</span>
+          </a>
+        </li>
+      </ul>
+      {{/shops}}
+    </div>
+  </div>
+</script>
+<script>
+  $(function(){
+    function get_category(url) {
+      if (typeof(url) == "undefined") { url = window.location.href }
+      return $.parseParams(url)["category"] || "全部"
+    }
+
+    var category_shops = fetch_wmall_data({path: "/api/wmall/shops/category.json"}, {supplier_id: '<%= session[:supplier_id] %>', category: get_category}, options = {})
+    var ractive_shops = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_category_shops_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_category_shops_template',
+
+      // Here, we're passing in some initial data
+      data: category_shops
+    });
+  })
+</script>

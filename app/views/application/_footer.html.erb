@@ -1,0 +1,49 @@
+<div class="footer">
+	<div class="footer-nav clearfix">
+		<div class="wrap clearfix">
+			<dl class="list-arrow-square">
+				<dt><a href="/about">关于微枚迪</a></dt>
+				<dd><a href="/agents">查询代理商</a></dd>
+				<dd><a href="/jobs">在线招聘</a></dd>
+				<dd><a href="/agreement">微枚迪服务协议</a></dd>
+			</dl>
+			<dl class="list-arrow-square">
+				<dt><a href="/news/qa">常见问题</a></dt>
+				<% News.qa.order("id desc").first(3).each do |qa|%>
+	  			<dd><%= link_to qa.title.truncate(15), "/news/#{qa.id}"%></dd>
+				<% end %>
+			</dl>
+			<dl class="list-icon">
+				<dt>联系方式</dt>
+				<dd class="icon-address"><a href="<%= contact_path%>">公司地址</a>  -  <a href="<%= contact_path%>">交通路线</a></dd>
+				<dd class="icon-phone">4000-365-711</dd>
+				<dd class="icon-mail"><a href="mailto:contact@winwemedia.com">contact@winwemedia.com</a></dd>
+			</dl>
+			<dl class="list-link">
+				<dt>友情链接</dt>
+				<dd>
+         <!--  <% FootLink.friend.each do |fl| %>
+            <a href="<%= fl.link %>" target="blank" rel="nofollow"><%= fl.name %></a>
+          <% end %> -->
+          <a href="<%= MOBILE_DOMAIN %>/wlife" target="blank" rel="nofollow">微客生活圈</a>
+          <a href="http://www.uzhe.com" target="blank" rel="nofollow">优者工作圈</a>
+          <a href="<%= MOBILE_DOMAIN %>/mobile" target="blank" rel="nofollow" style="border-right: 0">微枚迪管家</a>
+          <a href="https://mp.weixin.qq.com/cgi-bin/readtemplate?t=business/faq_operation_tmpl&type=info&lang=zh_CN&token=" target="blank" rel="nofollow">微信公众平台运营规范</a>
+          <a href="http://life.winwemedia.com/" target="blank" rel="nofollow" style="border-right: 0">微客LIFE</a>
+          <a href="https://mp.weixin.qq.com/cgi-bin/readtemplate?t=home/agreement_tmpl&type=info&lang=zh_CN&token=" target="blank" rel="nofollow">微信公众平台服务协议</a>
+          <a href="http://union.winwemedia.com/" target="blank" rel="nofollow">微客联盟</a>
+          <!-- <a href="http://top.winwemedia.com/shbenx/index.html" target="blank" rel="nofollow">上海奔想信息科技有限公司</a> -->
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<div class="footer-copyright">
+		<div class="wrap clearfix">
+			<p class="fl text-left">沪ICP备13009389号-5</p>
+			<p class="fr text-right mod-share">
+				<a href="http://weibo.com/winwemedia" class="icon-weibo" target="blank"></a>
+				<a href="http://t.qq.com/winwemedia" class="icon-tencent" target="blank"></a>
+			</p>
+		</div>
+	</div>
+</div>

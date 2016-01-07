@@ -1,0 +1,66 @@
+<%= form_tag sn_wmall_group_orders_path, {method: :get, class: 'box-form form-row'} do %>
+  <div class="modal-body">
+    <div class="col-md-12" style="padding-bottom: 20px;">
+      <div class="col-md-6 row" >
+        <div class="input-group input-group-sm input-group-text">
+          <%= text_field_tag :code, params[:code],class: 'col-xs-12', placeholder: "请输入SN码" %>
+          <span class="input-group-addon">
+            <input type="submit" value="查询" class="btn btn-sm btn-filter btn-primary">
+          </span>
+        </div>
+      </div>
+    </div>
+    <% if params[:code].present?  %>
+        <% if @group_order.present?%>
+            <div style="padding-left: 12px;">
+                <p>
+                  <span><b>订单编号：</b></span>
+                  <span><%= @group_order.order_no %></span>
+                </p>
+                <p>
+                  <span><b>SN码：</b></span>
+                  <span><%= @group_order.code %></span>
+                </p>
+                <p>
+                  <span><b>商品名称：</b></span>
+                  <span><%= @group_order.group_item.try(:name) %></span>
+                </p>
+                <p>
+                  <span><b>数量：</b></span>
+                  <span><%= @group_order.qty %></span>
+                </p>
+                <p>
+                  <span><b>订单金额：</b></span>
+                  <span><%= @group_order.total_amount %></span>
+                </p>
+                <p>
+                  <span><b>订单状态：</b></span>
+                  <span><%= @group_order.status_name %></span>
+                </p>
+                <p>
+                  <span><b>下单时间：</b></span>
+                  <span><%= @group_order.created_at %></span>
+                </p>
+                <p>
+                  <span><b>手机号码：</b></span>
+                  <span><%= @group_order.mobile %></span>
+                </p>
+                <p>
+                  <span><b>昵称：</b></span>
+                  <span><%= @group_order.username.present? ? @group_order.username : '无' %></span>
+                </p>
+            </div>
+        <% else %>
+              <div style="text-align: center; padding: 40px, 20px;">订单号不存在哦！</div>
+        <% end %>
+    <% end %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <% if @group_order && @group_order.paid? && !@group_order.consumed? %>
+        <!--<button type="button" class="btn btn-sm btn-primary" data-dismiss="modals">确认核销</button>-->
+        <%= link_to "确认核销", sn_consume_wmall_group_order_path(@group_order), class: "btn btn-sm btn-primary" %>
+    <% end %>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>

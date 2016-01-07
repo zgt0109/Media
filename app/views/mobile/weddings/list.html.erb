@@ -1,0 +1,76 @@
+<div class="wrap wrap-body">
+  <section id="index">
+    <div class="body">
+      <div class="box-list">
+				<% @wishes.each do |wish| %>
+					<% if wish.persisted? %>
+						<p>
+							<span><%= sanitize wish.content.gsub("\n","<br/>") %></span>
+							<b><%= wish.username %> <%= wish.created_at.strftime("%Y-%m-%d") %></b>
+						</p>
+					<% end %>
+				<% end %>
+      </div>
+    </div><!-- body end -->
+		<div class="box-full" id="order-bless" >
+			<!-- <p class="tcenter"> -->
+				<!--   <a onclick="showDiv('#order&#45;bless')" class="btn">送上祝福</a> -->
+				<!-- </p> -->
+			<div class="box-order">
+				<%= form_for @wedding_wish,  :validate => true,:url=> create_wish_app_weddings_path, :html=>{:id => :wish_form} do |form| %>
+					<dl>
+						<dt class="tcenter"><a class="btn-close" onclick="hideDiv2('#order-bless')"></a></dt>
+						<dd>
+						<div class="order-row">
+							<div class="fl">姓名：</div>
+							<div class="fr"><%= form.text_field :username,  :placeholder=> "请输入您的姓名" %></div>
+						</div>
+						<!--
+						  <div class="order-row">
+						  	<div class="fl">手机：</div>
+						  	<div class="fr"><%#= form.telephone_field :mobile,  :placeholder=> "请输入您的手机号码" %></div>
+						  </div>
+						-->
+						<div class="order-row">
+							<div class="fl">祝福：</div>
+							<div class="fr">
+								<%= form.text_area :content, :id => "wall-txt", :rows=> 5, :cols => 10, :placeholder => "请在此输入您的评论"  %>
+							</div>
+						</div>
+						</dd>
+					</dl>
+					<p class="tcenter">
+						<!--<input type="submit" class="btn" value="确定" onclick="hideDiv('#order-bless')"/>-->
+						<a class="btn form-submit" id="wish_submit" onclick="hideDiv2('#order-bless')">确定</a>
+						<!-- <input type="submit" class="btn" value="确定" onclick="hideDiv2('#order&#45;bless')"/> -->
+					</p>
+				<% end %>
+			</div><!--#order-bless end-->
+
+		</div><!-- footer end -->
+  </section>
+</div>
+
+<%= content_for :wedding_wish do %>
+	<a href="javascript:;" class="btn-zf" onclick="toggleDiv(this, '#order-bless')"><span>送祝福</span></a>
+	<a href="javascript:scroll(0,0)" class="btn-up"></a>
+	<div class="loading fixed-top"></div>
+
+<% end %>
+
+
+<script>
+	$(function(){
+		$(".btn-zf").click(function(){
+			$(this).animate({
+				left:"-200px"
+			});
+		});
+		$(".btn-close, #order-bless input[type=submit]").click(function(){
+			$(".btn-zf").animate({
+				left:"0px"
+			});
+		});
+	});
+</script>
+

@@ -1,0 +1,11 @@
+<table class="table">
+
+<% @print_orders.each do |p| %>
+<tr>
+  <td><%= p.id %></td>
+  <td><%= p.shop_order.order_no %></td>
+  <td><%= p.status_name %></td>
+</tr>
+<% end %>
+
+</table>

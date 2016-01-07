@@ -1,0 +1,39 @@
+<dl class="active">
+  <dt>活动规则设置<span class="fr">查看</span></dt>
+
+  <% if [25,28].include? @activity.activity_type_id %>
+    <dd>
+      <div class="wrap-part">
+        <%= form_for(@activity, validate: true) do |f| %>
+        <%= f.fields_for :activity_property, validate: true do |ap| %>
+          <div class="box-form form-row">
+            <%= render 'property_form', ap: ap %>
+          </div>
+        <% end %>
+        <% end %>
+      </div>
+    </dd>
+  <% else %>
+    <dd>
+      <div class="wrap-l">
+        <div class="wrap-view">
+          <span>
+            <% if ![4,5].include? @activity.activity_type_id %>
+              <%= image_tag @activity.activity_property.prize_pic_url, size: '221x120', class: 'property_pic' %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+
+      <div class="wrap-r">
+        <%= form_for(@activity, validate: true, html: { id: 'activity_property_form' }) do |f| %>
+        <%= f.fields_for :activity_property, validate: true do |ap| %>
+          <div class="box-form form-row">
+            <%= render 'property_form', ap: ap %>
+          </div>
+        <% end %>
+        <% end %>
+      </div>
+    </dd>
+  <% end %>
+</dl>

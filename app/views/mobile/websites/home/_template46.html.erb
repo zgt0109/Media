@@ -1,0 +1,26 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="mod-top">
+  <!--<img src="/assets/mobile/vweisiteV01/46/logo2.png"/>-->
+  <%#= image_tag website.logo.small %>
+</div>
+
+<div class="index">
+  <% website_menus.each_with_index do |menu, index| %>
+      <%= link_to menu_url(menu), class: 'box mod-index' do %>
+          <% if menu.pic? || menu.font_icon.present? %>
+              <div class="index-img">
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+              </div>
+          <% end %>
+          <div class="index-text">
+            <b><%= menu.title %></b>
+          </div>
+      <% end %>
+  <% end %>
+</div>
+
+<% content_for :document_ready_js do %>
+    fade6("#animate-6");
+<% end %>
+

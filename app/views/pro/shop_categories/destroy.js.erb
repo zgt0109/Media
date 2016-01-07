@@ -1,0 +1,21 @@
+<% if @shop_category.has_children? %>
+	showTip("alert", "该分类下有子分类， 请先删除子类再删除本分类");
+<% elsif @shop_category.can_delete? &&  @shop_category.delete! %>
+	showTip("success", "删除成功");
+<% else %>
+	showTip("alert", "该分类下已有菜品， 无法删除");
+<% end %>
+
+var tree1_dom = "<%= j(render :partial=> "pro/shop_categories/sub_menu", :collection => @shop_categories, :as =>:sub_menu) %>";
+$("#tree1").html(tree1_dom);
+$("#new_btn").show();
+$(".tree-item").each(function(){
+	if($(this).parent().hasClass("tree-folder-content")){
+
+	}else{
+		if($(this).attr("data-level") == "1"){
+			$(this).remove();
+		}
+
+	}
+});

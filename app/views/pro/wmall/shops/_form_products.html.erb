@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-sm-12">
+    <button class="btn btn-primary btn-sm pull-right" data-target="#add_1" data-toggle="modal">添加商品</button>
+  </div>
+
+  <div class="col-sm-12 margin-top-20">
+    <table id="table-1" class="table table-striped table-bordered table-hover dataTable J-dataTables">
+      <thead>
+        <tr>
+          <th>操作</th>
+          <th>名称</th>
+          <th>商品编号</th>
+          <th>售价(元)</th>
+          <th>分类</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @shop.products.each do |product| %>
+          <tr>
+            <td>
+              <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                <%= link_to "#nogo", title: "编辑", class: "green" do %>
+                  <i class="icon-pencil bigger-130"></i>
+                <% end %>
+                <%= link_to "#nogo", title: "删除", class: "red" do %>
+                  <i class="icon-trash bigger-130"></i>
+                <% end %>
+              </div>
+            </td>
+
+            <td> <%= product.name %> </td>
+            <td> <%= product.sn %> </td>
+            <td> <%= product.price %> </td>
+            <td> <%= product.category_list.join(",") %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

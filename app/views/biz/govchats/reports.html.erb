@@ -1,0 +1,96 @@
+<%= content_for :tab do%>
+<div id="tab-3" class="tab-pane active in">
+	<div class="row">
+		<div class="col-md-12">
+      <table id="actTable" class="table table-striped table-bordered table-hover dataTable ">
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>今日信件</th>
+            <th>全部信件</th>
+            <th>已回复</th>
+            <th>已归档</th>
+            <th>已删除</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>数量</td>
+            <td><span class="text-danger"><%= @activity.govchats.report.roots.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day).count %></span></td>
+            <td><span class="text-danger"><%= @activity.govchats.report.roots.count %></span></td>
+            <td><%= @activity.govchats.report.replied.roots.count %></td>
+            <td><%= @activity.govchats.report.archived.roots.count %></td>
+            <td><%= @activity.govchats.report.deleted.roots.count %></td>
+             <td><a href="javascript:;" data-toggle="modals" data-target="reply" data-title="编辑" data-height="1000" data-iframe="<%= edit_modal_govchats_path(chat_type: 'report') %>">编辑</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <%= form_for @search, url: reports_govchats_path, html: { method: :get } do |f| %>
+    <div class="col-sm-12 margin-top-20">
+      <div class="col-md-3 row">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">信件状态：</span>
+          <%= f.select :status_eq, [["全部", ''], ["未回复", 1],["已归档", 2], ["已回复", 3]], class: "col-xs-12" %>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">时间范围：</span>
+          <div class="col-xs-12">
+            <%= datetime_range_tag f, start_at: :created_at_gte, end_at: :created_at_lte, options: {class: 'datetimerange form-control min-width-280'} %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 text-right">
+        <%= f.submit '查询', class: 'btn btn-sm btn-primary btn-filter' %>
+      </div>
+    </div>
+    <%- end %>
+    <div class="col-md-12 margin-top-20">
+      <table id="actTable" class="table table-striped table-bordered table-hover dataTable ">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th width="60%">信件内容</th>
+            <th> 信件状态 </th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- if @chats.each do |chat| %>
+          <tr>
+            <td><%= chat.created_at.to_s %></td>
+            <td>
+             <div class="mail-info">
+              <%= chat.body %>
+            </div>
+          </td>
+          <td><%= chat.status_name %></td>
+          <td>
+            <a href="javascript:;" data-toggle="modals" data-target="detail" data-title="上访者详情" data-height="1000" data-iframe="<%= author_modal_govchat_path(chat) %>">上访者详情</a>
+            <%- if chat.normal? %>
+              <a href="javascript:;" data-toggle="modals" data-target="reply" data-title="回复" data-height="1000" data-iframe="<%= reply_modal_govchat_path(chat) %>">回复</a>
+            <%- end %>
+            <%- if chat.reply.present? %>
+              <a href="javascript:;" data-toggle="modals" data-target="reply" data-title="查看回复" data-height="1000" data-iframe="<%= reply_modal_govchat_path(chat) %>">查看回复</a>
+            <%- end %>
+            <%- if chat.normal? %>
+              <%= link_to '归档', archive_govchat_path(chat), method:  :post, data: {confirm: "确定要归档？"} %>
+            <%- end %>
+            <%= link_to '删除', remove_govchat_path(chat), method:  :post, data: {confirm: "确定要删除？"} %>
+          </td>
+        </tr>
+        <%- end.blank? %>
+        <tr><td colspan="4" class="text-center green">没有记录</td></tr>
+        <%- end %>
+      </tbody>
+    </table>
+    <%= paginate @chats %>
+  </div>
+</div>
+</div>
+</div>
+<%- end %>
+<%= render 'settings_tab' %>

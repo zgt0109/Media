@@ -1,0 +1,64 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微互动', activity_forms_path %></li>
+      <li><%= link_to '微场景', scenes_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12 g_vs_img">
+        <div class="left g_bord1 g_box200  g_mar20 g_vscene_add">
+          <a href="<%= new_scene_path %>" class="a200">
+            <div class="center g_vscence_icon"> <i class="fa fa-plus f40"></i> </div>
+            <div class="line-height-36 center f16" > 新增一个微场景</div>
+          </a>
+        </div>
+        <%- if current_user.activities.scene.setted.present? %>
+          <%- current_user.activities.scene.setted.to_a.each do |scene| %>
+            <%- url = scene.scene_url %>
+             <div class="left g_bord1 g_box200  g_mar20 g_vscene_add">
+               <a class="a200" title="展示设置" href="<%= pages_config_scene_pages_path(activity_id: scene.id) %>">
+                   <div class="center g_vscence_icon"> <i class="fa fa-camera f40"></i> </div>
+                   <div class="line-height-36 center f16" > <%= scene.name %></div>
+               </a>
+               <div class="g_tool">
+                    <div class="clearfix">
+                      <div class="col-3"> <a href="<%= edit_scene_path(scene) %>" data-rel="tooltip" data-original-title="微信消息" class=""> <i class="fa fa-pencil-square-o  btn-fa btn-remove"></i> </a> </div>
+                      <div class="col-3"> <a href="javascript:;" data-rel="tooltip" data-clipboard-text="<%= url %>" data-original-title="复制URL地址" class="copy-button" id="copy-<%= scene.id %>"> <i class="fa fa-link  btn-fa btn-remove  "></i> </a> </div>
+                      <div class="col-3"> <a href="javascript:;" data-toggle="modals" data-title="二维码" data-target="weisiteModal" data-rel="tooltip" data-html="true" data-original-title="二维码下载" data-height="1000" data-iframe="<%= qrcode_scene_path(scene) %>"> <i class="fa fa-qrcode  btn-fa btn-remove"></i> </a> </div>
+                    <div class="col-3">
+                      <%= link_to raw("<i  class='fa fa-trash-o'></i>"), scene, data: {rel: 'tooltip', 'original-title' => "删除", confirm: '确定要删除？'} , method: :delete  %>
+                    </div>
+                    </div>
+                </div>
+            </div>
+              <%- end %>
+        <%- end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript"> $( function() {
+      var clip=[], ids = [];
+      $('.copy-button').each(function(i){
+          ids[i] = $(this).attr('id');
+          clip[i] = new ZeroClipboard($(this), {
+              moviePath: "/flash/ZeroClipboard.swf"
+          } );
+
+          clip[i].on( "load", function(client) {
+              client.on( "complete", function(client, args) {
+                  if(args['current_element_id'] == ids[i]){
+                      showTip('success', '已复制场景链接')
+                  }
+              });
+          });
+      })
+  });</script>
+<% end %>

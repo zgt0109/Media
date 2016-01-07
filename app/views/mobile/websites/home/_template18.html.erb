@@ -1,0 +1,39 @@
+<div class="index" id="list-index">
+  <div class="hd">
+    <div class="index-btn" onclick="toggleToClass('#list-index','active')">
+      <span></span>
+    </div>
+    <p class="fl tright">
+      <% website_menus[0..1].each do |menu| %>
+        <%= link_to "<b>#{menu.title}</b>".html_safe, menu_url(menu) %>
+      <% end %>
+    </p>
+    <% if website_menus.size > 1 %>
+    <p class="fr tleft">
+      <% website_menus[2..3].each do |menu| %>
+        <%= link_to "<b>#{menu.title}</b>".html_safe, menu_url(menu) %>
+      <% end %>
+    </p>
+    <% end %>
+  </div>
+  <div class="bd">
+    <ul>
+      <% website_menus.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+            <span class="index-img"><%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %></span>
+            <span class="index-text"><%= menu.title %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<% content_for :document_ready_js do %>
+  $("body").addClass("body-navLine-bottom");
+  <% if @website_setting.bg_image.present? %>
+    // 静态背景图
+    //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+  <% end %>
+<% end %>

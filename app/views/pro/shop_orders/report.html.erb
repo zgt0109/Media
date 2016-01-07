@@ -1,0 +1,106 @@
+    <div class="main-content ">
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        <% if can_see? %>
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+
+          <li>
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+                <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+                <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+          <li><%= link_to "销售日报表", report_shop_orders_path(industry_id:  session[:current_industry_id]) %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+        <% end %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <!-- 搜索开始 -->
+          <%= form_for @search, url: report_shop_orders_url, :html => { :method => :get } do |f| %>
+              <div class="col-sm-12">
+                <% if can_see? %>
+                <div class="col-md-3 row margin-right-20">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">选择门店：</span>
+                    <%= f.select :shop_branch_id_eq, current_user.shop_branches.used.pluck(:name, :id), {include_blank: '全部'}, class: "col-xs-12" %>
+                  </div>
+                </div>
+                <% end %>
+                <div class="col-md-4">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">下单日期：</span>
+                    <div class="input-group input-group-sm col-xs-12 row">
+		<span class="input-group-addon">
+                  <i class="icon-calendar bigger-110"></i>
+		</span>
+                      <%#= f.text_field :date_gte, class: "datepicker form-control" %>
+
+                      <%= f.text_field :date_gte, value: @search.created_at_gte.try(:to_date), class: "datepicker input-sm form-control" %>
+                      <span class="input-group-addon">
+                  <i class="">-</i>
+		</span>
+                      <%= f.text_field :date_lte, value: @search.created_at_lte.try(:to_date), class: "datepicker input-sm form-control" %>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" class="btn btn-primary btn-sm btn-filter margin-left-5 form-submit" data-url="<%= report_shop_orders_url %>">查询</button>
+                  <%= link_to '导出Excel', 'javascript: void(0);', data: { url: report_shop_orders_url( format: :xls ) }, class: 'btn btn-primary btn-sm btn-filter margin-left-5 export_excel' %>
+                </div>
+              </div>
+          <% end %>
+          <!-- 搜索框结束 -->
+          <div class="col-xs-12 margin-top-20">
+            <table id="sellTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+              <tr>
+                <th>分店</th>
+                <th>日期</th>
+                <th>订单数量</th>
+                <th>总金额</th>
+                <th>客单价</th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <% @shop_order_reports.each do |shop_order_report| %>
+                  <tr>
+                    <td><%= shop_order_report.shop_branch.try(:name) %></td>
+                    <td><%= shop_order_report.date %></td>
+                    <td><%= shop_order_report.orders_count %></td>
+                    <td><%= f shop_order_report.total_amount %></td>
+                    <td><%= f shop_order_report.pay_amount %></td>
+                  </tr>
+              <% end %>
+              <% if @shop_order_reports.blank? %>
+                  <tr><td colspan="5">无记录</td></tr>
+              <% end %>
+              </tbody>
+            </table>
+            <%= paginate @shop_order_reports %>
+          </div>
+        </div>
+      </div>
+      <!-- /.page-content -->
+
+    </div>
+
+<% content_for :custom_js do %>
+<script>
+  $(function () {
+    $('.export_excel').click(function(event) {
+      $('form').attr( 'action', $(this).data('url') ).submit();
+    });
+    $('.form-submit').click(function(event) {
+      $('form').attr( 'action', $(this).data('url') );
+    });
+  })
+</script>
+<% end %>

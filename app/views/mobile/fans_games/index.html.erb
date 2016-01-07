@@ -1,0 +1,31 @@
+<div class="game-list">
+	<% @activities_fans_games.each do |afg| %>
+	  <a href="<%= mobile_fans_game_path(id:afg.fans_game_id) %>" class="box">
+	    <div class="game-img">
+	    	<%= image_tag "/images/fans_game/game_#{afg.fans_game_id}.jpg" %>
+	    </div>
+	    <div class="game-name"><%= afg.fans_game.name %></div>
+	    <div class="game-start">
+	      <span class="btn">开始玩</span>
+	    </div>
+	  </a>
+  <% end %>
+</div>
+<div class="alert J-guanzhu" style="display:none">
+  <div class="alert-m">
+    <div class="alert-img"></div>
+    <div class="alert-c">
+      <p>请先关注公众帐号</p>
+      <p><span class="alert-num">1</span>点击右上角<span class="alert-text">分享按钮</span>查看公众号</p>
+      <p><span class="alert-num">2</span>在【添加朋友】—【查找公众号】中搜索</p>
+      <p><span class="alert-btn"><%= @wx_mp_user.try(:name) %></span>（长按可复制）</p>
+      <p>如果已关注，请打开该公众帐号回复<span class="alert-text"><%= @activity.try(:keyword) %></span>，参与此活动</p>
+    </div>
+    <div class="alert-f">
+      <a href="javascript:;" class="alert-f-btn J-close">我知道了</a>
+    </div>
+  </div>
+</div>
+<script>
+
+</script>

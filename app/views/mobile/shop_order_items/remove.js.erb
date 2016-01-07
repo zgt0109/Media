@@ -1,0 +1,4 @@
+$("#close-ico-<%= @current_shop_product.id %>").html('<a rel="nofollow" data-remote="true" data-method="post" class="ico_b" href="/app/shop_orders/<%= @shop_order.id %>/shop_order_items/<%= @current_shop_product.id %>/add#mp.weixin.qq.com">yes</a>');
+$("#price_c_<%= @current_shop_product.id %>").html('0');
+$("#total_amount").html('<%= @shop_order.reload.pay_amount %>');
+$("#total_num").html('<%= @shop_order.reload.total_qty %>');

@@ -1,0 +1,54 @@
+<% provide(:title, @album.try(:name)) %>
+
+<div class="cent">
+  <div id="waterfall" class="list3">
+    <% @album.photos.page(1).each do |photo| %>
+      <div class="cell">
+        <a href="<%= mobile_album_path(photo, supplier_id: photo.album.supplier_id) %>">
+          <%= image_tag photo.img_url %>
+        </a>
+      </div>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+</div>
+<%= javascript_include_tag "mobile/albums/jquery.water.min" %>
+<script>
+  $(function(){
+    var page = 2,
+        get_ajax = true;
+    var opt={
+      getResource:function(index,render){
+        var html='',
+            data = [];
+        var get_url = "<%= load_more_photos_mobile_album_path(@album.supplier_id,@album) %>" + "?page=" + page;
+        if(get_ajax){
+          get_ajax = false;
+          $.ajax({
+              url: get_url,
+              async: false,
+              dataType: 'json',
+              success: function(jsonData) {
+                if(jsonData.photos.length > 0){
+                  page += 1;
+                  data = jsonData.photos;
+                  get_ajax = true;
+                }else{
+                  html='';
+                  data = [];
+                }
+              }
+          });
+        }
+        for(i=0;i<data.length;i++){
+          html += '<div class="cell"><a href="'+data[i].link_to+'"><img c src="'+data[i].img_url+'" /></a></div>';
+        }
+        return $(html);
+      },
+      auto_imgHeight:true,
+      insert_type:1
+    }
+    //不可删除，里面的‘opt’参数可删除
+    $('#waterfall').waterfall(opt);
+  })
+</script>

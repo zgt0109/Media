@@ -1,0 +1,59 @@
+
+<%= form_for @impression, validate: true, html: {class: 'form'} do |f| %>
+
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="control-label">印象名称<span class="required-star">*</span><small class="text-warning line-height-32">仅限4个汉字</small></label>
+      <div class="clearfix">
+        <%= f.text_field :content, maxlength: 20, class: "form-control", id: "impression" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">热度值<span class="required-star">*</span><small class="text-warning line-height-32">输入热度值，数字，1-99</small></label>
+      <div class="clearfix">
+        <%= f.text_field :ratio, maxlength: 2, class: "form-control", id: "ratio" %>
+      </div>
+    </div>
+  </div>
+  <%#= render 'shared/modalFooter' %>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $('.form-submit').on('click', function(e){
+      var input = $('#ratio');
+      var ratio = input.val();
+      var ratio_reg = /^\d{1,2}$/;
+      //兼容格式: 国家代码(2到3位)-区号(2到4位)-电话号码(7到8位)-分机号(3位)"
+      //var tel_reg =  /^(([0\+]\d{2,3}-)?(0\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/
+      //var tel_reg =  /^((\d{2,3}-)?(\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/ //add 400- number
+      if (!ratio_reg.test(ratio) ){
+        addErrorMessage(input, '热度值不正确, 请重新输入');
+        e.preventDefault();
+      }else{
+        removeErrorMessage(input);
+      }
+    })
+
+    $('.form-submit').on('click', function(e){
+      var input = $('#impression');
+      var impression = input.val();
+      //var ratio_reg = /^\a{2}$/;
+      var impression_reg = /^[\u4E00-\u9FA5]{4}$/;
+      //兼容格式: 国家代码(2到3位)-区号(2到4位)-电话号码(7到8位)-分机号(3位)"
+      //var tel_reg =  /^(([0\+]\d{2,3}-)?(0\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/
+      //var tel_reg =  /^((\d{2,3}-)?(\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/ //add 400- number
+      if (!impression_reg.test(impression) ){
+        addErrorMessage(input, '印象名称不正确, 请重新输入');
+        e.preventDefault();
+      }else{
+        removeErrorMessage(input);
+      }
+    })
+  </script>
+<% end %>

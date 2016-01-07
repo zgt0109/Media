@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-sm-12">
+    <%= form_for [:pro,@shop], as: :shop, html: {class: "form width-800", role: "form"} do |f| %>
+    <div class="form-group">
+      <label>商铺编号<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :sn, disabled: true, class: "col-md-8" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>商铺名称<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :name, class: "col-md-8" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>商铺分类<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= select_tag "shop_category", options_from_collection_for_select(current_mall.categories,"name","name",@shop.categories.first.try(:name)) %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>商铺LOGO<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <div class="width-80px">
+          <div class="cieldon-file" data-type="3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group ">
+      <input type="submit" class="btn btn-primary btn-sm" value="保存">
+      <%= link_to "返回", pro_wmall_shops_path, class: "btn btn-primary btn-sm" %>
+    </div>
+
+
+  <% end %>
+</div>
+</div>

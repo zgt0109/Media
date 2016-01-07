@@ -1,0 +1,41 @@
+<div class="body">
+  <div class="package-box">
+    <img src="<%= @activity.bg_pic_url || "/assets/red_packet/index_info.jpg" %>" alt="">
+  </div>
+  <%= form_for @red_packet_release, url: mobile_red_packets_path, method: :POST, validate: true do |f| %>
+      <%= f.hidden_field :activity_id, value: @activity.id %>
+      <%= f.hidden_field :wx_user_id, value: @wx_user.id %>
+      <%= f.fields_for :activity_user do |user| %>
+          <%= user.hidden_field :supplier_id, value: @supplier.id %>
+          <%= user.hidden_field :wx_mp_user_id, value: @wx_mp_user.id %>
+          <%= user.hidden_field :activity_id, value: @activity.id %>
+          <%= user.hidden_field :wx_user_id, value: @wx_user.id %>
+          <div class="info">
+            <ul>
+              <li><h3>用户资料填写</h3></li>
+              <li><%= user.text_field :name, placeholder: '请输入您的姓名', maxlength: 5  %></li>
+              <li><%= user.text_field :mobile, type: :tel, placeholder: '请输入您的手机号', maxlength: 15  %></li>
+              <!--li><%#= user.text_field :address, placeholder: '请输入您的地址'  %></li>
+              <li><%#= user.text_field :email, placeholder: '请输入正确的邮箱地址'  %></li-->
+              <li><input type="button" name="" value="提交" id="save_release"></li>
+            </ul>
+          </div>
+      <% end %>
+  <% end %>
+</div>
+<script>
+    $("#save_release").on("click", function(){
+        var name = $("#red_packet_release_activity_user_attributes_name").val(),
+            mobile = $("#red_packet_release_activity_user_attributes_mobile").val();
+        if(name == ""){
+            alert("请输入姓名!");
+            return false;
+        }else if(mobile == ""){
+            alert("请输入手机号！");
+            return false;
+        }else{
+            $(this).prop("disabled", true);
+            $('form').submit();
+        }
+    });
+</script>

@@ -1,0 +1,98 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微留言', edit_activity_leaving_messages_path %></li>
+        <li><%= link_to '微留言管理', leaving_messages_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+        <%= render "top_navs" %>
+        <div class="tab-content no-border padding-24">
+          <div id="tab-3" class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-sm-12">
+                <%= form_for @search, url: leaving_messages_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+                    <div class="col-md-3 row">
+                      <div class="input-group input-group-text col-xs-12 row">
+                        <%= f.text_field :body_like, class: 'col-xs-12', placeholder:"请输入查询信息" %>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="col-md-12 margin-top-20">
+                    <table id="feedbackTable" class="table table-striped table-bordered table-hover dataTable ">
+                      <thead>
+                        <tr>
+                          <th>用户昵称</th>
+                          <th>留言时间</th>
+                          <th>留言内容</th>
+                          <% if @activity.show_contact %><th>联系方式</th><% end %>
+                          <th>审核状态</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @messages.each do |message| %>
+                          <tr>
+                            <td><%= message.nickname %></td>
+                            <td><%= message.created_at %></td>
+                            <td><%= message.body %></td>
+                            <% if @activity.show_contact %><td><%= message.contact %></td><% end %>
+                            <td>
+                              <% if @activity.audited %>
+                                <% if message.init? %>
+                                  <%= link_to "通过", check_leaving_message_path(message, page: params[:page]), method: "post", confirm: "确定要通过吗？"  %>
+                                  <%= link_to "拒绝", deny_leaving_message_path(message, page: params[:page]), method: "post", confirm: "确定要拒绝吗？"  %>
+                                <% else  %>
+                                  已<%= message.status_name %>
+                                <% end %>
+                              <% else %>
+                                无需审核
+                              <% end %>
+                            </td>
+                            <td>
+                              <% read_lable = message.parent ? "查看" : "查看/回复" %>
+                              <%= modal_to read_lable, edit_leaving_message_path(message, page: params[:page]), tip: "点击#{read_lable}留言", title: "留言详情", height: 1000 %>
+                             
+                              <% delete_lable = message.parent ? "回复" : "留言" %>
+                              <%= link_to "删除", leaving_message_path(message, page: params[:page]), method: "delete", confirm: "确定要删除该#{delete_lable}吗？"  %>
+
+                              <% if message.replier_type != "Supplier" && message.replier %>
+                                <% if message.replier.leave_message_forbidden %>
+                                  <%= link_to "取消拉黑", cancel_forbid_replier_leaving_message_path(message, page: params[:page]), method: "post", confirm: "确定要取消拉入黑名单吗？" %>
+                                <% else %>
+                                  <%= link_to "拉黑", forbid_replier_leaving_message_path(message, page: params[:page]), method: "post", confirm: "确定要拉入黑名单吗？" %>
+                                <% end %>
+                              <% end %>
+                            </td>
+                          </tr>
+                        <% end %>
+                        <% if @messages.blank? %>
+                            <tr><td colspan="<%= @activity.show_contact ? 6 : 5%>">无记录</td></tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                    <%= paginate @messages %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+<% content_for :custom_js do %>
+<script>
+//$('#breadcrumbs>ul').append("<li><%= j link_to '基础设置', edit_activity_leaving_messages_path %></li>");
+</script>
+<% end %>

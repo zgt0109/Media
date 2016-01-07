@@ -1,0 +1,80 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <%= link_wx_plot_url(:life, false, {navigation: true})%>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+
+          <div class="col-xs-8">
+            <%= form_for @life, validate: true, html: {role: 'form', class: 'form width-800' } do |f| %>
+              <%= f.hidden_field :wx_plot_id%>
+              <div class="form-group ">
+                <label class="control-label">类别<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.select :wx_plot_category_id, @categories.collect{|t| [t.name, t.id]}, {}, class: 'col-sm-8' %>
+                </div>
+              </div>
+
+              <div class="form-group  ">
+                <label class="control-label">名称<span class="required-star">*</span></label>
+                <div class=" clearfix">
+                  <%= f.text_field :name, class: 'col-sm-8' %>
+                </div>
+              </div>
+              <div class="form-group  ">
+                <label class="control-label">联系电话<span class="required-star">*</span></label>
+                <div class=" clearfix">
+                  <%= f.text_field :phone, class: 'col-sm-8' %>
+                </div>
+              </div>
+              <div class="form-group  ">
+                <label class="control-label">地址<span class="required-star">*</span></label>
+                <div class=" clearfix">
+                  <%= f.text_field :address, class: 'col-sm-8' %>
+                </div>
+              </div>
+
+              <div class="form-group  ">
+                <label class="control-label">内容<span class="required-star">*</span></label>
+                <!--<div class="wysiwyg-editor"></div>-->
+                <%= render "shared/form_rich_text", field_name: "content", obj: f.object, f: f, wrapper_html_options: {class: "form-control"}%>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="form-group ">
+                <%= f.submit '确定', class: 'btn btn-sm btn-primary' %>
+                <a href="javascript:;" class="btn btn-sm btn-default" onclick="javascript:history.go(-1);">返回</a>
+              </div>
+
+            <% end %>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('form input[type=submit]').click(function(){
+              if($('#wx_plot_life_wx_plot_category_id').val() && $('#wx_plot_life_name').val() && $('#wx_plot_life_phone').val() && $('#wx_plot_life_address').val() && !$('#wx_plot_life_content').val()){
+                  showTip('warning',"请填写内容");
+                  $('.wysiwyg-editor').focus();
+                  return false;
+              }
+          });
+      })
+    </script>
+<% end %>
+

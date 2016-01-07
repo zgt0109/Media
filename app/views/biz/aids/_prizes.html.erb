@@ -1,0 +1,29 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>奖项说明</th>
+            <th>奖品名称</th>
+            <th>奖品数量</th>
+            <%- unless @activity.can_not_edit? %>
+            <th>操作</th>
+            <% end %>
+        </tr>
+    </thead>
+    <tbody>
+        <% @activity.activity_prizes.each_with_index do |prize, i| %>
+        <tr id="prize-<%= prize.id %>">
+            <td><%= prize.title %></td>
+            <td><%= prize.prize %></td>
+            <td><%= prize.prize_count %></td>
+            <%- unless @activity.can_not_edit? %>
+            <td>
+                <a href="javascript:;" data-toggle="modals" data-title="编辑奖品设置" data-height="1000" data-iframe="<%= activity_prize_path(prize, activity_id: @activity.id) %>">编辑</a>
+                <% if i > 2 %>
+                <%= link_to '删除', activity_prize_path(prize, activity_id: @activity.id), method: :delete, confirm: '确定删除？' %>
+                <% end %>
+            </td>
+            <%- end %>
+        </tr>
+        <%- end %>
+    </tbody>
+</table>

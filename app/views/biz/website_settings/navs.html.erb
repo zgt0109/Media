@@ -1,0 +1,82 @@
+<form class="form-horizontal" role="form">
+  <div class="modal-body">
+    <div class="row template-list">
+      <ul class="ace-thumbnails">
+        <% @website_templates.each_with_index do |nav, index| %>
+            <% next if nav.style_index == 0 %>
+            <li class="<%= @website_setting[@nav_type_columns[params[:nav_type].to_i]] == nav.style_index ? 'active' : ''%> <%= @bqq_website && @bqq_style_index.include?(nav.style_index) ? '' : 'product_template' %>" rel="<%= nav.style_index%>">
+              <a href="javascript:;" class="">
+                <%= image_tag nav.pic.large, class: 'pic', style: "height: 320px;width: 320px;" %>
+                <span><%= nav.style_index %>.<%= nav.name %></span>
+                <input type="hidden" value="<%= nav.style_index %>" class="style_index">
+                <input type="hidden" value="<%= nav.name %>" class="name">
+                <input type="hidden" value="<%= WebsiteSetting::UNABLE_CUSTOM_NAV_TEMPLATE_IDS.include?(nav.style_index) ? 1 : 0 %>" class="support">
+              </a>
+            </li>
+        <% end %>
+      </ul>
+      <input type="hidden" value="<%= params[:nav_type] %>" id="nav_type">
+      <input type="hidden" value="<%= @website_setting[@nav_type_columns[params[:nav_type].to_i]] %>" id="nav_template_id">
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+</form>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            $('.btn-primary').click(function(){
+                var div = $('.modal.fade.in'),
+                    li = $('li.active');
+                if($('#nav_template_id').val() == li.attr('rel')){
+                    $('.modal-iframe', window.parent.document).hide();
+                    $('.modal-backdrop', window.parent.document).hide();
+                    parent.showTip('success','保存成功');
+                    $('.modal-iframe', window.parent.document).remove();
+                    $('.modal-backdrop', window.parent.document).remove();
+                }else{
+                    <% if current_user.bqq_account? %>
+                    if (li.hasClass('product_template') ) {
+                        showTip('success','您的套餐类型无法使用模板，请联系经销商升级高版本套餐')
+                        $('.modal-iframe', window.parent.document).remove();
+                        return false;
+                    }
+                    <% end %>
+                    var nav_type = $('#nav_type').val(),
+                        nav_template_id = li.attr('rel');
+                    $.post('/website_settings/update_update_nav_template', {nav_type: nav_type, nav_template_id: nav_template_id}, function(result) {
+                        if (result.errors.length ==0){
+                            var nav_type_class = {'1': 'home', '2': 'inside'};
+                            if(li.find('.support').val() == '1'){
+                                $('.' + nav_type_class[nav_type], window.parent.document).find('.setting').hide();
+                            }else{
+                                $('.' + nav_type_class[nav_type], window.parent.document).find('.setting').show();
+                            }
+                            $('.' + nav_type_class[nav_type] + ' .no-template', window.parent.document).html('<img alt="Large_nav_01" src="' + li.find('img').attr('src') + '" style="height: 320px;width: 320px;">');
+                            $('.modal-iframe', window.parent.document).hide();
+                            $('.modal-backdrop', window.parent.document).hide();
+                            parent.showTip('success','保存成功');
+                            $('.modal-iframe', window.parent.document).remove();
+                            $('.modal-backdrop', window.parent.document).remove();
+
+                        }else{
+                            $('.modal-iframe', window.parent.document).hide();
+                            $('.modal-backdrop', window.parent.document).hide();
+                            parent.showTip('warning','保存失败');
+                            $('.modal-iframe', window.parent.document).remove();
+                            $('.modal-backdrop', window.parent.document).remove();
+                        }
+
+                    });
+                }
+            });
+            $('ul.ace-thumbnails').on('click', 'li', function(){
+                $('li.active').removeClass('active');
+                $(this).addClass('active');
+            });
+        });
+    </script>
+<% end %>

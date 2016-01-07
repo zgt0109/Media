@@ -1,0 +1,11 @@
+<% results.each do |f| %>
+  <li>
+    <div class="img"><%= image_tag "#{f.try(:pic).try(:large)}?imageView/2/w/110/h/70", data: {src: f.try(:pic).try(:large).to_s} if f.try(:pic?) %></div>
+    <%= content_tag_for :p, f do %><%= f.item_select_count %>票<% end if activity.allow_show_vote_count? %>
+    <%= div_for f, class: 'line' do %>
+      <label><b style="width:<%= f.item_per %>%;"></b></label>
+      <span class="count"><%= f.item_per %>%</span>
+    <% end if activity.allow_show_vote_percent? %>
+  </li>
+<% end %>
+

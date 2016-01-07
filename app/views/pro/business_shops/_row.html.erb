@@ -1,0 +1,17 @@
+<tr id="row-<%= business_shop.id %>">
+  <td><a onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="编辑店铺" data-url="<%= edit_business_shop_path(business_shop) %>"><%= business_shop.name %></a></td>
+  <td><%= image_tag business_shop.logo, size: '30x30' %></td>
+  <td><%= business_shop.activity.try :keyword %></td>
+  <td><%= business_shop.sort %></td>
+  <td>
+    <%= link_to "", open_function_business_shop_url(business_shop), method: :post, style: "margin-left: 40px", remote: true, class: "btn-pluin fl pluin-#{ business_shop.open_function ? "open" : "close" }" %>
+  <td>
+    <a onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="会员卡信息" data-url="<%= vip_card_branch_business_shop_path(business_shop) %>">会员卡</a>
+    <%= link_to '优惠信息', business_shop_business_privileges_path(business_shop) %>
+    <%= link_to '商品管理', business_shop_business_items_path(business_shop) %>
+    <%= link_to '环境信息', business_shop_business_shop_pictures_path(business_shop) %>
+    <a onclick="popUrl(this)" data-name="name" data-w="700" data-h="300" data-title="商铺账号" data-url="<%= business_shop_admin_business_shop_path(business_shop) %>">商铺账号</a>
+    <a onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="团购关联" data-url="<%= group_activities_business_shop_path(business_shop) %>">团购关联</a>
+    <%= link_to '删除', business_shop, data: { remote: true, method: :delete, confirm: '确定要删除该店铺吗？'} %>
+  </td>
+</tr>

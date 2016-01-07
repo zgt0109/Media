@@ -1,0 +1,29 @@
+<div class="box box-list">
+  <a href="<%= material_type_url main_material, website_menu %>" class="box-block"></a>
+  <div class="hd">
+    <b><%= main_material.title %></b>
+    <span><%= date_format_full_l(main_material.created_at)  %></span>
+  </div>
+  <div class="bd">
+    <%= image_tag main_material.pic.try(:large) if main_material.pic? %>
+  </div>
+  <div class="ft">
+    查看全文 >
+  </div>
+</div>
+
+<% child_material.each do |child| %>
+    <div class="box box-list">
+      <a href="<%= material_type_url child, website_menu %>" class="box-block"></a>
+      <div class="hd">
+        <b><%= child.title %></b>
+        <span><%= date_format_full_l(child.created_at)  %></span>
+      </div>
+      <div class="bd">
+        <%= image_tag child.pic.try(:large) if child.pic? %>
+      </div>
+      <div class="ft">
+        查看全文 >
+      </div>
+    </div>
+<% end %>

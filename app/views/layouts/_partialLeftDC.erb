@@ -1,0 +1,64 @@
+<ul class="nav nav-list">
+  <li class="<%= ['operating_reports'].include?(controller_name) && ['subscribes'].include?(action_name) ? 'open active' : ''%>">
+    <a href="javascript:;" class="dropdown-toggle">
+      <i class="fa fa-weixin"></i>
+      <span class="menu-text"> 用户数据</span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu" style="display: <%= ['operating_reports'].include?(controller_name) && ['subscribes'].include?(action_name) ? 'block' : 'none'%>;">
+      <li class="<%= ['subscribes'].include?(action_name) ? 'open active' : ''%>">
+        <%= link_to subscribes_operating_reports_path do %><i class="icon-double-angle-right"></i>关注数<% end %>
+      </li>
+      <!--<li><a href="/datacube/user_attr"> <i class="icon-double-angle-right"></i>用户属性</a></li>-->
+    </ul>
+  </li>
+  <li class="<%= 'open active' if controller_name == 'operating_reports' && action_name == 'keyword' %>">
+    <a href="javascript:;" class="dropdown-toggle">
+      <i class="icon-sitemap"></i>
+      <span class="menu-text">关键词数据</span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+      <li class="<%= 'open active' if controller_name == 'operating_reports' && action_name == 'keyword' %>">
+        <%= link_to keyword_operating_reports_path do %> <i class="icon-double-angle-right"></i>命中分析<% end %>
+      </li>
+    </ul>
+  </li>
+  <%= content_tag :li, class: (['operating_reports/index', 'flow_reports/index'].include?("#{controller_name}/#{action_name}") ? 'open active' : '') do %>
+    <a href="javascript:;" class="dropdown-toggle">
+      <i class="fa fa-signal"></i>
+      <span class="menu-text"> 流量数据</span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu" style="display: <%= ['operating_reports/index', 'flow_reports/index'].include?("#{controller_name}/#{action_name}") ? 'block' : 'none'%>;">
+      <li class='<%= side_menu_status(controller="flow_reports",action="index", nil, active = "open active") -%>'>
+        <%= link_to flow_reports_path do %><i class="icon-double-angle-right"></i>数据指标<% end %>
+      </li>
+      <li class='<%= side_menu_status('operating_reports', 'index', nil, active = "open active") -%>'>
+        <%= link_to operating_reports_path do %><i class="icon-double-angle-right"></i>请求分析<% end %>
+      </li>
+    </ul>
+  <% end %>
+  <li class="<%= 'open active' if controller_name == 'datacube_vips' %>">
+    <a href="javascript:;" class="dropdown-toggle">
+      <i class="fa fa-users"></i>
+      <span class="menu-text"> 会员数据</span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu" style="display: <%= controller_name == "datacube_vips" ? 'block' : 'none'%>;">
+      <li class="<%= "open active" if action_name == "index" %>">
+        <a href="<%= datacube_vips_path %>"> <i class="icon-double-angle-right"></i>会员数</a>
+      </li>
+      <li class="<%= "open active" if action_name == "amount" && @type == "pay_up" %>">
+        <a href="<%= amount_datacube_vips_path(type: "pay_up") %>"> <i class="icon-double-angle-right"></i>会员充值</a>
+      </li>
+      <li class="<%= "open active" if action_name == "amount" && @type == "pay_down" %>">
+        <a href="<%= amount_datacube_vips_path(type: "pay_down") %>"> <i class="icon-double-angle-right"></i>会员消费</a>
+      </li>
+      <li class="<%= "open active" if action_name == "point" %>">
+        <a href="<%= point_datacube_vips_path %>"> <i class="icon-double-angle-right"></i>会员积分</a>
+      </li>
+    </ul>
+  </li>
+
+</ul>

@@ -1,0 +1,53 @@
+<% content_for :form do %>
+    <%= render 'application/weixin_preview', wx_title: @activity.ready_activity_notice.title, wx_summary: @activity.ready_activity_notice.summary %>
+    <%= form_for @activity, validate: true, url: form_action, html: { class: 'form col-sm-7', role: :form } do |f| %>
+        <%= hidden_field_tag :step, params[:step] %>
+        <%= f.hidden_field :activity_type_id %>
+        <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+        <div class="form-group">
+            <label class="control-label">活动名称<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <%= f.text_field :name, maxlength: 64, class: "col-md-8", placeholder: "不能超过64个字" %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">活动触发关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动的关键词不能重复</small></label>
+            <div class="clearfix">
+                <%= f.text_field :keyword, class: 'col-md-8', placeholder: '' %>
+            </div>
+        </div>
+        <%= f.fields_for :ready_activity_notice, validate: true do |ran| %>
+            <%= ran.hidden_field :pic %>
+            <%= ran.hidden_field :pic_cache %>
+            <%= ran.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+            <%= render 'old_coupons/activity_notice_form', ran: ran %>
+        <% end %>
+        <div class="form-group">
+            <label class="control-label">活动预热时间 <small class="help-inline text-warning line-height-32">请确保预热时间早于活动开始时间，若两者一样或者不填活动预热时间，则表示没有预热</small></label>
+            <div class="clearfix">
+                <span class="pull-left">从</span>
+                <%= f.text_field :ready_at, class: 'date-time inputSmall width-30 pull-left' %>
+                <span class="pull-left">到活动开始时间</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">活动时间<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <%= datetime_range_tag f, options: {class: 'required datetimerange col-sm-6'} %>
+            </div>
+        </div>
+        <div class="form-group">
+            <%- if @activity.can_not_edit? %>
+                <a href="<%= activity_path(@activity, step: params[:step].to_i + 1) %>" class="btn btn-success btn-sm btn-next">
+                    下一步<i class="icon-arrow-right icon-on-right"></i>
+                </a>
+            <% else %>
+                <button type="submit" class="btn btn-success btn-sm btn-next">
+                    下一步<i class="icon-arrow-right icon-on-right"></i>
+                </button>
+            <% end %>
+
+            <%= link_to '返回', activities_path_by_type(@activity.activity_type_id), class: "btn btn-sm" %>
+        </div>
+    <% end %>
+<% end %>

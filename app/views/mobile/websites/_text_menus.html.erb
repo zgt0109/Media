@@ -1,0 +1,22 @@
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.each_with_index do |menu, index| %>
+      <%if index % 6 == 0%><li><%end%>
+        <%if menu.title.present? %>
+          <%= link_to menu_url(menu), class: 'box mod-index' do %>
+              <div class="p">
+                <b><%= menu.title%></b>
+                <i class="fa fa-angle-right"></i>
+              </div>
+            <%end%>
+          <%end%>
+          <%if index % 6 == 5%></li><%end%>
+      <%end%>
+    </ul>
+  </div>
+
+
+  <% content_for :document_ready_js do %>
+    divSwipe("indexList");
+  <% end %>
+

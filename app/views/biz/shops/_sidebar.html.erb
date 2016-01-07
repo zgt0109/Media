@@ -1,0 +1,92 @@
+<div class="sidebar" id="sidebar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <% supplier_id = current_shop_supplier.id %>
+
+    <ul class="nav nav-list">
+      <% if current_sub_account.can_manage_any_vip? || current_sub_account.can_manage_marketing_sncode? %>
+      <li class="<%= 'active open' if controller_name == 'shops' && action_name !~ /activity_consumes|consume_reports/ %>">
+        <%- if current_sub_account.can_manage_any_vip? %>
+          <%= left_nav_dropdown('icon-user', '会员卡') %>
+        <%- else %>
+          <%= left_nav_dropdown('icon-check', '活动核销') %>
+        <%- end %>
+
+        <ul class="submenu" style="display: <%= controller_name == "shops" ? 'block;' : 'none;'%>">
+            <%= link_to_left_nav( '会员交易', shops_vip_deals_path(supplier_id: supplier_id) ) if current_sub_account.can_manage_any_vip? %>
+            <%= link_to_left_nav( '活动核销', shops_vip_deals_path(supplier_id: supplier_id) ) if current_sub_account.can_manage_marketing_sncode? && !current_sub_account.can_manage_any_vip? %>
+            <%= link_to_left_nav( '礼品兑换', shops_point_gift_exchanges_path(supplier_id: supplier_id) ) if current_sub_account.can?('manage_vip_gift_exchange') %>
+            <%- if current_sub_account.can?('manage_vip_package_release') %>
+              <%= link_to_left_nav( '会员套餐记录', shops_package_users_path(supplier_id: supplier_id), action_name =~ /^package_users|item_consumes$/ ) %>
+            <%- elsif current_sub_account.can?('manage_vip_package_write_off') %>
+              <%= link_to_left_nav( '会员套餐记录', shops_item_consumes_path(supplier_id: supplier_id), action_name =~ /^package_users|item_consumes$/ ) %>
+            <%- end %>
+            <%= link_to_left_nav( '消费统计', shops_vip_consumes_path(supplier_id: supplier_id) ) if current_sub_account.can?('view_vip_transactions') %>
+        </ul>
+      </li>
+      <% end %>
+
+      <%- if current_sub_account.can_manage_marketing_sncode? %>
+        <li class="<%= 'active open' if controller_name == 'shops' && action_name =~ /activity_consumes|consume_reports/ %>">
+          <a href="<%= shops_activity_consumes_path(supplier_id: supplier_id) %>" class="dropdown-toggle">
+            <i class="icon-list"></i>
+            <span class="menu-text">活动核销记录</span>
+          </a>
+        </li>
+      <%- end %>
+
+      <% if current_shop_supplier.has_privilege_for?(10001) && current_sub_account.can_manage_catering? %>
+          <li class="<%= 'open active' if session[:current_industry_id] == 10001 %>">
+            <%= left_nav_dropdown 'icon-plus', '微餐饮' %>
+            <ul class="submenu" style="display: <%= session[:current_industry_id] == 10001 ? 'block;' : 'none;' %>">
+              <%= link_to_left_nav( '规则设定', book_rules_path(rule_type: 1, industry_id: 10001), industry_food_book_rules_path? ) if current_sub_account.can?('manage_catering_book_rules') %>
+              <%= link_to_left_nav( '菜单管理', shop_products_path(industry_id: 10001), catering_menus_path? ) if current_sub_account.can?('manage_catering_menus') %>
+              <%= link_to_left_nav( '订餐管理', shop_orders_path(industry_id: 10001), session[:current_industry_id] == 10001 && current_page?(shop_orders_path) ) if current_sub_account.can?('manage_catering_book_dinner') %>
+              <%= link_to_left_nav( '订座管理', shop_table_orders_path(industry_id: 10001), session[:current_industry_id] == 10001 && current_page?(shop_table_orders_path) ) if current_sub_account.can?('manage_catering_book_table') %>
+              <%= link_to_left_nav( '销售日报表', report_shop_orders_path(industry_id: 10001), session[:current_industry_id] == 10001 && current_page?(report_shop_orders_path) ) if current_sub_account.can?('manage_catering_reports') %>
+              <%= link_to_left_nav( '下单时间分析', graphic_shop_orders_path(industry_id: 10001), session[:current_industry_id] == 10001 && current_page?(graphic_shop_orders_path) ) if current_sub_account.can?('manage_catering_reports_graphic') %>
+            </ul>
+          </li>
+      <% end %>
+
+      <% if current_shop_supplier.has_privilege_for?(10002) && current_sub_account.can_manage_takeout? %>
+          <li class="<%= 'open active' if session[:current_industry_id] == 10002 %>">
+            <%= left_nav_dropdown 'icon-plus', '微外卖' %>
+            <ul class="submenu" style="display: <%= session[:current_industry_id] == 10002 ? 'block;' : 'none;' %>">
+              <%= link_to_left_nav( '规则设定', book_rules_path(rule_type: 3, industry_id: 10002), industry_takeout_book_rules_path? ) if current_sub_account.can?('manage_takeout_book_rules') %>
+              <%= link_to_left_nav( '菜单管理', shop_products_path(industry_id: 10002), takeout_menus_path? ) if current_sub_account.can?('manage_takeout_menus') %>
+              <%= link_to_left_nav( '外卖管理', shop_orders_path(industry_id: 10002), session[:current_industry_id] == 10002 && current_page?(shop_orders_path) ) if current_sub_account.can?('manage_takeout_orders') %>
+              <%= link_to_left_nav( '销售日报表', report_shop_orders_path(industry_id: 10002), session[:current_industry_id] == 10002 && current_page?(report_shop_orders_path) ) if current_sub_account.can?('manage_takeout_reports') %>
+              <%= link_to_left_nav( '下单时间分析', graphic_shop_orders_path(industry_id: 10002), session[:current_industry_id] == 10002 && current_page?(graphic_shop_orders_path) ) if current_sub_account.can?('manage_takeout_reports_graphic') %>
+            </ul>
+          </li>
+      <% end %>
+
+      <%- if current_sub_account.can_manage_hotel? %>
+          <li>
+            <a href="<%= hotel_branch_path %>" class="dropdown-toggle" target="_blank">
+              <i class="icon-plus"></i>
+              <span class="menu-text">微酒店</span>
+            </a>
+          </li>
+      <%- end %>
+    </ul>
+
+    <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+           data-icon2="icon-double-angle-right"></i>
+    </div>
+
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'collapsed')
+        } catch (e) {
+        }
+    </script>
+</div>
+

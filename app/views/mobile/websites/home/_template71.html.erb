@@ -1,0 +1,46 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<% index = 0 %>
+<% website_menus.each do |menu| %>
+    <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
+    <div class="index">
+
+      <%= link_to menu_url(menu), class: "box mod-index" do %>
+          <%= menu.pic_or_icon :has_title => true, :pic_type => "custom" %>
+      <% end if index % 2 == 1 %>
+
+      <div class="mod-index">
+        <div class="hd">
+          <%= link_to menu_url(menu), class: "box" do %>
+              <%= menu.title %>
+              <i class="fa fa-chevron-circle-right"></i>
+          <% end %>
+        </div>
+        <div class="bd">
+            <% if menu.has_sub_menus? %>
+                <% menu.sub_menus[0..3].to_a.each do |child| %>
+                  <%= link_to menu_url(child), class: 'box' do %>
+                    <%= child.title %>
+                  <% end %>
+                <% end %>
+            <% else %>
+              <% main_material = menu.menuable %>
+              <%= link_to material_type_url(main_material, menu), class: 'box' do %>
+                  <%= main_material.title %>
+              <% end if main_material.present? %>
+              <% main_material.children[0..2].to_a.each do |child| %>
+                  <%= link_to material_type_url(child, menu), class: 'box' do %>
+                      <%= child.title %>
+                  <% end %>
+              <% end if main_material.present? %>
+            <% end %>
+        </div>
+      </div>
+
+      <%= link_to menu_url(menu), class: "box mod-index" do %>
+          <%= menu.pic_or_icon :has_title => true, :pic_type => "custom" %>
+      <% end if index % 2 == 0 %>
+
+    </div>
+    <% index += 1 %>
+<% end %>

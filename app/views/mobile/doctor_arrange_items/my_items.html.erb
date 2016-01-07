@@ -1,0 +1,76 @@
+<section id="index">
+  <header>
+    <div class="wrap">
+      <a href="javascript:history.go(-1);" class="ico-prev">
+        <img src="/assets/mobile/whospital/ico-back.png">
+      </a>
+      <h1>我的预约订单</h1>
+    </div>
+  </header><!-- header end -->
+  <div class="body">
+    <form>
+      <% @items.each do |item| %>
+      <% if item.doctor_watch.present? %>
+      <div class="box box-order">
+        <dl>
+          <dt>订单信息<span class="info">预约订单号：<%= item.order_no %></span></dt>
+          <dd>
+            <div class="order-row">
+              <div class="fl">科室：</div>
+              <div class="fr"><span><%= item.hospital_department.try(:name) %></span></div>
+            </div>
+            <div class="order-row">
+              <div class="fl">专家：</div>
+              <div class="fr"><span><%= item.hospital_doctor.try(:name) %></span></div>
+            </div>
+            <div class="order-row">
+              <div class="fl">预约时间：</div>
+              <div class="fr">
+                <span><%= item.doctor_watch.arrange_time %></span>
+              </div>
+            </div>
+            <div class="order-row">
+              <div class="fl">下单时间：</div>
+              <div class="fr">
+                <span><%= item.created_at %></span>
+              </div>
+            </div>
+          </dd>
+        </dl>
+        <dl>
+          <dt>医院信息</dt>
+          <dd>
+            <div class="order-row">
+              <div class="fl">就诊医院：</div>
+              <div class="fr"><span><%= item.doctor_watch.shop_branch.name %></span></div>
+            </div>
+            <div class="order-row">
+              <div class="fl">医院地址：</div>
+              <div class="fr">
+                <a href="http://api.map.baidu.com/marker?location=<%= item.doctor_watch.doctor_arrange.shop_branch.location_y%>,<%= item.doctor_watch.doctor_arrange.shop_branch.location_x%>&title=<%=item.doctor_watch.doctor_arrange.shop_branch.address%>&content=<%= item.doctor_watch.doctor_arrange.shop_branch.address%>&output=html">
+                  <span><%= item.doctor_watch.shop_branch.address %></span></a>
+                </div>
+              </div>
+              <div class="order-row">
+                <div class="fl">联系电话：</div>
+                <div class="fr">
+                  <% unless item.doctor_watch.shop_branch.tel.blank? %>
+                  <a href="tel:<%=item.doctor_watch.shop_branch.tel%>"><span><%= item.doctor_watch.shop_branch.tel %></span></a>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="order-row">
+                <div class="fl">诊室路线：</div>
+                <div class="fr">
+                  <span><%= item.hospital_department.road %></span>
+                </div>
+              </div>
+            </dd>
+          </dl>
+        </div>
+        <% end %>
+      <% end %>
+    </form>
+  </div><!-- body end -->
+</section>

@@ -1,0 +1,12 @@
+<div class="index">
+  <div class="hd">
+    <%= @website.try(:name) %>
+  </div>
+  <div class="bd">
+    <% website_menus.each do |menu| %>
+        <%= link_to menu_url(menu), class: "box mod-index" do %>
+            <%= menu.title %>
+        <% end %>
+    <% end %>
+  </div>
+</div>

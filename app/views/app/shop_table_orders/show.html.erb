@@ -1,0 +1,50 @@
+<% provide(:title, '我要订座') %>
+<body>
+  <div class="html">
+    <div class="main">
+      <header>
+        <%= link_to app_shop_table_orders_url(anchor: "mp.weixin.qq.com"), class: "ico ico-prev" do %>
+          <img src="/assets/micro_stores/ico-prev.png"/>
+        <% end %>
+        <h1>订座详情</h1>
+      </header>
+
+      <section>
+      <div style="position:fixed;"></div>
+      <%= form_tag app_shop_table_order_path(@shop_table_order), method: :delete do |f| %>
+        <div class="box box-order-text">
+          <p> <b>预定门店：</b>
+            <span><%= @shop_table_order.shop_branch.try(:name) %></span>
+          </p>
+          <p> <b>预定时间：</b>
+            <span><%= @shop_table_order.booking_at %></span>
+          </p>
+          <p>
+            <b>用餐人数：</b>
+            <span><%= @shop_table_order.booking_count %>人</span>
+          </p>
+          <p>
+            <b>座位选择：</b>
+            <span><%= @shop_table_order.table_type_name %></span>
+          </p>
+          <p>
+            <b>订餐者电话：</b>
+            <span><%= @shop_table_order.mobile %></span>
+          </p>
+          <p>
+            <b>特殊需求：</b>
+            <span>
+              <%= @shop_table_order.description %>
+            </span>
+          </p>
+        </div>
+        <p class="box">
+          <%= submit_tag "取消订单", data: { confirm: '确定要取消订单？' }, class: "btn" if @shop_table_order.pending? %>
+        </p>
+      <% end %>
+      </section>
+    </div><!--main end-->
+  </div><!--wrap end-->
+
+<%= render "application/app_footer" %>
+</body>

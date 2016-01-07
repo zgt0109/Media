@@ -1,0 +1,67 @@
+<div class="m-main">
+  <%= form_tag sessions_path, id: "session_form", remote: true do %>
+    <div class="m-form">
+      <div class="m-icon circle"><i class="fa fa-user"></i></div>
+      <div class="m-title">微枚迪管理系统</div>
+      <div class="m-input-text m-input-join-u">
+        <%= text_field_tag :login, params[:login], class: "input-focus radius-bl0 radius-br0 validate", data: {tip: "请输入您的账号"} %>
+      </div>
+      <div class="m-input-text m-input-join-d m-input-pass">
+        <%= password_field_tag :password, nil, class: "input-focus radius-tl0 radius-tr0 validate", data: {tip: "请输入密码"} %>
+      </div>
+      <div class="m-input-text">
+        <%= text_field_tag "verify_code", nil, class: "input-focus validate", id: "check-place", data: {tip: "请输入验证码"} %>
+        <div class="m-check-num"><img id="image_code" src="/verify_code?<%= rand %>" width="90" height="40" alt="" /></div>
+        <div id="change_verify_code" class="m-tips m-tips-msg m-check-refresh"><i class="fa fa-refresh"></i></div>
+      </div>
+<!--       <div class="m-link-tip">
+        <a class="m-link-tip-fg" href="<%= new_password_reset_path %>">忘记密码？</a>
+        <a class="m-link-tip-rg" href="<%= register_path %>">注册新账号&gt;</a>
+      </div> -->
+      <div class="m-input-btn m-input-btn-ps">
+        <%= submit_tag "登录", class: "m-input-btn-s", disabled: true, disable_with: "提交中..."%>
+      </div>
+    </div>
+  <% end %>
+</div>
+<%= content_for :custom_js do %>
+    <script>
+      var frm = $("#session_form")
+      // frm.submit( function(ev) {
+      //  ev.preventDefault();
+
+      $("#session_form").bind("ajax:success", function(event, xhr, settings) {
+        checkInputDel($(".m-input-text"));
+        if(xhr["code"]==0){
+          location.href=xhr["url"];
+        }else{
+          checkInput($(".m-input-text").eq(xhr["num"]), xhr["status"], xhr["message"]);
+        }
+      });
+    </script>
+    <script>
+      $(function(){
+        $(".m-input-text input").Ztip({
+          exceptClass: ["validate"]
+        });
+      });
+
+      var input = $(".validate");
+      input.on("input keyup input", function() {
+        var flag = true;
+        input.each(function(i) {
+          var $val = $(this).val();
+          if (!$val || $val =="请输入您的账号" || $val =="请输入验证码") {
+            flag = false;
+            $(".m-input-btn-s").removeClass("m-input-btn-active").prop("disabled", true);
+            return false;
+          }
+        });
+        if(flag){
+          $(".m-input-btn-s").addClass("m-input-btn-active").prop("disabled", false);
+            console.log()
+            $("#password").prev().val($("#login").val());
+        }
+      });
+    </script>
+<% end %>

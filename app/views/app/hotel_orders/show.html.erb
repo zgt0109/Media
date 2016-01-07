@@ -1,0 +1,23 @@
+<header>
+	<a class="ico-hd arr-hd" href="javascript:history.go(-1);"></a>
+	<h1>订单详情</h1>
+</header>
+<div class="contxt cont-artical">
+	<div class="box-cont box-order">
+		<div class="hd">
+			<b><%= @hotel_branch.hotel.try(:name) %><%= @hotel_branch.try(:name) %></b>
+			<i><%= @hotel_room_type.try(:name) %></i> | <i><%= @hotel_order.try(:qty) %>间</i>
+		</div>
+		<div class="bd box-txt">
+			<p><span>入住日期</span><b><%= @hotel_order.check_in_date.strftime("%m月%d日") %> </b></p>
+			<p><span>离店日期</span><b><%= @hotel_order.check_out_date.strftime("%m月%d日") %> </b></p>
+			<p><span>订单状态</span><b><%= @hotel_order.try(:real_status_name) %></b></p>
+		</div>
+		<div class="ft box-txt">
+			<p><span>联系人电话：</span><b><%= @hotel_order.try(:mobile) %></b></p>
+			<p><span>现 金 支 付：</span><b>￥<%= @hotel_order.try(:total_amount) %></b></p>
+		</div>
+	</div>
+	<br/><br/>
+	<div class="tcenter"><%= link_to "参与评论", new_app_hotel_comment_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], oid: @hotel_order.try(:id), anchor: "mp.weixin.qq.com"), class: "btn btn-big" %></div>
+</div>

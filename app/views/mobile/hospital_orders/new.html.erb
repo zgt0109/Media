@@ -1,0 +1,112 @@
+<% provide(:title, @hospital.name) %>
+<section id="index">
+	<header>
+		<div class="wrap">
+			<a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+			<h1>预约挂号</h1>
+      <!--<a class="ico-member" onclick="transition('#transition-order-list','#index',1)"><img src="/assets/mobile/whospital/ico-member.png"/></a>-->
+			<a class="ico-member" href="<%= mobile_hospital_orders_path(wx_user_id: @wx_user.id) %>"><img src="/assets/mobile/whospital/ico-member.png"/></a>
+		</div>
+	</header><!-- header end -->
+	<div class="body">
+		<%= form_for @hospital_order, url: mobile_hospital_orders_path, method: :post do |f| %>
+		<%= hidden_field_tag "id", @hospital_doctor.id %>
+		<%= f.hidden_field :completed_at, value: Time.now %>
+		<%= f.hidden_field :wx_user_id %>
+			<div class="box box-order">
+				<dl>
+					<dt>专家信息</dt>
+					<dd>
+						<div class="order-row">
+							<div class="fl">科室：</div>
+							<div class="fr"><%= f.select :hospital_department_id, @hospital_doctor.hospital_departments.pluck(:name, :id) %></div>
+						</div>
+						<div class="order-row">
+              <div class="fl">专家：</div>
+              <div class="fr"><%= text_field_tag :hospital_doctor_id, @hospital_doctor.try(:name) %></div>
+            </div>
+						<div class="order-row">
+							<div class="fl">预约时间：</div>
+							<div class="fr date">
+								<input class="input" id="date" name="day" readonly/>
+							</div>
+						</div>
+						<div class="order-row">
+							<div class="fl">具体时间：</div>
+							<div class="fr">
+								<select name="noon">
+									<option value="9:00">上午</option>
+									<option value="14:00">下午</option>
+								</select>
+							</div>
+						</div>
+					</dd>
+				</dl>
+				<dl>
+					<dt>个人信息</dt>
+					<dd>
+						<div class="order-row">
+							<div class="fl">联系人：</div>
+							<div class="fr">
+								<!-- <input type="text"/> -->
+								<%= f.text_field :username, value: @wx_user.try(:nickname) %>
+							</div>
+						</div>
+						<div class="order-row">
+							<div class="fl">手机：</div>
+							<div class="fr">
+								<%= f.text_field :tel, value: @wx_user.try(:mobile) %>
+								<!--<input type="tel"/>-->
+								<!-- <span>wew3423423432</span> -->
+							</div>
+						</div>
+					</dd>
+				</dl>
+				<p class="tcenter">
+					<%= f.submit "提交挂号", class:"btn fw" %>
+				</p>
+			</div>
+		<% end %>
+	</div><!-- body end -->
+</section>
+
+<!-- 选择日期 JS -->
+<script type="text/javascript">
+$(function() {
+	$('.btn').click(function() {
+		if($("#hospital_order_tel").val() == ''){
+			alert('手机号码不能为空');
+			$('#hospital_order_tel').focus();
+			return false;
+		}else if($('#hospital_order_tel').val() && !test_mobile_number($('#hospital_order_tel').val())){
+			alert('手机号码格式不正确');
+			$('#hospital_order_tel').focus();
+			return false;
+		}else{
+			$(".box").submit();
+	  }
+	});
+});
+
+// 手机号码正则表达式
+function test_mobile_number(mobile_number) {
+	if (mobile_number == undefined) {
+		return false;
+	}
+	if (winwemedia_validators.mobile_reg.test(mobile_number)){
+		return true;
+	};
+	return false;
+}
+
+$(function(){
+	$( "#date" ).datepicker({
+		autoSize: true,
+		dateFormat: 'yy-mm-dd',
+		dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+		monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+		monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+	});
+});
+
+</script>

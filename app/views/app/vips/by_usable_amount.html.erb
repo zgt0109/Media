@@ -1,0 +1,38 @@
+<div class="html theme-1 vip-bg" id="html">
+  <div class="stage" id="stage">
+    <%= form_tag('/app/vips/save_release', method: :post) do %>
+      <%= hidden_field_tag :id, @package.id %>
+      <section id="sec-index">
+        <div class="password">
+          <p class="tcenter">共支付<%= @package.price %>元</p>
+          <div class="password-box">
+            <ul>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+            <input type="password" name="password" class="psw" />
+          </div>
+          <div class="form-btn mt">
+            <a href="javascript:void(0);" class="btn save_release">确认支付</a>
+            <a href="javascript:history.go(-1);" class="btn btn-small btn-gray">取消</a>
+          </div>
+        </div>
+      </section>
+    <% end %>
+  </div>
+</div>
+<script>
+  $(".save_release").on("click", function(){
+    var password=$('.psw').val();
+    if($('.psw').val() == ""){
+      alert("请输入密码！");
+      return false;
+    }else{
+      $('form').submit();
+    }
+  });
+</script>

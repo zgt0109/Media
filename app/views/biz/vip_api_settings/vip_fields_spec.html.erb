@@ -1,0 +1,31 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_vip' %>
+<% end %>
+
+<%= render 'biz/vip_api_settings/topbar' %>
+<style>
+  td { width: 200px; text-align: left; }
+</style>
+1、会员字段定义：
+<div class="box-table fl">
+<table>
+  <tr><th>字段名称        </th> <th>描述</th></tr>
+  <tr><td>id             </td> <td>会员ID</td></tr>
+  <tr><td>supplier_id    </td> <td>商户ID</td></tr>
+  <tr><td>uid            </td> <td>微信UID</td></tr>
+  <tr><td>vip_grade_name </td> <td>会员等级</td></tr>
+  <tr><td>user_no        </td> <td>会员卡号</td></tr>
+  <tr><td>name           </td> <td>姓名</td></tr>
+  <tr><td>mobile         </td> <td>手机号</td></tr>
+  <tr><td>birthday       </td> <td>生日</td></tr>
+  <tr><td>total_points   </td> <td>总积分</td></tr>
+  <tr><td>usable_points  </td> <td>可用积分</td></tr>
+  <tr><td>froze_points   </td> <td>被冻结积分</td></tr>
+  <tr><td>province_name  </td> <td>所在省</td></tr>
+  <tr><td>city_name      </td> <td>所在城市</td></tr>
+  <tr><td>district_name  </td> <td>所在区县</td></tr>
+  <tr><td>address        </td> <td>详细地址</td></tr>
+  <tr><td>description    </td> <td>会员简介</td></tr>
+  <tr><td>created_at     </td> <td>领卡日期</td></tr>
+</table>
+</div>

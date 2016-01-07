@@ -1,0 +1,25 @@
+function update_payment_transfer_result (transfer_result_data) {
+  $.ajax({
+      url: '<%= update_transfer_result_app_vip_user_payments_path({id: @vip_user_payment.id}) %>',
+      data: transfer_result_data,
+      ansync: false,
+      type: 'post',
+      success: function(data, status) {
+      }
+  });
+}
+
+function vip_user_payment_transfer() {
+  $.ajax({
+      //"/v1/vips/pay"
+      //<%= payment_request_payments_url %>',
+      url: "/v1/vips/pay",
+      data: <%=raw @vip_user_payment.transfer_params.to_json%>,
+      type: 'post',
+      success: function(data, status) {
+        update_payment_transfer_result(data)
+      }
+  });
+}
+
+vip_user_payment_transfer();

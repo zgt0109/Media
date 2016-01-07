@@ -1,0 +1,53 @@
+<% unless @website_pictures.size.zero? %>
+    <div class="banner banner-small" id="banner">
+      <ul class='clearfix'>
+        <% @website_pictures.each do |picture| %>
+            <li>
+              <%= link_to picture.menu_type.present? ? menu_url(picture) : 'javascript:;' do %>
+                  <%= image_tag picture.pic.large, class: 'img' if picture.pic? %>
+              <% end %>
+            </li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<% unless @website_menus.size.zero? %>
+    <div class="list5 clearfix">
+      <% @website_menus[0..3].each do |menu| %>
+          <%= link_to menu_url(menu), class: 'box' do %>
+              <div class="img-box">
+                <%= menu.pic_or_icon has_title: false, pic_type: "custom", pic_wrap_tag_i: :no, show_picture_material: :no, class: 'img' %>
+              </div>
+              <div class="text-box">
+                <div class="text-title"><%= menu.title %></div>
+              </div>
+          <% end %>
+      <% end %>
+
+      <% @website_menus[4..-1].to_a.each do |menu| %>
+          <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
+          <div class="box">
+            <div class="text-box">
+              <div class="text-title"><%= menu.title %></div>
+            </div>
+            <% if menu.has_sub_menus? %>
+                <% menu.sub_menus.each do |child| %>
+                    <%= link_to menu_url(child), class: 'img-box' do %>
+                        <%= image_tag child.pic.thumb, class: 'img' if child.pic? %>
+                    <% end %>
+                <% end %>
+            <% elsif main_material = menu.menuable && main_material.is_a?(Material) %>
+                <%= link_to material_type_url(main_material, menu), class: 'img-box' do %>
+                    <%= image_tag main_material.pic.thumb, class: 'img' if main_material.pic? %>
+                <% end %>
+                <% main_material.children.each do |child| %>
+                    <%= link_to material_type_url(child, menu), class: 'img-box' do %>
+                        <%= image_tag child.pic.thumb, class: 'img' if child.pic? %>
+                    <% end %>
+                <% end %>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+<% end %>

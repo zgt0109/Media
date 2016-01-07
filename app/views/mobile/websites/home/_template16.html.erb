@@ -1,0 +1,20 @@
+<div class="list">
+  <ul>
+    <% website_menus.each_with_index do |menu, index| %>
+      <li>
+        <%= link_to menu_url(menu) do %>
+          <div class="hd">
+            <b><%= menu.title %></b>
+            <span><%= menu.summary %></span>
+          </div>
+          <div class="bd">
+            <%= image_tag(menu.pic.custom) if menu.pic.custom.present?%>
+          </div>
+          <div class="ft">
+            查看全文
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

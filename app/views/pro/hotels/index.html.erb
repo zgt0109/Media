@@ -1,0 +1,40 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微酒店', hotels_path %></li>
+          <li><%= link_to '我的微酒店', hotels_path %></li>
+          <li><%= link_to '门店管理', hotels_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger">
+            <li class="active">
+              <%= link_to '门店管理', hotels_path %>
+            </li>
+            <li>
+              <%= link_to '分店管理', hotel_branches_path %>
+            </li>
+          </ul>
+
+          <div class="tab-content no-border padding-24">
+            <div id="tab1" class="tab-pane fade active in">
+              <div class="row">
+                <%= render 'form' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function() {
+            $('.error-message').remove();
+        })
+    </script>
+<% end %>

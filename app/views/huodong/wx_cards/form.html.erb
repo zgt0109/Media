@@ -1,0 +1,232 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '微信卡包', card_admins_wx_cards_path %></li>
+      <li><%= link_to '卡券管理', card_reports_wx_cards_path %></li>
+      <li><%= link_to '新增卡券', '#' %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12 margin-top-20">
+        <% activity = current_user.activities.where(activity_type_id:76).first %>
+        <%= form_for @wx_card, validate: true, html: { class: 'form col-sm-6' } do |f| %>
+          <%= f.hidden_field :color %>
+          <%= f.hidden_field :code_type, value: Wx::Card::CODE_TYPE_QRCODE %>
+          <%= f.hidden_field :brand_name, value: activity.page_title %>
+          <%= f.hidden_field :logo_url, value: activity.qiniu_logo_key %>
+          <%= f.hidden_field :use_custom_code, value: true %>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12 ">
+              <span class="input-group-addon width-100px">选择卡券类型<span class="required-star">*</span></span>
+              <%= f.select :card_type, Wx::Card::CARD_TYPES.slice(*%w[GENERAL_COUPON DISCOUNT GIFT CASH]).map(&:reverse), { selected: @wx_card.try(:card_type) }, class: "col-sm-12" %>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">卡券颜色<span class="required-star">*</span></span>
+              <div class="sel-box">
+                <a class="active" href="javascript:;">
+                  <label class="c-<%= Wx::Card::COLORS.index(@wx_card.try(:color)).to_i+1 %>"></label>
+                </a>
+                <ul>
+                  <% Wx::Card::COLORS.each_with_index do |color, i| %>
+                    <li><a href="javascript:;"class="c-<%= i + 1 %>" data-color="<%= color %>"></a></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix types DISCOUNT">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">折扣额度<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="表示打折额度(百分比),填 30 就是七折,且小于100。" data-original-title="" title=""></span></span>
+              <%= f.text_field :discount_discount, class: 'required col-sm-12' %>
+              <div class="input-group-addon">
+                <span class="margin-left-10">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix types CASH">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">减免金额<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="表示减免金额(单位为元)" data-original-title="" title=""></span></span>
+              <%= f.text_field :cash_reduce_cost, class: 'required col-sm-12' %>
+              <div class="input-group-addon">
+                <span class="margin-left-10">元</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix types CASH">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">起用金额<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="表示起用金额(单位为元)" data-original-title="" title=""></span></span>
+              <%= f.text_field :cash_least_cost, class: 'required col-sm-12' %>
+              <div class="input-group-addon">
+                <span class="margin-left-10">元</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">卡券标题<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="卡券名称不能为空且长度不超过9个汉字或18个英文字母" data-original-title="" title=""></span></span>
+              <%= f.text_field :title, class: 'required col-sm-12', id: 'p-title' %>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">卡券副标题<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="卡券名称不能为空且长度不超过9个汉字或18个英文字母" data-original-title="" title=""></span></span>
+              <%= f.text_field :sub_title, class: 'required col-sm-12' %>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">有效期<span class="required-star">*</span></span>
+              <div class="col-sm-12 row">
+                <div class="input-group input-group-text">
+                  <label class="input-group-addon width-100px">
+                    <%= f.radio_button :date_info_type, 1, checked: @wx_card.new_record? || @wx_card.try(:fixed_time?), class: :ace %>
+                    <span class="lbl"> 固定时间</span>
+                  </label>
+                  <%= datetime_range_tag f, start_at: :date_info_start_at, end_at: :date_info_end_at, options: {class: 'daterange col-sm-12 min-width-280'} %>
+                </div>
+                <div class="input-group input-group-text margin-top-10">
+                  <label class="input-group-addon width-100px">
+                    <%= f.radio_button :date_info_type, 2, checked: @wx_card.try(:fixed_term?), class: :ace %>
+                    <span class="lbl"> 领取后</span>
+                  </label>
+                  <%= f.select :date_info_fixed_begin_term, fixed_begin_term_options( @wx_card.try(:date_info_fixed_begin_term) ) %>
+                  <span class="margin-left-10 margin-right-10">生效，有效期</span>
+                  <%= f.select :date_info_fixed_term, fixed_term_options( @wx_card.try(:date_info_fixed_term) ) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12 ">
+              <span class="input-group-addon width-100px">库存<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="库存不能大于10亿" data-original-title="" title=""></span></span>
+              <%= f.text_field :sku_quantity, class: 'required col-sm-12' %>
+              <div class="input-group-addon">
+                <span class="margin-left-10">份</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12 ">
+              <span class="input-group-addon width-100px">领券限制<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-html="true" data-trigger="hover" data-placement="right" data-content="每个用户领券上限，默认为1" data-original-title="" title=""></span></span>
+              <%= f.text_field :get_limit, class: 'required col-sm-12', value: @wx_card.try(:get_limit) || 1 %>
+              <div class="input-group-addon">
+                <span class="margin-left-10">张</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <label class="col-sm-12">
+              <%= f.check_box :can_share, class: "ace" %>
+              <span class="lbl"> 用户可分享领券链接</span>
+            </label>
+          </div>
+          <div class="form-group clearfix">
+            <label class="col-sm-12">
+              <%= f.check_box :can_give_friend, class: "ace" %>
+              <span class="lbl"> 用户领券后可转赠其他好友</span>
+            </label>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12 ">
+              <span class="input-group-addon width-100px">操作提示<span class="required-star">*</span></span>
+              <%= f.text_field :notice, class: 'required col-sm-12', maxlength: 9, value: @wx_card.try(:notice) || "展示给店员使用" %>
+            </div>
+          </div>
+          <div class="form-group clearfix types GENERAL_COUPON">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">优惠详情<span class="required-star">*</span></span>
+              <%= f.text_area :general_coupon_default_detail, class: 'required form-control', rows: 5 %>
+            </div>
+          </div>
+          <div class="form-group clearfix types GIFT">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">优惠详情<span class="required-star">*</span></span>
+              <%= f.text_area :gift_gift, class: 'required form-control', rows: 5 %>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">使用须知<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="使用须知不能为空且长度不超过300个汉字" data-original-title="" title=""></span></span>
+              <%= f.text_area :description, class: 'required form-control', rows: 5, maxlength: 300 %>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="input-group input-group-text col-sm-12">
+              <span class="input-group-addon width-100px">客服电话<span class="required-star">*</span></span>
+              <%= f.text_field :service_phone, class: 'required col-sm-12' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="submit" value="保存" class="btn btn-sm btn-primary save_form">
+            <%= link_to "返回", :back, class: "btn btn-sm btn-default" %>
+          </div>
+        <% end %>
+        <div class="col-sm-6">
+          <div class="card-package c-<%= Wx::Card::COLORS.index(@wx_card.try(:color)).to_i+1 %>">
+            <div class="p-logo">
+              <img src="<%= activity.logo_url %>" alt="">
+              <span><%= activity.page_title %></span>
+            </div>
+            <div class="p-name" id="preview_title"><%= @wx_card.try(:title) || "卡券标题" %></div>
+            <div class="p-time" id="preview_time"><%= @wx_card.try(:wx_card_type) || Date.today %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  select_card_type();
+  <% if @wx_card.persisted? %>
+    $("form :input").prop('disabled', true);
+    showTip('warning', '不可修改');
+  <% end %>
+
+  $("#p-title").on("input",function(){
+    var title = $(this).val() || '这里岁卡券标题';
+    $("#preview_title").text(title);
+  });
+
+  $(".applyBtn").on("click",function(){
+    var start = $("[name='daterangepicker_start']").val(),
+        end = $("[name='daterangepicker_end']").val();
+    $("#preview_time").text(start+" - "+end);
+  });
+  $(".sel-box").on("click",".active",function(){
+    $(this).next("ul").slideToggle();
+  }).on("click","ul a",function(){
+    var $this = $(this),
+    $ul = $this.closest("ul"),
+    $class = $this.attr("class"),
+    $label = $ul.prev().find("label"),
+    $card = $(".card-package");
+    $ul.slideUp();
+    $label.attr("class",$class);
+    $card.attr("class","card-package "+$class);
+    $("#wx_card_color").val($this.attr("data-color"));
+  });
+  $(document).on("click",function(e){
+    var e = e || event;
+    if(!$(e.target).is(".sel-box,.sel-box *")){
+      $(".sel-box ul").slideUp();
+    }
+  });
+  $("#wx_card_card_type").on("change",select_card_type);
+});
+function select_card_type(){
+  var card_type = $("#wx_card_card_type").val();
+  $(".types").addClass("hide").hide();
+  $("." + card_type).removeClass("hide").show();
+}
+</script>
+<% end %>

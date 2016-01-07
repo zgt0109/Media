@@ -1,0 +1,7 @@
+<div class="banner">
+  <% if @activity.micro_aid_rule.banner_pic_url.present? %> 
+    <%= image_tag qiniu_img_url(@activity.micro_aid_rule.banner_pic_url), size: "640x250", class: "img-full banner-img", alt: "" %>
+  <% else %>
+    <%= image_tag "/assets/mobile/aids/global_banner.gif", size: "640x250", class: "img-full banner-img", alt: "" %>
+  <% end %>
+</div>

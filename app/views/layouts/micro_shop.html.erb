@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>门店管理系统</title>
+  <%= csrf_meta_tag %>
+  <meta name="description" content="responsive photo gallery using colorbox"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- basic styles -->
+  <%= stylesheet_link_tag 'micro_shop/micro_shop' %>
+
+  <!--[if IE 7]>
+  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css"/>
+  <![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="assets/css/ace-ie.min.css"/>
+  <![endif]-->
+
+  <%= javascript_include_tag 'jquery', 'micro_shop/ace-extra.min' %>
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.js"></script>
+  <script src="assets/js/respond.min.js"></script>
+  <![endif]-->
+  <script type="text/javascript" charset="utf-8">
+    window.qiniu_bucket = '<%= BUCKET_PICTURES %>'
+    window.qiniu_token = '<%= qiniu_pictures_upload_token %>'
+  </script>
+
+  <%= render 'application/baidu_tongji' %>
+</head>
+
+<body>
+<%= render 'biz/shops/navbar' %>
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        <%= render 'biz/shops/sidebar' %>
+
+        <%= yield %>
+
+
+    </div>
+
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div>
+<!-- /.main-container -->
+
+<!-- basic scripts -->
+
+
+<%= javascript_include_tag 'micro_shop/microshop_app' %>
+
+<script type="text/javascript">
+    $(function () {
+        App.init();
+        App.modal();
+        Validate.validateRestShop();
+    })
+    <% if flash[:notice] %>
+        new PNotify({
+            title: '通知',
+            text: '<%= flash[:notice] %>',
+            styling: 'fontawesome'
+        });
+    <% elsif flash[:alert] %>
+        new PNotify({
+            title: '通知',
+            text: '<%= flash[:alert] %>',
+            type: 'error',
+            styling: 'fontawesome'
+        });
+    <% end %>
+    <% flash.clear %>
+</script>
+<%= yield :custom_js if content_for?(:custom_js) %>
+
+</body>
+</html>

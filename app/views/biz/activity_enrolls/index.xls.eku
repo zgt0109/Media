@@ -1,0 +1,27 @@
+__filename = "enroll_users.xls"
+sheet1 = xls.create_worksheet
+
+@activity = if params[:id].present?
+				      current_user.activities.find(params[:id])
+				    elsif params[:search][:id_eq].present?
+				      current_user.activities.find(params[:search][:id_eq])
+				    else
+				      @activity_enrolls_all.first.try(:activity)
+				    end
+if @activity
+	columns = @activity.activity_forms.pluck(:field_value)
+	field_names = @activity.activity_forms.pluck(:field_name)
+
+	sheet1.row(0).concat columns + ['创建时间']
+
+	count_row = 1
+  @activity_enrolls_all.page(params[:page_exl]).per(200).each do |obj|
+    col = 0
+    field_names.each do |field_name|
+      sheet1[count_row, col] = obj.attrs(field_name)
+      col += 1
+    end
+    sheet1[count_row, col] = obj.created_at
+    count_row += 1
+  end
+end

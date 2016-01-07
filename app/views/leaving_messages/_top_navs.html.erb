@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger">
+  <li <% if action_name == "edit_activity" %>class="active"<% end %>>
+    <%= link_to "基础设置", "/leaving_messages/edit_activity" %>
+  </li>
+  <li <% if action_name == "set_template" %>class="active"<% end %>>
+    <%= link_to "模版设置", "/leaving_messages/set_template" %>
+  </li>
+  <li <% if action_name == "index" %>class="active"<% end %>>
+    <%= link_to "微留言管理", "/leaving_messages" %>
+  </li>
+
+</ul>

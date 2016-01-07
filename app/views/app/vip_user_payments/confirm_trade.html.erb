@@ -1,0 +1,60 @@
+<!-- 会员卡首页 start -->
+<section id="sec-index">
+  <%= form_for [:app, @vip_user_payment], remote: true, html: {class: "password"} do |f|%>
+    <p class="tcenter">共支付<%= number_to_currency @vip_user_payment.amount, unit: "", delimiter: ""%>元</p>
+
+    <div class="password-box">
+      <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <%= f.password_field :password, class: "psw"%>
+    </div>
+
+    <div class="form-btn mt">
+      <%= f.submit "确认支付", class: "btn", id: "submit_confirm_trade_form", disable_with: "支付中..." %>
+      <%= link_to "取消", @vip_user_payment.try(:callback_url_with_trade_result), class: "btn btn-small btn-gray"%>
+    </div>
+  <% end %>
+</section>
+<!-- 会员卡首页 end -->
+
+<%= javascript_include_tag "mobile/psw.js" %>
+<%= javascript_tag do %>
+  $(function(){
+    $("#submit_confirm_trade_form").bind("click", function (element,event) {
+      var password_array = [];
+
+      $(".psw").map(function(i, e) {
+        if (e.value == "") {
+         return false
+       } else {
+         password_array.push(e.value)
+       }
+      });
+
+      $("#vip_user_payment_password").val(password_array.join(""))
+
+    })
+
+    $('form#<%= "edit_vip_user_payment_#{@vip_user_payment.id}"%>').submit(function(event) {
+      var form = $(this);
+      $.ajax({
+        type: form.attr('method'),
+        url: form.attr('action'),
+        data: form.serialize()
+      }).done(function() {
+        // Optionally alert the user of success here...
+
+      }).fail(function() {
+        // Optionally alert the user of an error here...
+      });
+      event.preventDefault(); // Prevent the form from submitting via the browser.
+    });
+
+  })
+<% end %>

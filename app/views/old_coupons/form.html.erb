@@ -1,0 +1,55 @@
+<% params[:step] ||= '1' %>
+<% form_action = @activity.new_record? ? old_coupons_path : old_coupon_path(@activity.id) %>
+
+<%= render partial: "old_coupons/step#{params[:step]}", locals: { form_action: form_action } %>
+
+<% content_for :main_content do %>
+    <div class="main-content ">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <%= render 'partials/home' %>
+                <li><%= link_to '微活动', activities_path %></li>
+                <li><%= link_to '电子优惠券', old_coupons_activities_path %></li>
+            </ul>
+            <%= render '/layouts/qrcode' %>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="fuelux-wizard" data-target="#step-container">
+                        <ul class="wizard-steps">
+                            <li class="<%= 'active' if params[:step].to_i >= 1 %>">
+                                <span class="step">1</span>
+                                <span class="title">活动预热设置</span>
+                            </li>
+                            <li class="<%= 'active' if params[:step].to_i >= 2 %>">
+                                <span class="step">2</span>
+                                <span class="title">活动开始设置</span>
+                            </li>
+                            <li class="<%= 'active' if params[:step].to_i >= 3 %>">
+                                <span class="step">3</span>
+                                <span class="title">活动结束设置</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr>
+                </div>
+                <div class="col-sm-12 margin-top-20">
+                    <%= yield :form %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script>
+        $(function() {
+            <%- if @activity.can_not_edit? %>
+            $('input,select,textarea').prop('disabled', true);
+            $('.wysiwyg-editor').attr('contenteditable', false);
+            <% end %>
+            $('form').validate();
+        })
+    </script>
+<% end %>

@@ -1,0 +1,37 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<%= render :partial => "telphone", :locals => {:website => website} %>
+
+<div class="index">
+  <% website_menus.in_groups_of(5, false).each do |sub_menus| %>
+
+      <% ones = sub_menus[0..2] %>
+      <% twos = sub_menus[3..-1].to_a %>
+
+      <ul class="navLine-ul">
+        <% ones.each do |menu| %>
+            <li>
+              <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+                  <small><%= menu.title %></small>
+                  <%= menu.pic_or_icon :pic_type => "thumb" %>
+              <% end %>
+            </li>
+        <% end %>
+      </ul>
+
+      <% if twos.count > 0 %>
+          <ul class="navLine-ul">
+            <% twos.each do |menu| %>
+                <li>
+                  <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+                      <small><%= menu.title %></small>
+                      <%= menu.pic_or_icon :pic_type => "thumb" %>
+                  <% end %>
+                </li>
+            <% end %>
+          </ul>
+      <% end %>
+
+
+  <% end %>
+</div>

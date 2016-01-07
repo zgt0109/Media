@@ -1,0 +1,55 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '二维码推广', channel_qrcodes_path %></li>
+      <li><%= link_to '二维码分类', channel_types_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 二维码分类用于二维码管理中标识相同类别的二维码。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <button class="btn btn-primary btn-sm pull-right" data-toggle="modals" data-target="weisiteModal"
+                data-title="新增分类" data-width="" data-height="500" data-iframe="<%= new_channel_type_path %>">新增</button>
+      </div>
+      <div class="col-sm-12 margin-top-10">
+        <table class="table table-striped table-bordered table-hover dataTable ">
+          <thead>
+          <tr>
+            <th>分类名称</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+            <% if @channel_types.each do |channel_type| %>
+              <tr>
+                <td><%= channel_type.name %></td>
+                <td><%= channel_type.description %></td>
+                <td>
+                  <a href="javascript:;" data-toggle="modals" data-target="weisiteModal"
+                 data-title="编辑分类" data-width="" data-height="300" data-iframe="<%= edit_channel_type_path(channel_type) %>">编辑</a>
+                  <%= link_to '删除', channel_type_path(channel_type), method: 'delete', confirm: "确定要删除该分类？", data: {height: 160, weight: 350} %>
+                </td>
+              </tr>
+            <% end.blank? %>
+              <tr><td colspan="3" class="green text-center">无记录</td></tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @channel_types %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

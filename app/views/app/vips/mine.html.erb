@@ -1,0 +1,109 @@
+<% provide(:title, '我的中心') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="index" id="sec-index">
+      <div class="card-img"> <!-- no-card 没有领卡显示领卡按钮 -->
+        <div class="img-bg">
+          <img src="<%= @vip_card.cover_pic.presence || 'http://vcl-pictures.qiniucdn.com/FudiRXyXaCchVosPYrv22Ws9do1F' %>">
+          <div class="card-logo">
+            <% if @vip_card.logo? %>
+              <img src="<%= @vip_card.logo %>"/>
+            <% end %>
+          </div>
+          <div class="card-vip" style="color:#<%= @vip_card.name_bg_color.presence %>;"><%= @vip_card.try(:name) %></div>
+          <div class="card-name" style="color:#<%= @vip_card.card_bg_color.presence %>;">
+            <p><%= @vip_user.try(:vip_grade_name) %></p>
+            <p><%= @vip_user.try(:user_no) %></p>
+          </div>
+        </div>
+        <div class="card-btn">
+          <% if @vip_card.stopped? %>
+            <a class="btn btn-reg">商家已停用会员卡</a>
+          <% elsif @vip_user %>
+            <% if @vip_user.pending? %>
+              <a class="btn btn-reg">您的会员卡正在审核中</a>
+            <% elsif @vip_user.rejected? %>
+              <a class="btn btn-reg">您的会员卡申请已被拒绝</a>
+              <p class="card-p card-disnormal" id="card-p"><span class="fred">您的会员卡申请已被拒绝</span></p>
+            <% elsif @vip_user.freeze? %>
+              <a class="btn btn-reg">您的会员卡已被冻结</a>
+            <% end %>
+          <% else %>
+            <div class="card-btn">
+              <a class="btn btn-reg J-reg">点击领取会员卡</a>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <!-- tab box start -->
+      <div class="item-box">
+        <div class="item">
+          <a href="/app/vips/consumes">
+            <b><%= f @vip_user.try(:usable_amount) %></b>
+            <span>当前金额</span>
+          </a>
+        </div>
+        <%- if @supplier && @supplier.can_pay? && @vip_user && @vip_user.normal? %>
+          <div class="item cur">
+            <a href="/app/vips/go_recharge#mp.weixin.qq.com">
+              <b><i class="img img-1"></i></b>
+              <span>会员卡充值</span>
+            </a>
+          </div>
+        <% end %>
+        <div class="item">
+          <a href="/app/vips/points?type=out">
+            <b><%= @vip_user.try(:usable_points) %></b>
+            <span>可用积分</span>
+          </a>
+        </div>
+      </div>
+      <!-- tab box end -->
+      <!-- list box start -->
+      <div class="main">
+        <div class="list-box">
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="<%= my_mobile_coupons_path(supplier_id: session[:supplier_id]) %>">
+                <i class="icon icon-2"></i>
+                <span>我的优惠券</span>
+                <div class="num"><%= @coupons_count %></div>
+              </a>
+            </dt>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="<%= exchanged_app_vips_path(wxmuid: session[:wx_mp_user_id]) %>">
+                <i class="icon icon-3"></i>
+                <span>我的礼品券</span>
+                <div class="num"><%= @supplier.point_gifts.exchangeable.count %></div>
+              </a>
+            </dt>
+          </dl>
+        </div>
+        <div class="list-box">
+          <dl class="pos">
+            <dt class="border">
+              <a class="icon-right" href="/app/vips/print">
+                <i class="icon icon-5"></i>
+                <span>扫描我的会员卡</span>
+              </a>
+            </dt>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="/app/vips/information">
+                <i class="icon icon-6"></i>
+                <span>个人账户</span>
+              </a>
+            </dt>
+          </dl>
+        </div>
+      </div>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+  <%= render 'footbar' %>
+</div>

@@ -1,0 +1,34 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% color_index = 0 %>
+  <% website_menus.each do |menu| %>
+    <%sub_menus = menu.sub_menus%>
+    <%if sub_menus.present?%>
+      <dl>
+        <dt><%= menu.title%></dt>
+        <dd>
+          <% sub_menus.in_groups_of(3, false).each do |menus| %>
+            <div class="index-color-<%= color_index %>">
+              <% class_names = ["box", "mod-index", "index-#{menus.count}"] %>
+              <% menus.each do |menu| %>
+                <%= link_to menu_url(menu), class: class_names.join(" ") do %>
+                    <% if menu.pic? %>
+                      <i><%= image_tag menu.pic.thumb %></i>
+                    <% else %>
+                      <i class="fa <%= menu.try(:font_icon) %>"></i>
+                    <% end %>
+                    <small><%= menu.try(:title) || menu.try(:name) %></small>
+                  <% end %>
+                <% end %>
+              </div>
+              <%
+              color_index += 1
+              color_index = 0 if color_index == 6
+            %>
+            <% end %>
+          </dd>
+        </dl>
+      <%end%>
+    <%end%>
+  </div>

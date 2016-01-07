@@ -1,0 +1,33 @@
+<style>
+	label.error-message {display: none;}
+</style>
+<div class="main">
+	<section>
+		<%= form_for(@client, url: save_client_mobile_brokerages_path(@supplier)) do |f| %>
+			<div class="text ">
+				<%= f.text_field :name, maxlength: 5, class: "fc", placeholder: '输入客户姓名' %>
+				<span>*</span>
+			</div>
+			<div class="text">
+				<%= f.text_field :mobile, type: :tel, maxlength: 15, placeholder: '输入真实的客户电话以便我们回访' %>
+				<span>*</span>
+			</div>
+			<%= f.text_area :remarks, class: "remark", rows: 5, maxlength: 255, placeholder: '输入备注信息......' %>
+			<div class="blank30"></div>
+			<div class="broker-btn"><a href="#" id="client">马上推荐</a></div>
+		<% end %>
+	</section>
+</div>
+<script type="text/javascript">
+$('body').on('click','#client',function(){
+	var reg = /^[0-9_\-]*$/;
+	if($('#brokerage_client_name').val() == ""){
+		alert("请输入姓名！");
+	}else if($('#brokerage_client_mobile').val() == "" || !reg.test($('#brokerage_client_mobile').val())){
+		alert("请输入正确的电话号码！");
+	}else{
+		$(this).prop("disabled", true);
+		$('form').submit();
+	}
+});
+</script>

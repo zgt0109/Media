@@ -1,0 +1,48 @@
+<%= provide(:title, '适用门店') %>
+<%= stylesheet_link_tag "mobile/wcard" %>
+<%= javascript_include_tag 'mobile/vip_card' %>
+<div class="html theme-1" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <!-- tab box start -->
+      <% if @shop_branches.present? %>
+        <% @shop_branches.each_with_index do |shop,index| %>
+          <div class="<%= 'mt' if index != 0 %>">
+            <div class="list-box">
+              <div class="list-box-t">
+                <i class="icon icon-19"></i>
+                <%= shop.name %>
+              </div>
+              <dl>
+                <dt class="border">
+                  <a class="icon-right" href="/app/vips/map?address=<%= shop.address%>&city_name=<%= shop.city.try(:name)%>&supplier_name=<%= shop.name%>">
+                    <i class="icon icon-10"></i>
+                    <span>地址：<%= "#{shop.city.try(:province).try(:name)}#{shop.city.try(:name)}#{shop.district.try(:name)}#{shop.address}" %></span>
+                  </a>
+                </dt>
+              </dl>
+              <dl>
+                <dt class="border">
+                  <a class="icon-right" href="http://api.map.baidu.com/geocoder?address=<%= shop.city.try(:name)%><%= shop.address%>&output=html">
+                    <i class="icon icon-11"></i>
+                    <span>一键导航</span>
+                  </a>
+                </dt>
+              </dl>
+              <dl>
+                <dt class="border">
+                  <a class="icon-right" href="tel:<%= shop.tel %>">
+                    <i class="icon icon-12"></i>
+                    <span>电话：<%= shop.tel %></span>
+                  </a>
+                </dt>
+              </dl>
+            </div>
+          </div>
+        <%-end-%>
+      <% else %>
+        暂无门店
+      <%-end-%>
+    </section>
+  </div>
+</div>

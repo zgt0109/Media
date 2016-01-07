@@ -1,0 +1,22 @@
+<% title '支付' %>
+
+<div id="main" style="display: none;">
+  <div class="box">
+    <span class="title">支付</span>
+
+    <form action="https://ok.yeepay.com/payapi/mobile/pay/bankcard/debit/request" method="get" id='paysubmit'>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+        <% @data.each do |field, value| %>
+        <tr>
+          <td width="250"><%= field %>：</td><td><input type="text" size="50" name="<%= field %>" value="<%= value %>">
+          </td>
+        </tr>
+        <% end %>
+      </table>
+      <input type="submit" value="submit" id="pay_button">
+    </form>
+
+  </div>
+</div>
+
+<script>document.forms['paysubmit'].submit();</script>

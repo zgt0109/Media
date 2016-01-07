@@ -1,0 +1,17 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<%= render :partial => "telphone", :locals => {:website => website} %>
+
+<div class="index">
+  <% website_menus.in_groups_of(3, false).each do |sub_menus| %>
+    <ul class="navLine-ul">
+      <% sub_menus.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+            <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

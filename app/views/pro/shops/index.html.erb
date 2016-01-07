@@ -1,0 +1,140 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li>
+            <% if current_user.industry_food? || params[:activity_type_id] == "6" || params[:activity_type_id] == "7" || session[:current_industry_id] == 10001 %>
+                <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || params[:activity_type_id] == "9" || session[:current_industry_id] == 10002 %>
+                <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+          <li><a href="#">基本信息</a></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="tabbable">
+            <ul class="nav nav-tabs padding-24 tab-size-bigger">
+              <li class="<%= "active" unless @activity %>">
+                <% if params[:activity_type_id] == "6" || params[:activity_type_id] == "7" || session[:current_industry_id] == 10001 %>
+                    <%= link_to "基本信息", shops_path(industry_id: 10001) %>
+                <% elsif params[:activity_type_id] == "9" || session[:current_industry_id] == 10002 %>
+                    <%= link_to "基本信息", shops_path(industry_id: 10002) %>
+                <% end %>
+              </li>
+              <!-- 固定有的, 下面的是遍历出来的-->
+              <% @shop.activities.each do |activity| %>
+                  <% if activity.activity_type.book_dinner? && (params[:activity_type_id] == "6" || params[:activity_type_id] == "7" || session[:current_industry_id] == 10001) %>
+                      <li class="<%= "active" if params[:activity_type_id] == "6" %> ">
+                        <%= link_to "订餐设置", shops_path(activity_type_id: 6) %>
+                      </li>
+                  <% elsif activity.activity_type.take_out? && (params[:activity_type_id] == "9"  || session[:current_industry_id] == 10002) %>
+                      <li class="<%= "active" if params[:activity_type_id] == "9" %> ">
+                        <%= link_to "外卖设置", shops_path(activity_type_id: 9) %>
+                      </li>
+                  <% elsif activity.activity_type.book_table? && (params[:activity_type_id] == "6" || params[:activity_type_id] == "7" || session[:current_industry_id] == 10001)  %>
+                      <li class="<%= "active" if params[:activity_type_id] == "7" %> ">
+                       <%= link_to "订座设置", shops_path(activity_type_id: 7) %>
+                       </li>
+                  <% end %>
+
+              <% end %>
+            </ul>
+            <div class="tab-content no-border padding-24">
+
+          <% unless @activity %>
+              <div id="tab-1" class="tab-pane fade active in">
+                <div class="row">
+                  <div class="col-xs-12 ">
+                    <%= form_for @shop, validate: true do |f| %>
+                        <%= f.hidden_field :supplier_id %>
+                        <%= f.hidden_field :wx_mp_user_id %>
+                        <%= f.hidden_field :shop_type %>
+
+                        <label>餐厅名称</label>
+                        <div class="clearfix">
+                          <%= f.text_field :name, class: "col-xs-6" %>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm margin-top-20">保存</button>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+              <%if @activity %>
+                      <!-- tab开始 -->
+                      <div id="tab-<%= @activity.activity_type.id %>" class="tab-pane fade active in">
+                        <div class="row">
+                          <!-- 活动表单开始 -->
+                          <%= form_for @activity, validate: true, :html => {:class => "form col-xs-12"} do |f| %>
+                              <%= render "weixin_preview", wx_title: @activity.name || '标题', wx_summary: @activity.summary || '描述', wx_pic: (@activity.pic_url.blank? ? '/assets/activity_pics/11.jpg' : @activity.pic_url) %>
+
+                              <div class="col-xs-12 col-md-6 col-lg-7">
+                                <div class="form-group">
+                                  <label class="control-label">回复关键词<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="关键词不能和其他进行中的活动的关键词重复" data-original-title="" title=""> </span></label>
+                                  <div class="clearfix">
+                                    <%= f.text_field :keyword, class: "col-xs-6" %>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="control-label">微信消息标题<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息标题，不能超过64个字" data-original-title="" title=""> </span></label>
+
+                                  <div class="clearfix">
+                                    <%= f.text_field :name, class: "col-xs-6 js-copy" %>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片" data-original-title="" title=""></span></label>
+                                  <div class="clearfix">
+                                    <div data-name="activity[qiniu_pic_key]" data-img="<%= @activity.pic_url %>" data-key="<%= @activityqiniu_pic_key || "" %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+
+
+                                    <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要" data-original-title="" title=""></span></label>
+
+                                  <div class="clearfix">
+                                    <%= f.text_area :summary, rows: 5, maxlength: 255, placeholder: "不能超过255个字", class: "form-control js-copy-des" %>
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                                </div>
+                              </div>
+                            <% end %><!-- 表单结束-->
+                        </div>
+                        <!-- row 结束 -->
+                      </div>
+                      <!-- tab 结束 -->
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+
+<% content_for :custom_js do %>
+  <script>
+   $(function(){
+     $(".js-copy").keyup(function(){
+       $("#preview_title").html($(this).val());
+     });
+     $(".js-copy-des").keyup(function(){
+       $("#preview_summary").html($(this).val());
+     });
+   })
+  </script>
+<% end %>

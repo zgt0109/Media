@@ -1,0 +1,194 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>预约<%= params[:bespeak_type] == "1" ? "保养" : "试驾" %></div>
+    <%= form_for @car_bespeak, url: mobile_car_shops_path(supplier_id: @supplier.id), validate: true do |f| %>
+      <%= f.hidden_field :wx_user_id %>
+      <%= f.hidden_field :supplier_id %>
+      <%= f.hidden_field :wx_mp_user_id %>
+      <%= f.hidden_field :car_shop_id %>
+      <%= f.hidden_field :bespeak_type %>
+      <%= f.hidden_field :car_brand_id %>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <% if @car_bespeak.repair? %>
+              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, supplier_id: @supplier.id) %>" class="fa fa-chevron-right fa-chevron-right">
+                <b>我的保养<em class="bg-green"><%= @user_bespeak %></em></b>
+              </a>
+            <% else %>
+              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, supplier_id: @supplier.id) %>" class="fa fa-chevron-right fa-chevron-right">
+                <b>我的试驾<em class="bg-green"><%= @user_bespeak %></em></b>
+              </a>
+            <% end %>
+          </dt>
+        </dl>
+      </div>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>预约说明</b>
+            </a>
+          </dt>
+          <dd class="show">
+            <%= @activity.try(:summary) %>
+          </dd>
+        </dl>
+      </div>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>请认真填写表单</b>
+            </a>
+          </dt>
+          <dd class="show">
+            <div class="mod-form form-hor">
+              <div class="form-li">
+                <div class="li-l"><b>选择车系：</b></div>
+                <div class="li-r">
+                  <% options = @supplier.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+                  <%= select_tag("car_bespeak[car_catena_id]", options_for_select(options.insert(0,["选择车系",""]), @car_catena_id), id: 'car_catena', class: 'input') %>
+                </div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>选择车型：</b></div>
+                <div class="li-r" id="span_car_type">
+                  <%
+                  if @car_catena_id.present?
+                    options = @supplier.car_shop.car_types.where(car_catena_id: @car_catena_id).order(:sort).pluck(:name, :id)
+                  else
+                    options = [["选择车型",""]]
+                  end
+                  %>
+                  <%= select_tag("car_bespeak[car_type_id]", options_for_select(options, @car_type_id), id: 'car_type', class: 'input') %>
+                </div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>姓名：</b></div>
+                <div class="li-r"><%= f.text_field :name, placeholder: "请输入您的姓名", class: "input" %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>手机号码：</b></div>
+                <div class="li-r"><%= f.text_field :mobile, placeholder: "请输入您的手机号码", class: "input" %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>预约时间：</b></div>
+                <div class="li-r"><%= f.text_field :bespeak_date, id: "date", readonly: true, class: "input" %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>备注：</b></div>
+                <div class="li-r"><%= f.text_field :description, placeholder: "如您有特殊需求，请在此说明", class: "input" %></div>
+              </div>
+            </div>
+          </dd>
+        </dl>
+      </div>
+      <div class="mod-btn">
+          <input type="button" value="提交预约" data-input="submit" class="btn btn-bigest" readonly/>
+      </div>
+    <% end %>
+  </div>
+</section>
+<script type="text/javascript">
+$("[name='car_bespeak[car_catena_id]']").change(function(){
+  var set_url = "<%= select_type_mobile_car_owners_url(supplier_id: @supplier.id) %>" + "?car_catena_id=" + $("[name='car_bespeak[car_catena_id]']").val() + "&name=car_bespeak";
+  jQuery.ajax({
+    type: "GET",
+    url: set_url,
+    dataType: "json",
+    success: function(data){
+      $('#span_car_type').html(data.html);
+    }
+  });
+});
+
+$(function(){
+  $( "#date" ).datepicker({
+    autoSize: true,
+    dateFormat: 'yy-mm-dd',
+    minDate: "<%= Date.today %>",
+    dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+    monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+  });
+  focusForm("header",function(){
+      $("header").css({"margin-bottom":"0"});
+  },function(){
+      $("header").css({"margin-bottom":"-120px"});
+  });
+});
+
+$(function() {
+  $('.btn-bigest').click(function() {
+    var now = new Date().format("yyyy-MM-dd hh:mm:ss");
+    bespeak_date = $('#car_bespeak_bespeak_date').val();
+    $car_bespeak_bespeak_car_brand = $('#bespeak_car_brand');
+    $car_bespeak_car_catena = $('#car_catena');
+    $car_bespeak_car_type = $("[name='car_bespeak[car_type_id]']");
+    $car_bespeak_bespeak_date = $('#date');
+    $car_bespeak_plate_number = $('#car_bespeak_plate_number');
+    $car_bespeak_name = $('#car_bespeak_name');
+    $car_bespeak_mobile = $('#car_bespeak_mobile');
+    $car_bespeak_order_date = $('#car_bespeak_order_date');
+    $car_bespeak_order_budget = $('#car_bespeak_order_budget');
+    if(!$car_bespeak_car_catena || $car_bespeak_car_catena.val()==""){
+      alert('车系不能为空');
+      $car_bespeak_car_catena.focus();
+    }else if(!$car_bespeak_car_type || $car_bespeak_car_type.val()==""){
+      alert('车型不能为空');
+      $car_bespeak_car_type.focus();
+    }else if(!$car_bespeak_bespeak_date || $car_bespeak_bespeak_date.val()==""){
+      alert('请选择预约时间');
+      $car_bespeak_bespeak_date.focus();
+    }else if(bespeak_date < now){
+      alert('预约时间必须大于当前时间');
+      $bespeak_date.focus();
+    }else if(!$car_bespeak_name || $car_bespeak_name.val()==""){
+      alert('姓名不能为空');
+      $car_bespeak_name.focus();
+    }else if(!test_mobile_number($car_bespeak_mobile.val()) || $car_bespeak_mobile.val()==""){
+      alert('手机号码格式不正确');
+      $car_bespeak_mobile.focus();
+    }else{
+      $(this).attr("disabled", "disabled");
+      $("form").submit();
+    }
+  });
+});
+
+   // 手机号码正则表达式
+   function test_mobile_number(mobile_number) {
+     if (mobile_number == undefined) {
+       return false;
+     }
+     if (winwemedia_validators.mobile_reg.test(mobile_number)){
+       return true;
+     };
+     return false;
+   }
+
+   Date.prototype.format = function(format){
+     var o = {
+       "M+" : this.getMonth()+1, //month
+       "d+" : this.getDate(), //day
+       "h+" : this.getHours(), //hour
+       "m+" : this.getMinutes(), //minute
+       "s+" : this.getSeconds(), //second
+       "q+" : Math.floor((this.getMonth()+3)/3), //quarter
+       "S" : this.getMilliseconds() //millisecond
+     }
+
+     if(/(y+)/.test(format)) {
+       format = format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+     }
+
+     for(var k in o) {
+       if(new RegExp("("+ k +")").test(format)) {
+         format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+       }
+     }
+     return format;
+   }
+
+   </script>

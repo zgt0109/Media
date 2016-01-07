@@ -1,0 +1,24 @@
+<% provide(:title, @hospital.name) %>
+<section id="index">
+	<header>
+		<div class="wrap">
+			<a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+			<h1>我的预约单</h1>
+		</div>
+	</header><!-- header end -->
+	<div class="body">
+		<% if @hospital_orders.count == 0 %>
+		  <div class="box-null">真遗憾，暂时没有预约订单哦！</div><!--box-null end-->
+		<% else %>
+		<% @hospital_orders.each do |order| %>
+		<div class="box-p">
+			<p class="p-title"><b>预约单号：</b><span><%= order.order_no %></span></p>
+			<p><b>科室：</b><span class="fgreen"><%= order.hospital_department.try(:name) %></span></p>
+			<p><b>专家：</b><span class="fgreen"><%= order.hospital_doctor.try(:name) %></span></p>
+			<p><b>预约时间：</b><span><%= cn_am_pm order.booking_at %></span></p>
+			<p><b>下单时间：</b><span><%= cn_am_pm order.created_at %></span></p>
+		</div>
+		<% end %>
+		<% end %>
+	</div><!-- body end -->
+</section>

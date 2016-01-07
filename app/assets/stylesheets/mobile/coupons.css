@@ -1,0 +1,78 @@
+/*
+*= require mobile/winwemedia01
+*= require font/font-awesome.min
+*= require mobile/showshare
+*= require_self
+*/
+
+.body{font-size:12px;}
+header{width:100%;height:44px;line-height:44px;background:#5ab6b4;}
+header a{display:block;width:25%;height:100%;float:left;padding:0 10px;}
+header a img{max-height:22px;}
+header h1{width:50%;color:#fff;font-size:16px;text-align:center;float:left;}
+
+/*btn*/
+.btn-box{width:100%;padding:10px;}
+.btn-block{width:100%;}
+.btn-green{background:#6fc1be;}
+.edit{overflow:hidden;}
+.edit img{max-width:100%;}
+/*tab-box*/
+.tab-box{width:100%;height:35px;background:#f7f7f7;}
+.tab-box ul{width:100%;height:35px;display:table;list-style:none;}
+.tab-box li{display:table-cell;text-align:center;vertical-align:middle;}
+.tab-box a{color:#666;padding:5px 10px;border-radius:1000px;}
+.tab-box .active a{color:#fff;background:#5ab6b4;}
+
+.tab-page{display:none;}
+.coupons-list .active{display:block;}
+
+.coupons-t{color:#000;font-size:16px;margin-top:5px;padding:0 10px;height:30px;line-height:30px;}
+.coupons-list{padding:1px 10px;}
+.coupons-list .box{display:table;width:100%;height:78px;color:#fff;margin-top:10px;border-radius:5px;}
+.cp-info{width:100%;height:100%;display:table-cell;padding:5px 10px;background:#ff5575;position:relative;vertical-align:top;}
+.cp-info:after{display:table;content:"";position:absolute;right:0;bottom:0;width:82px;height:40px;background:url(/mobile/img/coupons/coupons-icon.png);-webkit-background-size:auto 47px;background-size:auto 47px;}
+.cp-logo{width:82px;height:100%;float:right;border-left:2px dotted #ff5575;margin-left:-1px;text-align:center;line-height:80px;}
+.cp-logo img{max-height:80px;max-width:70px;}
+.cp-price{height:55px;padding-top:5px;}
+.cp-price:after{display:table;content:"";clear:both;}
+.cp-price dd,
+.cp-price dt{float:left;}
+.coin{font-size:15px;padding-top:15px;}
+.cp-price dt{font-size:42px;margin:0 5px;}
+.cp-price dd b{display:block;font-size:18px;margin-top:5px;}
+.cp-time{height:15px;}
+
+.c-receive,
+.c-use{border:1px solid #ff5575;}
+.c-receive .cp-info,
+.c-use .cp-info{background:#ff5575;}
+.c-receive .cp-info:after{background-position:0 0;}
+.c-use .cp-info:after{background-position:-270px 0;}
+.c-receive .cp-logo,
+.c-use .cp-logo{border-left-color:#ff5575;}
+
+.c-end,
+.c-used{border:1px solid #7edadb;}
+.c-end .cp-info,
+.c-used .cp-info{background:#7edadb;}
+.c-end .cp-info:after{background-position:-90px 0;}
+.c-used .cp-info:after{background-position:-360px 0;}
+.c-end .cp-logo,
+.c-used .cp-logo{border-left-color:#7edadb;}
+
+.c-overdue{border:1px solid #ccc;}
+.c-overdue .cp-info{background:#ccc;}
+.c-overdue .cp-info:after{background-position:-180px 0;}
+.c-overdue .cp-logo{border-left-color:#ccc;}
+/*list-box*/
+.mod-box{margin-top:0px;}
+.mod-box dl:first-child{border-top:none;}
+.mod-box dl dt:first-child a{border-top:1px solid #ccc;}
+.mod-box dl:last-child{border-bottom:none;}
+.mod-box .icon{position:absolute;left:-30px;top:12px;}
+.icon{display:inline-block;width:20px;height:20px;background:url(/mobile/img/coupons/icon.png);background-repeat:no-repeat;-webkit-background-size:auto 20px;background-size:auto 20px;}
+.icon-1{background-position:-160px 0;}
+.icon-2{background-position:-320px 0;}
+.fa-chevron-right:before{display:block;content:"";position:absolute;right:2px;top:10px;width:20px;height:20px;background:url(/mobile/img/coupons/icon.png);background-repeat:no-repeat;background-position:-300px 0;-webkit-background-size:auto 20px;background-size:auto 20px;-webkit-background-size:auto 20px;background-size:auto 20px;opacity:0.5;}
+.fa-chevron-down:before{content:'';}

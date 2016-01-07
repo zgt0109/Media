@@ -1,0 +1,72 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '会员卡', vip_users_path %></li>
+      <li><%= link_to '会员营销', marketing_vip_cards_path %></li>
+      <li><%= link_to '会员套餐服务项目', vip_package_items_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render 'biz/vip_packages/tab_card' %>
+
+        <div class="tab-content no-border padding-24">
+          <div class="tab-pane active">
+            <div class="col-sm-12 row">
+              <%= form_for @search, url: vip_package_items_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+              <div class="col-md-3 row">
+                <div class="input-group input-group-sm input-group-text">
+                  <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入服务项目" %>
+                  <span class="input-group-addon">
+                  <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                  </span>
+                </div>
+              </div>
+                <div class="col-md-3 row">
+                </div>
+                <div class="col-md-3 row pull-right">
+                  <a href="<%= new_vip_package_item_path %>" class="btn btn-primary btn-sm btn-filter pull-right margin-left-10">新增</a>
+                </div>
+              <% end %>
+            </div>
+            <div class=" col-sm-12 row margin-top-20">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>服务项目</th>
+                    <th>价格</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @package_items.each do |item| %>
+                    <tr id="item-<%= item.id %>">
+                      <td><%= item.name %></td>
+                      <td><%= f item.price %></td>
+                      <td><%= item.created_at %></td>
+                      <td>
+                      <a href="<%= edit_vip_package_item_path(item) %>" class="fgreen">编辑</a>
+                      <% unless item.vip_packages.count > 0 %>
+                        <%= link_to '删除', vip_package_item_path(item), remote: true, method: 'delete', confirm: "你确定要删除吗?" %>
+                      <% end %>
+                      </td>
+                    </tr>
+                  <% end.blank? %>
+                    <tr><td colspan="4" class="green text-center">无记录</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @package_items %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

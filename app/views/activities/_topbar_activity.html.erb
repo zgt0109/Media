@@ -1,0 +1,47 @@
+<a href="javascript:void(0);" class="h1 <%= (request.original_url =~ /activities$|activities(\?page|\/old_coupons|\/guas|\/wheels|\/fights|\/groups|\/surveys|\/votes|\/hit_eggs|\/slot)/i) ? "pagecurrent" : 'uncurrent' %>">
+ <% case @search.activity_type_id_eq  when 3 %>
+ 电子优惠券
+ <% when 4 %>
+ 刮刮卡抽奖
+ <% when 5 %>
+ 幸运大转盘
+ <% when 8 %>
+ &nbsp;&nbsp;一战到底&nbsp;&nbsp;
+ <% when 12 %>
+ 微投票
+ <% when 14 %>
+ 我的团购
+ <% when 15 %>
+ 微调研
+ <% when 25 %>
+ 砸金蛋
+  <% when 28 %>
+ 老虎机
+ <% else %>
+ 我的营销活动
+ <% end %>
+</a>
+<% if @search.activity_type_id_eq == 8 %>
+  <a href="<%= fight_questions_path %>" class="h1 <%= ((request.original_url =~ /activities\/fight_questions/i) ? "pagecurrent" : 'uncurrent') %>">题库管理</a>
+<%end%>
+<% if @search.activity_type_id_eq && @search.activity_type_id_eq != 12 && @search.activity_type_id_eq != 15 %>
+  <a href="<%= consumes_activities_path %>?activity_type_id=<%= @search.activity_type_id_eq%>" class="h1 <%= ((request.original_url =~ /activities\/consumes/i) ? "pagecurrent" : 'uncurrent') %>">SN码管理</a>
+  <% unless @activity_type_id == 14 || @activity_type_id == 12 || @activity_type_id == 15%>
+    <a href="<%= report_activities_path %>?activity_type_id=<%= @activity_type_id %>" class="h1 <%= ((request.original_url =~ /activities\/report/i) ? "pagecurrent" : 'uncurrent') %>">
+      <%= "优惠券报表" if @activity_type_id == 3 %>
+      <%= "刮刮卡报表" if @activity_type_id == 4 %>
+      <%= "大转盘报表" if @activity_type_id == 5 %>
+      <%= "砸金蛋报表" if @activity_type_id == 25 %>
+      <%= "一战到底报表" if @activity_type_id == 8 %>
+      <%= "老虎机报表" if @activity_type_id == 28 %>
+    </a>
+  <% end %>
+<%end%>
+<% if @search.activity_type_id_eq == 12 %>  
+  <%= link_to "用户数据", votes_user_data_activities_path, class: "h1 #{((request.original_url =~ /activities\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+<% end %>
+<% if @search.activity_type_id_eq == 15 %>
+  <%# = link_to "题目设置", activity_survey_questions_path, class: "h1 #{((controller_name == 'activity_survey_questions' && %(index new edit show).include?(action_name))? 'pagecurrent' : 'uncurrent')}" %>
+  <%# = link_to "统计图表", diagram_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/diagram/i)) ? 'pagecurrent' : 'uncurrent'}" %>
+  <%= link_to "用户数据", user_data_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+<% end %>

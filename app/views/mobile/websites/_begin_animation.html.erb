@@ -1,0 +1,20 @@
+<% if @website_setting.open_begin_animation? && @website_setting.bg_image.present? && !(@website_setting.first_display && session[:display_begin_animation])%>
+  <% session[:display_begin_animation] = true %>
+  <% content_for :begin_animation_section do %>
+    <!-- 首页开场动画 Start -->
+    <div class="mod-animate animate-<%= @website_setting.begin_animation_type %>" id="animate-<%= @website_setting.begin_animation_type %>">
+      <% if @website_setting.begin_animation_type.to_i == 9 %>
+          <div class="mod-gua"></div>
+      <% else %>
+          <%= image_tag @website_setting.bg_image %>
+      <% end %>
+    </div>
+    <!-- 首页开场动画 End -->
+    <%= javascript_include_tag '/assets/mobile/lib/wScratchPad.js' if @website_setting.begin_animation_type.to_i == 9 %>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        fade<%= @website_setting.begin_animation_type %>("#animate-<%= @website_setting.begin_animation_type %>", '<%= @website_setting.bg_image.to_s %>'); // 首页开场动画
+      });
+    </script>
+  <% end %>
+<% end %>

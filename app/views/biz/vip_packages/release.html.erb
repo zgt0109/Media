@@ -1,0 +1,98 @@
+<%= form_tag save_release_vip_packages_path do %>
+  <%= hidden_field_tag :user_no, "" %>
+  <div class="modal-body">
+    <div class="input-group input-group-text">
+      <input type="text" class="col-xs-12" id="search_user_no" placeholder="请输入会员卡号">
+      <span class="input-group-addon">
+       <a href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+     </span>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="user_info" style="display:none">
+          <table class="text-info" id="vip_user">
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>选择会员卡套餐<span class="required-star">*</span>
+      <div class="clearfix">
+        <% vip_packages = @vip_card.vip_packages.active.latest.map{|a|["#{truncate_utf(a.name)}(#{f a.price}元)",a.id]} %>
+        <%= select_tag :id,
+            options_for_select(
+            vip_packages.insert(0,['请选择',''])
+            )
+        %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>支付方式<span class="required-star">*</span>
+      <div class="clearfix">
+        <% payment_types = [['请选择',''],['会员卡余额支付',VipPackagesVipUser::BY_BALANCE],['现金支付',VipPackagesVipUser::BY_CASH]] %>
+        <%= select_tag :payment_type,
+            options_for_select(payment_types)
+        %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>备注</label>
+      <div class="clearfix">
+        <%= text_area_tag :description, nil, row: 5, class: "col-xs-12" %>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" onclick="save_button()">确定发放</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script>
+  $(document).on("change", '#id', function(){
+    var get_url = "<%= use_usable_amount_vip_packages_path %>" + "?user_no=" + $("#user_no").val() + "&id=" + $("#id").val();
+    $.getJSON(get_url, function(data) {
+      $("#payment_type").val(data.status ? "<%= VipPackagesVipUser::BY_BALANCE %>" : "<%= VipPackagesVipUser::BY_CASH %>");
+    });
+  });
+
+  $('#search_user_no').keydown(function(event) { if(event.which == 13) { event.preventDefault(); return false; } });
+  var package_price = <%= raw Hash[@vip_card.vip_packages.active.latest.pluck(:id, :price)].to_json %>
+  function save_button(){
+    var select_id = $("#id").val();
+    if($("#user_no").val() == ""){
+      showTip('warning',"请先查询会员卡号");
+      return false;
+    }else if(select_id == ""){
+      showTip('warning',"请选择会员卡套餐");
+      return false;
+    }else if($("#payment_type").val() == ""){
+      showTip('warning',"请选择支付方式");
+      return false;
+    }else if($("#payment_type").val() == "1" && package_price[parseFloat(select_id)] > parseFloat($('td:last').html())){
+      showTip('warning',"余额不足");
+      return false;
+    }else{
+      $('form').submit();
+    }
+  }
+
+$('.btn-filter').on("click", function(){
+  var get_url = "<%= find_vip_user_vip_packages_path %>" + "?user_no=" + $("#search_user_no").val();
+  $.get(get_url, function(data) {
+    if(data.user_status == 1){
+      $('#user_no').val(data.user_no);
+      $('#vip_user').html('<tr><td>会员卡号:</td><td>'+ data.user_no +'</td></tr>'+ '<tr><td>会员姓名:</td><td>'+ data.name +'</td></tr>' + '<tr><td>手机号码:</td><td>'+ data.mobile +'</td></tr>' + '<tr><td>余额:</td><td>'+ data.usable_amount +'</td></tr>');
+      $('.user_info').show();
+    }else{
+      $('.user_info').hide();
+      showTip('warning',"该会员不存在");
+      return false;
+    }
+  });
+});
+
+</script>
+<% end %>

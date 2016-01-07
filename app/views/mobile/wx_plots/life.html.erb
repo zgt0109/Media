@@ -1,0 +1,39 @@
+<% title @life.name %>
+<div class="body">
+  <div class="life-box no-margin">
+    <dl>
+      <dt><%= @life.name %></dt>
+      <dd>
+        <div class="life-li">
+          <a href="javascript:void(0);" class="box">
+            <i class="fa fa-phone"></i>
+            <span><%= @life.phone %></span>
+            <span class="mark"><%= @life.wx_plot_category.try(:name) %></span>
+          </a>
+        </div>
+        <div class="life-li">
+          <a href="javascript:void(0);" class="box">
+            <i class="fa fa-map-marker"></i>
+            <%= @life.address %>
+          </a>
+        </div>
+        <div class="edit">
+          <%= raw @life.content %>
+        </div>
+        <div class="btn-box">
+          <div class="btn-cell cell-default">
+            <%= link_to '拨打联系电话', "tel:#{@life.phone}", class: 'btn btn-primary' %>
+          </div>
+          <div class="btn-cell cell-small">
+            <%= link_to '返回', lives_mobile_wx_plots_url, class: 'btn' %>
+          </div>
+        </div>
+      </dd>
+    </dl>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function(){
+      $(".edit img").css({"height":"auto","width":"auto","max-width":"100%"});
+  });
+</script>

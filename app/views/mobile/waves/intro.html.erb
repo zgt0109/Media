@@ -1,0 +1,41 @@
+<section class="content2-wrap">
+  <section class="banner"><img src="/assets/img/lottery/rule.png" alt=""/></section>
+  <div class="prize-btn">
+    <a href="javascript:;" class="act-prize" data-toggle="tab" data-target="#tab1"></a>
+    <a href="javascript:;" class="act-des" data-toggle="tab" data-target="#tab2"></a>
+  </div>
+  <article class="content2">
+    <article class="tab-content">
+      <article id="tab1" class="tab">
+        <% @activity.activity_prizes.each do |prize| %>
+          <div class="item">
+            <header><%= prize.title %>
+              <%- if @activity.activity_property.is_show_prize_qty? %>
+                <small><%= prize.prize_count %>名</small>
+              <%- end %>
+            </header>
+            <p>
+              <%= prize.prize %>
+            </p>
+          </div>
+        <%- end %>
+      </article>
+      <article id="tab2" class="tab">
+        <p class="act-con-time">活动时间：</p>
+        <p><%= @activity.start_at %>--<%= @activity.end_at %></p>
+        <p class="act-con-des">活动说明：<%= raw @activity.description %></p>
+      </article>
+    </article>
+  </article>
+  <a href="<%= mobile_waves_path(activity_id: @activity.try(:id)) %>" class="back"></a>
+</section>
+<script>
+    $(function () {
+        var winstr = window.location.href;
+        var eqs = parseInt(winstr.substr(winstr.length-1,winstr.length));
+        var sefl = $('.prize-btn a').eq(eqs-1);
+        sefl.addClass('active');
+        var target = sefl.attr('data-target');
+        $(target).show().siblings().hide();
+    })
+</script>

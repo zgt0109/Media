@@ -1,0 +1,77 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微酒店', hotels_path %></li>
+          <li><%= link_to '订单管理', hotel_orders_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+
+          <div class="col-sm-12 no-padding input-filter">
+            <%= form_for @search, html: { method: :get } do |f| %>
+                <div class="col-md-3">
+                  <select name="field" class="form-control">
+                    <option value='name' <%= params[:field] == 'name' ? 'selected' : '' %>>姓名</option>
+                    <option value='mobile' <%= params[:field] == 'mobile' ? 'selected' : '' %>>手机号码</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input name="q" value="<%= params[:q] %>" type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="col-md-3">
+                  <%= f.select :status_eq, HotelOrder.status_options, { include_blank: '全部' }, class: "form-control" %>
+                </div>
+                <div class="col-sm-3">
+                  <input type="submit" class="btn btn-primary btn-sm btn-filter" value="查询"/>
+                </div>
+            <% end %>
+          </div>
+
+          <div class="col-sm-12 no-padding-right margin-top-20">
+            <table id="" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+                  <tr>
+                    <th style="width: 15%;">入住人姓名</th>
+                    <th style="width: 12%;">手机号码</th>
+                    <th style="width: 12%;">预定房型</th>
+                    <th>预定日期</th>
+                    <th style="width: 12%;">预定门店</th>
+                    <th style="width: 12%;">预定状态</th>
+                    <th style="width: 15%;">操作</th>
+                  </tr>
+              </thead>
+              <tbody>
+              <% @hotel_orders.each do |order| %>
+                  <tr>
+                    <td><%= order.name %></td>
+                    <td><%= order.mobile %></td>
+                    <td><%= order.hotel_room_type.try(:name) %></td>
+                    <td>
+                      <%= order.check_in_date %>
+                      至
+                      <%= order.check_out_date %>
+                    </td>
+                    <td><%= order.hotel_branch.try(:name) %></td>
+                    <td><%= order.real_status_name %></td>
+                    <td>
+                      <%= link_to '完成', [:completed, order], data: {confirm: "确认执行完成操作？", method: :post} if order.incomplete? and not order.expired? %>
+                      <%= link_to '撤消', [:revoked, order], data: {confirm: "确认执行撤消操作？", method: :post} if order.incomplete? and not order.expired? %>
+                      <%= link_to '查看详情', 'javascript:void(0);', data: {toggle: 'modals', height: '1000', iframe: hotel_order_path(order), title: '查看详情'} %>
+                    </td>
+                  </tr>
+              <% end %>
+              <% if @hotel_orders.blank? %>
+                  <tr><td colspan="7">还没有订单</td></tr>
+              <%end%>
+              </tbody>
+            </table>
+            <%= paginate @hotel_orders %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

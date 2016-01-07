@@ -1,0 +1,140 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar_ec_shop' %>
+<% end %>
+
+<% content_for :topbar do %>
+    <h1 class="pagecurrent">基本信息</h1>
+<% end %>
+
+<p class="p-note">
+  提示：1、设置微电商基础信息以及微信关键字回复内容；<br>
+  　　　2、以下“<span class="fred"> * </span>”均为必填项；
+</p>
+<%= form_for(@ec_shop, validate: true, html: { id: 'vip_activity_form', class: 'vip_activity_form' }) do |f| %>
+
+    <div class="box-form form-row fl">
+
+      <div class="p">
+        <span>微电商名称 <em>*</em><span class="fgray"> （最多输入64个字）</span></span>
+        <%= f.text_field :name, class: 'input-text', placeholder: "请输入微电商名称"  %>
+      </div>
+
+      <div class="box-upload fl" style="margin-top:-5px;">
+        <p class="til">
+          <label style="width:12%;">首页封面图片</label>
+          <label><%= f.check_box :is_open_cover_pic, :style=>"width:auto;vertical-align:top;margin:8px 4px 0 0;" %>
+            <i><span class="fgray">首页显示封面动态效果</span></i>
+          </label>
+        </p>
+
+        <div class="upload-img upload-preview-img">
+          <span><%= f.object.cover_pic? ? image_tag(f.object.cover_pic.large, id: 'ec_shop_cover_pic', class: 'view') : "<img src='/assets/bg_fm.jpg' alt='首页封面图片' id='ec_shop_cover_pic' class='view'/>".html_safe %></span>
+          <!-- <i>点击查看示意图</i> -->
+        </div>
+        <div class="upload-btn">
+          <div class="box-file">
+            <%= f.file_field :cover_pic, rel: 'ec_shop_cover_pic', class: 'not-null-img', id: 'ec_shop_cover_pic_url' %>
+            <a class="btn btn-big">上传图片</a>
+          </div>
+          <span class="p-file"><span class="fgray">图片建议尺寸：640像素*1136像素</span></span>
+        </div>
+        <div class="p show_pic_advice_notice" style="margin-top:10px;padding:0;display: none;">
+          <span id='show_pic_advice_text'></span>
+        </div>
+      </div>
+
+
+      <%= f.fields_for :activity do |activity| %>
+
+          <div class="p">
+            <span>关键词 <em>*</em><span class="fgray"> （用于公众账号中触发微电商，不能同其他关键字重复）</span></span>
+            <%= activity.text_field :keyword, class: 'input-text',  maxlength: 64, placeholder: "请输入关键词" %>
+          </div>
+
+          <div class="p">
+            <span>微信消息标题 <em>*</em><span class="fgray"> （发送关键词后返回的微信消息标题，不能超过64个字）</span></span>
+            <%= activity.text_field :name, class: 'input-text',  maxlength: 64, placeholder: "请输入微信消息标题" %>
+          </div>
+
+
+          <div class="box-upload fl">
+            <span>微信消息图片<em>*</em><span class="fgray"> （发送关键词后返回的微信消息图片）</span></span>
+            <div class="upload-img upload-preview-img">
+              <span><%= activity.object.pic? ? image_tag(activity.object.pic.large, id: 'preview_ec_shop_notice_pic', class: 'view') : "<img src='/assets/activity_pics/22.jpg' alt='微信消息图片' id='preview_ec_shop_notice_pic' class='view'/>".html_safe %></span>
+              <!-- <i>点击查看示意图</i> -->
+            </div>
+            <div class="upload-btn">
+              <div class="box-file">
+                <%= activity.file_field :pic, rel: 'preview_ec_shop_notice_pic', class: 'not-null-img', id: 'ec_shop_notice_pic' %>
+                <a class="btn btn-big">上传图片</a>
+              </div>
+              <span class="p-file"><span class="fgray">图片建议尺寸：720像素*400像素 </span></span>
+            </div>
+            <div class="p show_pic_advice_notice" style="margin-top:10px;padding:0;display: none;">
+              <span id='show_pic_advice_text'></span>
+            </div>
+          </div>
+
+
+          <div class="p" style="margin-top: 10px;">
+            <span>微信消息摘要<span class="fgray">（发送关键词后返回的微信消息摘要，不能超过255个字）</span></span>
+            <%= activity.text_area :summary, rows: 8, maxlength: 255, placeholder: "请输入微信消息摘要", class: "activity_notice_summary" %>
+          </div>
+
+          <div class="p" >
+            <p><input type="submit" value="保存" class="btn btn-small form-submit btn-orange" /></p>
+          </div>
+
+          </div>
+      <% end %>
+
+<% end %>
+
+<script type="text/javascript">
+    $(function() {
+//        $('.view').one('load',function() {
+//            if($(this).closest('.box-upload').is(":visible")){
+//                var img = new Image();
+//                img.src=$(this).attr('src');
+//                if($(this).attr('id') == 'ec_shop_cover_pic'){
+//                    if((img.width != 640 || img.height!= 1136) && $(this).attr('src') != '/assets/bg_fm.jpg'){
+//                        $(this).closest('.box-upload').find('.show_pic_advice').show();
+//                        $(this).closest('.box-upload').find('.upload_pic').text('重新上传');
+//                        $(this).closest('.box-upload').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+//                    }
+//                }else{
+//                    if((img.width != 720 || img.height!= 400) && $(this).attr('src') != '/assets/bg_fm.jpg'){
+//                        $(this).closest('.box-upload').find('.show_pic_advice').show();
+//                        $(this).closest('.box-upload').find('.upload_pic').text('重新上传');
+//                        $(this).closest('.box-upload').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+//                    }
+//                }
+//            }
+//        });
+
+        $(".not-null-img").change(function(){
+            var file = $(this);
+            var img = new Image();
+            setTimeout(function(){
+                img.src=file.closest('.box-upload').find('img').attr('src');
+                if(file.attr('id') == 'ec_shop_cover_pic_url'){
+                    if(img.width != 640 || img.height!= 1136){
+                        file.closest('.box-upload').find('.show_pic_advice_notice').show();
+                        file.closest('.box-upload').find('.upload_pic').text('重新上传');
+                        file.closest('.box-upload').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+                    }else{
+                        file.closest('.box-upload').find('.show_pic_advice').hide();
+                    }
+                }else{
+                    if(img.width != 720 || img.height!= 400){
+                        file.closest('.box-upload').find('.show_pic_advice_notice').show();
+                        file.closest('.box-upload').find('.upload_pic').text('重新上传');
+                        file.closest('.box-upload').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+                    }else{
+                        file.closest('.box-upload').find('.show_pic_advice').hide();
+                    }
+                }
+            }, 1000)
+        });
+    });
+</script>

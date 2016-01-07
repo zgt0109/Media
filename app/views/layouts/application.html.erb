@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for?(:title) ? yield(:title) : "微枚迪 客户ID: #{current_user.try(:id)}" %></title>
+  <%= csrf_meta_tags %>
+  <meta charset="utf-8"/>
+  <meta name="description" content="Common form elements and layouts"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <!--<link rel="stylesheet" href="/assets/pnotify.custom.min.css"/>-->
+  <%= stylesheet_link_tag "application", "application_1", "ace.min", "application_2", media: "all" %>
+  <!-- basic styles -->
+  <%= yield(:head) if content_for?(:head) %>
+
+  <%= javascript_tag do %>
+    window.qiniu_bucket = '<%= BUCKET_PICTURES %>'
+    window.qiniu_token = '<%= qiniu_pictures_upload_token %>'
+  <% end %>
+
+  <%= render 'application/baidu_tongji' %>
+</head>
+
+<body>
+  <!--[if lt IE 9]>
+    <div class="mod-ie">系统检测到您<i> 所使用的浏览器 </i>版本比较低，推荐使用<b> Firefox </b>或<b> Chrome </b>浏览器打开，否则将无法体验完整的产品功能。<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div>
+  <![endif]-->
+
+  <%= render partial:'/layouts/partialTop' %>
+  <%= render partial:'/layouts/partialLeft' %>
+
+  <%= content_for?(:content) ? yield(:content) : yield %>
+
+  <%= javascript_include_tag "application" %>
+
+  <script type="text/javascript">
+    $(function(){
+      $('input[type=file]').each(function(){
+        $(this).attr('data-token', '<%= qiniu_pictures_upload_token%>');
+        $(this).attr('data-bucket', '<%= BUCKET_PICTURES%>');
+      });
+    });
+  </script>
+
+  <%= yield(:insert_to_html) if content_for?(:insert_to_html) %>
+  <%= yield :custom_js if content_for?(:custom_js) %>
+
+  <%= render 'notice' %>
+  <%#= render 'help_info' %>
+  <%#= render 'mission' if current_user.try(:can_show_introduce?) %>
+  <%#= render 'system_message' if current_user && current_user.has_industry_for?(10014) %>
+  <%#= render 'tools_qq' %>
+
+</body>
+</html>

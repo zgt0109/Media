@@ -1,0 +1,74 @@
+<%= content_for :tab do %>
+<div class="tab-pane active" id="tab-2">
+  <div class="row">
+     <div class="col-sm-12">
+      <%= form_for @search, url: {action: 'consumes' }, html: { method: :get } do |f| %>
+        <div class="col-md-3 row">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">选择活动：</span>
+            <%= f.select :activity_id_eq, current_user.activities.show.where(activity_type_id: 71).pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">姓名：</span>
+            <%= f.text_field :name_like, class: 'col-xs-12' %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">手机：</span>
+            <%= f.text_field :mobile_like, class: 'col-xs-12' %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">SN码：</span>
+            <%= text_field_tag :code, params[:code], class: 'col-xs-12' %>
+          </div>
+        </div>
+
+       <div class="col-md-3 row pull-right">
+            <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+        </div>
+     <%- end %>
+    </div>
+    <div class="col-xs-12 margin-top-20">
+      <table class="table table-striped table-bordered table-hover ">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>手机</th>
+            <th>奖品名称</th>
+            <th>SN码</th>
+            <th>使用门店</th>
+            <th>使用时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- if @prizes.each_with_index do |prize, index|%>
+            <tr>
+              <td><%= index + 1%></td>
+              <td><%= prize.name %></td>
+              <td><%= prize.mobile %></td>
+              <td><%= prize.prize_name %></td>
+              <td><%= prize.code %></td>
+              <td><%= prize.shop_name %></td>
+              <td><%=prize.used_at %></td>
+              <td>
+                  <%= modal_to '立即使用', find_consume_unfold_path(prize.consume_id), title: '使用SN码', width: '' if prize.consume.try(:unfold_can_use?) %>
+              </td>
+            </tr>
+          <%- end.blank? %>
+              <tr><td colspan="8" class="text-center green">没有记录</td></tr>
+          <%- end %>
+        </tbody>
+      </table>
+       <%= paginate @prizes %>
+    </div>
+  </div>
+</div>
+<%- end %>
+<%= render 'settings_tab' %>

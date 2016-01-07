@@ -1,0 +1,79 @@
+<div class="widget-box transparent">
+  <div class="widget-header widget-header-flat">
+    <h4><%= @category.persisted? ? '编辑分类' : '新增分类' %></h4>
+  </div>
+  <div class="widget-body">
+    <%= form_for @category, validate: true, html: {class: 'form' } do |f| %>
+      <div class="form-group margin-top-10 class-frist">
+        <% span_html = capture do %>
+          <span><input type="radio" name="class" class="mr-10" <%= "checked" if @category.parent? %> data-template="#template1">一级分类</span>
+          <span><input type="radio" name="class" class="mr-10" <%= "checked" unless @category.parent? %> data-template="#template2">二级分类</span>
+        <% end %>
+
+        <% if @categories.root.present? %>
+          <% if @category.persisted? %>
+            <% unless @category.parent? %>  
+              <%= span_html %>
+            <% end %>
+          <% else %>
+            <%= span_html %>
+          <% end %>
+        <% end %>
+        
+        <div class="blank10"></div>
+        <div class="first" style="display: block;">
+          
+          <% @div_first_html_1 = capture do %>
+            <%= f.hidden_field :parent_id, value: 0 %>
+            一级分类名称：
+            <div class="blank10"></div>
+            <%= f.text_field :name, class: 'col-xs-12', placeholder: '请输入一级分类的名称' %>
+            <div class="blank10"></div>
+          <% end %>
+
+          <% @div_first_html_2 = capture do %>
+            一级分类名称：
+            <div class="blank10"></div>
+            <%= f.select :parent_id, @categories.root.order(:position).collect{|t| [t.name, t.id] unless t.id == @category.try(:id)}, {}, class: 'col-xs-12' %>
+            <div class="blank10"></div>
+            二级分类名称：
+            <div class="blank10"></div>
+            <%= f.text_field :name, class: 'col-xs-12', placeholder: '请输入二级分类的名称' %>
+            <div class="blank10"></div>
+          <% end %>
+
+          <%= @category.parent? ? @div_first_html_1 : @div_first_html_2 %>
+        </div>
+      </div>
+       
+      <div class="text-left">
+        <input type="submit" value="保存" class="btn btn-primary btn-sm">　　
+        <input type="reset" onclick="javascript:location.href='<%= trip_ticket_categories_url %>'" value="取消" class="btn btn-default btn-sm">
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="template1" style="display:none;">
+ <%= @div_first_html_1 %>
+</div>
+
+<div id="template2" style="display:none;">
+ <%= @div_first_html_2 %>
+</div>
+
+<script>
+  $(function(){
+    $('input[type=radio]').on('click', function(){
+      $('#form .first').html($($(this).data('template')).html());
+    });
+
+    $('input[type=submit]').click(function(){
+      if(!$('#trip_ticket_category_name').val()){
+        showTip('warning','请输入分类名称');
+        $('#trip_ticket_category_name').focus();
+        return false;
+      }
+    });
+  });
+</script>

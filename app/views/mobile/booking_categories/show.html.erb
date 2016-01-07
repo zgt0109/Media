@@ -1,0 +1,14 @@
+<% title "分类商品一览" %>
+<% content_for :booking_top_pic do %>
+    <header>
+      <a href="<%= mobile_bookings_url(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <h1><%= @booking_category.name %></h1>
+    </header><!-- header end -->
+<% end %>
+
+<div class="box-list">
+    <%= render :partial => 'booking_items', :collection => @booking_items, :as => :booking_item %>
+    <% if (link_to_next_page @booking_items, '点击加载更多', :remote => true).present? %>
+      <p class="tcenter"><span class="loading"><%= link_to_next_page @booking_items, '点击加载更多', :remote => true %></span></p>
+    <% end %>
+</div>

@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Supplier:</b>
+  <%= @house_expert.supplier_id %>
+</p>
+
+<p>
+  <b>Wx mp user:</b>
+  <%= @house_expert.wx_mp_user_id %>
+</p>
+
+<p>
+  <b>House:</b>
+  <%= @house_expert.house_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @house_expert.name %>
+</p>
+
+<p>
+  <b>Intro:</b>
+  <%= @house_expert.intro %>
+</p>
+
+<p>
+  <b>Pic:</b>
+  <%= @house_expert.pic_url %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @house_expert.status %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @house_expert.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_house_expert_path(@house_expert) %> |
+<%= link_to 'Back', house_experts_path %>

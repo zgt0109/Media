@@ -1,0 +1,41 @@
+<% if @website_pictures.present? %>
+  <%
+      has_slider_text ||= :yes
+      show_slider_span ||= :yes
+      has_slider_text = :no if @website_pictures.map{|w| w.title}.join.blank?
+      has_slider_text = :no unless @website_setting.is_wp_open_bottom
+      align ||= "tcenter"
+  %>
+  <div class="mod-slider slider-ver" id="index">
+    <ul class="slider-list">
+      <% @website_pictures.each do |picture| %>
+        <li>
+          <% if picture.menu_type.present? %>
+            <%= link_to menu_url(picture) do %><%= image_tag picture.pic.big if picture.pic? %><% end %>
+          <% else %>
+            <%= image_tag picture.pic.big if picture.pic? %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <%if has_slider_text == :yes%>
+      <div class="slider-text">
+        <%if show_slider_span == :yes %><span class="tcenter slider-span" id="slider-span"><%= @website_pictures.first.try(:title)%></span><% end %>
+        <div id="pagenavi" class="<%= align %> slider-page">
+          <% @website_pictures.each_with_index do |picture, index| %>
+            <%= link_to index+1, '#', class: index == 0 ? 'active' : '' %>
+            <% end %>
+          </div>
+        </div>
+      <%end%>
+    </div>
+
+    <% content_for :document_ready_js do %>      
+        indexSwipe("index", <%= @website_pictures.map(&:title).map(&:to_s).to_s.html_safe %>);
+        bannerSet({
+            background: "#<%= @website_setting.wp_bottom_color %>",
+            opacity: "<%= @website_setting.wp_bottom_opacity%>",
+            color: "#<%= @website_setting.wp_font_color %>"
+        })
+    <% end %>
+  <% end %>

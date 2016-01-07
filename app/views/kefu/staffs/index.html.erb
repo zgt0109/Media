@@ -1,0 +1,111 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微客服', kf_settings_path %></li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+    
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li >
+            <%= link_to '客服触发指令设置', kf_settings_path %>
+          </li>
+          <li class="active">
+            <%= link_to '客服账号设置', staffs_path %>
+          </li>
+        </ul>
+        
+        <div class="tab-content no-border padding-24">
+          <div class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="alert alert-block alert-info">
+                  <strong class="pull-left">提示：</strong>
+                  <ul class="vwebsiteHeadAlert">
+                    <li>1、在当前页面添加客服账号；</li>
+                    <li>2、微信客服系统专用平台: <a href="http://kf.winwemedia.com" target="_blank">http://kf.winwemedia.com</a>；</li>
+                    <li>3、在使用微信客服系统之前，要确保已经在
+                      <基础服务>模块的
+                        <自定义菜单>栏目绑定了“应用id”和“应用秘钥”；
+                    </li>
+                    <li>4、需要开通微信客服权限，请联系渠道运营人员；</li>
+                    <li>
+                      5、最多可创建3个客服坐席(1个客服管理员，2个普通客服)；客服坐席可以实时接收和回复来自手机微信端的用户信息；单个客服坐席可同时和多个用户进行会话；客服坐席可以将当前通话转接给其他在线的客服；客服坐席可以将有价值的、重要的通话标记并保存。
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <% unless current_user.is_open_kefu? %>
+                  <button class="btn btn-primary btn-sm pull-right" data-target="#add" data-toggle="modal">新增客服</button>
+                <% else %>
+                  <%= link_to '新增客服', new_staff_path, class: "btn btn-primary btn-sm pull-right mission_addbtn" if current_user.staffs.count < 3 %>
+                <% end %>
+              </div>
+              
+              <div class="col-md-12 margin-top-20">
+                <table id="" class="table table-striped table-bordered table-hover dataTable ">
+                  <thead>
+                  <tr>
+                    <th>客服工号</th>
+                    <th>客服昵称</th>
+                    <th>权限</th>
+                    <th>最后登录时间</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @staffs.each do |staff| %>
+                    <tr>
+                      <td><%= staff.staff_no %></td>
+                      <td><%= staff.nickname %></td>
+                      <td><%= staff.role_name %></td>
+                      <td><%= staff.last_login ? staff.last_login : "还没登录过哦.." %></td>
+                      <td>
+                        <%= link_to "编辑", edit_staff_path(staff) %>
+                        <%= link_to "删除", staff_path(staff), method: "DELETE", confirm: "确定要删除?" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- /.page-content -->
+    <div class="modal fade" id="add">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">新增客服</h4>
+          </div>
+
+          <form class="form" role="form" id="form-1">
+            <div class="modal-body">
+              需要开通微信客服权限，请联系渠道运营人员！
+            </div>
+
+            <div class="modal-footer">
+
+              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+            </div>
+          </form>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+      <!-- /.page-content -->
+    </div>
+  </div>
+<% end %>

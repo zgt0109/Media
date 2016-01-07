@@ -1,0 +1,79 @@
+<%= stylesheet_link_tag "canal" %>
+
+<% content_for :sidebar do %>
+  <%= render 'sidebar_business' %>
+<% end %>
+
+<%= content_for :topbar do %>
+  <%= link_to "基础设置", activities_supplier_prints_path, class: "h1 uncurrent" %>
+  <%= link_to "帐号管理", supplier_prints_path, class: "h1 uncurrent" %>
+  <%= link_to "设备管理", supplier_print_clients_path, class: "h1 pagecurrent" %>
+<% end %>
+
+<%= form_for @supplier_print_client, validate: true, html: { id: 'form' } do |f| -%>
+  <div class="p">
+    <span style="width:18%">设备ID：</span>
+    <%= f.text_field :client_id, :style => "width: 50%", class: "input-text", disabled: true %>
+  </div>
+  <div class="p">
+    <span style="width:18%">设备编号：</span>
+    <%= f.text_field :client_no, :style => "width: 50%", class: "input-text", disabled: true %>
+  </div>
+  <div class="p">
+    <span style="width:18%">微信帐号：</span>
+    <%= f.select :supplier_print_id, current_user.supplier_prints.pluck(:public_name, :id) %>
+  </div>
+  <div class="p">
+    <span style="width:18%">网点名称：</span>
+    <%= f.text_field :net_name, :style => "width: 50%;", class: "input-text", disabled: true %>
+  </div>
+  <div class="p">
+    <span style="width:18%">每天最大打印数量：</span>
+    <%= f.text_field :daymaxnum, :style => "width: 50%;", class: "input-text", disabled: true %>
+  </div>
+
+  <div class="p">
+    <span>设备底部广告图片：<em>*</em>（必须上传一张图片）<span class="fgray">（图片建议尺寸：936像素*300像素） </span></span>
+    <div class="box-upload">
+      <div class="margin">
+        <div class="box-file">
+          <%= f.hidden_field :bottom_img %>
+          <%= file_field_tag "file", data: {width: 400, height: 400, url: "http://up.qiniu.com", bucket: BUCKET_PICTURES, 'form-data'=>{token: qiniu_pictures_upload_token }}, class: "single_upload_to_qiniu img_preview", rel: 't' %>
+          <a class="btn btn-big">上传图片</a>
+        </div>
+        <span class="p-file"><!-- 图片建议尺寸：720像素*400像素 --> </span>
+      </div>
+      <div class="upload-img">
+        <span style="width:150px; height:150px; line-height:150px;">
+          <%= image_tag f.object.try(:bottom_img_url) || '/assets/bg_fm.jpg', width: 150, height: 150, id: 't'  %>
+        </span>
+      </div>
+    </div><!--box-upload end-->
+  </div>
+
+  <div class="p">
+    <span style="width:18%">是否广告设备：</span>
+    <%= f.check_box :is_banner, :style => "width:200px;" %>
+  </div>
+  <div class="p">
+    <span style="width:18%">mac地址：</span>
+    <%= f.text_field :mac, :style => "width: 50%;", class: "input-text", disabled: true %>
+  </div>
+  <div class="p">
+    <span style="width:18%">状态：</span>
+    <%= f.select :status, SupplierPrintClient.status_options, :style => "width:200px;" %>
+  </div>
+  <div class="p" style="display:none">
+    <span style="width:18%">照片打印模式：</span>
+    <%= f.select :print_mode, SupplierPrintClient.print_mode_options, :style => "width:200px;" %>
+  </div>
+  <p style="margin-left:18%">
+    <input class="btn btn-small btn-orange" type="submit" value="保存" style="margin:0 10px 0 0;">
+  </p>
+<% end -%>
+
+<script type="text/javascript">
+  $(".single_upload_to_qiniu").each(function(){
+    single_upload_to_qiniu($(this));
+  });
+</script>

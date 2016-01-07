@@ -1,0 +1,34 @@
+<% if @wx_plot.cover_pic.present? %>
+    <div class="mod-slider slider-hor" id="index">
+      <ul class="slider-list">
+        <li><a><%= image_tag @wx_plot.cover_pic %></a></li>
+      </ul>
+      <div class="slider-text">
+        <span class="fl slider-span" id="slider-span"><%#= website_menu.name %></span>
+      </div>
+    </div>
+<% end %>
+
+
+<div class="index">
+  <% @bulletins.in_groups_of(4, false).each do |childs| %>
+      <% childs.each_with_index do |child, index| %>
+          <%= link_to bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com'), class: 'box mod-index'  do %>
+              <% if child.pic.present? or child.font_icon.present? %>
+                  <% if child.pic? %>
+                      <% if index == 1 || index == 2%>
+                          <i><%= image_tag child.pic %></i>
+                      <% else %>
+                          <%= image_tag child.pic %>
+                      <% end %>
+                  <% else %>
+                      <i class="<%= child.font_icon %>"></i>
+                  <% end %>
+              <% else %>
+                  <i></i>
+              <% end %>
+              <% if index == 1 || index == 2%><small><%= child.title %></small><% end %>
+          <% end %>
+      <% end %>
+  <% end %>
+</div>

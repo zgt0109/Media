@@ -1,0 +1,8 @@
+<% title "#{@website.try(:name)}" %>
+<% content_for :website_full_screen do %>
+<div class="pageShow" id="pageShow">
+  <%= image_tag @website.home_cover_pic.large %>
+</div>
+<% end if @website.home_cover_pic? && @website.is_open_cover_pic && !@website.template16? %>
+<%= render "app/websites/home/template#{@website.template_id}", {:website => @website, :website_pictures => @website_pictures, :website_menus => @website_menus} %>
+

@@ -1,0 +1,20 @@
+<% title @activity.try(:name) %>
+<%= stylesheet_link_tag 'mobile/gua' %>
+<%= javascript_include_tag 'mobile/gua' %>
+
+<div class="html">
+	<div class="stage stage-start" id="stage">
+		<section class="sec-game">
+      <%- if [Activity::WARM_UP, Activity::NOT_START].include?(@activity.activity_status) %>
+        <%= render "prepare" %>
+      <%- else %>
+        <div class="sec-end" id="sec-end">
+          <p>活动已结束
+            下次记得早点来哦~</p>
+        </div>
+      <%- end %>
+    </section>
+
+    <%= render "description" %>
+  </div>
+</div>

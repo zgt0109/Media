@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%= content_for?(:title) ? yield(:title) : "微预定" %></title>
+  <%= stylesheet_link_tag "mobile/winwemedia01","mobile/font-awesome.min.css","mobile/jquery-ui-1.10.3.custom.min","mobile/worder" %>
+  <%= javascript_include_tag "mobile/lib/jquery", "mobile/lib/swipe", "mobile/winwemedia01", "mobile/lib/jquery-ui-1.10.3.custom.min", "lib/validators" %>
+  <!--script src="http://www.yourwebsite.com/history.js/scripts/bundled/html4+html5/jquery.history.js"></script-->
+</head>
+<%= csrf_meta_tags %>
+<body class="<%= @body_class.presence %>">
+  <%= render 'application/gb2big5' %>
+  <script>
+    <% if flash[:notice] || flash[:alert] %>
+    alert("<%= flash[:notice] || flash[:alert] %>");
+    <% flash[:notice]= nil; flash[:alert] = nil %>
+    <% end %>
+  </script>
+  <div class="html" id="html" style="<%= action_name == 'index' ?  'padding: 0 0 102px 0;' : '' %>">
+    <div class="stage" id="stage">
+      <%= yield %>
+    </div><!-- main end -->
+  </div><!-- html end -->
+  <a href="javascript:scroll(0,0)" class="btn-up"></a>
+  <div class="loading fixed-top"></div>
+  <%= render 'application/app_footer' %>
+</body>
+</html>
+<script type="text/javascript">
+  function cancelSubmit() {
+    location.href='<%= mobile_reservations_path(activity_id: @reservation.id) %>';
+  }
+</script>

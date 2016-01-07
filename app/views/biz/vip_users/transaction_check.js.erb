@@ -1,0 +1,26 @@
+var form = $('#'+ '<%= @form %>');
+<%- if params[:source] == 'branch' %>
+    form.find('.privilege_item').each(function(){
+      $(this).get(0).checked = false;
+    })
+    form.find('#pay_amount').text('<%= f @pay_amount %>');
+    form.find('#given_points').text('<%= @given_points %>');
+    form.find('#given_moneys').text('<%= f @given_moneys %>');
+<%- else %>
+    $('.privilege_item input').each(function(){
+      $(this).get(0).checked = false;
+    })
+    $('#pay_amount').text('<%= f @pay_amount %>');
+    $('#given_points').text('<%= @given_points %>');
+    $('#given_moneys').text('<%= f @given_moneys %>');
+<%- end %>
+<%- if @selected_privilege_ids.present? %>
+  <%- @selected_privilege_ids.each do |id| %>
+    var id = '<%= id %>';
+    <%- if params[:source] == 'branch' %>
+        form.find('#privilege'+id).get(0).checked = true;
+    <%- else %>
+        $('#privilege'+id).get(0).checked = true;
+    <%- end %>
+  <%- end %>
+<%- end %>

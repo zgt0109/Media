@@ -1,0 +1,39 @@
+<%= javascript_include_tag 'jquery','jquery_ujs' %>
+<header>
+	<%= link_to "", app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id] , anchor: "mp.weixin.qq.com"), class: "ico-hd arr-hd" %>
+	<h1>我的订单</h1>
+</header>
+<div class="contxt cont-artical">
+	<% if @hotel_orders.count == 0 %>
+	<%= link_to app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], anchor: "mp.weixin.qq.com"), class: "box-null" do %><%= image_tag "/assets/hotel/null.png" %><% end %>
+	<% else %>
+	<div class="box-cont box-list-order page-cont">
+    <%= render :partial => 'app/hotel_orders/hotel_orders', :object => @hotel_orders, :as => :hotel_order %>
+	</div>
+	<div class="tcenter"><%= link_to_next_page @hotel_orders, "点击查看更多...", class: "loading", id: "more_loading", :remote => true %></div>
+	<div class="tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
+	<% end %>
+</div>
+
+<script>
+/*
+$("body").on("click",".list-li", function(event){
+	var order_id = $(this).attr('data-order-id');
+	window.location.href = "<%= app_hotel_orders_path %>/"+order_id+"?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>";
+
+});
+*/
+$( document ).ajaxStart(function() {
+	$(".isloading").css("display",'');
+	$("#more_loading").css("display","none");
+});
+
+$( document ).ajaxStop(function() {
+	$(".isloading").css("display",'none');
+	$("#more_loading").css("display","block");
+});
+
+function showOrder(order_id){
+	window.location.href = "<%= app_hotel_orders_path %>/"+order_id+"?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>#mp.weixin.qq.com";
+}
+</script>

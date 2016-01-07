@@ -1,0 +1,19 @@
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.in_groups_of(9, false).each do |menus| %>
+        <%if menus.present?%>
+            <li>
+              <% menus.each do |menu|%>
+                  <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+                      <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+                  <% end %>
+              <% end %>
+            </li>
+        <%end%>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :document_ready_js do %>
+    divSwipe("indexList");
+<% end %>

@@ -1,0 +1,43 @@
+<% content_for :sidebar do %>
+  <% if @website.micro_life? %>
+    <%= render 'sidebar_life' %>
+  <% elsif @website.micro_circle? %>
+    <%= render 'pro/business/sidebar_business' %>
+  <% end %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent">轮播图片</a>
+<% end %>
+
+<div id="cont4" class="cont">
+
+  <div class="box-photo fl" id="photoList">
+
+    <div class="photo-li li-add" style="width: 235px; height: 133.33333333333334px;">
+      <% new_picture_path = new_pro_website_picture_path if @website.micro_life? %>
+      <% new_picture_path = new_busine_picture_path if @website.micro_circle? %>
+      <a class="btn-add" onclick="popUrl(this)" data-name="name" data-w="800" data-h="500" data-title="新增图片" data-url="<%= new_picture_path %>">
+        <span>添加图片</span>
+      </a>
+    </div>
+
+    <% @pictures.each do |picture| %>
+      <%= render 'pro/website_pictures/picture', picture: picture %>
+    <% end %>
+
+  </div>
+
+
+  <%= paginate @pictures %>
+</div>
+
+
+<style>
+    img {
+        height: 133px;
+        width: 235px;
+    }
+</style>
+
+

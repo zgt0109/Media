@@ -1,0 +1,10 @@
+var $children_department = $("#children_department");
+$children_department.empty();
+<% @hospital_department.children.each do |d| %>
+$children_department.append('<option value="<%= d.id %>"><%= d.name %></option>');
+<% end %>
+if($children_department.find('option').length > 0){
+  $children_department.attr('disabled', false);
+}else{
+  $children_department.attr('disabled', false);
+}

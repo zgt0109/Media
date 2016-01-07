@@ -1,0 +1,74 @@
+<%= content_for(:pop) do %>
+    <%= render 'application/mobile/pop' %>
+<% end %>
+<%= content_for(:topbar) do %>
+    <%= render  "application/mobile/topbar_nav" %>
+<% end %>
+<section>
+  <div class="box-detail">
+    <% if @item_pictures.present?  %>
+    <div class="box-img" id="slider">
+      <ul class="box-img-list">
+        <% @item_pictures.each do |pic| %>
+            <li><%= image_tag pic.pic_url %>></li>
+        <% end %>
+      </ul><!-- box-img-list end -->
+      <div id="pagenavi" class="box-img-page">
+        <% @item_pictures.each_with_index do |w, index| %>
+            <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>"><% index + 1 %></a>
+        <% end %>
+      </div><!-- box-img-page end -->
+    </div><!-- box-img end -->
+    <% end  %>
+    <div class="deail-name">
+      <b><%= @item.title %></b>
+      <span class="fl">价格：￥<%= f @item.price%></span>
+      <span class="fr">已售：101件</span>
+    </div><!-- deail-name end -->
+    <div class="detail-btn">
+      <a href="gobuy.html" class="btn"><img src="../assets/img/wshop/ico-money.png"/>立即购买</a>
+      <a class="btn btn-red" id="btn-add"><img src="../assets/img/wshop/ico-car-add.png"/>加入购物车</a>
+    </div><!-- detail-btn end -->
+    <div class="detail-tab">
+      <div class="hd"><a class="active">商品详情</a><a href="commentList.html">商品评价(<%= @item.ec_comments.count %>)</a></div>
+      <div class="bd">
+        <div class="detail-bd">
+          <%= @item.description %>
+        </div>
+        <!--<div class="box-more"></div>-->
+      </div>
+    </div>
+  </div><!-- box-detail end -->
+</section><!-- section end -->
+<a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>
+<div class="pop pop-form" id="pop-number">
+  <div class="pop-bg"></div>
+  <div class="pop-bd" style="height:170px; margin-top:-85px;">
+    <div class="box-pop">
+      <div class="hd">
+        <b>购买数量</b>
+      </div>
+      <div class="bd">
+        <p class="box-number"><i>-</i><input type="text" value="1"/><i>+</i></p>
+        <p><input class="btn btn-close" type="submit" value="确定"/></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pop pop-result result-success" id="pop-result" style="z-index:1000;">
+  <div class="pop-bd">
+    <div class="box-pop">
+      <span>123</span>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    new Swipe(document.getElementById('slider'), {
+        speed:500,
+        callback: function(){
+            var lis = $(this.element).next("div").children();
+            lis.removeClass("active").eq(this.index).addClass("active");
+        }
+    });
+
+</script>

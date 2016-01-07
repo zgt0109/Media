@@ -1,0 +1,42 @@
+<% content_for :main_content do %>
+
+    <div class="main-content ">
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微信基础设置', welcome_wx_mp_users_path %></li>
+          <li><%= link_to '自动回复', reply_wx_mp_users_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、当粉丝在您的微信公众号中输入的关键字无法匹配时，<%= agent_name %>会自动推送以下您设置的回复内容；</li>
+                <li>2、以下“<em style="color: #ff0000; padding: 0 3px;"> * </em>”均为必填项；</li>
+              </ul>
+            </div>
+
+
+          </div>
+
+          <div class=" col-sm-12 ">
+            <%= render 'form', {text_allow_blank: true} %>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+<% end %>

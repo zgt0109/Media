@@ -1,0 +1,9 @@
+<%= javascript_include_tag 'jquery', 'main' %>
+
+<script>
+	var $parent_doc = $(parent.document);
+	$parent_doc.find('#photo_<%= @picture.id %>').replaceWith('<%= j render "pro/website_pictures/picture", picture: @picture %>');
+	$parent_doc.find('.pop').fadeOut(function() { $(this).remove(); });
+	parent.showTip('success', '保存成功');
+    window.parent.location.reload();
+</script>

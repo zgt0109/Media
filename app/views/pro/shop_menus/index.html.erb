@@ -1,0 +1,96 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li>
+        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+          <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+        <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+          <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+        <% end %>
+      </li>
+      <li>
+        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+          <%= link_to "菜单管理", shop_menus_path(industry_id: 10001) %>
+        <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+          <%= link_to "菜单管理", shop_menus_path(industry_id: 10002) %>
+        <% end %>
+      </li>
+  </ul> 
+  <%= render '/layouts/qrcode' %>
+   </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li class="active">
+            <%= link_to "菜单管理", shop_menus_path %>
+          </li>
+          <li >
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+              <%= link_to "菜单设置", shop_products_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+              <%= link_to "菜单设置", shop_products_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+          <li class="#{controller_name == 'shop_categories' ? 'active' : '' }">
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+              <%= link_to "菜单分类", shop_categories_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+              <%= link_to "菜单分类", shop_categories_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+        </ul>
+        <div class="tab-content no-border padding-24">
+          <div id="tab-3" class="tab-pane fade active in">
+            <div class="col-sm-12 no-padding-right">
+              <% shop_menu = current_user.shop.shop_menus.new %>
+              <%= link_to "新增", shop_menu, method: :post, class: "btn btn-primary btn-sm pull-right", remote: true, confirm: "确定新增一个菜单么？" %>
+            </div>
+            <div class="clearfix"></div>
+            <table id="" class="table table-striped table-bordered table-hover dataTable margin-top-10">
+              <thead>
+            	<tr>
+            	  <th>菜单编号</th>
+            	  <th>分类数量</th>
+            	  <th>菜品数量</th>
+            	  <th>操作</th>
+            	</tr>
+              </thead>
+              <tbody>
+            	<% @shop_menus.each do |menu| %>
+            	<tr>
+            	  <td><%= menu.menu_no %></td>
+            	  <td><%= menu.shop_categories.count %></td>
+            	  <td><%= menu.shop_products.count %></td>
+
+            	  <td>
+                  <%= link_to "查看", menu, remote: true %>
+                  <%= link_to "分配", assign_shop_menu_path(menu), remote: true %>
+                  <%= link_to "复制", clone_shop_menu_path(menu), method: :post, confirm: "确定复制新增一个菜单么？" %>
+                  <%= link_to "修改菜品", shop_products_path(shop_menu_id: menu.id) %>
+                  <%= link_to "修改分类", shop_categories_path(shop_menu_id: menu.id) %>
+                  <%= link_to "删除", menu, method: :delete, confirm: "确定删除？" %>
+            	  </td>
+            	</tr>
+            	<% end %>
+            	<% if @shop_menus.blank? %>
+            	<tr><td colspan="7">无记录</td></tr>
+            	<% end %>
+              </tbody>
+            </table>
+            <%= paginate @shop_menus %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="modal_div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    </div>
+
+
+  </div>
+</div>

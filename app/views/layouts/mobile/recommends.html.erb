@@ -1,0 +1,120 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>推荐有奖</title>
+    <%= stylesheet_link_tag 'mobile/recommend' %>
+    <%= javascript_include_tag 'mobile/lib/recommend' %>
+    <style type="text/css">
+      .view-recommend {
+          background: url(/assets/img/view-recommend.png) no-repeat right center;
+          width: 100%;
+          height: 480px;
+          background-size: contain;
+          margin-top: -49px;
+          top: 0;
+          display: block;
+      }
+    </style>
+</head>
+<body>
+<div class="html" id="html">
+    <div class="stage" id="stage">
+        <section id="sec-index">
+            <%= yield %>
+        </section>
+    </div>
+</div>
+<%- if (action_name != 'prize' ) && (@prizes.present? || @gift.present?) %>
+<div class="slide-btn"><a href="<%= prize_mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">我的奖品</a></div>
+<%- end %>
+<div class="mod-pop J-sn" style="height: 665px; display: none;">
+    <div class="pop-body">
+        <div class="pop-main">
+            <input type="hidden" id="prize_id">
+            <p>奖品等级：<b id="prize_title"></b></p>
+            <p>奖品名称：<b id="prize_prize"></b></p>
+            <p>手机号</p>
+            <p>
+                <input type="text" id="consume_mobile" class="input" placeholder="请输入手机号以便我们联系您兑奖">
+            </p>
+        </div>
+        <div class="pop-foot">
+            <div class="cell">
+                <a href="javascript:;" onclick="hidePop('.mod-pop')">取消</a>
+            </div>
+            <div class="cell">
+                <a href="javascript:;" id="submit_mobile">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$('.show_prize').on('click', function(){
+  var prize_title, prize_prize, prize_id;
+  prize_title = $(this).data('title');
+  prize_prize = $(this).data('prize');
+  prize_id = $(this).data('prizeid');
+
+  $('#prize_title').text(prize_title);
+  $('#prize_prize').text(prize_prize);
+  $('#prize_id').val(prize_id);
+
+   showPop('.J-sn');
+})
+$('#submit_mobile').on('click', function(){
+      var prize_id = $('#prize_id').val();
+      var consume_mobile = $('#consume_mobile').val();
+
+      if (!consume_mobile || !(/^1[3|4|5|8][0-9]\d{8}$/.test(consume_mobile))) {
+        alert('请输入正确的手机号码');
+        return false;
+      }
+
+
+      var opts = {
+        lines: 12, // The number of lines to draw
+        length: 7, // The length of each line
+        width: 5, // The line thickness
+        radius: 10, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 0, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 1, // Rounds per second
+        trail: 100, // Afterglow percentage
+        shadow: true, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '50%', // Top position relative to parent
+        left: '50%' // Left position relative to parent
+      };
+      target = document.getElementById('submit_mobile');
+      new Spinner(opts).spin(target);
+
+      var url = window.encodeURI("/<%= session[:supplier_id] %>/recommends/update_info?prize_id="+prize_id+"&mobile="+consume_mobile);
+       $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: url,
+          dataType: 'json',
+          success: function (data) {
+              if (data.status && data.status == 'ok'){
+                location.href="<%= mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.uid) %>"
+              }
+          }
+      })
+    });
+</script>
+<div class="mod-pop" id="pop-share" onclick="hidePop('#pop-share')"><span class="view-public"></span></div>
+<div class="mod-pop" id="pop-recommend"  onclick="hidePop('#pop-recommend')"><span class="view-recommend"></span></div>
+<%= render 'application/app_footer' %>
+</body>
+</html>

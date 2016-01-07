@@ -1,0 +1,7 @@
+__filename = "card_consumes.xls"
+sheet1 = xls.create_worksheet
+sheet1.row(0).concat(['卡券名称', '卡券类型', 'sn码', '领取时间', '使用时间', '使用门店'])
+@search.page(params[:page_exl]).per(EXPORTING_COUNT).each_with_index do |consume, i|
+  system_values = [consume.consumable.title, consume.consumable.card_type_name, consume.code, consume.created_at, consume.used_at, consume.use_shop_name]
+  sheet1.row(i + 1).replace(system_values)
+end

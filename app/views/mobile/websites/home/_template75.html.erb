@@ -1,0 +1,16 @@
+<div class="mod-logo">
+  <%= website.name %>
+</div>
+<div class="index">
+  <% website_menus.each do |menu| %>
+      <%= link_to menu_url(menu), class: "box mod-index" do %>
+          <p>
+            <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+          </p>
+      <% end %>
+  <% end %>
+</div>
+
+<% content_for :document_ready_js do %>
+    $('body').addClass('body-navLine-bottom');
+<% end %>

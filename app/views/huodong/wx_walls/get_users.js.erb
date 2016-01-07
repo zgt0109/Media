@@ -1,0 +1,2 @@
+$('#user_count').text('<%= @user_count %>');
+$("#users-ul").data('last-id', '<%= @wx_wall_users.first.id %>').prepend('<%= j( render("users") ) %>');

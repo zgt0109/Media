@@ -1,0 +1,116 @@
+<% content_for :brokerage_breadcrumb_li do %>
+    <li><%= link_to '活动设置', brokerage_settings_path %></li>
+<% end %>
+<% content_for :brokerage_tab_content do %>
+    <div id="tab-4" class="tab-pane fade active in">
+      <div class="row">
+        <div class="col-sm-12 margin-top-20">
+          <%= form_for @brokerage, validate: true, class: "form" do |f| %>
+            <%= f.fields_for :activity do |activity| %>
+              <%= activity.hidden_field :supplier_id, value: current_user.id %>
+              <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+              <%= activity.hidden_field :activity_type_id %>
+              <%= activity.hidden_field :status, value: Activity::SETTED %>
+              <%= render "weixin_preview", wx_title: activity.object.try(:name) || '标题', wx_summary: activity.object.try(:summary) || '描述' %>
+              <div class="col-sm-7">
+                <div class="form-group">
+                  <label class="control-label">回复关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">关键词不能和其他进行中的活动的关键词重复</small></label>
+                  <div class="clearfix">
+                    <%= activity.text_field :keyword, class: 'required col-md-8', validate: true, placeholder: '请输入全民经纪人对应的关键字' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">微信消息标题<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息标题"></span></label>
+                  <div class="clearfix">
+                    <%= activity.text_field :name, class: "required col-md-8", id: 'wx_title', placeholder: '请输入微信消息标题' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+                  <div class="clearfix">
+                    <div data-name="brokerage_setting[activity_attributes][qiniu_pic_key]" data-img = "<%= activity.object.qiniu_pic_url || activity.object.default_pic_url %>" data-key="<%= activity.object.qiniu_pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity.object.activity_type_id] : activity.object.qiniu_pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+                    <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
+                  <div class="clearfix">
+                    <%= activity.text_area :summary, rows: 5, maxlength: 255, validate: true, id: 'wx_summary', class: 'form-control', placeholder: '请输入微信消息摘要' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">活动Logo<small class="help-inline text-warning line-height-32">（图片建议尺寸：400像素*100像素）</small></label>
+                  <div class="col-sm-12 no-padding-left">
+                    <div class="cieldon-file" data-type="0" data-height="50" data-width="200"  data-name="brokerage_setting[logo_key]" data-img="<%= f.object.logo_url %>" data-key="<%= f.object.logo_key %>"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                  <label>活动图片<small class="help-inline text-warning line-height-32">（图片建议尺寸：585像素*585像素）</small></label>
+                  <div class="col-sm-12 no-padding-left">
+                    <div class="cieldon-file" data-type="0" data-height="195" data-width="195"  data-name="brokerage_setting[pic_keys]" data-img="<%= f.object.pic_url %>" data-key="<%= f.object.pic_keys %>"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                  <label>注册协议<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_area :agreement, rows: 5, maxlength: 128, validate: true, class: 'required col-md-8', placeholder: '不能超过128个字' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>活动联系电话<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :tel, class: 'required col-md-8', validate: true %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>每月结算日<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <div class="input-group input-group no-padding-left no-padding-right col-md-8">
+                      <%= f.text_field :month_settlement_day, class: 'required col-md-12', validate: true %>
+                      <span class="input-group-addon">日</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>最低结算金额<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :min_settlement_amount, class: 'required col-md-8', validate: true %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">活动详情<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="不能超过2000个字"></span></label>
+                  <div class="clearfix">
+                    <%= render "shared/form_rich_text", field_name: "description", obj: activity.object, f: activity, wrapper_html_options: {class: "form-control", placeholder: "请输入活动细则"}, options: {value: activity.object.read_attribute("description"), style: "display:none"} %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="保存" class="btn btn-primary btn-sm">
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<%= render 'huodong/brokerage/brokerage_main_content' %>
+
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $('form').validate();
+});
+
+$('.btn-sm').on('click', function(event){
+    var reg = /^[0-9_\-]*$/;
+    if (!reg.test($('#brokerage_setting_tel').val())){
+      showTip('warning',"活动联系电话格式不对，正确格式如下：\n座机号码：区号-座机号码(或)\n手机号码：11位手机号码");
+      event.preventDefault();
+      return false;
+    }
+  })
+</script>
+<% end %>

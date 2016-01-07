@@ -1,0 +1,37 @@
+<%= form_tag({url: mobile_vote_login_path}, method: 'get', id: "search_form") do %>
+<div class="search-box">
+  <div class="search">
+    <i class="icon-search"></i>
+      <%= text_field_tag 'q', nil, {placeholder: "输入编号或姓名", value: "#{params[:q]}"} %>
+    <i class="icon-cancel"></i>
+  </div>
+</div>
+<% end %>
+
+
+<script type="text/javascript">
+
+	$(function(){
+		var search_value = $(".search input").val();
+      		if(search_value){
+			$(".search input").addClass("active");
+      		}else{
+      			$(".search input").removeClass("active");
+      		}
+      	});
+
+	$(".search").on("input","input",function(){
+		var $this = $(this);
+		var val = $this.val();
+		if(val){
+			$this.addClass("active");
+		}else{
+			$this.removeClass("active");
+		}
+	});
+
+	$(".icon-cancel").on("click",function(){
+		$(".search input").val("").removeClass("active").trigger("input");
+		$("#search_form").submit();
+	});
+</script>

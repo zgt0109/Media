@@ -1,0 +1,32 @@
+<% @comments.each do |c| %>
+  <% if @template_id == 1 %>
+    <dl>
+      <dd>
+        <p><%= c.comment %></p>
+        <p>
+          <span class="fl"><%= c.nickname %></span>
+          <span class="fr"><%= c.created_at.to_date.to_s %></span>
+        </p>
+      </dd>
+    </dl>
+  <% else %>
+    <dl>
+      <dt><span><%= truncate c.nickname, length: 12 %></span><span class="fr fgary"><%= c.created_at.to_s[0..15] %></span></dt>
+      <dd>
+        <p>
+          <span class="score">
+            <span class="start start-<%= c.business_shop_impression.try(:total_star) %>"></span>
+          </span>
+          <span>人均</span> 
+          <% if c.business_shop_impression %>
+            <span class="forange">￥ <%= c.business_shop_impression.avg_price %></span>
+          <% end %>
+        </p>
+        <p>
+          <span>点评：</span>
+          <span class="fgray"><%= c.comment %></span>
+        </p>
+      </dd>
+    </dl>
+  <% end %>
+<% end %>

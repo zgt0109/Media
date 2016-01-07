@@ -1,0 +1,27 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <%= form_for shop_product do |f| %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="myModalLabel">菜品排序</h4>
+    </div>
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label for="" class="col-sm-12 control-label">该菜品的分类中共有：<%= shop_product.bother_count %> 款菜品</label>
+
+        <div class="col-sm-9">
+          菜品显示顺序： <%= f.number_field :sort %>
+        </div>
+      </div>
+     
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+      <%= f.submit "保存", class: "btn btn-primary btn-sm" %>
+      <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+    </div>
+    <% end %>
+  </div>
+
+</div>

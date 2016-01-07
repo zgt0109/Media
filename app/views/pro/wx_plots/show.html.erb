@@ -1,0 +1,68 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <li><%= link_to '基本信息', wx_plots_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+
+            <%= render "weixin_preview", wx_title: @activity.try(:name), wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
+
+            <%= form_for @activity, validate: true, html: {role: 'form', class: 'form col-sm-7' } do |activity| %>
+              <%= activity.hidden_field :supplier_id %>
+              <%= activity.hidden_field :wx_mp_user_id %>
+              <%= activity.hidden_field :activity_type_id %>
+              <%= activity.hidden_field :status %>
+
+              <%= activity.fields_for :supplier, current_user do |s| %>
+                <%= s.fields_for :wx_plot, @wx_plot do |w|%>
+                        <div class="form-group">
+                          <label class="control-label">模块名称<span class="required-star">*</span></label>
+                          <div class="clearfix">
+                            <%= w.text_field params[:type].to_sym, class: 'col-xs-6' %>
+                          </div>
+                        </div>
+                        <% if ['repair', 'complain'].include?(params[:type]) %>
+                            <div class="form-group">
+                              <label class="control-label">联系电话</label>
+                              <div class="clearfix">
+                                <%= w.text_field "#{params[:type].to_s}_phone".to_sym, class: 'col-xs-6' %>
+                              </div>
+                            </div>
+                        <% end %>
+                <% end %>
+              <% end %>
+
+
+              <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url , pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+
+              <div class="form-group ">
+                <%= activity.submit '保存', class: 'btn btn-sm btn-primary' %>
+                <input type="button" class="btn btn-sm btn-default" value="返回" onclick="javascript: window.location.href ='<%= wx_plots_path %>'">
+              </div>
+
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('form input[type=submit]').click(function(){
+              if($('input[name="activity[name]"]').val() && !$('input[name="activity[qiniu_pic_key]"]').val()){
+                  showTip('warning',"请上传微信消息图");
+                  return false;
+              }
+          });
+      });
+    </script>
+<% end %>

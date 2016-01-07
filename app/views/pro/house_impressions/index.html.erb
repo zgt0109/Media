@@ -1,0 +1,94 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li> <i class="icon-home home-icon"></i> <%= link_to "首页", root_path %> </li>
+          <li> <%= link_to "微房产", house_layouts_path %> </li>
+					<li><%= link_to "房友印象", house_impressions_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+            <li class="active">
+              <a data-toggle="tab" href="#tab-1">
+
+                房友印象微信设置
+              </a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#tab-2">
+                房友印象查询
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-1" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12 ">
+                  <!-- PAGE CONTENT BEGINS -->
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接销售顾问页面。</li>
+                    </ul>
+                  </div>
+                </div>
+                <%= form_for @activity, url: update_activity_house_impressions_path, validate: true, html: {role: "form", class: "form col-xs-12"} do |activity| %>
+                  <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述' %>
+                  <div class="col-xs-12 col-md-6 col-lg-7">
+                    <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-sm btn-primary" value="保存" />
+                      <!-- <input type="reset" class="btn btn&#45;sm btn&#45;primary" value="停用" /> -->
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div id="tab-2" class="tab-pane fade">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+											<li> 添加的印象总数必须是6个</li>
+                    </ul>
+                  </div>
+                  <button class="btn btn-primary btn-sm pull-right" data-target="addFriend" data-toggle="modals" data-title="新增房友印象" data-height="400" data-iframe="/house_impressions/new">新增</button>
+                </div>
+                <div class="col-md-12 margin-top-20">
+                  <table id="houseFriendTable" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                      <tr>
+                        <th>印象名称</th>
+                        <th>热度值（%）</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @impressions.each do |it| %>
+                        <tr>
+                          <td><%= it.content %></td>
+                          <td><%= it.ratio %></td>
+                          <td>
+														<a href="javascript:;" class="fgreen" data-target="addFriend" data-toggle="modals" data-title="编辑房友印象" data-height="400" data-iframe="/house_impressions/<%= it.id %>/edit">编辑</a>
+														<%= link_to '删除', it, data: {toggle: "modals", confirm: "确定要删除该房友印象？", target: "delModel", url: house_impressions_path(it), method: "delete"} %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.page-content -->
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

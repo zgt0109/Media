@@ -1,0 +1,16 @@
+<%- if params[:from_head] == 'true' %>
+  $('#hospital_doctors').html('<%= j render "hospital_doctor", hospital_doctors: @hospital_doctors %>');
+  <% if @hospital_doctors.try(:last_page?) %>
+    $('.page').remove();
+  <% else %>
+    $('.page').replaceWith('<%= j paginate(@hospital_doctors) %>');
+  <% end %>
+<%- else %>
+  $('.box-list').append('<%= j render "hospital_doctor", hospital_doctors: @hospital_doctors %>');
+  <% if @hospital_doctors.try(:last_page?) %>
+    $('.page').remove();
+  <% else %>
+    $('.page').replaceWith('<%= j paginate(@hospital_doctors) %>');
+  <% end %>
+  $(".foot-loading").removeClass("isloading").fadeOut();
+<% end %>

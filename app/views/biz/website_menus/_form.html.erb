@@ -1,0 +1,838 @@
+<%= form_for @website_menu, validate: true, :html => { :class => 'form', id: 'website_menu_form', role: 'form' } do |f| %>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :website_id %>
+  <%= f.hidden_field :old_parent_id, value: f.object.parent_id %>
+
+  <div class="form-group ">
+    <label class="control-label">站点名称<span class="required-star">*</span></label>
+    <div class="clearfix">
+      <%= f.text_field :name, class: "col-xs-6", placeholder: "请输入站点名称", maxlength: 32 %>
+    </div>
+  </div>
+
+  <!--<div class="form-group  ">-->
+    <!--<label class="control-label">站点描述</label>-->
+    <!--<div class=" clearfix">-->
+      <!--<%#= f.text_field :summary, class: "col-xs-6" %>-->
+    <!--</div>-->
+  <!--</div>-->
+
+    <div class="form-group  ">
+      <label class="control-label">站点描述</label>
+      <div class=" clearfix">
+        <% WebsiteMenu.summary_type_options.each do |k| %>
+            <div class="radio radio-inline no-margin-top no-padding-left">
+              <label class="control-label">
+                <%= f.radio_button :summary_type, k[1], class: 'ace' %>
+                <span class="lbl"><%= "#{k[0]}#{k[1] == 3 ? '：' : ''}"%></span>
+
+              </label>
+              <%= f.text_field :summary if k[1] == 3 %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+
+  <div class="form-group">
+    <label class="control-label" style="position: relative;">标题图<small class="help-inline text-warning line-height-32">没有更好的图片?微枚迪给你提供</small><a href="javascript:;" class="btn btn-primary btn-sm btn-toggle" data-target=".icon-box" data-scroll="icon-tab-2">图片素材</a><%= render 'font'%><a href="javascript:;" class="btn btn-default btn-sm delete-img">删除</a><%= f.hidden_field :is_delete_pic %><%= f.hidden_field :font_icon %></label>
+    <div class="clearfix">
+      <div class="cieldon-file pull-left width-100px" data-type="0" data-width="100" data-height="100" <% if f.object.font_icon.present? %> data-fa="<%= f.object.font_icon %>"  <% else %> data-img="<%= f.object.pic_url %>" <% end %> data-name="website_menu[pic_key]" data-key="<%= f.object.pic_key %>" data-callback="pic_dispose"></div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label">栏目焦点图<small class="help-inline text-warning line-height-32">栏目焦点图非必须，如果不想显示，点击</small><input type="button" class="btn btn-default btn-sm delete-img" value="删除"/><%= f.hidden_field :is_delete_cover_pic %></label>
+    <div class="clearfix">
+      <div class="cieldon-file pull-left width-100px" data-type="0" data-width="100" data-height="100" data-img="<%= f.object.cover_pic_url%>" data-name="website_menu[cover_pic_key]" data-key="<%= f.object.cover_pic_key %>" data-callback="cover_pic_dispose"></div>
+      <small class="text-warning pull-left margin-top-20">建议尺寸:720*400px</small>
+    </div>
+  </div>
+
+  <div class="form-group ">
+    <label class="control-label">栏目分类<span class="required-star">*</span><small class="help-inline text-warning line-height-32">选择站点栏目的分类</small></label>
+    <div class="clearfix" id="selects">
+      <%= select_tag "website_name", options_for_select([[@website.name, '0']], selected: params[:website_name]), class: 'menu_category' %>
+      <% @menu_categories_selects.each_with_index do |select, index|%>
+          <%= select_tag "menu_category_id#{select[0]}", options_for_select([['', '']] + select[1].collect{|t| [t.name, t.id]}, selected: params["menu_category_id#{select[0]}".to_sym]), class: "menu_category", rel: select[0], style: index > 2 ? 'margin-top: 10px;': ''   if select[1].present? %>
+      <% end %>
+      <%= f.hidden_field :parent_id, class: 'hidden_menu_category_id' %>
+    </div>
+  </div>
+
+<% unless @website_menu.has_children? %>
+
+  <div class="form-group ">
+    <label class="control-label">栏目类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">根据你的需求，选择站点栏目的类型，文章等大部分栏目类型可以直接在当前页面创建</small><span class="icon-question-sign " data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="<%= render 'info' %>" ></span></label>
+    <div class="clearfix">
+      <labet class="line-height-32 url-info">
+        <span class="icon-question-sign" data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="使用链接方式添加活动项目，易造成用户身份获取问题（如看到他人信息，或者已他人身份参与活动），建议直接调用活动，如需使用链接，请注意不要添加带有openid或者uid等参数的链接" data-original-title="" title=""></span>
+      </labet>
+      <%
+         reject_types = current_user.bqq_account? ? [3,4,5,8,10,18,19] : [8,10,19]
+         menu_type_options = WebsiteMenu.menu_type_options.reject{|m| reject_types.include?(m.last) || m.last == WebsiteMenu::ACTIVITY}
+      %>
+      <%= f.select :menu_type, menu_type_options, {}, class: 'col-xs-6' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="tab-content no-border no-padding" id="tab1">
+      <div class="tab-pane active" id="tab-0">
+        <div class="form-group ">
+          <label class="control-label">详情页副标题<small class="help-inline text-warning line-height-32">适用于大多数详情页模版</small></label>
+          <% WebsiteMenu.subtitle_type_options.each_with_index do |subtitle_type, index| %>
+              <div class="radio no-padding-left" style="<%= 'margin-top: -5px;' if index == 0 %>">
+                <label>
+                  <%= f.radio_button :subtitle_type, subtitle_type[1], class: 'ace' %><span class="lbl"><%= subtitle_type[0] %></span>
+                </label>
+                <%= f.text_field :subtitle, class: "input-text", style: f.object.subtitle_type == WebsiteMenu::SHOW_CONTENT ? 'width: 42%;' : 'width: 42%;display:none;' if subtitle_type[1] == WebsiteMenu::SHOW_CONTENT %>
+              </div>
+          <% end %>
+        </div>
+
+        <div class="form-group ">
+          <label class="control-label">内容<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= render "shared/form_rich_text", field_name: "content", obj: f.object, f: f, wrapper_html_options: {class: "form-control"}%>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="tab-1">
+        <div class="form-group">
+          <label class="control-label">快速选择链接</label>
+          <div class="clearfix">
+            <%= select_tag :quick_link, options_for_select(quick_link_options, @website_menu.url), class: "col-sm-6", validate: true, id: 'quick_select_link' %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">
+            自定义链接
+            <span class="required-star">*</span>
+            <small class="help-inline text-warning line-height-32">请不要使用带有openid字段的链接（将会造成用户身份错乱）</small>
+          </label>
+          <div class="clearfix">
+            <%= f.text_field :url, class: "col-xs-6", validate: true %>
+          </div>
+        </div>
+
+      </div>
+      <div class="tab-pane active" id="tab-2">
+        <div class="form-group">
+          <label class="control-label">选择语音<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :audio_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane active" id="tab-2">
+        <div class="form-group">
+          <label class="control-label">选择相册<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :album_id, current_user.albums.show.order('albums.sort, albums.updated_at DESC').map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane active" id="tab-2">
+        <div class="form-group">
+          <label class="control-label">选择360全景<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :panoramagram_id, current_user.activities.panoramagram.active.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane active" id="tab-1">
+        <div class="form-group">
+          <label class="control-label">联系电话<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.text_field :tel, class: "col-xs-6", maxlength: 15, validate: true %>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="tab-5">
+        <div class="form-group">
+          <label class="control-label">经纬度<span class="required-star">*</span><small class="help-inline text-warning">这个地址只是模糊定位，准确地址请地图上标记</small></label>
+          <div id="preview" class="clearfix">
+            <div id="float_search_bar">
+              <label>区域：</label>
+              <%= f.text_field :address, class: "input-text bd_map_address", style:"width :40%", validate: true %>
+              <a id="search_button" class="button">查找</a>
+              <span>点击地图或标注获取坐标</span>
+            </div>
+            <div id="map_container"></div>
+            <%= f.text_field :location_x, class: 'input-text bd_map_lng', readonly: true, style: "width:120px; margin-top:10px; margin-left:10px;" %>
+            <%= f.text_field :location_y, class: 'input-text bd_map_lat', readonly: true, style: "width:120px; margin-top:10px; margin-left:6px;" %>
+            <input type="hidden" id="is_address" value="">
+            <input type="hidden" id="is_just" value="">
+            <input type="hidden" id="is_new" value="<%= @website_menu.address.present? ? '0':'1' %>">
+          </div>
+        </div>
+        <%= render 'baidu_map'%>
+      </div>
+      <div class="tab-pane" id="tab-1">
+        <div class="form-group">
+          <label class="control-label">图文资源<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6' %>
+            &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-8 no-padding">
+            <label class="pull-left">图文预览</label>
+          </div>
+          <div class="col-sm-8 no-padding">
+            <div class="warpVMS">
+              <div class="vMicroShow">
+                <div class="vMSHead">
+                  <span class="title">
+                    <%= f.object.menuable.try(:title) rescue '' %>
+                  </span><br>
+                  <span class="grey">
+                    <%= f.object.menuable.created_at.to_date rescue Date.today %>
+                  </span>
+                </div>
+                <div class="vMSImg" id="img-1" style="background: url('<%= f.object.menuable.try(:pic).try(:large) rescue '' %>')"></div>
+                <div class="vMSFoot">
+                  <p class="grey">
+                    <%= f.object.menuable.try(:summary) rescue '' %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-1">
+        <div class="form-group">
+          <label class="control-label">图文资源<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6'  %>
+            &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-8 no-padding">
+            <label class="pull-left">图文预览</label>
+          </div>
+          <div class="col-sm-8 no-padding">
+            <div class="warpVMS">
+              <div class="vMicroShow">
+                <div class="vMSHead">
+                  <span class="title">
+                    <%= f.object.menuable.try(:title) rescue '' %>
+                  </span><br>
+                  <span class="grey">
+                    <%= f.object.menuable.created_at.to_date rescue Date.today %>
+                  </span>
+                </div>
+                <div class="vMSImg" id="img-1" style="background: url('<%= f.object.menuable.try(:pic).try(:large) rescue '' %>')"></div>
+                <div class="vMSFoot">
+                  <p class="grey">
+                    <%= f.object.menuable.try(:summary) rescue '' %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="tab-1">
+        <div class="form-group">
+          <label class="control-label">QQ号码<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <% if current_user.bqq_account? %>
+              <%= f.text_field :qq, value: current_user.api_user.uid, class: "col-xs-6", readonly: true %>
+            <% else %>
+              <%= f.text_field :qq, class: "col-xs-6", validate: true %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="tab-1">
+        <!--微官网活动-->
+        <div class="form-group">
+          <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+          <div class="clearfix">
+            <%= select_tag "activity_website", options_for_select(ActivityType.id_options.select{|m| m.last == ActivityType::WEBSITE}), class: 'col-xs-6' %>
+          </div>
+        </div>
+
+        <!--微会员卡活动-->
+        <div class="form-group">
+          <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+          <div class="clearfix">
+            <%= select_tag "activity_vip", options_for_select(ActivityType.id_options.select{|m| m.last == ActivityType::VIP}), class: 'col-xs-6' %>
+          </div>
+        </div>
+
+        <!--营销互动活动-->
+        <div class="form-group">
+          <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+          <% types = current_user.bqq_account? ? ActivityType.bqq_markets : ActivityType.markets %>
+          <% activity = (types.select{|m| m.last.to_s.split(', ').to_a.include?(@website_menu.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
+          <div class="clearfix">
+            <%= select_tag "activity_market", options_for_select(types, selected: activity.last), class: 'col-xs-6 gl' %>
+          </div>
+        </div>
+
+        <!--业务管理活动-->
+        <div class="form-group">
+          <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+          <% activity = (ActivityType.business.select{|m| m.last.to_s.split(', ').to_a.include?(@website_menu.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
+          <div class="clearfix">
+            <%= select_tag "activity_business", options_for_select(ActivityType.business, selected: activity.last), class: "col-xs-6 gl" %>
+          </div>
+        </div>
+
+        <!--行业解决方案活动-->
+        <div class="form-group">
+          <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+          <% activity = (ActivityType.industry.select{|m| m.last.to_s.split(', ').to_a.include?(@website_menu.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
+          <div class="clearfix">
+            <%= select_tag "activity_industry", options_for_select(ActivityType.industry, selected: activity.last), class: "col-xs-6 gl" %>
+          </div>
+        </div>
+
+        <div class="form-group" id="website_menu_activity_id">
+          <label class="control-label">选择具体活动<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <% if @website_menu.new_record? %>
+                <table id="menuTable" class="table table-striped table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th></th>
+                    <th>活动标题</th>
+                    <th>触发关键字</th>
+                    <th>活动时间</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                      <tr><td colspan="5">您当前尚未创建相关活动</td></tr>
+                  </tbody>
+                </table>
+            <% else %>
+            <% end %>
+          </div>
+        </div>
+
+      </div>
+      <div class="tab-pane active" id="tab-1">
+        <!--业务对接模块-->
+        <div class="form-group">
+          <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :docking_type, options_for_select(WebsiteMenu.docking_type_options, selected: f.object.get_docking_type), {}, class: "col-xs-6" %>
+            <%= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+          </div>
+        </div>
+
+        <!--具体业务对接功能-->
+        <div class="form-group">
+          <label class="control-label">选择具体业务对接功能<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :docking_function, options_for_select(WebsiteMenu.docking_function_options, selected: f.object.get_docking_function), {}, class: "col-xs-6", data: {initialize: true, value: f.object.get_docking_function} %>
+          </div>
+        </div>
+
+        <div class="form-group" id="ec_selects">
+          <label class="control-label">选择商品类别<span class="required-star">*</span></label>
+          <div class="clearfix" id="ec_categories">
+            <% @ec_seller_cat_selects.each_with_index do |select, index|%>
+                <% value = index == 0 ? select[1].collect{|t| [t["name"], t["id"]]} : [['不限', '-1']] + select[1].collect{|t| [t["name"], t["id"]]} rescue '' %>
+                <%= select_tag "ec_seller_cat_id#{select[0]}", options_for_select(value, selected: @website_menu.menuable_id), class: "col-xs-6 ec_seller_cat", rel: select[0]  %>
+            <% end %>
+          </div>
+          <%= f.hidden_field :goods_category_id, class: 'hidden_ec_seller_cat_id', value: f.object.menuable_id %>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">请输入你要链接的商品编号<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.text_field :good_id, value: f.object.get_docking_function == 5 ? f.object.menuable_id : '', class: "col-xs-6", validate: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+  <div class="form-group ">
+    <input type="submit" class="btn btn-sm btn-primary" data-fn="submit" value="确定"/>
+    <input type="button" class="btn btn-sm btn-default" onclick="javascript:window.location.href = '<%= website_menus_path %>';" value="返回"/>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        select_website_menu_type();
+
+        $('#website_menu_menu_type').change( function() {
+            select_website_menu_type();
+        });
+
+        function set_materials_img_css(){
+            $('#img-1').css({'display': 'block', 'background-size': '100%', 'width': '100%', 'height': '200px', 'background-repeat': 'no-repeat no-repeat'});
+        }
+
+        function cover_pic_dispose(){
+            $('#website_menu_is_delete_cover_pic').val('');
+        }
+
+        function pic_dispose(){
+            $('#website_menu_is_delete_pic').val('');
+            $('#website_menu_font_icon').val('');
+        }
+
+        function materials(select){
+            var self = $(select);
+            if(self.val()){
+                $.ajax({
+                    url: '/materials/'+self.val(),
+                    type: "get",
+                    dataType : "json",
+                    success : function (data){
+                        if(data){
+                            self.closest('.tab-pane').find('span.title').html(data['title']);
+                            self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
+                            self.closest('.tab-pane').find('p.grey').html(data['summary']);
+                            self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                            set_materials_img_css();
+                        }
+                    }
+                });
+            }
+            else{
+                self.closest('.tab-pane').find('span.title').html('素材标题');
+                self.closest('.tab-pane').find('span.grey').html("<%= Date.today %>");
+                self.closest('.tab-pane').find('p.grey').html('');
+                self.closest('.tab-pane').find('#img-1').attr("background-image", 'url()');
+                self.closest('.tab-pane').find('#img-1').attr('style', '');
+            }
+        }
+
+        function find_activies(select){
+            var self = $(select);
+            if(self.val()){
+                var url = '/website_menus/find_activities?ids=' + self.val();
+                if($('#website_menu_id').val()){
+                    url += '&id=' +  $('#website_menu_id').val();
+                }
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    success : function (data){
+                        $('#website_menu_activity_id').html(data);
+                        return true;
+                    },
+                    error: function() {
+                        return false;
+                    }
+                });
+            }
+        }
+
+        function select_website_menu_type() {
+            $("#website_menu_qq").closest('.tab-pane').removeClass('active');
+            $('#website_menu_content').closest('.tab-pane').removeClass('active');
+            $('#website_menu_subtitle').closest('.tab-pane').removeClass('active');
+            $('#website_menu_single_material_id').closest('.tab-pane').removeClass('active');
+            $('#website_menu_multiple_material_id').closest('.tab-pane').removeClass('active');
+            $('#website_menu_activity_id').closest('.tab-pane').removeClass('active');
+            $('#website_menu_url').closest('.tab-pane').removeClass('active');
+            $('.url-info').addClass('hide');
+            $('#website_menu_tel').closest('.tab-pane').removeClass('active');
+            $('#website_menu_audio_id').closest('.tab-pane').removeClass('active');
+            $('#website_menu_album_id').closest('.tab-pane').removeClass('active');
+            $('#website_menu_panoramagram_id').closest('.tab-pane').removeClass('active');
+            $('#website_menu_address').closest('.tab-pane').removeClass('active');
+            $('#website_menu_docking_type').closest('.tab-pane').removeClass('active');
+            $('#activity_market').closest('.form-group').hide();
+            $('#activity_business').closest('.form-group').hide();
+            $('#activity_industry').closest('.form-group').hide();
+            $('#activity_website').closest('.form-group').hide();
+            $('#activity_vip').closest('.form-group').hide();
+            $('input[type=submit]').closest('.form-group').css('margin-top', '');
+            $('#website_menu_goods_category_id').closest('.form-group').hide();
+            $('#website_menu_good_id').closest('.form-group').hide();
+            if ( $('#website_menu_menu_type').val() == 1 ) {
+                $('#website_menu_content').closest('.tab-pane').addClass('active');
+            } else if ( $('#website_menu_menu_type').val() == 2 ) {
+                $('#website_menu_activity_id').closest('.tab-pane').addClass('active');
+            } else if ( $('#website_menu_menu_type').val() == 3 ) {
+                $('#website_menu_single_material_id').closest('.tab-pane').addClass('active');
+                $('input[type=submit]').closest('.form-group').css('margin-top', 350);
+                materials($('#website_menu_single_material_id'));
+            } else if ( $('#website_menu_menu_type').val() == 4 ) {
+                $('#website_menu_multiple_material_id').closest('.tab-pane').addClass('active');
+                $('input[type=submit]').closest('.form-group').css('margin-top', 350);
+                materials($('#website_menu_multiple_material_id'));
+            } else if ( $('#website_menu_menu_type').val() == 6 ) {
+                $('#website_menu_url').closest('.tab-pane').addClass('active');
+                $('.url-info').removeClass('hide');
+            } else if ( $('#website_menu_menu_type').val() == 18 || $('#website_menu_menu_type').val() == 20 ) {
+                $('#website_menu_qq').closest('.tab-pane').addClass('active');
+            } else if ( $('#website_menu_menu_type').val() == 7 ) {
+                $('#website_menu_tel').closest('.tab-pane').addClass('active');
+            } else if ( $('#website_menu_menu_type').val() == 9 ) {
+
+            } else if ( $('#website_menu_menu_type').val() == 5 ) {
+                $('#website_menu_audio_id').closest('.tab-pane').addClass('active');
+            } else if ( $('#website_menu_menu_type').val() == 11 ) {
+                $('#website_menu_address').closest('.tab-pane').addClass('active');
+                $('input[type=submit]').closest('.form-group').css('margin-top', 50);
+            } else if ( $('#website_menu_menu_type').val() == 12 ) {
+                find_activies($('#activity_website'));
+            } else if ( $('#website_menu_menu_type').val() == 13 ) {
+                find_activies($('#activity_vip'));
+            } else if ( $('#website_menu_menu_type').val() == 14 ) {
+                $('#website_menu_activity_id').closest('.tab-pane').addClass('active');
+                $('#activity_market').closest('.form-group').show();
+                find_activies($('#activity_market'));
+            } else if ( $('#website_menu_menu_type').val() == 15 ) {
+                $('#website_menu_activity_id').closest('.tab-pane').addClass('active');
+                $('#activity_business').closest('.form-group').show();
+                find_activies($('#activity_business'));
+            } else if ( $('#website_menu_menu_type').val() == 16 ) {
+                $('#website_menu_activity_id').closest('.tab-pane').addClass('active');
+                $('#activity_industry').closest('.form-group').show();
+                find_activies($('#activity_industry'));
+            }else if ( $('#website_menu_menu_type').val() == 17 ) {
+                $('#website_menu_docking_function').closest('.tab-pane').addClass('active');
+                website_menu_docking_function_change();
+                website_menu_docking_type_change();
+            }else if ( $('#website_menu_menu_type').val() == 21 ) {
+                $('#website_menu_album_id').closest('.tab-pane').addClass('active');
+            }else if ( $('#website_menu_menu_type').val() == 24 ) {
+                $('#website_menu_panoramagram_id').closest('.tab-pane').addClass('active');
+            }
+        }
+
+        function website_menu_docking_type_change(){
+            $('#website_menu_goods_category_id').closest('.form-group').hide();
+            $('#website_menu_good_id').closest('.form-group').hide();
+            $('#website_menu_docking_function option').remove();
+            if($('#website_menu_docking_type').val() == 1){
+		if($('#website_menu_docking_function').attr('data-initialize') == 'true'){
+			if(parseInt($('#website_menu_docking_function').attr('data-value')) == 4){
+				$('#website_menu_docking_function').append("<option value='1'>首页</option><option value='4' selected='selected'>商品分类</option>");			
+				$('#website_menu_goods_category_id').closest('.form-group').show();
+				$.each($('.ec_seller_cat'), function(){
+					$(this).val($(this).attr('rel'));
+				});
+			}else{
+				$('#website_menu_docking_function').append("<option value='1' selected='selected'>首页</option><option value='4'>商品分类</option>");			
+			}
+			$('#website_menu_docking_function').attr('data-initialize', false);
+		}else{
+			$('#website_menu_docking_function').append("<option value='1'>首页</option><option value='4'>商品分类</option>");
+		}
+            }else if($('#website_menu_docking_type').val() == 2){
+                $('#website_menu_docking_function').append("<option value='6'>订单管理</option>");
+            }
+        }
+        function website_menu_docking_function_change(){
+            $('#website_menu_goods_category_id').closest('.form-group').hide();
+            $('#website_menu_good_id').closest('.form-group').hide();
+            if($('#website_menu_docking_function').val() == 4){
+                $('#website_menu_goods_category_id').closest('.form-group').show();
+                $('#website_menu_goods_category_id').val($('#ec_categories select:visible').last().val());
+            }else if($('#website_menu_docking_function').val() == 2){
+                $('#website_menu_good_id').closest('.form-group').show();
+            }
+        }
+
+        $(function(){
+
+            $('#website_menu_single_material_id, #website_menu_multiple_material_id').change(function(){
+                materials($(this));
+            });
+
+            $('#website_menu_docking_type').change(function(){
+                website_menu_docking_type_change();
+            });
+
+            $('#quick_select_link').val($('#website_menu_url').val());
+
+            $('#website_menu_docking_function').change(function(){
+                website_menu_docking_function_change();
+            });
+            $('#activity_market, #activity_business, #activity_industry, #activity_website, #activity_vip').change(function(){
+                find_activies($(this));
+            });
+
+            $('#website_menu_form input[type=submit]').click(function(event) {
+                var url_reg = /^(http|https):\/\/[a-zA-Z0-9].+$/;
+                var menu_type = $('#website_menu_menu_type').val();
+                if ( $('#website_menu_name').val()){
+                    if($('#website_menu_summary_type_3').is(":checked") && !$('#website_menu_summary').val()){
+                        showTip('warning','显示说明不能为空');
+                        return false;
+                    }
+                    if(!$('#website_menu_parent_id').val()){
+                        showTip('warning','请选择栏目分类');
+                        return false;
+                    }
+                    if($('#website_menu_menu_type').is(":visible") && !$('#website_menu_menu_type').val()){
+                        showTip('warning','请选择栏目类型');
+                        $('#website_menu_menu_type').focus();
+                        return false;
+                    }
+                    if ( $('#website_menu_menu_type').val() == 3 && !$('#website_menu_single_material_id').val() ) {
+                        showTip('warning','请选择一条图文素材');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 1 && !$('#website_menu_content').val().trim()) {
+                        showTip('warning',"请填写文本内容");
+                        return false;
+                    } else if($('#website_menu_menu_type').val() == 1 && $('#website_menu_subtitle_type_2').is(":checked") && !$('#website_menu_subtitle').val()){
+                        showTip('warning',"请填写副标题内容");
+                        $('#website_menu_subtitle').focus();
+                        return false;
+                    }
+                    else if ( $('#website_menu_menu_type').val() == 4 && !$('#website_menu_multiple_material_id').val() ) {
+                        showTip('warning','请选择一条图文素材');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 2 && !$('#website_menu_activity_id').val() ) {
+                        showTip('warning','请选择活动');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 5 && !$('#website_menu_audio_id').val() ) {
+                        showTip('warning','请选择语音');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 21 && !$('#website_menu_album_id').val() ) {
+                        showTip('warning','请选择相册');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 24 && !$('#website_menu_panoramagram_id').val() ) {
+                        showTip('warning','请选择360全景');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 6 && $('#website_menu_url').val() == '') {
+                        showTip('warning','请填写链接地址');
+                        return false;
+                    }else if ( $('#website_menu_menu_type').val() == 6 && !url_reg.test($('#website_menu_url').val())){
+                        showTip('warning','地址格式不正确，必须以http(s)://开头');
+                        return false;
+                    } else if ( $('#website_menu_menu_type').val() == 7 && !$('#website_menu_tel').val() ) {
+                        showTip('warning','请填写联系电话');
+                        return false;
+                    }else if ($('#website_menu_menu_type').val() == 7 && $('#website_menu_tel').val()) {
+                        var  branch_tel = $('#website_menu_tel').val();
+                        var  mobile_reg = /^\d{11}$/;
+                        var  reg = /^[0-9_\-]*$/;
+                        //兼容格式: 国家代码(2到3位)-区号(2到4位)-电话号码(7到8位)-分机号(3位)"
+                        var tel_reg =  /^((0\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/
+                        if (!reg.test(branch_tel)){
+                            showTip('warning','联系电话输入有误，请重新输入');
+                            event.preventDefault();
+                        };
+                    }else if ( $('#website_menu_menu_type').val() == 11 && !$('#website_menu_address').val() ) {
+                        showTip('warning','请填写导航地址');
+                        $('#website_menu_address').focus();
+                        return false;
+                    }else if($('#website_menu_menu_type').val() == 11 && $('#is_address').val() == '1'){
+                        showTip('warning','导航地址范围太小，请扩大地址搜索范围');
+                        $('#website_menu_address').focus();
+                        return false;
+                    }else if( $('#website_menu_menu_type').val() == 11 && $('#is_address').val() == '2'){
+                        showTip('warning','导航地址还没有进行定位，请查找定位');
+                        $('#website_menu_address').focus();
+                        return false;
+                    }else if( $('#website_menu_menu_type').val() == 11 && $('#is_address').val() == '3'){
+                        if(!$('#website_menu_location_x').val()){
+                            showTip('warning','经度为空，请重新导航');
+                            $('#website_menu_location_x').focus();
+                        }else{
+                            showTip('warning','纬度为空，请重新导航');
+                            $('#website_menu_location_y').focus();
+                        }
+                        return false;
+                    }else if(menu_type == 12 || menu_type == 13 || menu_type == 14 || menu_type == 15 || menu_type == 16){
+                        var check_radio = $("#website_menu_activity_id input[type='radio']:checked")
+                        if(menu_type == 12 || menu_type == 13){
+                            if(check_radio.length == 0){
+                                showTip('warning','相应活动还没有创建，请创建');
+                                return false;
+                            }
+                        }else{
+                            if(!$('.gl:visible').val()){
+                                showTip('warning','请选择活动类型');
+                                return false;
+                            }
+
+                            if(check_radio.length == 0){
+                                showTip('warning','请选择具体活动');
+                                return false;
+                            }
+                        }
+                    }else if(menu_type == 17){
+                        // if(!$('#supplier_ec_shop').val()){
+                        //     showTip('warning','微电商的相关活动还没有创建，请先创建');
+                        //     return false;
+                        // }
+                        if(!$('#website_menu_docking_type').val()){
+                            showTip('warning','选择业务对接模块');
+                            return false;
+                        }
+                        //微电商业务模块
+                        if($('#website_menu_docking_type').val() == '1'){
+                            if(!$('#website_menu_docking_function').val()){
+                                showTip('warning','选择具体业务对接功能');
+                                return false;
+                            }else if($('#website_menu_docking_function').val() == '4' && !$('#website_menu_goods_category_id').val()){
+                                showTip('warning','选择商品类别');
+                                return false;
+                            }else if($('#website_menu_docking_function').val() == '5'){
+                                var number_reg = /^\+?[1-9][0-9]*$/;
+                                if(!$('#website_menu_good_id').val()){
+                                    showTip('warning','请输入你要链接的商品编号');
+                                    return false;
+                                }else if(!number_reg.test($('#website_menu_good_id').val())){
+                                    showTip("warning", "商品编号必须为大于0的正整数");
+                                    return false;
+                                }else{
+                                    var flag = false;
+                                    $.ajax({
+                                        url: '/website_menus/find_good?id=' + $('#website_menu_good_id').val(),
+                                        type: "get",
+                                        dataType: "json",
+                                        async: false,
+                                        success : function (data){
+                                            if(parseInt(data) > 0){flag= true;}
+                                            else{flag= false;}
+                                        },
+                                        error: function() {
+                                            flag = false;
+                                        }
+                                    });
+                                    if(!flag){
+                                        showTip('warning','商品不存在');
+                                        return false;
+                                    }
+                                    return flag;
+                                }
+                            }
+                        }
+                    }else if((menu_type == 18 || menu_type == 20 ) && !$('#website_menu_qq').val()){
+                        showTip('warning','请输入QQ号码');
+                        $('#website_menu_qq').focus();
+                        return false;
+                    }
+                }
+
+            });
+
+            if($('.menu_category:visible:last').val()){$(".hidden_menu_category_id").val($('.menu_category:visible:last').val());}
+            $("#selects").on("change", ".menu_category", function(){
+                var rel = $(this).attr('rel');
+                $.each($('.menu_category'), function(){
+                    if(parseInt($(this).attr('rel')) > rel){
+                        $(this).remove();
+                    }
+                });
+                if(!$(this).val()){
+                    if($('.menu_category:visible:last').val()){
+                        $(".hidden_menu_category_id").val($('.menu_category:visible:last').val());
+                    }else{
+                        if($('.menu_category:visible:last').prev().val()){
+                            $(".hidden_menu_category_id").val($('.menu_category:visible:last').prev().val());
+                        }else{
+                            $(".hidden_menu_category_id").val(0);
+                        }
+                    }
+                }
+                else{
+                    $.ajax({
+                        type: "GET",
+                        url: "/website_menus/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=1',
+                        success: function(data) {
+                            return false;
+                        },
+                        error: function() {
+                            return false;
+                        }
+                    });
+                }
+            });
+
+            $("#ec_selects").on("change", ".ec_seller_cat", function(){
+                var change_select = $(this),
+                        rel = $(this).attr('rel');
+                if(change_select.val() == "-1"){
+                    $.each($('.ec_seller_cat'), function(){
+                        var select = $(this);
+                        if(select.val() != '-1'){$(".hidden_ec_seller_cat_id").val(select.val());}
+                    });
+                }
+                else{
+                    var arr = [];
+                    $.each($('.ec_seller_cat'), function(){
+
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "/website_menus/select_ec_category?category_id=" + change_select.val(),
+                        success: function(data) {
+                            $('#ec_categories').html(data);
+                            $.each($('.ec_seller_cat'), function(){
+                                var select = $(this);
+                                if(select.val() != '-1'){$(".hidden_ec_seller_cat_id").val(select.val());}
+                            });
+                            return false;
+                        },
+                        error: function() {
+                            $('#ec_categories').html('<select></select>');
+                            return false;
+                        }
+                    });
+                }
+            });
+
+            $('.delete-img').click(function(){
+                var a = $(this).closest('.form-group').find('.file-btn a');
+                a.css({'width': 90, 'height': 90, 'background-image': 'url()', 'background-color': '', 'font-size': '', 'background-position': '', 'background-repeat': 'no-repeat', "background-size": "100% 100%"});
+                a.html('<p><i class="fa fa-plus"></i><small>上传图片</small></p>');
+                $(this).closest('.form-group').find('input[type="hidden"]').val('');
+                $(this).next().val(1);
+                $(this).closest('.form-group').find('.file-btn input[type="file"]').val('');
+            });
+
+            $('.file-img').css({'width': 90, 'height': 90});
+            $('.file-btn a').css({'width': 90, 'height': 90});
+
+            $('.icon-box i').click(function(){
+                $('.icon-box').hide();
+                var a = $(this).closest('.form-group').find('.file-btn a'), self = $(this);
+                $(this).closest('.form-group').find('.file-btn input[type="file"]').val('');
+                a.css({'width': 90, 'height': 90, 'background': '#1b6aaa', 'font-size': '30px'});
+                a.html('<p><i class="' + $(this).attr('class') + '"></i></p>')
+                self.closest('.form-group').find('input[type="hidden"]').each(function(){
+                    if($(this).attr('name') == 'website_menu[font_icon]'){
+                        $(this).val(self.attr('class'));
+                    }else{
+                        $(this).val('')
+                    }
+                });
+            });
+
+            $('#quick_select_link').on('change', function(){
+              $('#website_menu_url').val($(this).val());
+            });
+
+            $('input[name="website_menu[subtitle_type]"]').click(function(){
+                if($(this).val() == '2'){
+                    $('#website_menu_subtitle').show();
+                }else{
+                    $('#website_menu_subtitle').hide();
+                }
+            });
+
+            $('input[name="website_menu[summary_type]"]').click(function(){
+                if($(this).val() != '3'){
+                    $('#website_menu_summary').val('');
+                }
+            });
+        });
+
+
+    </script>
+<% end %>

@@ -1,0 +1,15 @@
+var tree1_dom = "<%= j(render :partial=> "pro/shop_categories/sub_menu", :collection => @shop_categories, :as =>:sub_menu) %>";
+$("#tree1").html(tree1_dom);
+$("#new_btn").show();
+$(".tree-item").each(function(){
+	if($(this).parent().hasClass("tree-folder-content")){
+		// alert("has tree folder");
+	}else{
+		if($(this).attr("data-level") == "1"){
+		// alert("no has folder should be removed");			
+		$(this).remove();
+		}
+
+
+	}
+})

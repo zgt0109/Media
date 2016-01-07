@@ -1,0 +1,45 @@
+<%= form_for @picture, validate: true do |f| %>
+    <%= f.hidden_field :supplier_id %>
+    <%= f.hidden_field :wx_mp_user_id  %>
+    <div class="modal-body">
+    <div class="alert alert-block alert-info ">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li>图片建议尺寸：720像素*400像素，可支持上传格式为：jpg、png、bmp、gif。</li>
+      </ul>
+    </div>
+    <div class="form-group">
+      <label class="control-label">标题<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :title, class: 'col-xs-6' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">图片<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <div id="logo" class="pull-left margin-right-10"></div>
+        <div class="cieldon-file width-100px" data-type="0" data-div="#logo" data-height="90" data-width="160" data-img="<%= f.object.pic.large %>" data-name="booking_ad[qiniu_pic_key]" data-key="<%= f.object.qiniu_pic_key %>"></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary', data: {fn: 'submit'} %>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('input[type=submit]').click(function(){
+              if($('#booking_ad_title').val()){
+                  if("<%= @picture.pic? %>" == 'false' && !$('input[name="booking_ad[qiniu_pic_key]"]').val()){
+                      showTip('warning', '请上传图片');
+                      return false;
+                  }
+              }
+          });
+      });
+    </script>
+<% end %>

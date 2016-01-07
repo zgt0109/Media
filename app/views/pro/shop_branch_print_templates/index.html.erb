@@ -1,0 +1,156 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+        微官网
+      </li>
+      <li>微官网设置</li>
+    </ul>
+    <div class="pull-right">
+      <span class="green lighter ShowQRCodeTxt">扫描预览二维码</span>
+      <div class="showQRCode">
+	<i class="i-qrcode icon-qrcode icon-3x"></i>
+	<div class="QRCode">
+	  <img src="/assets/qr.jpg">
+	</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <div class="clearfix">
+	    <select class="input print_type_select" onchange="change_print_type_select();">
+              <option value="1">订餐小票</option>
+              <option value="2">外卖小票</option>
+            </select>
+          </div>
+        </div>
+        <table class="table table-hover table-print">
+          <tbody>
+            <tr>
+              <td class="print-name">订单编号：</td>
+              <td colspan="2">xxxxxxxxxxxxx</td>
+            </tr>
+            <tr>
+              <td class="print-name">门店：</td>
+              <td colspan="2">xxxxxxxxxxxxx</td>
+            </tr>
+            <tr>
+              <td class="print-name">手机：</td>
+              <td>xxxxxxxxxxx</td>
+              <td>xxx</td>
+            </tr>
+            <tr>
+              <td class="print-name">下单时间：</td>
+              <td colspan="2">xxxx-xx-xx xx:xx:xx</td>
+            </tr>
+            <tr>
+              <td id="dizhi" class="print-name">过期时间</td>
+              <td colspan="2">xxxx-xx-xx xx:xx:xx</td>
+            </tr>
+            <tr class="table-line">
+              <td class="prine-name">项目名称：</td>
+              <td class="tcenter">数量</td>
+              <td class="tright">小计</td>
+            </tr>
+            <tr>
+              <td class="prine-name">xxx</td>
+              <td class="tcenter">x</td>
+              <td class="tright">xx.xx</td>
+            </tr>
+            <tr>
+              <td class="prine-name">xxx</td>
+              <td class="tcenter">x</td>
+              <td class="tright">xx.xx</td>
+            </tr>
+            <tr class="table-line">
+              <td class="prine-name">小计：</td>
+              <td class="tright" colspan="2">小计</td>
+            </tr>
+            <tr>
+              <td class="prine-name">已付：</td>
+              <td class="tright" colspan="2">30.00</td>
+            </tr>
+            <tr>
+              <td class="prine-name">代付：</td>
+              <td class="tright" colspan="2">30.00</td>
+            </tr>
+            <tr class="table-line">
+              <td colspan="3">自定义字段 1</td>
+            </tr>
+            <tr class="table-line">
+              <td colspan="3"> </td>
+            </tr>
+            <tr class="table-line">
+              <td class="print-name">时间：</td>
+              <td colspan="2">xxxx-xx-xx xx:xx:xx</td>
+            </tr>
+            <tr>
+              <td class="print-name tcenter">品名</td>
+              <td class="tcenter" colspan="2">数量</td>
+            </tr>
+            <tr class="table-line">
+              <td class="print-name tcenter">xx</td>
+              <td class="tcenter" colspan="2">x</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-xs-6">
+
+	<div class="col-xs-6">
+	  <%= form_for @shop_branch_print_template_1, remote: true, :html => { :id => "template_1" } do |f| %>
+	    <div class="form-group">
+              <label class="col-4 tright">自定义字段1：</label>
+              <div class="form-input col-7">
+		<%= f.text_field :content, class: "input-text live-save", :onkeyup => 'auto_save(1)' %>
+		<%= f.hidden_field :template_type %>
+		<%= f.hidden_field :shop_branch_id %>
+              </div>
+	    </div>
+	    <%= f.submit "保存", id:"auto_save_btn_1", class: "hidden form-submit" %>
+	  <% end %>
+	  
+	  <%= form_for @shop_branch_print_template_2, remote: true, :html => { :id => "template_2", style: "display:none" } do |f| %>
+            <div class="form-group">
+              <label class="col-4 tright">自定义字段1：</label>
+              <div class="form-input col-7">
+		<%= f.text_field :content, class: "input-text live-save", :onkeyup => 'auto_save(2)' %>
+	        <%= f.hidden_field :template_type %>
+		<%= f.hidden_field :shop_branch_id %>
+              </div>
+            </div>
+            <%= f.submit "保存", id:"auto_save_btn_2", class: "hidden form-submit" %>
+	  <% end %>
+	</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+ function change_print_type_select(){
+   var val = $(".print_type_select").val();
+   if (val === "1"){
+     $("#template_1").show();
+     $("#template_2").hide();
+     $("#dizhi").html("过期时间");
+   }else{
+     $("#template_1").hide();
+     $("#template_2").show();
+     $("#dizhi").html("外卖地址");
+   }
+ }
+
+ function auto_save(id){
+   $("#auto_save_btn_"+id).click();
+ }
+</script>

@@ -1,0 +1,113 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '会员卡', vip_users_path %></li>
+      <li><%= link_to '会员卡套餐', vip_packages_path %></li>
+      <li><%= link_to '服务项目核销', item_consumes_vip_packages_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render 'biz/vip_packages/tab_card' %>
+
+        <div class="tab-content no-border padding-24">
+          <div class="tab-pane active">
+            <div class="alert alert-block alert-success ">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>已核销：<%= @total_item_consumes.count %>个</li>
+              </ul>
+            </div>
+            <%= form_for @search, url: item_consumes_vip_packages_path, :html => { :method => :get } do |f| %>
+              <div class="col-sm-12 row">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">时间范围：</span>
+                    <div class="input-group">
+                      <%= datetime_range_tag f, start_at: :updated_at_gte, end_at: :updated_at_lte, options: {class: 'daterange'} %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">会员姓名：</span>
+                    <%= f.text_field :vip_user_name_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">套餐：</span>
+                    <% packages = @vip_card.vip_packages.show.latest.pluck(:name, :id) %>
+                    <%= f.select :vip_package_id_eq, options_for_select(packages.insert(0,['请选择套餐','']), (params[:search][:vip_package_id_eq] if params[:search])), {}, class: "col-xs-12" %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">服务：</span>
+                    <% items = @vip_card.vip_package_items.normal.latest.map{|a|[a.name,a.id]} %>
+                    <%= f.select :vip_package_item_id_eq, options_for_select(items.insert(0,['请选择服务项目','']), (params[:search][:vip_package_item_id_eq] if params[:search])), {}, class: "col-xs-12" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 row margin-top-20">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">门店：</span>
+                    <% branchs = current_user.shop_branches.used.pluck(:name, :id) %>
+                    <%= f.select :shop_branch_id_eq, options_for_select(branchs.insert(0,['请选择门店','']), (params[:search][:shop_branch_id_eq] if params[:search])), {}, class: "col-xs-12" %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                  <%#= link_to '查询', 'javascript:;', class: 'btn btn-primary btn-sm btn-filter', id: 'search_vip_users' %>
+                  <%= link_to '导出EXCEL', item_consumes_vip_packages_path(:format => :xls,:search => params[:search]) , class: 'btn btn-primary btn-sm btn-filter' %>
+                </div>
+                <div class="col-md-3 row pull-right">
+                  <a class="btn btn-primary btn-sm btn-filter pull-right" data-target="weisiteModal" data-toggle="modals" data-title="核销服务" data-height="600" data-iframe="<%= use_package_vip_packages_path %>">核销</a>
+                </div>
+              </div>
+            <% end %>
+            <div class=" col-sm-12 row margin-top-20">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th width="10%">套餐名称</th>
+                    <th width="10%">服务项目</th>
+                    <th width="8%">SN码</th>
+                    <th width="10%">会员卡号</th>
+                    <th width="10%">会员姓名</th>
+                    <th width="15%">手机号码</th>
+                    <th width="15%">核销时间</th>
+                    <th width="15%">核销门店</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @item_consumes.each do |item_consume| %>
+                    <tr>
+                      <td><%= item_consume.vip_package.name %></td>
+                      <td><%= item_consume.vip_package_item.name %></td>
+                      <td><%= item_consume.sn_code %></td>
+                      <td><%= item_consume.vip_user.try(:user_no) %></td>
+                      <td><%= item_consume.vip_user.try(:name) %></td>
+                      <td><%= item_consume.vip_user.try(:mobile) %></td>
+                      <td><%= item_consume.updated_at.to_date %></td>
+                      <td><%= item_consume.shop_branch.try(:name) || '商户总部' %></td>
+                    </tr>
+                  <% end.blank? %>
+                    <tr><td colspan="8" class="green text-center">无记录</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @item_consumes %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

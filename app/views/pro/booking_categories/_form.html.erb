@@ -1,0 +1,29 @@
+<div class="widget-box transparent">
+  <div class="widget-header widget-header-flat">
+    <h4 class=""><%= @booking_category.new_record? ? '新增分类' : '编辑分类'%></h4>
+  </div>
+  <div class="widget-body">
+    <%= form_for @booking_category, validate: true, html: {id: 'booking_category_form'} do |f| %>
+        <%= f.hidden_field :parent_id %>
+        <%= f.hidden_field :supplier_id %>
+        <%= f.hidden_field :wx_mp_user_id %>
+        <%= f.hidden_field :id %>
+
+        <div class="form-group margin-top-10">
+          <label class="control-label">分类名称<span class="required-star">*</span><small class="text-warning">必填，不能超过8个字</small></label>
+          <div class="clearfix">
+            <%= f.text_field :name, class: "col-xs-8 required", maxlength: 8, validate: true %>
+          </div>
+          <span class="help-block"></span>
+        </div>
+
+
+        <div class="clearfix"></div>
+        <div class="text-left margin-top-10">
+          <input type="submit" class="btn btn-primary btn-sm btn-submit" value="保存">
+          <input type="reset" class="btn btn-default btn-sm" value="取消" onclick="javascript:location.href='<%= booking_categories_path %>'">
+        </div>
+
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+        <%= render 'pro/college_teachers/breadcrumbs' %>
+
+        <div class="page-content">
+            <div class="row">
+                <div class="col-xs-12">
+                  <%= form_for(@teacher, validate: true) do |f| %>
+                    <div class="form-group">
+                        <label class="control-label">姓名<span class="required-star">*</span></label>
+                        <div class="clearfix">
+                            <%= f.text_field :name, class: 'col-md-8' %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">职称<span class="required-star">*</span></label>
+                        <div class="clearfix">
+                            <%= f.text_field :position, class: 'col-md-8' %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">简介<span class="required-star">*</span></label>
+                        <div class="clearfix">
+                            <%= f.text_area :intro, class: 'col-md-8', rows: 5 %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">头像<span class="required-star">*</span><span class="help-inline text-warning line-height-32">图片建议尺寸：120像素*140像素</span></label>
+                        <div class="clearfix">
+                            <div id="img-2" class="pull-left margin-right-10" style="background: #eee; width:120px; height: 140px;"></div>
+                            <div data-img="<%= @teacher.avatar_url %>" data-key="<%= @teacher.qiniu_avatar_key %>" data-name="college_teacher[qiniu_avatar_key]" class="cieldon-file width-100px" data-type="1" data-div="#img-2" data-width="120" data-height="140"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                      <input type="button" class="btn btn-sm btn-default" value="返回">
+                    </div>
+                  <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

@@ -1,0 +1,59 @@
+<script type="text/javascript">
+    $(function(){
+        var groups = {
+            '微官网': {'name': '微官网', 'id': 1, 'parent_id': 1},
+            '会员卡': {'name': '微会员卡', 'id': 2, 'parent_id': 2},
+            '素材管理': {'name': '素材管理', 'id': 3, 'parent_id': 3},
+            '微信基础设置': {'name': '微信基础设置', 'id': 4, 'parent_id': 4},
+            '微活动': {'name': '微活动', 'id': 5, 'parent_id': 5},
+            '图片分享': {'name': '微活动', 'id': 5, 'parent_id': 5},
+            '微信墙': {'name': '微现场', 'id': 28, 'parent_id': 6},
+            '微现场': {'name': '微现场', 'id': 28, 'parent_id': 6},
+            '微门店': {'name': '微门店', 'id': 6, 'parent_id': 7},
+            '微团购': {'name': '微团购', 'id': 7, 'parent_id': 8},
+            '微团购支付版': {'name': '微团购', 'id': 7, 'parent_id': 8},
+            '微客服': {'name': '微客服', 'id': 8, 'parent_id': 9},
+            '微硬件': {'name': '微硬件', 'id': 9, 'parent_id': 10},
+            '微WiFi': {'name': '微硬件', 'id': 9, 'parent_id': 10},
+            '微互动': {'name': '微互动', 'id': 10, 'parent_id': 11},
+            '微相册': {'name': '微互动', 'id': 10, 'parent_id': 11},
+            '微社区': {'name': '微互动', 'id': 10, 'parent_id': 11},
+            '微插件': {'name': '微插件', 'id': 11, 'parent_id': 12},
+            '二维码推广': {'name': '二维码推广', 'id': 12, 'parent_id': 13},
+            '短消息管理': {'name': '短消息管理', 'id': 27, 'parent_id': 14},
+            '微客生活圈': {'name': '微客生活圈', 'id': 13, 'parent_id': 15},
+            '微商圈': {'name': '微商圈', 'id': 14, 'parent_id': 16},
+            '微生活': {'name': '微生活', 'id': 15, 'parent_id': 17},
+            '微汽车': {'name': '微汽车', 'id': 16, 'parent_id': 18},
+            '微电商': {'name': '微电商', 'id': 17, 'parent_id': 19},
+            '微酒店': {'name': '微酒店', 'id': 18, 'parent_id': 20},
+            '微房产': {'name': '微房产', 'id': 19, 'parent_id': 21},
+            '微婚礼': {'name': '微婚礼', 'id': 20, 'parent_id': 22},
+            '微餐饮': {'name': '微餐饮', 'id': 21, 'parent_id': 23},
+            '微外卖': {'name': '微外卖', 'id': 22, 'parent_id': 24},
+            '微旅游': {'name': '微旅游', 'id': 23, 'parent_id': 25},
+            '微医疗': {'name': '微医疗', 'id': 24, 'parent_id': 26},
+            '微教育': {'name': '微教育', 'id': 25, 'parent_id': 27},
+            '微服务': {'name': '微服务', 'id': 26, 'parent_id': 28},
+	    '微小区': {'name': '微小区', 'id': 29, 'parent_id': 29},
+	    '微枚迪支付': {'name': '微枚迪支付', 'id': 30, 'parent_id': 30}
+        };
+        if($('.breadcrumb li').eq(1)){
+            var title = $('.breadcrumb li').eq(1).text().trim();
+            if(title&&groups[title]){
+                var id = groups[title]['id'], name = groups[title]['name'], url = '/home/'+id+'/help_post?parent_id='+groups[title]['parent_id'] + '<%= defined?(@help_anchor) ?  @help_anchor : "" %>';
+                var html = '<div class="page-content help-info" style="height: 50px;"><div class="row"><div class="col-xs-12">' +
+                        '<div class="alert alert-block alert-warning">' +
+                        '<button type="button" class="close margin-left-15" data-dismiss="alert">' +
+                        '<i class="icon-remove" onclick="$(\'.page-content.help-info\').remove();"></i>' +
+                        '</button>' +
+                        '<i class="icon-warning-sign text-warning"></i>'+
+                        ' 提示：我们提供了【'+name+'】的在线操作指南，遇到设置问题时可以快速查看'+
+                        '<a class="pull-right" href="'+url+'" target="_blank">现在查看</a>'+
+                        '</div>'+
+                        '</div></div></div>'
+                $('.breadcrumbs').after(html);
+            }
+        }
+    });
+</script>

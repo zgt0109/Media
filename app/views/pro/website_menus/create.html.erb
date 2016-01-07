@@ -1,0 +1,14 @@
+<%= javascript_include_tag 'jquery', 'main' %>
+
+<script type="text/javascript">
+  var $parent_doc = $(parent.document);
+  $parent_doc.find('.pop').fadeOut(function() { $(this).remove(); });
+  parent.showTip('success', '操作成功');
+  <% if @website_menu.parent %>
+    $parent_doc.find('#parent-menu-<%= @website_menu.parent_id %>').replaceWith('<%= j render "pro/website_menus/sub_menu", sub_menu: @website_menu.parent %>');
+    $parent_doc.find('#parent-menu-<%= @website_menu.parent_id %>').addClass('active');
+  <% else %>
+    $parent_doc.find('#menu-root').append('<%= j render "pro/website_menus/sub_menu", sub_menu: @website_menu %>');
+  <% end %>
+  window.parent.location.reload();
+</script>

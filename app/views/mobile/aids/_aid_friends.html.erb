@@ -1,0 +1,12 @@
+<ul class="msg-list msg-friend">
+  <% @results.present? && @results.each do |result| %>
+    <li class="msg-list-item">
+      <% aid_user = result.wx_user %>
+      <%= image_tag (aid_user.present? && aid_user.headimgurl.present?) ? aid_user.headimgurl : "/assets/mobile/aids/global_portrait.png", size: "60x60", class: "img-full msg-rank-portrait", alt: "" %>
+      <div class="msg-rank-helper">
+        <span class="msg-rank-nickname"><%= result.wx_user.nickname %></span>
+        <span class="msg-rank-count"><%= number_to_currency(result.points, unit: '', precision: 0) %></span>
+      </div>
+    </li>
+  <% end %>
+</ul>

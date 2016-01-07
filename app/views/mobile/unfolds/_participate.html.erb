@@ -1,0 +1,154 @@
+<div class="body">
+    <div class="package-box">
+        <%- if @friend %>
+            <%- if @from_wx_user_participate.present? %>
+                <%- if @participate.present? %>
+                    <%- if @invited %>
+                        <img src="/assets/img/package/package-open.jpg" alt="">
+                        <div class="text">
+                            <%- if (@prize.present? && @prize.reached?) || (@activity.extend.invites_count.to_i  - @invites.count <= 0) %>
+                                人品太好了，礼包已被拆开快去
+                                <%- if !@subscribed %>
+                                    <a href="javascript:;" onclick="showPop('#pop-share')">
+                                <%- elsif @activity.extend.base_info_required == "off" %>
+                                    <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">
+                                <%- elsif @prize.name.present? && @prize.mobile.present?  %>
+                                    <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">
+                                <%- else %>
+                                    <a href="<%= user_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">
+                                <%- end %>
+                                我的礼包</a>看看吧!
+                            <%- elsif @invites.present? %>
+                                <span>已有<%= @invites.count  %>位好友拆开礼包，还差<%= @activity.extend.invites_count.to_i  - @invites.count %>位继续加油！</span>
+                            <%- else %>
+                                <small>恭喜您，获得</small>
+                                <h1><%= @activity.extend.prize_or_gift_name %></h1>
+                                <span>赶紧邀请<%= @activity.extend.invites_count %>位好友帮你拆礼包吧！</span>
+                            <%- end %>
+                       </div>
+                    <%- else %>
+                        <img src="/assets/img/package/package-1.jpg" alt="">
+                    <%- end %>
+                <%- else %>
+                    <%- if @invited %>
+                        <img src="/assets/img/package/package-open.jpg" alt="">
+                        <div class="text">
+                            <%- if @from_wx_user_prize.present? && (@from_wx_user_prize.reached? || @activity.extend.invites_count.to_i  - @from_wx_user_invites.count <= 0)  %>
+                                <span>在小伙伴们的努力下我已经成功地把礼品搬回家了，你也来拆个自己的礼包吧！</span>
+                            <%- else %>
+                                <%- index = @from_wx_user_invites.pluck(:to_wx_user_id).index(session[:wx_user_id]) || 0 %>
+                                <span>你是第<%= index + 1 %>个帮他拆礼包的小伙伴，还差<%= @activity.extend.invites_count.to_i  - @from_wx_user_invites.count %>位小伙伴帮忙拆开礼包他就能把奖品带回家了！</span>
+                            <%- end %>
+                        </div>
+                    <%- else %>
+                        <img src="/assets/img/package/package-1.jpg" alt="">
+                    <%- end %>
+                <%- end %>
+            <%- else %>
+                <img src="/assets/img/package/package-1.jpg" alt="">
+            <%- end %>
+        <%- else %>
+            <img src="/assets/img/package/package-open.jpg" alt="">
+            <div class="text">
+                    <%- if (@prize.present? && @prize.reached?) || (@activity.extend.invites_count.to_i  - @invites.count <= 0)  %>
+                        人品太好了，礼包已被拆开快去
+                        <%- if !@subscribed %>
+                            <a href="javascript:;" onclick="showPop('#pop-share')">
+                        <%- elsif @activity.extend.base_info_required == "off" %>
+                            <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">
+                        <%- elsif @prize.name.present? && @prize.mobile.present?  %>
+                            <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">
+                        <%- else %>
+                            <a href="<%= user_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>">
+                        <%- end %>
+                        我的礼包</a>看看吧!
+                <%- elsif @invites.present? %>
+                    <span>已有<%= @invites.count  %>位好友拆开礼包，还差<%= @activity.extend.invites_count.to_i  - @invites.count %>位继续加油！</span>
+                <%- else %>
+                    <small>恭喜您，获得</small>
+                    <h1><%= @activity.extend.prize_or_gift_name %></h1>
+                    <span>赶紧邀请<%= @activity.extend.invites_count %>位好友帮你拆礼包，把奖品带回家！</span>
+                <%- end %>
+           </div>
+        <%- end%>
+    </div>
+    <%- if @friend %>
+        <%- if @from_wx_user_participate.present? %>
+            <%- if @participate.present? %>
+                <%- if @invited %>
+                    <a id="spin" class="p-btn p-btn-big" onclick="showPop('#pop-share')" style="cursor: pointer;">
+                        <img src="/assets/img/package/btn-big.png" alt="">
+                            <div class="text">邀请好友拆礼包</div>
+                    </a>
+                <%- else %>
+                    <a id="spin" class="p-btn p-btn-big  help-friend" style="cursor: pointer;">
+                    <img src="/assets/img/package/btn-big.png" alt="">
+                        <div class="text">帮好友拆礼包</div>
+                    </a>
+                <%- end %>
+            <%- else %>
+                <%- if @invited %>
+                    <a id="spin" class="p-btn p-btn-big participate" style="cursor: pointer;">
+                    <img src="/assets/img/package/btn-big.png" alt="">
+                        <div class="text">拆个自己的礼包</div>
+                    </a>
+                <%- else %>
+                    <a id="spin" class="p-btn p-btn-big  help-friend" style="cursor: pointer;">
+                    <img src="/assets/img/package/btn-big.png" alt="">
+                        <div class="text">帮好友拆礼包</div>
+                    </a>
+                <%- end %>
+            <%- end %>
+        <%- else %>
+            <a id="spin" class="p-btn participate" style="cursor: pointer;">
+                <img src="/assets/img/package/btn.png" alt="">
+                <div class="text">拆包有奖</div>
+            </a>
+        <%- end %>
+    <%- else %>
+        <a class="p-btn p-btn-big" onclick="showPop('#pop-share')" style="cursor: pointer;">
+        <img src="/assets/img/package/btn-big.png" alt="">
+            <div class="text">邀请好友拆礼包</div>
+        </a>
+    <%- end %>
+    <div class="btn-box">
+        <div class="cell">
+            <a href="<%= rules_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="btn">
+                <span>游戏规则</span>
+            </a>
+        </div>
+        <%- if !@subscribed %>
+            <div class="cell">
+                <a href="javascript:;" class="btn" onclick="showPop('#pop-share')">
+                    <span>
+                      <%- if (@prize.present? && @prize.reached?) || (@activity.extend.invites_count.to_i  - @invites.count <= 0) %>
+                         我的礼包
+                      <%- else %>
+                         关注我们
+                      <%- end %>
+                    </span>
+                </a>
+            </div>
+        <%- else %>
+            <%- if (@prize.present? && @prize.reached?) || (@activity.extend.invites_count.to_i  - @invites.count <= 0) %>
+                <div class="cell">
+                <%- if @activity.extend.base_info_required == "off" %>
+                    <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="btn">
+                        <span>我的礼包</span>
+                    </a>
+                <%- else %>
+                    <%- if @prize && @prize.name.present? && @prize.mobile.present?  %>
+                        <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="btn">
+                            <span>我的礼包</span>
+                        </a>
+                   <%- else %>
+                        <a href="<%= user_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="btn">
+                            <span>我的礼包</span>
+                        </a>
+                   <%- end %>
+                 <%- end %>
+                 </div>
+            <%- end %>
+         <%- end %>
+    </div>
+</div>

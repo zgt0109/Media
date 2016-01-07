@@ -1,0 +1,14 @@
+<% @wx_wall_messages.each do |wx_wall_message| %>
+	<li data-id="<%= wx_wall_message.id %>">
+		<div class="user-left">
+			<div class="user-img">
+				<img src="<%= wx_wall_message.wx_wall_user.try(:avatar_url).presence || "/assets/wx_wall/user-img.jpg" %>"/>
+			</div>
+		</div>
+		<div class="user-msg">
+			<h1><%= wx_wall_message.wx_wall_user.try(:nickname) %></h1>
+			<p><%= wx_wall_message.message %></p>
+			<div class="user-time"><%= wx_wall_message.created_at %></div>
+		</div>
+	</li>
+<% end %>

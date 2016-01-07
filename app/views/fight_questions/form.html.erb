@@ -1,0 +1,81 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+	<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '一战到底', fights_activities_path %></li>
+      <li><%= link_to '题库管理', fight_questions_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+	<div class="page-content">
+		<div class="row">
+			<div class="col-xs-12">
+				<%= form_for @fight_question, validate: true do |f| %>
+					<%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+					<div class="form-group">
+						<label class="control-label">题目名称:<span class="required-star">*</span></label>
+						<div class="clearfix">
+							<%= f.text_area :title, maxlength: 60, rows: 5, class: "form-control" %>
+						</div>
+					</div>
+					<div class="form-group">
+            <label class="control-label">题目图片:</label>
+            <div class="clearfix">
+              <%= render "upload_image_div", name: "fight_question[qiniu_pic_key]", key: f.object.qiniu_pic_key, img: (f.object.pic_url || '/assets/bg_fm.jpg'), width: 180, height: 60,  suggest: "建议尺寸：宽720像素" %>
+            </div>
+          </div>
+					<div class="form-group">
+						<label class="control-label">选项A:<span class="required-star">*</span></label>
+						<div class="clearfix">
+							<%= f.text_field :answer_a, maxlength: 60, class: 'form-control answer_a', placeholder: "长度不超过60个字符" %>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label">选项B:<span class="required-star">*</span></label>
+						<div class="clearfix">
+							<%= f.text_field :answer_b, maxlength: 60, class: 'form-control answer_b', placeholder: "长度不超过60个字符" %>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label">选项C:</label>
+						<div class="clearfix">
+							<%= f.text_field :answer_c, maxlength: 60, class: 'form-control answer_c', disabled: true, placeholder: "长度不超过60个字符" %>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label">选项D:</label>
+						<div class="clearfix">
+							<%= f.text_field :answer_d, maxlength: 60, class: 'form-control answer_d', disabled: true, placeholder: "长度不超过60个字符" %>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label">选项E:</label>
+						<div class="clearfix">
+							<%= f.text_field :answer_e, maxlength: 60, class: 'form-control answer_e', disabled: true, placeholder: "长度不超过60个字符" %>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label">答案:<span class="required-star">*</span></label>
+						<div class="clearfix">
+							<%= f.select :correct_answer, FightQuestion::correct_answer_options, {}, class: 'col-md-5' %>
+						</div>
+					</div>
+					<% if current_page?(new_fight_question_path) or current_page?(edit_fight_question_path) %>
+						<div class="form-group">
+							<%= submit_tag "保存", id: "add-fight-question", class: "btn btn-sm btn-primary form-submit btn-orange" %>
+							<a href="javascript:history.go(-1);" class="btn btn-sm btn-default">取消</a>
+						</div>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+	window.onload = initSelectOption();
+</script>
+<% end %>

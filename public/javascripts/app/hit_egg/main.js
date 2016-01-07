@@ -1,0 +1,11 @@
+$(function(){
+    //a.active
+	$("a").on({
+        touchstart:function(){
+            $(this).addClass("active");
+        },
+        touchend:function(){
+             $(this).removeClass("active");
+        }
+    });
+});

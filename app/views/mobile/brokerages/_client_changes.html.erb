@@ -1,0 +1,5 @@
+<li>
+	<h4><%= change.client.name %></h4>
+	<p><%= change.commission_type.mission_type_name %>，获得<%= change.commission %>元<%= "话费" if change.commission_type.call_charge? %>。</p>
+	<p><%= change.created_at %></p>
+</li>

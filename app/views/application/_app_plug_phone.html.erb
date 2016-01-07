@@ -1,0 +1,8 @@
+<div class="plug-div">
+  <div class="plug-phone" id="plug-phone">
+    <input type="checkbox" class="plug-menu" id="plug-btn">
+    <% website_popup_menus.each do |popup_menu|  %>
+        <div><a style="background-image:url(<%= popup_menu.icon.thumb %>);" href="<%= website_activity_link(popup_menu) %>">&nbsp;</a></div>
+    <% end %>
+  </div>
+</div>

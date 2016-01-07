@@ -1,0 +1,27 @@
+<tr id="record<%= wall.id %>">
+  <td class="tleft"><%= wall.name %></td>
+  <td><%= wall.keyword %></td>
+  <td><%= wall.wx_wall_users.count %></td>
+  <td>
+    <p><%= wall.start_at %></p>
+    <p><%= wall.end_at %></p>
+  </td>
+  <td><%= wall.activity_status_name %></td>
+  <td class="tleft">
+    <%- unless ['已结束'].include?(wall.activity_status_name) %>
+    <a href="<%= wx_wall_path(wall) %>" target="_blank" title='上墙页面'><i class="wicon wicon-1"></i></a>
+    <a onclick="popUrl(this)" data-name="name" data-w="800" data-h="0.8" data-title="编辑微信墙" data-url="<%= edit_wx_wall_path(wall) %>" title='编辑'><i class="wicon wicon-3"></i></a>
+    <a onclick="popUrl(this)" data-name="name" data-w="800" data-h="0.8" data-title="互动设置" data-url="<%= extra_settings_wx_wall_path(wall) %>" title='互动设置'><i class="wicon wicon-2"></i></a>
+    <%- end %>
+    <%= link_to raw('<i class="wicon wicon-4"></i>'), wx_wall_messages_path(wx_wall_id: wall.id), title: '留言管理' %>
+    <a onclick="popUrl(this)" data-name="name" data-w="830" data-h="0.8" data-title="中奖管理" data-url="<%= wx_wall_user_prizes_path(id: wall.id) %>" title='中奖管理'><i class="wicon wicon-5"></i></a>
+    <% if !wall.deleted? && wall.activity.starting? %>
+      <%- if wall.stopped? %>
+        <%= link_to raw('<i class="wicon wicon-8"></i>'), start_wx_wall_path(wall), method: :post, title: '开启' %>
+      <%- else %>
+        <%= link_to raw('<i class="wicon wicon-6"></i>'), stop_wx_wall_path(wall), method: :post, title: '停止' %>
+      <%- end %>
+    <% end %>
+    <%= link_to raw('<i class="wicon wicon-7"></i>'), wx_wall_path(wall), method: :delete, confirm: "删除后活动的所有信息将不可恢复，确认删除吗？", title: '删除', data:{weight: 360} %>
+  </td>
+</tr>

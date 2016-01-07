@@ -1,0 +1,81 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '会员卡', vip_users_path %></li>
+      <li><%= link_to '消费记录', vip_records_path %></li>
+      <li><%= link_to '趋势图', trend_vip_records_url %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li>
+          <a href="<%= vip_records_url %>">
+            消费记录
+          </a>
+        </li>
+        <li>
+          <a href="<%= point_vip_records_url %>">
+            积分记录
+          </a>
+        </li>
+        <li class="active">
+          <a href="<%= trend_vip_records_url %>">
+            趋势图
+          </a>
+        </li>
+      </ul>
+      <% if @chart %>
+        <div class="tab-content no-border">
+          <div class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="clearfix">
+                  <%{"最近7天" => "one_weeks", "最近一月" => "one_months", "最近半年" => "six_months", "最近一年" => "twelve_months"}.each do |key, value|%>
+                    <a href="<%= trend_vip_records_path(created_date: value) %>" class="btn btn-primary btn-filter btn-filter-tab <%= "active" if @date == value %>"><%= key %></a>
+                  <%end%>
+                </div>
+                <div class="chart margin-top-20">
+                  <div class="col-md-8 highCharts">
+                    <div class="chart" id="basic_line_test"></div>
+                    <div>
+                      <span><%= @start %></span>
+                      <span class="margin-left-10">到</span>
+                      <span class="margin-left-10"><%= @today %></span>
+                      <span class="margin-left-20">共消费 <%= @count %> 次</span>
+                    </div>
+                  </div>
+                  <div class="well">
+                    <div class="chartInfoHead">消费次数</div>
+                    <div class="chartInfoCon1 help-inle test text-warning line-height-32">
+                      <b><%= @today_counts %></b>
+                      <span>今日消费次数</span>
+                    </div>
+                    <div class="chartInfoCon2 text-info ">
+                      <b><%= @yesterday_counts %></b>
+                      <span>昨日消费次数</span>
+                    </div>
+                    <div class="chartInfoHeadFooter">目前消费共计<%= @total_counts %>次</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    <% if @chart %>
+      $('#basic_line_test').append("<%= escape_javascript(high_chart('chart_basic_line1', @chart)) -%>");
+    <% end %>
+  });
+</script>
+<% end %>

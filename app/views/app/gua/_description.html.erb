@@ -1,0 +1,25 @@
+<section class="sec-info sec-bg-top">
+  <% @activity.activity_prizes.each do |prize| %>
+    <p><b><%= prize.title %>：<%= prize.prize %>。<% if @activity.activity_property.is_show_prize_qty? %>奖品数量：<%= prize.prize_count %><% end %></b></p>
+  <% end %>
+  <i>活动奖项:</i>
+</section>
+<section class="sec-text sec-bg-bottom">
+  <em></em>亲，中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
+</section>
+<%- if @activity.activity_status != Activity::WARM_UP && @wx_user.present? %>
+  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+    <a href="<%= gua_list_app_gua_index_path(aid: @activity.id) %>" class="btn btn-block">点击查看我获得的奖品 ></a>
+  <%- end %>
+<%- end %>
+<section class="sec-detail sec-bg-top sec-bg-bottom">
+  <i>活动说明:</i>
+  <em></em>
+  <div class="mod-cke">
+  <%- if @activity.activity_status == Activity::UNDER_WAY %>
+    <%= raw @activity.activity_notices.active.first.description rescue '' %>
+  <%- else %>
+    <%= raw @activity.activity_notices.ready.first.description rescue '' %>
+  <%- end %>
+  </div>
+</section>

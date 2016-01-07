@@ -1,0 +1,169 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微报名', activity_forms_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+              <label class="control-label">报名表单自动<span class="required-star"> * </span><small class="help-inline text-warning line-height-32">至少选择两项，报名开始后字段不能修改</small></label>
+              <div class="checkbox-list" id="fields_list">
+                <% @fields.each do |f| %>
+                  <label class="control-label">
+                    <%= check_box_tag f.name, f.value, @checked_fields_names.include?(f.name), form_field_id: f.id, class: "ace" %>
+                    <span class="lbl"><%= f.value %></span>
+                  </label>
+                <% end %>
+              </div>
+
+
+              <%= form_tag edit_fields_save_activity_forms_path(id: @activity.id), id: "add_fields_form", style: "clear: both" do %>
+              <div class="clearfix">
+                <div class="col-xs-12 col-sm-6 col-md-2 row margin-top-10">
+                  <div class="input-group">
+
+                      <%= text_field_tag :new_field, nil, class: "form-control", placeholder: "" %>
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn green btn-filter">添加字段</button>
+                      </span>
+
+                  </div>
+                </div>
+              </div>
+              <% end %>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">表单字段排序<small class="help-inline text-warning line-height-32">数字设置越大的排在越后面显示</small></label>
+                <div class="clearfix" id="list-2">
+
+                </div>
+            </div>
+
+
+            <%= form_tag checked_fields_save_activity_forms_path(id: @activity.id), id: "checked_fields_form", target: "_top", style: 'margin-top: -15px;' do %>
+                <% @checked_fields.each do |f| %>
+                    <%= render "checked_field", {f: f, required: @required_field_names.include?(f.field_name)} %>
+                <% end %>
+
+                <p class="hd">
+                    <button type="submit" class="btn btn-primary btn-sm">保存</button>
+                    <button type="button" class="btn btn-sm" id="edit_cancel">取消</button>
+                </p>
+            <% end %>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        var max_order_id = <%= @checked_fields.present? && @checked_fields.last.sort || 0 %>;
+        var activity_type = 12;
+
+        function hide_iframe(){
+            $(parent.document).find('.pop').fadeOut(function() { $(this).remove(); });
+        }
+
+        function get_order_id(){
+            max_order_id += 1;
+            return max_order_id;
+        }
+
+        $(document).ready(function(){
+
+            <% if @notice %>showTip('warnning', '<%= @notice %>');<% end %>
+
+            $("#edit_cancel").click(function(){ window.open("/activity_forms", "_top"); });
+
+            $('.pop .hd', window.parent.document).html('报名字段设置：<%= @activity.name %> <a class="btn-close"></a>');
+
+            $("#fields_list").delegate("label input[type=checkbox]", "click", function(){
+
+                <% if @activity.can_not_edit? %>
+                event.preventDefault();
+                showTip('warning', '活动已开始，无法添加或删除字段！');
+                return null;
+                <% end %>
+
+                var field_name = $(this).attr("name");
+                if ($(this).is(":checked")){
+                    // 添加设置字段
+                    $.get("/activity_forms/checked_field", {form_field_id: $(this).attr("form_field_id"), sort_id: get_order_id()}, function(result){
+                        $('#checked_fields_form .form-group').last().after(result);
+                    });
+                }else{
+                    if (field_name == "username"){
+                        showTip('warning', '报名字段必须包含“姓名”！');
+                        event.preventDefault();
+                    }else{
+                      if(field_name == "mobile"){
+                        showTip('warning', '报名字段必须包含“手机”！');
+                        event.preventDefault();
+                      }
+                        else{
+                        $("#checked_fields_form .form-group[field_name=" + field_name + "]").remove();
+                      }
+                    }
+                }
+            });
+
+            $("#add_fields_form").submit(function(event){
+                event.preventDefault();
+                var new_field = $.trim($("#new_field").val())
+                if (new_field == ""){
+                    showTip('warning', '请先填写字段名称！');
+                }else{
+                    $.ajax({
+                        type: "POST",
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.errors.length > 0){
+                                showTip('warning', data.errors[0]);
+                            }else{
+                                if (data.new_li != ""){
+                                    $("#fields_list").append(data.new_li);
+                                    $("#new_field").val("");
+                                }
+                            }
+                        },
+                        error: function (msg) {
+                            showTip('warning', "请求出错：" + msg);
+                        }
+                    });
+                }
+            });
+
+            $("#checked_fields_form").submit(function(event){
+                var validate_success = true;
+                if ($('#checked_fields_form .form-group').length < 2){
+                    showTip('warning', "至少需要设置2个字段");
+                    validate_success = false;
+                }
+                $("#checked_fields_form .form-group input[type=number]").each(function(index, input){
+                    if (!(parseInt($(input).val()) > 0)){
+                        showTip('warning', "排序编号必须是大于0的数字。");
+                        validate_success = false;
+                    }
+                });
+                if (!validate_success){
+                    event.preventDefault();
+                }
+            });
+
+        });
+    </script>
+<% end %>

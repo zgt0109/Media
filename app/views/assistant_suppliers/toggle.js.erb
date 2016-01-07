@@ -1,0 +1,5 @@
+<%- if @flag == "open" %>
+  $("#toggle_<%= @assistant_supplier.assistant_id %>").removeClass('pluin-close').addClass('pluin-open');
+<%- else %>
+  $("#toggle_<%= @assistant_supplier.assistant_id %>").removeClass('pluin-open').addClass('pluin-close');
+<%- end %>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link href="/assets/favicon.ico" rel="shortcut icon">
+    <title><%= content_for?(:title) ? yield(:title) : "微医疗" %></title>
+    <%= stylesheet_link_tag "mobile/whospital", media: "all" %>
+    <%= javascript_include_tag "mobile/whospital" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body class="<%= @page_class %>">
+  <%= render 'application/gb2big5' %>
+    <div class="html">
+      <div class="main">
+	<div class="wrap wrap-body">
+	  <%= yield %>
+	</div>
+      </div>
+    </div>
+
+    <%= render 'application/app_footer' %>
+    <a href="javascript:scroll(0,0)" class="btn-up"></a>
+    <div class="loading fixed-top"></div>
+
+    <% if flash[:notice] || flash[:alert] %>
+    <script type="text/javascript">
+      alert("<%= flash[:notice] || flash[:alert] %>");
+    </script>
+    <% end %>
+  </body>
+</html>

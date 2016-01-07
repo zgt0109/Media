@@ -1,0 +1,63 @@
+<div class="body">
+  <div class="package-box">
+    <img src="<%= @activity.bg_pic_url || "/assets/red_packet/package-1.jpg" %>" alt="">
+  </div>
+  <% if @activity.activity_status_name == "未开始" %>
+      <div class="state ended">
+        <img src="/assets/red_packet/check.png" alt="">
+        <div class="text"><span>敬请期待</span></div>
+      </div>
+  <% elsif @activity.activity_status_name == "已结束" && @red_packet_release.blank? %>
+      <div class="state ended">
+        <img src="/assets/red_packet/check.png" alt="">
+        <div class="text"><span>活动已结束</span></div>
+      </div>
+  <% elsif @cannot_generate && @red_packet_release.blank? %>
+      <div class="state ended">
+        <img src="/assets/red_packet/check.png" alt="">
+        <div class="text"><span>已抢光</span></div>
+      </div>
+  <% elsif @red_packet_release %>
+      <a href="<%= mobile_red_packet_path(@supplier, @red_packet_release) %>">
+        <div class="state start">
+          <img src="/assets/red_packet/checkst.png" alt="">
+          <div class="text"><span>我的礼包</span></div>
+        </div>
+      </a>
+  <% else %>
+      <a href="<%= new_mobile_red_packet_path %>">
+        <div class="state start">
+          <img src="/assets/red_packet/checkst.png" alt="">
+          <div class="text"><span>领取礼包</span></div>
+        </div>
+      </a>
+  <% end %>
+  <% if @activity.description.present? %>
+    <div class="rules" id="rules">
+      <h3>活动规则</h3>
+      <div class="rule-inner">
+        <%= @activity.description.html_safe %>
+      </div>
+      <a href="#" class="closed" id="closed"><input type="button" value="我知道了"></a>
+      <div class="cover"></div>
+    </div>
+
+    <div class="btn-box">
+      <a href="" class="btn">
+        <span  id="rulesbtn">活动规则</span>
+      </a>
+    </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+  $("#rulesbtn").click(function(e){
+    $("#rules").show();
+    $(".black").show();
+    e.preventDefault();
+  });
+  $("#closed").click(function(e){
+    $("#rules").hide();
+    $(".black").hide();
+    e.preventDefault();
+  });
+</script>

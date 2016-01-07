@@ -1,0 +1,21 @@
+<section id="sec-index">
+    <div class="body">
+        <div class="mod-des">
+            <img src="<%= @reservation.logo_url %>">
+            <p><%= @reservation.description %></p>
+        </div>
+        <div class="mod-form form-hor">
+            <div class="bd">
+                <%- @reservation.custom_fields.normal.visible.order(:position).each do |field|%>
+                    <%= render "field", field: field %>
+                <%- end %>
+            </div>
+            <div class="ft">
+                <%- if @order.created? && (@order.wx_user_id.to_s == @wx_user.id) %>
+                    <%= link_to '撤销预定',  abandon_mobile_reservations_path(id: @order.id), class: "btn btn-blue abandon", data: {confirm: '确定撤销么？' } %>
+                 <%- end %>
+                <input type="button" value="返回" class="btn btn-gray" onclick="cancelSubmit();"/>
+            </div>
+        </div>
+    </div>
+</section>

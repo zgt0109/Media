@@ -1,0 +1,11 @@
+var html = '<%= j render :partial => 'photo', :collection => @photos, :as => :p %>'
+$(".list-img").append(html);
+$(".more").remove();
+$(".box-padding").append('<div class="ft tcenter more"><%= j link_to_next_page @photos, '点击加载更多', :remote => true, :class => "loading", :id => "more_loading" ,:style=>"display: block;" %> </div>');
+$(document).ready(function(){
+//    $(".list-img a").on('click', function(){
+        $(".list-img a").photoSwipe();
+    $(".isloading").css("display",'none');
+    $("#more_loading").css("display","block");
+//    });
+});

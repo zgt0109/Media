@@ -1,0 +1,44 @@
+<div class="body ">
+    <div class="u-head">
+        <img src="/assets/img/package/u-head.png" alt="">
+        <div class="text">游戏规则</div>
+        <div class="u-mark">
+            <img src="/assets/img/package/mark.png" alt="">
+        </div>
+    </div>
+    <div class="scroll-box">
+        <div class="form-box" id="scroll">
+            <div class="wrap">
+                <div class="f-li">
+                    <label><i class="icon icon-1"></i>活动截至</label>
+                    <div class="text"><%= @activity.start_at %> 至 <%= @activity.end_at %></div>
+                </div>
+                <div class="f-li">
+                    <label><i class="icon icon-2"></i>活动说明</label>
+                    <div class="edit">
+                        <%= raw @activity.description %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="<%= mobile_unfolds_path(activity_id: @activity.try(:id), openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="t-btn t-btn-yellow foot-btn">返回首页</a>
+    </div>
+</div>
+<script>
+$(function(){
+    setTimeout(function(){
+        iScroll("#scroll");
+    },300);
+    function iScroll(id){
+        scrollBox = new IScroll(id, {
+            myScrollHeight: 11,
+            hideScrollbar: false,
+            scrollbars: true,
+            mouseWheel: true,
+            click: true
+        });
+        var DOM = $(id)[0];
+        DOM.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+    }
+});
+</script>

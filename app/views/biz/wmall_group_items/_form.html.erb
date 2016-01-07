@@ -1,0 +1,104 @@
+    <div class="form-group">
+      <label class=" ">商铺</label>
+
+      <div class="clearfix">
+        <%= select_tag 'shop_id', options_for_select(@shops, @shop), id: "e1" %>
+        <%#= f.select :group_category_id, @group_categories.collect{|t| [t.com_str([t.name]), t.id]}, :class => "col-md-8" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">商品名称<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :name, :class=>"col-md-8", maxlength: 10%>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">摘要</label>
+
+      <div class="clearfix">
+        <%= f.text_field :summary, :class=>"col-md-8", maxlength: 30%>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">团购价格<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :price, :class=>"col-md-8"%>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">原价格<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :market_price, :class=>"col-md-8"%>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">商品图片<span class="required-star">*</span><small class="help-inline text-warning line-height-32">此处是商品的轮播图片，最多上传5张图片，图片建议尺寸：640像素*640像素</small></label>
+      <div class="clearfix">
+        <%= content_tag :div, nil, class: "cieldon-file", data: {type: "9", name: "group_item[picture_keys]", img: "#{@group_item.group_item_pictures.map(&:pic_url).join(',')}", key: "#{@group_item.group_item_pictures.map(&:pic_key).join(',')}", width: "150", height: "150", onloadback: "max_file_load"} %>
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label>团购描述<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= render "shared/form_rich_text", field_name: "description", obj: @group_item, f: f, wrapper_html_options: {class: "col-md-8"}%>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>套餐说明<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= render "shared/form_rich_text", field_name: "package_description", obj: @group_item, f: f, wrapper_html_options: {class: "col-md-8"}%>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>购买须知<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+
+        <%= render "shared/form_rich_text", field_name: "special_warn", obj: @group_item, f: f, wrapper_html_options: {class: "col-md-8"}%>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">活动时间</label>
+
+      <div class="clearfix">
+        <div class="input-group input-group no-padding-left no-padding-right">
+        <span class="input-group-addon">
+        <i class="icon-calendar bigger-110"></i>
+        </span>
+
+          <%= f.text_field :date_range, class: "input-xlarge date-range-picker datetimerange" %>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">每人最多购买数<small class="help-inline text-warning line-height-32">-1表示不限制购买数</small></label>
+      <div class="clearfix">
+        <%= f.text_field :limit_coupon_count, class: 'col-md-8' %>
+      </div>
+    </div>
+
+    <div class="form-group ">
+      <input type="submit" class="btn btn-sm btn-primary" value="保存">
+    </div>
+<% content_for :custom_js do %>
+    <script>
+        // console.log($("#e1"));
+        $(document).ready(function() { $("#e1").select2(); });
+    </script>
+<% end %>
+

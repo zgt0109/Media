@@ -1,0 +1,4 @@
+$('#message_children').html('<%= j render :partial => "children" %>');
+showTip('success','回复成功');
+$('#leaving_message_body').val('');
+$(".create_reply").attr("disabled", false);

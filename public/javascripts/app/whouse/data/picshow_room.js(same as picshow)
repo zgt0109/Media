@@ -1,0 +1,284 @@
+﻿showPics(
+    [
+        {
+            title: '项目总览',
+            ps1:
+                [
+                    {
+                        type: 'title',
+                        title: '项目总览',
+                        subTitle: 'Project overview'
+                    },
+                    {
+                        type: 'img',
+                        name: '项目区位图',
+                        img: 'imgs/x1.jpg',
+                        size: [454, 413]
+                    },
+                    {
+                        type: 'img',
+                        name: '项目大鸟瞰',
+                        img: 'imgs/x2.jpg',
+                        size: [411, 340]
+                    }
+                ],
+            ps2:
+                [
+                    {
+                        type: 'img',
+                        name: '项目鸟瞰',
+                        img: 'imgs/x3.jpg',
+                        size: [539, 487]
+                    },
+                    {
+                        type: 'text',
+                        content: '东原D7区位于江北核心生活区，鸿恩寺板块，是集购物中心、高级写字楼、公寓、品质住宅为一体的大型城市综合体；国家级鸿恩寺公园、石门公园、龙山公园和儿童公园围绕；连通多条城市主干道和红岩村大桥，北接冉家坝，西连石门大桥，东接观音桥步行街和嘉华大桥，门口即轻轨5号线站点。'
+                    },
+                    {
+                        type: 'img',
+                        name: '夜景鸟瞰图',
+                        img: 'imgs/x4.jpg',
+                        size: [378, 340]
+                    }
+                ]
+        },
+        {
+            title: '纯熟实景',
+            ps1:
+                [
+                    {
+                        type: 'title',
+                        title: '纯熟实景',
+                        subTitle: 'Real estate'
+                    },
+                    {
+                        type: 'img',
+                        name: '纯熟实景',
+                        img: 'imgs/sj1.jpg',
+                        size: [609, 760]
+                    },
+                    {
+                        type: 'img',
+                        name: '纯熟实景',
+                        img: 'imgs/sj2.jpg',
+                        size: [491, 759]
+                    },
+                    {
+                        type: 'img',
+                        name: '纯熟实景',
+                        img: 'imgs/sj3.jpg',
+                        size: [503, 757]
+                    }],
+            ps2:
+                [
+                    {
+                        type: 'img',
+                        name: '纯熟实景',
+                        img: 'imgs/sj4.jpg',
+                        size: [503, 754]
+                    },
+                    {
+                        type: 'text',
+                        content: '鸿恩寺板块唯一的集SHOPPING MALL、高层住宅、SOHO公寓等为一体的大型城市综合体'
+                    },
+                    {
+                        type: 'img',
+                        name: '纯熟实景',
+                        img: 'imgs/sj5.jpg',
+                        size: [600, 880]
+                    },
+                    {
+                        type: 'img',
+                        name: '纯熟实景',
+                        img: 'imgs/sj6.jpg',
+                        size: [600, 900]
+                    }
+                ]
+        },
+        {
+            title: '缤纷商业',
+            ps1:
+                [
+                    {
+                        type: 'title',
+                        title: '缤纷商业',
+                        subTitle: 'Landscape facilities'
+                    },
+                    {
+                        type: 'img',
+                        name: '缤纷商业',
+                        img: 'imgs/s1.jpg',
+                        size: [567, 309]
+                    },
+                    {
+                        type: 'img',
+                        name: '缤纷商业',
+                        img: 'imgs/s3.jpg',
+                        size: [427, 567]
+                    }
+                ],
+            ps2:
+                [
+                    {
+                        type: 'img',
+                        name: '缤纷商业',
+                        img: 'imgs/s4.jpg',
+                        size: [567, 548]
+                    },
+                    {
+                        type: 'text',
+                        content: '30万方商圈中心绝版低密阔景华宅，给市民提供百货、超市、电影院、餐饮、休闲等各种便利。'
+                    },
+                    {
+                        type: 'img',
+                        name: '缤纷商业',
+                        img: 'imgs/s5.jpg',
+                        size: [567, 250]
+                    }
+                ]
+        },
+        {
+            title: '公共资源',
+            ps1:
+                [
+                    {
+                        type: 'title',
+                        title: '公共资源',
+                        subTitle: 'Public Resource'
+                    },
+                    {
+                        type: 'img',
+                        name: '公共资源',
+                        img: 'imgs/lpyx.png',
+                        size: [582, 375]
+                    },
+                    {
+                        type: 'img',
+                        name: '公共资源',
+                        img: 'imgs/3.jpg',
+                        size: [454, 558]
+                    }
+                ],
+            ps2:
+                [
+                    {
+                        type: 'img',
+                        name: '公共资源',
+                        img: 'imgs/y4.jpg',
+                        size: [1362, 906]
+                    },
+                    {
+                        type: 'text',
+                        content: '华丽的公共区域，超高的的入户大堂，彰显出东原D7区高贵、华丽的品质。'
+                    },
+                    {
+                        type: 'img',
+                        name: '公共资源',
+                        img: 'imgs/y2.jpg',
+                        size: [1297, 683]
+                    }
+                ]
+        },
+        {
+            title: '华丽样板',
+            ps1:
+                [
+                    {
+                        type: 'title',
+                        title: '样板间欣赏',
+                        subTitle: 'Beach Hotel'
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l1.jpg',
+                        size: [507, 757]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l2.jpg',
+                        size: [1137, 755]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l3.jpg',
+                        size: [1137, 752]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l4.jpg',
+                        size: [1117, 741]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l5.jpg',
+                        size: [1131, 747]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l6.jpg',
+                        size: [494, 753]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l7.jpg',
+                        size: [1133, 755]
+                    }
+                ],
+            ps2:
+                [
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l8.jpg',
+                        size: [1137, 756]
+                    },
+                    {
+                        type: 'text',
+                        content: '东原D7区整个户型设计追求视觉上的效果最大化，整体空间比较开阔，设计师充分活用原生地形，形成建筑景观一体化，富有魅力的居住环境。。'
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l9.jpg',
+                        size: [1131, 752]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l10.jpg',
+                        size: [1128, 749]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l11.jpg',
+                        size: [1118, 742]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l12.jpg',
+                        size: [1128, 749]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l13.jpg',
+                        size: [1135, 754]
+                    },
+                    {
+                        type: 'img',
+                        name: '样板间欣赏',
+                        img: 'imgs/l14.jpg',
+                        size: [499, 752]
+                    }
+                ]
+        }
+    ]);

@@ -1,0 +1,16 @@
+__filename = "vip_users.xls"
+custom_fields = @vip_card.custom_fields.normal.where("name != '姓名' AND name != '电话'")
+custom_field_ids = custom_fields.pluck(:id)
+sheet1 = xls.create_worksheet
+system_header = ['微信用户ID', '卡号', '姓名', '手机号', '可用金额', '可用积分', '开卡时间', '等级']
+custom_header = custom_fields.pluck(:name)
+sheet1.row(0).concat(system_header+custom_header)
+@search.page(params[:page_exl]).per(1500).pluck(:wx_user_id, :user_no, :name, :mobile, :usable_amount, :usable_points, :created_at, :id, :vip_grade_id).each_with_index do |system_values, i|
+  vip_grade_id = system_values.pop
+  vip_user_id  = system_values.pop
+  vip_grade_name = @vip_card.vip_grades.find { |g| g.id == vip_grade_id }.try(:name) || @vip_card.init_grade_name
+  system_values << vip_grade_name
+  hash = CustomValue.where(vip_user_id: vip_user_id, custom_field_id: custom_field_ids).joins(:custom_field).pluck("custom_fields.name", "custom_values.value").to_h
+  custom_values = custom_header.map { |field_name| hash[field_name] }
+  sheet1.row(i + 1).replace(system_values+custom_values)
+end

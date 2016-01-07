@@ -1,0 +1,57 @@
+<div class="vcsection">
+  <div class="vcsection-header">
+    <div class="vcsection-header-txt">会员卡商家信息</div>
+    <div class="vcsection-header-btn">
+      <input type="button" class="btn btn-sm btn-primary" value="保存" id="supplier_info_save_btn"></div>
+  </div>
+  <div class="vcsection-body clearfix">
+    <%= form_for @activity, validate: true, html:{id: 'supplier_info_form', class: 'form col-md-12'} do |f| %>
+    <%= f.fields_for :vip_card, @activity.vip_card do |card| %>
+    <div class="vcindent-520">
+      <div class="col-md-12 margin-top-30">
+        <div class="form-group ">
+          <label class="control-label">
+            地址经纬度
+            <span class="icon-question-sign "data-rel="popover" data-trigger="hover" data-placement="right" data-content="用于一键导航，请准确在地图上标注位置" title="" data-original-title=""></span>
+            <%= render 'shared/baidu_address', {f: card, obj: @activity.vip_card} %>
+          </label>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+    <div class="vcmargin-520">
+        <div class="form-group ">
+          <label class="control-label">
+            公司联系方式
+            <span class="icon-question-sign "data-rel="popover" data-trigger="hover" data-placement="right" data-content="用于手机端一键拨号" title="" data-original-title=""></span>
+          </label>
+          <div class="clearfix">
+            <%= card.text_field :mobile, validate: true, class: "col-xs-10", placeholder: "如13988888888或021-66666666", data: {rule: "req", format: ""} %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>公司所在地区</label>
+          <div>
+            <%= address_select(@activity.vip_card, name_prefix: 'activity[vip_card_attributes]') %>
+          </div>
+        </div>
+        <div class="form-group ">
+          <div class="clearfix">
+            <%= card.text_field :address, validate: true, class: "col-xs-10 ", placeholder: "请输入公司详细地址,最多可输入30个字符", data: {maxlength: "30", error: "最好不要超过30个字", rule: "length"} %>
+          </div>
+        </div>
+    </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for(:custom_js) do %>
+<script type="text/javascript" charset="utf-8">
+    $(function() {
+        $('#supplier_info_save_btn').click(function() {
+            $('#supplier_info_form').submit();
+        });
+    })
+</script>
+<% end %>

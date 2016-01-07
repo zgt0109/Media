@@ -1,0 +1,64 @@
+<% content_for(:sidebar) do %>
+  <%= render 'sidebar_business' %>
+<% end %>
+
+<%= content_for :topbar do %>
+  <%= link_to '微留言设置', edit_activity_leaving_messages_path, class: 'h1 uncurrent' %>
+  <h1 class="pagecurrent">微留言管理</h1>
+<% end %>
+
+<div class="box-form fl form-horizontal">
+  <p>
+    <span style="font-size:20px;color:green;"><%= @message.try(:nickname) %></span>
+  </p>
+  <p>
+    <span><%= @message.body %></span>
+  </p>
+  <p>
+    <span><%= @message.created_at %></span>
+  </p>
+  <%- if @message.parent.nil? %>
+    <p>
+      <%= form_for current_user.leaving_messages.new, validate: true do |f| %>
+        <%= f.hidden_field :replier_id, value: current_user.id %>
+        <%= f.hidden_field :replier_type, value: "Supplier" %>
+        <%= f.hidden_field :parent_id, value: @message.id %>
+        <%= f.hidden_field :status, value: 2 %>
+        <p>
+          <%= f.text_area :body, placeholder: "回复...", rows: 3 %>
+        </p>
+        <p>
+          <input type="submit" value="回复" class="btn btn-big form-submit create_reply" />
+          <a href="<%= leaving_messages_path(page: params[:page]) %>" class="btn btn-big form-submit" style="margin-left:10px;">返回留言列表</a>
+        </p>
+      <% end %>
+    </p>
+  <%- else %>
+    <p>
+      <a href="<%= leaving_messages_path(page: params[:page]) %>" class="btn btn-big form-submit">返回留言列表</a>
+    </p>
+  <%- end %>
+  <%- if @children.present? %>
+    <div class="box-text text-col">
+      <hr />
+      <%- @children.each do |child| %>
+        <span style="font-size:20px;color:green;"><%= child.nickname %></span>
+        <p><%= child.body %></p>
+      <%- end %>
+    </div>
+    <div style="text-align:center"><%= paginate @children %></div>
+  <%- end %>
+</div>
+
+<script>
+  $(function(){
+    $(".create_reply").on({
+      click:function(){
+        if (!$('#leaving_message_body').val()){
+          showTip('warning','请输入内容');
+          return false;
+        }
+      }
+    });
+  });
+</script>

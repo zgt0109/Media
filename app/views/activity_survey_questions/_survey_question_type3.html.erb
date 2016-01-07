@@ -1,0 +1,54 @@
+<div class="<%= 'hide' unless f.object.survey_question_type == survey_question_type %>" id="radio-<%= survey_question_type %>">
+    <% if f.object.survey_question_type == survey_question_type %>
+        <% survey_question_choices.each_with_index do |s, i| %>
+            <% uuid =  SecureRandom.uuid %>
+            <%= f.fields_for :survey_question_choices, s do |sq| %>
+                <%= sq.hidden_field :id, name: "activity_survey_question[survey_question_choices_attributes][#{uuid}][id]" %>
+                <div class="form-group survey-question-options">
+                    <label class="control-label">选项<%= i + 1 %></label>
+                    <div class="clearfix">
+                        <div class="form-group clearfix">
+                            <div class="cieldon-file width-auto" data-type="0" data-width="100" data-height="100" data-img="<%= sq.object.pic %>" data-name="activity_survey_question[survey_question_choices_attributes][<%= uuid %>][pic]" data-key="<%= sq.object['pic'] %>"></div>
+                            <%= sq.check_box :_destroy, style: 'display:none', name: "activity_survey_question[survey_question_choices_attributes][#{uuid}][_destroy]" %>
+                            <small class="help-inline text-warning line-height-30">建议尺寸：宽140像素*高140像素</small>
+                            <% if i > 1 %>
+                                <a href="javascript:;" class="btn btn-sm btn-link" data-toggle="delet">删除</a>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>            
+            <% end %>
+        <% end %>
+    <% else %>
+        <% 1.upto(2) do |m| %>
+            <% uuid = SecureRandom.uuid %>
+            <div class="form-group survey-question-options">
+                <label class="control-label">选项<%= m %></label>
+                <div class="clearfix">
+                    <div class="form-group clearfix">
+                        <div class="cieldon-file width-auto" data-type="0" data-width="100" data-height="100" data-name="activity_survey_question[survey_question_choices_attributes][<%= uuid %>][pic]" ></div>
+                        <input type="checkbox" name="activity_survey_question[survey_question_choices_attributes][<%= uuid %>][_destroy]" style="display:none">
+                        <small class="help-inline text-warning line-height-30">建议尺寸：宽140像素*高140像素</small>
+                    </div>
+                </div>
+            </div>    
+        <% end %>
+    <% end %>
+    <div class="form-group">
+        <div class="clearfix">
+            <a href="javascript:;" class="btn btn-sm btn-primary" data-toggle="addOption" data-type="<%= survey_question_type %>">添加选项</a>
+        </div>
+    </div>
+</div>
+
+<div class="form-group survey-question-options" template="<%= survey_question_type %>" style="display: none;">
+    <label class="control-label">选项</label>
+    <div class="clearfix">
+        <div class="form-group clearfix">
+            <div class="cieldon-file width-auto" data-type="0" data-width="100" data-height="100" data-name="activity_survey_question[survey_question_choices_attributes][$uuid$][pic]" ></div>
+            <input type="checkbox" name="activity_survey_question[survey_question_choices_attributes][$uuid$][_destroy]" style="display:none">
+            <small class="help-inline text-warning line-height-30">建议尺寸：宽140像素*高140像素</small>
+            <a href="javascript:;" class="btn btn-sm btn-link" data-toggle="delet">删除</a>
+        </div>
+    </div>
+</div>   

@@ -1,0 +1,51 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微服务', bookings_path %></li>
+          <li><%= link_to '轮播图片', booking_ads_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="vwebsitePicture col-sm-12">
+            <ul class="ace-thumbnails thumbnails-1">
+              <li>
+                <%= link_to 'javascript:;', data: {toggle: 'modals', title: '新增图片', width: '800', height: '500', iframe: new_booking_ad_path} do %>
+                  <div class="text text-block">
+                    <div class="inner">添加图片<br><i class="icon-plus"></i></div>
+                  </div>
+                <% end %>
+              </li>
+              <% @pictures.each do |picture| %>
+                  <li>
+                    <a href="javascript:;" title="<%= picture.title %>" data-rel="colorbox">
+                      <%= image_tag picture.pic.large %>
+                      <div class="text">
+                        <div class="inner"><%= picture.title %></div>
+                      </div>
+                    </a>
+                    <div class="tools">
+                      <a href="#">
+                        <i class="icon-trash btn-fa btn-remove"></i>
+                        <i class="icon-pencil btn-fa" data-toggle="modals" data-target="pictureModal" data-title="编辑图片" data-width="800" data-height="500" data-iframe="<%= edit_booking_ad_path(picture) %>"></i>
+                      </a>
+                      <%= link_to '', booking_ad_path(picture), data: {method: :delete, confirm: '确定要删除吗？'}, style: 'display: none;', class: 'remove-picture' %>
+                    </div>
+                  </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $('.btn-remove').click(function(){
+            $(this).closest('.tools').find('.remove-picture').click();
+        });
+    </script>
+<% end %>

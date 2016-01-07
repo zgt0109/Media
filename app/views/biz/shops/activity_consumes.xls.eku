@@ -1,0 +1,18 @@
+__filename = "活动核销记录报表.xls"
+sheet1 = xls.create_worksheet
+system_header = ['活动名称', '奖品内容','SN码', '中奖者手机', '领取时间', '使用时间', '使用门店']
+sheet1.row(0).concat(system_header)
+row_number = 1
+@consumes.each do |consume|
+  row_content = [
+    consume.activity_or_coupon_name,
+    consume.activity_or_coupon_info ,
+    consume.code,
+    consume.mobile,
+    consume.created_at.to_s,
+    consume.used_at.to_s,
+    current_shop_branch.name
+  ]
+  sheet1.row(row_number).replace(row_content)
+  row_number += 1
+end

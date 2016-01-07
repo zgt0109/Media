@@ -1,0 +1,212 @@
+    <div class="main-content ">
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        <% if can_see? %>
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li>
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+                <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+                <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+     
+          <li>
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+                <%= link_to "菜单设置", shop_products_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+                <%= link_to "菜单设置", shop_products_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+        <% end %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="tabbable">
+            <%= render 'pro/shop_products/nav_tab' %>
+
+            <div class="tab-content no-border padding-24">
+              <div id="tab-1" class="tab-pane fade active in">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <%= form_for @search, url: shop_products_path, html: { method: :get } do |f| %>
+                      <%= hidden_field_tag :search_shelve_status %>
+                      <% if can_see? %>
+                      <div class="col-md-3 no-padding">
+                        <div class="input-group input-group-text">
+                          <span class="input-group-addon">菜单编号:</span>
+                          <%= f.select :shop_menu_id_eq, current_user.shop.shop_menus.pluck(:menu_no, :id), {}, class: 'col-xs-12' %>
+                        </div>
+                      </div>
+                      <% end %>
+                      <div class="col-md-3 ">
+                        <div class="input-group input-group-text">
+                          <span class="input-group-addon">一级分类</span>
+                          <%= f.select :category_parent_id_eq, current_user.shop.shop_categories.root.where(shop_menu_id: @shop_menu_id_eq).pluck(:name, :id), {}, class: 'col-xs-12' %>
+                        </div>
+                      </div>
+                 
+                      <div class="col-md-3">
+                        <div class="input-group input-group-text">
+                          <span class="input-group-addon">二级分类</span>
+                          <%= f.select :shop_category_id_eq, current_user.shop.shop_categories.second_scope.where(parent_id: @category_parent_id_eq).pluck(:name, :id), {}, class: 'col-xs-12' %>
+                       
+                        </div>
+                      </div>
+              
+                      <div class="col-md-3 no-padding-right">
+                        <button type="submit"  class="btn btn-primary btn-sm btn-filter margin-left-5">查询</button>
+                        <%= link_to "新增", new_shop_shop_product_url(shop_id: current_user.shop.id, industry_id: session[:current_industry_id]), class: "btn  btn-primary btn-sm pull-right" %>
+                      </div>
+                      
+                   <% end %>    
+                  </div>
+
+                  <div class="col-sm-12 margin-top-10">
+                    <a class="btn btn-info btn-sm tooltip-info search-shelve-status" href="javascript:;" data-shelve-status=''>全部</a> 
+                    <a class="btn btn-info btn-sm tooltip-info search-shelve-status" href="javascript:;" data-shelve-status='1'>已上架菜品</a>
+                    <a class="btn btn-info btn-sm tooltip-info search-shelve-status" href="javascript:;" data-shelve-status='0'>已下架菜品</a>
+                  </div>
+                  
+                  <div class="col-xs-12 margin-top-20">
+                    <table id="" class="table table-striped table-bordered table-hover dataTable ">
+                      <thead>
+                      <tr>
+                        <th>菜品编号</th>
+                        <th>图片</th>
+                        <th>名称</th>
+                        <th>价格</th>
+                        <!-- <th>库存</th> -->
+                        <th>状态</th>
+                        <th>新品</th>
+                        <th>热品</th>
+                        <th>序号</th>
+                        <th>操作</th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <% @shop_products.each do |shop_product| %>
+                          <tr>
+                            <td><%= shop_product.code %></td>
+                            <td><%= image_tag shop_product.pic_url_url , size: '70x70' %></td>
+                            <td><%= shop_product.name %></td>
+                            <td><%= f shop_product.price %></td>
+                           <!--  <td class="quantity" data-quantity="<%#= shop_product.quantity %>" data-id="<%#= shop_product.id %>">
+                              <span><%#= shop_product.quantity.present? ? shop_product.quantity : '无限制' %></span>
+                              <input type="text" value='<%#= shop_product.quantity %>' class="form-control hide" size="1">
+                            </td> -->
+                            <td><%= shop_product.shelve_status_name %></td>
+                            <td><%= shop_product.is_new_name %></td>
+                            <td><%= shop_product.is_hot_name %></td>
+                            <td><%= shop_product.sort %></td>
+                            <td>
+                              <%= link_to "编辑", edit_shop_shop_product_url(current_user.shop, shop_product) %>
+                              <%= link_to "删除", shop_product, method: :delete, confirm:"确认删除?" %>
+                              <%= link_to "排序", sort_shop_product_path(shop_product), remote: true %>
+                              <%= link_to "置顶", top_shop_product_path(shop_product), method: :post, confirm: "确定将该菜品在分类中置顶么？" %>
+                              <%= link_to "上架", change_shelve_status_shop_shop_products_url(current_user.shop, id: shop_product.id, shelve_status: 1), method: :post, confirm: "确定将该菜品上架么？" if shop_product.not_shelve? %>
+                              <%= link_to "下架", change_shelve_status_shop_shop_products_url(current_user.shop, id: shop_product.id, shelve_status: 0), method: :post, confirm: "确定将该菜品下架么？" if shop_product.shelve? %>
+                            </td>
+                          </tr>
+                      <% end %>
+                      <% if @shop_products.blank? %>
+                          <tr><td colspan="9">无记录</td></tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                    <%= paginate @shop_products %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal fade" id="modal_div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    </div>
+
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      $("#search_shop_menu_id_eq").change(function(){
+        var menu_id = $(this).val();
+        render_parent_category_select(menu_id);
+      });
+      $("#search_category_parent_id_eq").change(function(){
+        var parent_id = $(this).val();
+        render_shop_category_select(parent_id);
+      });
+
+      $('.search-shelve-status').on('click', function(){
+        $('#shop_product_search #search_shelve_status').val($(this).data('shelve-status'));
+        $('#shop_product_search').submit();
+      });
+
+      $('td.quantity').on('click', function(){
+        $input = $(this).find('input[type=text]');
+        if($input.hasClass('hide')){
+          $input.val($(this).data('quantity'));
+          $input.removeClass('hide');
+          $input.focus();
+          $(this).find('span').addClass('hide');
+        }
+      });
+
+      // $('td.quantity input[type=text]').on('blur', function(){
+      //   var self = $(this)
+      //       quantity = self.val()
+      //       span = self.prev()
+      //       td = self.closest('td');
+      //   if(quantity && !/^[+]?[0-9]+$/.test(quantity)){
+      //     showTip('warning','库存必须为大于等于0的整数');
+      //     self.focus();
+      //     return false;
+      //   }else{
+      //     //current_user.shop
+      //     $.ajax({
+      //       type: "POST",
+      //       url: "/shops/<%= current_user.shop.id %>/shop_products/change_quantity?id=" + td.data('id') + "&quantity=" + quantity,
+      //       success: function(data) {
+      //         span.text(quantity ? quantity : '无限制');
+      //         span.removeClass('hide');
+      //         self.addClass('hide');
+      //         td.data('quantity', quantity);
+      //         showTip('success', '库存修改成功');
+      //         return false;
+      //       },
+      //       error: function(data) {
+      //         showTip('warning', data['err_msg']);
+      //         return false;
+      //       }
+      //     });
+      //   }
+      // });
+    });
+
+
+    function render_parent_category_select(menu_id){
+      var url = "/shop_products/root_categories?menu_id="+menu_id
+      $.get(url,function(html){
+
+      });
+    }
+
+    function render_shop_category_select(parent_id){
+      var url = "/shop_products/child_categories?parent_id="+parent_id
+      $.get(url,function(html){
+
+      });
+    }
+  </script>
+<% end %>    

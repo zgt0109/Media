@@ -1,0 +1,43 @@
+<%= stylesheet_link_tag 'mobile/addgetma' %>
+<div class="body">
+    <div class="banner">
+      <img src="/assets/recommend-img.jpg" alt="">
+    </div>
+    <div class="main">
+        <%- if @gift.present? %>
+            <div class="title-tag">关注获得</div>
+            <div class="text">
+                <%- if @subscribed %>
+                    <p>关注成功，恭喜您获得“<%= @gift.prize_name %>”</p>
+                    <p>SN码：<%= @gift.code %>(<span class="text-red"><%= @gift.consume.try(:state_name) %></span>)<a class="addgetma" href="javascript:;" data-ma="<%= @gift.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></p>
+                <%- else %>
+                    <p>亲，您还没有关注，关注“<%= @wx_mp_user.try(:name) %>”后将即拿到属于您的奖品</p>
+                <%- end %>
+            </div>
+        <%- end %>
+        <div class="title-tag">推荐获得</div>
+        <%- @prizes.each do |consume| %>
+            <div class="text">
+                <p><%= consume.activity_prize.title %>: <%= consume.activity_prize.prize %></p>
+                <div class="tips">
+                    <p><span>中奖时间：</span>
+                    <span><%= consume.created_at.to_s %> </span>
+                    </p>
+                    <p>
+                        <span>兑奖手机号：</span>
+                        <span><%= consume.mobile %></span>
+                    </p>
+                    <p>
+                        <span>兑奖SN码：</span>
+                        <span><%= consume.code %>(<span class="text-red"><%= consume.state_name %></span>)<a class="addgetma" href="javascript:;" data-ma="<%= consume.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></span>
+                    </p>
+                </div>
+            </div>
+            <br >
+        <%- end %>
+    </div>
+    <div class="btn-box">
+        <a href="<%= mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="btn btn-bigest btn-red">返回</a>
+    </div>
+</div>
+<%= javascript_include_tag 'mobile/qcode' %>

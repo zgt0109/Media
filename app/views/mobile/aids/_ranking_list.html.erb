@@ -1,0 +1,15 @@
+<ul class="msg-list msg-rank">
+  <% order = 1 %>
+  <% @ranking_list.present? && @ranking_list.each do |rank| %>
+    <li class="msg-list-item">
+      <span class="msg-rank-num"><%= order %></span>
+      <% activity_user = rank[:activity_user] %>
+      <%= image_tag (activity_user.present? && activity_user.wx_user.present? && activity_user.wx_user.headimgurl.present?) ? activity_user.wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png", size: "60x60", class: "img-full msg-rank-portrait", alt: "" %>
+      <div class="msg-rank-helper">
+        <span class="msg-rank-nickname"><%= activity_user.wx_user.nickname %></span>
+         <span class="msg-rank-count"><%= number_to_currency(rank[:points], unit: '', precision: 0) %></span>
+      </div>
+    </li>
+  <% order += 1 %>
+  <% end %>
+</ul>

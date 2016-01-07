@@ -1,0 +1,294 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微官网', websites_path %></li>
+      <li><%= link_to '文章中心', website_articles_path %></li>
+    </ul>
+    <!-- .breadcrumb -->
+    <%= render '/layouts/qrcode' %>
+
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <%= form_for @article, validate: true, html: {class: 'form'} do |f| %>
+          <%= f.hidden_field :article_type %>
+          <%= f.hidden_field :website_article_category_id %>
+          <%= f.hidden_field :status %>
+          <div class="form-group">
+            <label class="control-label"><%= @article.as_article? ? "文章标题" : "展示内容名称" %></label>
+            <div class="clearfix">
+              <%= f.text_field :title, class: 'col-xs-6' %>
+            </div>
+          </div>
+          <% 
+            if @article.website_article_category.try(:parent_id).to_i == 0
+              options_2 = [['请先选择一级分类', '']]
+              options_3 = [['请先选择二级分类', '']]
+              selected_2,selected_3 = '',''
+            else
+              categories = @website.website_article_categories.send(params[:article_type])
+              if categories.where(id: @article.website_article_category.parent_id).first.try(:parent_id) == 0
+                options_2 = categories.where(parent_id: @article.website_article_category.parent_id).pluck(:name, :id).unshift(['', ''])
+                options_3 = [['请先选择二级分类', '']]
+                selected_2,selected_3 = @article.website_article_category_id,''
+              else
+                options_2 = categories.where(parent_id: @article.website_article_category.root.id).pluck(:name, :id).unshift(['', ''])
+                options_3 = categories.where(parent_id: @article.website_article_category.parent_id).pluck(:name, :id).unshift(['', ''])
+                selected_2,selected_3 = @article.website_article_category.parent_id,@article.website_article_category_id
+              end
+            end
+          %>
+          <div class="form-group">
+            <label class="control-label">选择分类<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <div class="col-lg-2 col-md-2 col-sm-2 no-padding-left">
+                <% options = @website.website_article_categories.send(params[:article_type]).where(parent_id: 0).pluck(:name, :id).unshift(['请选择一级分类', '']) %>
+                <%= select_tag :product_category_map_category_id_1, options_for_select(options, @article.website_article_category.try(:root).try(:id)), class: "form-control" %>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2">
+                <%= select_tag :product_category_map_category_id_2, options_for_select(options_2, selected_2), class: "form-control form-select-2" %>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 no-padding-right">
+                <%= select_tag :product_category_map_category_id_3, options_for_select(options_3, selected_3), class: "form-control form-select-2" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group hide" id="category_tags">
+            <label class="control-label col-sm-12 no-padding-left">展示内容标签</label>
+            <% if @article.as_article? %>
+              <div class="col-md-6 row" id="tags"></div>
+            <% elsif @article.as_product? %>
+              <div class="col-md-6 no-padding-left no-padding-right" id="tags"></div>
+            <% end %>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">副标题<span class="required-star">*</span></label>
+            <div class="col-sm-12 row">
+              <% WebsiteArticle::SUBTITLE_TYPES.each do |value, value_name| %>
+              <label class="margin-right-10">
+                <%= f.radio_button :subtitle_type, value, class: "ace" %>
+                <span class="lbl"><%= value_name %></span>
+              </label>
+              <% end %>
+              <%= f.text_field :subtitle, class: 'inline' %>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group">
+            <label style="position: relative;" class="control-label">图片<span class="help-inline text-warning line-height-32">建议图片尺寸：200*200</span>
+              <a id="clearpic" class="btn btn-default btn-sm margin-left-20" href="javascript:;">删除</a>
+            </label>
+            <div class="clearfix">
+              <div id="pic" data-key="<%= @article.pic_key %>" data-name="website_article[pic_key]" data-img="<%= @article.pic %>" data-height="100" data-width="100" data-type="0" class="cieldon-file pull-left width-100px cieldon-file-0"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">文章正文内容<span class="required-star">*</span><span class="help-inline text-warning line-height-32">请在下方文本框中添加并编辑文章正文内容</span></label>
+            <div class="clearfix"></div>
+            <% if @article.as_article? %>
+              <div class="row">
+                <div class="col-lg-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">
+                      <%= f.check_box :show_author %>显示作者来源：
+                    </span>
+                    <%= f.text_field :author, class: 'form-control' %>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">
+                      链接：
+                    </span>
+                    <%= f.text_field :link, class: 'form-control' %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+            <div class="col-sm-10 no-padding-left">
+              <%= render "shared/form_rich_text", field_name: "content", obj: @article, f: f, wrapper_html_options: {class: "wysiwyg-editor"}%>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group ">
+            <button class="btn btn-sm btn-primary form-submit" type="button" onclick="submit_article(1);">保存并上架</button>
+            <button class="btn btn-sm btn-primary form-submit" type="button" onclick="submit_article(2);">保存</button>
+            <a class="btn btn-sm btn-default" href="javascript:history.go(-1);">返回</a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+    <script>
+    function submit_article(status){
+      set_category_id();
+      if ( $('#website_article_website_article_category_id').val() == "" ) {
+        showTip('warning', '请选择分类');
+        return false;
+      }else if ( $("input[name='website_article[subtitle_type]']").val() == "4" && $('#website_article_subtitle').val() == "") {
+        showTip('warning', '请填写说明');
+        return false;
+      }else if ($("#website_article_content").val() == ""){
+        showTip('warning', '请填写正文');
+        return false;
+      }
+      $('#website_article_status').val(status);
+      $('form').submit();
+    }
+    function set_category_id(){
+      if ( $('#product_category_map_category_id_3').val() != "" ) {
+        $('#website_article_website_article_category_id').val($('#product_category_map_category_id_3').val());
+      }else if ( $('#product_category_map_category_id_2').val() != "") {
+        $('#website_article_website_article_category_id').val($('#product_category_map_category_id_2').val());
+      }else if ( $('#product_category_map_category_id_1').val() != "") {
+        $('#website_article_website_article_category_id').val($('#product_category_map_category_id_1').val());
+      }
+    }
+        $(function(){
+            var tag_ids = <%= raw @article.tag_ids %>,
+                tag_children_ids = <%= raw @tag_children_ids %>,
+                descriptions = <%= raw @descriptions %>,
+                category_type = "<%= params[:article_type] %>";
+            $('#clearpic').click(function(){
+                $('#pic .file-btn a').css('background-image','');
+                $('input[name="website_article[pic]"]').val('');
+            });
+            function changeTagsByCategory(category_id) {
+              var select_2 = $('#product_category_map_category_id_2'),
+                  select_3 = $('#product_category_map_category_id_3');
+                //获取json数据
+                var get_url = "/website_articles/select_categorie?tag=1&parent_id=" + category_id + "&category_type=" + category_type;
+                $.get(get_url, function(data) {
+                  if(data.result == 'success'){
+                    var json=data.categories;
+                    var str='';
+                    if(json[0].select.length){
+                      $.each(json[0].select,function(i,n){
+                          str+='<option value="'+ n.value+'">'+ n.name+'</option>';
+                      });
+                      select_2.html(str);
+                      select_2.removeAttr("disabled");
+                    }else{
+                      select_2.html('<option value="">请先选择一级分类</option>');
+                      select_2.attr("disabled",'disabled');
+                      select_3.html('<option value="">请先选择二级分类</option>');
+                      select_3.attr("disabled",'disabled');
+                    }
+                    if(json[0].tags.length){
+                      <% if @article.as_article? %>
+                        $('#tags').html(article_tags_html(json));
+                      <% elsif @article.as_product? %>
+                        $('#tags').html(product_tags_html(json));
+                      <% end %>
+                      $('#category_tags').removeClass('hide');
+                    }else{
+                        $('#category_tags').addClass('hide');
+                        $('#tags').html('');
+                    }
+                    
+                  }
+                });
+            }
+
+            function getTags(category_id) {
+              var select_2 = $('#product_category_map_category_id_2'),
+                  select_3 = $('#product_category_map_category_id_3');
+                //获取json数据
+                var get_url = "/website_articles/select_categorie?tag=1&parent_id=" + category_id + "&category_type=" + category_type;
+                $.get(get_url, function(data) {
+                  if(data.result == 'success'){
+                    var json=data.categories;
+                    if(json[0].tags.length){
+                      <% if @article.as_article? %>
+                        $('#tags').html(article_tags_html(json));
+                      <% elsif @article.as_product? %>
+                        $('#tags').html(product_tags_html(json));
+                      <% end %>
+                      $('#category_tags').removeClass('hide');
+                    }else{
+                        $('#category_tags').addClass('hide');
+                        $('#tags').html('');
+                    }
+                    
+                  }
+                });
+            }
+
+            function article_tags_html(json){
+              var str = '';
+              $.each(json[0].tags,function(i,n){
+               var check = jQuery.inArray(n.value,tag_ids) > -1 ? "checked" : "";
+                  str+='<label class="margin-b-10 margin-right-20"><input id="website_article_tag_ids" name="website_article[tag_ids][]" type="checkbox"  class="ace" value="'+ n.value+'" '+check+'><span class="lbl">'+ n.name+'</span></label>';
+              });
+              return str;
+            }
+
+            function product_tags_html(json){
+              var str = '';
+              $.each(json[0].tags,function(i,n){
+                  var ops = '',
+                      check = jQuery.inArray(n.inpval,tag_ids) > -1 ? "checked" : "",
+                      description = descriptions[i] ? descriptions[i] : "";
+                  $.each(n.ops,function(l,m){
+                    var select = jQuery.inArray(m.value,tag_children_ids) > -1 ? "selected" : "";
+                    ops+='<option value="'+ m.value+'" '+select+'>'+ m.name+'</option>';
+                  });
+                  str+='<div class="margin-b-10">\
+                          <label class="col-md-4 no-padding-left">\
+                          <input type="checkbox" name="website_article[tag_ids][]" class="ace" value="'+ n.inpval+'" '+check+'>\
+                          <span class="lbl">'+ n.name+'</span>\
+                  </label>\
+                  <div class="col-lg-3 col-md-3 col-sm-3 no-padding-right">\
+                          <select name="tag_children_ids[]" class="form-control form-select-2">'+ops+'</select>\
+                  </div>\
+                  <div class="input-group input-group-text col-md-5 no-padding-right">\
+                          <span class="input-group-addon">具体描述：</span>\
+                  <input type="text" class="col-xs-12" name="tag_children_descriptions[]" value="'+ description+'">\
+                          </div>\
+                  <div class="clearfix"></div>\
+                  </div>';
+              });
+              return str;
+            }
+            $('#product_category_map_category_id_1').change(function(){
+              changeTagsByCategory($(this).val());
+            });
+            <% if !@article.new_record? %>
+              getTags($('#product_category_map_category_id_1').val());
+            <% end %>
+            $('#product_category_map_category_id_2').change(function(){
+                var val = $(this).val();
+                var select = $('#product_category_map_category_id_3');
+                //获取json数据
+                var get_url = "/website_articles/select_categorie?parent_id=" + val + "&category_type=" + category_type;
+                $.get(get_url, function(data) {
+                  var json=data.categories;
+                  var str='';
+                  if(json.length){
+                    $.each(json,function(i,n){
+                        str+='<option value="'+ n.value+'">'+ n.name+'</option>';
+                    });
+                    select.html(str);
+                    select.removeAttr("disabled");
+                  }else{
+                      select.html('<option value="">请先选择二级分类</option>');
+                      select.attr("disabled",'disabled');
+                  }
+                });
+
+            });
+
+        });
+    </script>
+
+<% end %>

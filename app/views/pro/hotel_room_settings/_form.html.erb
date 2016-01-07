@@ -1,0 +1,64 @@
+<%= form_for(@hotel_room_setting, validate: true) do |f| %>
+    <%= f.hidden_field :date if params[:id].present?%>
+    <%= f.hidden_field :booked_qty %>
+    <%= f.hidden_field :available_qty %>
+    <%= hotel_branches_for_js %>
+  <div class="modal-body">
+    <div class="form-group">
+      <%= hotel_branch_select('hotel_room_setting', @hotel_room_setting.hotel_branch_id, (@hotel_room_setting.hotel_room_type_id|| @hotel_branches.first.try(:id))) %>
+      <%= f.select(:hotel_room_type_id, options_for_room_type('hotel_room_setting', (@hotel_room_setting.hotel_branch_id || @hotel_branches.first.try(:id)), (@hotel_room_setting.hotel_room_type_id||params[:hotel_room_type_id])) , {}, class: 'margin-left-5 col-xs-5') %>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="form-group">
+      <label>开放数量</label>
+      <div class="clearfix">
+        <%= f.text_field :open_qty, maxlength: 18, class: "form-control", validate: {presence: true, greater_than_or_equal_to: 0} %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>入住日期</label>
+      <div class="clearfix">
+        <%= f.text_field :date, maxlength: 18, disabled: (params[:id].present? ? true : false), class: 'datepicker form-control' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>已订数量</label>
+      <div class="clearfix">
+        <%= f.text_field :booked_qty, maxlength: 18, disabled: true, class: "form-control", readonly: true %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>剩余数量</label>
+      <div class="clearfix">
+        <%= f.text_field :available_qty, maxlength: 18, disabled: true, class: "form-control", readonly: true  %>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary' %>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function() {
+            $('.datepicker').on('apply.daterangepicker', function(ev, picker) {
+                removeErrorMessage($($(ev).attr('currentTarget')));
+                $('form').resetClientSideValidations();
+            });
+            $('#hotel_branch').change(function(){
+                $('#hotel_room_setting_hotel_room_type_id option').remove();
+                var arr = hotel_branches[$(this).val()];
+                $.each(arr, function(i, e){
+                   // console.log(e);
+                   $("#hotel_room_setting_hotel_room_type_id").prepend('<option value="' + e[1] + '">' + e[0] + '</option>');
+                });
+            });
+        });
+    </script>
+<% end %>

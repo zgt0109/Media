@@ -1,0 +1,23 @@
+<ul class="box-nav box">
+  <li class="<%= (controller_name == "business") ? "pagecurrent current" : '' %>">
+    <%= link_to business_url do %><span>基本信息</span><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /busine_menus/i) ? "pagecurrent current" : '' %>">
+    <%= link_to busine_menus_url do %><span>菜单管理</span><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /busine_popup_menus/i) ? "pagecurrent current" : '' %>">
+    <%= link_to busine_popup_menus_path do %><span>弹出菜单</span><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /busine_pictures/i) ? "pagecurrent current" : '' %>">
+    <%= link_to busine_pictures_url do %><span>轮播图片</span><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /business_shops/i) ? "pagecurrent current" : '' %>">
+    <%= link_to business_shops_path do %><span>店铺管理</span><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /busine_articles/i) ? "pagecurrent current" : '' %>">
+    <%= link_to busine_articles_url do %><span>文章管理</span><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /busine_assistants/i) ? "pagecurrent current" : '' %>">
+    <%= link_to busine_assistants_url do %><span>生活小助手</span><% end %>
+  </li>
+</ul>

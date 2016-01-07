@@ -1,0 +1,23 @@
+<div class="index" id="indexList">
+  <div class="mod-top"><%= website.name %></div>
+  <div class="index-wrap">
+    <% website_menus.each do |menu| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <% if menu.pic? || menu.font_icon.present? %>
+                <%= menu.pic_or_icon has_title: true, pic_type: "thumb" %>
+            <% else %>
+                <small><%= menu.title %></small>
+            <% end %>
+        <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render "iscroll", {:selector => "#stage"} %>
+
+<% content_for :document_ready_js do %>
+    <% if @website_setting.bg_image.present? %>
+        // 静态背景图
+        //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+    <% end %>
+<% end %>

@@ -1,0 +1,61 @@
+<%= stylesheet_link_tag 'mobile/addgetma' %>
+<div class="body ">
+    <div class="u-head">
+    <img src="/assets/img/package/u-head.png" alt="">
+        <div class="text">我的礼包</div>
+        <div class="u-mark">
+        <img src="/assets/img/package/mark.png" alt="">
+        </div>
+    </div>
+    <div class="scroll-box">
+        <div class="form-box" id="scroll">
+            <div class="wrap">
+                <div class="f-li">
+                    <label><i class="icon icon-1"></i>奖品名称</label>
+                    <div class="text"><%= @activity.extend.prize_or_gift_name %></div>
+                </div>
+                <div class="f-li">
+                    <label><i class="icon icon-2"></i>兑奖SN码</label>
+                    <div class="text"><%= @prize.code %><a class="addgetma" href="javascript:;" data-ma="<%= @prize.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></div>
+                </div>
+                <div class="f-li">
+                    <label><i class="icon icon-1"></i>有效期</label>
+                    <%- if @prize.consume.try(:coupon?) %>
+                        <div class="text"><%= @prize.consume.try(:consumable).try(:use_start).try(:to_s) %> 至 <%= @prize.consume.try(:consumable).try(:use_end).try(:to_s) %></div>
+                    <%- else %>
+                        <%- if @activity.extend.prize_start.present? && @activity.extend.prize_end%>
+                            <div class="text"><%= @activity.extend.prize_start %> 至 <%= @activity.extend.prize_end %></div>
+                        <%- else %>
+                            <div class="text">不限制</div>
+                        <%- end %>
+                    <%- end %>
+                </div>
+                <div class="f-li">
+                    <label><i class="icon icon-2"></i>领奖说明</label>
+                    <div class="edit">
+                    <%= raw @activity.activity_property.try(:prize_description) %>
+                </div>
+            </div>
+        </div>
+        <a href="<%= mobile_unfolds_path(activity_id: @activity.try(:id), openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="t-btn t-btn-yellow foot-btn">返回首页</a>
+    </div>
+</div>
+<%= javascript_include_tag 'mobile/qcode' %>
+<script>
+    $(function(){
+        setTimeout(function(){
+            iScroll("#scroll");
+        },300);
+        function iScroll(id){
+            scrollBox = new IScroll(id, {
+                myScrollHeight: 11,
+                hideScrollbar: false,
+                scrollbars: true,
+                mouseWheel: true,
+                click: true
+            });
+            var DOM = $(id)[0];
+            DOM.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+        }
+    });
+</script>

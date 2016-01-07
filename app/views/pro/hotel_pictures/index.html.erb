@@ -1,0 +1,121 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微酒店', hotels_path %></li>
+          <li><%= link_to '房型管理', hotel_room_types_path %></li>
+          <li><%= link_to '相册管理', hotel_pictures_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger">
+            <li>
+              <%= link_to '房型管理', hotel_room_types_path %>
+            </li>
+            <li>
+              <%= link_to '预订设置', hotel_room_settings_path %>
+            </li>
+            <li class="active">
+              <%= link_to '相册管理', hotel_pictures_path %>
+            </li>
+          </ul>
+
+          <div class="tab-content no-border padding-24">
+            <div id="tab3" class="tab-pane fade active in">
+              <div class="row">
+
+                <div class="col-sm-12">
+                  <div class="alert alert-block alert-info ">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li>1、最多可上传<span class="required-star">20</span>张图片，可设置<span class="required-star">1</span>张封面；</li>
+                      <li>2、支持上传图片格式为：jpge、png、bmp，图片尺寸建议为480*480，大小限制10mb以内；</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-3 no-padding-left">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">选择门店：</span>
+                      <%= select_tag 'hotel_picture_hotel_branch_id', options_for_select(@hotel_branches.pluck(:name, :id), params[:hotel_branch_id]), class: 'form-control' %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 margin-top-20">
+                <div>
+                  <div class="cieldon-file" data-type="6" data-width="200" data-height="200" data-em="设为封面,取消封面" data-imgs-type="hotel_pictures" data-hotel-id="<%= @hotel.id %>" data-hotel-branch-id="<%= @hotel_branch_id %>" data-img="<%= @hotel_pictures.map(&:path_url).join(',') %>" data-img-ids="<%= @hotel_pictures.map(&:id).join(',') %>"></div>
+                  <div style="display: none;" class='pictures-operate'>
+                    <% @hotel_pictures.each do |picture| %>
+                        <%= link_to '设为封面', cover_hotel_picture_path(picture), data: {confirm: '确认将此图片设为封面吗？', method: :post, id: picture.id}, class: 'cover' %>
+                        <%= link_to '取消封面', discover_hotel_picture_path(picture), data: {confirm: '确认取消此封面图片吗？', method: :post, id: picture.id}, class: 'discover' %>
+                        <%= link_to '删除', picture, data: {confirm: '确认删除此图片吗？', method: :delete, id: picture.id}, class: 'remove' %>
+                    <% end %>
+                  </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+
+        function set_cover(id){
+            $.each($('.file-tag'), function(){
+                if($(this).closest('.file-img').find('.file-btn a').attr('img-id') == id){
+                    $(this).text('取消封面');
+                    $(this).addClass('active');
+                }else{
+                    $(this).text('设为封面');
+                    $(this).removeClass('active');
+                }
+            });
+        }
+        $(function() {
+            $('#hotel_picture_hotel_branch_id').change(function(event){
+                window.location.href = "<%= hotel_pictures_path %>?hotel_branch_id="+$('#hotel_picture_hotel_branch_id').val();
+            });
+
+            $(document).on('click', '.file-del', function(){
+                var id = $(this).closest('.file-img').find('.file-btn a').attr('img-id');
+                $('.remove[data-id="'+id+'"]').click();
+            });
+
+            $(document).on('click', '.file-tag', function(){
+                var text = $(this).text(),
+                    id =  $(this).parents('.file-img').find('.file-btn a').attr('img-id'),
+                    urls = {'取消封面': {'class': 'cover', text: '设为封面'}, '设为封面': {'class': 'discover', 'text': '取消封面'}};
+                $(this).text(urls[text]['text']),
+                $('.'+urls[text]['class']+'[data-id="'+id+'"]').click();
+            });
+
+            <% if @cover_picture.present? %>
+            set_cover('<%= @cover_picture.id %>');
+            <% end %>
+
+            $(document).on('click', '[data-toggle="text"]', function () {
+                var self = $(this),
+                    text = self.attr("data-text");
+                if (text && text != "") {
+                    text = text.split(",");
+                }
+                self.toggleClass("active");
+                if (self.hasClass("active")) {
+                    self.html(text[1]);
+                } else {
+                    self.html(text[0]);
+                }
+            });
+        });
+    </script>
+<% end %>

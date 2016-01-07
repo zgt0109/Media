@@ -1,0 +1,14 @@
+<% if sub_menu.has_children? %>
+  <dl id="parent-menu-<%= sub_menu.id %>">
+    <dt>
+      <%= render 'operation', menu: sub_menu %>
+    </dt>
+    <dd>
+      <%= render partial:  "pro/website_menus/sub_menu", collection: sub_menu.children.order(:sort), as: :sub_menu %>
+    </dd>
+  </dl>
+<% else %>
+  <p id="parent-menu-<%= sub_menu.id %>">
+    <%= render 'operation', menu: sub_menu %>
+  </p>
+<% end %>

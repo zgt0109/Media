@@ -1,0 +1,143 @@
+<% content_for :booking_top_pic do %>
+    <header>
+        <a href="<%= @booking_order.is_flow_supplier ? 'javascript:void(0);' : mobile_booking_item_url(id: params[:booking_item_id].to_i, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev">
+            <% unless @booking_order.is_flow_supplier %><img src="/assets/mobile/wserver/ico-back.png"/><% end %>
+        </a>
+      <h1>订单信息填写</h1>
+    </header>
+<% end %>
+
+<%= form_for @booking_order, url: mobile_booking_orders_path, method: 'post' do |f| %>
+    <%= f.hidden_field :wx_user_id %>
+    <%= f.hidden_field :booking_item_id %>
+    <%= f.hidden_field :wx_mp_user_id %>
+    <%= f.hidden_field :supplier_id %>
+    <%= f.hidden_field :price %>
+    <%= f.hidden_field :status %>
+    <%= hidden_field_tag :is_flow_supplier, f.object.is_flow_supplier %>
+    <!--<input name="booking_item_qty" id="booking_item_qty" value="<%#= @booking_item.qty %>" type="hidden">-->
+    <div class="box-form">
+      <p>
+        <span class="fl">联系人：</span>
+        <span class="fr">
+          <%= f.text_field :username %>
+        </span>
+      </p>
+      <p>
+        <span class="fl">联系电话：</span>
+        <span class="fr">
+          <%= f.text_field :tel %>
+        </span>
+      </p>
+      <p style="<%= f.object.is_flow_supplier ? 'display:none;' : ''%>">
+        <span class="fl">预订数量：</span>
+        <span class="fr">
+            <%= f.text_field :qty %>
+        </span>
+      </p>
+      <% if f.object.is_flow_supplier %>
+          <p>
+            <span class="fl">地址：</span>
+            <span class="fr">
+              <%= f.text_field :address %>
+            </span>
+          </p>
+      <% else %>
+          <p>
+            <span class="fl">预订日期：</span>
+            <span class="fr">
+              <input name="booking_order[booking_at]" id="booking_order_booking_at" placeholder="2013/1/1" class='input date' readonly/>
+            </span>
+          </p>
+          <p>
+            <span class="fl">备注：</span>
+            <span class="fr">
+              <%= f.text_area :description, rows: 5 %>
+            </span>
+          </p>
+      <% end %>
+
+      <p>
+        <input class="btn" type="submit" value="提交"/>
+      </p>
+    </div>
+<% end %>
+
+<script type="text/javascript">
+    $( function () {
+
+        $(".date").datepicker({
+            autoSize: true,
+            dateFormat: 'yy-mm-dd',
+            dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+            monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+            monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+        });
+
+
+        $('.btn').click(function(event) {
+            var tel_reg = /^(-|\+)?\d+(\.\d+)?$/;
+            var now = new Date().format("yyyy-MM-dd");
+            if(parseInt($('#booking_item_qty').val()) == 0){
+                alert("商品已预定完，不能预定了！");
+                return false;
+            }else if(!$('#booking_order_username').val()){
+                alert("联系人不能为空");
+                $('#booking_order_username').focus();
+                return false;
+            }else if(!$('#booking_order_tel').val()){
+                alert("联系电话不能为空");
+                $('#booking_order_tel').focus();
+                return false;
+            }else if(!tel_reg.test($('#booking_order_tel').val())){
+                alert("联系电话必须是数字");
+                $('#booking_order_tel').focus();
+                return false;
+            }else if(!$('#booking_order_qty').val()){
+                alert("预订数量不能为空");
+                $('#booking_order_qty').focus();
+                return false;
+            }else if(!tel_reg.test($('#booking_order_qty').val())){
+                alert("预订数量必须是数字");
+                $('#booking_order_qty').focus();
+                return false;
+            }else if(parseInt($('#booking_order_qty').val()) <= 0){
+                alert("预订数量必须大于0");
+                $('#booking_order_qty').focus();
+                return false;
+            }
+//            else if(parseInt($('#booking_order_qty').val()) > parseInt($('#booking_item_qty').val())){
+//                alert("预订数量不能大于商品数量");
+//                $('#booking_order_qty').focus();
+//                return false;
+//            }
+//            else if(!$('#booking_order_booking_at').val()){
+//                alert("请选择预订日期");
+//                $('#booking_order_booking_at').focus();
+//                return false;
+//            }else if($('#booking_order_booking_at').val() < now){
+//                alert("预订日期不能小于当前日期");
+//                $('#booking_order_booking_at').focus();
+//                return false;
+//            }
+            if($('#is_flow_supplier').val() == 'true'){
+                if(!$('#booking_order_address').val()){
+                    alert("地址不能为空");
+                    $('#booking_order_address').focus();
+                    return false;
+                }
+            }else{
+                if(!$('#booking_order_booking_at').val()){
+                    alert("请选择预订日期");
+                    $('#booking_order_booking_at').focus();
+                    return false;
+                }else if($('#booking_order_booking_at').val() < now){
+                    alert("预订日期不能小于当前日期");
+                    $('#booking_order_booking_at').focus();
+                    return false;
+                }
+            }
+        });
+    });
+
+</script>

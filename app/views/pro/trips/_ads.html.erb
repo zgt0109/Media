@@ -1,0 +1,23 @@
+<div id="tab-2" class="tab-pane fade">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="alert alert-block alert-info">
+        <strong class="pull-left">提示：</strong>
+        <ul class="vwebsiteHeadAlert">
+          <li>1、图片建议尺寸：720像素*400像素，可支持上传格式为：jpg、png、bmp、gif；</li>
+          <li>2、上传的图片会在微旅游手机端的首页显示，最多上传5张图片。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="vwebsitePicture col-xs-12">
+      <ul class="ace-thumbnails thumbnails-1">
+        <li>
+          <%= form_for @trip.trip_ads.new, url: "/trips/ad_add" do |f|%>
+            <%= content_tag :div, nil, class: "cieldon-file", data: {type: "0", name: "trip_ad[pic_key]", img: "#{@trip_ad.try(:pic_url)}", key: "#{@trip_ad.try(:pic_key)}", width: "180", height: "100"} %>
+          <% end %>
+        </li>
+        <%= render partial: "pro/trips/ad_li", collection: @trip_ads, as: :trip_ad%>
+      </ul>
+    </div>
+  </div>
+</div>

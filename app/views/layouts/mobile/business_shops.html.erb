@@ -1,0 +1,97 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta name="format-detection" content="telephone=no">
+	<meta content="telephone=no" name="format-detection">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title><%= @business_shop.name %></title>
+	<%= stylesheet_link_tag( @template_id == 1 ? 'mobile/business_shop' : 'mobile/wbusiness2' ) %>
+</head>
+<body>
+  <%= render 'application/gb2big5' %>
+<div class="html" id="html">
+	<div class="stage" id="stage">
+		<section id="<%= 'sec-index' if @template_id == 1 || action_name !~ /show/ %>">
+			<%= render 'nav' if action_name != 'show' || @template_id == 1 %>
+			
+			<div class="body <%= "body-null" if !@vip_user.try(:normal?) && @template_id == 2 && action_name == 'show' %>" id="body">
+				<%= yield %>
+			</div>
+		</section>
+		<%= render 'vip_card' if @template_id == 2 && action_name == 'show' %>
+
+		<%= yield :apply_vip_card if content_for?(:apply_vip_card) %>
+	</div>
+</div>
+
+<%= render 'application/app_footer' %>
+<%= javascript_include_tag 'mobile/business_shop' %>
+
+<a href="javascript:scroll(0,0)" class="btn-pop btn-up"><i class="fa fa-arrow-up"></i></a>
+
+<script>
+	$(function(){
+
+		// $( "#date" ).datepicker({
+		// 	autoSize: true,
+		// 	dateFormat: 'yy-mm-dd',
+		// 	dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+		// 	monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+		// });
+		//divSwipe("nav-top");
+		<% if action_name =~ /privileges/ %>
+			var h1=window.screen.availHeight+10;
+			var h2=$(".html").height();
+			$("#transitionTop").height(470).css({"top":"-470px"});
+			$("#stage").css({"min-height":h1+"px"});
+			$(".dirB").height(h1);
+		<% end %>
+		focusForm("header");
+		showBtnUp(100);
+
+	});
+
+	<% if flash[:notice] || flash[:alert] %>
+		alert('<%= flash[:notice] || flash[:alert] %>');
+	<% end %>
+</script>
+
+<%= yield :custom_js if content_for?(:custom_js) %>
+
+<% if action_name =~ /comment/ %>
+	<script>
+		$(function(){
+        setTimeout(function() {
+            $("a.fa-chevron-right:first").click();
+        }, 1);
+        //底部上拉刷新
+        document.addEventListener("touchstart",function(e){
+            var t=e.touches[0],
+                y=t.pageY;
+            $documentH = $(document).height();
+            $("body").attr("data-y",y);
+        });
+        var urls = [];
+        document.addEventListener("touchmove",function(e){
+            var url = $('.page .next').attr('href');
+            var t=e.touches[0],
+                startY=parseInt($("body").attr("data-y")),
+                pageY=(startY - t.pageY);
+            $touchT = $(window).scrollTop() + $(window).height() +pageY;
+            if($touchT>=$documentH){
+                if (url && urls.indexOf(url) == -1) {
+                    urls.push(url);
+                    $(".b-loading").show();
+                    return $.getScript(url);
+                }
+            }
+        });
+    });
+	</script>
+<% end %>
+</body>
+</html>

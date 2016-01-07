@@ -1,0 +1,644 @@
+<style>
+  #preview{
+    border: 1px solid #bfd2e1;
+    width: 490px;
+    height: 370px;
+    font-family: Arial, Helvetica, sans-serif,"宋体";
+  }
+  #map_container{
+      height: 368px;
+  }
+  #map_container{clear: both;}
+  #float_search_bar{
+    z-index: 2012;
+    position: absolute;
+    width: 488px;
+    height: 35px;
+    line-height: 20px;
+    background: url("/assets/baidu_map_search_bar.png") repeat-x;
+    background-position: 0 -21px;
+    padding: 3px 0 0 10px;
+    *zoom:1;
+  }
+  #float_search_bar:after{
+    display: table;
+    content: "";
+    clear: both;
+  }
+  #float_search_bar label, #float_search_bar span{
+      color: #0787cb;
+      font-size: 14px;
+      width: auto;
+      float: none;
+  }
+  #float_search_bar input{
+      width: 180px;
+      height: 20px;
+      margin-top: 1px;
+      float: none;
+  }
+  #float_search_bar input:focus{
+      outline: none;
+  }
+  select {width: 30%;}
+  #search_button{
+      align-items: flex-start;
+      text-align: center;
+      border: 0;
+      padding: 0px 6px 3px;
+      box-sizing: border-box;
+      color: white;
+      width: 77px;
+      height: 20px;
+      background: url("/assets/baidu_map_search_bar.png") no-repeat;
+      background-position: 0 0;
+      margin-right: 5px;
+      cursor: pointer;
+  }
+</style>
+<p class="p-note">
+  提示：以下“<span class="fred" style="width:auto;float:none;">*</span>”均为必填项；
+</p>
+
+<div class="box-des fl">
+
+  <div class="des-l leftbar" style="width:280px">
+    <div class="des-view" style="width:270px">
+      <b class="title preview_activity_title"><%= @business_shop.activity.try(:name) || '标题' %></b>
+      <span><%= Date.today %></span>
+      <div cover="cover box-img" class="img">
+        <%= image_tag(( @business_shop.activity.try(:pic?) ? @business_shop.activity.pic.large.presence : Activity.new(activity_type_id: 39).default_pic_url) , id: 'preview_shop_notice_pic', class: 'view', width: 258) %>
+      </div>
+      <p class="preview_activity_summary"><%= @business_shop.activity.try(:summary) %></p>
+    </div>
+  </div>
+
+  <div class="des-r rightbar" style="width:460px;">
+    <%= form_for @business_shop, validate: true do |f| %>
+      <div class="box-form form-row fl">
+
+        <%= f.fields_for :activity do |activity| %>
+          <% if @business_shop.activity.new_record? %>
+            <%= activity.hidden_field :supplier_id %>
+            <%= activity.hidden_field :wx_mp_user_id %>
+            <%= activity.hidden_field :activity_type_id %>
+            <%= activity.hidden_field :status %>
+          <% end %>
+          <div class="p">
+            <span>回复关键词<em>*</em><span class="fgray">（用于公众账号中触发店铺，不能同其他关键字重复）</span></span>
+            <%= activity.text_field :keyword, class: "input-text" %>
+          </div>
+
+          <div class="p">
+            <span>微信消息标题<em>*</em><span class="fgray">（发送关键词后返回的微信消息标题，不能超过64个字）</span></span>
+            <%= activity.text_field :name, class: "input-text activity_title", maxlength: 44 %>
+          </div>
+
+
+          <div class="p box-upload">
+            <span>微信消息图片<em>*</em><span class="fgray">（发送关键词后返回的微信消息图片）</span></span>
+            <div class="box-file">
+                <input type="file">
+                <a class="btn btn-big"><span class='upload_pic' style="float:none;">上传照片</span>
+                  <%= activity.file_field :pic, id: 'shop_notice_pic', class: 'img_preview', rel: 'preview_shop_notice_pic', validate: activity.object.pic_cache.blank?, data: { width: 720, height: 400 } %>
+                  <%= activity.hidden_field :pic_cache %>
+                </a>
+            </div>
+            <span class="p-file"><span class="fgray">（图片建议尺寸：720像素*400像素）</span></span>
+          </div>
+
+          <div class="p">
+            <span>微信消息摘要<span class="fgray">（发送关键词后返回的微信消息摘要，不能超过255个字）</span></span>
+            <%= activity.text_area :summary, rows: 5, cols: 40, maxlength: 255, placeholder: "限255字", class: 'activity_summary'  %>
+          </div>
+        <% end %>
+
+
+        <div class="p">
+          <span>店铺名称<em>*</em><span class="fgray">（不能超过4个汉字）</span></span>
+          <%= f.text_field :name, class: "input-text" %>
+        </div>
+
+        <div class="p">
+          <span>店铺副标题<span class="fgray">（不能超过5个汉字）</span></span>
+          <%= f.text_field :subtitle, class: "input-text" %>
+        </div>
+
+        <div class="p box-upload">
+          <span>店铺LOGO<em>*</em></span>
+          <div class="upload-img">
+            <span style="width:90px; height:90px;">
+              <%= image_tag((@business_shop.logo.presence || '/assets/bg_fm.jpg'), size: '90x90', id: 'preview_shop_logo_pic') %>
+            </span>
+          </div>
+          <div class="upload-btn" style="margin:10px 0 0 0;">
+            <div class="box-file">
+              <%= f.file_field :logo, rel: 'preview_shop_logo_pic', class: 'img_preview', validate: @business_shop.logo_cache.blank?, data: { width: 300, height: 300 } %>
+              <%= f.hidden_field :logo_cache %>
+              <a class="btn btn-big">上传照片</a>
+            </div>
+            <span class="p-file"><span class="fgray">（图片建议尺寸：宽300像素*高300像素）</span></span>
+          </div>
+        </div>
+
+
+        <div class="p">
+          <span>显示顺序<em>*</em><span class="fgray">（数字越小，显示越靠前）</span></span>
+          <%= f.text_field :sort, maxlength: 5, class: "input-text" %>
+        </div>
+
+        <div class="p">
+          <span>店铺简介<em>*</em><span class="fgray">（简介文字请不要超过100字）</span></span>
+          <%= f.text_area :description, rows: 3, cols: 50 %>
+        </div>
+
+        <div class="p">
+          <span>店铺电话<em>*</em></span>
+          <%= f.text_field :tel, class: "input-text" %>
+        </div>
+
+        <div class="p">
+          <span>店铺地址<em>*</em></span>
+          <%= f.text_field :address, class: "input-text" %>
+        </div>
+
+        <div class="p select_location">
+          <span>店铺位置</span>
+          <label style="width: 30%;"><input type="radio" class="select_location_status" name="business_shop[location_status]" value="1" style="float:none;"><i style="float:none;">不使用导航</i></label>
+          <label style="width: 30%;"><input type="radio" class="select_location_status" name="business_shop[location_status]" value="2" style="float:none;"><i style="float:none;">显示位置导航</i></label>
+          <label style="width: 30%;"><input type="radio" class="select_location_status" name="business_shop[location_status]" value="3" style="float:none;"><i style="float:none;">使用图片</i></label>
+        </div>
+
+        <div class="p">
+          <div id="location_none">
+            <span class="fred">您的店铺页面上将不会打开地图导航</span>
+          </div>
+        </div>
+
+        <div class="p">
+          <div id="location_normal">
+            <div id="preview">
+              <div id="float_search_bar">
+                <label>区域：</label>
+                <%= f.text_field :location_address, id: "address_keyword" %>
+                <a id="search_button" class="button">查找</a>
+                <span>点击地图或标注获取坐标</span>
+              </div>
+              <div id="map_container"></div>
+            </div>
+            <%= f.text_field :location_x, class: 'input-text', style: "width:20%;margin:0" %>
+            <%= f.text_field :location_y, class: 'input-text', style: "width:20%;margin:0" %>
+            <input type="hidden" id="is_address" value="">
+            <input type="hidden" id="is_just" value="">
+            <input type="hidden" id="is_new" value="<%= @business_shop.location_address.present? ? '0':'1' %>">
+          </div>
+        </div>
+
+        <div class="p">
+          <div class="upload-img" id="location_picture" style="width: 180px;height:100px;">
+            <span><%= image_tag((@business_shop.location_pic.presence || '/assets/bg_fm.jpg'), id: 'preview_location_pic') %></span>
+          </div>
+          <div class="upload-btn" style="padding: 0;margin:0;">
+            <div class="box-file">
+              <%= f.file_field :location_pic, class: 'img_preview', rel: 'preview_location_pic', data: {width: 720, height: 400} %>
+              <a class="btn btn-big">上传图片</a>
+            </div>
+            <span class="p-file"><span class="fgray">（图片建议尺寸：宽720像素*高400像素）</span></span>
+          </div>
+        </div>
+
+        <p><input type="submit" value="保存" class="btn btn-small btn-orange form-submit"/></p>
+
+      </div>
+    <% end %>
+
+  </div>
+</div>
+<script type="text/javascript">
+  $(function(){
+    var location_type = $('.select_location input[value=<%= @business_shop.location_status || 1 %>]');
+    location_type.attr('checked', true);
+    location_type.click();
+  })
+
+  // $('#address_keyword').val($('#business_shop_address').val());
+
+  // $('#business_shop_address').on('keyup', function(){
+  //   address = $(this).val();
+  //   $('#address_keyword').val(address);
+  //   $('#search_button').click();
+  // })
+
+  $('#address_keyword').on('keyup', function(){
+    address = $(this).val();
+    $('#search_button').click();
+    // $('#business_shop_address').val(address);
+  })
+
+  $('.pop-cont').on('click', '.select_location_status', function(){
+    var select_type = $('.select_location_status:checked').val();
+    if (select_type == 1){
+      $('#location_none').closest('.p').show();
+      $('#location_normal').closest('.p').hide();
+      $('#location_picture').closest('.p').hide();
+    }else if (select_type == 2){
+      $('#location_none').closest('.p').hide();
+      $('#location_normal').closest('.p').show();
+      $('#location_picture').closest('.p').hide();
+      document.getElementById("search_button").click();
+    }else{
+      $('#location_none').closest('.p').hide();
+      $('#location_normal').closest('.p').hide();
+      $('#location_picture').closest('.p').show();
+    }
+  });
+</script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+<script type="text/javascript">
+  function getUrlParas(){
+      var hash = location.hash,
+          para = {},
+          tParas = hash.substr(1).split("&");
+      for(var p in tParas){
+          if(tParas.hasOwnProperty(p)){
+              var obj = tParas[p].split("=");
+              para[obj[0]] = obj[1];
+          }
+      }
+      return para;
+  }
+  var para = getUrlParas(),
+      center = para.address?decodeURIComponent(para.address) : ($('#address_keyword').val() ?  $('#address_keyword').val() : '金科路'),
+      city = para.city?decodeURIComponent(para.city) : '上海市';
+
+  var marker_trick = false;
+  var map = new BMap.Map("map_container");
+  map.enableScrollWheelZoom();
+
+  var opts = {type: BMAP_NAVIGATION_CONTROL_LARGE}
+  map.addControl(new BMap.NavigationControl(opts));
+
+  opts = {offset: new BMap.Size(150, 5)}
+  map.addControl(new BMap.ScaleControl(opts));
+
+  map.addControl(new BMap.OverviewMapControl());
+
+  var marker = new BMap.Marker(new BMap.Point(121.608797, 31.209985), {
+      enableMassClear: false,
+      raiseOnDrag: true
+  });
+
+  var local = new BMap.LocalSearch(map, {
+      renderOptions:{map: map},
+      pageCapacity: 1
+  });
+
+  //创建地址解析器实例
+  var myGeo = new BMap.Geocoder();
+
+  <% if @business_shop.location_address.present? %>
+    <% if @business_shop.location_x.present? && @business_shop.location_y.present? %>
+      //存在经纬度的情况
+      marker = new BMap.Marker(new BMap.Point(<%= @business_shop.location_x %>, <%= @business_shop.location_y %>), {
+          enableMassClear: false,
+          raiseOnDrag: true
+      });
+      map.centerAndZoom(new BMap.Point(<%= @business_shop.location_x %>, <%= @business_shop.location_y %>), 19);
+    <% else %>
+        //不存在经纬度， 存在地址的情况
+        local.search("<%= @business_shop.location_address %>");
+    <% end %>
+  <% else %>
+    var myCity = new BMap.LocalCity();
+    myCity.get(function(result){
+        document.getElementById("address_keyword").value = result.name;
+        local.search(result.name);
+    });
+  <% end %>
+
+  window.onload = function(){
+      document.getElementById("search_button").onclick = function(){
+          document.getElementById('is_just').value = '1';
+          document.getElementById("is_new").value = '0';
+          local.search(document.getElementById("address_keyword").value);
+      };
+      document.getElementById("address_keyword").onkeyup = function(e){
+          document.getElementById('is_just').value = '1';
+          document.getElementById('is_address').value = '2';
+          document.getElementById("is_new").value = '0';
+          map.clearOverlays();
+          marker.show();
+          var me = this;
+          e = e || window.event;
+          var keycode = e.keyCode;
+          if(keycode === 13){
+              local.search(document.getElementById("address_keyword").value);
+          }
+      };
+  };
+
+  document.getElementById("business_shop_location_x").onkeyup =  function(e){
+      reposition();
+  };
+  document.getElementById("business_shop_location_y").onkeyup =  function(e){
+      reposition();
+  };
+
+  //改变经纬度重新查找地址和定位
+  function reposition(){
+
+      var lng = document.getElementById('business_shop_location_x').value,
+          lat = document.getElementById('business_shop_location_y').value;
+      if(!lng || !lat){
+          document.getElementById('is_address').value = '3'; //经度或纬度为空
+          return;
+      }
+      if(parseFloat(lng) >= 0 && parseFloat(lng) <= 180 && parseFloat(lat) >= 0 && parseFloat(lat) <= 90){
+
+          marker.hide();
+          var point = new BMap.Point(lng, lat);
+
+          //反向地理编码(通过经纬度定位地址)
+          myGeo.getLocation(point, function(result){
+              if (result){
+                  document.getElementById('address_keyword').value = result.address;
+              }
+          });
+
+          marker = new BMap.Marker(point, {
+              enableMassClear: false,
+              raiseOnDrag: true
+          });
+
+          marker.enableDragging();
+          map.clearOverlays();
+          map.addOverlay(marker);
+          map.centerAndZoom(point, 19);
+      }else{
+          if(parseFloat(lng) < 0 || parseFloat(lng) > 180 || !parseFloat(lng)){
+              showTip('warning','经度范围有误，请重新输入')
+              document.getElementById('business_shop_location_x').focus();
+          }else{
+              showTip('warning','纬度范围有误，请重新输入');
+              document.getElementById('business_shop_location_y').focus();
+          }
+      }
+  }
+
+  //点击地图时的处理
+  map.addEventListener("click", function(e){
+      if(!(e.overlay)){
+          map.clearOverlays();
+          marker.show();
+          marker.setPosition(e.point);
+          setResult(e.point.lng, e.point.lat);
+
+          //反向地理编码(通过经纬度定位地址)
+          myGeo.getLocation(new BMap.Point(e.point.lng, e.point.lat), function(result){
+              if (result){
+                  document.getElementById('address_keyword').value = result.address;
+              }
+          });
+      }
+  });
+
+  marker.enableDragging();
+  //将标注点加入地图
+  map.addOverlay(marker);
+
+  //标注点划动时的处理
+  marker.addEventListener("dragend", function(e){
+      setResult(e.point.lng, e.point.lat);
+
+      //反向地理编码(通过经纬度定位和更新地址)
+      myGeo.getLocation(new BMap.Point(e.point.lng, e.point.lat), function(result){
+          if (result){
+              document.getElementById('address_keyword').value = result.address;
+          }
+      });
+  });
+
+
+
+  local.setSearchCompleteCallback(function(results){
+      if(local.getStatus() !== BMAP_STATUS_SUCCESS){
+          if(document.getElementById("address_keyword").value){
+
+              document.getElementById("is_address").value = '1';
+              marker.hide();
+              try{
+                  //地址查不到时，反向将地址解析成经纬度在查询一次
+                  myGeo.getPoint(document.getElementById("address_keyword").value, function(point){
+
+                      if(point) {
+                          if($('#is_just').val()){
+                              marker = new BMap.Marker(new BMap.Point(point.lng, point.lat), {
+                                  enableMassClear: false,
+                                  raiseOnDrag: true
+                              });
+                          }else{
+                              <% if @business_shop.location_x.present? && @business_shop.location_y.present? %>
+                                  marker = new BMap.Marker(new BMap.Point(<%= @business_shop.location_x %>, <%= @business_shop.location_y %>), {
+                                      enableMassClear: false,
+                                      raiseOnDrag: true
+                                  });
+                                  document.getElementById("is_just").value = '1';
+                              <% end %>
+                          }
+
+                          marker.enableDragging();
+
+                          map.clearOverlays();
+                          map.addOverlay(marker);
+                          map.centerAndZoom(point, 19);
+                          setResult(point.lng, point.lat);
+                          document.getElementById("is_address").value = '';
+                      }else{
+
+                      }
+                  }, "");
+              }
+              catch(e){
+
+              }
+
+          }else{
+              // showTip('warning','请填写导航地址');
+          }
+
+      } else {
+          marker.hide();
+          document.getElementById("is_address").value = '';
+      }
+      showLocation();
+  });
+
+  local.setMarkersSetCallback(function(pois){
+      if(document.getElementById("is_new").value == '1'){map.setZoom(11);}
+      for(var i=pois.length; i--; ){
+          var marker = pois[i].marker;
+          setResult(marker.getPosition().lng, marker.getPosition().lat)
+          marker.addEventListener("click", function(e){
+              marker_trick = true;
+              var pos = this.getPosition();
+              setResult(pos.lng, pos.lat);
+          });
+      }
+  });
+
+  function a(){
+      document.getElementById("float_search_bar").style.display = "none";
+  }
+
+  document.getElementById("float_search_bar").onkeydown=function(event){
+      var e = event || window.event || arguments.callee.caller.arguments[0];
+      if(e && e.keyCode==13){ // enter 键
+          return false;
+      }
+  };
+
+  /*
+   * setResult : 定义得到标注经纬度后的操作
+   * 请修改此函数以满足您的需求
+   * lng: 标注的经度
+   * lat: 标注的纬度
+   */
+  function setResult(lng, lat){
+    $("#business_shop_location_x").val(lng);
+    $("#business_shop_location_y").val(lat);
+  }
+  function showLocation(){
+      setTimeout(function(){
+          if($('.BMap_noprint').eq(1)){$('.BMap_noprint').eq(1).click();}
+          else{showLocation();}
+      }, 50);
+  }
+</script>
+
+<script>
+$(function(){
+  $("#business_shop_name").blur(function(){
+    var score = calScore($("#business_shop_name").val());
+    if(score > 4){
+      alert("商铺名称不能超过4个汉字");
+      $(this).focus();
+    }
+  });
+  $("#business_shop_subtitle").blur(function(){
+    var score = calScore($("#business_shop_subtitle").val());
+    if(score > 5){
+      alert("商铺副标题不能超过5个汉字");
+      $(this).focus();
+    }
+  });
+  $("#business_shop_name, #business_shop_subtitle").keydown(function(event){
+    // alert(event.keyCode);
+      if(event.keyCode==32){return false}
+  })
+  $("#form-submit").click(function(){
+    var score1 = calScore($("#business_shop_name").val());
+    if(score1 > 4){
+      alert("商铺名称不能超过4个汉字");
+      // $(this).focus();
+      return false;
+    }
+    var score2 = calScore($("#business_shop_subtitle").val());
+    if(score2 > 5){
+      alert("商铺副标题不能超过5个汉字");
+      // $(this).focus();
+      return false;
+    }
+  })
+})
+
+function remove_extra_4(score, max){
+  if(score > max){
+    $("#business_shop_name").val(
+      function(index,va){
+        return va.substr(0,va.length-1);
+    })
+    score = calScore($("#business_shop_name").val());
+    remove_extra_4(score, max);
+  }
+}
+
+function remove_extra_5(score, max){
+  if(score > max){
+    $("#business_shop_subtitle").val(
+      function(index,va){
+        return va.substr(0,va.length-1);
+    })
+    score = calScore($("#business_shop_subtitle").val());
+    remove_extra_5(score, max);
+  }
+}
+
+function calScore(s){
+  score = 0;
+  // var s = "overpopulation";
+  for (var i = 0; i < s.length; i++) {
+      // console.log(s.charAt(i));
+      v = s.charAt(i);
+      if(f_check_number(v)){
+        // console.log('number');
+        score += 0.5;
+      }else if(f_check_zh(v)){
+        // console.log('ch');
+        score += 1;
+      }else if(f_check_lowercase(v)){
+        // console.log('low');
+        score += 0.5;
+      }else if(f_check_uppercase(v)){
+        // console.log('up');
+        score += 0.75;
+      }
+  }
+  // console.log(score);
+  return score;
+}
+
+/* * 判断是否为数字，是则返回true,否则返回false */
+function f_check_number(obj)
+{
+   if (/^\d+$/.test(obj))
+   {
+      return true;
+   }
+   else
+   {
+      // f_alert(obj,"请输入数字");
+      return false;
+   }
+}
+
+/* 用途：检查输入字符串是否只由汉字组成 如果通过验证返回true,否则返回false */
+function f_check_zh(obj){
+   if (/^[\u4e00-\u9fa5]+$/.test(obj)) {
+     return true;
+   }
+   // f_alert(obj,"请输入汉字");
+   return false;
+}
+
+/* * 判断是否为小写英文字母，是则返回true,否则返回false */
+function f_check_lowercase(obj)
+{
+   if (/^[a-z]+$/.test( obj ))
+   {
+      return true;
+   }
+   // f_alert(obj,"请输入小写英文字母");
+   return false;
+}
+
+/* * 判断是否为大写英文字母，是则返回true,否则返回false */
+function f_check_uppercase(obj)
+{
+   if (/^[A-Z]+$/.test( obj ))
+   {
+      return true;
+   }
+   // f_alert(obj,"请输入大写英文字母");
+   return false;
+}
+</script>

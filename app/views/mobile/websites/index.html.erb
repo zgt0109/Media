@@ -1,0 +1,13 @@
+<% title @website.try(:name) %>
+
+<% stylesheet "/stylesheets/vweisiteV01/index/index#{@template_id}.css" if @website_setting.home_template.websitev01? %>
+
+<%= render "begin_animation" %>
+
+<%= render 'bg_music' %>
+
+<%= render "mobile/websites/home/template#{@template_id}", { website: @website, website_pictures: @website_pictures, website_menus: @website_menus } %>
+
+<%= render "mobile/websites/navs/nav#{@nav_template_id}", {:website_menus => @website_menus} if @nav_template_id.to_i > 0 %>
+
+<%#= render "mobile/websites/attention_tips", {} if @website.attention_tips && (!@current_user_is_fans)%>

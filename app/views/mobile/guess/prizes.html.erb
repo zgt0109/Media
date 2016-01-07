@@ -1,0 +1,27 @@
+<%= stylesheet_link_tag 'mobile/addgetma' %>
+<div class="page-list">
+  <ul>
+    <%- if @consumes.each do |consume| %>
+      <li class="<%= consume.can_use? ? 'have' : 'over' %>">
+        <div class="title">
+          <span class="ewm" href="javascript:;" data-ma="<%= consume.rqrcode %>"></span>
+          <p>您在<%= consume.created_at.year %>年参加了商家猜图活动, 恭喜您获得 <%= consume.consumable.try(:info) %></p>
+        </div>
+        <p class="sn">
+          SN码：<%= consume.code %><%= consume.can_use? ? '' : "(#{consume.state_name})" %>
+        </p>
+        <%- if !consume.can_use? %>
+          <%= link_to '', hide_consume_mobile_guess_path(consume_id: consume.id), class: 'delete' %>
+        <%- end %>
+      </li>
+    <%- end.blank? %>
+      <li style="border-bottom: navajowhite;margin-top: 200px;">
+        <div class="title" style="background:none;">
+        <span class="ewm"></span>
+        <p style="text-align: center;">暂无奖品</p>
+        </div>
+      </li>
+    <%- end %>
+  </ul>
+</div>
+<%= javascript_include_tag 'mobile/qcode' %>

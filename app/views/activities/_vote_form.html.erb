@@ -1,0 +1,202 @@
+<style type="text/css">
+.fgray {color: #999; float: none; font-size: 12px; width: auto; }
+</style>
+<div id="cont3" class="cont">
+  <div class="box-des fl" >
+    <% content_for :p_note do %>
+      <p class="p-note" >
+        <span>提示：</span>
+        1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微投票；<br />
+        <span style="margin-left: 40px;">2、以下“ <em class="ck_em">*</em> ”均为必填项；</span>
+      </p>
+    <% end %>
+    <div class="des-l" style="width:230px; margin-top:20px;">
+      <div class="des-view" style="width:230px;">
+        <b class="activity_notice_title_preview" id="preview_title" style="word-break: break-all;"><%= @activity.new_record? ? "微信消息标题" : @activity.name %></b>
+        <span><%= Time.now.strftime("%Y-%m-%d") %></span>
+        <p class="img upload-preview-img-218-100" style="clear:both;">
+          <%= image_tag((@activity.pic.presence || @activity.default_pic_url), size: '211x120', id: 'preview_pic') %>
+        </p>
+        <p class="intro activity_notice_summary_preview" id="preview_summary" style="word-break: break-all;">
+          <%#= @activity.new_record? ? "微信消息摘要" : truncate(@activity.summary, length: 20, omission: "...") %>
+          <%= @activity.new_record? ? "微信消息摘要" : @activity.summary %>
+        </p>
+      </div>
+    </div><!--des-l end-->
+    <div class="des-r" style="width:560px">
+      <%= form_for @activity, validate: true do |f| %>
+        <%= f.hidden_field :activity_type_id %>
+        <%= f.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
+        <%= f.hidden_field :status %>
+        <div class="p">
+          <span>关键字<em>*</em>
+            <span class="fgray">（用于公众账号中触发微投票，不能同其他关键字重复）</span>
+          </span>
+           <%= f.text_field :keyword, :class => 'input-text', validate: true %>
+        </div>
+        <div class="p">
+          <span>微信消息标题<em>*</em>
+            <span class="fgray">（发送关键词后返回的微信消息标题，建议28个字以内）</span>
+          </span>
+          <%= f.text_field :name, :class => 'input-text', maxlength: 64, validate: true %>
+        </div>
+        <div class="p">
+          <span>活动时间
+            <span class="fgray">（活动开始和结束时间，非必填）</span>
+          </span>
+          <br />
+          <%= f.text_field :start_at, class: 'input-date datetimepicker', style: 'width: 128px;', id: 'start_at_time', readonly: true %> <i>-</i> <%= f.text_field :end_at, class: 'input-date datetimepicker', style: 'width: 128px;', id: 'end_at_time', readonly: true %>
+        </div>
+        <div class="p">
+          <span>微信消息图片
+            <span class="fgray">（发送关键词后返回的微信消息图片，该图片也在投票详情页展示）</span>
+          </span>
+          <div class="box-upload">
+            <div class="margin">
+              <div class="box-file">
+                 <%= f.file_field :pic, rel: 'preview_pic', data: {width: 720, height: 400}, id: 'activity_pic', class: 'img_preview'  %>
+                <a class="btn btn-big">上传照片</a>
+              </div>
+              <span class="p-file"><span class="fgray">图片建议尺寸：720像素*400像素</span></span>
+            </div>
+          </div>
+          <!--box-upload end-->
+        </div><!--p-->
+        <div class="p">
+          <span>微信消息摘要
+            <span class="fgray">（发送关键词后返回的微信消息摘要，不能超过255个字）</span>
+          </span>
+          <!-- <textarea rows="8" placeholder="说明"></textarea> -->
+          <%= f.text_area :summary, maxlength: 255, size: "100x100" %>
+        </div>
+        <div class="p">
+          <span>活动说明
+            <!--<span class="fgray">（不能超过2000个字）</span>-->
+          </span>
+          <!-- <textarea rows="8" placeholder="说明"></textarea> -->
+          <%#= f.text_area :description, validate: true %>
+          <%= f.cktext_area :description, ckeditor: { toolbar: "mini", height: 300 } %>
+        </div>
+        <div class="p">
+          <span>结束后的活动说明
+            <span class="fgray">（活动结束后显示的“活动说明”，不能超过255个字）</span>
+          </span>
+          <%= text_area_tag "extend_closing_note", @activity.extend.closing_note, :maxlength => 255, :style => "height:100px;" %>
+        </div>
+
+        <div class="p">
+          <span><%= check_box_tag :allow_repeat_apply, 1, @activity.allow_repeat_apply?, style: "float: none" %> &nbsp; 允许每天重复投票
+            <span class="fgray">（允许同一个微信帐号每天重复投票）</span>
+          </span>
+        </div>
+
+        <div class="p" style="display: none;">
+          <span>最多能选择几个选项<em>*</em>
+
+          </span>
+          <%= f.fields_for :activity_property do |activity_property| %>
+            <%= activity_property.text_field :get_limit_count, validate: true, class: "input-text", disabled: (@activity.persisted? ? true : false), value: activity_property.object.get_limit_count > 0 ?  activity_property.object.get_limit_count : 1 %>
+            <%= activity_property.hidden_field :activity_type_id %>
+          <% end %>
+        </div>
+
+        <div class="p">
+          <input type="submit" value="<%= @activity.new_record? ? '保存&投票设置' :  '保存'%>" class="btn btn-biger submit-btn btn-orange">
+          <input type="reset" value="取消" class="btn btn-small btn-remove" onclick="hide_iframe()" style="margin-left: 10px;">
+        </div>
+      <% end %>
+    </div><!--des-r end-->
+  </div><!--box-des end-->
+</div>
+<style>
+.datetimepicker {
+  width: 130px !important;
+}
+.showright .upbox .t {
+    border-bottom: 0px solid #CCCCCC;
+    height: 26px;
+    padding: 0 0 0px;
+}
+.itembox .leftslide .vote {
+  padding-top: 0;
+}
+
+.ck_em {
+  color: #ff0000;
+  padding: 0 3px;
+  font-style: normal;
+}
+
+#activity_summary {
+  height: 100px;
+}
+</style>
+
+<script>
+function hide_iframe(){
+  var div = window.parent.document.getElementById('pop-name');
+  div.parentNode.removeChild(div);
+}
+$('.btn-close', window.parent.document).click(function(){hide_iframe();});
+$(".but-addi").click(function(){
+  var html = '<div class="margin"><input type="text" size="30" name="activity[activity_vote_items_attributes]['+Date.now()+'][name]" id="activity_activity_vote_items_attributes_'+Date.now()+'_name" data-validate="true" class="input-text item_input_name"><a href="javascript:void(0)" class="del"> 删除</a></div>';
+  $(this).parent().before(html);
+});
+$(function(){
+  $('#allow_repeat_apply').removeAttr('disabled');
+  $("#items_div").on('click','.del',function(){
+    if (confirm("确认删除?")){
+      $(this).parent().find('input[type="checkbox"]').attr('checked',true);
+      $(this).parent().hide();
+      render_items_preview();
+    }
+  });
+  $("#items_input_div").on('keyup',".item_input_name",function(){
+    render_items_preview();
+  });
+});
+
+function render_items_preview(){
+  $("#preview_item_div").empty();
+  var items = $(".item_input_name:visible").map(function(){return $(this).val();}).get();
+  var html = '';
+  items.forEach(function(item) {
+    if(item != ''){
+      html+='<label><input type="checkbox"> <i>'+item+'</i></label>';
+    }
+  });
+  $(".vt").remove();
+}
+
+function goback(){
+  window.location.href='<%= votes_activities_url %>';
+}
+render_items_preview();
+
+$(".submit-btn").click(function(){
+    if($('#start_at_time').val() && !$('#start_at_time').is(":disabled")){
+        var now = new Date().format("yyyy-MM-dd hh:mm:ss");
+        if($('#start_at_time').val() < now){
+            addErrorMessage($('#start_at_time'), '活动开始时间不能小于当前时间');
+            $('#start_at_time').focus();
+            return false;
+        }
+    }
+    if($('#end_at_time').val() && !$('#end_at_time').is(":disabled")){
+        var now = new Date().format("yyyy-MM-dd hh:mm:ss");
+        if($('#end_at_time').val() < now){
+            addErrorMessage($('#end_at_time'), '活动开始时间不能小于当前时间');
+            $('#end_at_time').focus();
+            return false;
+        }
+        if($('#start_at_time').val()){
+            if($('#start_at_time').val() > $('#end_at_time').val()){
+                addErrorMessage($('#end_at_time'), '活动结束时间不能小于活动开始时间');
+                $('#end_at_time').focus();
+                return false;
+            }
+        }
+    }
+
+});
+</script>

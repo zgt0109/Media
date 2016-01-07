@@ -1,0 +1,29 @@
+body{background: #d2d1cd;}
+.box{padding: 10px; overflow: hidden;margin: 10px 2% 0 2%; display: block; text-align: center;}
+.mod-btn{ width: 96%; background:#e45245;border-radius: 5px; padding:0 5px;font-size: 18px; }
+.mod-btn a{color:#fff; background: #e8645a; display: block; width: 100%; height: 100%; padding:10px 0; border-radius: 3px;}
+.index a:nth-child(2n){ margin-left: 0;}
+.mod-index{width: 47.2%; display: inline-block; background: #fff; color: #666; float:left;}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; text-align: center; overflow: hidden;}
+.mod-index small{ font-size: 14px; padding: 5px 0; line-height: 20px; display: block; height: 30px;}
+.mod-index i{height: 60px; width: 60px; border-radius:1000px; border:2px solid #ddd; overflow: hidden;text-align: center; line-height: 60px; display: inline-block; }
+.mod-index img{width: 100%; height: 100%; border-radius: 10000px; float: left;}
+.mod-index .fa{ font-size: 40px;}
+.mod-btn .fa{ margin:0 5px 0 0;}
+.btn-up-1{ background: #e8645a;}
+.btn-up-1 .fa{ background: #fff; color: #e8645a;}
+.navPop-1 .navPop-btn{ background: #e8645a;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #e8645a;}
+.navPop-wrap>div a{
+    background: #e8645a;
+    color: #fff;
+}
+@media only screen and (max-width:1080px){
+    .mod-index{width:47%;}
+}
+@media only screen and (min-width:1224px){
+   .mod-index{width:47%;} 
+}
+@media only screen and (max-width:320px){
+   .mod-index{width:46.95%;} 
+}

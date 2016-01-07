@@ -1,0 +1,55 @@
+<% if hospital_doctors.count == 0 %>
+<div class="box-null">真遗憾，暂时没有发布专家哦！</div><!--box-null end-->
+<% else %>
+<% hospital_doctors.each do |doctor| %>
+<div class="list-li box">
+  <a class="fw" href="<%= mobile_hospital_doctor_path(id: doctor.id) %>">
+    <div class="hd">
+      <% if doctor.avatar.present? %>
+      <%= image_tag doctor.try(:avatar) %>
+      <% else %>
+      <% if doctor.gender == 1 %>
+      <%= image_tag "/assets/mobile/whospital/doctor-male.jpg" %>
+      <% else %>
+      <%= image_tag "/assets/mobile/whospital/doctor-female.jpg" %>
+      <% end %>
+      <% end %>
+    </div><!--hd end-->
+    <div class="bd">
+      <p class="li-name"><%= doctor.name %><i class="arrow fr"></i></p>
+      <p class="li-intro">
+        <b>职务：</b>
+        <span><%= doctor.hospital_job_titles.pluck(:name).join("、") %></span>
+        <% if doctor.is_online && doctor.has_future_arrange %>
+          <% unless doctor.is_full %>
+          <span class="state">有号</span>
+          <% else %>
+          <span class="state full">约满</span>
+          <% end %>
+        <% end %>
+      </p>
+      <p class="li-intro">
+        <b>科室：</b>
+        <span><%= doctor.hospital_departments.pluck(:name).join("、") %>
+        </span>
+      </p>
+
+       <!--<span>
+         <% doctor.work_time.to_s.split(",").each do |t| %>
+         <i><%= t %></i>
+         <% end %>
+       </span>-->
+     </p>
+   </div><!--bd end-->
+ </a>
+
+<% if doctor.doctor_watches.count > 0 %>
+ <% if doctor.is_online? && doctor.has_future_arrange && !doctor.is_full %>
+ <%= link_to "在线挂号", mobile_doctor_watches_path(supplier_id: session[:supplier_id], doctor_id: doctor.id), class: "fw btn" %>
+ <% elsif doctor.is_online? && doctor.is_full %>
+ <%= link_to "查看排班表", mobile_doctor_watches_path(supplier_id: session[:supplier_id], doctor_id: doctor.id, readonly: true), class: "fw btn" %>
+ <% end %>
+<% end %>
+</div>
+<% end %>
+<% end %>

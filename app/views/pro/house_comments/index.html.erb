@@ -1,0 +1,40 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar_house' %>
+<% end %>
+
+<% content_for :topbar do %>
+    <a href="javascript:;" class="h1 pagecurrent">评论管理</a>
+<% end %>
+
+<div class="box-table fl">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
+    <tr>
+      <th width="10%">姓名</th>
+      <th width="14%">电话</th>
+      <th width="32%">内容</th>
+      <th width="32%">回复内容</th>
+      <th>操作</th>
+    </tr>
+    <% if @house_comments.count > 0 %>
+        <% @house_comments.each do |comment| %>
+            <tr>
+              <td><%= comment.name %></td>
+              <td><%= comment.mobile %></td>
+              <td><%= comment.content %></td>
+              <td><%= (comment.replyed? ? comment.reply_content : '<span style="color: red">未回复</span>'.html_safe) %></td>
+              <td>
+                <%= link_to '删除', comment, method: :delete, :data => { :confirm => "确认删除此回复吗？" },  class:"fred" %>
+                <%= link_to '回复', comment, class:"fgreen" %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr><td colspan="5" class="fgreen" style="float:center">还没有信息</td></tr>
+    <% end %>
+  </table>
+</div>
+
+<div class="ft">
+  <%= paginate @house_comments, theme: :pretty %>
+</div>
+

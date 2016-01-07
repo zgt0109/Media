@@ -1,0 +1,52 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <div class="hd">
+    <% website_menus[0..2].to_a.each_with_index do |menu, index| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+            <% unless index == 2 %><small><%= menu.title %></small><% end %>
+        <% end %>
+    <% end %>
+  </div>
+  <% website_menus[3..-1].to_a.in_groups_of(12, false).each do |sub_menus| %>
+      <div class="bd">
+        <% sub_menus.each_with_index do |menu, index| %>
+            <%= link_to menu_url(menu), class: 'box mod-index' do %>
+                <% if index == 0 || index == 7 %>
+                    <small><%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %><%= menu.title %></small>
+                <% else %>
+                    <%= menu.pic_or_icon :has_title => true, :pic_type => "custom" %>
+                <% end %>
+            <% end %>
+        <% end %>
+      </div>
+  <% end %>
+
+  <!--快捷菜单中的电话和一键导航-->
+  <% tel = website.website_popup_menus.phone.first.try(:tel) %>
+  <% address = website.website_popup_menus.nav.first.try(:address) %>
+
+  <% if address.present? || tel.present? %>
+      <!--ft的背景图采用微官网的logo-->
+      <div class="ft" style="background-image: url(<%= website.logo? ? website.logo.big : ''%>)">
+        <p style="<%= website.logo? ? '' : 'border-left:none;'%>">
+          <% if address.present? %>
+        <span>
+          地址：<%= address %>
+        </span>
+          <% end %>
+          <% if tel.present? %>
+        <span>
+          <%= link_to "tel:#{tel}", class: 'fa fa-phone btn' do %>电话：<%= tel %><% end %>
+        </span>
+          <% end %>
+        </p>
+      </div>
+  <% end %>
+
+
+</div>
+
+
+

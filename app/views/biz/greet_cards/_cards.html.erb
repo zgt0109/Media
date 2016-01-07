@@ -1,0 +1,53 @@
+<div class="box-form select-icon card">
+<a class="btn btn-big" style="margin-left: 220px;margin-top: -8px;">图片素材</a>
+<div class="icon-box card" style="display: none; margin-left: 218px; margin-top: -8px;">
+<div class="icon-tab">
+  <a class="active" href="javascript:;">推荐</a>
+  <!-- <a href="javascript:;" class="">全部</a> -->
+</div>
+<div class="icon-list" style="display: block; ">
+  <div class="content">
+   <!--  <i class="fa fa-pagelines"></i>
+    <i class="fa fa-cny"></i> -->
+    <!-- <img src="/assets/default_cards/yuanxiao_index.png" width="125" height="61"> -->
+    <img src="/assets/default_cards/big/1.png" width="80" height="142">
+    <img src="/assets/default_cards/big/2.png" width="80" height="142">
+    <img src="/assets/default_cards/big/3.png" width="80" height="142">
+    <img src="/assets/default_cards/big/4.png" width="80" height="142">
+    <img src="/assets/default_cards/big/5.png" width="80" height="142">
+    <img src="/assets/default_cards/big/6.png" width="80" height="142">
+    <img src="/assets/default_cards/big/7.png" width="80" height="142">
+  </div>
+</div>
+<div class="icon-list" style="display: none; ">
+<div id="content" class="content" style="top: 0px; ">
+
+</div>
+<div class="scrollBox">
+  <div class="scroll" id="scroll" style="top: 0px; "></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+$(function(){
+    $(".select-icon.card").on("click",".btn",function(){
+      $(".icon-box.card").show();
+    });
+
+    $(".select-icon.card").on("click","img",function(){
+      $("#preview_greet_card_card_pic").attr("src",$(this).attr("src"));
+      $("#card_label").remove();
+      $("#greet_card_card_pic").closest(".box-upload").find('.show_pic_advice').hide();
+      $("#greet_card_card_pic").closest(".box-upload").find(".show_pic_advice_text").html('');
+      $("#greet_card_recommand_card_pic").val($(this).attr("src"));
+    });
+});
+</script>
+<style>
+.icon-list {
+  overflow: auto;
+}
+</style>

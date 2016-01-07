@@ -1,0 +1,26 @@
+<%= form_for(@brokerage_commission_transaction, url: brokerage_broker_commission_transactions_path(@brokerage_broker), remote: true) do |f| %>
+<div class="modal-body">
+    <div class="form-group">
+      <label class="control-label">佣金金额:</label>
+      <span class="required-star">
+        <%= @brokerage_broker.unsettled_commission  %>
+      </span>元
+    </div>
+</div>
+<div class="modal-footer">
+  <%= f.submit "确定", class: "btn btn-sm btn-primary", id: "btn-submit" %>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(function(){
+      var transaction_account  = <%= @brokerage_broker.bank_card_no.blank? && @brokerage_broker.alipay_account_name.blank? %> ;
+      if(transaction_account == 1 ) {
+          $('#btn-submit').hide();
+          parent.showTip('warning', '该经纪人尚未绑定银行卡或支付宝');
+      }
+    });
+</script>
+<% end %>

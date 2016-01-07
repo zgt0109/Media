@@ -1,0 +1,34 @@
+<% if @vip_user %>
+  <div class="footbar">
+    <ul>
+      <li class="<%= "cur" if action_name == "index" %>">
+        <a class="foot-box" href="<%= app_vips_path %>">
+          <i class="f-icon-1"></i>
+          <span>会员卡</span>
+        </a>
+      </li>
+      <%if @vip_card.checkin_enabled? && @vip_user.normal? %>
+        <li class="<%= "cur" if action_name == "signin" %>">
+          <a class="foot-box" href="/app/vips/signin">
+            <i class="f-icon-2"></i>
+            <span>积分签到</span>
+          </a>
+        </li>
+      <% end %>
+      <li class="<%= "cur" if action_name == "notes" %>">
+        <a class="foot-box" href="/app/vips/notes">
+          <i class="f-icon-3"></i>
+          <span>通知中心</span>
+        </a>
+      </li>
+      <%if @vip_card.checkin_enabled? && @vip_user.normal? %>
+        <li class="<%= "cur" if action_name == "mine" %>">
+          <a class="foot-box" href="<%= mine_app_vips_path %>">
+            <i class="f-icon-4"></i>
+            <span>我的中心</span>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

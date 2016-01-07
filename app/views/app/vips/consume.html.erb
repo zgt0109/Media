@@ -1,0 +1,48 @@
+<% provide(:title, '消费详情') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+    <div class="stage" id="stage">
+        <div id="sec-index">
+            <div class="user-info">
+                <ul>
+                    <li>
+                        <span class="label">类型：</span>
+                        <span><%= @vip_user_transaction.direction_type_name %></span>
+                    </li>
+                    <% if @vip_user_transaction.amount_source_name.present? %>
+                        <li>
+                            <span class="label">消费来源：</span>
+                            <span><%= @vip_user_transaction.amount_source_name %></span>
+                        </li>
+                    <% end %>
+                    <li>
+                        <span class="label">金额：</span>
+                        <span><%= @vip_user_transaction.amount.to_f.round(2) %>元</span>
+                    <li>
+                        <span class="label">付款方式：</span>
+                        <span><%= @vip_user_transaction.payment_type_name %></span>
+                    </li>
+                    <li>
+                        <span class="label">消费门店：</span>
+                        <span><%= @vip_user_transaction.shop_branch_name %></span>
+                    </li>
+                    <li>
+                        <span class="label">交易日期：</span>
+                        <span><%= @vip_user_transaction.created_at %></span>
+                    </li>
+                    <% if @vip_user_transaction.order_no.present? %>
+                        <li>
+                            <span class="label">订单号：</span>
+                            <span><%= @vip_user_transaction.order_no %></span>
+                        </li>
+                    <% end %>
+                    <% if @vip_user_transaction.description.present? %>
+                        <li>
+                            <span class="label">备注：</span>
+                            <span><%= @vip_user_transaction.description %></span>
+                        </li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

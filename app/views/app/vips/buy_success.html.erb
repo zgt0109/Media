@@ -1,0 +1,13 @@
+<div class="html theme-1" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="mod-success c-6">
+        <i class="img img-4"></i>
+        购买成功！支付金额<%= params[:price] %>元
+      </div>
+      <div class="form-btn p10 mt">
+        <a href="<%= vip_packages_app_vips_path(type: 'unexpired',status: 'unused') %>" class="btn btn-biger">完成</a>
+      </div>
+    </section>
+  </div>
+</div>

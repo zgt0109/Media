@@ -1,0 +1,127 @@
+<% content_for :body_append do %>
+
+<% activity_status_name = @activity.vote_status_attrs[0] %>
+
+<input type="hidden" id="get_limit_count" value="<%= @activity.activity_property.try(:get_limit_count).to_i %>">
+<input type="hidden" id="id_allow" value="<%= !activity_status_name.eql?(Activity::UNDER_WAY_NAME) ? '1' : (@activity_user.new_record? ? '' : '1')%>" >
+<input type="hidden" id="id_show_user_tel" value="<%= @activity.allow_show_user_tel? %>" >
+<input type="hidden" id="user_type" value="<%= @activity.activity_setting.try(:user_type).to_i  %>">
+<input type="hidden" id="wx_user_subscribe" value="<%= @wx_user.subscribe? %>">
+<input type="hidden" id="vip_user" value="<%= !!@wx_user.vip_user  %>">
+
+<div class="popup">
+  <div class="pop-body">
+    <div class="pop-t">信息填写</div>
+    <div class="pop-m">
+      <%= form_for :activity_user, url: mobile_vote_success_url(supplier_id: session[:supplier_id], vote_id: @activity.id), html: {method: 'POST'} do |f|%>
+        <%= hidden_field_tag "ids" %>
+        <div class="mod-form">
+          <div class="form-title"></div>
+
+          <div class="mod-li">
+            <%= f.text_field :name, placeholder: "请输入您的姓名", value: f.object.try(:name) || @vip_user.try(:name) %>
+          </div>
+          <div class="mod-li">
+            <%= f.text_field :mobile, placeholder: "请输入您的手机号码", value: f.object.try(:mobile) || @vip_user.try(:mobile) %>
+          </div>
+
+          <!--<div class="mod-li">
+            <%#= text_field_tag "verify_code", nil, placeholder: "请输入验证码", id: "check-place", style: "width: 60%" %>
+            <span id="change_verify_code"><img id="image_code" src="/verify_code?<%= rand %>" width="90" height="40" alt="" style="margin-top: -8px" data-up='false'/></span>
+          </div>-->
+        </div>
+      <% end %>
+    </div>
+
+    <div class="pop-f">
+      <div class="cell">
+        <a href="javascript:;" data-dismiss="modal" class="btn form-submit" id="submit-btn">确定投票</a>
+      </div>
+
+      <div class="cell">
+        <a href="javascript:;" data-fn="modal" class="btn btn-yellow">取消</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+    if($('#id_show_user_tel').val() == 'false'){
+      $('#activity_user_name, #activity_user_mobile').closest('div').hide();
+    }
+
+    var $submitBtn = $('#submit-btn'),
+            $alertMessage = $('#alert_message'),
+            submittedClass = 'submitted';
+
+    function popError(errorMessage) {
+        $alertMessage.html(errorMessage);
+        showPop();
+       
+        return false;
+    }
+    function submitVoteForm() {
+        $submitBtn.addClass(submittedClass);
+        var ids = $.map($('li.check'), function(li, i) {
+            return li.getAttribute('rel');
+        });
+        $('#ids').val(ids);
+        $('form').submit();
+    }
+
+    $submitBtn.click(function() {
+        if($submitBtn.hasClass(submittedClass)) {
+            return;
+        }
+        if($('#id_show_user_tel').val() == 'true'){
+            if(!$('#activity_user_name').val()){
+                return popError('姓名不能为空');
+            }else if(!$('#activity_user_mobile').val()){
+                return popError('手机号码不能为空');
+            }else if($('#activity_user_mobile').val() && !winwemedia_validators.mobile_reg.test($('#activity_user_mobile').val())){
+                return popError('手机号码格式不正确');
+            }
+        }
+
+        // if( !$("#check-place").val() ){
+        //     return popError('验证码不能为空');
+        // }else if( validate_image_code() == false ){
+        //     return popError('验证码不正确');
+        // }
+        submitVoteForm();
+        // }else{
+        //     submitVoteForm();
+        // }
+    });
+
+    // 确认验证码
+    function validate_image_code(){
+        $.ajax({
+            type: 'GET',
+            url: "<%= validate_image_code_path %>",
+            async : false,
+            data: {image_code: $("#check-place").val()},
+            success: function(result){
+                if(result["code"] == -1){
+                    $('#check-place').val('').focus();
+                    chec_image_code = false;
+                }else{
+                    chec_image_code = true;
+                }
+            }
+        });
+        return chec_image_code;
+    }
+
+    // 更新验证码
+    $("#change_verify_code").click(function() {
+      $image_code = $('#image_code');
+      $image_code.attr("src", $image_code.attr("src") + Math.random());
+      $('#verify_code').val('').focus();
+      return false;
+    });
+
+});
+</script>
+<% end %>

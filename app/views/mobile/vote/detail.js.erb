@@ -1,0 +1,6 @@
+var html = '<%= j (render partial: "detail_li", collection: @activity_vote_items, as: :item) %>';
+$(".lanmu-content ul").append(html);
+$(".loading").remove();
+<% if @activity_vote_items.next_page %>
+  $(".lanmu-content").append('<div class="loading"><%= link_to_next_page @activity_vote_items, "加载更多", remote: true %></div>');
+<% end %>

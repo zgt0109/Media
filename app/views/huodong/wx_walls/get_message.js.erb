@@ -1,0 +1,22 @@
+//留言
+<% if @wx_wall_messages.present? %>
+	last_id = <%= @wx_wall_messages.last.try(:id) %>;
+  msgLoad("#message","<%= j @html.html_safe %>","<%= params[:direction] %>",<%= @wx_wall_messages.count %>);
+<% end %>
+// 抽奖者
+<% if @wx_wall.prize_check == 'true' && @user_count %>
+	$('#user_count').text('<%= @user_count %>');
+	<% if @wx_wall_users.present? %>
+		$("#users-ul").data('last-id', '<%= @wx_wall_users.first.id %>').prepend('<%= j( render("users") ) %>');
+	<% end %>
+<% end %>
+// 投票
+<% if @wx_wall.vote_check == 'true' && @wx_wall.vote && @vote_items.present? %>
+	$('.num b').html('<%= @num %>');
+	showVoteChart(<%= raw @vote_items.map(&:name).to_json %>, <%= raw json_for_vote_items( @vote_items, @wx_wall.template_id ) %>, '<%= vote_word_color(@wx_wall.template_id) %>');
+<% end %>
+// 签到
+<% if @wx_wall.signin_check == 'true' && @avatar %>
+	$('#signin_user_ids').val("<%= @user_ids %>");
+	add_signin("<%= @avatar %>");
+<% end %>

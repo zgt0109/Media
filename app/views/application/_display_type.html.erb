@@ -1,0 +1,413 @@
+<div class="form-group ">
+  <label class="control-label clearfix">展现类型<span class="required-star">*</span></label>
+  <div class="clearfix">
+    <%= f.select :menu_type, menu_type_options, {}, class: 'form-control' %>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="tab-content no-border no-padding" id="tab1">
+
+    <!--活动-->
+    <div class="tab-pane" id="activity_id">
+        <div class="form-group">
+          <label class="">选择活动<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.select :activity_id, current_user.activities.active.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id) }, validate: true, class: 'form-control' if f.object.methods.include? :activity_id %>
+          </div>
+        </div>
+    </div>
+
+    <!--链接-->
+    <div class="tab-pane active" id="url">
+      <div class="form-group">
+        <label class="control-label">链接<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.text_field :url, class: "form-control", validate: true if f.object.methods.include? :url %>
+        </div>
+      </div>
+    </div>
+
+    <!--语音-->
+    <div class="tab-pane active" id="audio">
+      <div class="form-group">
+        <label class="control-label">选择语音<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.select :audio_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: f.object.try(:menuable_id) }, validate: true, class: 'form-control' if f.object.methods.include? :audio_id %>
+        </div>
+      </div>
+    </div>
+
+    <!--电话-->
+    <div class="tab-pane active" id="tel">
+      <div class="form-group">
+        <label class="control-label">联系电话<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.text_field :tel, class: "form-control", maxlength: 15, validate: true if f.object.methods.include? :tel %>
+        </div>
+      </div>
+    </div>
+
+    <!--导航-->
+    <div class="tab-pane active" id="address">
+      <div class="form-group">
+        <label class="">经纬度<span class="required-star">*</span><small class="text-warning">这个地址只是模糊定位，准确地址请地图上标记</small></label>
+        <div id="preview" class="clearfix">
+          <div id="float_search_bar">
+            <label>区域：</label>
+            <%= f.text_field :address, class: "input-text bd_map_address", style:"width :40%", validate: true if f.object.methods.include? :address %>
+            <a id="search_button" class="button">查找</a>
+            <span>点击地图或标注获取坐标</span>
+          </div>
+          <div id="map_container"></div>
+        </div>
+        <%= f.text_field :location_x, class: 'input-text bd_map_lng', readonly: true, style: "width:120px;" if f.object.methods.include? :location_x %>
+        <%= f.text_field :location_y, class: 'input-text bd_map_lat', readonly: true, style: "width:120px;" if f.object.methods.include? :location_y %>
+        <input type="hidden" id="is_address" value="">
+        <input type="hidden" id="is_just" value="">
+        <input type="hidden" id="is_new" value="<%= f.object.address.present? ? '0':'1' if f.object.methods.include? :address  %>">
+      </div>
+      <%= render 'baidu_map'%>
+    </div>
+
+    <!--单图文素材-->
+    <div class="tab-pane" id="single_material">
+      <div class="form-group">
+        <label class="control-label">图文资源<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'form-control' if f.object.methods.include? :single_material_id %>
+          &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-8 no-padding">
+          <label class="pull-left">图文预览</label>
+        </div>
+        <div class="col-sm-8 no-padding">
+          <div class="warpVMS">
+            <div class="vMicroShow">
+              <div class="vMSHead">
+                    <span class="title">
+                      <%= f.object.menuable.try(:title) rescue '' %>
+                    </span><br>
+                    <span class="grey">
+                      <%= f.object.menuable.created_at.to_date rescue Date.today %>
+                    </span>
+              </div>
+              <div class="vMSImg" id="img-1" style="background: url('<%= f.object.menuable.try(:pic).try(:large) rescue ''%>')"></div>
+              <div class="vMSFoot">
+                <p class="grey">
+                  <%= f.object.menuable.try(:summary) rescue '' %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--多图文素材-->
+    <div class="tab-pane" id="multiple_material">
+      <div class="form-group">
+        <label class="control-label">图文资源<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'form-control' if f.object.methods.include? :multiple_material_id %>
+          &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="">
+          <label class="">图文预览</label>
+        </div>
+        <div class="">
+          <div class="warpVMS">
+            <div class="vMicroShow">
+              <div class="vMSHead">
+                    <span class="title">
+                      <%= f.object.menuable.try(:title) rescue '' %>
+                    </span><br>
+                    <span class="grey">
+                      <%= f.object.menuable.created_at.to_date rescue Date.today %>
+                    </span>
+              </div>
+              <div class="vMSImg" id="img-1" style="background: url('<%= f.object.menuable.try(:pic).try(:large) rescue ''%>')"></div>
+              <div class="vMSFoot">
+                <p class="grey">
+                  <%= f.object.menuable.try(:summary) rescue '' %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--QQ-->
+    <div class="tab-pane active" id="qq">
+      <div class="form-group">
+        <label class="control-label">QQ号码<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <% if current_user.bqq_account? %>
+              <%= f.text_field :qq, value: current_user.api_user.uid, class: "form-control", readonly: true if f.object.methods.include? :qq %>
+          <% else %>
+              <%= f.text_field :qq, class: "form-control", validate: true if f.object.methods.include? :qq %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane active" id="activity_2">
+      <!--微官网活动-->
+      <div class="form-group">
+        <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+        <div class="clearfix">
+          <%= select_tag "activity_website", options_for_select(ActivityType.id_options.select{|m| m.last == ActivityType::WEBSITE}), class: 'form-control' rescue ''  %>
+        </div>
+      </div>
+
+      <!--微会员卡活动-->
+      <div class="form-group">
+        <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+        <div class="clearfix">
+          <%= select_tag "activity_vip", options_for_select(ActivityType.id_options.select{|m| m.last == ActivityType::VIP}), class: 'form-control' %>
+        </div>
+      </div>
+
+      <!--营销互动活动-->
+      <div class="form-group">
+        <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+        <% types = current_user.bqq_account? ? ActivityType.bqq_markets : ActivityType.markets %>
+        <% activity = (types.select{|m| m.last.to_s.split(', ').to_a.include?(f.object.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
+        <div class="clearfix">
+          <%= select_tag "activity_market", options_for_select(types, selected: activity.last), class: 'form-control gl' %>
+        </div>
+      </div>
+
+      <!--业务管理活动-->
+      <div class="form-group">
+        <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+        <% activity = (ActivityType.business.select{|m| m.last.to_s.split(', ').to_a.include?(f.object.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
+        <div class="clearfix">
+          <%= select_tag "activity_business", options_for_select(ActivityType.business, selected: activity.last), class: "form-control gl" %>
+        </div>
+      </div>
+
+      <!--行业解决方案活动-->
+      <div class="form-group">
+        <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
+        <% activity = (ActivityType.industry.select{|m| m.last.to_s.split(', ').to_a.include?(f.object.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
+        <div class="clearfix">
+          <%= select_tag "activity_industry", options_for_select(ActivityType.industry, selected: activity.last), class: "form-control gl" %>
+        </div>
+      </div>
+
+      <div class="form-group" id="website_menu_activity_id">
+        <label class="control-label">选择具体活动<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <% if f.object.new_record? %>
+              <table id="menuTable" class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th></th>
+                  <th>活动标题</th>
+                  <th>触发关键字</th>
+                  <th>活动时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td colspan="5">您当前尚未创建相关活动</td></tr>
+                </tbody>
+              </table>
+          <% else %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane active" id="docking_type">
+
+      <!--业务对接模块-->
+      <div class="form-group">
+        <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.select :docking_type, options_for_select(WebsiteMenu.docking_type_options), {}, class: "form-control" if f.object.methods.include? :docking_type %>
+          <%= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+        </div>
+      </div>
+
+      <!--具体业务对接功能-->
+      <div class="form-group">
+        <label class="control-label">选择具体业务对接功能<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.select :docking_function, options_for_select(WebsiteMenu.docking_function_options, selected: f.object.get_docking_function), {}, class: "form-control" if f.object.methods.include? :docking_function %>
+        </div>
+      </div>
+
+      <div class="form-group" id="ec_selects">
+        <label class="control-label">选择商品类别<span class="required-star">*</span></label>
+        <div class="clearfix" id="ec_categories">
+          <% @ec_seller_cat_selects.each_with_index do |select, index|%>
+              <% value = index == 0 ? select[1].collect{|t| [t["name"], t["id"]]} : [['不限', '-1']] + select[1].collect{|t| [t["name"], t["id"]]} %>
+              <%= select_tag "ec_seller_cat_id#{select[0]}", options_for_select(value, selected: f.object.menuable_id), class: "form-control ec_seller_cat", rel: select[0] rescue ''  %>
+          <% end if @ec_seller_cat_selects.present? %>
+        </div>
+        <%= f.hidden_field :goods_category_id, class: 'hidden_ec_seller_cat_id', value: f.object.menuable_id if f.object.methods.include? :goods_category_id%>
+      </div>
+
+      <div class="form-group" id="good_id">
+        <label class="control-label">请输入你要链接的商品编号<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.text_field :good_id, value: f.object.get_docking_function == 5 ? f.object.menuable_id : '', class: "form-control", validate: true if f.object.methods.include? :good_id %>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var object_name = "<%= f.object_name %>";
+    select_menu_type();
+
+    $('#' + object_name + '_menu_type').change( function() {
+        select_menu_type();
+    });
+
+    function set_materials_img_css(){
+        $('#img-1').css({'display': 'block', 'background-size': '100%', 'width': '100%', 'height': '200px', 'background-repeat': 'no-repeat no-repeat'});
+    }
+
+    function materials(select){
+        var self = $(select);
+        if(self.val()){
+            $.ajax({
+                url: '/materials/'+self.val(),
+                type: "get",
+                dataType : "json",
+                success : function (data){
+                    if(data){
+                        self.closest('.tab-pane').find('span.title').html(data['title']);
+                        self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
+                        self.closest('.tab-pane').find('p.grey').html(data['summary']);
+                        self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                        set_materials_img_css();
+                    }
+                }
+            });
+        }
+        else{
+            self.closest('.tab-pane').find('span.title').html('素材标题');
+            self.closest('.tab-pane').find('span.grey').html("<%= Date.today %>");
+            self.closest('.tab-pane').find('p.grey').html('');
+            self.closest('.tab-pane').find('#img-1').attr("background-image", 'url()');
+            self.closest('.tab-pane').find('#img-1').attr('style', '');
+        }
+    }
+
+    function find_activies(select){
+        var self = $(select);
+        if(self.val()){
+            var url = '/website_menus/find_activities?ids=' + self.val();
+            if($('#website_menu_id').val()){
+                url += '&id=' +  $('#website_menu_id').val();
+            }
+            $.ajax({
+                url: url,
+                type: "get",
+                success : function (data){
+                    $('#website_menu_activity_id').html(data);
+                    return true;
+                },
+                error: function() {
+                    return false;
+                }
+            });
+        }
+    }
+
+    function select_menu_type() {
+        $("#qq").removeClass('active');
+        $('#content').removeClass('active');
+        $('#subtitle').removeClass('active');
+        $('#single_material').removeClass('active');
+        $('#multiple_material').removeClass('active');
+        $('#activity_2').removeClass('active');
+        $('#url').removeClass('active');
+        $('#tel').removeClass('active');
+        $('#audio').removeClass('active');
+        $('#address').removeClass('active');
+        $('#docking_type').removeClass('active');
+        $('#activity_market').closest('.form-group').hide();
+        $('#activity_business').closest('.form-group').hide();
+        $('#activity_industry').closest('.form-group').hide();
+        $('#activity_website').closest('.form-group').hide();
+        $('#activity_vip').closest('.form-group').hide();
+        $('#ec_selects').closest('.form-group').hide();
+        $('#good_id').closest('.form-group').hide();
+        var type = $('#' + object_name + '_menu_type').val();
+        if ( type == 1 ) {
+            $('#content').addClass('active');
+        } else if ( type == 2 ) {
+            $('#activity_id').addClass('active');
+        } else if ( type == 3 ) {
+            $('#single_material').addClass('active');
+            materials($('#' + object_name + '_single_material_id'));
+        } else if ( type == 4 ) {
+            $('#multiple_material').addClass('active');
+            materials($('#' + object_name + '_multiple_material_id'));
+        } else if ( type == 6 ) {
+            $('#url').addClass('active');
+        } else if ( type == 18 || type == 20 ) {
+            $('#qq').addClass('active');
+        } else if ( type == 7 ) {
+            $('#tel').addClass('active');
+        } else if ( type == 9 ) {
+
+        } else if ( type == 5 ) {
+            $('#audio').addClass('active');
+        } else if ( type == 11 ) {
+            $('#address').addClass('active');
+        } else if ( type == 12 ) {
+            find_activies($('#activity_website'));
+        } else if ( type == 13 ) {
+            find_activies($('#activity_vip'));
+        } else if ( type == 14 ) {
+            $('#' + object_name + '_activity_id').closest('.tab-pane').addClass('active');
+            $('#activity_market').closest('.form-group').show();
+            find_activies($('#activity_market'));
+        } else if ( type == 15 ) {
+            $('#w' + object_name + '_activity_id').closest('.tab-pane').addClass('active');
+            $('#activity_business').closest('.form-group').show();
+            find_activies($('#activity_business'));
+        } else if ( type == 16 ) {
+            $('#' + object_name + '_activity_id').closest('.tab-pane').addClass('active');
+            $('#activity_industry').closest('.form-group').show();
+            find_activies($('#activity_industry'));
+        }else if ( type == 17 ) {
+            $('#' + object_name + '_docking_function').closest('.tab-pane').addClass('active');
+            $('#' + object_name + '_docking_function').change();
+        }
+    }
+    $(function(){
+
+        $('#' + object_name + '_single_material_id, #' + object_name + '_multiple_material_id').change(function(){
+            materials($(this));
+        });
+        $('#' + object_name + '_docking_function').change(function(){
+            $('#' + object_name + '_goods_category_id').closest('.form-group').hide();
+            $('#' + object_name + '_good_id').closest('.form-group').hide();
+            if($(this).val() == 4){
+                $('#' + object_name + '_goods_category_id').closest('.form-group').show();
+            }else if($(this).val() == 2){
+                $('#' + object_name + '_good_id').closest('.form-group').show();
+            }
+        });
+        $('#activity_market, #activity_business, #activity_industry, #activity_website, #activity_vip').change(function(){
+            find_activies($(this));
+        });
+
+    });
+</script>

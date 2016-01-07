@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title><%= @wx_wall.activity.try(:name).presence || '微信墙' %></title>
+    <%= stylesheet_link_tag 'mobile/wwall' %>
+  </head>
+<body>
+<div class="html" id="html">
+    <div class="stage" id="stage">
+        <section id="sec-index">
+            <div class="body">
+              <header>
+                <div class="tab-box">
+                  <ul>
+                    <li class="<%= 'cur' unless @is_image %>"><a href="?msg_type=text">微信墙</a></li>
+                    <% if @pictures.count > 0 %>
+                      <li class="<%= 'cur' if @is_image %>"><a href="?msg_type=image">照片</a></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </header>
+              <div class="content <%= @is_image ? 'photo' : 'message' %>">
+                <ul>
+                  <% if @is_image %>
+                    <% @pictures.each do |picture| %>
+                      <li><%= image_tag qiniu_img_url(picture.sn) %></li>
+                    <% end %>
+                  <% else %>
+                    <%= render partial: 'message', collection: @messages, as: :message %>
+                    <div class="line"></div>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+        </section>
+    </div>
+</div>
+<% unless @is_image %>
+  <%= javascript_include_tag 'jquery' %>
+  <script>
+    //底部上拉刷新
+    var can_pull = true;
+    document.addEventListener("touchmove",function(e){
+        var url = location.href, message_id = $('.content li:first').data('id');
+        url += ( url.indexOf('?') == -1  ? '?' : '&');
+        url += 'message_id=' + message_id;
+        if ( can_pull ) {
+          can_pull = false;
+          $.getScript(url);
+        }
+    });
+  </script>
+<% end %>
+</body>
+</html>

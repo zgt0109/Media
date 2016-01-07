@@ -1,0 +1,44 @@
+<section class="sec-index">
+  <header class="box">
+    <div class="mod-nav">
+      <%= link_to "返回",mobile_wmall_shop_path(auth_params.merge(id: params[:id]))%>
+      <span>列表</span>
+    </div>
+  </header>
+  <div class="body" id='ractive_shop_products_container'>
+  </div>
+</section>
+
+<script id='ractive_shop_products_template' type='text/ractive'>
+  {{#products}}
+    <a class="mod-product" href="{{url}}">
+      <div class="list-img">
+        <img src="{{pic_url}}">
+      </div>
+      <div class="list-text">
+        <b>{{name}}</b>
+        <span class="fred"><small>会员价：￥</small>{{price}}</span>
+      </div>
+    </a>
+  {{/products}}
+  {{^products}}
+    <div class="mod-null">这家店铺太懒了，还没有添加商品！</div>
+  {{/products}}
+</script>
+<script>
+  $(function(){
+
+    var shop_products = fetch_wmall_data({path: "/api/wmall/products/shop.json"}, {supplier_id: '<%= session[:supplier_id] %>', shop_id: '<%= params[:id] %>'}, options = {}) || null
+    var ractive_shops = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_shop_products_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_shop_products_template',
+
+      // Here, we're passing in some initial data
+      data: {products: shop_products}
+    });
+  })
+</script>

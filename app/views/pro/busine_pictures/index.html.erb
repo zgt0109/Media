@@ -1,0 +1,54 @@
+<style>
+    #faceButton {
+        margin-left: 20px;
+        color: black;
+    }
+    .upload-img span img {
+        height: 90px;
+        width: 160px;
+    }
+    .poto-busniess .list-img {
+        height: 111px;
+        width: 200px;
+    }
+</style>
+
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent">轮播图片</a>
+<% end %>
+
+
+<div id="cont4" class="cont">
+<div class="box-photo fl" id="photoList">
+
+  <div class="photo-li li-add" style="width: 235px; height: 133.33333333333334px;">
+    <a class="btn-add" onclick="popUrl(this)" data-name="name" data-w="800" data-h="500" data-title="新增图片" data-url="<%= new_busine_picture_path %>">
+      <span>添加图片</span>
+    </a>
+  </div>
+
+  <% @pictures.each do |picture| %>
+  <div class="photo-li" id="photo_<%= picture.id %>" style="width: 235px; height: 133.33333333333334px;">
+      <div class="li-img">
+        <%= image_tag(picture.pic.thumb) if picture.pic? %>
+      </div>
+      <div class="li-btn">
+        <div class="li-p" data-id="21" data-title="">
+          <span class="fl" style="width: 80%;"></span>
+          <span class="fr" style="display: block;">
+            <a class="btn-edit" onclick="popUrl(this)" data-name="name" data-w="800" data-h="500" data-title="编辑图片" data-url="<%= edit_busine_picture_path(picture) %>">
+            </a>
+            <%= link_to '', busine_picture_path(picture), method: :delete, confirm: '确定删除？', class: "btn-detele", remote: true %>
+          </span>
+        </div>
+        <div class="li-bg"></div>
+      </div>
+  </div>
+  <% end %>
+
+</div>
+</div>

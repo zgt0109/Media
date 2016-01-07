@@ -1,0 +1,308 @@
+<%= form_for @vip_care, validate: true, html: {id: 'vip_care_form'} do |f| %>
+    <%= hidden_field_tag :given_coupon_ids, @vip_care.given_coupon_ids %>
+    <%= hidden_field_tag :given_gift_ids, @vip_care.given_gift_ids %>
+  <div class="modal-body" xmlns="http://www.w3.org/1999/html">
+        <div class="alert alert-block alert-success ">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+                <li>1、节日类型中，“生日”类型若用户领卡时未填写则无法获取会员的生日信息；</li>
+                <li>2、若“赠送类型”选择“赠送积分”，请在通知内容中告知用户务必在当月将赠送的积分使用完毕，过期将作废；</li>
+                <li>3、优惠券、礼品券张数小于发送对象的人数时，系统会将券随机发送给选中的会员，收到券的会员才能收到你的站内信通知；</li>
+            </ul>
+        </div>
+        <div class="form-group">
+            <label>节日名称<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <%= f.text_field :name, class: 'col-xs-12', maxlength: 20, placeholder: '建议6个字以内', validate: true %>
+            </div>
+        </div>
+        <div class="radioTab">
+            <div>节日类型<span class="required-star">*</span></div>
+            <label>
+                 <%= f.radio_button :category, 1, checked: @vip_care.new_record? || @vip_care.festival?, class: :ace, data: { toggle: :radioTab, target: :usualField } %>
+                <span class="lbl">节日</span>
+            </label>
+            <label>
+                <%= f.radio_button :category, 2, checked: @vip_care.birthday?, class: :ace, class: :ace, data: { toggle: :radioTab, target: :customField } %>
+                <span class="lbl">生日</span>
+            </label>
+        </div>
+        <div class="form-group category_1 categories">
+            <label>节日时间<span class="required-star">*</span></label>
+            <div class="clearfix">
+                <div class="input-group no-padding-left no-padding-right">
+                    <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+                    <%= f.text_field :care_day, class: 'input-xlarge care_date datepicker' %>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group vip_user_by_group category_1 categories">
+            <label>发送对象</label>
+            <div>
+              <%= render 'biz/vip_cares/given_group_options', f: f, giver: @vip_care %>
+            </div>
+        </div>
+
+        <div class="form-group category_2 categories">
+            <label>发送对象</label>
+            <div>
+                <select id="vip_care_care_month" name="vip_care[care_month]">
+                  <%= content_tag :option, value: '' do %>
+                    请选择发送对象
+                  <% end %>
+                  <%= options_for_select((1..12).map{|a|[a.to_s+"月份生日的会员(#{vip_user_count_by_birthday_month(a)}人)",a,{'data-users' => vip_user_count_by_birthday_month(a)}]},  selected: @vip_care.care_month) %>
+                </select>
+            </div>
+        </div>
+
+        <div class="radioTab select_given_type">
+            <div>赠送类型<span class="required-star">*</span></div>
+            <label class="col-xs-12">
+                <%= f.radio_button :given_type, 1, checked: @vip_care.new_record? || @vip_care.point?, class: 'ace given_type', data: { toggle: :radioTab, target: :usualField } %>
+                <span class="lbl">赠送积分</span>
+                <%= f.number_field :given_points, class: 'input-small', maxlength: 20, min: 1 %> 分
+            </label>
+            <% if @vip_care.respond_to?(:old_coupon?) %>
+            <label class="col-xs-12">
+                 <%= f.radio_button :given_type, 2, checked: @vip_care.old_coupon?, disabled: @coupons.blank?, class: 'ace given_type given_coupons', data: { toggle: :radioTab, target: :customField } %>
+                <span class="lbl">赠送优惠券</span>
+                <div class="row given_coupons given_types given_type_2">
+                    <%- @coupons.each do |coupon| %>
+                      <div class="checkbox-inline">
+                          <label class="block">
+                              <input type="checkbox" name="vip_care[given_coupon_ids][]" value="<%= coupon.id %>" class="ace">
+                              <span class="lbl"><%= coupon.name %>
+                                (<span class="coupon_num"><%= coupon.activity_property.coupon_count - coupon.activity_consumes.size %></span>)
+                              </span>
+                          </label>
+                      </div>
+                    <%- end %>
+                    <label id='coupon_info'><%= '没有可选的有效优惠券，请前往“营销互动-->优惠券”添加' if @coupons.blank? %></label>
+                </div>
+            </label>
+            <% end %>
+            <% if @vip_care.respond_to?(:gift?) %>
+            <label class="col-xs-12">
+                <%= f.radio_button :given_type, 3, checked: @vip_care.gift?, class: 'ace given_type', disabled: @point_gifts.blank?, data: { toggle: :radioTab, target: :customField } %>
+                <span class="lbl">赠送礼品券</span>
+                <div class="row given_types given_type_3">
+                  <%- @point_gifts.each do |gift| %>
+                    <div class="checkbox-inline">
+                        <label class="block">
+                            <input type="checkbox" name="vip_care[given_gift_ids][]" value="<%= gift.id %>" class="ace">
+                            <span class="lbl"><%= gift.name %></span>
+                        </label>
+                    </div>
+                  <%- end %>
+                  <label id='gift_info'><%= '没有可选的有效礼品券，请前往“微会员卡-->礼品管理”添加' if @point_gifts.blank? %></label>
+                </div>
+            </label>
+            <% end %>
+            <% if @vip_care.respond_to?(:coupon?) %>
+            <label class="col-xs-12">
+                <%= f.radio_button :given_type, 4, checked: @vip_care.coupon?, disabled: current_coupon_name_ids.blank?, class: 'ace given_type' %>
+                <span class="lbl">赠送优惠券</span>
+                <%= f.select :given_coupon_id, current_coupon_name_ids.presence || [['无可用优惠券', '']] %>
+            </label>
+            <% end %>
+        </div>
+        <div class="form-group">
+            <label class="control-label">消息发送时间<small class="help-inle test text-warning line-height-32"> 若不填则为即时发送</small></label>
+            <div class="clearfix">
+                <div class="input-group no-padding-left no-padding-right">
+                    <span class="input-group-addon">
+                    <i class="icon-calendar bigger-110"></i>
+                    </span>
+                    <%= f.text_field :message_send_at, class: 'input-xlarge datepicker care_date' %>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>站内信通知内容<span class="required-star">*</span></label>
+            <small class="help-inle test text-warning line-height-32">
+                动态参数
+                <span class="fgreen dynamic_options"><a>{会员姓名}</a><a>{商户名称}</a><a>{礼品券}</a><a>{优惠券}</a></span>
+            </small>
+            <div class="clearfix">
+                <%= f.text_area :message_body, rows: 5, class: "col-xs-12" %>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-sm btn-primary submit-care" data-fn="submit">确定</button>
+        <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+    </div>
+<% end %>
+
+
+
+<% content_for :custom_js do %>
+
+  <script type="text/javascript">
+    <% if action_name == 'show' %>
+    $('input, select, textarea').attr('disabled', true);
+    <% end %>
+    $(function(){
+
+      (show_or_hide_category_options = function( category ) {
+          $('.categories').hide();
+          $('.category_' + category).show();
+      })( $('input[name="vip_care[category]"]:checked').val() );
+
+      $('input[name="vip_care[category]"]').click(function(event) {
+        show_or_hide_category_options( $(this).val() );
+      });
+
+      (show_or_hide_given_type_options = function( type ) {
+          $('.given_types').hide();
+          $('.given_type_' + type).show();
+      })( $('input[name="vip_care[given_type]"]:checked').val() );
+      $('input[name="vip_care[given_type]"]').click(function(event) {
+        show_or_hide_given_type_options( $(this).val() );
+      });
+
+      <%- if action_name != "show" %>
+        $('.dynamic_options a').on('click', function(){
+          var strLength = $('#vip_care_message_body').val($('#vip_care_message_body').val() + $(this).text()).focus().val().length;
+          $('#vip_care_message_body')[0].setSelectionRange(strLength, strLength);
+        });
+      <%- end %>
+
+
+      $('.vip_care_category input').on('change', function(){
+        var is_festival = $('#vip_care_category_1').is(':checked');
+        if(is_festival){
+          $('.vip_user_by_birthday_month').hide();
+          $('.vip_user_by_group').show();
+          $('.care_day').show();
+        }else{
+          $('.vip_user_by_group').hide();
+          $('.vip_user_by_birthday_month').show();
+          $('.care_day').hide();
+        }
+      });
+
+
+      $('.submit-care').on('click', function(event){
+        var is_festival = $('#vip_care_category_1').is(':checked');
+        if(is_festival){
+          var care_day = $('#vip_care_care_day').val();
+          if( !care_day ){
+            addErrorMessage($('#vip_care_care_day'), '不能为空');
+          }
+        }else{
+          if($('#vip_care_care_month').val() == ''){
+            showTip('warning', '请选择发送对象');
+            return false;
+          }
+        }
+        var $start_time = $('#vip_care_message_send_at');
+        var start_time  = $start_time.val();
+        if ( Date.parse(start_time) < new Date().getTime() ) {
+          addErrorMessage( $start_time, '定时发送时间不能小于当前时间' );
+          return false;
+        }
+        var selected_given_type = $('.select_given_type input[type=radio]:checked').val();
+        if(selected_given_type == 1 ){
+          if($('#vip_care_given_points').val() > 0){
+            $('#vip_care_form').submit();
+          }else{
+            addErrorMessage($('#vip_care_given_points'), '赠送积分只能是大于0的数字');
+          }
+        }else{
+          if(selected_given_type == 2 ){
+            <%- if @coupons.present? %>
+              if($('.given_coupons input:checked').length){
+                $.each($('.given_coupons input:checked'), function(index, coupon){
+                  var num = $(this).next('.coupon_num').text();
+                  if(is_festival){
+                    var users = $('#vip_care_given_group_id option:selected').data('users');
+                  }else{
+                    var users = $('#vip_care_care_month option:selected').data('users');
+                  }
+                  if(users > num){
+                    couponConfirm();
+                  }else{
+                    $('#vip_care_form').submit();
+                  }
+                });
+              }else{
+                showTip('warning', '请勾选需要赠送的优惠券');
+              }
+            <%- else %>
+              showTip('warning', '没有可选的有效优惠券');
+            <%- end %>
+          }else{
+            <%- if @point_gifts.present? %>
+              if($('.given_gifts input:checked').length){
+                $('#vip_care_form').submit();
+              }else{
+                showTip('warning', '请勾选需要赠送的礼品券');
+              }
+            <%- else %>
+              showTip('warning', '没有可选的有效礼品券');
+            <%- end %>
+          }
+        }
+      });
+      $('#vip_care_care_day').on('keyup', function(){
+        if($(this).val()){
+          removeErrorMessage($(this));
+        }else{
+          addErrorMessage($(this), '不能为空');
+        }
+      });
+      $('#vip_care_given_points').on('keyup', function(){
+        var points = $(this).val(); //number
+        if(points){
+          removeErrorMessage($(this));
+        }else{
+          addErrorMessage($(this), '赠送积分只能是大于0的数字');
+        }
+      });
+
+        $( ".care_date" ).datepicker({
+          yearRange: "2014:2024",
+          minDate: "+0d"
+        });
+        $('.vip_care_category input:checked').change();
+        $('.select_given_type input[type=radio]:checked').click();
+        <%- unless @vip_care.new_record? %>
+        <% if @vip_care.respond_to?(:old_coupon?) %>
+          <%- if @vip_care.old_coupon? %>
+            var given_coupon_ids = $('#given_coupon_ids').val().split(' ');
+            given_coupon_ids.forEach(function(entry){
+              $('.given_coupons input[value='+entry+']').attr('checked', true)
+            });
+          <%- elsif @vip_care.gift? %>
+            var given_gift_ids = $('#given_gift_ids').val().split(' ');
+            given_gift_ids.forEach(function(entry){
+              $('.given_gifts input[value='+entry+']').attr('checked', true)
+            });
+          <%- end %>
+        <%- end %>
+        <%- end %>
+
+      function couponConfirm() {
+        var w = 350, h = 150, title = "系统提示";
+        var randomId = new Date().getTime();
+        var a_tag = "<a class='btn btn-biger btn-orange' " + " id='" + randomId + "' onclick='$(\"#vip_care_form\").submit()'>确认发送</a>";
+        var bd="<div class='box-form form-row'><form>" + '优惠券不足，系统会将优惠券随机发送给选中的会员，你也可以选择其他数量充足的优惠券发放' + "</p><p class='tcenter'>" + a_tag + "<a class='btn btn-biger btn-close' style='margin-left:5px'>选择其他优惠券</a></p></form></div>";
+
+        if( $("#pop-delete") ){ $("#pop-delete").remove(); }
+        if( h <= 0 ){ h= parseInt(window.screen.availHeight) * 0.8; }
+
+        var html='<div class="pop" id="pop-delete"><div class="pop-bg"></div><div class="pop-border" style="width:'+(w+20)+'px; height:'+(h+20)+'px; margin:'+-(h+20)/2+'px 0 0 '+-(w+20)/2+'px;"></div><div class="pop-bd" style="width:'+w+'px; height:'+h+'px; margin:'+-h/2+'px 0 0 '+-w/2+'px;"><div class="hd">'+title+'<a class="btn-close"></a></div><div class="bd">'+bd+'</div></div></div>';
+        $("body").append(html);
+        var parent_pop = $('#pop-delete').fadeIn();
+        $(".btn-close").unbind('click').click(function() {
+          parent_pop.fadeOut(function() { parent_pop.remove(); });
+        });
+      }
+    });
+  </script>
+
+<% end %>
+

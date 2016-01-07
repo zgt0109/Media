@@ -1,0 +1,30 @@
+<div class="index">
+  <% website_menus.in_groups_of(6, false) do |menus| %>
+    <div class="index-l">
+      <% menus[0..1].each_with_index do |menu, index| %>
+          <%= link_to menu_url(menu), class: "box mod-index box-#{index+1}" do %>
+            <p>
+              <small><%= menu.title %></small>
+              <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+            </p>
+          <% end %>
+      <% end %>
+    </div>
+    <div class="index-r">
+      <% menus[2..4].to_a.each_with_index do |menu, index| %>
+          <%= link_to menu_url(menu), class: "box mod-index box-#{index+3}" do %>
+              <p>
+                <small><%= menu.title %></small>
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+              </p>
+          <% end %>
+      <% end %>
+    </div>
+      <%= link_to menu_url(menus[5]), class: "box mod-index box-6" do %>
+          <p>
+            <%= menus[5].pic_or_icon :has_title => false, :pic_type => "custom" %>
+            <small><%= menus[5].title %></small>
+          </p>
+      <% end if menus[5].present? %>
+  <% end %>
+</div>

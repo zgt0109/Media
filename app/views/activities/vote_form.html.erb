@@ -1,0 +1,104 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微互动', activity_forms_path %></li>
+          <li><%= link_to '微投票', votes_activities_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+      <div class="page-content">
+        <div class="row">
+
+          <div class="col-xs-12 ">
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微投票。</li>
+              </ul>
+            </div>
+          </div>
+
+
+          <div class="col-md-12">
+            <%= form_for @activity, url: @activity_url, validate: true do |activity| %>
+                <%= activity.hidden_field :activity_type_id %>
+                <%= activity.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
+                <%= activity.hidden_field :status %>
+                <%= hidden_field_tag :allow_show_vote_percent, @activity.allow_show_vote_percent? ? 0 : 1, name: 'activity[extend][allow_show_vote_percent]' %>
+                <%= hidden_field_tag :allow_show_vote_count, @activity.allow_show_vote_count? ? 1 : 0, name: 'activity[extend][allow_show_vote_count]' %>
+
+                <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述', wx_pic: @activity.pic_url %>
+
+                <div class="col-xs-12 col-md-6 col-lg-7">
+                  <%= render "weixin_setting", activity: activity, data_img: (@activity.pic_url.presence || @activity.default_pic_url), pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key,
+                             include_activity_date: 1, include_description: nil, include_extend_closing_note: nil%>
+
+                  
+
+                  <div class="form-group">
+                    <%= activity.fields_for :activity_setting, @activity.new_record? ? @activity.build_activity_setting : @activity.activity_setting do |as| %>
+                      <% ActivitySetting.user_type_options.each do |m| %>
+                        <label class="line-height-32 margin-right-10">
+                          <%= as.radio_button :user_type, m[1], class: 'ace' %>
+                          <span class="lbl"><%= m[0] %></span>
+                        </label>
+                      <% end %>
+		      <br><br>
+                    <% end %>
+                    <label>
+                      <input type="checkbox" <%if @activity.allow_show_user_tel? %> checked <% end %> class="ace allow_show_user_tel">
+                      <span class="lbl">投票时用户填写姓名、手机号</span><small class="help-inline text-warning line-height-32"></small>
+                    </label>
+                    <%= hidden_field_tag :allow_show_user_tel, @activity.allow_show_user_tel? ? 0 : 1, name: 'activity[extend][allow_show_user_tel]' %>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label><%= check_box_tag :allow_repeat_apply, 1, @activity.allow_repeat_apply?, class: "ace" %><span class="lbl">允许每天投票</span><small class="help-inline text-warning line-height-32">允许同一个微信帐号每天投票</small></label>
+                  </div>
+
+                <!--div class="form-group">
+                  <label class="control-label"><%#= activity.check_box :require_wx_user, class: "ace" %><span class="lbl">未关注可参与</span></label>
+                </div-->
+
+                  <div class="form-group">
+                    <%= activity.hidden_field :activity_type_id  %>
+                    <%= activity.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
+                    <%= activity.submit "#{activity.object.new_record? ? '题目设置' : '保存'}", class: 'btn btn-sm btn-primary'%>
+                    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals" onclick="javascript: window.location.href = '<%= votes_activities_path %>'">取消</button>
+                  </div>
+                </div>
+
+                <div class="col-xs-12 col-md-6 col-lg-7" style="display: none;">
+                  <span>最多能选择几个选项<em>*</em></span>
+                  <%= activity.fields_for :activity_property do |activity_property| %>
+                    <%= activity_property.text_field :get_limit_count, validate: true, class: "input-text", disabled: (@activity.persisted? ? true : false), value: activity_property.object.get_limit_count > 0 ?  activity_property.object.get_limit_count : 1 %>
+                    <%= activity_property.hidden_field :activity_type_id %>
+                  <% end %>
+                </div>
+
+            <% end %>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('.allow_show_user_tel').click(function(){
+              if($(this).is(':checked')){
+                  $('#allow_show_user_tel').val(0);
+              }else{
+                  $('#allow_show_user_tel').val(1);
+              }
+          });
+      });
+    </script>
+<% end %>

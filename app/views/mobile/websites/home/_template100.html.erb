@@ -1,0 +1,114 @@
+<div class="banner">
+  <div class="banner-img">
+    <%= image_tag @website_setting.bg_image if @website_setting.bg_image.present? %>
+  </div>
+  <div class="logo">
+    <div class="logo-img">
+      <%= image_tag website.logo if website.logo? %>
+    </div>
+    <h1><%= website.name %></h1>
+  </div>
+</div>
+
+<div class="index-tab">
+  <div class="index-tab-box" id="tab-box">
+    <ul>
+      <% menus , index = [], 0 %>
+      <% website_menus.each do |menu| %>
+        <%
+          next unless menu.multiple_graphic? || menu.has_sub_menus?
+          next if menu.multiple_graphic? && menu.menuable.blank?
+          menus << menu
+          index += 1
+        %>
+        <li class="<%= 'active' if index == 1 %>">
+          <%= link_to menu.title, 'javascript:;' %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<div class="index" id="indexList">
+  <ul>
+    <% menus.each do |menu| %>
+        <li>
+          <% if menu.multiple_graphic? %>
+              <% main_material = menu.menuable %>
+              <%= link_to material_type_url(main_material, menu), class: 'box mod-index' do %>
+                <div class="p">
+                  <i><%= image_tag main_material.pic.large %></i>
+                  <b><%= main_material.title %></b>
+                </div>
+              <% end %>
+              <% main_material.children.each do |child| %>
+                  <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
+                      <div class="p">
+                        <i><%= image_tag child.pic.large %></i>
+                        <b><%= child.title %></b>
+                      </div>
+                  <% end %>
+              <% end %>
+          <% else %>
+              <% menu.sub_menus.each do |child| %>
+                  <%= link_to menu_url(child), class: 'box mod-index' do %>
+                      <div class="p">
+                        <% if child.pic? %>
+                            <i><%= image_tag child.pic.thumb %></i>
+                        <% else %>
+                            <i class="<%= child.try(:font_icon) %>"></i>
+                        <% end %>
+                        <b><%= child.title %></b>
+                      </div>
+                  <% end %>
+              <% end %>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<script>
+    var thisSwipe,optSwipe;
+    function toolSwipe(idNmane){
+        optSwipe=new Swipe(document.getElementById(idNmane), {
+            speed:500,
+            callback: function(index,element){
+                var len = $(this.element).find("li").length;
+                len = len-3;
+                if(element >=len){
+                    optSwipe.slide(len);
+                }
+            }
+        });
+        return optSwipe;
+    }
+    function divSwipe(idNmane){
+        thisSwipe=new Swipe(document.getElementById(idNmane), {
+            speed:500,
+            callback: function(){
+                var index = this.index,
+                        len = this.length;
+                if(index > 0 && index < len -1){
+                    optSwipe.slide(index-1);
+                }
+                $(".index-tab-box li").removeClass("active").eq(index).addClass("active");
+            }
+        });
+        return thisSwipe;
+    }
+    $(function(){
+        divSwipe("indexList");
+        toolSwipe("tab-box");
+        $("#tab-box a").on("click",function(){
+            var $this = $(this).parent(),
+                    $len = $this.parent().find("li").length,
+                    $index = $this.index();
+            $this.addClass("active").siblings().removeClass("active");
+            if($index>0&&$index<$len-1){
+                optSwipe.slide($index-1);
+            }
+            thisSwipe.slide($index);
+        })
+    });
+</script>

@@ -1,0 +1,38 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="index">
+
+  <% left_menus, right_menus = [], [] %>
+
+  <% website_menus.in_groups_of(12, false).each do |menus| %>
+      <% menus.each_with_index do |menu, index| %>
+          <% if [0, 3, 5, 7, 10].include? index %>
+              <% left_menus << menu %>
+          <% else %>
+              <% right_menus << menu %>
+          <% end %>
+      <% end %>
+  <% end %>
+
+
+  <div class="index-l">
+    <% left_menus.each do |menu| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <p>
+              <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+            </p>
+        <% end %>
+    <% end %>
+  </div>
+
+  <div class="index-r">
+    <% right_menus.each do |menu| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <p>
+              <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+            </p>
+        <% end %>
+    <% end %>
+  </div>
+
+</div>

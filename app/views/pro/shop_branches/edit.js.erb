@@ -1,0 +1,9 @@
+var bd = '<%= j render "form" %>';
+name = 'question';
+w = 400;
+h = 500;
+title = '编辑分店'
+$('#pop-' + name).remove()
+var html='<div class="pop" id="pop-'+name+'"><div class="pop-bg"></div><div class="pop-border" style="width:'+(w+20)+'px; height:'+(h+20)+'px; margin:'+-(h+20)/2+'px 0 0 '+-(w+20)/2+'px;"></div><div class="pop-bd" style="width:'+w+'px; height:'+h+'px; margin:'+-h/2+'px 0 0 '+-w/2+'px;"><div class="hd">'+title+'<a class="btn-close"></a></div><div class="bd">'+bd+'</div></div></div>';
+$("body").append(html);
+$("#pop-"+name).fadeIn();

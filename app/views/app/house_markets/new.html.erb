@@ -1,0 +1,116 @@
+<body class="list">
+<div class="html">
+<div class="main">
+  <header>
+    <a class="ico tleft" href="javascript:history.go(-1);"><img src="/assets/house_market/12.png"/></a>
+    <h1>预约看房报名</h1>
+  </header>
+  <section>
+    <%= form_for @house_bespeak,:url => app_house_markets_path,:validate => true do |f|  %>
+      <%= f.hidden_field :wx_user_id %>
+      <div class="box-form">
+        <p>
+          <span>姓名：</span>
+                <span class="form-input input-name">
+                  <%= f.text_field :name, :placeholder => "请输入您的真实姓名"%>
+                </span>
+        </p>
+        <p>
+          <span>手机号：</span>
+                <span class="form-input input-phone">
+                    <%= f.text_field :mobile, :placeholder => "请输入您的手机号" %>
+                </span>
+        </p>
+        <p>
+          <span>预约时间：</span>
+                <span class="form-input input-date">
+                <%#= f.date_select :order_time,:start_year => 2010, :use_month_numbers => true  %>
+                  <%= date_for_select('house_bespeak[order_time]', id: 'select-s', class: '')%>
+                <i><img src="/assets/house_market/16.png"/></i>
+                </span>
+                <span class="form-input input-select">
+                <!--<select>-->
+                  <!--<option value="00">上午</option>-->
+                  <!--<option value="01">下午</option>-->
+
+                <!--</select>-->
+                <%= time_select("order_for_time",'', :time_separator => "") %>
+                <i><img src="/assets/house_market/17.png"/></i>
+                </span>
+          <%#= f.date_select :order_time,:start_year => 2010, :use_month_numbers => true  %>
+          <%#= date_for_select('house_bespeak[order_time]', id: 'select-s', class: '')%>
+        </p>
+        <p class="box-number">
+          <span>随行人数：</span>
+          <i class="number-minus" onclick="change_num(1);">-</i><%= f.text_field :people_count %><i onclick="change_num(2);">+</i>
+        </p>
+        <p>
+          <span>备注：</span>
+          <%= f.text_area :description, :placeholder=> "有什么特别想告诉我们的，请在这里填写", :rows => 5 %>
+        </p>
+        <p><%= f.submit "提交报名" , :class => "form-submit btn-submit" %></p>
+      </div>
+    <% end %>
+  </section><!-- section end -->
+</div><!-- main end -->
+<script>
+  function change_num(value){
+      var num_value = parseInt($("#house_bespeak_people_count").val());
+      if(value == 1){
+         if(num_value >= 2){num_value -= 1;}
+      }else if(value == 2){
+         num_value += 1;
+      }
+      $("#house_bespeak_people_count").val(num_value);
+  }
+  // 手机号码正则表达式
+  function test_mobile_number(mobile_number) {
+      if (mobile_number == undefined) {
+          return false;
+      }
+      var mobile_reg = /^\d{11}$/;
+      if (mobile_reg.test(mobile_number)){
+          return true;
+      };
+      return false;
+  }
+  $(".btn-submit").click(function(){
+      if(!$("#house_bespeak_name").val() ){
+          alert("姓名不能为空");
+          $("#house_bespeak_name").focus();
+          return false;
+      }else if (!$("#house_bespeak_mobile").val()){
+          alert("手机号码不能为空");
+          $("#house_bespeak_mobile").focus();
+          return false;
+      }else if (!test_mobile_number($("#house_bespeak_mobile").val() ) ){
+          alert("手机号码格式不正确")
+          $("#house_bespeak_mobile").focus();
+          return false;
+
+      }
+  });
+
+  $("#order_for_time__5i").css("display","none");
+
+  $(function(){
+      var header=$("header");
+      $("input,textarea,select").focus(function(){
+          header.css({"position":"absolute"});
+      });
+      $("input,textarea,select").blur(function(){
+          header.css({"position":"fixed"});
+      });
+  });
+
+</script>
+</div>
+  <%= @supplier.try(:piwik_js_code) %>
+</body>
+<style>
+
+    .box-form span.form-input {
+        background-position: 7px center;
+
+    }
+</style>

@@ -1,0 +1,39 @@
+<%= javascript_include_tag "mobile/lib/iscroll" %>
+<div class="index" id="indexList">
+  <ul class="index-wrap">
+    <% website_menus.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box mod-index', style: "background-image:url(#{menu.pic.try(:custom)});" do %>
+              <div class="index-name"><%= menu.title %></div>
+              <div class="index-line"></div>
+              <div class="index-icon"><i class="<%= menu.font_icon %>"></i></div>
+              <div class="index-summary"><%= menu.summary %></div>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        vcScroll();
+        <% if @website_setting.bg_image.present? %>
+        // 静态背景图
+        //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+        <% end %>
+    });
+    function vcScroll (id) {
+        var myScroll = new IScroll("#indexList", {
+            scrollX: true,
+            scrollY: false,
+            mouseWheel: true,
+            scrollbars: false,
+            mouseWheel: true,
+            interactiveScrollbars: true,
+            shrinkScrollbars: 'scale',
+            fadeScrollbars: true,
+            click: true
+        });
+        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+    }
+</script>

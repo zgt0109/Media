@@ -1,0 +1,346 @@
+.chose_content {
+	margin:0 1%;
+	padding:2% 0;
+	display:table;
+	width:98%;
+	margin:0 auto;
+}
+.chose_content a {
+	display:table-row;
+	width:100%;
+	min-height:44px;
+}
+.chose_content a p {
+	font-size: 12px;
+	display:table-cell;
+	vertical-align:middle;
+	border: 1px solid #c2c2c2;
+	padding:5px 5px 5px 20px;
+}
+.chose_content a p span,
+.chose_content a p b{ display:inline-block;}
+
+.chose_content a p.name {
+	color: #444;
+	width:30%;
+	background: url(/assets/shop_order/bg_left.png) no-repeat 8px center #FFF;
+	background-size: auto 35px;
+	border-radius:5px 0 0 5px;
+	border-right:0;
+}
+.chose_content a p.name span{ width:100%;}
+.chose_content a p.num {
+	color: #888;
+	width:63%;
+	border-left: 1px dotted #c2c2c2;
+	background:url(/assets/shop_order/bg_ico_gored.png) no-repeat 97% center #fff;
+	background-size: auto 12px;
+	border-radius:0 5px 5px 0;
+	padding:5px 20px 5px 10px;
+}
+.chose_content a p.num b{ width:22%; float:left;}
+.chose_content a p.num span{ width:78%; float:left;}
+
+.chose_content a:hover p.name{
+	background: url(/assets/shop_order/bg_left.png) no-repeat 8px center #e8645a;
+	background-size: auto 35px;
+}
+.chose_content a:hover p.num{
+	background: url(/assets/shop_order/bg_ico_gowri.png) no-repeat 97% center #e8645a;
+	background-size: auto 12px;
+}
+.chose_content a:hover p {
+	color: #fff;
+}
+.margin{ width:100%; height:5px;}
+
+.details_content,
+.menued_content{
+	padding: 16% 6px 6px;
+}
+.details-title{ background:#c7cfd0; color:#444; height:26px; line-height:26px; padding:0 10px;}
+.details_content .tall,
+.menued_content .tall{
+	background: #fff;
+	border-radius: 5px 5px;
+	position: relative;
+	overflow: hidden;
+	border:1px solid #c2c2c2;
+}
+.details_content .tall .fl,
+.menued_content .tall .fl{ width:64%; float:left; overflow:hidden; padding:10px 0 10px 10px;}
+.details_content .tall .fr,
+.menued_content .tall .fr{ width:30%; float:right; padding:10px 10px 10px 0; overflow:hidden; text-align:right;}
+.details_content .tall .fr img,
+.menued_content .tall .fr img{ margin:0 0 10px 0;}
+.details_content .tall p,
+.menued_content .tall p{
+	padding: 5px 0;
+	font-size: 12px;
+	line-height: 12px;
+}
+.details_content .tall p span,
+.menued_content .tall p span {
+	display: inline-block;
+	color: #444;
+}
+.details_content .tall input,
+.menued_content .tall input{ border:1px solid #ccc; width:80%; line-height:28px;}
+.details_content .tall p span.pre,
+.menued_content .tall p span.pre {
+	width: 30%;
+	white-space: pre;
+	color: #666;
+}
+.details_content .tall p span.red,
+.menued_content .tall p span.red {
+	color: #e8645a;
+}
+.details_content .tall a.cal img,
+.menued_content .tall a.cal img {
+	max-height: 30px;
+}
+.details_content .list,
+.menued_content .list {
+	background: #fff;
+	margin: 10px 0 0;
+	border-radius: 5px 5px;
+	overflow: hidden;
+	border:1px solid #c2c2c2;
+}
+.details_content .list p,
+.menued_content .list .item {
+	padding: 15px 10px;
+	border-bottom: 1px dotted #c2c2c2;
+	font-size: 12px;
+	line-height: 14px;
+	color: #888;
+}
+.details_content .list p:last-child,
+.menued_content .list .item:last-child{
+	border: none;
+}
+.details_content .list p span {
+	display: inline-block;
+}
+.details_content .list p span.left {
+	width: 40%;
+}
+.details_content .list p span.midd {
+	width: 40%;
+}
+.details_content .list p span.midd em {
+	color: #444;
+	font-style: normal;
+}
+.reserve {
+	background: #fff;
+}
+.reserve_content {
+	padding: 2%;
+	width:96%;
+	float:left;
+}
+.reserve_content .topimg {
+	 position:relative;
+}
+.reserve_content .topimg img {
+	max-width: 100%;
+}
+.reserve_content .topimg p {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 7px;
+	background: url(/assets/shop_order/bg_but_bg.png) repeat-x;
+	background-size: contain;
+}
+.reserve_content .list {
+	width: 100%;
+	margin: 0 auto;
+}
+.reserve_content .list p, .reserve_content .list a {
+	display: block;
+	border-bottom: 2px dotted #c2c2c2;
+	padding: 15px 20px 15px 30px;
+	white-space: nowrap;
+	color: #666;
+	font-size: 12px;
+	line-height: 12px;
+}
+.reserve_content .list p span, .reserve_content .list a span {
+  color: #888;
+}
+.reserve_content .list a.adress {
+  background: url(/assets/shop_order/bg_ico_adress.png) no-repeat 10px center, url(/assets/shop_order/bg_ico_gored.png) no-repeat 490px center;
+  background-size: 14px auto;
+}
+.reserve_content .list a.phone {
+  background: url(/assets/shop_order/bg_ico_phone.png) no-repeat 10px center, url(/assets/shop_order/bg_ico_gored.png) no-repeat 490px center;
+  background-size: 14px auto;
+}
+.reserve_content .list a.adress{background: url(/assets/shop_order/bg_ico_adress.png) no-repeat 10px center, url(/assets/shop_order/bg_ico_gored.png) no-repeat 98% center; background-size: 14px auto, auto 12px;}
+.reserve_content .list a.phone{background: url(/assets/shop_order/bg_ico_phone.png) no-repeat 10px center, url(/assets/shop_order/bg_ico_gored.png) no-repeat 98% center; background-size: 14px auto, auto 12px;}
+.reserve_content .list p.time {
+	background: url(/assets/shop_order/bg_ico_time.png) no-repeat 10px center;
+	background-size: 14px auto;
+}
+.reserve_content .form {
+	width: 80%;
+	margin: 20px auto;
+	padding: 0 10%;
+	text-align:center;
+}
+.reserve_content .form p.inp {
+	height: 28px;
+	width: 256px;
+	background: url(/assets/shop_order/bg_inp_01.png) no-repeat center center;
+	overflow: hidden;
+	background-size: contain;
+	display:inline-block;
+}
+.reserve_content .form p.inp input.text {
+	display: inline-block;
+	border: none;
+	margin: 0;
+	padding: 0;
+	width: 200px;
+	color: #333;
+	padding: 0 10px 0 10px;
+	font-size: 12px;
+	line-height: 12px;
+	vertical-align: middle;
+	height: 28px;
+	background: none;
+	float: left;
+}
+.reserve_content .form p.inp input.reset {
+	display: inline-block;
+	border: none;
+	margin: 0;
+	padding: 0;
+	width: 10%;
+	height: 100%;
+	background: none;
+	cursor: pointer;
+	float: right;
+}
+.reserve_content .form p.sub {
+	margin: 10px auto;
+}
+.reserve_content .form p.sub input {
+	max-height: 35px;
+}
+.menued_content .list .item{ padding:10px 3%; width:94%; overflow:hidden; float:left;}
+.menued_content .list .item p {
+	display: inline-block;
+	font-size: 12px;
+	line-height: 16px;
+	color: #888;
+	float:left;
+}
+.menued_content .list .item p span {
+	color: #444;
+}
+.menued_content .list .item p.name {
+	width: 40%;
+}
+.menued_content .list .item p.price {
+	width: 30%;
+}
+.menued_content .list .item p.num {
+	width: 25%;
+	text-align: center;
+	position: relative;
+}
+.menued_content .list .item p.num img {
+	max-height: 20px;
+	position: absolute;
+	top: 50%;
+	margin-top: -10px;
+}
+.menued_content .list .item p.num img.jian {
+	left: 0;
+}
+.menued_content .list .item p.num img.jia {
+	right: 0;
+}
+.map_content {
+	padding: 15% 0 0;
+}
+.map_content .mapbox {
+	width: 99%;
+	margin: 0 auto;
+}
+#dituContent {
+	border: 1px solid #ccc;
+	width: 100%;
+	position:fixed;
+	height:100%;
+}
+.order_content {
+	padding: 3%;
+	width:94%;
+	float:left;
+}
+.order_content .list {
+	border-top: 2px solid #c2c2c2;
+	border-bottom: 2px solid #c2c2c2;
+}
+.order_content a {
+	display: block;
+	overflow: hidden;
+	line-height: 20px;
+	font-size: 12px;
+	color: #888;
+	background: url(/assets/shop_order/bg_ico_gored.png) no-repeat 90% center #fff;
+	border-top: 2px dotted #c2c2c2;
+	padding: 10px 0;
+}
+.order_content a:first-child {
+	border: none;
+}
+.order_content a:hover {
+	color: #fff;
+	background: url(/assets/shop_order/bg_ico_gowri.png) no-repeat 600px center #e8645a;
+}
+.order_content a p {
+	float: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.order_content a p.top {
+	width: 90%;
+	padding: 0 0 0 20px;
+}
+.order_content a p.bot {
+	width: 90%;
+	padding: 0 0 0 20px;
+}
+
+@media screen and (orientation:landscape) {
+.chose_content {
+	padding: 1%;
+}
+.chose_content a p {
+	padding: 10px 3%;
+}
+.chose_content a p.name {
+	width: 20%;
+}
+.chose_content a p.num {
+	width: 30%;
+}
+.chose_content a p.phone {
+	width: 30%;
+}
+.map_content {
+	padding: 10% 0 0;
+}
+.order_content {
+	padding: 2%;
+	width:96%;
+}
+}

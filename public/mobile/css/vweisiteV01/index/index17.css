@@ -1,0 +1,64 @@
+.box{}
+.box,
+.box a{color:#fff;}
+.index{width:100%;overflow: hidden;text-align:center;}
+.mod-index{width: 94%; overflow: hidden; display: table; margin:4% 0.8% 0 4%;}
+.mod-index p{ width: 100%; height: 100%; vertical-align: middle; display: table-cell; overflow: hidden; padding: 10px;}
+.mod-index i,
+.mod-index small{ display: block; text-align: center; width: 100%; display:block;color: #fff;}
+.mod-index small{ line-height: 20px; font-size: 14px; margin: 10px 0 0 0;overflow: hidden;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index i { height: 40px;}
+.mod-index .fa{ font-size: 40px;}
+.mod-index i img{ max-height: 100%; vertical-align: top;}
+.index-r a:nth-child(7n+1) i,
+.index-r a:nth-child(7n+1) small,
+.index-l a:nth-child(5n+3) i,
+.index-l a:nth-child(5n+3) small{ width: 50%; float: left;line-height:40px; padding: 0;}
+.index-r a:nth-child(7n+1) i,
+.index-l a:nth-child(5n+3) i{}
+.index-r a:nth-child(7n+1) .fa,
+.index-l a:nth-child(5n+3) .fa{}
+.index-l,
+.index-r{ width: 50%; float: left; overflow: hidden;}
+.index-l a{ margin-right:2%;}
+.index-r a{ margin-left: 2%;}
+.index-l a:nth-child(5n+1){ background: #f9677a; height: 132px;}
+.index-l a:nth-child(5n+2){ background: #fa801d; height: 140px;}
+.index-l a:nth-child(5n+3){ background: #22bbe9; height: 70px;}
+.index-l a:nth-child(5n+4){ background: #22bbe9; height: 140px;}
+.index-l a:nth-child(5n+5){ background: #f1c40f; height: 140px;}
+.index-r a:nth-child(7n+1){ background: #de445e; height: 60px;}
+.index-r a:nth-child(7n+2){ background: #01cad4; height: 90px;}
+.index-r a:nth-child(7n+3){ background: #23bc6a; height: 70px;}
+.index-r a:nth-child(7n+4){ background: #498cff; height: 90px;}
+.index-r a:nth-child(7n+5){ background: #23bc6a; height: 70px;}
+.index-r a:nth-child(7n+6){ background: #23bc6a; height: 70px;}
+.index-r a:nth-child(7n+7){ background: #498cff; height: 70px;}
+.index-r a:nth-child(7n+2) small,
+.index-r a:nth-child(7n+3) small,
+.index-r a:nth-child(7n+4) small,
+.index-r a:nth-child(7n+5) small,
+.index-r a:nth-child(7n+6) small,
+.index-r a:nth-child(7n+7) small{height: 20px;}
+.index-l a:nth-child(5n+1) small,
+.index-l a:nth-child(5n+2) small,
+.index-l a:nth-child(5n+4) small,
+.index-l a:nth-child(5n+5) small{max-height: 40px;}
+.index-l a:nth-child(5n+3) small,
+.index-r a:nth-child(7n+1) small{ margin: 0;max-height: 40px;}
+.index-r a:nth-child(7n+2) i,
+.index-r a:nth-child(7n+4) i{margin: 5px 0 0 0;}
+
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+    .index-l a:nth-child(5n+2),
+    .index-l a:nth-child(5n+4),
+    .index-l a:nth-child(5n+4){ height: 146px;}
+}

@@ -1,0 +1,169 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <% if can_see? %>
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <li><%= link_to "微餐饮", shops_path(industry_id: 10001) %></li>
+        <li><%= link_to "菜单管理", shop_products_path(industry_id: 10001) %></li>
+        <li><%= link_to "菜单设置", shop_products_path(industry_id: 10001) %></li>
+      <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+        <li><%= link_to "微餐饮", shops_path(industry_id: 10002) %></li>
+        <li><%= link_to "菜单管理", shop_products_path(industry_id: 10002) %></li>
+        <li><%= link_to "菜单设置", shop_products_path(industry_id: 10002) %></li>
+      <% end %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+    <% end %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="tabbable">
+        <%= render 'pro/shop_products/nav_tab' %>
+
+        <div class="tab-content no-border padding-24">
+          <div id="tab-1" class="tab-pane fade active in">
+            <div class="row">
+
+              <div class="col-sm-12">
+                <%= form_for @shop_product,validate: true, :html => { :class => "form"} do |f| %>
+
+                <%= f.hidden_field :shop_id %>
+
+                <% if can_see? %>
+                <div class="form-group">
+                  <label>选择菜单</label>
+                  <div class="clearfix">
+                    <%= f.select :shop_menu_id, current_user.shop.shop_menus.pluck(:menu_no, :id), {include_blank: '请选择菜单' }, class: "col-xs-6" %>
+                  </div>
+                </div>
+                <% end %>
+
+                <div class="form-group">
+                  <label>一级分类</label>
+
+                  <div class="clearfix" id="first_div">
+                    <select class="col-xs-6" id="one_c">
+                      <option value="-1">选择一级分类</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+
+                  <label>二级分类</label>    
+                  <div class="clearfix"  id="second_div">
+                    <select class="col-xs-6" id="two_c">
+                      <option value="-1">选择二级分类</option>
+                    </select>
+                  </div>        
+                </div>
+
+                <% unless @shop_product.new_record? %>
+                <div class="form-group">
+                  <label class="control-label">菜品编号</label>
+                  <div class="clearfix">
+                    <%= f.text_field :code, disabled: true, class: "col-xs-6" %>
+                  </div>
+                </div>
+                <% end %>
+                <div class="form-group">
+                  <label class="control-label">名称</label>
+                  <div class="clearfix">
+                    <%= f.text_field :name, class: "col-xs-6" %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">图片<small class="help-inline text-warning">图片建议尺寸：720像素*400像素</small></label>
+
+                  <div class="clearfix">
+                    <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="180" data-height="100" data-name="shop_product[qiniu_pic_key]" data-img="<%= @shop_product.pic_url_url %>" data-key="<%= @shop_product.qiniu_pic_key || "" %>"></div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>价格</label>
+                  <label>
+                    <!-- <input name="form-field-checkbox" class="ace ace-checkbox-2" type="checkbox"> -->
+                    <%= f.check_box :is_current_price, class: "ace ace-checkbox-2" %>
+                    <span class="lbl">显示为时价</span>
+                  </label>
+
+                  <div class="clearfix">
+                    <%= f.text_field :price, class: "col-xs-6" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="margin-right-5">
+                    <%= f.check_box :is_new, class: "ace" %>
+                    <span class="lbl">新品</span>
+                  </label>
+                  <label class="margin-right-5">
+                    <%= f.check_box :is_hot, class: "ace" %>
+                    <span class="lbl">热品</span>
+                  </label>
+                </div>
+
+                <!-- <div class="form-group">
+                  <label class="control-label">菜品库存<small class="help-inline text-warning">&nbsp;*库存不填写为不限制菜品库存</small></label>
+                  <div class="clearfix">
+                    <%#= f.text_field :quantity, class: "col-xs-6" %>
+                  </div>
+                </div> -->
+                
+                <div class="form-group">
+                  <label class="control-label">详情</label>
+                  <div class="">
+                    <%= render "shared/form_rich_text", field_name: "description", obj: @shop_product, f: f, wrapper_html_options: {class: "clearfix"} %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <%= f.hidden_field :sort %>
+                  <%= f.submit "保存", class: "btn btn-sm btn-primary" %>
+                  <a href="javascript:history.go(-1);" class="btn btn-sm btn-default">返回</a>
+                </div>
+                <% end %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <% content_for :custom_js do %>
+  <script>
+  $(function(){
+      $("body").on("change","#shop_product_shop_menu_id", function(event){
+        load_first_categories($(this).val());
+      });
+      $("body").on("change","#first_level_categories", function(event){
+        load_second_categories($(this).val());
+      });
+
+      var two_id = "<%= @shop_product.category_parent_id %>";
+      var one_id = "<%= @shop_product.shop_menu_id %>";
+      load_first_categories(one_id);
+      load_second_categories(two_id);
+      
+    });
+
+    function load_first_categories(id){
+      var url = "/shop_menus/"+id+"/root_categories"
+      $.get(url,function(html){
+        $("#first_level_categories").val(<%= @shop_product.category_parent_id %>);
+      });
+    }
+
+    function load_second_categories(id){
+      var url = "/shop_categories/"+id+"/second";
+
+      $.get(url,function(html){
+$("#second_level_categories").val(<%= @shop_product.shop_category_id %>);
+      });
+    }
+  </script>
+  <% end %>

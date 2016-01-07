@@ -1,0 +1,74 @@
+<section>
+  <div class="user-box" id='ractive_wx_user_container'>
+  </div>
+</section>
+
+<script id='ractive_wx_user_template' type='text/ractive'>
+  <div class="user-top">
+    <div class="user-icon"><i>{{avatar}}</i></div>
+    <div class="user-name"><span>{{nickname}}</span></div>
+  </div>
+  <div class="item-box">
+    <div class="item">
+      <%= link_to mobile_wmall_following_shops_path(auth_params) do %>
+        <span class="f-red">{{cnt_followings}}</span>
+        <span>关注</span>
+      <% end %>
+    </div>
+    <div class="item">
+      <a href="{{points_url}}">
+        <span class="f-red">{{usable_points}}</span>
+        <span>积分</span>
+      </a>
+    </div>
+  </div>
+  <div class="menu-box">
+    <ul class="nobg">
+      <li>
+        <a href="{{signin_url}}">
+        <%= link_to signin_app_vips_path(auth_params.slice(:wxmuid,:wxuid)) do %>
+          <i class="u-icon u-icon-1"></i>签到
+        <% end %>
+      </li>
+    </ul>
+
+    <ul>
+      <li>
+        <%= link_to app_vips_path(auth_params.slice(:wxmuid,:wxuid)) do %>
+          <i class="u-icon u-icon-2"></i>会员卡
+        <% end %>
+      </li>
+      <% if @supplier.blog_bbs? %>
+        <li><%=link_to raw('<i class="u-icon u-icon-3"></i>会员论坛'), mobile_wbbs_topics_path(auth_params.slice(:supplier_id)) %></li>
+      <% end %>
+    </ul>
+
+    <ul>
+      <% @assistants.each_with_index do |assistant|%>
+        <li>
+           <%= link_to assistant.url do %>
+             <i class="u-icon u-icon-<%= assistant.font_icon%>"></i><%= "#{assistant.name}"%>
+             <%# image_tag assistant.is_a?(Assistant) ? assistant.pic.try(:thumb) : assistant.pic.try(:large)%>
+           <% end %>
+        </li>
+      <% end %>
+      <!--li><a href="javascript:void(0);"><i class="u-icon u-icon-5"></i>天气预报</a></li-->
+    </ul>
+  </div>
+</script>
+<script>
+  $(function(){
+    var wx_user = fetch_wmall_data({path: "/api/wmall/wx_users/<%= auth_params[:wxuid] %>.json"},<%=raw auth_params.to_json %>, options = {})
+    var ractive_wx_user = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_wx_user_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_wx_user_template',
+
+      // Here, we're passing in some initial data
+      data: wx_user
+    });
+  })
+</script>

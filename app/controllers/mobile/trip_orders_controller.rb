@@ -1,0 +1,35 @@
+class Mobile::TripOrdersController < Mobile::BaseController
+  layout "mobile/trips"
+  before_filter :body_class, :require_wx_user
+
+  def index
+    @orders = @wx_user.trip_orders.where(supplier_id: @supplier.id).order('created_at desc')
+  end
+
+  def new
+    @trip_order = @wx_user.trip_orders.new(trip_ticket_id: params[:ticket_id])
+    @ticket = @trip_order.trip_ticket
+  end
+
+  def create
+    @trip_order = @wx_user.trip_orders.new(params[:trip_order])
+     @ticket = @trip_order.trip_ticket
+    
+    if @trip_order.save!
+      redirect_to mobile_trip_orders_path, notice:"提交成功！"
+    else
+      render 'new', alert:"提交失败！"
+    end
+  end
+
+  private
+
+  def body_class
+    if action_name == "new"
+      @body_class = "shopcar"
+    else
+      @body_class = "order null"
+    end
+  end
+
+end

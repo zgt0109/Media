@@ -1,0 +1,15 @@
+var amount = parseFloat($('#vip_recharge_order_amount').val());
+$('#vip_recharge_order_amount').val(amount);
+$('#vip_recharge_order_pay_amount').val('<%= @pay_amount %>');
+$('#vip_recharge_order_given_points').val('<%= @given_points %>');
+$('#pay_amount').text('<%= @pay_amount %>');
+$('#given_points').text('<%= @given_points %>');
+$('#given_moneys').text('<%= @given_moneys %>');
+$('.privilege_item').removeClass('selected');
+<%- if @selected_privilege_ids.present? %>
+  <%- @selected_privilege_ids.each do |id| %>
+    var id = '<%= id %>';
+    $('#privilege'+id).addClass('selected');
+  <%- end %>
+<%- end %>
+$('.confirm_recharge').on('click', confirmRecharge);

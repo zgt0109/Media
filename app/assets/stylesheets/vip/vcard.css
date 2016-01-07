@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+/**
+ * @author frey
+ * @date 2015/05/11
+ */
+
+.vertical-correct{vertical-align: -2px;}
+.vcard-left{float: left;}
+.vcard-right{float: right;}
+input.vcard-hidden{display: none;}
+
+.vcsection{margin-bottom: 30px;}
+.vcsection-header{height: 36px; line-height: 36px; overflow: hidden; padding: 0px 15px; background-color: #F4F5F9; border: 1px #E4E4E4 solid;}
+.vcsection-header-txt{float: left;}
+.vcsection-header-btn{float: right;}
+.vcsection-header-btn .btn{vertical-align: 1px;}
+.vcsection-body{border: 1px #E4E4E4 solid; margin-top: -1px;}
+
+.vcindent-80{width: 80px; float: left;}
+.vcmargin-80{margin-left: 80px;}
+.vcindent-500{width: 500px; float: left;}
+.vcmargin-500{margin-left: 500px;}
+.vcindent-550{width: 550px; float: left;}
+.vcmargin-550{margin-left: 550px;}
+
+.vcard-card{position: relative; width: 534px; height: 318px; overflow: hidden; background-color: #c33; -webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+-o-border-radius: 6px;
+border-radius: 6px; background-position: center center; -webkit-background-size: cover;
+background-size: cover;}
+.vcard-elem{white-space: nowrap;}
+.vcard-level{position: absolute;}
+.vcard-logo{position: absolute; width: 30%;}
+.vcard-logo img{width: 100%; height: auto;}
+.vcard-number{position: absolute;}
+input.vcard-btn{border: none; height: 30px; line-height: 30px; width: 120px; text-align: center; background-color: #ddd; color: #666666; cursor: pointer; -webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+-o-border-radius: 3px;
+border-radius: 3px;}
+input.vcard-btn:focus{outline: none;}
+input.vcard-btn:active{opacity: 0.7;}
+input.vcard-color{width: 50px; vertical-align: middle; text-indent: -999em; -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.5);
+-moz-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.5);
+-o-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.5);
+box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.5);}
+input.vcard-color:hover{cursor: crosshair;}
+input.vcard-color:active{opacity: 1;}
+.vcard-tips{margin-left: 5px;}
+.vcard-setcard{width: 164px; vertical-align: middle;}
+.vcard-progress{position: absolute; width: 100%; left: 0px; top: 50%; -webkit-transform: translateY(-50%);
+-moz-transform: translateY(-50%);
+-o-transform: translateY(-50%);
+transform: translateY(-50%); height: 28px; line-height: 28px; text-align: center; background-color: rgba(0, 0, 0, 0.6); color: #fff;}
+.vcard-card-main .vcard-elem{cursor: move;}
+
+.vcard-list{border-top: 1px #ddd solid; padding-top: 20px; margin: 0px auto;}
+.vcard-list-no{height: 40px; line-height: 40px; text-align: center; margin-bottom: 50px;}
+.vcard-item{float: left; padding: 14px 14px; margin: 10px 10px; border: 1px #CCC solid;}
+.vcard-item-name{height: 24px; line-height: 24px; text-align: center; font-size: 14px; font-weight: bold;}
+.vcard-item-btns{margin-top: 10px;}
+.vcard-item-cardwp{width: 267px; height: 159px; overflow: hidden; margin-top: 12px; margin-bottom: 12px;}
+.vcard-item-card{-webkit-transform: scale(0.5);
+-moz-transform: scale(0.5);
+-o-transform: scale(0.5);
+transform: scale(0.5); -webkit-transform-origin: left top;
+-moz-transform-origin: left top;
+-o-transform-origin: left top;
+transform-origin: left top;}
+
+/*.vcard-tpls{display: none; position: fixed; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); left: 0px; top: 0px; z-index: 99999;}*/
+.vcmodal{display: none; position: fixed; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); left: 0px; top: 0px; z-index: 99999;}
+.vcmodal-main{position: absolute; width: 900px; height: 510px; left: 50%; top: 50%; margin-left: -450px; margin-top: -250px; background-color: #fff; border: #ddd 1px solid;}
+.vcmodal-header{height: 60px; line-height: 60px; padding-left: 24px; border-bottom: 1px #ddd solid;}
+.vcmodal-body{overflow: auto; height: 440px;}
+.vcmodal-body .vcard-list{border: none; width: 875px;}
+.vcmodal-body .vcard-item{position: relative; margin: 20px 10px 24px 10px; padding: 2px; border: none; cursor: pointer; -webkit-transition: all 0.2s ease-in 0s;
+-moz-transition: all 0.2s ease-in 0s;
+-o-transition: all 0.2s ease-in 0s;
+transition: all 0.2s ease-in 0s;}
+.vcmodal-body .vcard-item-cardwp{margin-top: 0px; margin-bottom: 0px;}
+.vcard-item-tit{position: absolute; width: 100%; height: 24px; line-height: 24px; text-align: center; color: #438EB9; left: 0px; top: -26px; z-index: 10;}
+.vcmodal-close{position: absolute; right: 0px; top: 0px; width: 50px; height: 50px; font-size: 30px; font-family: serif; line-height: 50px; text-align: center; cursor: pointer;}
+
+.vcard-edit .vcmodal-main{height: 450px}
+.vcard-edit .vcmodal-body{width: 800px; margin: 40px auto 0px; height: 360px;}
+
+.vcmodal-body .vcard-item:hover, .vcmodal-body .vcard-item.active{background-color: #438EB9;}

@@ -1,0 +1,31 @@
+<div class="banner-list">
+  <ul>
+    <% website_menus[0..3].each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box' do %>
+              <div class="banner-img">
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+              </div>
+              <small><%= menu.title %></small>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+  <div class="logo">
+    <a href="#" class="box">
+      <!--<img src="/assets/mobile/vweisiteV01/60/logo.png" alt="">-->
+      <%= image_tag @website.logo? ? @website.logo : '/assets/mobile/vweisiteV01/60/logo.png'%>
+    </a>
+  </div>
+</div>
+<div class="index">
+  <div class="navLine-img">
+    <% website_menus[4..-1].to_a.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box mod-index-img' do %>
+              <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+          <% end %>
+        </li>
+    <% end %>
+  </div>
+</div>

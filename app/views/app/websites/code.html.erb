@@ -1,0 +1,2 @@
+<h1>这里是二维码</h1>
+<%= image_tag @website.rqrcode(mobile_root_url).try(:to_data_url) %>

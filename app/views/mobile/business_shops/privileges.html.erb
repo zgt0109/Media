@@ -1,0 +1,297 @@
+<% if @vip_user %>
+  <div class="mod-member" id="member-1">
+    <p>我的会员卡</p>
+    <div class="mod-card">
+      <div class="card-box">
+        <%= image_tag @vip_card_pic, id: :pic %>
+        <p class="card-logo">
+          <span class="tleft">
+            <% if @business_shop.logo? %>
+            <img src="<%= @business_shop.try(:logo).presence %>"/>
+            <% end %>
+          </span>
+          <span class="tright" style="color: #<%= @vip_card_branch.try(:name_bg_color) %>"><%= @vip_card_branch.try(:name) %></span>
+        </p>
+        <p class="card-info" style="color: #<%= @vip_card_branch.try(:card_bg_color) %>">
+          <small><%= @vip_user.try(:user_no) %></small>
+        </p>
+      </div>
+    </div>
+    <div class="mod-list box">
+      <% if @vip_user.normal? %>
+        <p class="list-title"><%= @business_shop.try(:name) %>会员尊享</p>
+        <% @privileges.each do |privilege| %>
+          <dl>
+            <dt onclick="listDt(this)"><p class="fa fa-chevron-down"><i class="fa fa-bookmark"></i><%= privilege.name %></p></dt>
+            <dd>
+              <p>到店内向我们展示此页面，并转发到朋友圈，就可以享受此优惠：</p>
+              <p class="fred"><%= privilege.description.to_s.html_safe %></p>
+            </dd>
+          </dl>
+        <% end %>
+      <% else %>
+        <p class="list-title tcenter">您的会员卡<%= @vip_user.human_status_name %></p>
+      <% end %>
+    </div>
+  </div>
+
+<% else %>
+  <div class="mod-member" id="member-0">
+    <div class="mod-card card-null">
+      <div class="card-box">
+        <%= image_tag @vip_card_pic, id: :pic %>
+        <p class="card-logo">
+          <span class="tleft">
+            <% if @business_shop.logo? %>
+            <img src="<%= @business_shop.try(:logo).presence %>"/>
+            <% end %>
+          </span>
+          <span class="tright"><%= @vip_card_branch.try(:name) %></span>
+        </p>
+      </div>
+    </div>
+    <a class="btn" onclick="toggleToClass('#html','dirB');resize('#transitionTop','dirL');">立即领取会员卡</a>
+  </div>
+
+  <% content_for :apply_vip_card do %>
+    <section class="mod-transition transition-top" id="transitionTop">
+      <div class="mod-form">
+        <div class="hd"><p class="tcenter">会员卡申请</p></div>
+        <div class="bd">
+          <p class="tcenter">填写信息即可领取会员卡，享受会员特权。</p>
+          <div class="form-li">
+            <div class="li-l"><b>姓名：</b></div>
+            <div class="li-r">
+              <%- name_field = @vip_card.custom_fields.normal.where(name: '姓名').first %>
+              <%  name_class = "input is_required" %>
+              <input id="user_name" name="user_name" type="text" placeholder="请输入您的真实姓名" class="<%= name_class %>" data-name='真实姓名'/>
+            </div>
+          </div>
+          <div class="form-li">
+            <div class="li-l"><b>电话：</b></div>
+            <div class="li-r">
+              <%- mobile_field = @vip_card.custom_fields.normal.where(name: '电话').first %>
+              <% mobile_class = "input is_required" %>
+              <input id="phone" name="phone" type="text" placeholder="请输入您的有效联系电话" class="<%= mobile_class %>" data-name='联系电话'/>
+            </div>
+          </div>
+          <div class="form-li">
+            <div class="li-l"><b>验证码：</b></div>
+            <div class="li-r">
+              <input id="captcha" name="captcha" type="tel" placeholder="请输入验证码" class="input is_required" data-name='验证码'>
+            </div>
+            <div class="li-r">
+              <input type="button" value="获取验证码" class="btn btn-small J-identifying">
+            </div>
+          </div>
+          <%- @vip_card.custom_fields.normal.each do |field|%>
+            <%- next if %w(姓名 电话).include?(field.name) %>
+            <%- if %(integer string text).include?(field.field_format) %>
+              <div class="form-li">
+                <div class="li-l"><b><%= field.name %>：</b></div>
+                <div class="li-r">
+                  <input id="field_<%= field.id %>" class= "<%= field.is_required? ? "is_required" : "" %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" />
+                </div>
+              </div>
+            <%- elsif %(datetime).include?(field.field_format) %>
+              <div class="form-li">
+                <div class="li-l"><b><%= field.name %>：</b></div>
+                <div class="li-r">
+                  <input id="field_<%= field.id %>" class= "date <%= field.is_required? ? "is_required" : "" %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" readonly/>
+                </div>
+              </div>
+            <%- elsif %(select radio).include?(field.field_format) %>
+              <div class="form-li">
+                <div class="li-l"><b><%= field.name %>：</b></div>
+                <div class="li-r">
+                  <select id="field_<%= field.id %>" style="background: #f0eef0;padding: 0;" class= "<%= field.is_required? ? "is_required" : "" %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+                  <%- field.possible_options.each do |option| %>
+                    <%- if option.present? %>
+                      <option value="<%= option %>"><%= option %></option>
+                    <%- end %>
+                  <%- end %>
+                  </select>
+                </div>
+              </div>
+            <%- elsif %(checkbox).include?(field.field_format) %>
+                <div class="form-li">
+                <div class="li-l"><b><%= field.name %>：</b></div>
+                <div class="li-r">
+                  <select multiple="multiple" id="field_<%= field.id %>" style="background: #f0eef0;padding: 0;" class= "<%= field.is_required? ? "is_required" : "" %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+                  <%- field.possible_options.each do |option| %>
+                    <%- if option.present? %>
+                      <option value="<%= option %>"><%= option %></option>
+                    <%- end %>
+                  <%- end %>
+                  </select>
+                </div>
+              </div>
+            <% end %>
+          <%- end%>
+        </div>
+        <div class="ft">
+          <input type="submit" value="领 取" class="btn form-submit" onclick="javascript:submitMobile();"/>
+          <input type="button" value="取 消" class="btn btn-gray" onclick="toggleToClass('#html','dirB');resize('#transitionTop','dirL');$('.J-identifying').removeClass('btn-gray').val('获取验证码');"/>
+        </div>
+        <!--div class="ft">
+          <input type="submit" value="领 取" class="btn" onclick="toggleToClass('#html','dirB');showAndHind('#member-1','#member-0')"/>
+          <input type="button" value="取 消" class="btn btn-gray" onclick="toggleToClass('#html','dirB')"/>
+        </div-->
+      </div>
+    </section>
+  <% end %>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+  $(function(){
+      reresize();
+      showBtnUp(100);
+  });
+
+// 倒计时
+  $(".J-identifying").on("click",function(){
+    if($('#phone').val() == ""){
+      alert('请输入手机号码');
+    }else{
+      var $this = $(this),
+          $time = 60;
+      if(!$this.hasClass("btn-gray")){
+          $this.addClass("btn-gray").val("重新获取(60)");
+          showTime();
+          $.get("<%= send_sms_app_vips_path %>" + "?phone=" + $('#phone').val());
+      }
+      function showTime(){
+        if($time ==0){
+          $this.removeClass("btn-gray").val("获取验证码");
+        }else{
+          $this.val("重新获取("+$time+")");
+          setTimeout(showTime,1000);
+          $time--;
+        }
+      }
+    }
+  });
+
+  function listDt(self){
+      var that=$(self),
+              dl=that.parents("dl"),
+              p=dl.find("p.fa");
+      if(dl.hasClass("active")){
+          $(".mod-list dl").removeClass("active");
+          $(".mod-list dt p.fa").attr("class","fa fa-chevron-down");
+      }else{
+          $(".mod-list dl").removeClass("active");
+          toggleToClass(dl,'active');
+          $(".mod-list dt p.fa").attr("class","fa fa-chevron-down");
+          p.attr("class","fa fa-chevron-up");
+
+      }
+  }
+
+  function reresize(){
+      var h1=$("#sec-index").height(),
+          h2=$(".html").height(),
+              h;
+      if(h1>h2){
+          h=h1;
+      }else{
+          h=h2;
+      }
+      $("#transitionTop").height(h).css({"top":-h+"px"});
+      $("#stage").css({"min-height":h+"px"});
+      $(".html").css({"min-height":h+"px"});
+  }
+</script>
+
+<script type="text/javascript">
+  $(function(){
+    $( ".date" ).datepicker({
+      yearRange: "-100:+0",
+      maxDate: "+0d",
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+      monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+
+    if ($('.multiple')){
+      $('.multiple').each(function(){
+        $(this).val($(this).data('value').split(','));
+      });
+    }
+  });
+
+  function submitMobile() {
+    var mobile = $('#phone').val();
+    var mobile_required = $('#phone').hasClass('is_required');
+    var user_name = $('#user_name').val();
+    var required_done = 1;
+
+    if (mobile_required && !(/\d{11}$/.test(mobile))) {
+      alert('请输入正确的手机号码');
+      required_done = 0;
+      return false;
+    }
+
+    $('.is_required').each(function(){
+      var value = $(this).val();
+      var name = $(this).data('name');
+      if (!value){
+        alert(name + '不能为空');
+        required_done = 0;
+        return false;
+      }
+    });
+
+    // console.log(required_done)
+    if(required_done == 0){
+      return false;
+    }else{
+      var field_params = "";
+
+      $('.field').each(function(){
+        var name = $(this).attr('name');
+        var value = $(this).val();
+        param = ('&' + name + '=' + value)
+        field_params += param
+      });
+
+      $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: '/app/vips/signup?uname=' + window.encodeURI(user_name) + '&mobile=' + mobile + field_params + '&captcha=' + $('#captcha').val() + '&' + Math.random() +'#mp.weixin.qq.com',
+        dataType: 'json',
+        timeout:30000,
+        success: function (data) {
+          if (data.ajax_msg) {
+            if(data.ajax_msg.status == 1){
+              <%- if @vip_card.audited? %>
+              alert('感谢您的提交，请等待审核');
+              <% else %>
+              alert('您的会员卡号为:' + data.ajax_msg.cardnumer);
+              <% end %>
+              window.location.reload();
+            }else if(data.ajax_msg.status == 0){
+              alert('您已经是会员了，会员卡号为:' + data.ajax_msg.cardnumer);
+              window.location.reload();
+            }else if(data.ajax_msg.status == -2){
+              alert('手机号码已被使用!');
+            }else if(data.ajax_msg.status == -3){
+              alert('验证码不正确!');
+            }else{
+              alert('当前申请人数较多，请稍后重试');
+            }
+          }else {
+            alert('当前申请人数较多，请稍后重试');
+          }
+          $("input.form-submit").attr('disabled', false);
+        },
+        error: function(e){
+          // alert(JSON.stringify(e));
+        }
+      });
+    }
+  }
+</script>
+<% end %>

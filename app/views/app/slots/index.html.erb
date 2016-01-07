@@ -1,0 +1,187 @@
+<%= javascript_include_tag 'mobile/gua' %>
+<%- if @activity.stopped? %>
+  <section class="sec-game">
+    <div id="scene-end">
+      <div class="game-text" id="text-end"></div>
+    </div><!--#scene-end end-->
+    <div class="game-clound"></div>
+  </section>
+  <script>
+    $("#text-end").animate({
+        top:"50%"
+    },"fast");
+  </script>
+<%- else %>
+  <% if @activity.activity_status == Activity::WARM_UP %>
+      <section class="sec-game">
+        <div class="game-shine" id="shine"></div>
+        <div id="scene-start">
+            <div class="game-text table" id="text-start">
+                <p class="td">
+                    <em><%= date_format_full_l @activity.start_at %></em>正式开始...<br/>敬请关注！<br/>
+                    <span>离活动开始还有</span><br/><br/>
+
+                    <% over_time = Time.diff(@activity.start_at, Time.now)
+                       second = ((DateTime.parse(@activity.start_at.to_s) - DateTime.parse(Time.now.to_s))*24*60*60).to_i
+                    %>
+                    <%#= over_time %>
+                    <% if over_time[:diff] != '00:00:00' && second > 60 %>
+                    <b>
+                      <%= "#{over_time[:year]}年".html_safe if over_time[:year].to_i > 0 %>
+                      <%= "#{over_time[:month]}月".html_safe if over_time[:month].to_i > 0 %>
+                      <%= "#{over_time[:week].to_i * 7 + over_time[:day].to_i}天".html_safe if (over_time[:week].to_i * 7 + over_time[:day].to_i) > 0 %>
+                      <%= "#{over_time[:hour]}时".html_safe if over_time[:hour].to_i > 0 %>
+                      <%= "#{over_time[:minute]}分".html_safe if over_time[:minute].to_i > 0 %>
+                    </b>
+                    <% else %>
+                      <b><%= "#{second}秒" %></b>
+                    <% end %>
+                  </span>
+                </p>
+            </div>
+        </div><!--#scene-start end-->
+        <div class="game-clound"></div>
+      </section>
+      <script>
+          $("#text-start").animate({
+              top:"50%"
+          },"fast");
+      </script>
+      <%= render "prize_and_tip"%>
+      <section class="sec-text">
+        <i>活动预热说明:</i><%= raw @activity.try(:ready_activity_notice).try(:description) %>
+      </section>
+  <% elsif @activity.activity_status == Activity::UNDER_WAY %>
+    <section class="sec-game">
+      <div class="game-shine" id="shine"></div>
+
+      <div id="scene-index">
+        <div class="game-box" id="game-1">
+          <div class="game-wrap">
+            <div class="game-p">
+              <p data-result="1">
+                <%- @elements.each do |element| %>
+                  <span data-id="<%= element.id %>"><%= element.pic? ? image_tag(element.pic.thumb) : element.name %></span>
+                <%- end %>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="game-box" id="game-2">
+          <div class="game-wrap">
+            <div class="game-p">
+              <p data-result="2">
+                <%- @elements.each do |element| %>
+                  <span data-id="<%= element.id %>"><%= element.pic? ? image_tag(element.pic.thumb) : element.name %></span>
+                <%- end %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="game-box" id="game-3">
+          <div class="game-wrap">
+            <div class="game-p">
+              <p data-result="3">
+                <%- @elements.each do |element| %>
+                  <span data-id="<%= element.id %>"><%= element.pic? ? image_tag(element.pic.thumb) : element.name %></span>
+                <%- end %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <%- if @wx_user %>
+          <%- if @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+            <a class="btn" onclick="showTips('.J-register');">开始</a>
+          <%- else %>
+            <%- if @activity.slot_prizes_left_count < 1 %>
+              <a class="btn">奖池中没有奖品了</a>
+            <%- else %>
+              <a class="btn" id="btn-start">开始</a>
+            <%- end %>
+          <%- end %>
+        <%- else %>
+          <a class="btn" onclick="showTips('.J-guanzhu');">开始</a>
+        <%- end %>
+      </div><!--#scene-index end-->
+
+      <div class="game-clound"></div>
+    </section>
+    <%= render "prize_and_tip"%>
+    <section class="sec-text">
+      <i>活动说明:</i><%= raw @activity.try(:active_activity_notice).try(:description) %>
+    </section>
+  <% else %>
+    <section class="sec-game">
+      <div id="scene-end">
+        <div class="game-text" id="text-end"></div>
+      </div><!--#scene-end end-->
+      <div class="game-clound"></div>
+    </section>
+    <%= render "prize_and_tip"%>
+    <section class="sec-text">
+      <i>活动说明:</i><%= raw @activity.try(:active_activity_notice).try(:description) %>
+    </section>
+    <script>
+      $("#text-end").animate({
+          top:"50%"
+      },"fast");
+    </script>
+  <% end %>
+<% end %>
+<script>
+  $('#game-1 p').data('result', '<%=  @elements.count  %>');
+  $('#game-2 p').data('result', '<%=  @elements.count %>');
+  $('#game-3 p').data('result', '<%=  @elements.count  %>');
+
+  function error_message_alert(type,string){
+      var result=$("#pop-result");
+      var error_message = $("#error_message");
+      var h=$(document).height();
+      result.height(h);
+
+      if(type==0){
+          result.addClass("result-success");
+      }else{
+          result.addClass("result-fail");
+          error_message.css("color","red");
+      }
+      span = result.find("span");
+      span.html(string);
+      result.show();
+      setTimeout(function(){
+          result.fadeOut(1000);
+      },2000);
+  }
+
+  var submit_mobile = function(){
+      if($("#activity_consume_mobile").val() == ''){
+          error_message_alert(1,"手机号码不能为空");
+          return false;
+      }else if(!test_mobile_number($("#activity_consume_mobile").val())){
+          error_message_alert(1,"手机号码格式不正确");
+          return false;
+      }else{
+          $("btn-award").submit();
+      }
+  };
+
+  // 手机号码正则表达式
+  function test_mobile_number(mobile_number) {
+      if (mobile_number == undefined) {
+          return false;
+      }
+      if (winwemedia_validators.mobile_reg.test(mobile_number)){
+          return true;
+      };
+      return false;
+  }
+
+  /*
+  var cancer_submit = (function(){
+    $(".pop").fadeOut();
+  });*/
+
+</script>
+
+<script src="/javascripts/app/slot/tiger.js"></script>

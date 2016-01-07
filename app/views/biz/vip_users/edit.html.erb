@@ -1,0 +1,92 @@
+<%= form_for @vip_user, validate: true do |f| %>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>会员卡号<span class="required-star">*</span></label>
+            <div class="clearfix"><%= @vip_user.user_no %></div>
+        </div>
+
+        <div class="form-group">
+            <label>线下会员卡号</label>
+            <div class="clearfix"><%= f.text_field :custom_user_no, class: 'col-xs-12' %></div>
+        </div>
+
+        <% if current_user.vip_card.use_vip_avatar? %>
+        <div class="form-group ">
+            <label class="control-label">
+                会员照片
+                <span class="text-warning line-height-32">（照片尺寸：413*295）</span>
+                <span class="required-star">*</span>
+            </label>
+            <div class="clearfix"></div>
+            <div class="cieldon-file f24 pull-left" data-type="0" data-height="295" data-width="413" data-name="vip_user[avatar]" data-img="<%= @vip_user.avatar_url %>" data-key="<%= @vip_user.avatar %>"></div>
+            <% unless @view_only %>
+            <span style="display:inline-block;">
+                <a href="javascript:;" id="remove_avatar_key">删除</a>
+            </span>
+            <% end %>
+        </div>
+        <% end %>
+
+        <%- @vip_card.custom_fields.normal.order(:position).each do |field|%>
+            <% if field.name == '姓名' %>
+                <div class="form-group">
+                    <label>姓名<span class="required-star">*</span></label>
+                    <div class="clearfix">
+                        <%= f.text_field :name, class: 'col-xs-12' %>
+                    </div>
+                </div>
+            <% elsif field.name == '电话' %>
+                <div class="form-group">
+                    <label>电话<span class="required-star">*</span></label>
+                    <div class="clearfix">
+                        <%= f.text_field :mobile, class: 'col-xs-12' %>
+                    </div>
+                </div>
+            <% else %>
+                <div class="form-group">
+                    <label><%= field.name %><% if field.is_required? %><span class="required-star">*</span><% end %></label>
+                    <div class="clearfix">
+                        <% value = @vip_user.custom_values.where(custom_field_id: field.id).first.try(:value) %>
+                        <%- if %(integer string).include?(field.field_format) %>
+                            <% text_pattern = field.field_format == 'integer' ? 'pattern=[0-9]*' : '' %>
+                            <input id="field_<%= field.id %>" class= "<%= field.is_required? ? 'required' : '' %> col-xs-12" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" <%= text_pattern %> placeholder="<%= field.placeholder %>" value="<%= value %>" />
+                        <%- elsif %(text).include?(field.field_format) %>
+                            <textarea rows="5" id="field_<%= field.id %>" class="col-xs-12 <%= field.is_required? ? 'required' : '' %> col-xs-12" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" placeholder="<%= field.placeholder %>"><%= value %></textarea>
+                        <%- elsif %(datetime).include?(field.field_format) %>
+                            <input id="field_<%= field.id %>" class= "date datepicker <%= field.is_required? ? 'required' : '' %> col-xs-12" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" readonly value="<%= value %>"/>
+                        <%- elsif %(select radio).include?(field.field_format) %>
+                            <select id="field_<%= field.id %>" class= "<%= field.is_required? ? 'required' : '' %>" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+                                <option>请选择</option>
+                                <%= options_for_select(field.possible_options.map(&:presence).compact, value) %>
+                            </select>
+                        <%- elsif %(checkbox).include?(field.field_format) %>
+                            <select multiple="multiple" id="field_<%= field.id %>" class= "<%= field.is_required? ? 'required' : '' %>" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+                                <option>请选择</option>
+                                <%= options_for_select(field.possible_options.map(&:presence).compact, value) %>
+                            </select>
+                        <% end %>
+                    </div>
+                </div>
+            <% end %>
+
+        <% end %>
+
+    </div>
+</div>
+<%= render 'partials/modalFooter' unless @view_only %>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+  $('#remove_avatar_key').click(function() {
+      $('[name="vip_user[avatar]"]').val('');
+      $('.cieldon-file a').css('background-image', '');
+  });
+  $('form').validate();
+  <% if @view_only %>
+  $(function() {
+      $(':file, .cieldon-file a p').remove();
+      $(':input, a').css({'pointer-events': 'none', 'cursor': 'default'});
+  });
+  <% end %>
+</script>
+<% end %>

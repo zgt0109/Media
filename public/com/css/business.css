@@ -1,0 +1,29 @@
+body{background:#f8f8f8;}
+.banner{width:100%;height:405px;background:url(../images/business/business.jpg) top center no-repeat;}
+.vip-banner{width:100%;height:405px;background:url(../upload/vipcard.jpg) top center no-repeat;}
+.kf-banner{width:100%;height:405px;background:url(../upload/kefu.jpg) top center no-repeat;}
+.b-main{margin-top:20px;padding:50px 0;}
+.b-title{font-size:22px;height:22px;padding:20px 0;color:#444;font-family:microsoft yahei;border-bottom:1px solid #d2d2d2;position:relative;}
+.b-title i{position:absolute;width:100px;height:70px;text-align:center;font-style:normal;color:#fff;line-height:70px;background:#f8f8f8 url(../img/b-title-bg.png) 15px 0 no-repeat;top:27px;}
+.b-title h1{margin:0 0 0 130px;font-size:24px;}
+.b-con{color:#666;padding-left:130px;width:870px;margin:0 auto;padding:30px 0 10px;}
+.part1{display:table-cell;width:376px;vertical-align:middle;}
+.part2{display:table-cell;width:50%;vertical-align:middle;}
+.part3{display:table-cell;width:494px;vertical-align:middle;}
+.va-b{vertical-align:bottom;}
+.block{display:block;}
+.big{font-size:14px;font-weight:bold;font-family:microsoft yahei;margin-right:80px;}
+.biger{font-size:22px;font-weight:bold;}
+.b-detail{margin-right:80px;}
+.b-img img{max-width:1000px;}
+.b-list{margin-left:-83px;color:#fff;font-size:14px;background:url(../img/b-list-bg.jpg) no-repeat;}
+.b-list li{height:70px;line-height:70px;margin-top:30px;padding-left:83px;}
+.b-list b{font-size:22px;font-family:FZZhengHeiS-EB-GB;margin-right:10px;}
+.b-list span{margin-right:5px;}
+.b-img-bg{min-width:1000px;height:1091px;margin-top:30px;background:url(../img/b-img-4.jpg) top center no-repeat;}
+.b-text-2{height:77px;widows:100%;padding:70px 0 20px;margin-top:-167px;text-align:center;font-size:14px;color:#444;}
+.b-text-3{width:100%;margin-top:-200px;font-size:14px;font-weight:bold;color:#444;text-align:center;}
+.b-text-3 b{font-size:30px;color:#00a3c8;line-height:1.2;}
+.b-text-4{margin-top:20px;}
+.b-text-4 p{width:280px;font-size:14px;margin:0 auto;color:#666;}
+.b-img-2{background:#84d0e1;}

@@ -1,0 +1,17 @@
+<section id="sec-index">
+  <%= render '/mobile/car_shops/footer' %>
+  <div class="body">
+      <div class="mod-title">
+          <img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>实用工具
+      </div>
+      <div class="mod-list list-tool">
+        <% @assistants.each do |ass| %>
+          <% if @assistant_ids.include?(ass.id) %>
+            <a href="<%= ass.url %>" class="mod-fa fa fa-chevron-right">
+                <b><%= ass.name %></b>
+            </a>
+          <% end %>
+        <% end %>
+      </div>
+  </div>
+</section>

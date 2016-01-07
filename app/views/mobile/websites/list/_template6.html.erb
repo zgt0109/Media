@@ -1,0 +1,28 @@
+<div class="box box-list">
+  <div class="bd list-room">
+    <% website_menu.sub_menus.each do |child| %>
+      <a href="<%= menu_url child %>" class="table">
+        <% if child.pic? %>
+          <b>
+            <img src="<%= child.is_a?(Assistant) ? child.pic.try(:thumb) : child.pic.try(:large) %>">
+          </b>
+        <% end %>
+        <span><%= child.name %></span>
+      </a>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :load_view_js do %>
+  <script type="text/javascript">
+    $(function(){
+      new Swipe(document.getElementById('slider'), {
+        speed:500,
+        auto:3000
+      });
+      navSwip=new Swipe(document.getElementById('sliderNav'), {
+        speed:500
+      });
+    });
+  </script>
+<% end %>

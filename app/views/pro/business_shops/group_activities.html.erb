@@ -1,0 +1,59 @@
+<p class="p-note">
+  提示：1、在这个页面可以将已经创建的团购活动关联到当前商户名下；<br>
+  <span style="margin-left: 36px;">2、关联以后商户可以在商户自己的后台进行团购SN码的确认。</span>
+</p>
+<p>关联商铺的团购活动</p>
+<%= form_tag update_group_activities_business_shop_path(@business_shop), :method => :post, class: 'box-form form-row' do %>
+  <div class="form-inline">
+	  <div class="form-group">
+	  	<% options = @total_group_activities.map{|a|[a.name,a.id]}.presence || [["无",""]] %>
+	    <%= select_tag "activities_business_shop[activity_id]", options_for_select(options), :class => "input-select" %>
+	    <input type="submit" class="btn btn-big offset-0" value="确认关联">
+	  </div><!--form-group end-->
+	</div>
+<% end %>
+
+<div class="box-table fl">
+	<p>已关联团购活动</p>
+  <table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+    <tr>
+      <th>活动名称</th>
+      <th>关键词</th>
+      <th>团购状态</th>
+      <th>活动时间</th>
+      <th>状态</th>
+      <th>操作</th>
+    </tr>
+    <% @shop_activitys.each do |activity| %>
+     <% activity.complete_cupon if activity.pending? %>
+     <tr>
+       	<td><%= truncate_u activity.name, length: 16 %></td>
+       	<td><%= activity.keyword %></td>
+        <td><%= activity.deal_status_name %></td>
+        <td>
+          <%= (activity.activity_type.is_show? or activity.activity_type.fight?) ? activity.start_at.strftime('%Y-%m-%d %H:%M')  : "" %>
+          <br/>
+          <%= (activity.activity_type.is_show? or activity.activity_type.fight?) ? activity.end_at.strftime('%Y-%m-%d %H:%M')  : "" %>
+        </td>
+       <td>
+       <%= show_activity_status(activity) %>
+       <%= activity.activity_type.fight? ? (activity.setted? ? activity.activity_status_name : (activity.setting? ? "未设题" : activity.status_name)) : "" %>
+       </td>
+       <td class="txt-left-align">
+          <%= link_to '删除', delete_group_activities_business_shop_path(@business_shop,activity_id: activity.id), data: { remote: true, method: :delete, confirm: '确定要删除该关联吗？'} %>
+        </td>
+     </tr>
+    <% end %>
+    <% if @shop_activitys.empty? %>
+      <tr>
+        <td  class="fgreen tcenter" colspan="6">暂无信息</td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+</div>
+
+<div class="ft">
+  <%= paginate @shop_activitys %>
+</div>

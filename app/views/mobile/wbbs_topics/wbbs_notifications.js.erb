@@ -1,0 +1,8 @@
+$(".mod-load").addClass("load-btn").removeClass("loading").html('<i class="fa fa-arrow-circle-o-down"></i>查看历史信息').show();
+<% if @wbbs_notifications.last %>
+var html = "<%= j( render partial: 'wbbs_notification', collection: @wbbs_notifications ) %>";
+$('.mod-box').append( html );
+<% else %>
+$(".mod-load").html("已全部显示");
+<% end %>
+$('.mod-load').data('id', "<%= @wbbs_notifications.last.try(:id) %>");

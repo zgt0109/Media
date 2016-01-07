@@ -1,0 +1,10 @@
+<div class="body box-article ckeditor_content">
+  <div class="hd">
+    <h3><%= website_menu.menuable.try(:title) %></h3>
+    <span><%= date_format_full_l(website_menu.menuable.created_at) %></span>
+  </div>
+  <div class="bd">
+    <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? %>
+    <p><%= raw website_menu.menuable.try(:content) %></p>
+  </div>
+</div>

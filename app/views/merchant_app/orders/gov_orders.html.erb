@@ -1,0 +1,109 @@
+<% title "信箱留言" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"<% end %>
+<% content_for :header do %>
+  <header>
+    <span class="text">信箱留言</span>
+    <a href="javascript:;"><span class="filter"></span></a>
+  </header>
+<% end %>
+
+<% content_for :mod_pop do %>
+  <div class="mod-pop">
+    <div class="mod-bg"></div>
+    <div class="mod-body">
+      <ul>
+        <li class="<%= params[:activity_id].present? ? '' : 'active'%>"><a href="/merchant_app/orders/gov_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&value_like=<%= params[:value_like]%>">所有</a</li>
+        <li ng-repeat="activity in demo.activities" class="{{(
+
+        (activity.govmailbox_id == <%= params[:govmailbox_id].present? ? params[:govmailbox_id].to_i : -999 %>)
+        ||
+        (activity.chat_type == <%= params[:chat_type].present? ? params[:chat_type].to_i : -999 %>)
+
+        ) ? 'active' : ''}}"><a href="/merchant_app/orders/gov_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&value_like=<%= params[:value_like]%>&activity_id={{activity.activity_id}}&chat_type={{activity.chat_type}}&govmailbox_id={{activity.govmailbox_id}}">{{activity.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<%= form_tag gov_orders_merchant_app_orders_url, method: :get do %>
+  <%= hidden_field_tag :role, 'supplier' %>
+  <%= hidden_field_tag :role_id, @login_user.id %>
+  <%= hidden_field_tag :token, @login_user.auth_token %>
+  <div class="search-box">
+    <div class="search">
+      <div class="s-icon"></div>
+      <%= text_field_tag 'value_like', params[:value_like], placeholder: '搜索' %>
+    </div>
+  </div>
+<% end %>
+
+<div infinite-scroll='demo.nextPage()' infinite-scroll-disabled='demo.busy' infinite-scroll-distance='1'>
+  <div class="mod-list" ng-repeat="order in demo.orders">
+    <dl ng-show='order'>
+      <dt class="icon-right {{order.dt_class}}">
+        <a href='/merchant_app/orders/{{order.id}}/gov_order_detail?role=supplier&role_id=<%= @login_user.id %>&model={{order.class}}&token=<%= @login_user.auth_token %>'>留言时间：{{order.created_at}}</a>
+      </dt>
+      <dd>
+        <p><span>信箱名称：{{order.category}}</span></p>
+        <p ng-repeat="(key,value) in order"><span ng-show="key == '姓名' || key == '电话' ">{{key}}：{{value}}<span></p>
+      </dd>
+     </dl>
+  </div>
+</div>
+<div class="mod-load" ng-show='demo.busy'>加载中…</div>
+
+<script>
+ var app = angular.module('app', ['infinite-scroll']);
+
+ app.controller('customersController',
+  function ($scope, Demo) {
+    $scope.demo = new Demo();
+  }
+  );
+
+  // 创建后台数据交互工厂
+  app.factory('Demo', function ($http) {
+   var Demo = function () {
+     this.orders = [];
+     this.order_ids = [];
+     this.activities = [];
+     this.busy = false;
+     this.page = 1;
+     this.last_order_id = null;
+   };
+
+   Demo.prototype.nextPage = function () {
+     if (this.busy) return;
+     this.busy = true;
+     var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&value_like=#{params[:value_like]}&chat_type=#{params[:chat_type]}&govmailbox_id=#{params[:govmailbox_id]}&activity_id=#{params[:activity_id]}&page=" %>'+ this.page;
+     $http.get(url).success(function (response) {
+       if(response.result == 'success'){
+         this.activities = response.data['activities'];
+         var items = response.data['orders'];
+         this.busy = false;
+         if(items.length > 0 && this.last_order_id != items[items.length-1]['id']){
+           for(var i = 0; i < items.length; i++) {
+             if(this.order_ids.indexOf() == -1){
+               this.orders.push(items[i]);
+               this.order_ids.push(items[i].id);
+             }
+           }
+           this.last_order_id = items[items.length-1].id
+           this.page = this.orders.length % 10 == 0 ? (this.orders.length == 0 ? 1 : this.page + 1) : this.page;
+         }
+       }
+       else{
+         console.log(response);
+       }
+     }.bind(this))
+     .error(function(response) {
+      console.log(response);
+    }.bind(this));
+   };
+
+   return Demo;
+ });
+
+
+</script>
+

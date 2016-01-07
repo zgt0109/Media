@@ -1,0 +1,84 @@
+<% title "订单详情" %>
+<% content_for :booking_top_pic do %>
+    <header>
+      <a href="<%= mobile_booking_orders_path(supplier_id: @supplier.id) %>" class="ico-prev">
+        <img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <h1>订单详情</h1>
+    </header>
+<% end %>
+
+  <dl class="box-orderList">
+    <dd>
+      <ul class="shopcar-list">
+        <% unless @booking_order.is_flow_supplier %>
+            <a href="<%= mobile_booking_item_path(@booking_item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="li-fw">
+              <li class="shopcar-info">
+                <% picture = @booking_item.booking_item_pictures.first %>
+                <span class="<%= picture.try(:pic?) ? "" : "img-null"%> info-fl">
+                <%=  picture.try(:pic?) ? (image_tag picture.pic.try(:thumb)) : "暂无<br/>图片".html_safe %>
+              </span>
+                <p>
+                  <b><%= @booking_item.name %></b>
+                  <span class="fl">数量：<%= @booking_item.qty %>件</span>
+                  <span class="fr">￥<%= f @booking_item.price %></span>
+                </p>
+              </li>
+            </a>
+        <% end %>
+      </ul>
+    </dd>
+  </dl>
+  <div class="box-order box-p">
+    <p>
+      <b>预订单号：</b>
+      <span><%= @booking_order.order_no %></span>
+    </p>
+    <p>
+      <b>联系人：</b>
+      <span><%= @booking_order.username %></span>
+    </p>
+    <p>
+      <b>联系电话：</b>
+      <span><%= @booking_order.tel %></span>
+    </p>
+    <% if @booking_order.is_flow_supplier %>
+        <p>
+          <b>地址：</b>
+          <span><%= @booking_order.address %></span>
+        </p>
+    <% else %>
+        <p>
+          <b>预订数量：</b>
+          <span><%= @booking_order.qty %></span>
+        </p>
+        <p>
+          <b>预订日期：</b>
+          <span><%= @booking_order.booking_at %></span>
+        </p>
+    <% end %>
+    <p>
+      <b>订单状态：</b>
+      <span><%= @booking_order.status_name %></span>
+    </p>
+    <% if @booking_order.completed? %>
+        <p>
+          <b>完成时间：</b>
+          <span><%= @booking_order.completed_at %></span>
+        </p>
+    <% elsif  @booking_order.canceled? %>
+        <p>
+          <b>取消时间：</b>
+          <span><%= @booking_order.canceled_at %></span>
+        </p>
+    <% end %>
+    <% unless @booking_order.is_flow_supplier %>
+    <p>
+      <b>备注：</b>
+      <span><%= @booking_order.description %></span>
+    </p>
+    <% end %>
+  </div>
+  <% if @booking_order.pending? %>
+    <%= link_to '取消订单', cancel_mobile_booking_order_url(@booking_order, supplier_id: @supplier.id), class: "btn btn-fw", confirm:"确认取消订单?" %>
+  <% end %>
+

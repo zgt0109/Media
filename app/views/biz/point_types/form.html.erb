@@ -1,0 +1,145 @@
+<%= form_for(@point_type, validate: true) do |f| %>
+  <div class="modal-body">
+    <div class="alert alert-block alert-info">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li>1、积分类型中，“签到送积分”和“领卡送积分”只允许添加一条；</li>
+        <li>2、“签到送积分”或“领卡送积分”添加后，该积分类型的积分策略不可再添加，只能在原有基础上编辑。</li>
+      </ul>
+    </div>
+    <div class="VCFields">
+      <label>积分类型<span class="required-star">*</span></label>
+      <div class="radioTab">
+        <label>
+          <%= f.radio_button :category, 1, class: 'ace', checked: @point_type.consume?, data: { toggle: :radioTab, target: :radioTab1 } %>
+          <span class="lbl">消费送积分</span>
+        </label>
+        <label>
+          <%= f.radio_button :category, 2, class: 'ace', checked: @point_type.recharge?, data: { toggle: :radioTab, target: :radioTab2 } %>
+          <span class="lbl">充值送积分</span>
+        </label>
+        <label disabled="disabled">
+          <%= f.radio_button :category, 3, class: 'ace', checked: @point_type.checkin?, data: { toggle: :radioTab, target: :radioTab3 }, disabled: @in_checkin %>
+          <span class="lbl">签到送积分</span>
+        </label>
+        <label disabled="disabled">
+          <%= f.radio_button :category, 4, class: 'ace', checked: @point_type.register?, data: { toggle: :radioTab, target: :radioTab4 }, disabled: @in_register %>
+          <span class="lbl">领卡送积分</span>
+        </label>
+      </div>
+      <div class="radio-tab-content">
+
+        <div id="radioTab1" class="radio-tab-pane categories">
+          <div class="form-group">
+            <label>送分规则<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="设置会员消费相应的金额时可赠送的积分数"></span></label>
+            <div class="clearfix">
+              消费 <%= f.text_field :amount, class: :inputSmall %>元
+              送 <%= f.text_field :points, class: :inputSmall %>积分　
+              <label>
+                <%= f.check_box :accumulative %> 是否累计
+                <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选则表示该积分规则可累计，如规则为：消费1元赠送1积分，那么当消费15元时赠送15积分。"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="radioTab2" class="radio-tab-pane categories">
+          <div class="form-group">
+            <label>送分规则<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="设置会员充值相应的金额时可赠送的积分数"></span></label>
+            <div class="clearfix">
+              充值 <%= f.text_field :amount, class: :inputSmall %>元
+              送 <%= f.text_field :points, class: :inputSmall %>积分　
+              <label>
+                <%= f.check_box :accumulative %> 是否累计
+                <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选则表示该积分规则可累计，如规则为：充值1元赠送1积分，那么当充值15元时赠送15积分。"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="radioTab3" class="radio-tab-pane categories">
+            <div class="form-group">
+                <label>送分规则<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="设置会员充值相应的金额时可赠送的积分数"></span></label>
+                <div class="clearfix">
+                    <label>
+                        <input name="form-field-checkbox" type="checkbox" class="ace">
+                        <%= f.check_box :checkin_enabled, class: :ace, disabled: @in_checkin && !@point_type.checkin? %>
+                        <span class="lbl">每次签到送</span>
+                        <%= f.text_field :points, class: 'input-small', disabled: @in_checkin && !@point_type.checkin? %>
+                        积分
+                    </label>
+                </div>
+                <div class="clearfix">
+                    <label>
+                        <input name="form-field-checkbox" type="checkbox" class="ace">
+                        <%= f.check_box :succ_checkin_enabled, class: :ace, disabled: @in_checkin && !@point_type.checkin? %>
+                        <span class="lbl">连续</span>
+                        <%= f.text_field :succ_checkin_days, class: 'input-small', disabled: @in_checkin && !@point_type.checkin? %>
+                        天签到送
+                        <%= f.text_field :succ_checkin_points, class: 'input-small', disabled: @in_checkin && @point_type.checkin? %>
+                        积分
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="radioTab4" class="radio-tab-pane categories">
+          <div class="form-group">
+            <label>送分规则<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="设置会员领卡时赠送的积分数"></span></label>
+            <div class="clearfix">
+              领卡赠送 <%= f.text_field :points, class: :inputSmall %>积分
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label>规则说明</label>
+      <div class="clearfix">
+        <%= f.text_area :description, rows: 5, class: "col-xs-12" %>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <%= f.submit '保存', class: "btn btn-sm btn-primary" %>
+    <%= f.button '取消', type: :reset, class: "btn btn-sm btn-default", data: { dismiss: "modals" } %>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    $(function() {
+    
+      (show_or_hide_caregories = function( category ) {
+          $('.categories').hide();
+          $('#radioTab' + category).show();
+          $('.categories input').attr('disabled', true);
+          $('#radioTab' + category + ' input').attr('disabled', false);
+          $('form').resetClientSideValidations();
+      }) ( $('input[name="point_type[category]"]:checked').val() );
+
+      $('input[name="point_type[category]"]').click(function(event) {
+        show_or_hide_caregories( $(this).val() );
+      });
+
+
+      $(document).on("click", ".btn-primary", function(){
+        var category = $("[name='point_type[category]']:checked").val();
+        var checkin = $("[name='point_type[checkin_enabled]']");
+        var succ_checkin = $("[name='point_type[succ_checkin_enabled]']");
+        if(category == "3" && !checkin.is(":checked") && !succ_checkin.is(":checked")){
+          showTip('warning', '请勾选积分内容');
+          return false;
+        }else{
+          $('form').submit();
+        }
+      });
+
+      $.each($('input'), function(index, val) {
+        reDisplayError( $(val) );
+      });
+    });
+  </script>
+<% end %>

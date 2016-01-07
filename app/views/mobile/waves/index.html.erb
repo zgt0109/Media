@@ -1,0 +1,102 @@
+<section class="content-wrap">
+  <article class="content">
+  <img src="/assets/img/lottery/shake_ico.jpg" alt="开始摇" width="150" height="150" class="strimg "/>
+    <p class="gameover  hide">
+    <img src="/assets/img/lottery/gamed_face.png" class="fa">
+    <img src="/assets/img/lottery/gamed_txt.png" class="te">
+    </p>
+    <div class="shake-circle" id="shakebox">
+      <ul class="shake-num shake-slid">
+        <li>
+          <div class="col-bg">
+          <p class="num"><img src="/assets/img/lottery/01.png"></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star_hl.png">
+            <img src="/assets/img/lottery/star_hl.png">
+              <img src="/assets/img/lottery/star_hl.png">
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="col-bg">
+          <p class="num"><img src="/assets/img/lottery/02.png"></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star_hl.png">
+            <img src="/assets/img/lottery/star_hl.png">
+              <img src="/assets/img/lottery/star_hl.png">
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="col-bg">
+          <p class="num"><img src="/assets/img/lottery/03.png"></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star_hl.png">
+            <img src="/assets/img/lottery/star_hl.png">
+              <img src="/assets/img/lottery/star.png">
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="col-bg">
+          <p class="num"><img src="/assets/img/lottery/04.png"></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star_hl.png">
+            <img src="/assets/img/lottery/star_hl.png">
+              <img src="/assets/img/lottery/star.png">
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="col-bg">
+          <p class="num"><img src="/assets/img/lottery/05.png"></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star_hl.png">
+            <img src="/assets/img/lottery/star.png">
+              <img src="/assets/img/lottery/star.png">
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="col-bg">
+          <p class="num"><img src="/assets/img/lottery/06.png"></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star_hl.png">
+            <img src="/assets/img/lottery/star.png">
+              <img src="/assets/img/lottery/star.png">
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="col-bg ash">
+          <p class="num no-p"><img src="/assets/img/lottery/text_nopri.png" class=""></p>
+            <p class="star">
+            <img src="/assets/img/lottery/star.png">
+            <img src="/assets/img/lottery/star.png">
+              <img src="/assets/img/lottery/star.png">
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+  <span class="speed1"></span>
+  <span class="speed2"></span>
+  <%= render "operations" %>
+</section>
+<a class="bgcover"></a>
+<div class="pop tomorrow">
+<img src="/assets/img/lottery/btn_tormmrow.png">
+</div>
+<div class="pop nochange">
+<img src="/assets/img/lottery/btn_nochange.png">
+</div>
+<div class="pop getpri">
+<p class="til"><img src="/assets/img/lottery/gift_pri.png"></p>
+  <p class="showpri"></p>
+  <p class="int"><%= @activity.activity_property.display_win_tip %></p>
+  <input type="text" class="inp" value="<%= @wx_user.try(:related_mobile) %>" id="phone">
+  <input type="hidden" id="acid">
+  <p class="sub"><img src="/assets/img/lottery/submit.png" onclick="submitMobile();"></p>
+</div>

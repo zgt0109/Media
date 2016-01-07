@@ -1,0 +1,6 @@
+__filename = "group_consumes_#{Time.now.strftime("%Y%m%d%H%M%S")}.xls"
+sheet1 = xls.create_worksheet
+sheet1.row(0).concat ["SN码", "商品名称", "所属商家","商品数量", "订单金额", "下单时间", "使用时间"]
+@wmall_group_orders.each_with_index do |order, i|
+  sheet1.update_row i+1, order.code , order.try(:group_item).try(:name),order.try(:group_item).try(:groupable).try(:name), order.qty, order.total_amount,order.created_at, order.consume_at
+end

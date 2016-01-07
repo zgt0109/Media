@@ -1,0 +1,15 @@
+<li data-id="<%= message.id %>">
+  <div class="user-left">
+    <div class="user-img">
+      <img src="<%= message.wx_wall_user.avatar_url %>" alt="<%= message.wx_wall_user.nickname %>" width="590" height="250">
+    </div>
+    <div class="user-time">
+      <span><%= message.created_at.strftime "%R" %></span>
+      <small><%= message.created_at.strftime "%P" %></small>
+    </div>
+  </div>
+  <div class="user-msg">
+    <h1><%= message.wx_wall_user.nickname %></h1>
+    <p><%= message.text? ? message.message : "<img src='#{message.pic}'/>".html_safe %></p>
+  </div>
+</li>

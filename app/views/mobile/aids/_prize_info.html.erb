@@ -1,0 +1,9 @@
+<ul class="msg-list msg-info">
+  <% @prizes.present? && @prizes.each do |prize| %>
+    <li class="msg-list-item">
+      <span class="msg-info-ranking"><%= prize.title %></span>
+      <span class="msg-inof-prize"><%= prize.prize %></span>
+      <span class="msg-inof-count"><%= "#{prize.prize_count}名" %></span>
+    </li>
+  <% end %>
+</ul>

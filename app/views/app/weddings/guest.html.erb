@@ -1,0 +1,107 @@
+<%= javascript 'lib/validators' %>
+<% provide(:title, '新婚典礼') %>
+<div class="contxt cont-index">
+  <div class="box-contxt table">
+    <p class="td">
+      谨定于
+    </p>
+    <p class="td">
+      <b>公历<%= date_format_full_l(@wedding.wedding_at)%>   <%= @wedding.wedding_at.strftime('%H:%M')%></b><br/>
+      <em>农历<%= gong_li_to_nong_to(@wedding.wedding_at) %>   <%= @wedding.wedding_at.strftime('%H:%M')%></em>
+    </p>
+    <p class="td">星期<%= @wedding.show_week  %></p>
+  </div>
+
+  <div class="box-contxt table">
+    <div class="tr">
+      <p class="td">地址：</p>
+      <p class="td"><b><%= @wedding.address  %></b></p>
+      <p class="td"><i class="arrow arr-small"></i></p>
+    </div>
+    <div class="tr">
+      <p class="td"></p>
+      <p class="td"><em>恭候您的光临</em></p>
+      <p class="td"></p>
+    </div>
+    <a href="<%= address_app_weddings_path  %>" class="box-block"></a>
+  </div>
+  <%# unless @guest.present? %>
+
+  <div class="box-contxt box-form">
+    <%= form_for :wedding_guest, :url=>create_guest_app_weddings_path do |form| %>
+    <p><label>姓名</label><%= form.text_field :username, :disabled => show_disable_with_input %></p>
+    <p><label>电话</label><%= form.text_field :phone, :disabled => show_disable_with_input  %></p>
+    <p><label>人数</label><%= form.text_field :people_count, :disabled => show_disable_with_input  %></p>
+    <p>
+        <% if show_disable_with_input %>
+            <div class="box-relative"><a class="btn btn-big">我已确认赴宴</a></div>
+        <% else %>
+            <div class="subimt_form box-relative"><input type="submit" class="form-submit"/><a class="btn btn-big">我要赴宴</a></div>
+        <% end %>
+        </p>
+    <% end %>
+  </div>
+
+  <%# end %>
+  <p class="tcenter fred p-ft table">
+    <a class="box-block" href="<%= wish_app_weddings_path %>"></a>
+    <span class="td">*如您无法赴宴，可点击前往祝福墙给我们送上您的祝福</span>
+    <span class="td"><i class="arrow arr-small"></i></span>
+  </p>
+</div>
+<%= render :partial => "alert"  %>
+<script>
+    $(".subimt_form").click(function(){
+        if($("#wedding_guest_username").val() == ''){
+          alert("姓名不能为空!");
+          $("#wedding_guest_username").focus();
+          return false;
+        }else if($("#wedding_guest_phone").val() == ''){
+          alert("手机号不能为空!");
+          $("#wedding_guest_phone").focus();
+          return false;
+        }else if( !test_mobile_number($("#wedding_guest_phone").val()) ){
+          alert("手机号码格式不正确!");
+          $("#wedding_guest_phone").focus();
+          return false;
+        }else if($("#wedding_guest_people_count").val() == ''){
+            alert("人数不能为空！");
+            $("#wedding_guest_people_count").focus();
+            return false;
+        }else if( !validate_people_count($("#wedding_guest_people_count").val()) ){
+            alert("人数只能是正数字！");
+            $("#wedding_guest_people_count").focus();
+            return false;
+        }else{
+        $("form").submit();
+        }
+
+    })
+
+    function validate_people_count(count){
+        if (count == undefined) {
+            return false;
+        }
+        var count_reg = /^[0-9]*$/;
+        if (count_reg.test(count)){
+            return true;
+        };
+        return false;
+
+    }
+
+    // 手机号码正则表达式
+    function test_mobile_number(mobile_number) {
+        if (mobile_number == undefined) {
+            return false;
+        }
+        if (winwemedia_validators.mobile_reg.test(mobile_number)){
+            return true;
+        };
+        return false;
+    }
+
+    function close_show(value){
+        document.getElementById(value).style.display='none';
+    }
+</script>

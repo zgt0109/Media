@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title><%= yield(:title) %></title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.css"/>
+    <%= stylesheet_link_tag "mobile/greet", media: "all" %>
+    <%= javascript_include_tag "mobile/greet" %>
+    <%= yield :head %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+  <%= render 'application/gb2big5' %>
+    <%= yield %>
+    <%= render "application/mobile_footer" %>
+  </body>
+</html>

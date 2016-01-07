@@ -1,0 +1,53 @@
+<%= form_for(@shop_table_setting, validate: true) do |f| %>
+<%= f.hidden_field :date if params[:id].present? %>
+<div class="modal-body">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label">门店</label>
+      <div class="clearfix">
+        <input type="text" class="col-md-8" disabled="disabled" value="<%= @shop_table_setting.shop_branch.name %>">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">开放大厅数量<span class="required-star">*</span></label>
+      <div class="clearfix">
+	<%= f.text_field :open_hall_count, maxlength: 18, class: "col-md-8", validate: true %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">开放包间数量<span class="required-star">*</span></label>
+      <div class="clearfix">
+	<%= f.text_field :open_loge_count, maxlength: 18, class: "col-md-8", validate: true %>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label">预订时间</label>
+      <div class="clearfix line-height-28"><%= @shop_table_setting.date %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">预订大厅数量</label>
+      <div class="clearfix">
+	<%= f.text_field :hall_table_booking_count_by_date, maxlength: 18, disabled: (params[:id].present? ? true : false), class: 'col-md-8' %><span class='field_with_errors hotel_room_setting_date'><label class='date-message message hide'></label></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">预订包间数量</label>
+      <div class="clearfix">
+	<%= f.text_field :loge_table_booking_count_by_date, maxlength: 18, disabled: true, class: "col-md-8" %>  
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+
+<% end %>

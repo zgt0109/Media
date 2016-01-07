@@ -1,0 +1,138 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微汽车', car_shops_path %></li>
+      <li><%= link_to '车型管理', car_types_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、以下<span class="required-star">* </span>均为必填项；</li>
+          </ul>
+        </div>
+      </div>
+      <%= form_for(@car_type, validate: true) do |f| %>
+        <%= f.hidden_field :supplier_id, value: current_user.id %>
+        <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+        <%= f.hidden_field :car_brand_id, value: @car_shop.car_brand.try(:id) %>
+        <div class="col-md-5 col-lg-5">
+          <div class="form-group">
+            <label class="">车型名称<span class="required-star">*</span><small class="text-warning">不能超过16个字</small></label>
+            <div class="clearfix">
+              <%= f.text_field :name, class: 'form-control', maxlength: 16 %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">选择车系<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <% options = current_user.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+              <%= f.select :car_catena_id, options_for_select(options, @car_type.try(:car_catena_id)), {}, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">显示顺序</label>
+            <div class="clearfix">
+              <%= f.text_field :sort, maxlength: 5, placeholder: '1', class: 'form-control' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">指导价（万元）<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :price, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">最新报价（万元）<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :dealer_price, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">级别</label>
+            <div class="clearfix">
+              <%= f.text_field :level, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">年款</label>
+            <div class="clearfix">
+              <%= f.select :year, options_for_select((2001..2030).to_a, @car_type.try(:year)), {}, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">发动机</label>
+            <div class="clearfix">
+              <%= f.text_field :engine, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-lg-5">
+          <div class="form-group">
+            <label class="">变速箱</label>
+            <div class="clearfix">
+              <%= f.text_field :gear_box, class:"form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">排量(mL)</label>
+            <div class="clearfix">
+              <%= f.text_field :output_volumne, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">长*宽*高(mm)</label>
+            <div class="clearfix">
+              <%= f.text_field :car_size, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">车身结构</label>
+
+            <div class="clearfix">
+              <%= f.text_field :structure, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">百公里加速(s)</label>
+            <div class="clearfix">
+              <%= f.text_field :accelerate, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">最高车速（Km/h）</label>
+            <div class="clearfix">
+              <%= f.text_field :speed, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">油耗（L）</label>
+
+            <div class="clearfix">
+              <%= f.text_field :oil, class: "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="">整车质保</label>
+            <div class="clearfix">
+              <%= f.text_field :warranty, class: "form-control"%>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">保存</button>
+            <%= link_to '返回', car_types_path, class: 'btn btn-sm btn-default' %>
+          </div>
+        </div>
+      </div>
+    <%- end %>
+  </div>
+</div>
+<%- end %>

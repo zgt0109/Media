@@ -1,0 +1,63 @@
+<style type="text/css">
+  .poto-busniess .list-img img {max-width: auto; max-height: 100%; }
+  .poto-list .list-img {background: #fff;}
+</style>
+<%= stylesheet_link_tag "jquery-upload-file/uploadfile.css" %>
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <%= link_to '店铺管理', business_shops_path, class: 'h1 uncurrent' %>
+  <h1 class="pagecurrent">环境信息</h1>
+<% end %>
+
+<div class="box-table fl tright">
+  <p>
+    <span class="btn btn-biger btn-orange" id="fileuploader">
+      <span>上传环境图片</span>
+    </span>
+  </p>
+</div>
+
+<div class="box-list fl">
+  <% if @business_shop_pictures.present? %>
+      <p>已上传的图片 </p>
+      <ul class="poto-list poto-busniess" id="pics-ul">
+        <% @business_shop_pictures.each do |picture| %>
+          <% if picture.pic? %>
+            <li id="picture-<%= picture.id %>">
+              <span class="list-img"><%= image_tag(picture.pic) %></span>
+                <%= link_to '删除', business_shop_business_shop_picture_path(id: picture.id), method: :delete, data:{confirm: '确定删除？'}, remote: true %>
+              </span>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+      </p>
+  <% else %>
+      <p>暂无图片</p>
+  <% end %>
+ </div>
+
+<div class="ft">
+  <%= paginate @business_shop_pictures %>
+</div>
+<%= javascript_include_tag "jquery-upload-file/jquery.uploadfile.min.js" %>
+<script type="text/javascript">
+$(function () {
+  $("#fileuploader").uploadFile({
+    url:"<%= business_shop_business_shop_pictures_url %>",
+    multiple: true,
+    fileName: 'picture[]',
+    showStatusAfterSuccess: true,
+    // showAbort: true,
+    // showDone: true,
+    maxFileCount: 100,
+    maxFileSize:1024*1024*20,
+    afterUploadAll:function(){
+      window.location.reload();
+    }
+  });
+});
+</script>

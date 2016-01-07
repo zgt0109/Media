@@ -1,0 +1,13 @@
+<ul class="nav nav-list">
+  <li class="<%= 'open active' if controller_name =~ /vip_api_settings|vip_external_http_apis/  %>">
+    <a href="javascript:;" class="dropdown-toggle">
+      <i class="fa fa-users"></i>
+      <span class="menu-text"> 会员API</span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+      <li class="<%= 'open active' if spec_vip_api_settings_path == request.path %>"><a href="<%= spec_vip_api_settings_path %>"> <i class="icon-double-angle-right"></i>说明文档</a></li>
+      <li class="<%= 'open active' if controller_name =~ /vip_api_settings|vip_external_http_apis/ && action_name != 'spec' %>"><a href="<%= vip_api_settings_path %>"> <i class="icon-double-angle-right"></i>接口设置</a></li>
+    </ul>
+  </li>
+</ul>

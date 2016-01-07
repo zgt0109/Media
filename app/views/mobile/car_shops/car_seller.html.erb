@@ -1,0 +1,35 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>销售代表</div>
+    <div class="mod-list list-user">
+      <% @car_sellers.each do |seller| %>
+        <div>
+          <div class="list-img">
+            <a><img src="<%= seller.pic_url %>"/></a>
+          </div>
+          <div class="list-text">
+            <p>
+              <b>姓名：</b>
+              <span><%= seller.name %></span>
+            </p>
+            <p>
+              <b>职业：</b>
+              <span><%= seller.position %></span>
+            </p>
+            <p>
+              <b>语言：</b>
+              <span><%= seller.skilled_language %></span>
+            </p>
+            <a class="btn btn-bigest" href="tel:<%= seller.phone %>"><i class="fa fa-phone"></i><%= seller.phone %></a>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<script>
+  $(function(){
+    indexSwipe("index");
+  });
+</script>

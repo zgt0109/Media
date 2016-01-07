@@ -1,0 +1,22 @@
+<li class="<%= li_class.to_s %>"  template_id="<%= template.style_index %>" template_type="<%= template_type %>" tag_id="<%= template.website_tag_id %>" boutique='<%= template.is_boutique %>' <%= template.support_html_li_attrs %> >
+  <a href="javascript:;">
+    <%= image_tag template.pic.thumb, style: 'height: 240px;width: 160px;' %>
+    <div class="text">
+      <div class="inner">
+        <% if template.home_template? %>
+            <p><span>背景图:</span><i class="<%= template.support_bg_image_class %>"></i></p>
+            <p><span>幻灯片:</span><i class="<%= template.support_slide_class %>"></i></p>
+            <p><span>微官网Logo:</span><i class="<%= template.support_ws_logo_class %>"></i></p>
+            <p><span>站点标题图:</span><i class="<%= template.support_wm_pic_class %>"></i></p>
+            <p><span>背景音乐:</span><i class="<%= template.support_bg_music_class %>"></i></p>
+            <p><span>模板类型:</span><%= template.website_tag.try(:name) %></p>
+            <p><span>图标形状:</span><%= template.icon_shape_name %></p>
+            <p><span>滚动方式:</span><%= template.scroll_way_name %></p>
+        <% else %>
+            <%= template.description %>
+        <% end %>
+      </div>
+    </div>
+    <span><%= index %>. <%= template.name %></span>
+  </a>
+</li>

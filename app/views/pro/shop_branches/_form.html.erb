@@ -1,0 +1,113 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+        微餐饮
+      </li>
+      <li>分店管理</li>
+    </ul>
+    <div class="pull-right">
+      <span class="green lighter ShowQRCodeTxt">扫描预览二维码</span>
+      <div class="showQRCode">
+  <i class="i-qrcode icon-qrcode icon-3x"></i>
+  <div class="QRCode" style="display: none;">
+    <img src="/assets/qr.jpg">
+  </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>请您务必填写正确，这些将会直接显示在手机页面。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <% @shop_branch.can_validate = true %>
+        <%= form_for @shop_branch,validate: true, html: { class: 'form' } do |f| %>
+        <%= f.hidden_field :shop_id %>
+        <div class="form-group">
+          <label class="control-label">分店名称<span class="required-star">* </span></label>
+          <div class="clearfix">
+            <%= f.text_field :name, class: "col-xs-6" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">分店登录密码<span class="required-star">* </span></label>
+          <div class="clearfix">
+            <%= f.password_field :password, autocomplete: :off, class: 'col-xs-6', validate: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">门店电话<span class="required-star">* </span></label>
+          <div class="clearfix">
+            <%= f.text_field :tel, maxlength: 15, class: "col-xs-6", validate: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">手机<small class="text-warning">用于接收客户订单信息，请正确填写</small></label>
+          <div class="clearfix">
+            <%= f.text_field :mobile, maxlength: 18, class: "col-xs-6" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">营业时间</label>
+          <div class="clearfix">
+            <div class="input-group col-xs-6 row">
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+              <%= f.text_field :start_time, class: "timepicker col-xs-12" %>
+              <span class="input-group-addon">~</span>
+              <%= f.text_field :end_time, class: "timepicker col-xs-12" %>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">门店地址<span class="required-star">* </span></label>
+          <div class="clearfix">
+            <%= address_select(f.object, name_prefix: 'shop_branch_attributes') %>
+          </div>
+        </div>
+        <div class="form-group clearfix">
+          <%= f.text_field :address, class: "col-xs-6", placeholder: "请输入详细地址" %>
+        </div>
+        <div class="form-group">
+          <label class="control-label">地址经纬度</label>
+          <div class="clearfix">
+            <div id="preview" class="clearfix">
+              <div id="float_search_bar">
+                <label>区域：</label>
+                <%#= f.text_field :address, class: "input-text bd_map_address", style:"width :40%", validate: true %>
+                <input type="text" id="address_keyword" class="bd_map_address" style="width :40%" value="<%#= @vip_card.address %>"/>
+                <a id="search_button" class="button">查找</a>
+                <span>点击地图或标注获取坐标</span>
+              </div>
+              <div id="map_container"></div>
+            </div>
+            <%#= card.text_field :location_x, class: 'input-text bd_map_lng', readonly: true, style: "width:120px;" %>
+            <%#= card.text_field :location_y, class: 'input-text bd_map_lat', readonly: true, style: "width:120px;" %>
+            <input type="hidden" id="is_address" value="">
+            <input type="hidden" id="is_just" value="">
+            <input type="hidden" id="is_new" value="<%#= @vip_card.address.present? ? '0':'1' %>">
+          </div>
+          <!-- 这里是百度地图 -->
+          <%= render 'baidu_map'%>
+        </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-primary">确定</button>
+            <a href="javascript:;" class="btn btn-sm btn-default">返回</a>
+          </div>
+      </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+</div>

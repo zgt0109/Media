@@ -1,0 +1,16 @@
+<tr>
+  <td><%= item.id%></td>
+  <td><%= item.group_category.try(:name)%></td>
+  <td><%= item.try(:name)%></td>
+  <td><%= item.try(:price)%></td>
+  <td><%= item.group_orders.count %></td>
+  <td><%= item.group_orders.paid.count %></td>
+  <td class="txt-left-align">
+    <%= link_to "编辑", edit_group_item_path(item), class: "fgreen"%>
+    <% if item.deleted? %>
+      <%= link_to "上架", group_item_path(item), data: {toggle: "modals", confirm: "确认上架？", target: "delModel", url: group_item_path(item), method: "delete"}%>
+    <% else %>
+      <%= link_to "下架", group_item_path(item), data: {toggle: "modals", confirm: "确认下架？", target: "delModel", url: group_item_path(item), method: "delete"}%>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,160 @@
+<style type="text/css">
+  .form-col span {width: 30%;}
+  .box-des .des-l, .box-des .des-r{min-height: 0;}
+  .double-line {width:240px; font-size: 12px; color: #999; line-height:16px; margin-top:-1px; }
+  .box-step span {font-size: 18px; width: 24%; text-align: center; color: #000000; }
+  span.active {color: #0000FF; }
+  .next_step{width: 110%; margin-left: 15px; left: 0px; top: 0px; width: 42px; height: 23px;background-image:url(/assets/next_step.png)}
+</style>
+<% content_for :sidebar do %>
+  <%= render(['votes', 'surveys', 'groups'].include?(params[:action]) ? 'sidebar_business' : 'sidebar_activity') %>
+<% end %>
+
+<% content_for :topbar do %>
+  <%= render 'topbar_activity_new' %>
+<% end %>
+
+<%= form_for @activity, :url => prize_settings_activity_path, validate: true, :html => { class: 'form-horizontal', id: 'setting-form' } do |f| %>
+  <p class="box-step">
+    <span>活动预热设置<img class="next_step" src="/assets/next_step.png" /></span>
+    <span>活动开始设置<img class="next_step" src="/assets/next_step.png" /></span>
+    <span>活动规则设置<img class="next_step" src="/assets/next_step.png" /></span>
+    <span class="active" style="width:12%">奖品设置</span>
+  </p>
+
+
+  <div class="p-note">
+    <p>提示：以下内容加“<em style="color: #ff0000; padding: 0 3px;"> * </em>”号均为必填项；</p>
+  </div>
+
+  <%- if @activity.lottery_activity? %>
+    <%= f.fields_for :activity_property, validate: true do |activity_property| %>
+      <% @activity.activity_property.can_validate = true %>
+      <div class="box-des fl" style="">
+        <div class="des-l" style="width:230px;">
+          <div class="textbox" style="font-size: 22px;">全局设置</div>
+        </div>
+
+        <div class="des-r" style="width:493px">
+          <div class="box-form form-col fl every">
+            <div class="p">
+              <span>每人参与的总次数</span>
+              <%= activity_property.text_field :partake_limit, validate: true, class: 'remove-last-dot input-text', style: "width:80px;" %><i class="partake-limit-message red"></i>
+              <em>*</em><span class="fgray">（-1表示不限制次数）</span>
+            </div>
+            <div class="p">
+              <span>每人每天可参与次数</span>
+              <%= activity_property.text_field :day_partake_limit, validate: true, class: 'remove-last-dot input-text', style: "width:80px;" %><i class="day-partake-limit-message red"></i>
+              <em>*</em><span class="fgray">（-1表示不限制次数）</span>
+            </div>
+            <div class="p">
+              <span>每人中奖的总次数</span>
+              <%= activity_property.text_field :prize_limit, validate: true, class: 'remove-last-dot input-text', style: "width:80px;" %><i class="prize-limit-message red"></i>
+              <em>*</em><span class="fgray">（-1表示不限制次数）</span>
+            </div>
+            <div class="p">
+              <span>每人每天可中奖次数</span>
+              <%= activity_property.text_field :day_prize_limit, validate: true, class: 'remove-last-dot input-text', style: "width:80px;" %><i class="day-prize-limit-message red"></i>
+              <em>*</em><span class="fgray">（-1表示不限制次数）</span>
+            </div>
+            <div class="p">
+              <span>是否展示奖品数量</span>
+              <%= activity_property.check_box :is_show_prize_qty, class: 'remove-last-dot input-text', style:'width: 30px; height:15px; line-height:15px; margin:6px 0 0 0;vertical-align: middle;' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if @activity.lottery_activity? %>
+    <div id="activity_prizes">
+      <%= f.fields_for :activity_prizes do |activity_prize| %>
+        <div class="box-des fl">
+          <hr/>
+          <div class="des-l" style="width:230px;">
+            <div class="p">
+              <%- if activity_prize.object.activity.activity_type_id == 28 %>
+                <% ids = activity_prize.object.activity_element_ids.to_s.split(',') %>
+                <% ids.each_with_index do |id, index| %>
+                  <%- element = ActivityPrizeElement.find(ids[index].to_i) %>
+                  <%= image_tag element.pic.thumb, size: '35x35' %>
+                <%- end %>
+              <%- else %>
+                <div class="textbox"  style="font-size: 22px;">奖品设置</div>
+              <%- end %>
+          </div>
+          </div>
+          <div class="des-r" style="width:493px">
+            <div class="box-form form-col fl prizes-msg">
+              <div class="p">
+                <span>奖项说明</span>
+                <%= activity_prize.text_field :title, class: 'wheel-disabled input-text', style: "width:80px;", maxlength: 5, validate: true %>
+                <em> * </em><span class="fgray">（不能超过5个）</span>
+              </div>
+              <div class="p">
+                <span><%= activity_prize.object.title %>奖品设置</span>
+                <%= activity_prize.text_field :prize, maxlength: 50, class: 'input-text', style: "width:80px;", validate: true %>
+                <em> * </em><span class="fgray">（不能超过50个）</span>
+              </div>
+              <div class="p">
+                <span>
+                  <%= activity_prize.object.title %>奖品数量
+                </span>
+                <%= activity_prize.text_field :prize_count, class: 'remove-last-dot input-text', style: "width:80px;", validate: true %>
+                <em> * </em><span class="fgray">（首次设置后不能修）</span>
+              </div>
+              <div class="p">
+                <span>
+                  <%= activity_prize.object.title %>中奖几率
+                </span>
+                <%= activity_prize.text_field :prize_rate, class: 'remove-last-dot validate-prize-rate input-text', style: "width:80px;", validate: true %>
+                <i class="double-line"> % <em> * </em> （首次设置后不能修改，不能小于0.0001，不能大于100）</i>
+              </div>
+
+              <div class="p">
+                <span>
+                  <%= activity_prize.object.title %>当天次数
+                </span>
+                <%= activity_prize.text_field :day_limit_count, class: 'remove-last-dot validate-not-zero input-text', style: "width:80px;", validate: true %>
+                <i class="double-line"><em> * </em>
+                  （奖品当天允许出奖次数，-1表示不限制）
+                </i>
+              </div>
+              <div class="p">
+                <span>
+                  <%= activity_prize.object.title %>每人总次数
+                </span>
+                <%= activity_prize.text_field :people_limit_count, class: 'remove-last-dot validate-not-zero input-text', style: "width:80px;", validate: true %>
+                <i class="double-line"><em> * </em> （每个人获得此奖品的总次数，-1表示不限制）
+                </i>
+              </div>
+              <div class="p">
+                <span>
+                  <%= activity_prize.object.title %>每人每天次数
+                </span>
+                <%= activity_prize.text_field :people_day_limit_count, class: 'remove-last-dot validate-not-zero input-text', style: "width:80px;", validate: true %>
+                <i class="double-line"><em> * </em>   （每个人每天获得此奖品的次数，-1表示不限制）
+                </i>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="box-des fl">
+    <div class="des-l">
+    </div>
+    <div class="des-r">
+      <p class="p-but p-but-r" style="text-align: right;">
+        <%= link_to '上一步', edit_rule_settings_activity_path(@activity), class: "submit-keep btn btn-big" %>
+        <%= submit_tag "完成", class: "submit-keep btn btn-big btn-orange" %>
+      </p>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  var activity_type = 28;
+</script>

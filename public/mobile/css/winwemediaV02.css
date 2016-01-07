@@ -1,0 +1,214 @@
+* {margin:0;padding:0; outline: 0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html, body {
+	height: 100%
+}
+body {
+	position: relative;
+	overflow-x: hidden;
+	font-size: 14px;
+	font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+	-webkit-text-size-adjust: none;
+}
+body, p, form, h1, h2, h3, h4, h5, h6, ul, ol, li, section, div, * {
+	padding: 0;
+	margin: 0
+}
+img {
+	border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+    display: inline-block;
+}
+a {
+	text-decoration: none;
+}
+video {
+	display: inline-block;
+	width:100%;
+	background:#000;
+}
+::-moz-selection {
+ background: none;
+ color: #fff;
+ text-shadow: none;
+}
+::selection {
+	background: none;
+	color: #fff;
+	text-shadow: none;
+}
+dl,
+ul,
+p{-webkit-margin-before:0em;-webkit-margin-after:0em;}
+p{ margin: 0;}
+.hide {
+	display: none;
+}
+.show{display: inline-block;}
+.break {
+	word-spacing: normal;
+	word-break: normal;
+	word-break: break-all;
+}
+.tleft {
+	text-align: left;
+}
+.tright {
+	text-align: right;
+}
+.tcenter {
+	text-align: center;
+}
+.fl{ float:left;}
+.fr{ float:right;}
+.fw{ width: 100%;}
+.fa{ font-style:normal;}
+/*table*/
+.table {
+	height: 100%;
+	width: 100%;
+	display: table;
+	text-align: center;
+}
+.tr{ display:table-row;}
+.td {
+	display: table-cell;
+	vertical-align: middle;
+}
+/*navLine-ul*/
+.navLine-ul,
+.navLine-ul li{ list-style: none;}
+.navLine-ul{
+    width:100%;
+    display: -webkit-box;
+    display: -moz-box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.navLine-ul li {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    text-align: center;
+
+}
+.navLine-ul li>a{display: block; width: 100%;}
+.navLine-ul li>a>*{
+    pointer-events:none;
+}
+.ui-datepicker{
+    width: 96% ! important;
+    left:1% ! important;
+}
+/*ico*/
+.ico-share {
+    background: url("/mobile/img/vweisiteV01/pluin/ico-share.png") no-repeat 0 center;
+    background-size:23px 20px;
+    padding: 0 0 0 27px;
+}
+.ico-pyq{ background:url(/mobile/img/vweisiteV01/pluin/ico-pyq.png) no-repeat 0 center; background-size:21px 20px; padding:0 0 0 25px;}
+.text-share{ background:url(/mobile/img/vweisiteV01/pluin/text.png) no-repeat right center; width:100%; height:155px; background-size:contain; top:0; display: block;}
+/*btn*/
+.btn{-webkit-appearance:none;}
+/*btn-pop*/
+.btn-pop{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 900;
+    display: none;
+    box-shadow: 0, 0, 5px rgba(0,0,0,0.25);
+    width: 40px;
+    height: 40px;
+    border-radius: 1000px;
+    background: #999;
+    padding: 5px;
+}
+.btn-pop .fa{ width: 30px; height: 30px; font-size: 20px; text-align: center; line-height: 30px; background: #fff; color: #999; position: absolute; border-radius: 1000px;}
+.btn-up{right: 16px;
+    bottom: 16px;}
+.btn-comment{ left: 16px; bottom: 16px; display: block;}
+/*box*/
+.mod-page a:active,
+.mod-page.active,
+.mod-share a:active,
+.mod-share a.active,
+.box-active:active,
+.box-active.active,
+.btn:active,
+.btn.active{
+    opacity:0.8;
+    filter:alpha(opacity=80);
+    -moz-opacity:0.8;
+    -khtml-opacity:0.8;
+}
+/*layout*/
+.html{ position: relative; max-width: 640px; margin: auto; overflow: hidden; min-height: 100%; padding: 0 0 40px 0;}
+.stage{position: relative; min-height: 100%; -webkit-transition: -webkit-transform .8s;}
+/*.dirL .stage{-webkit-transform: translate(-100px,0);}*/
+/*.dirR .stage{-webkit-transform: translate(+100%,0);}*/
+/*.dirT .stage{-webkit-transform: translate(0,-100%);}*/
+/*.dirB .stage{-webkit-transform: translate(0,+100%);}*/
+footer{ height: 35px; line-height: 35px; position: relative; margin-top:-35px; text-align: center; z-index: 0;}
+footer,
+footer a{ color: #888;}
+/*module*/
+.mod-transition{ position: absolute;overflow:hidden;}
+.transition-left{left: -100%; top: 0; height: 100%; }
+.transition-right{left: 100%; top: 0; height: 100%; }
+.transition-top{left: 0; top: -100%; width: 100%; }
+.transition-bottom{left: 0; top: 100%; width: 100%; }
+/*slider*/
+.mod-slider{ width: 100%;position:relative; overflow:hidden; text-align:center;}
+.slider-hor{ height: 170px;}
+.slider-ver{ height: 100%; position: fixed; top:0; left: 0;}
+.mod-slider ul,
+.mod-slider li{ list-style: none;}
+.slider-list,
+.slider-text{position: absolute; width: 100%;left:0;}
+.slider-list{ height: 100%; top:0; z-index: 0;}
+.slider-list li,
+.slider-list a{width: 100%; height: 100%; overflow: hidden;display: block; text-align:center;}
+.slider-hor img{ width: 100%; max-height:170px;}
+.slider-ver img{ max-width:100%;}
+.slider-text{ z-index: 1; }
+.slider-hor .slider-text{padding: 5px 10px;bottom: 0;background: rgba(0,0,0,0.5); color: #fff;height: 30px; line-height: 20px;}
+.slider-ver .slider-text{padding: 0; z-index: 1000;}
+.slider-span{height:20px; overflow: hidden;text-overflow:ellipsis; white-space:nowrap;}
+.slider-hor .slider-span{ width: 60%; text-align: left;}
+.slider-ver .slider-span{ width:100%; height:50px; line-height: 50px; color: #fff; background: rgba(0,0,0,0.8); display: block; }
+.slider-page{ height: 20px; }
+.slider-hor .slider-page{width:40%; text-align: right;}
+.slider-ver .slider-page{ width: 100%; height: 50px; line-height: 50px;}
+.slider-page a{display:inline-block;width:10px; height:10px; line-height:9999px; overflow:hidden; background:#413b2d; border-radius:10px; margin:0 5px;}
+.slider-page a.active{ background:#fff;}
+/*mod-pop*/
+.mod-pop{ position: fixed; width:100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9000; top:0; left: 0; display: none;}
+/*loading fixed-top*/
+.loading.fixed-top{left:0; top:0; margin:5px; display:none; position: fixed;}
+.loading {
+    display: inline-block;
+    color: #999;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 0 10px 0;
+    padding:0 0 0 25px;
+    background:url(/mobile/img/loading.png) no-repeat 0 center;
+    background-size:20px 20px;
+}
+.isloading{
+    background:url(/mobile/img/loading.gif) no-repeat 0 center;
+    background-size:20px 20px;
+}
+@media screen and (orientation:landscape) {
+
+}

@@ -1,0 +1,47 @@
+<div class="header">
+  <div class="wrap">
+    <div class="logo">
+      <a href="/"></a>
+    </div>
+    <div class="header-nav">
+      <ul>
+      	<li>
+      	  <%= link_to "首页", root_url, class: current_page?(root_path) ? 'active' : '' %>
+      	</li>
+      	<li>
+      	  <%= link_to "经典案例", solution_path, class: action_name == 'solution' ? 'active' : '' %>
+      	</li>
+      	<li>
+      	  <%= link_to "功能导航", navigation_path, class: action_name == 'navigation' ? 'active' : '' %>
+      	</li>
+      	<li>
+      	  <%= link_to "渠道代理", spread_path, class: current_page?(spread_path) ? 'active' : ''%>
+      	</li>
+      
+      	<li>
+         <%= link_to "微客商站", newbusiness_path, class: current_page?(newbusiness_path) ? 'active' : '' %>
+      	</li>
+        <li>
+         <%= link_to "微客生活圈", wlife_path, class: current_page?(wlife_path) ? 'active' : '' %>
+        </li>
+        
+      	<li data-nav="tab">
+          <a href="javascript:void(0)">帮助中心<img src="/com/images/ico_da.png"><img src="/com/images/ico_db.png" class="hide"></a>
+
+          <ul class="ls">
+            <li><%= link_to "关于我们", about_path %></li>
+            <li>
+              <%= link_to "媒体报道", news_index_path(display: "dashboard"), class: controller_name == 'news' ? 'active' : '' %>
+            </li>
+            <li><%= link_to "使用指南", help_menus_path, target: "_blank" %></li>
+            <li><%= link_to "产品问答", answer_path %></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="header-btns">
+      <%= link_to "登录", sign_in_path, class: controller_name == 'sessions' ? 'btn btn-text' : 'btn btn-text' %>
+      <%= link_to "注册", register_path, class: "btn btn-green" %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="alert J-guanzhu" style="display:none">
+  <div class="alert-m">
+    <div class="alert-img"></div>
+    <div class="alert-c">
+      <p>请先关注公众帐号</p>
+      <p><span class="alert-num">1</span>点击右上角<span class="alert-text">分享按钮</span>查看公众号</p>
+      <p><span class="alert-num">2</span>在【添加朋友】—【查找公众号】中搜索</p>
+      <p><span class="alert-btn"><%= @wx_mp_user.try(:name) %></span>（长按可复制）</p>
+      <p>如果已关注，请打开该公众帐号回复<span class="alert-text"><%= @keyword ||  @activity.try(:keyword) %></span>，参与此活动</p>
+    </div>
+    <div class="alert-f">
+      <a href="javascript:;" class="alert-f-btn J-close">我知道了</a>
+    </div>
+  </div>
+</div>
+<div class="alert J-register" style="display:none">
+  <div class="alert-m">
+    <div class="alert-img"></div>
+    <div class="alert-c text-center">
+      <%-if defined?(@wx_user) && @wx_user.present?%>
+        <%- vip_user = @wx_user.vip_user %>
+        <%- if vip_user.present?%>
+          <%- if vip_user.pending? %>
+              <h1>您的会员卡还没通过审核 </h1>
+             <p>会员卡审核通过后可参与</p>
+          <%- elsif vip_user.freeze? %>
+              <h1>您的会员卡已冻结 </h1>
+              <p>会员卡解冻后可参与</p>
+          <%- elsif vip_user.rejected?%>
+              <h1>您的会员卡申请已拒绝</h1>
+              <p>该活动仅允许会员可参与</p>
+          <%- end %>
+        <%- else %>
+           <h1>请先领取会员卡</h1>
+           <p>该活动仅允许会员可参与</p>
+        <%- end %>
+       <%- end %>
+    </div>
+    <div class="alert-btn-box">
+      <div class="alert-cell cell-4">
+        <a href="javascript:;" class="alert-f-btn btn-gray J-close">我知道了</a>
+      </div>
+      <%- if defined?(@wx_user) && @wx_user.present? && @wx_user.vip_user.blank? %>
+        <div class="alert-cell">
+          <a href="<%= app_vips_path(wxmuid: session[:wx_mp_user_id]) %>" class="alert-f-btn J-close">领取会员卡</a>
+        </div>
+      <%- end %>
+    </div>
+  </div>
+</div>
+
+<% if @supplier.try(:bqq_account?) && !@not_show_mark %>
+  <footer>Powered By Tencent</footer>
+<% elsif @supplier && @supplier_footer && @supplier.try(:is_show_mark?) %>
+  <%- unless @not_show_mark %>
+    <footer>
+      <%= @supplier_footer.footer_link.present? ? link_to(@supplier_footer.footer_content, @supplier_footer.footer_link) : @supplier_footer.footer_content %>
+    </footer>
+  <% end %>
+<%- end %>
+
+<%= render "application/mobile_footer" %>
+
+<% if controller_name !~ /\Aguess|waves|unfolds|scenes|surveys|recommends|coupons|vips|slots|gua|hit_eggs|wheel|fight|wx_shakes\z/ %>
+  <%= render 'application/image_zoom' %>
+<% end %>

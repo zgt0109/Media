@@ -1,0 +1,88 @@
+<% provide(:title, "订单确认") %>
+<%= content_for(:topbar) do %>
+  <header>
+      <a href="javascript:history.go(-1);" class="ico-prev"><%= image_tag 'mobile/wshop/ico-back.png' %></a>
+      <h1>订单确认</h1>
+  </header>
+<% end %>
+
+<section>
+  <div class="box-adress table">
+    <% if @address.present? %>
+    <a href="<%= mobile_ec_addresses_path(supplier_id: @supplier.id, from: "cart", items: @carts.map(&:ec_item_id))%>" class="address_href">
+      <p class="td" style="padding: 0px;">
+          <b>收货地址</b>
+          <span><%= @address.try(:username) %>   <%= @address.try(:tel) %></span>
+          <span><%= @address.try(:province).try(:name) %><%= @address.try(:city).try(:name) %></span>
+          <span><%= @address.try(:address) %></span>
+      </p>
+    </a>
+    <p class="td">
+        <i class="arrow"></i>
+    </p>
+    <% else %>
+        <a href="<%= new_mobile_ec_address_path(supplier_id: @supplier.id, from: "cart", items: @carts.map(&:ec_item_id)) %>" class="box-adress table">
+          <p class="td">
+            <b>您还没有填写收货地址</b>
+          </p>
+          <p class="td">
+            <i class="arrow"></i>
+          </p>
+        </a>
+    <% end %>
+
+
+  </div>
+  <%= form_for @ec_order, url: mobile_ec_orders_path do |f| %>
+      <%= hidden_field_tag :ec_shop_id, @ec_order.ec_shop_id %>
+      <%= hidden_field_tag :wx_user_id, @ec_order.wx_user_id %>
+      <%= hidden_field_tag :address_id, @address.try(:id) %>
+      <dl class="box-orderList" id="ec_order">
+         <%= render 'order', :locals => {:carts => @carts, :address => @address} %>
+      </dl>
+  <% end %>
+
+  <script>
+      function update_cart(id, operate, items){
+          $.ajax({
+                      type:"get",
+                      url: "<%= update_cart_mobile_ec_carts_path(supplier_id: @supplier.id)%>",
+                      data: {"ec_item_id": id, "operate": operate, "form": "order", "carts": items},
+                      success: function(){
+//                      alert("提交成功!");
+//                      $("#new_college_enroll")[0].reset();
+                      }
+                  }
+          )
+      }
+
+      function ajax_submit_price(id, carts){
+          var qty = $("#item_value_" + id).val();
+          if(!qty || parseInt(qty) == 0 ){
+//          txt.value = txt.defaultValue;
+          }else{
+//         console.log(qty);
+              $.ajax({
+                          type:"get",
+                          url: "<%= update_cart_with_qty_mobile_ec_carts_path(supplier_id: @supplier.id)%>",
+                          data: {"ec_item_id": id, "qty": qty, "form": "order", "carts": carts},
+                          success: function(){
+//                      alert("提交成功!");
+//                      $("#new_college_enroll")[0].reset();
+                          }
+                      }
+              )
+          }
+      }
+  </script>
+  <style>
+      .address_href {
+          padding: 20px 5%;
+          text-align: left;
+          width: 100%;
+          color: #666666;
+      }
+
+
+  </style>
+</section>

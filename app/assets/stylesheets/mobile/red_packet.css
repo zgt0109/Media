@@ -1,0 +1,414 @@
+/*
+*= require mobile/winwemedia01
+*= require mobile/font-awesome.min
+*= require_self
+*/
+
+body{
+    background: #FFFAD1;
+    font-family: "微软雅黑";
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+.bg,.stage,section,.body,.package-box,.package-box img{
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    height: 100%;
+}
+.state{
+    width: 60%;
+    height: 78px;
+    position: fixed;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    top: 60%;
+}
+.state img{
+    width: 100%;
+    height: 78px;
+    position: absolute;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+}
+.state .text{
+    width: 191px;
+    height: 78px;
+    position: absolute;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    text-align: center;
+    line-height: 80px;
+    font-size: 30px;
+    color: #cb3b28;
+}
+.ended .text{color: #ccc;}
+/*.start{display: block;}
+.ended{display: none;}*/
+.btn-box{
+    width: 100%;
+    position: fixed;
+    top:78%;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+}
+.btn-box a{
+    display: block;
+}
+.btn-box .btn{
+    width: 57%;
+    height: 37px;
+    background: #FCC707;
+    line-height: 37px;
+    color: #000;
+    font-size: 17px;
+    display: block;
+}
+.btn-box .btn span{
+    width: 100%;
+    height: 37px;
+    display: block;
+}
+.info{
+    width: 67%;
+    position: absolute;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    top: 28%;
+}
+.info ul{list-style: none;}
+.info ul li{
+    margin-bottom: 10px;
+    text-align: center;
+}
+.info ul li h3{
+    font-size: 17px;
+    color: #fff;
+    line-height: 36px;
+}
+.info ul li input{
+    width: 100%;
+    height: 37px;
+    border-radius: 5px;
+    background: #fff8c4;
+    outline: none;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    color: #000;
+    font-family: "微软雅黑";
+}
+input::-webkit-input-placeholder{
+    color: #c7c299;
+}
+.info ul li:last-child  input{
+    background: #fcc707;
+    font-size: 17px;
+}
+.black{
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    position: absolute;
+    z-index: 98;
+    display: none;
+}
+.rules{
+    width: 87%;
+    max-height: 380px;
+    position: absolute;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    top: 19%;
+    background: #fff8c4;
+    border-radius: 5px;
+    padding: 20px;
+    line-height: 20px;
+    color: #eb5f36;
+    white-space: normal;
+    word-break: break-all;
+    z-index: 99;
+    display: none;
+    overflow-y: hidden;
+}
+.rules .rule-inner{
+    width: 100%;
+    max-height: 360px;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+}
+.rules .cover{
+    width: 5%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 380px;
+    z-index: 99999;
+}
+.rules img{
+    width: 100%;
+}
+.rules h3{
+    text-align: center;
+    font-size: 17px;
+    line-height: 26px;
+    margin-bottom: 3px;
+    color: #000;
+}
+.rules p:nth-child(2){padding-bottom: 10px;}
+.rules p:last-child{margin-bottom: 10px;}
+.rules a{display: block;}
+.rules input{
+    width: 72%;
+    height: 37px;
+    border-radius: 5px;
+    background: #fcc707;
+    outline: none;
+    border: none;
+    font-size: 17px;
+    font-family: "微软雅黑";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+}
+.rules .closed{
+    width: 100%;
+    height: 39px;
+    display: block;
+    background: #fff8c4;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+}
+
+.list{
+    width: 78%;
+    position: absolute;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    top: 26%;
+}
+.list .hd{
+    padding: 0 20px;
+    color: #fff;
+    position: relative;
+}
+.list .hd h3{
+    text-align: center;
+    font-size: 17px;
+    line-height: 30px;
+}
+.list .hd img{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 20px;
+    bottom: 0px;
+}
+.list .er{
+    position: absolute;
+    right: 0;
+    top: 78px;
+    display: none;
+    z-index: 9999;
+}
+.list .er img{
+    width: 120px;
+    height: 120px;
+}
+.list .swipe{
+    width: 100%;
+    background: #fff8c4;
+    padding: 5px;
+    margin-top: 10px;
+    height: 175px;
+    border-radius: 5px;
+}
+.list .swipe ul{
+    width: 100%;
+    height: 170px;
+    background: #fff8c4;
+    list-style: none;
+    overflow-x:hidden;
+}
+.cover{
+    width: 5%;
+    height: 175px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #fff8c4;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.list ul:after{
+    content:"";
+    display:block;
+    clear:both;
+    height:0;
+}
+.list ul li{
+    width: 95%;
+    border-bottom: 1px dashed #e75f36;
+    padding: 5px 5px 10px 5px;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+.list ul li:after {
+    content:"";
+    display:block;
+    clear:both;
+    height:0;
+}
+.list ul li:last-child{
+    border:none;
+    text-align: center;
+    color: #ee6036;
+}
+.list ul li img{
+    width: 35px;height: 35px;
+    float: left;margin-right: 3px;
+}
+.box .top p:nth-child(1){float: left;font-size: 12px;}
+.box .top p:nth-child(2){float: right;font-size: 12px;}
+.box .bot p:nth-child(1){float: left;font-size: 14px;}
+.box .bot p:nth-child(2){float: right;font-size: 14px;}
+
+.l_detail{
+    width: 78%;
+    position: absolute;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    top: 36%;
+}
+.l_detail .hd{
+    color: #fff;
+    position: relative;
+    text-align: center;
+}
+.l_detail .hd h3{
+    font-size: 17px;
+    line-height: 30px;
+}
+.l_detail .hd img{
+    width: 135px;
+    height: 135px;
+    position: absolute;
+    left: 50%;
+    top: 130%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+}
+.bottips{
+    position: relative;
+    left: 50%;
+    transform:translate(-50%,0);
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    top: 20px;
+    animation:botbtn 1s linear 0s infinite alternate;
+    -webkit-animation:botbtn 1s linear 0s infinite alternate;
+    -ms-animation:botbtn 1s linear 0s infinite alternate;
+
+}
+@-webkit-keyframes botbtn{
+    from{
+        top:20px;
+    }
+    to{
+        top: 30px;
+    }
+}
+@-ms-keyframes botbtn{
+    from{
+        top:20px;
+    }
+    to{
+        top: 30px;
+    }
+}
+.toptips{
+    position: absolute;
+    left: 50%;
+    top: -50%;
+    transform:translate(-50%,0);
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    -webkit-animation:topbtn 1s linear 0s infinite alternate;
+    -ms-animation:topbtn 1s linear 0s infinite alternate;
+    animation:topbtn 1s linear 0s infinite alternate;
+
+}
+@-webkit-keyframes topbtn{
+    from{
+        top:-50%;
+    }
+    to{
+        top: -46%;
+    }
+}
+@-ms-keyframes topbtn{
+    from{
+        top:-50%;
+    }
+    to{
+        top: -46%;
+    }
+}
+.topbtns{
+    width: 40px;
+    height: 100%;
+    position: absolute;
+    top: -150%;
+    left: 50%;
+    -webkit-transform:translate(-50%,0);
+    -ms-transform:translate(-50%,0);
+    transform:translate(-50%,0);
+    -webkit-animation:topbtns 1s linear 0s infinite alternate;
+    -ms-animation:topbtns 1s linear 0s infinite alternate;
+    animation:topbtns 1s linear 0s infinite alternate;
+}
+@-webkit-keyframes topbtns{
+    from{
+        top:-150%;
+    }
+    to{
+        top: -140%;
+    }
+}
+@-ms-keyframes topbtns{
+    from{
+        top:-150%;
+    }
+    to{
+        top: -140%;
+    }
+}
+

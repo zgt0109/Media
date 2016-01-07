@@ -1,0 +1,25 @@
+<%= form_for @group_category, validate: true, html: {class: "form", role: "form"} do |f| %>
+  <%= f.hidden_field :group_id %>
+  <%= f.hidden_field :parent_id %>
+
+  <div class="form-group margin-top-10">
+    <label class="control-label">名称：<span class="required-star">*</span></label>
+    <div class="clearfix">
+      <%= f.text_field :name, class: "col-xs-8 required", maxlength: 8, placeholder: "不能超过8个字" %>
+    </div>
+  </div>
+  <%# if @group_category.new_record? %>
+  <%if false %>
+    <div class="form-group">
+      <label class="control-label">排序：<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :sort, maxlength: 5, class: "col-xs-8 required", placeholder: "值越小越靠前" %>
+      </div>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <input type="submit" class="btn btn-primary btn-sm" value="保存">
+    <input type="reset" class="btn btn-default btn-sm" value="取消">
+  </div>
+<% end %>

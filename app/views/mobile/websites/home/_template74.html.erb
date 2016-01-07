@@ -1,0 +1,20 @@
+<% if website_menus.present? %>
+    <div class="mod-logo"><%= website.name %></div>
+    <div class="index" id="index">
+      <a href="javascript:;" onclick="toggleToClass('#index','active')"></a>
+      <% website_menus[0..7].each do |menu| %>
+          <%= link_to menu_url(menu) do %>
+              <p>
+                <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+              </p>
+          <% end %>
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :document_ready_js do %>
+    <% if @website_setting.bg_image.present? %>
+        // 静态背景图
+        //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+    <% end %>
+<% end %>

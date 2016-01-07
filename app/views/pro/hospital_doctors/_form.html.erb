@@ -1,0 +1,314 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微医疗', hospitals_url %></li>
+        <li><%= link_to '医生管理', hospital_doctors_path %></li>
+        <li><%= link_to @hospital_doctor.new_record? ? '新增医生' : '编辑医生', '#' %></li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <%= form_for @hospital_doctor, validate: true,  html: { class: "form", role: "form" } do |f| %>
+          <%= f.hidden_field :hospital_id %>
+            <div class="form-group">
+              <label class="control-label">医生姓名<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= f.text_field :name, class: "col-xs-6", placeholder: "请输入医生姓名" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">医生照片<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <div class="cieldon-file width-100px " data-type="0" data-width="70" data-height="85" data-name="hospital_doctor[avatar_key]" data-img="<%= f.object.avatar_url %>" data-key="<%= f.object.avatar_key %>"></div>
+                <span class="help-inline text-warning line-height-32">图片建议尺寸：140像素*170像素</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">性别<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <label class="control-label">
+                  <%= f.radio_button :gender, 1, class: "ace" %>
+                  <span class="lbl">男</span>
+                </label>
+                <label class="margin-left-10">
+                  <%= f.radio_button :gender, 2, class: "ace" %>
+                  <span class="lbl">女</span>
+                </label>
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">简介<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= f.text_area :description, class: "col-xs-6", rows: "3" %>
+              </div>
+            </div>
+           
+            <div class="form-group">
+              <label class="control-label">职称<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <div class="input-group input-group-sm col-xs-4 row">
+                  <input class="form-control" type="text" id="new_job_title">
+                  <div class="input-group-btn">
+                    <button class="btn btn-sm btn-info" type="button" id="append_hospital_job_title" onclick="add_new_hospital_job_title();">新增职称</button>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix margin-top-10" id="title_lable">
+                <% @hospital_doctor.hospital.hospital_job_titles.each do |hospital_job_title| %>
+                  <div class="badge <%= @hospital_doctor.hospital_job_titles.include?(hospital_job_title) ? "active": "badge-grey" %>" data-job_title_id="<%= hospital_job_title.id %>">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <i class="icon-remove"></i>
+                    </button>
+                    <span><%= hospital_job_title.name %></span>
+                  </div>
+                <% end %>
+
+                <div style="display: none;" id="hidden_title_div">
+                  <% @hospital_doctor.hospital.hospital_job_titles.each do |hospital_job_title| -%>
+                    <%= check_box_tag(:hospital_job_title_ids, hospital_job_title.id, @hospital_doctor.hospital_job_titles.include?(hospital_job_title), :name => 'hospital_doctor[hospital_job_title_ids][]') -%>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">所属科室<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <div class="col-xs-3 row">
+                  <select class="form-control form-select-1" id="parent_department">
+                    <% @hospital_doctor.hospital.hospital_departments.root.each do |hospital_department| %>
+                      <option value="<%= hospital_department.id %>"><%= hospital_department.name %></option>
+                    <% end %>
+                  </select>
+                </div>
+                <div class="col-xs-3">
+                  <select class="form-control form-select-2" id="children_department" disabled></select>
+                </div>
+
+                <div class="col-xs-4 row">
+                  <a href="javascript:;" class="btn btn-info btn-sm" id="append_hospital_department">添加科室</a>
+                </div>
+              </div>
+
+              <div class="clearfix margin-top-10" id="department_lable">
+                <% @hospital_doctor.hospital_departments.each do |hospital_department| %>
+                  <div class="badge active">
+                    <button type="button" class="close" data-dismiss="alert">
+                      <i class="icon-remove" data-department_id="<%= hospital_department.id %>"></i>
+                    </button>
+                    <span><%= hospital_department.name %></span>
+                  </div>
+                <% end %>
+
+                <div style="display: none;">
+                  <% @hospital_doctor.hospital.hospital_departments.each do |hospital_department| -%>
+                    <%= check_box_tag(:hospital_department_ids, hospital_department.id, @hospital_doctor.hospital_departments.include?(hospital_department), :name => 'hospital_doctor[hospital_department_ids][]') if hospital_department.children.count == 0 -%>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">医生排序</label>
+              <div class="clearfix">
+                <div class="input-group input-group-sm col-xs-4 row">
+                  <%= f.number_field :sort, class: "form-control" %>
+                  <span class="input-group-addon">数字越小排序越靠前</span>
+                </div>
+              </div>
+            </div>
+
+          
+            <div class="form-group">
+                <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                <%= link_to '取消', hospital_doctors_url, class: 'btn btn-sm btn-default' %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div style="display:none">
+  <%= form_for @hospital_job_title, remote: true do |f| %>
+    <%= f.hidden_field :hospital_id %>
+    <%= f.text_field :name %>
+  <% end %>
+
+  <%= form_for @hospital_department, remote: true do |f| %>
+    <%= f.hidden_field :hospital_id %>
+    <%= f.text_field :name %>
+  <% end %>
+</div>
+
+<% content_for :custom_js do %>
+  <script>
+  function add_new_hospital_job_title(){
+    var new_title = $("#new_job_title").val();
+    if( new_title ){
+      $("#hospital_job_title_name").val(new_title);
+      $("#new_hospital_job_title").submit();
+      $("#new_job_title").val('');
+    }
+  }
+
+  function validateName(){
+    return !$("#hospital_doctor_name").val() == '';
+  }
+
+  function validateContent(){
+    return !$("#wx_menu_content").val() == '';
+  }
+
+  function validateTitle(){
+    return $("#title_lable a.selected_tag").size() > 0;
+  }
+
+  function validateDepartment(){
+    return $("#department_lable a").size() > 0;
+  }
+
+  function showErrorMessage(field, x, y){
+    if($(field).parent().find(".error-message").length > 0){
+
+    }else{
+      $(field).after('<label class="error-message" style="margin-left: 336px;position: absolute;top: '+x+'px;left:'+y+'px">不能为空<i></i><em></em></label>');
+    }
+  }
+  function hiddenErrorMessage(field){
+    $(field).parent().find(".error-message").remove();
+  }
+  </script>
+
+  <script type="text/javascript">
+    $(function(){
+     
+      $("#title_lable").on("click",".badge", function(){
+        var id = $(this).data('job_title_id');
+        if ( $(this).hasClass("badge-grey") ) {
+          $(this).removeClass("badge-grey").addClass('active');
+        } else {
+          $(this).removeClass('active').addClass("badge-grey");
+        }
+
+        $("#title_lable input:checkbox[value="+id+"]").trigger('click');
+        hiddenErrorMessage("#append_hospital_job_title");
+      });
+
+      $("#title_lable").on("click","i", function(){
+        var id = $(this).closest('.badge').data('job_title_id');
+        $.ajax({
+          type: "DELETE",
+          url: "/hospital_job_titles/"+id,
+          success: function(data) {
+            // $(this).parent().remove();
+            return false;
+          },
+          error: function() {
+            // showTip('warning','删除失败');
+            return false;
+          }
+        });
+      });
+
+      $("#department_lable").on("click","i", function(){
+        var id = $(this).data('department_id');
+        $("#department_lable input:checkbox[value="+id+"]").trigger('click');
+        $(this).closest('.badge').remove();
+      });
+
+      $(".form-group").on("change","#parent_department", function() {
+        loadChildrenDepartment();
+      });
+
+      $("#append_hospital_department").click(function(){
+        var children_text = $("#children_department option:selected").text();
+        var children_id = $("#children_department option:selected").val();
+        var parent_text = $("#parent_department option:selected").text();
+        var parent_id = $("#parent_department option:selected").val();
+        if(parent_text == ""){
+          showTip("warning","请先在科室管理中添加科室");
+        }else{
+          if(children_id){ //子部门存在
+            if($("#department_lable input:checkbox[value="+children_id+"]").prop('checked')){
+
+            }else{
+              html = '<div class="badge active"><button type="button" class="close" data-dismiss="alert"><i class="icon-remove" data-department_id="'+children_id+'"></i></button><span>'+children_text+'</span></div>';
+              $("#department_lable").append(html);
+              $("#department_lable input:checkbox[value="+children_id+"]").prop('checked', true);
+              hiddenErrorMessage("#append_hospital_department");
+            }
+          }else{
+            var parent_text = $("#parent_department option:selected").text();
+            var parent_id = $("#parent_department option:selected").val();
+            if($("#department_lable input:checkbox[value="+parent_id+"]").prop('checked')){
+
+            }else{
+              html = '<div class="badge active"><button type="button" class="close" data-dismiss="alert"><i class="icon-remove" data-department_id="'+parent_id+'"></i></button><span>'+parent_text+'</span></div>';
+              $("#department_lable").append(html);
+              $("#department_lable input:checkbox[value="+parent_id+"]").prop('checked', true);
+              hiddenErrorMessage("#append_hospital_department");
+            }
+          }
+        }
+      });
+    });
+
+    function loadChildrenDepartment(){
+      var parent_id = $("#parent_department").val();
+      $.ajax({
+          type: "GET",
+          url: "/hospital_departments/"+parent_id,
+          success: function(data) {
+            return false;
+          },
+          error: function() {
+            return false;
+          }
+        });
+    }
+    loadChildrenDepartment();
+  </script>
+  <script>
+    $(function(){
+      $('#hospital_doctor_avatar').change(function () {
+        var img = new Image();
+        setTimeout(function(){
+          img.src=$('#doctor_preview').attr('src');
+          if(img.width != 140 || img.height!= 170){
+            $('.show_pic_advice').show();
+            $('.upload_pic').text('重新上传');
+            $('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+            }else{
+              $('.show_pic_advice').hide();
+            }
+        }, 1000)
+      });
+    });
+  </script>
+  <!-- validate -->
+  <script type="text/javascript">
+    $(function(){
+      $("input:radio").click(function(){
+        if($("#doctor_preview").attr("src").indexOf("male") > 0){
+          if($(this).val() == '1'){
+            $("#doctor_preview").attr("src","/assets/hospital/male.jpg");
+          }else{
+            $("#doctor_preview").attr("src","/assets/hospital/female.jpg");
+          }
+        }
+      });
+    });
+
+  </script>
+<% end %>

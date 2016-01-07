@@ -1,0 +1,74 @@
+<% content_for :main_content do %>
+	<div class="main-content ">
+		<div class="breadcrumbs" id="breadcrumbs">
+			<ul class="breadcrumb">
+        <li> <i class="icon-home home-icon"></i><%= link_to "首页", root_path %> </li>
+        <li> <%= link_to "微婚礼", weddings_path %> </li>
+			</ul>
+			<%= render partial:'/layouts/qrcode' %>
+		</div>
+
+		<div class="page-content">
+			<div class="row">
+				<%= form_tag weddings_path, :method => :get do %>
+					<div class="col-sm-12">
+						<div class="col-md-3 row">
+							<div class="input-group input-group-text">
+								<span class="input-group-addon">新郎或新娘：</span>
+								<%= text_field_tag :name, params[:name] ,class: 'col-xs-12', placeholder: "请输入新郎或新娘的名字" %>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="input-group input-group-text">
+								<span class="input-group-addon">关键词：</span>
+								<%= text_field_tag :keyword, params[:keyword] ,class: 'col-xs-12', placeholder: "请输入关键词" %>
+							</div>
+						</div>
+						<div class="col-md-3 row">
+							<button class="btn btn-primary btn-sm btn-filter" type="submit">查询</button>
+						</div>
+						<div class="col-md-3 pull-right row">
+							<a href="/weddings/new" class="btn btn-primary btn-sm pull-right">新增</a>
+						</div>
+					</div>
+				<% end %>
+
+				<div class="col-md-12 margin-top-20">
+					<table id="vweddingTable"
+						class="table table-striped table-bordered table-hover dataTable ">
+						<thead>
+							<tr>
+								<th>编号</th>
+								<th>关键词</th>
+								<th>新郎-新娘</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% @weddings.each do |wedding| %>
+								<tr>
+									<td><%= wedding.id %></td>
+									<td><%= wedding.activity.keyword rescue '' %></td>
+									<td><%= wedding.groom  %>-<%= wedding.bride%></td>
+									<td class="txt-left-align">
+										<a href="javascript:;" data-toggle="modals" data-title="选择模板" data-height="600" data-width="746" data-target="selectTemplate" data-iframe="<%= edit_template_wedding_path(wedding) %>">选择模板</a>
+										<%= link_to "编辑", edit_wedding_path(wedding)  %>
+										<a href="javascript:;" data-toggle="modals" data-title="分享设置" data-height="600" data-width="1000" data-target="shareSet" data-iframe="<%= new_wedding_qr_code_path(wedding) %>">分享设置</a>
+										<%= link_to "婚纱照", wedding_pictures_path(wedding)  %>
+										<%= link_to "宾客", wedding_guests_path(wedding)  %>
+										<%= link_to "祝福", wedding_wishes_path(wedding)  %>
+										<%= link_to '删除', wedding_path(wedding), data: {toggle: "modals", confirm: "确定要删除该婚礼？", target: "delModel", url: wedding_path(wedding)}, method: :delete %>
+									</td>
+								</tr>
+							<% end %>
+						</tbody>
+
+					</table>
+				<%= paginate @weddings %>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>
+ <% content_for :custom_js do %>
+ <% end %>

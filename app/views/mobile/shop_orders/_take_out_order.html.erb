@@ -1,0 +1,18 @@
+<%= link_to mobile_shop_order_path(supplier_id: session[:supplier_id], id: order.id, anchor: "mp.weixin.qq.com"), class: "mod-food fa fa-angle-right" do %>
+    <p>
+        <b>外卖编号：</b>
+        <span><%= order.order_no %></span>
+    </p>
+    <p>
+        <b>门　　店：</b>
+        <span><%= order.shop_branch.name %></span>
+    </p>
+    <p>
+        <b>外卖时间：</b>
+        <span><%= order.book_at %></span>
+    </p>
+    <p>
+        <b>状　　态：</b>
+        <span><%= order.status_name %>  <%= order.pay_status_name unless order.cashpay? %></span>
+    </p>
+<% end %>

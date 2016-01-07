@@ -1,0 +1,70 @@
+/*
+*= require mobile/font-awesome.min
+*= require mobile/winwemedia01
+*/
+body{background:#e8e7e6;}
+.pageindex{padding:10px;display:-webkit-box;-webkit-box-orient:vertical;}
+.pageindex .logo{width:100%;height:60px !important;background:url("/assets/img/caitu/logo.png") center no-repeat;background-size:150px 40px;}
+.pageindex .desc{background:#fff;padding:10px;color:#666;}
+.pageindex .desc h2{font-size:16px;margin-bottom:5px;}
+.pageindex .desc p{font-size:14px;}
+.pageindex .desc a.details{float:right;width:100%;font-size:14px;text-align:right;display:block;color:#0000cc;}
+
+.question-list{padding:5px;}
+.question-list .box{width:50%;padding:5px;float:left;}
+.question-list .box>a{padding:5px;position:relative;color:#666;text-align:center;width:100%;height:100%;overflow:hidden;display:block;background:#fff;}
+.question-list .img{display:block;width:100%;height:100px;overflow:hidden;}
+.question-list .img img{width:100%;min-height:100%;}
+.question-list .box>a p{height:22px;line-height:22px;overflow:hidden;}
+.question-list .over{position:absolute;top:5px;right:5px;width:70px;height:70px;background:url("/assets/img/caitu/over.png") no-repeat;background-size:contain;}
+.footer{background-color:rgba(0,0,0,0.7);font-size:14px;color:#ccc;line-height:45px;height:45px;width:100%;position:fixed;bottom:0;left:0;text-align:center;}
+.footer em{font-weight:bold;font-size:18px;font-style:normal}
+.footer a{display:block;background:#f2865b;text-align:center;color:#fff;font-size:14px;border-radius:5px;width:100px;float:right;height:35px;line-height:35px;margin:5px 10px;}
+.page-question{padding:10px;}
+.page-question .title{width:100%;background:#fff;width:100%;padding:5px;}
+.page-question .title img{width:100%;}
+.page-question .title p{text-align:left;color:#f2865b;font-size:18px;margin:10px 0px;padding-left:5px;}
+.page-question .answers li{width:100%;background:#fff;color:#666666;margin-top:10px;vertical-align:center;padding:10px;padding-right:15%;}
+.page-question .answers li.yes{background:#666666 url("/assets/img/caitu/checkbox.png") 96% no-repeat;background-size:30px;color:#fff;}
+.page-question .sub{text-align:center;margin:20px 0 0px;}
+.page-question .sub a{display:block;background:#f2865b;width:140px;font-size:18px;height:45px;line-height:45px;border-radius:5px;color:#fff;}
+.prompt{background:#f2865b;width:100%;position:fixed;list-style-position:outside;top:0;padding:20px 10px;color:#fff;font-size:16px}
+.html.pagelist{background:#fff;}
+.page-list li{width:100%;list-style:none;border-bottom:1px solid #d0d0d0;color:#5c5c5c;padding:15px 10px;font-size:14px;position:relative;}
+li.over{color:#adadad;}
+.page-list li.have span.ewm{display:block;width:30px;height:30px;background:url("/assets/img/caitu/ewm.png") no-repeat;background-size:30px;}
+.page-list li.over span.ewm{display:block;width:30px;height:30px;background:url("/assets/img/caitu/ewm-over.png") no-repeat;background-size:30px;}
+.page-list .title{background:#f0f1f3;padding:10px 5px;display:-webkit-box;width:100%;}
+.page-list .title>p{padding:0px 10px;width:90%;}
+.page-list p.sn{padding-left:45px;font-size:14px;padding-top:10px;}
+.page-list p.sn em{font-style:normal;color:#f2865b;font-weight:bold;font-size:14px;}
+.page-list li img.ewm{width:30px;display:block;}
+.page-list li a.delete{display:block;width:50px;height:50px;background:url("/assets/img/caitu/delete.png") center no-repeat;background-size:20px;position:absolute;right:0px;bottom:0px;}
+.showewm{position:absolute;top:0;display:none;left:0;background:rgba(0,0,0,0.8) url("/assets/images/ewm.jpg") center 20%  no-repeat;background-size:290px;width:100%;height:100%;}
+.showewm.pop{opacity:0;-webkit-transition:all 0.2s linear;}
+.showewm.show{opacity:1;}
+
+/* 11-26 add */
+.mod-pop{width:100%;height:100%;position:fixed;left:0;top:0;}
+.mod-main{width:100%;padding:0 10px;position:absolute;top:50%;margin-top:-117px;}
+.mod-form{background:#fff;border-radius:5px;overflow:hidden;}
+.mod-li{height:44px;padding:10px;margin-top:10px;border:1px solid #d6d6d6;border-radius:3px;position:relative;}
+.mod-li input{width:100%;height:100%;font-size:16px;line-height:22px;color:#666;border:none;overflow:hidden;}
+.mod-li .error-tips{position:absolute;width:100%;height:100%;padding:10px;color:#cc3300;left:0;top:0px;background:#fff;}
+.mod-li .error-icon{display:inline-block;width:15px;height:15px;vertical-align:middle;background-image:url(/assets/img/caitu/icon.png);-webkit-background-size:100% 100%;background-size:100% 100%;}
+.mod-btn{margin-top:10px;}
+.btn-yellow{color:#fff;background:#f2865b;}
+.btn-white{color:#f2865b;background:#fff;}
+
+.over-pop{background:rgba(242,134,91,.96);}
+.over-img{width:64%;margin:50px 18%;}
+.over-img img{max-width:100%;}
+.over-btn{position:absolute;width:100%;left:0;bottom:20px;}
+
+.popup{display:none;position:fixed;left:0;top:0;width:100%;height:100%;padding:0 10px;background:rgba(0,0,0,.8);}
+.pop-body{position:relative;border-radius:5px;overflow:hidden;background:#fff;top:50%;}
+.pop-t{height:44px;line-height:44px;font-size:18px;color:#f2865b;text-align:center;background:#ddd;}
+.pop-m{text-align: center;padding:10px;font-size:15px;color:#000;line-height:24px;}
+.pop-f{width:100%;display:table;padding:10px 5px;}
+.pop-f .cell{display:table-cell;padding:0 5px;}
+.pop-f .btn{width:100%;}

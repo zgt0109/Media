@@ -1,0 +1,127 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-title">
+      <img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>车型比较
+    </div>
+    <div class="mod-compare">
+      <div class="compare-li">
+        <div class="compare-img"><a href="javascript:;" onclick="toggleToClass('#html','dirL');resize('#transitionRight','dirL');click_num(1)"><img id="path_1" src="<%= @general.try(:path_url) %>"/></a>
+        </div>
+        <span id="name_1"><%= @car_type.name %></span>
+      </div>
+      <div>VS</div>
+      <div class="compare-li">
+ 				<div class="compare-img"><a href="javascript:;" onclick="toggleToClass('#html','dirL');resize('#transitionRight','dirL');click_num(2)"><img id="path_2" src="/assets/mobile/wcar/bg-compare.jpg"/></a></div>
+        <span id="name_2">车型名字</span>
+      </div>
+    </div>
+    <div class="mod-table table-compare">
+      <div class="hd">参数对比</div>
+      <div class="bd">
+        <table>
+          <tr>
+            <td width="100">最新报价：</td>
+            <td class="dealer_price_1" width="100"><%= @car_type.dealer_price %></td>
+            <td class="dealer_price_2" width="100"></td>
+          </tr>
+          <tr>
+            <td>级别：</td>
+            <td class="level_1"><%= @car_type.level %></td>
+            <td class="level_2"></td>
+          </tr>
+          <tr>
+            <td>年款：</td>
+            <td class="year_1"><%= @car_type.year %></td>
+            <td class="year_2"></td>
+          </tr>
+          <tr>
+            <td>发动机：</td>
+            <td class="engine_1"><%= @car_type.engine %></td>
+            <td class="engine_2"></td>
+          </tr>
+          <tr>
+            <td>变速箱：</td>
+            <td class="gear_box_1"><%= @car_type.gear_box %></td>
+            <td class="gear_box_2"></td>
+          </tr>
+          <tr>
+            <td>排量(ml)：</td>
+            <td class="output_volumne_1"><%= @car_type.output_volumne %></td>
+            <td class="output_volumne_2"></td>
+          </tr>
+          <tr>
+            <td>长*宽*高<br>(mm)：</td>
+            <td class="car_size_1"><%= @car_type.car_size %></td>
+            <td class="car_size_2"></td>
+          </tr>
+          <tr>
+            <td>车身结构：</td>
+            <td class="structure_1"><%= @car_type.structure %></td>
+            <td class="structure_2"></td>
+          </tr>
+          <tr>
+            <td>百公里加速<br>(s)：</td>
+            <td class="accelerate_1"><%= @car_type.accelerate %></td>
+            <td class="accelerate_2"></td>
+          </tr>
+          <tr>
+            <td>最高车速<br>(Km/h)：</td>
+            <td class="speed_1"><%= @car_type.speed %></td>
+            <td class="speed_2"></td>
+          </tr>
+          <tr>
+            <td>油耗(L)：</td>
+            <td class="oil_1"><%= @car_type.oil %></td>
+            <td class="oil_2"></td>
+          </tr>
+          <tr>
+            <td>整车质保：</td>
+            <td class="warranty_1"><%= @car_type.warranty %></td>
+            <td class="warranty_2"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="mod-transition transition-right" id="transitionRight">
+	<input type="hidden" id="click_num" value="" />
+  <div class="mod-type">
+      <% @car_types.each do |type| %>
+			<a href="javascript:change_type('<%= type.id %>');"><%= type.name %></a>
+		<% end %>
+  </div>
+</section>
+<script type="text/javascript">
+function click_num(num){
+  $('#click_num').val(num);
+}
+
+function change_type(id){
+  var set_url = "<%= change_type_mobile_car_shops_path(supplier_id: @supplier.id) %>" + "?car_type_id=" + id;
+  jQuery.ajax({
+    type: "GET",
+    url: set_url,
+    dataType: "json",
+    success: function(data){
+    	var num = $('#click_num').val();
+    	$('#path_'+num).attr("src",data.path);
+    	$('#name_'+num).html(data.name);
+      $('.dealer_price_'+num).html(data.dealer_price);
+      $('.level_'+num).html(data.level);
+      $('.year_'+num).html(data.year);
+      $('.engine_'+num).html(data.engine);
+      $('.gear_box_'+num).html(data.gear_box);
+      $('.output_volumne_'+num).html(data.output_volumne);
+      $('.car_size_'+num).html(data.car_size);
+      $('.structure_'+num).html(data.structure);
+      $('.accelerate_'+num).html(data.accelerate);
+      $('.speed_'+num).html(data.speed);
+      $('.oil_'+num).html(data.oil);
+      $('.warranty_'+num).html(data.warranty);
+      toggleToClass('#html','dirL');resize('#transitionRight','dirL');
+    }
+  });
+}
+</script>

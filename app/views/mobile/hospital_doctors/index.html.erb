@@ -1,0 +1,32 @@
+<style type="text/css">
+  .pagination li{display: none;}
+</style>
+<% provide(:title, @hospital.name) %>
+<section id="index">
+  <header>
+    <div class="wrap">
+      <a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+      <h1>
+        <a class="select-down" href="javascript:void(0);" onclick="transition('#index','#transition-category',1)">全部科室</a>
+      </h1>
+
+        <%= link_to my_items_mobile_doctor_arrange_items_path, class: "ico-member" do %>
+          <img src="/assets/mobile/whospital/ico-member.png">
+        <% end %>
+
+    </div>
+  </header><!-- header end -->
+
+  <div class="body">
+    <div class="box-list"  id="hospital_doctors">
+      <%= render "hospital_doctor", hospital_doctors: @hospital_doctors %>
+    </div><!-- box-list end -->
+    <div style="text-align:center;">
+      <div class="foot-loading"></div><%= paginate @hospital_doctors %>
+    </div>
+  </div><!-- body end -->
+</section>
+
+<%= render "department_search" %>
+<%= javascript_include_tag 'jquery' %>
+<script src="/javascripts/app/leaving_messages/endless_doctor.js" type="text/javascript"></script>

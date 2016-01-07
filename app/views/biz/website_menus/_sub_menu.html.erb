@@ -1,0 +1,62 @@
+<% if sub_menu.has_children? %>
+    <div class="tree-folder tree-li" menu-id="<%= sub_menu.id %>" parent-id="<%= sub_menu.parent_id %>">
+      <div class="tree-folder-header">
+        <i class="tree-fa fa fa-plus-square"></i>
+        <div class="tree-folder-name" data-id="<%= sub_menu.id %>"><%= sub_menu.name %></div>
+        <div class="tree-tools" data-id="<%= sub_menu.id %>">
+          <div>
+            <%= link_to '', new_website_menu_path(parent_id: sub_menu.id), class: 'fa fa-plus tree-add', title: '新增子站点' %>
+          </div>
+          <div>
+            <%= link_to '', edit_website_menu_path(sub_menu), class: 'fa fa-pencil tree-edit', title: '编辑当前站点' %>
+          </div>
+          <div>
+            <%= link_to '', website_menu_path(sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确定要删除吗？'}, title: '删除当前站点' %>
+          </div>
+          <div>
+            <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {toggle: 'treeUp'}, title: '上移' %>
+          </div>
+          <div>
+            <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-down tree-down', data: {toggle: 'treeDown'}, title: '下移' %>
+          </div>
+          <div>
+            <a href="javascript:;" class="fa fa-qrcode tree-code" rel="popover" data-img="/assets/gm/loading.gif"></a>
+          </div>
+          <div><a href="javascript:;" class="fa fa-thumb-tack tree-zd" title="置顶"></a></div>
+          <div><a href="javascript:;" class="fa fa-level-down tree-level-down" title="时间倒序"></a></div>
+          <div><a href="javascript:;" class="fa fa-level-up tree-level-up" title="时间顺序"></a></div>
+        </div>
+      </div>
+
+      <div class="tree-folder-content" style="display: none;">
+        <%#= render :partial=> "sub_menu", :collection => sub_menu.children.order(:sort), :as =>:sub_menu %>
+        <p class="mod-loading"><img src="/assets/loading.gif"/></p>
+      </div>
+    </div>
+<% else %>
+    <div class="tree-item tree-li" menu-id="<%= sub_menu.id %>" parent-id="<%= sub_menu.parent_id %>">
+      <i class="tree-fa fa fa-circle"></i>
+      <div class="tree-item-name" data-id="<%= sub_menu.id %>"><%= sub_menu.name %></div>
+      <div class="tree-tools" data-id="<%= sub_menu.id %>">
+        <div>
+          <%= link_to '', new_website_menu_path(parent_id: sub_menu.id), class: 'fa fa-plus tree-add', title: '新增子站点' %>
+        </div>
+        <div>
+          <%= link_to '', edit_website_menu_path(sub_menu), class: 'fa fa-pencil tree-edit', title: '编辑当前站点' %>
+        </div>
+        <div>
+          <%= link_to '', website_menu_path(sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确定要删除吗？' }, title: '删除当前站点' %>
+        </div>
+        <div>
+          <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {toggle: 'treeUp'}, title: '上移' %>
+        </div>
+        <div>
+          <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-down tree-down', data: {toggle: 'treeDown'}, title: '下移' %>
+        </div>
+        <div>
+          <a href="javascript:;" class="fa fa-qrcode tree-code" rel="popover" data-img="/assets/gm/loading.gif"></a>
+        </div>
+        <div><a href="javascript:;" class="fa fa-thumb-tack tree-zd" title="置顶"></a></div>
+      </div>
+    </div>
+<% end %>

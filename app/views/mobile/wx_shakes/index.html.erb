@@ -1,0 +1,65 @@
+<section id="sec-index">
+  <div class="body">
+    <div class="mod-game" id="countDown">等待开始</div>
+      <a href="<%= mobile_wx_shake_path(@wx_shake,supplier_id: @supplier.id) %>" class="mod-btn mod-gift">
+        <p class="fa fa-angle-right" style="line-height: 40px;">
+          <b>查看比赛结果</b>
+        </p>
+      </a>
+  </div>
+  <input id="shake_round_status" type="hidden" value="0">
+</section>
+<script>
+  $(function(){
+    var gaming,
+        old_count = 0,
+        count = 0;
+    var faye = new Faye.Client('http://<%= FAYE_HOST %>/faye', {retry: 5});
+
+    var shake_round_id = null;
+
+    var subscription = faye.subscribe("/mobile/wx_shake_start/<%= @wx_shake.id %>", function(data){
+      shake_round_id = data.shake_round_id;
+      countDown(<%= @wx_shake.countdown %>,function(time){
+        $("#countDown").html("倒计时："+time+"秒");
+        if(time==0){
+          //摇动有效
+          start_game();
+          $('#shake_round_status').val("1");
+          $("#countDown").html("活动进行中");
+        }
+      });
+    });
+
+    subscription.then(function() {
+      alert('连接成功，您可以参与活动了！');
+    });
+
+    function faye_publish(count){
+      faye.publish('/shake_site/<%= @wx_shake.id %>', {shakes: ["<%= @supplier.id %>",shake_round_id,"<%= @wx_shake_user.id %>","<%= @wx_shake_user.avatar %>",count]});
+    }
+
+    faye.subscribe("/mobile/wx_shake_end/<%= @wx_shake.id %>", function(data){
+      window.clearInterval(gaming);
+      old_count = count = 0;
+      $('#shake_round_status').val("0");
+      $("#countDown").html("活动已结束");
+    });
+    
+    window.addEventListener('shake', function(){
+      if($('#shake_round_status').val() == "1"){
+        count += 1;
+      }
+    }, false);
+
+    function start_game(){
+      gaming = window.setInterval(function(){
+                  if(count > old_count){
+                    old_count = count;
+                    faye_publish(count);
+                  }
+                },1000);
+    }
+
+  });
+</script>

@@ -1,0 +1,6 @@
+.pageError{ background:#fff; position:relative;height:100%;min-height:320px;}
+.cont-error{ width:800px; height:320px; position:absolute; top:50%; left:50%; margin:-160px 0 0 -400px;}
+.cont-error p{ position:absolute; left:337px; top:175px; font-size:16px; color:#666;}
+.cont-error a{ color:#86b733;}
+.error-404{ background:url(/assets/404.jpg) no-repeat left center;}
+.error-500{ background:url(/assets/500.jpg) no-repeat left center;}

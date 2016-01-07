@@ -1,0 +1,19 @@
+body{background: #fff;}
+.box{overflow: hidden; display: block;}
+.index{ width: 96%; margin: 2%;}
+.mod-index{width: 100%;height:42px;display:block; color: #333;padding:0 25px 0 13px;margin:5px 0;font-size:16px;line-height:42px;overflow:hidden;background:#f2f4f3;position:relative;}
+.mod-index:after{display:block;content:"\f105";position:absolute;font-family:FontAwesome;width:15px;height:20px;font-size:20px;line-height:20px;color:#333;right:0;top:11px;}
+.mod-index .index-img i{ width: 30px; height: 30px; line-height: 30px; display: block; overflow: hidden;text-align: center;}
+.mod-index .index-text>*{font-weight: 100; line-height: 20px; padding:5px 10px 0 5px; display: block;}
+.mod-index >*:first-child >*{ padding-left: 0;}
+.index-text small{ font-size: 12px; color: #999;}
+.mod-index img{ max-height: 30px; float: left;}
+.mod-index .fa{ font-size: 30px; color: #fff;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}

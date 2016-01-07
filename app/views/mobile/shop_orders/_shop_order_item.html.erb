@@ -1,0 +1,32 @@
+<div class="like_a list-box">
+  <div class="list-cell">
+    <%= shop_order_item.shop_product.try(:name) %>
+  </div>
+
+  <div class="list-cell">
+    <div class="middle-div">
+      <div class="mod-number" data-min="1" data-max="10">
+        <i class="number-minus">
+          <%= link_to "", minus_mobile_shop_order_item_path(supplier_id: session[:supplier_id], id: shop_order_item.id), class: "hidden_link", style: "left: 0", remote: true, method: :post %>
+        </i>
+
+        <input type="tel" class="js-number-item-change" value="<%= shop_order_item.qty %>"/>
+        <%= link_to "", change_mobile_shop_order_item_path(supplier_id: session[:supplier_id], id: shop_order_item.id), remote: true, method: :post, style: "display:none", class: "hidden-link" %>
+
+        <i class="number-plus">
+          <%= link_to "", plus_mobile_shop_order_item_path(supplier_id: session[:supplier_id], id: shop_order_item.id), class: "hidden_link", style: "left: 0", remote: true, method: :post %>
+        </i>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <span class="text-red">
+      <% if shop_order_item.shop_product.try(:is_current_price) %>
+        /
+      <% else %>
+        ￥<%= shop_order_item.total_price %>
+      <% end %>
+    </span>
+  </div>
+</div>

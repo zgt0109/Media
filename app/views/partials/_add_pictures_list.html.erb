@@ -1,0 +1,26 @@
+<ul class="ace-thumbnails thumbnails-1">
+  <li>
+    <a data-toggle="modal" href="#addPhotoModal">
+      <div class="text text-block">
+        <div class="inner">添加图片<br><i class="icon-plus"></i></div>
+      </div>
+    </a>
+  </li>
+  <% @pictures.each do |picture| %>
+    <li id="photo_<%= picture.id %>">
+      <a href="javascript:;" title="<%= picture.title %>" data-rel="colorbox" data-id="<%= picture.id %>" data-title="<%= picture.title %>">
+        <img alt="150x150" src="<%= picture.pic.large %>" />
+        <div class="text">
+          <div class="inner"><%= picture.title %></div>
+        </div>
+      </a>
+
+      <div class="tools">
+        <a href="#">
+          <i class="icon-trash btn-fa btn-remove"></i>
+          <i class="icon-pencil btn-fa btn-edit" data-toggle="modal" data-target="#editPhotoModal"></i>
+        </a>
+      </div>
+    </li>
+  <% end %>
+</ul>

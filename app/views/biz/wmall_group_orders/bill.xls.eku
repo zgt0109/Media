@@ -1,0 +1,6 @@
+__filename = "shops_#{Time.now.strftime("%Y%m%d%H%M%S")}.xls"
+sheet1 = xls.create_worksheet
+sheet1.row(0).concat ["编号", "商家名称", "已完成订单总数", "金额"]
+@shops.each_with_index do |shop, i|
+  sheet1.update_row i+1, shop.id, shop.name, shop.qty, shop.amount
+end

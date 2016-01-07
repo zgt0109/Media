@@ -1,0 +1,18 @@
+<% provide(:title, '专业名师') %>
+<div class="box box-padding">
+  <div class="box-teacher">
+    <div class="hd college_title">名师简介</div>
+    <% if @teachers.present? %>
+        <% @teachers.each do |t| %>
+            <div class="bd">
+              <img src="<%= t.avatar  %>"/>
+              <p>姓名： <%= t.name  %></p>
+              <p>职称：  <%= t.position  %></p>
+              <p class="tright"><a class="btn btn-small" href="<%= app_college_teacher_path(t, anchor: "mp.weixin.qq.com")  %>">查看详情</a></p>
+            </div>
+        <% end %>
+    <% else %>
+        <p>没有教师资料！</p>
+    <% end %>
+  </div>
+</div>

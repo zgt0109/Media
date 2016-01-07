@@ -1,0 +1,50 @@
+<div id="festival" class="tab-pane active">
+    <div class="alert alert-block alert-success">
+        <strong class="pull-left">提示：</strong>
+        <ul class="vwebsiteHeadAlert">
+            <li>历史积分：<%= @total_vip_givens.sum(:value) %></li>
+        </ul>
+    </div>
+
+    <%= form_for @search, url: vip_user_path(@vip_user), :html => { :method => :get } do |f| %>
+      <%= hidden_field_tag :type, params[:type] %>
+      <div class="table-filter">
+        <div class="filter-form pull-right">
+            <%= f.submit '查询', class: 'btn btn-primary btn-sm' %>
+        </div>
+        <div class="filter-form pull-right">
+            <%= f.text_field :created_at_gte, class: 'input-date datepicker', placeholder: "选择日期范围" %> -
+            <%= f.text_field :created_at_lte, class: 'input-date datepicker', placeholder: "选择日期范围" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="margin-top-20 ">
+        <table id="festivalTable"
+               class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+            <tr>
+                <th width="30%">日期</th>
+                <!--th width="15%">赚取/消费</th-->
+                <th width="30%">名称</th>
+                <th>状态</th>
+                <th>积分</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% if @givens.each do |given| %>
+                <tr>
+                  <td><%= (given.unused? ? given.start_at.try(:to_date) : given.updated_at.to_date) %></td>
+                  <!--td><%#= transaction.direction_type_name %></td-->
+                  <td><%= given.vip_care.name %></td>
+                  <td><%= given.status_name %></td>
+                  <td><%= (given.unused? ? "+" : "-") + given.value.to_s %></td>
+                </tr>
+              <% end.blank? %>
+                <tr><td colspan="4" class="green text-center">没有记录</td></tr>
+              <% end %>
+            </tbody>
+        </table>
+        <%= paginate @givens %>
+    </div>
+</div>

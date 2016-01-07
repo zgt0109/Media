@@ -1,0 +1,79 @@
+<style type="text/css">
+.ddcommon:focus{outline: none;}
+.ddcommon .ddChild li img,.ddcommon .ddTitle .ddTitleText img{max-height: 30px;}
+.ddlabel{margin-left: 20px;}
+#preview_business_shop_logo{max-height: 30px;}
+.box-main { box-shadow: none; padding: 0; margin: 5px 0; }
+</style>
+
+<p class="p-note">
+  提示：以下“ <em class="fred">*</em> ”均为必填项；
+</p>
+
+<p class="box-main">
+  <span class="p-plugin fl">是否启用会员卡：</span>
+  <%= link_to '', toggle_vip_card_business_shop_path(@business_shop), class: "btn-pluin fl pluin-#{@business_shop.enable_vip_card? ? 'open' : 'close'}", data: { remote: true, method: :post } %>
+</p>
+
+<div class="box-des fl">
+  <div class="des-l leftbar" style="width:280px">
+    <div class="des-view" style="width:270px;">
+      <div cover="cover box-img" class="img vip_card_bg" style="position:relative">
+        <div style="position:absolute;top:5px;right:5px;"><b id="preview_vip_card_name"><%= @vip_card_branch.name rescue nil%></b></div>
+        <div style="position:absolute;top:5px;left:5px;">
+          <% if @business_shop.logo? %>
+            <%= image_tag  @business_shop.logo.presence, id: 'preview_business_shop_logo' %>
+          <%- else %>
+            <img id="preview_business_shop_logo">
+          <%- end %>
+        </div>
+        <%= image_tag (@vip_card_branch.pic.presence || @vip_card_branch.vip_card.cover_pic), id: 'preview_pic' %>
+        <div class="vip_card_number" style="position:absolute;bottom:5px;right:5px;"><!--b class="preview_vip_card_number">会员卡等级名称</b><br/--><b class="preview_vip_card_number">88888888</b></div>
+      </div>
+    </div>
+  </div>
+
+<div class="des-r rightbar" style="width:460px; margin-top: -5px;">
+  <%= form_for @vip_card_branch, url: update_vip_card_branch_business_shop_path(@business_shop), validate: true do |f| %>
+    <div class="p">
+      <span>会员卡名称<em>*</em><span class="fgray">（不能超过20个字符，建议8个字以内）</span></span>
+      <%= f.text_field :name, class: 'input-text', style: "width:60%;" %>
+      <%= f.text_field :name_bg_color, class: 'input-text color', style: "width:20%;" %>
+    </div>
+
+    <div class="p">
+      <span>使用自己设计背景图<span class="fgray">（建议尺寸：宽720px * 高400px）</span></span>
+      <div class="box-upload">
+        <div class="box-file">
+          <%= f.file_field :pic, rel: 'preview_pic', data: {width: 720, height: 400}, class: 'img_preview'%>
+          <a class="btn btn-big">选择背景</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="p">
+      <span style="width: 100%;">会员卡号颜色</span>
+      <%= f.text_field :card_bg_color, class: 'input-text color', style: "width:20%;" %>
+    </div>
+
+    <p><input type="submit" value="保存" class="btn btn-small btn-orange"/></p>
+  <% end %>
+</div>
+<%= javascript_include_tag "jscolor/jscolor.js" %>
+<script type="text/javascript">
+  $(function(){
+    $('#preview_vip_card_name').css('color', '#'+ $('#vip_card_branch_name_bg_color').val());
+    $('.preview_vip_card_number').css('color', '#'+ $('#vip_card_branch_card_bg_color').val());
+    $('#vip_card_branch_name').on('keyup', function(){
+      $('#preview_vip_card_name').html($(this).val());
+    });
+    $('#vip_card_branch_name_bg_color').on('change', function(){
+      colorhex = '#'+$(this).val();
+      $('#preview_vip_card_name').css('color', colorhex);
+    });
+    $('#vip_card_branch_card_bg_color').on('change', function(){
+      colorhex = '#'+$(this).val();
+      $('.preview_vip_card_number').css('color', colorhex);
+    });
+  });
+</script>

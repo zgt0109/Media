@@ -1,0 +1,21 @@
+<% content_for :form do %>
+    <%= render 'application/weixin_preview', wx_title: @activity.stopped_activity_notice.title, wx_summary: @activity.stopped_activity_notice.summary %>
+    <%= form_for(@activity, url: form_action, validate: true, html: { id: 'stopped_notice_form', class: "form col-sm-7" }) do |f| %>
+        <%= hidden_field_tag :step, params[:step] %>
+        <%= f.fields_for :stopped_activity_notice, validate: true do |ran| %>
+            <%= ran.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+            <%= render 'old_coupons/activity_notice_form', ran: ran, state_name: '发放完毕', no_description: true %>
+        <% end %>
+
+        <div class="form-group">
+            <% prev_url = action_name == 'show' ? activity_path(@activity, step: params[:step].to_i - 1) : edit_activity_path(@activity, step: params[:step].to_i - 1) %>
+            <a href="<%= prev_url %>" class="btn btn-prev btn-sm">
+              <i class="icon-arrow-left"></i>上一步
+            </a>
+            <%- unless @activity.can_not_edit? %>
+                <button type="submit" class="btn btn-success btn-sm btn-next">完成</button>
+            <% end %>
+            <%= link_to '返回', activities_path_by_type(@activity.activity_type_id), class: "btn btn-sm" %>
+        </div>
+    <% end %>
+<% end %>

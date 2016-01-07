@@ -1,0 +1,40 @@
+<%= form_for @sms_order, validate: true do |f| %>
+  <%= f.hidden_field :supplier_id %>
+  <div class="modal-body">
+    <div class="radioTab">
+      <% SmsOrder.usable_buy.each_with_index do |m, i| %>
+        <label><%= f.radio_button :plan_id, m[0], plan_cost: m[1][:plan_cost].to_f / 100, class: 'ace' %><span class="lbl"><%= m[1][:plan_name] %></span></label>
+      <% end %>
+    </div>
+
+    <div class="radio-tab-content">
+      <div class="radio-tab-pane">
+        支付金额：<%= SmsOrder.usable_buy.select{|f| f[0] == @sms_order.plan_type}.flatten[1][:plan_cost].to_f / 100 %>元
+      </div>
+    </div>
+    
+    <div class="form-group margin-top-15" style="display: none;">
+      <label>充值方式</label>
+      <div class="clearfix">
+        <%= f.select :payment_type, SmsOrder::payment_type_options, {}, class: "form-control" %>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>备注</label>
+      <div class="clearfix">
+        <%= f.text_area :remark, maxlength: 255, rows: '5', class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <%= render 'partials/modalFooter' %>
+<% end %>
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+        $(':radio').click(function(){
+          $('.radio-tab-pane').html('支付金额：' + $(this).attr('plan_cost') + '元');
+        });
+    });
+  </script>
+<% end %>

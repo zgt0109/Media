@@ -1,0 +1,26 @@
+<%= f.select :given_group_type, VipCare.given_group_type_options, {}, {id: 'given_group_type'} %>
+<select id="given_group_id" name="<%= giver.class.name.underscore %>[given_group_id]">
+  <% if giver.give_to_vip_group? %>
+      <%= render 'biz/vip_cares/vip_group_options', f: f, giver: giver %>
+  <% elsif giver.give_to_vip_grade? %>
+      <%= render 'biz/vip_cares/vip_grade_options', f: f, giver: giver %>
+  <% end %>
+</select>
+<select id="VipGrade_options" class="hide">
+  <%= render 'biz/vip_cares/vip_grade_options', f: f, giver: giver %>
+</select>
+<select id="VipGroup_options" class="hide">
+  <%= render 'biz/vip_cares/vip_group_options', f: f, giver: giver %>
+</select>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function() {
+            var $givenType = $('#given_group_type'),
+                    $givenGroupId = $('#given_group_id');
+            $givenType.change(function () {
+                $givenGroupId.html($('#' + $givenType.val() + '_options').html());
+            });
+        });
+    </script>
+<% end %>

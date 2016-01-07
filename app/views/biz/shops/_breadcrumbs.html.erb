@@ -1,0 +1,34 @@
+<div class="breadcrumbs" id="breadcrumbs">
+<%
+=begin
+%>
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <ul class="breadcrumb">
+      <li>
+        <i class="margin-left-5"> </i>
+        <%= link_to '会员卡', shops_vip_deals_path %>
+      </li>
+      <li>
+        <% if action_name =~ /vip_deal/ %>
+            <%= link_to '会员交易', shops_vip_deals_path %>
+        <% elsif action_name =~ /point_gift/ %>
+            <%= link_to '礼品兑换', shops_point_gift_exchanges_path %>
+        <% elsif action_name =~ /package|item_consumes/ %>
+            <%= link_to '会员套餐记录', shops_package_users_path %>
+        <% elsif action_name =~ /vip_consumes/ %>
+            <%= link_to '消费统计', shops_vip_consumes_path %>
+        <% elsif action_name =~ /coupon_consumes/ %>
+            <%= link_to '活动核销记录', shops_coupon_consumes_path %>
+        <% end %>
+      </li>
+    </ul>
+<%
+=end
+%>
+</div>

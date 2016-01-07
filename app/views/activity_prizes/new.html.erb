@@ -1,0 +1,130 @@
+<%= form_for @prize, validate: true do |f| %>
+<%= hidden_field_tag :activity_id, @activity.id %>
+<%= f.hidden_field :activity_id, value: @activity.id %>
+<div class="modal-body">
+  <div class="form-group">
+    <label>奖项说明<span class="required-star">*</span><small class="text-warning line-height-32">不能超过5个字</small></label>
+    <div class="clearfix">
+      <%= f.text_field :title, class: 'col-md-8', maxlength: 5, validate: true, style: 'width: 218px;' %>
+    </div>
+  </div>
+  <div class="form-group normal_prize">
+    <label>奖品名称<span class="required-star">*</span><small class="text-warning line-height-32">不能超过50个字</small></label><br>
+    <% ActivityPrize::PRIZE_TYPES.each do |prize_type, prize_type_name| %>
+      <% next if prize_type == "redpacket_prize" && f.object.activity.activity_type_id != 64%>
+      <label class="control-label">
+        <%= f.radio_button :prize_type, prize_type, class: "ace" %>
+        <span class="lbl"><%= prize_type_name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </label>
+    <% end %>
+    <div class="clearfix normal_prize prizes">
+      <%= f.text_field :prize, class: 'col-md-8', maxlength: 50, validate: true, placeholder: '请输入奖品名称，不超过50个字' %>
+    </div>
+    <div class="clearfix point_prize prizes">
+      <%= f.text_field :points, class: 'col-md-8', maxlength: 50, validate: true, placeholder: '请输入积分值' %>
+    </div>
+    <div class="clearfix redpacket_prize prizes">
+      <%= f.text_field :prize_value, class: 'col-md-8', maxlength: 50, validate: true, placeholder: '请输入1.00~200.00元的红包金额' %>   元
+    </div>
+  </div>
+  <div class="form-group">
+    <label>奖品数量<span class="required-star">*</span></label>
+    <div class="clearfix">
+      <%= f.text_field :prize_count, class: 'col-md-8', placeholder: 0, validate: true, value: (@prize.prize_count.presence || 0 ) %>
+    </div>
+  </div>
+  <%- unless @activity.recommend? %>
+    <div class="form-group">
+      <label>中奖几率%<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :prize_rate, class: 'col-md-8', placeholder: 0.0, validate: true, value: (@prize.prize_rate.presence ||  0.0 ) %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>当天次数<span class="required-star">*</span><small class="text-warning line-height-32">奖品当天允许出奖次数，-1表示不限制</small></label>
+      <div class="clearfix">
+        <%= f.text_field :day_limit_count, class: 'col-md-8', placeholder: -1, validate: true %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>每人总次数<span class="required-star">*</span><small class="text-warning line-height-32">每个人获得此奖品的总次数，-1表示不限制</small></label>
+      <div class="clearfix">
+        <%= f.text_field :people_limit_count, class: 'col-md-8', placeholder: -1, validate: true %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>每人每天次数<span class="required-star">*</span><small class="text-warning line-height-32">每个人每天获得此奖品的次数，-1表示不限制</small></label>
+      <div class="clearfix">
+        <%= f.text_field :people_day_limit_count, class: 'col-md-8', placeholder: -1, validate: true %>
+      </div>
+    </div>
+  <%- else %>
+      <div class="form-group">
+      <label>推荐人数<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :recommends_count, class: 'col-md-8', validate: true %>
+      </div>
+    </div>
+  <%- end %>
+</div>
+<div class="clearfix"></div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-primary" onclick="save_submit()">确定</button>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+<%- end %>
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    function validate_prize_rate(){
+      var status;
+      var set_url = "<%= probability_activity_prizes_path %>" + "?prize_rate=" + $("[name='activity_prize[prize_rate]']").val() + "&activity_id=" + <%= @activity.id %>;
+      <%- unless @prize.new_record? %>
+        set_url += '&prize_id=<%= @prize.id %>';
+      <%- end %>
+      jQuery.ajax({
+        async: false,
+        type: "GET",
+        url: set_url,
+        dataType: "json",
+        success: function(data){
+          status = data.status;
+          if(status == "false"){
+            addErrorMessage($("[name='activity_prize[prize_rate]']"), '中奖几率之和不得超过100,当前可设置的最大值为：'+data.num);
+          }
+        }
+      });
+      return status
+    }
+
+    $(function() {
+      <%- if @activity.can_not_edit? %>
+        $('input,select,textarea').prop('disabled', true);
+        $('.wysiwyg-editor').attr('contenteditable', false);
+      <%- end %>
+
+      function togglePrizeType(prizeType) {
+        $('.prizes').hide();
+        $('.' + prizeType).show();
+      }
+
+      togglePrizeType('<%= @prize.prize_type %>');
+
+      $('input[name="activity_prize[prize_type]"]').click(function (event) {
+        var prizeType = $(this).val();
+        togglePrizeType(prizeType);
+      });
+    })
+
+    $("[name='activity_prize[prize_rate]']").focus(function(){
+      $(this).parent().find('.error-message').remove();
+    }).blur(function(){
+      validate_prize_rate();
+    });
+
+    function save_submit(){
+      if(validate_prize_rate() != "false"){
+        $('form').submit();
+      }
+    }
+  </script>
+<% end %>

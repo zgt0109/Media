@@ -1,0 +1,82 @@
+<% content_for :tab do %>
+    <div id="tab1" class="tab-pane fade active in ">
+      <div class="row">
+        <div class="col-sm-12">
+          <% if current_user.usable_sms < 100 %>
+            <div class="alert alert-block alert-warning">
+              <span class=""><strong>预警：</strong>你的短信条数少于100条，为确保你的信息准确到达请尽快购买新的短信套餐。</span>
+              <a href="javascript:;" class="pull-right" data-toggle="modals" data-height="500" data-iframe="<%= new_sms_order_path %>" data-title="购买短信套餐">立即购买</a>
+            </div>
+          <% end %>
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、短信消息用于用户下单成功后向商家发送一条短信消息通知，提醒商家及时处理用户订单；</li>
+              <li>2、如有赠送的短信，使用时系统会将赠送的短信扣除完毕后再扣除购买的短信；</li>
+              <li>3、当月赠送的短信若未用完系统会默认清零；</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <%= form_for @search, :html => {:method => :get} do |f| %>
+              <div class='col-sm-3 no-padding-left'>
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">日期：</span>
+
+                  <div class="input-group">
+                    <%= f.text_field :date_gte, class: "form-control datepicker", placeholder: "开始时间" %>
+                    <span class="input-group-addon input-group-addon-text">
+                       -
+                    </span>
+                    <%= f.text_field :date_lte, class: "form-control datepicker", placeholder: "结束时间" %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <input type="submit" class="btn btn-primary btn-sm" value="查询">
+              </div>
+              <div class="col-sm-6 pull-right">
+                <p class="line-height-30 text-right">赠送剩余：<%= current_user.free_sms %>条； 购买剩余<%= current_user.pay_sms %>条；
+                  总共使用：<%= current_user.sms_expenses.succeed.count %>条</p>
+              </div>
+          <% end %>
+        </div>
+        <div class="col-sm-12 margin-top-10">
+            <table id="" class="table table-striped table-bordered table-hover dataTable">
+              <thead>
+              <tr>
+                <th>日期</th>
+                <% SmsExpense::operation_id_options.each do |f| %>
+	           <%# next if f[0] == "电商" %>
+                  <th><%= f[0] %>使用</th>
+                <% end %>
+                <th>当日使用总数</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @dates.each do |d| %>
+                <tr>
+                  <td><%= d.date %></td>
+                  <% SmsExpense::operation_id_options.each do |f| %>
+		     <%# next if f.first == "电商" %>
+                    <td><%= current_user.sms_expenses_count(d.date, f.last) %></td>
+                  <% end %>
+                  <td><%= current_user.sms_expenses_count(d.date) %></td>
+                </tr>
+              <% end %>
+              <% if @dates.blank? %>
+                <tr>
+                  <td colspan="<%= SmsExpense::operation_id_options.count + 2 %>" class="green text-center">还没有使用记录</td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12">
+          <%= paginate @dates %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<%= render 'main_content' %>

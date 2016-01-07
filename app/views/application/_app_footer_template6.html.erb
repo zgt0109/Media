@@ -1,0 +1,21 @@
+<div class="box-index">
+  <div class="box-bg"></div>
+  <div class="box-nav" id="sliderNav">
+    <ul class="box-nav-list" >
+      <%- @website.website_menus.root.in_groups_of(4).each do |array| %>
+        <%- array = array.compact %>
+        <%- if array.present? %>
+          <li>
+            <%- array.each do |menu| %>
+              <a href="<%= (menu.multiple_graphic? || menu.has_children?) ? mobile_channel_url(supplier_id: @website.supplier_id, website_menu_id: menu.id, anchor: "mp.weixin.qq.com") : website_activity_link(menu) %>" class="nav-room <%= @website_menu.id == menu.id ? "active" : "" if @website_menu %>" style="background-image:url(<%= menu.pic.try(:thumb) %>);">
+                <%= menu.name %>
+              </a>
+            <%- end %>
+          </li>
+        <%- end %>
+      <%- end %>
+    </ul>
+  </div>
+  <a class="nav-btn nav-prev" onclick="navSwip.prev()"></a>
+  <a class="nav-btn nav-next" onclick="navSwip.next()"></a>
+</div>

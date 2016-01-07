@@ -1,0 +1,13 @@
+<div class="box box-list">
+  <%= link_to mobile_micro_store_url(:supplier_id => branch.supplier_id, id: branch.id, ref: "table", anchor: "mp.weixin.qq.com"), class: "bd fw" do %>
+      <b><%= branch.name %></b>
+      <p><%= branch.ditu_address %></p>
+  <% end %><!-- 详情 -->
+  <div class="ft table">
+      <a class="td" href="/app/shop_table_orders/new?shop_branch_id=<%=branch.id%>"><img src="/assets/micro_stores/ico-desk.png">订座</a>
+      <a class="td" href="tel:<%= branch.tel %>"><img src="/assets/micro_stores/ico-call.png">电话</a>
+      <a class="td" href="http://api.map.baidu.com/geocoder?address=<%= branch.ditu_address %>&output=html">
+        <img src="/assets/micro_stores/ico-location.png">导航
+      </a>
+  </div>
+</div>

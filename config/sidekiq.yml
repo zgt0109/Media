@@ -1,0 +1,12 @@
+# Sample configuration file for Sidekiq.
+# Options here can still be overridden by cmd line args.
+#   sidekiq -C config.yml
+---
+:verbose: false
+:concurrency:  5
+:pidfile: tmp/sidekiq.pid
+:queues:
+  - [standard, 10]
+  - [website_preview_pic, 20]
+  - [kefu, 100]
+  - [website_setting, 200]

@@ -1,0 +1,29 @@
+<% title @wx_plot.try(:life) %>
+<div class="body">
+  <div class="life-box">
+    <dl>
+      <% @categories.each do |f| %>
+          <% phones = @lives.select{|t| t.wx_plot_category_id == f.id} %>
+          <% next if phones.blank? %>
+          <dt><%= f.name %></dt>
+          <% phones.each do |m| %>
+              <dd>
+                <div class="info">
+                  <%= link_to life_mobile_wx_plot_url(id: m.id, anchor: 'mp.weixin.qq.com') do %>
+                    <span class="info-text">
+                      <b><%= m.name %></b>
+                      <span><%= m.phone %></span>
+                    </span>
+                  <% end %>
+                </div>
+                <div class="phone">
+                  <%= link_to "tel:#{m.phone}", class: 'box' do %>
+                      <i class="icon fa fa-phone"></i>
+                  <% end %>
+                </div>
+              </dd>
+          <% end %>
+      <% end %>
+    </dl>
+  </div>
+</div>

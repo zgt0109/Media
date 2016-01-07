@@ -1,0 +1,174 @@
+<% content_for(:title) { '获奖公告' } %>
+<div id="wrapper">
+	<div id="main_box">
+		<div class="hd_jifen"> <span class="jf_title"><%= @fight_report_card.score %></span>
+			<% if @fight_report_card.registered? %>
+			<p>排名第<strong class="e8645a"><%= @my_ranking %></strong>，击败了全国<strong class="e8645a"><%= format "%.2f", @defeated_rate %>%</strong>的对手。</p>
+			<%else%>
+			<p>您尚未参加活动，下次再来吧。</p>
+			<%end%>
+		</div>
+
+
+
+		<div id="msg_content" class="hd_jifen hd_jifen2 hd_jifen3 clear">
+			
+			<!-- 未中奖开始  显示此内容时去掉上一节点的样式: style=" padding-top:8px;" -->
+			<div id="unwin" class="tit_box2 clear" style="display: none;">
+				<span class="t_a"><%= image_tag 'fight/ico_4.png', size: '27x27' %><span class="t_b">活动结束,<br />很遗憾，您没有中奖，下次请努力哦！</span></span> 
+			</div>
+			<!-- 未中奖结束 -->
+			
+			<!-- 中奖开始  显示此内容时去掉上一节点的样式: style=" padding-top:8px;" -->
+			<div id="wined" class="tit_box2 clear" style="display: none;">
+				<span class="t_a">
+					<%= image_tag 'fight/smile.png', size: '27x27' %>
+					<span class="t_b">
+						活动结束,<br />恭喜您获得本次活动<strong class="e8645a"> <%= @fight_report_card.activity_prize.try(:title) %> </strong>
+						<span id="txt-sn"></span><a href="javascript:get_sn();" class="btn_c fr" id="a_getsn" style="display: none;">领取奖品</a>
+					</span>
+				</span>
+			</div>
+			<!-- 中奖结束 -->
+			
+			
+			<div class="jp_title clear">
+				<div class="jp_inner clear">
+					<div class="j_fl fl">
+						<h2>积分排名</h2>
+						<h3>TOP10</h3>
+					</div>
+					<div class="j_fr fr">
+						<h4><%= @activity.name %></h4>
+						<h5>活动时间：<%= @activity.start_at.to_date %>~<%= @activity.end_at.to_date %></h5>
+					</div>
+				</div>
+			</div>
+			<div class="jp_content clear">
+				<table class="jp_table">
+					<% @top_rankings.each_with_index do |top_ranking, i|%>
+					<tr class="<%= i%2==0 ? '' : 'grap' %>">
+						<td class="c888" width="20%">第<%= i+1%>名</td>
+						<td class="c444" width="50%"><%= top_ranking.activity_user.try(:name)%></td>
+						<td class="c888" width="30%">积分<strong class="e8645a"> <%= top_ranking.score%></strong></td>
+					</tr>
+					<%end%>
+				</table>
+			</div>
+		</div>
+
+		<% if @activity.activity_prizes.count > 0 and @activity.activity_prizes.sum(:prize_count) > 0 %>
+		<div class="hd_list clear">
+			<div class="title_c"> <span class="ico_a"></span>
+				<p class="ico_info">奖品</p>
+			</div>
+			<div class="rt_info">
+				<div style="padding-left:15px; padding-right:10px;">
+					<table class="jp_list">
+						<% @activity.activity_prizes.each do |prize| %>
+						<% if prize.prize_count > 0 %>
+						<tr>
+							<td class="jp_name"><%= prize.title %>：</td>
+							<td class="jp_info"><%= prize.prize %> <h5>( 数量：<span><%= prize.prize_count %></span> ) </h5></td>
+						</tr>
+						<%end%>
+						<%end%>
+					</table>
+				</div>
+			</div>
+		</div>
+		<% end-%>
+
+		<% if @activity.description %>
+		<div class="hd_list clear">
+			<div class="title_c"> 
+				<span class="ico_b"></span>
+				<p class="ico_info">活动说明</p>
+			</div>
+			<div class="rt_info">
+				<p><%= raw @activity.description %></p>
+			</div>
+		</div>
+		<% end-%>
+
+		<% if @activity.activity_property and @activity.activity_property.special_warn %>
+		<div class="hd_list clear">
+			<div class="title_c"> 
+				<span class="ico_c"></span>
+				<p class="ico_info">活动规则</p>
+			</div>
+			<div class="rt_info">
+				<p><%= raw @activity.activity_property.special_warn %></p>
+			</div>
+		</div>
+	</div>
+	<% end-%>
+
+</div>
+
+<!-- 领取SN码 弹出层-->
+<div id="poppg" style="display:none;">
+	<div id="popDiv" class="mydiv mydiv2" style="display:block;">
+		<!--弹出内容-->
+
+		<div class="show_div" style="display:block;">
+			<div class='m-box1-bd ad-form-bd ad-form-bd2' style="padding-top:0px;">
+				<div style="padding:20px 18px;">
+					<p class="sn_info"><span class="c888">您的SN码为：</span><span class="c444" id="sn"></span></p>
+					<p class='ad-form-bd-submit' style="padding:0px 115px;"><a href="javascript:$('#poppg').hide();$('#txt-sn').show();" class="btn_d" >确&nbsp;认</a></p>
+				</div>
+			</div>
+		</div>
+
+		<!--弹出内容结束-->
+		<!-- 下面的基本操作-->
+	</div>
+	<div id="bg" class="bg" style="display: block;"></div>
+	<iframe class="popIframe" frameborder="0" style="display:none;" ></iframe>
+	<!--弹出层结束-->
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		if(<%= @no_question ? true : false %>)alert("亲~今天没有题目喔,看看最新的排名吧!");
+		var is_show_list = <%= @activity.activity_status == Activity::SHOW_LIST ? true : false %> ;
+		var is_win = <%= @is_win ? true : false %>
+		var is_draw = <%= @fight_report_card.activity_consume ? true : false %>
+		if(is_show_list){
+			$('#msg_content').css('padding-top', '0px');
+			if(is_win){
+				$('#wined').show();
+				if(is_draw){
+					$('#txt-sn').text('  SN码: '+'<%= @fight_report_card.activity_consume.try(:code)%>');
+				}else{
+					$('#a_getsn').show();
+				}
+			}else{
+				$('#unwin').show();
+			}
+		}
+	});
+
+	function get_sn(){
+		$('#a_getsn').hide();
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url: "/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=consume",
+			dataType: 'json',
+			timeout:30000,
+			success: function (data) {
+				if(data.is_error){
+					alert("领奖出错!")
+				}else{
+					$('#sn').text(data.sn);
+					$('#poppg').show();
+					$('#txt-sn').text('  SN码: '+data.sn);
+				}
+			},
+			error: function(e){
+				alert('网络错误');
+			}
+		});
+	}
+</script>

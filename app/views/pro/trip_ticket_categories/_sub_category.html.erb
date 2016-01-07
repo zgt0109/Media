@@ -1,0 +1,40 @@
+<% category_div_html = capture do %>
+  <div data-id="<%= category.id %>" class="tree-tools">
+    <% if level <= 1 %>
+	  <div>
+      <%= link_to '', new_trip_ticket_category_url(parent_id: category.id), data: {remote: true}, class: 'fa fa-plus tree-add' %>
+    </div>
+    <% end %>
+    <div>
+      <%= link_to '', edit_trip_ticket_category_url(category), data: {remote: true}, class: 'fa fa-pencil tree-edit' %>
+    </div>
+    <div>
+      <%= link_to '', trip_ticket_category_url(category), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确定要删除吗？'}, title: '删除当前门票分类' %>
+	  </div>
+    <div>
+      <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {method: :post} %>
+    </div>
+    <div>
+      <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-down tree-down', data: {method: :post} %>
+    </div>
+  </div>
+<% end %>
+<% if category.children_count > 0 %>
+	<div data-parent-id="<%= category.parent_id %>" data-name="<%= category.name %>" data-id="<%= category.id %>" class="tree-folder tree-li current">
+      <div data-level="<%= level %>" class="tree-folder-header">
+        <i id="square-parent-id-<%= category.id %>" class="tree-fa fa fa-plus-square"></i>
+        <div class="tree-folder-name"><%= category.name %></div>
+        <%= category_div_html %>
+      </div>
+	    <div style="display: none;" class="tree-folder-content">
+      	<%= render partial: "sub_category", collection: category.children.order('position'), as: :category, locals: {level: level + 1}  %>
+      </div>
+
+    </div>
+<% else %>
+	<div data-level="<%= level %>" data-parent-id="<%= category.parent_id %>" data-name="<%= category.id %>" data-id="<%= category.name %>" class="tree-item tree-li current">
+      <i class="tree-fa fa fa-circle"></i>
+      <div class="tree-item-name"><%= category.name %></div>
+      <%= category_div_html %>
+    </div>
+<% end %>

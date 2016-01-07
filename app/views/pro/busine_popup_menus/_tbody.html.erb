@@ -1,0 +1,16 @@
+<tbody id="menu-list-body">
+  <% if @menus.each do |menu| %>
+    <tr id="menu-row-<%= menu.id %>">
+      <td><%= image_tag menu.icon.try(:thumb), size: '40x40' if menu.icon? %></td>
+      <td><%= menu.menu_type_name %></td>
+      <td><span class="word-break"><%= menu.description %></span></td>
+      <td><%= menu.sort %></td>
+      <td>
+        <a class="fgreen" onclick="popUrl(this)" data-name="menu-<%= menu.id %>" data-w="600" data-h="500" data-title="编辑菜单" data-url="<%= edit_busine_popup_menu_path(menu) %>">编辑</a>
+        <%= link_to '删除', busine_popup_menu_path(menu), class: "fgreen", method: :delete, confirm: '确定删除？', remote: true %>
+      </td>
+    </tr>
+  <% end.blank? %>
+    <tr><td colspan="5" class="green text-center">还没有添加菜单</td></tr>
+  <% end %>
+</tbody>

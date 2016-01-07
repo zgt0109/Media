@@ -1,0 +1,12 @@
+<%= javascript_include_tag 'jquery' %>
+
+<script>
+  $parent_doc = $(parent.document);
+  $parent_doc.find('#no-records').remove();
+  $parent_doc.find('#rows').append('<%= j render "row", business_privilege: @business_privilege %>');
+  $parent_doc.find('.pop').fadeOut(function() {
+    $(this).remove();
+  });
+  parent.showTip('success', '新增成功');
+  parent.document.location.reload();
+</script>

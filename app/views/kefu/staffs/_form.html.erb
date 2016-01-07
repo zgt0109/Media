@@ -1,0 +1,114 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微客服', kf_settings_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="col-sm-12">
+        <%= form_for @staff, url: (@staff.new_record? ? staffs_path : staff_path(@staff)), validate: true, html: {class: 'form staff-form', role: 'form'} do |f| %>
+          <div class="form-group">
+            <label class="control-label">客服工号</label>
+            <div class="clearfix">
+              <%= f.text_field :staff_no, class: 'col-xs-6' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">登录密码</label>
+            <div class="clearfix">
+              <%= f.text_field :password, class: 'col-xs-6', autocomplete: :off %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">客服昵称</label>
+            <div class="clearfix">
+              <%= f.text_field :nickname, class: 'col-xs-6' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">客服权限</label>
+            <div class="clearfix">
+              <%= f.select :role, [['普通权限', 'normal'], ['管理员权限', 'admin']] %>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <a href="javascript:;" class="btn btn-sm btn-primary staff-submit">确定</a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  var new_record = <%= @staff.new_record? %>;
+  var staff_id   = <%= @staff.id || 0 %>;
+  function validatePassword() {
+    if(new_record && !$("#kf_staff_password").val()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+  function validatePresence(field, notice) {
+    if(!$(field).val()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function showWarningAndFocus(field, text) {
+    showTip('warning',text);
+    $(field).focus();
+  }
+
+  $(".staff-submit").click(function(event){
+      event.preventDefault()
+      if(!validatePresence('#kf_staff_staff_no')) {
+        showWarningAndFocus('#kf_staff_staff_no', '请输入客服工号')
+        return
+      }
+      $.ajax({
+        url: "/staffs/validate_staff_no",
+        type: "POST",
+        data: { staff_id: staff_id, staff_no: $("#kf_staff_staff_no").val() },
+        success: function(res) {
+          if(res.valid) {
+            if(!validatePassword()) {
+              showWarningAndFocus('#kf_staff_password', '请输入登录密码')
+              return
+            }
+            if(!validatePresence('#kf_staff_nickname')) {
+              showWarningAndFocus('#kf_staff_nickname', '请输入客服昵称')
+              return
+            }
+            $.ajax({
+              url: '/staffs/validate_staff_role',
+              data: { role: $("#kf_staff_role").val(), staff_id: staff_id },
+              type: 'POST',
+              success: function(res) {
+                if(res.valid) {
+                  $(".staff-form").submit()
+                } else {
+                  showWarningAndFocus('#kf_staff_staff_no', '管理员权限已经分配')
+                  return
+                }
+              }
+            })
+          } else {
+              showWarningAndFocus('#kf_staff_staff_no', '客服工号已经被占用')
+              return
+          }
+        }
+      })
+  })
+</script>
+<% end %>

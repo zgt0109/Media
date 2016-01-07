@@ -1,0 +1,19 @@
+defaults: &defaults
+  host: "localhost"
+  port: "5672"
+  username: "mquser"
+  password: "mq.password"
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+  host: "mq.winwemedia.com"
+
+production:
+  <<: *defaults
+  host: "mq.winwemedia.com"

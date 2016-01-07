@@ -1,0 +1,76 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '一战到底', fights_activities_path %></li>
+      <li><%= link_to '题库管理', fight_questions_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li>
+          <a href="<%= fights_activities_path %>">
+            一战到底
+          </a>
+        </li>
+        <li class="active">
+          <a href="<%= fight_questions_path %>">
+            题库管理
+          </a>
+        </li>
+        <li>
+          <a href="<%= consumes_activities_path(activity_type_id: ActivityType::FIGHT) %>">
+            SN码管理
+          </a>
+        </li>
+        <li>
+          <a href="<%= report_activities_path(activity_type_id: ActivityType::FIGHT) %>">
+            一战到底报表
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="clearfix">
+              	<%= link_to '新增', new_fight_question_path, class: 'btn btn-primary btn-sm pull-right' %>
+              </div>
+            </div>
+            <div class="col-md-12 margin-top-20">
+              <table id="fightQuestionTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                  <tr>
+                    <th>题目名称</th>
+                    <th width="100">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                	<% if @fight_questions.each do |question| %>
+					   <tr>
+						  <td class="tleft"><%= question.title %></td>
+					      <td>
+							<%= link_to '修改', edit_fight_question_path(question)%>&nbsp;
+							<%= link_to '删除', question, method: :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) } %>
+						  </td>
+					   </tr>
+				     <% end.blank? %>
+	                   <tr>
+					    <td class="green text-center" colspan="2">还没有创建题库</td>
+				       </tr>
+				    <% end %>
+                </tbody>
+              </table>
+              <%= paginate @fight_questions %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

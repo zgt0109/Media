@@ -1,0 +1,89 @@
+<% form_for [@house_layout,@panorama], html: {} do |f| %>
+	<div class="clearfix"></div>
+	<%= render "picture_uploader", {f: f,field_name: :tile0}%> 
+	<div class="clearfix"></div>
+
+	<div class="p">
+		<span>全景图名称<em>*</em></span>
+		<%= f.text_field :name, placeholder: "请输入全景图名称", class: "input-text", id: "panorama_name" %>
+	</div>
+	<%= f.submit "提交", class: "btn form-submit btn-orange btn-small "%>
+<% end %>
+<% content_for :main_content do %>
+	<div class="main-content ">
+		<div class="breadcrumbs" id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home home-icon"></i>
+					<a href="#">首页</a>
+				</li>
+				<li> <%= link_to "微房产", house_layouts_path %> </li>
+				<li><%= link_to "全景图", house_layout_house_layout_panoramas_path(@house_layout) %></li>
+			</ul>
+			<!-- .breadcrumb -->
+			<%= render '/layouts/qrcode' %>
+		</div>
+		<div class="page-content">
+			<div class="row">
+				<div class="col-sm-12">
+					<!-- PAGE CONTENT BEGINS -->
+					<div class="alert alert-block alert-info">
+						<strong class="pull-left">提示：</strong>
+						<ul class="vwebsiteHeadAlert">
+							<li> 1、添加全景图图片，参考 <a href="http://www.winwemedia.com/htmls/house/panorama.html">如何制作一个360度全景?</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<%#= form_for @panorama, url: (@panorama.new_record? ? house_layout_house_layout_panoramas_path(@house_layout) : house_layout_house_layout_panorama_path(@house_layout, @panorama)), class: "", role: "form" do |f|%>
+					<%= form_tag house_layout_house_layout_panoramas_path(@house_layout), class: "", role: "form" do %>
+            <%= hidden_field_tag "panorama_id", @panorama.id %>
+						<div class="col-md-3 row">
+							<div class="input-group input-group-text">
+								<span class="input-group-addon">全景图名称<span class="required-star">*</span>：</span>
+								<%= text_field_tag :panorama_name, @panorama.name, class: "col-xs-12" %>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<input type="submit" class="btn btn-sm btn-filter btn-primary" value="确定"/>
+						</div>
+					<% end %>
+				</div>
+				<div class="col-sm-12 margin-top-20">
+					<div>
+						<%= content_tag :div, nil, class: "cieldon-file", data: {type: "6", name: "picture_name", img: "#{[@panorama.tile0_url,@panorama.tile1_url,@panorama.tile2_url,@panorama.tile3_url,@panorama.tile4_url,@panorama.tile5_url].select(&:present?).join(',')}", create_api_url: "/house_layouts/#{@house_layout.id}/house_layout_panoramas.json", width: "180", height: "100"} %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% if false and browser.firefox? %>
+		<div class="panorama_preview">
+			<%=render "shared/panorama_preview", {tile0: @panorama.tile0_url,tile1: @panorama.tile1_url,tile2: @panorama.tile2_url,tile3: @panorama.tile3_url,tile4: @panorama.tile4_url,tile5: @panorama.tile5_url} if @panorama.tile0.present? and @panorama.tile1.present? and @panorama.tile2.present? and @panorama.tile3.present? and @panorama.tile4.present? and @panorama.tile5.present?%>
+		</div>
+	<% end %>
+<% end %>
+
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $('form .btn[type=submit]').on('click', function(e){
+    var input = $('#panorama_name');
+    var panorama_name = input.val();
+    var panorama_name_reg = /.+/;
+    //兼容格式: 国家代码(2到3位)-区号(2到4位)-电话号码(7到8位)-分机号(3位)"
+    //var tel_reg =  /^(([0\+]\d{2,3}-)?(0\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/
+    //var tel_reg =  /^((\d{2,3}-)?(\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/ //add 400- number
+    if (!panorama_name_reg.test(panorama_name) ){
+      addErrorMessage(input, '全景图名字不能为空');
+      e.preventDefault();
+    }else if ($(".cieldon-file .file-img").length <7){
+      addErrorMessage(input, '全景图不能少于6张');
+      e.preventDefault();
+    }else{
+      removeErrorMessage(input);
+    }
+  })
+
+</script>
+<% end %>
+

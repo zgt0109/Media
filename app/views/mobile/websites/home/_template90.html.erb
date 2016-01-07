@@ -1,0 +1,20 @@
+<%# = render "slider_full", {:has_slider_text => :no} %>
+
+<div class="index" id="indexList">
+<%# website_menus.in_groups_of(8, false).each do |menus| %>
+  <div class="index-wrap">
+    <% website_menus[0..7].each do |menu| %>
+      <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+        <small><%= menu.title %></small>
+      <% end %>
+    <% end %>
+  </div>
+<%# end %>
+</div>
+
+<% content_for :document_ready_js do %>
+  <% if @website_setting.bg_image.present? %>
+    // 静态背景图
+    //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+  <% end %>
+<% end %>

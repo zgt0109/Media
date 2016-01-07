@@ -1,0 +1,33 @@
+<div class="pop pop-seat" data-table="">
+  <div class="pop-bg"></div>
+  <div class="popw-bd" style="overflow-y: auto;">
+    <div class="hd"></div>
+    <div class="box-form">
+      <%= form_for(seat, remote: true, validate: true, html: { data: { "original-path" => wedding_seats_path(wedding) } }) do |f| %>
+      <input name="_method" type="hidden" value="post" id="seat_method">
+      <p>
+        <span>桌号（可以使用数字和中文代替）</span>
+        <%= f.text_field :name, class: 'input-text' %>
+      </p>
+      <p>
+        <span>座位数量（最少为1，最多为10）</span>
+        <%= f.text_field :seats_count, class: 'input-text' %>
+      </p>
+      <p>
+        <span>贵宾名称（宾客数不多于座位数）</span>
+        <input type="text" class="input-text guest-input" name="guest_names[]"/>
+      </p>
+      <% end %>
+      <div class="ft">
+        <a href="javascript:;", class="btn btn-small btn-orange" id="seat_save_link" style="float: none;">保存</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-small" style="float: none;">返回</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  .popw-bd { z-index: 200; width: 435px; height: 500px; top: 50%; left: 50%; margin: -260px 0 0 -200px; background: #eeeeee; position: absolute; border-radius: 5px; padding: 10px 5%; overflow: hidden; }
+  .pop-seat .hd { border-bottom: 5px solid #323436; height: 50px; background: url(/assets/bg.png) no-repeat 0 -492px; }
+  .popw-bd .box-form p .input-text { width: 278px; }
+</style>

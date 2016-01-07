@@ -1,0 +1,147 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '会员卡', vip_users_path %></li>
+      <li><%= link_to '会员卡套餐', vip_packages_path %></li>
+      <li><%= link_to '套餐管理', vip_packages_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= form_for(@vip_package, validate: true) do |f| %>
+          <div class="form-group">
+            <label class="control-label">套餐名称<span class="required-star">*</span><small class="help-inline text-warning line-height-32">建议输入12个字以内</small></label>
+            <div class="clearfix">
+              <%= f.text_field :name, class: 'col-xs-6' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">包含的服务项目<span class="required-star">*</span><small class="help-inline text-warning line-height-32">-1为不限制使用次数</small></label>
+            <div class="checkbox-list">
+              <% if @package_items.each_with_index do |item, i| %>
+                <% vip_package_items_vip_package = @vip_package.vip_package_items_vip_packages.find { |v| v.vip_package_item_id == item.id } %>
+                <div class="form-group">
+                  <label class="control-label">
+                    <%= check_box_tag "vip_package[vip_package_items_vip_packages_attributes][#{i}][vip_package_item_id]", item.id, vip_package_items_vip_package, class: "ace item_checkbox" %>
+                    <span class="lbl"><%= item.name %></span>
+                    <%= hidden_field_tag "vip_package[vip_package_items_vip_packages_attributes][#{i}][_destroy]", vip_package_items_vip_package ? '' : 1 %>
+                    <%= hidden_field_tag "vip_package[vip_package_items_vip_packages_attributes][#{i}][id]", vip_package_items_vip_package.try(:id) %>
+                  </label>
+                  <%= text_field_tag "vip_package[vip_package_items_vip_packages_attributes][#{i}][items_count]", vip_package_items_vip_package.try(:items_count) || 1, class: 'input-small margin-right-10' %>次
+                </div>
+              <% end.blank? %>
+                <label class="control-label"><span class="lbl">暂无服务项目，请先添加服务项目</span></label>
+              <% end %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">套餐价格<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :price, class: 'col-xs-6' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">有效期<span class="required-star">*</span><small class="help-inline text-warning line-height-32">从发放给用户的时刻起计时</small></label>
+            <div class="checkbox-list">
+              <%= f.text_field :expiry_num, class: 'input-small margin-right-10' %>个月
+            </div>
+          </div>
+          <% if current_user.shop_branches.used.present? %>
+            <div class="form-group shop_branch_list">
+              <div class="checkbox-list">
+                <label class="control-label">
+                  <%= f.check_box :shop_branch_limited, class: 'ace' %>
+                  <span class="lbl">使用门店限制（若不选则默认为所有门店通用）</span>
+                </label>
+              </div>
+              <div class="margin-0">
+                <%#= ajax_address_select(name_prefix: "open_struct", province_id: @province_id, city_id: @city_id, city: true, district: false) %>
+                <%= address_select(OpenStruct.new(province_id: @province_id, city_id: @city_id), no_district: true) %>
+                <span class="fgray" id="shop_branch_count">（当前已选择<font><%= @vip_package.try(:shop_branch_ids).length %></font>个门店）</span>
+              </div>
+              <% @shop_branchs.each_with_index do |branchs,index| %>
+                <div class="margin-0 shop_branchs" id="shop_branch_<%= branchs.first.try(:city_id) %>" style="display: <%= index == 0 ? 'block;' : 'none;' %>">
+                  <% branchs.each do |branch| %>
+                    <label class="control-label"> <%= f.check_box :shop_branch_ids, {name: 'vip_package[shop_branch_ids][]'}, branch.id, false %> <%= branch.name %> </label>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
+            <button type="button" class="btn btn-sm btn-default" onclick="javascript:history.go(-1);">取消</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  <% if !@vip_package.shop_branch_limited %>
+    $(".shop_branch_list").find(".margin-0").hide();
+  <% end %>
+  <% if @vip_package.vip_packages_vip_users.count > 0 %>
+    $("form input").prop('disabled', true);
+    showTip('warning', '套餐已发放，不可编辑');
+  <% end %>
+});
+
+$(document).on("click", "input[name='vip_package[shop_branch_limited]']", function(){
+    if($(this).is(":checked")){
+        $(".shop_branch_list").find(".margin-0").show();
+        $("#city").change();
+    }else{
+        $(".shop_branch_list").find(".margin-0").hide();
+    }
+});
+
+$(document).on("change", "#city", function(){
+    if($('#shop_branch_'+$('#city').val()).length > 0){
+        $('.shop_branchs').hide();
+        $('#shop_branch_'+$('#city').val()).show();
+    }else{
+        var get_url = "<%= get_shop_point_gifts_path %>" + "?province_id=" + $('#province').val() + "&city_id=" + $('#city').val();
+        $.get(get_url, function(html) {
+            $('.shop_branchs').hide();
+            $('.shop_branch_list').append(html);
+        });
+    }
+});
+
+$(document).on("click", "input[name='vip_package[shop_branch_ids][]']", function(){
+    var font=$('#shop_branch_count').find("font");
+    var num=parseInt(font.html()) + ( $(this).is(":checked") ? 1 : -1 );
+    font.html(num);
+});
+
+$('input[type="submit"]').on('click', function(event) {
+    if ( $('.item_checkbox:checked').length == 0 ) {
+      showTip('warning', '至少选择一个服务项目');
+      return false;
+    }
+    if ( $('#vip_package_shop_branch_limited').is(':checked') ) {
+        if ( $("input[name='vip_package[shop_branch_ids][]']:checked").length == 0 ) {
+            showTip('warning', '请选择使用门店');
+            return false;
+        }
+    }
+});
+
+$('.item_checkbox').change(function() {
+  if ( $(this).is(":checked") ) {
+    $(this).next().next().val('');
+  } else {
+    $(this).next().next().val('1');
+  }
+})
+
+</script>
+<% end %>

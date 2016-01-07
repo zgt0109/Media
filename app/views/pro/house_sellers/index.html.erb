@@ -1,0 +1,67 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li> <i class="icon-home home-icon"></i> <%= link_to "首页", root_path %> </li>
+        <li> <%= link_to "微房产", house_layouts_path %> </li>
+        <li><%= link_to "销售顾问管理", house_sellers_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+          <li>
+            <%= link_to "销售顾问微信设置", activity_house_sellers_path %>
+          </li>
+          <li class="active">
+            <%= link_to "销售顾问管理", house_sellers_path %>
+          </li>
+        </ul>
+        <div class="tab-content no-border padding-24">
+          
+          <div id="tab-2" class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-primary btn-sm pull-right" data-target="addSaler" data-toggle="modals" data-title="新增销售代表" data-height="1000" data-iframe="/house_sellers/new">新增</button>
+              </div>
+
+              <div class="col-md-12 margin-top-20">
+                <table id="salerTable" class="table table-striped table-bordered table-hover dataTable ">
+                  <thead>
+                    <tr>
+                      <th>姓名</th>
+                      <th>电话</th>
+                      <th>职位</th>
+                      <th>语言</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @sellers.each do |seller| %>
+                      <tr>
+                        <td><%= seller.name %></td>
+                        <td><%= seller.phone %></td>
+                        <td><%= seller.position %></td>
+                        <td><%= seller.skilled_language %></td>
+                        <td>
+                          <a href="javascript:;" class="fgreen" data-target="addSaler" data-toggle="modals" data-title="编辑销售代表" data-height="1000" data-iframe="/house_sellers/<%= seller.id %>/edit">编辑</a>
+                          <%= link_to '删除', seller, data: {toggle: "modals", confirm: "确定要删除该销售代表？", target: "delModel", url: house_seller_path(seller), method: "delete"} %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <%= paginate @sellers, theme: :pretty if @sellers.total_pages > 1%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.page-content -->
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

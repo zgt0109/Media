@@ -1,0 +1,8 @@
+//create.js.erb
+<% if @is_v %>
+var model_html = "<%= j(render 'table', :doctor_arranges => @flash_arranges) %>";
+//$("#current_arrange_tbody").empty();
+$("#current_arrange_tbody").append(model_html);
+<% else %>
+  showTip("warning", "有重复排班");
+<% end %>

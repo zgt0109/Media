@@ -1,0 +1,216 @@
+<% provide(:title, "订单提交") %>
+
+<% content_for :body_class do  %>bggrey<% end %>
+  <div class="pad10">
+    <%= form_for @group_order, url: mobile_group_orders_path(supplier_id: @supplier.id), remote: true do |f| %>
+      <%= f.hidden_field :group_item_id %>
+      <%= f.hidden_field :price %>
+      <%= f.hidden_field :username %>
+      <div class="bgf bord1 radiu3">
+        <div class="clear bordb3 f14 pad10">
+          <p class="left grey"><%= @group_item.name %></p>
+            <span class="right order_price">单价<span><%= f @group_item.price %></span>元</span>
+          </div>
+          <div class="">
+            <div class="bordb3 clear pad10">
+              <div class="lab grey left">数量</div>
+              <div class="right">
+                <div class="add-num">
+                  <a href="javascript:;" class="sub" onclick="change_num(1);">
+                    <i class="com_icon3 icon7"></i>
+                  </a>
+                  <div class="text_input">
+                    <%= f.number_field :qty, min: 1, onblur: "default_num(this);", maxlength: 4, onchange: "onchangeqty(this);" %>
+                  </div>
+                  <a href="javascript:;" class="add" onclick="change_num(2);">
+                    <i class="com_icon3 icon8"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="bordb3 clear pad10">
+              <div class="lab grey left">手机号码</div>
+              <div class="auto">
+                <%= f.telephone_field :mobile, class: 'text_input2 txtright', placeholder: '必填' %>
+              </div>
+            </div>
+            <div class="bordb3 clear pad10">
+              <div class="lab grey left">总价</div>
+                <div class="right">
+                  <span class="red order_count"><%= f @group_item.price %></span>元
+                </div>
+              </div>
+            </div>
+          </div>
+          <% payment_classes = {'余额支付' => 'zhifu1', '微信支付' => 'zhifu2', '支付宝支付' => 'zhifu3', '易宝支付' => 'zhifu4'}%>
+          <div class="tit1">选择支付方式</div>
+            <div class="bgf bord1 radiu3">
+              <div class="zhifu_list">
+                <ul>
+                  <% if @payment_types.present? %>
+                    <% @payment_types.each_with_index do |payment_type, index|%>
+                      <li class="<%= 'on' if index.eql?(0) %>">
+                       <span class="right check_icon"></span>
+                       <span class="left zf_pic <%= payment_classes[payment_type.name] %>"></span>
+                       <span><%= payment_type.name %></span>
+                      </li>
+                      <%= f.radio_button :payment_type_id, payment_type.id, {checked: index.eql?(0)}  %>
+                    <% end %>
+                  <% else %>
+                    <span>没有可用的支付方式</span>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            <div class="blank1"></div>
+            <%= f.submit '提交订单', class: 'order_sub' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+<% content_for :bgshadow do  %><div class="bgshadow"></div><% end %>
+
+<% content_for :document_ready_js do  %>
+  <script>
+// 手机号码正则表达式
+    function test_mobile_number(mobile_number) {
+        if (mobile_number == undefined) {
+            return false;
+        }
+        if (/^[0-9\-]{9,15}$/.test(mobile_number)){
+            return true;
+        };
+        return false;
+    }
+
+  function only_num(txt, e){
+      var evt = window.event ? window.event : e
+      var curKey = evt.keyCode || evt.which || evt.charCode;
+      if (curKey == '37' || curKey == '39') {
+          return;
+      }
+      txt.value = txt.value.replace(/[^\d]/g, '');
+  }
+
+  var price = <%= @group_item.price%>
+  var limit_coupon_count = <%= @group_item.limit_coupon_count %>
+  var limit_sum = <%= @group_orders.sum(&:qty)%>
+  function change_num(value){
+      var num_value = parseInt($("#group_order_qty").val());
+
+      if(value == 1){
+          if(num_value >= 2){
+              num_value -= 1;
+          }
+      }else if(value == 2){
+          if(limit_coupon_count != -1 ){
+             if((num_value + limit_sum + 1) > limit_coupon_count ){
+                 alert("此商品每人最多只能购买<%= @group_item.limit_coupon_count %>件");
+                 return;
+             }else{ num_value += 1;}
+          }else{
+              num_value += 1;
+          }
+
+      }
+      $("#group_order_qty").val(num_value);
+      //$("#order_price").html((price*num_value).toFixed(2) + "元");
+      $(".order_count").html((price*num_value).toFixed(2));
+  }
+  function default_num(txt){
+      if(!$("#group_order_qty").val() || $("#group_order_qty").val() == 0 ){
+          txt.value = txt.defaultValue;
+          //$("#order_price").html((price*txt.value).toFixed(2) + "元");
+          $(".order_count").html((price*num_value).toFixed(2));
+      }
+  }
+  function onchangeqty(txt){
+      var num_value = parseInt($("#group_order_qty").val());
+      if(!num_value || num_value == 0 ){
+          txt.value = txt.defaultValue;
+          $("#order_price").html((price*txt.value).toFixed(2) + "元");
+      }else{
+          if( limit_coupon_count != -1){
+              if((num_value + limit_sum ) > limit_coupon_count ){
+                  txt.value = txt.defaultValue;
+                  alert("此商品每人最多只能购买<%= @group_item.limit_coupon_count %>件");
+                  $("#order_price").html((price*txt.value).toFixed(2) + "元");
+                  return;
+              }
+          }else{
+//              $("#group_order_qty").val(num_value);
+//              $("#order_price").html((price*num_value).toFixed(2) + "元");
+          }
+          $("#group_order_qty").val(num_value);
+          $(".order_count").html((price*num_value).toFixed(2));
+          //$("#order_price").html((price*num_value).toFixed(2) + "元");
+
+      }
+
+  }
+
+    $(function(){
+
+
+        $(".text_input input").bind("change ",function(){
+            var price = $(".order_price span").html();
+            var geshu = $(".text_input input").val();
+            $(".order_count").html((price*geshu).toFixed(2));
+        })
+
+        //addNum();
+
+        $(".zhifu_list ul li").click(function(){
+            $(this).addClass("on").siblings().removeClass("on");
+            $(this).next().prop('checked', true);
+        })
+        
+        $('form input[type=submit]').click(function(){
+          if(!$("#group_order_mobile").val()){
+            alert("手机号码不能不空");
+            $("#group_order_mobile").focus();
+            return false;
+          }
+          if(!test_mobile_number($("#group_order_mobile").val()) ) {
+
+            alert("手机号码格式不正确");
+            $("#group_order_mobile").focus();
+            return false;
+          }
+        });
+
+    })
+    function addNum(){
+
+
+        $(".add-num").on("click",".sub",function(){
+
+            var $this = $(this).parent();
+            var price = $(".order_price span").html();
+
+            $text = $this.find(".text_input input"),
+                    $val = parseInt($text.val()),
+                    $add = $this.find(".add");
+            if($val > 1){
+                $val = ($val-1).toString();
+                $text.val($val);
+            }
+            var geshu = $(".text_input input").val();
+            $(".order_count").html((price*geshu).toFixed(1))
+        });
+        $(".add-num").on("click",".add",function(){
+            var $this = $(this).parent();
+            var price = $(".order_price span").html();
+            $text = $this.find(".text_input input"),
+                    $val = parseInt($text.val()),
+                    $sub = $this.find(".sub");
+            $val = ($val+1).toString();
+            $text.val($val).removeClass("min");
+            var geshu = $(".text_input input").val();
+            $(".order_count").html((price*geshu).toFixed(1));
+        });
+    }
+</script>
+<% end %>

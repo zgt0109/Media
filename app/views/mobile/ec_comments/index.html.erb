@@ -1,0 +1,37 @@
+<% provide(:title, "商品评论") %>
+<%= content_for(:topbar) do %>
+    <header>
+      <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id,:id => @item.id, anchor: "mp.weixin.qq.com")  %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
+      <h1>评论</h1>
+      <a href="<%= new_mobile_ec_comment_path(supplier_id: @supplier.id,:id => @item.id) %>"><img src="/assets/mobile/wshop/ico-comment.png"/></a>
+    </header><!-- header end -->
+<% end %>
+
+    <section>
+      <div class="box-comment">
+        <div class="ft-comment">
+             <%#= render :partial=> "comment", :object => @comments %>
+          <% if @comments.present?  %>
+              <% @comments.each do |comment| %>
+                  <div class="ft-list">
+                    <div class="fl">
+                                <span class="bd-img">
+                                   <%= image_tag "/assets/life/user_logo.png" %>
+                                </span>
+                    </div>
+                    <div class="fr">
+                      <b></b>
+                      <p><%= comment.content %></p>
+                  <span>
+                        <i class="fl"><%= comment.name %></i>
+                        <i class="fr"><%= date_format_full(comment.created_at) %></i>
+                  </span>
+                    </div>
+                  </div>
+              <% end %>
+          <% else%>
+              <p class="tcenter ft-null">暂无评论</p>
+          <% end %>
+        </div>
+      </div>
+    </section><!-- section end -->

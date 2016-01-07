@@ -1,0 +1,53 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+                <li><%= link_to '会员卡', vip_users_path %></li>
+                <li><%= link_to '微会员管理', vip_users_path %></li>
+                <li><%= link_to '会员详情', vip_user_path(@vip_user, type: :show_user) %></li>
+                <% if params[:type] == 'money' %>
+                    <li><%= link_to '消费记录', vip_user_path(@vip_user.id, type: :money) %></li>
+                <% elsif params[:type] == 'transactions' %>
+                    <li><%= link_to '积分记录', vip_user_path(@vip_user.id, type: :transactions) %></li>
+                <% elsif params[:type] == 'given' %>
+                    <li><%= link_to '会员关怀积分', vip_user_path(@vip_user.id, type: :given) %></li>
+                <% elsif params[:type] == 'grade' %>
+                    <li><%= link_to '等级调节记录', vip_user_path(@vip_user.id, type: :grade) %></li>
+                <% end %>
+                <%= yield :vip_breadcrumb if content_for? :vip_breadcrumb %>
+            </ul>
+            <%= render '/layouts/qrcode' %>
+        </div>
+
+        <div class="page-content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-24" id="myTab">
+                            <li class="<%= 'active' if params[:type] == 'show_user' %>">
+                                <%= link_to vip_user_path(@vip_user.id, type: :show_user) do %><i class="green icon-home bigger-110"></i>会员详情<% end %>
+                            </li>
+                            <li class="<%= 'active' if params[:type] == 'money' %>">
+                                <%= link_to '消费记录', vip_user_path(@vip_user.id, type: :money) %>
+                            </li>
+                            <li class="<%= 'active' if params[:type] == 'transactions' %>">
+                                <%= link_to '积分记录', vip_user_path(@vip_user.id, type: :transactions) %>
+                            </li>
+                            <li class="<%= 'active' if params[:type] == 'given' %>">
+                                <%= link_to '会员关怀积分', vip_user_path(@vip_user.id, type: :given) %>
+                            </li>
+                            <li class="<%= 'active' if params[:type] == 'grade' %>">
+                                <%= link_to '等级调节记录', vip_user_path(@vip_user.id, type: :grade) %>
+                            </li>
+                        </ul>
+                        <div class="tab-content no-border padding-24">
+                            <% params[:type] = 'show_user' unless %w(show_user money transactions given grade).include?(params[:type]) %>
+                            <%= render params[:type] == 'transactions' ? 'money' : params[:type] %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

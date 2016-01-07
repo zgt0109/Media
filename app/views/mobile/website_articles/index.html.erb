@@ -1,0 +1,209 @@
+<%= stylesheet_link_tag '/stylesheets/website_articles/list' %>
+<%= render "#{params[:article_type]}_index" %>
+
+
+<script>
+  var category_data = <%= raw JSON.pretty_generate(@categories.collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position, children_count: t.children_count.to_i, category_type: t.category_type}}) %>;
+  //console.log(category_data);
+
+  function search_category(id){
+    var category = null;
+    $.each(category_data, function(i, c){
+      if(c.id == parseInt(id)){
+        category = c;
+        return category;
+      }
+    });
+
+    if(category == null){return false;}
+
+    return category;
+  }
+  function search_category_tags(id){
+    $.ajax({
+      url: "<%= tags_mobile_website_articles_url(article_type: params[:article_type]) %>&category_id=" + id,
+      type: "get",
+      success : function (response){
+        console.log(response);
+        if(response.result == 'success'){
+          var t_html = '', tc_html = '';
+          $.each(response.data, function(i, t){
+            t_html += '<a href="javascript:;">'+t.name+'</a>'
+            tc_html += '<div class="filter-content">';
+            $.each(t.children, function(j, tc){
+              tc_html += '<span><a href="javascript:;" data-id="'+tc.id+'">'+tc.name+'</a></span>'
+            });
+            tc_html += '</div>';
+          });
+          if(t_html == ''){
+            $('.product-filter').html('');
+          }
+          else{
+	    $('.product-filter').html('<div class="filter-box">'+ t_html+'</div>'+'<div class="filter-main">'+tc_html+'</div>');
+          }
+        } 
+        else{
+          console.log(response);
+        }
+        return true;
+      },
+      error: function(response) {
+        console.log(response);
+        return false;
+      }
+    });  
+  }
+  function change_category(id, flag){
+    var category = search_category(id), div_categories_data = [], html = '';
+    if(!category){ return false;}
+    if(category.children_count > 0){
+      $.each(category_data, function(i, c){
+        if(c.parent_id == category.id){
+          div_categories_data.push(c);
+        }
+      });
+      div_categories_data = div_categories_data.sort(function(a, b){return a.position-b.position});
+      //console.log(div_categories_data);
+      console.log(category);
+      html += '<a href="javascript:;" class="category all active" data-id="'+category.id+'" data-parent-id="'+category.parent_id+'" style="display: block;">全部</a>';
+      $.each(div_categories_data, function(i, c){
+        if(c.children_count > 0){
+          html += '<a href="javascript:;" class="category" data-children-count="'+c.children_count+'" data-id="'+c.id+'" data-parent-id="'+c.parent_id+'" style="display: block;">'+c.name+'<i class="fa fa-angle-right"></i></a>'
+        }  
+        else{
+          html += '<a href="javascript:;" class="category" data-children-count="'+c.children_count+'" data-id="'+c.id+'" data-parent-id="'+c.parent_id+'" style="display: block;">'+c.name+'</a>'
+        }
+      });
+      $('.category-box').html(html);
+      $('.category-foot .back').removeClass('disabled');
+      $('.category-foot .back').attr('data-parent-id', category.id);
+      $('.head-name span').text(category.name);
+      $('.head-name span').attr('data-id', category.id);
+      $('.category-foot .all').attr('data-id', category.id);
+    }
+    else{
+      $('form #category_id').val(category.id);
+      $('form').submit();
+    }
+    if(category.category_type == 2){
+      search_category_tags(category.id)
+    }
+  }
+  
+  function back_category(id){
+    var category = search_category(id), div_categories_data = [], html = '', parent = null;
+    if(!category){ return false;}
+    $.each(category_data, function(i, c){
+      if(c.parent_id == category.parent_id){
+        div_categories_data.push(c);
+      }
+      if(c.id == category.parent_id){
+        parent = c;
+      }
+    });
+    div_categories_data = div_categories_data.sort(function(a, b){return a.position-b.position});
+    //console.log(div_categories_data);
+    if(parent == null){
+      html += '<a href="javascript:;" class="category all active" data-id="" data-parent-id="" style="display: block;">全部</a>';
+    }
+    else{
+      html += '<a href="javascript:;" class="category all active" data-id="'+parent.id+'" data-parent-id="'+parent.parent_id+'" style="display: block;">全部</a>';
+    }
+    $.each(div_categories_data, function(i, c){
+      if(c.children_count > 0){
+        html += '<a href="javascript:;" class="category" data-children-count="'+c.children_count+'" data-id="'+c.id+'" data-parent-id="'+c.parent_id+'" style="display: block;">'+c.name+'<i class="fa fa-angle-right"></i></a>'
+      }  
+      else{
+        html += '<a href="javascript:;" class="category" data-children-count="'+c.children_count+'" data-id="'+c.id+'" data-parent-id="'+c.parent_id+'" style="display: block;">'+c.name+'</a>'
+      }
+    });
+    $('.category-box').html(html);
+    if(div_categories_data[0].parent_id == 0){
+      $('.category-foot .back').addClass('disabled');
+    }
+    else{
+      $('.category-foot .back').removeClass('disabled');
+      $('form #search_taggings_tag_id_eq').val('');
+    }
+    if(parent == null){
+      $('.head-name span').text('全部分类');
+      $('.head-name span').attr('data-id', '');
+      $('.category-foot .back').attr('data-parent-id', '');
+      $('.category-foot .all').attr('data-id', '');
+    }
+    else{
+      $('.head-name span').text(parent.name);
+      $('.category-foot .back').attr('data-parent-id', parent.id);
+      $('.category-foot .all').attr('data-id', parent.id);
+    }
+    if(category.category_type == 2){
+      search_category_tags(category.id)
+    }
+  }
+
+  $(function(){
+
+    $(document).on("click", ".filter-box a",function(){
+        var $this = $(this),
+            $index = $this.index(),
+            $cont = $(".filter-main");
+        if($this.hasClass("active")){
+            $this.removeClass("active");
+            $cont.slideUp(function(){
+                $cont.find(".filter-content").hide();
+            });
+        }else{
+            $this.toggleClass("active").siblings().removeClass("active");
+            $cont.slideUp(function(){
+                $cont.find(".filter-content").hide();
+                $cont.find(".filter-content").eq($index).show();
+                $cont.slideDown();
+            });
+        }
+    });
+
+    $(document).on("click",".category a.category",function(){
+      if($(this).hasClass('all')){
+        $('form #category_id').val($(this).attr('data-id'));
+        $('form').submit();
+      }
+      else{
+        change_category($(this).attr('data-id'));
+      }
+    });
+    $(document).on("click",".category-foot .back",function(){
+      if($(this).hasClass('disabled')){return false;}
+      else{
+        back_category($(this).attr('data-parent-id'));
+      }
+    });
+    $(document).on("click",".category-foot .all",function(){
+//      if($(this).attr('data-id')){
+//        $('form #category_id').val($(this).attr('data-id'));
+//      }
+//      else{
+//	$('form #category_id').val('');
+//      }
+      $('form #category_id').val($('.category-box a.category.active').attr('data-id'));
+      $('form').submit();
+    });
+
+    $(document).on("click",".filter-main a",function(){
+      $('form #search_taggings_tag_id_eq').val($(this).attr('data-id'));
+      $('form #category_id').val($('.head-name span').attr('data-id'));
+      $('form').submit();
+    });
+
+    var category = search_category(<%= params[:category_id] %>);
+    //console.log(category);
+    if(category.children_count > 0){
+	change_category(category.id);
+    }else{
+      back_category(category.id);
+    }
+    $('.category-box a.category').removeClass('active');
+    $('.category-box a.category[data-id="<%= params[:category_id] %>"]').addClass('active');
+
+   
+  });
+</script>

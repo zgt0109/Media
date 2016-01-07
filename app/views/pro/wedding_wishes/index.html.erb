@@ -1,0 +1,70 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+				<li> <i class="icon-home home-icon"></i><%= link_to "首页", root_path %> </li>
+				<li> <%= link_to "微婚礼", weddings_path %> </li>
+				<li><%= link_to "祝福", wedding_wishes_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <%= form_tag wedding_wishes_path, :method => :get do %>
+            <div class="col-md-4 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">祝福人姓名：</span>
+                <%= text_field_tag :username, params[:username] ,class: 'col-xs-12', placeholder: "请输入祝福人姓名" %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">手机号码：</span>
+                <%= text_field_tag :mobile, params[:mobile] ,class: 'col-xs-12', placeholder: "请输入祝福人手机号码" %>
+              </div>
+            </div>
+            <div class="col-md-3 row">
+              <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+              <%= link_to "导出Excel", params.merge(format: :xls), class: "btn btn-primary btn-sm btn-filter margin-left-10" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-sm-12 margin-top-20">
+          <table id="weddingGuestsTable"
+            class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+              <tr>
+                <th>祝福人姓名</th>
+                <th>手机号码</th>
+                <th>内容</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @wedding_wishes.each do |wish| %>
+                <tr>
+                  <td><%= wish.username %></td>
+                  <td><%= wish.mobile %></td>
+                  <td><%= wish.content  %></td>
+                  <td>
+                    <%= link_to "删除", wedding_wish_path(@wedding,wish), data: {toggle: "modals", confirm: "确定要删除？", target: "delModel", url: house_live_photos_path(wish)}, method: "delete" %>
+                  </td>
+                </tr>
+                <% end.blank? %>
+                <tr><td colspan="4" class="green text-center">还没有祝福</td></tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%= paginate @wedding_wishes %>
+
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>
+

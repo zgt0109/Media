@@ -1,0 +1,106 @@
+.html{background-image: url(assets/mobile/vweisiteV01/18/bg.jpg); background-position:center top; background-size: 100% auto; background-repeat: no-repeat;}
+.box{background:rgba(255,255,255,0.6); display: block; text-align: center;}
+.box,
+.box a{color:#393939;}
+.index{width: 60%; position: absolute;left: 20%; bottom:10%; z-index: 1;}
+.index-wrap{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    width: 100%;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -o-text-size-adjust: none;
+    text-size-adjust: none;
+}
+.mod-index{width: 48%; float: left; height: 45px;margin:5px 1%;-webkit-tap-highlight-color:rgba(0,0,0,0.35);}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; text-align: center; overflow: hidden;}
+.mod-index small{ font-size: 14px; display: block;word-spacing:normal; word-break:normal; word-break:break-all; height: 45px; line-height: 45px;}
+.btn-up-1{display: none;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+.mod-index:nth-child(1){-webkit-animation:animate1 .5s ease-in;}
+.mod-index:nth-child(2){-webkit-animation:animate2 .5s ease-in;}
+.mod-index:nth-child(3){-webkit-animation:animate3 .5s ease-in;}
+.mod-index:nth-child(4){-webkit-animation:animate4 .5s ease-in;}
+.mod-index:nth-child(5){-webkit-animation:animate5 .5s ease-in;}
+.mod-index:nth-child(6){-webkit-animation:animate6 .5s ease-in;}
+.mod-index:nth-child(7){-webkit-animation:animate7 .5s ease-in;}
+.mod-index:nth-child(8){-webkit-animation:animate8 .5s ease-in;}
+@-webkit-keyframes animate1 {
+    0% {
+        -webkit-transform:translate(-300px,-150px)
+    }
+    100% {
+        -webkit-transform:translate(0,0)
+    }
+}
+@-webkit-keyframes animate2 {
+     0% {
+         -webkit-transform:translate(300px,-150px)
+     }
+     100% {
+         -webkit-transform:translate(0,0)
+     }
+ }
+@-webkit-keyframes animate3 {
+      0% {
+          -webkit-transform:translate(-300px,-50px)
+      }
+      100% {
+          -webkit-transform:translate(0,0)
+      }
+  }
+@-webkit-keyframes animate4 {
+	0% {
+	   -webkit-transform:translate(300px,-50px)
+	}
+	100% {
+	   -webkit-transform:translate(0,0)
+	}
+}
+@-webkit-keyframes animate5 {
+	0% {
+	   -webkit-transform:translate(-300px,50px)
+	}
+	100% {
+	   -webkit-transform:translate(0,0)
+	}
+}
+@-webkit-keyframes animate6 {
+	0% {
+	   -webkit-transform:translate(300px,50px)
+	}
+	100% {
+	   -webkit-transform:translate(0,0)
+	}
+}
+@-webkit-keyframes animate7 {
+	0% {
+	   -webkit-transform:translate(-300px,150px)
+	}
+	100% {
+	   -webkit-transform:translate(0,0)
+	}
+}
+@-webkit-keyframes animate8 {
+	0% {
+	   -webkit-transform:translate(300px,150px)
+	}
+	100% {
+	   -webkit-transform:translate(0,0)
+	}
+}

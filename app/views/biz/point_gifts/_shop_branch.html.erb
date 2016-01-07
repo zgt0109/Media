@@ -1,0 +1,17 @@
+<% 
+  if request.referrer =~ /point_gift/
+    prefix = 'point_gift'
+  elsif request.referrer =~ /vip_package/
+    prefix = 'vip_package'
+  elsif request.referrer =~ /coupon/
+    prefix = 'coupon'
+  end
+  prefix ||= 'point_gift'
+%>
+<% if @shop_branchs.present? %>
+  <div class="margin-0 shop_branchs" id="shop_branch_<%= @city_id %>">
+    <% @shop_branchs.each do |branch| %>
+      <label> <%= check_box_tag "#{prefix}[shop_branch_ids][]", branch.id %> <%= branch.name %> </label>
+    <% end %>
+  </div>
+<% end %>

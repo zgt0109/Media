@@ -1,0 +1,23 @@
+<% provide(:title, '个人资料') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+    <div class="stage" id="stage">
+        <!-- 会员卡首页 start -->
+        <section id="sec-index">
+            <div class="user-info">
+                <ul>
+                    <% @vip_hash.to_h.each do |k, v| %>
+                        <li>
+                            <span class="label"><%= vip_info_human_key k %>：</span>
+                            <span><%= v %></span>
+                        </li>
+                    <% end %>
+                </ul>
+            </div>
+        </section>
+        <!-- 会员卡首页 end -->
+    </div>
+</div>
+
+<style>
+    /*.label { display: inline-block; width: 80px; text-align: right; }*/
+</style>

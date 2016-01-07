@@ -1,0 +1,68 @@
+
+    <div class="mod-slider slider-ver" id="index">
+      <ul class="slider-list">
+        <li>
+          <div class="index">
+            <div class="index-box">
+              <% website_menus[0..9].each do |menu| %>
+                  <%= link_to menu_url(menu), class: 'box mod-index' do %><%= menu.pic_or_icon has_title: false, pic_type: "thumb" %><% end %>
+              <% end %>
+            </div>
+            <a href="javascript:;" class="box mod-logo"><i><%= image_tag website.logo if website.logo? %></i></a>
+          </div>
+          <%= image_tag @website_pictures[0].pic.large if @website_pictures[0].present? && @website_pictures[0].pic? %>
+        </li>
+        <% if website_menus[10..13].present? %>
+            <li>
+              <div class="index-list">
+                <% website_menus[10..13].each_with_index do |menu, index| %>
+                    <%= link_to menu_url(menu), class: 'box mod-list' do %>
+                        <% if index % 2 == 0 %>
+                            <div class="index-img">
+                              <%= menu.pic_or_icon has_title: false, pic_type: "thumb" %>
+                            </div>
+                            <div class="index-text">
+                              <b><%= menu.title %></b>
+                              <!--<small>副标题</small>-->
+                            </div>
+                        <% else %>
+                            <div class="index-text">
+                              <b><%= menu.title %></b>
+                              <!--<small>副标题</small>-->
+                            </div>
+                            <div class="index-img">
+                              <%= menu.pic_or_icon has_title: false, pic_type: "thumb" %>
+                            </div>
+                        <% end %>
+                    <% end %>
+                <% end %>
+              </div>
+              <%= image_tag @website_pictures[1].pic.large if @website_pictures[1].present? && @website_pictures[1].pic? %>
+            </li>
+        <% end %>
+        <% if website_menus[14].present? %>
+            <li>
+              <%= link_to menu_url(website_menus[14]) do %><%= image_tag website_menus[14].pic.custom if website_menus[14].pic? %><% end %>
+            </li>
+        <% end %>
+      </ul>
+      <div class="slider-text">
+        <div id="pagenavi" class="fr slider-page">
+          <%= link_to 1, '#', class: 'active' if website_menus.to_a[0..9].present? %>
+          <%= link_to 2, '#', class: '' if website_menus.to_a[10..13].present? %>
+          <%= link_to 3, '#', class: '' if website_menus.size > 10 %>
+        </div>
+      </div>
+    </div>
+
+<% content_for :document_ready_js do %>
+    rotateMenu(".index",".mod-index");
+    new Swipe(document.getElementById("index"), {
+        speed:500,
+        auto:false,
+        callback:function(){
+            var lis = $(this.element).next("div").find("#pagenavi").children();
+            lis.removeClass("active").eq(this.index).addClass("active");
+        }
+    });
+<% end %>

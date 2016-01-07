@@ -1,0 +1,73 @@
+<% 
+   order_type ||= 1 
+   main_series ||= 1
+   li_class ||= 'menu-1'
+   div_class ||= 'list list-1'
+   div_id ||= ''
+   data_scale ||= 0.3
+   swipe_ul_li_div_class ||= 'list list-2'
+   group_number ||= 8
+%>
+<% content_for :main_series do %><%= main_series %><% end %>
+
+<%= render 'slider_3' %>
+
+<div class="<%= div_class %>" id="<%= div_id %>">
+  <ul>
+    <% if order_type == 1 %>
+      <% website_menus.each_with_index do |menu, i| %>
+        <li class="<%= li_class %>" style="<%= menu.mobile_websitev02_style(@home_template) %>">
+          <%= link_to menu_url(menu), class: 'box', data: {scale: data_scale} do %>
+            <div class="menu-img">
+              <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+            </div>
+            <div class="menu-text"><%= menu.title %></div>
+          <% end %>
+        </li>
+      <% end %>
+    <% elsif order_type == 2 %>
+      <% website_menus.each_with_index do |menu, i| %>
+        <li class="<%= li_class %>" style="<%= menu.mobile_websitev02_style(@home_template) %>">
+          <%= link_to menu_url(menu), class: 'box', data: {scale: data_scale} do %>
+            <% if i % 2 == 0 %>
+	      <div class="menu-img">
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+              </div>
+            <% end %>
+            <div class="menu-text"><%= menu.title %></div>
+            <% if i % 2 == 1 %>
+	      <div class="menu-img">
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+              </div>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    <% elsif order_type == 3 %>
+      <% website_menus.in_groups_of(group_number, false).each do |menus| %>
+        <li>
+          <div class="<%= swipe_ul_li_div_class %>">
+            <ul>
+              <% menus.each do |menu| %>
+                <li class="<%= li_class %>" style="<%= menu.mobile_websitev02_style(@home_template) %>">
+                  <%= link_to menu_url(menu), class: 'box', data: {scale: data_scale} do %>
+                    <div class="menu-img">
+                      <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+                    </div>
+                    <div class="menu-text"><%= menu.title %></div>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul> 
+          </div>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
+
+<script>
+    $(function(){
+        var navLineSwipe = indexSwipe("navLine-menu",false);
+    })
+</script>

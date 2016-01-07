@@ -1,0 +1,28 @@
+<%= javascript_include_tag 'jquery','jquery_ujs' %>
+<header>
+	<%if 'new'.eql?(params[:source])%>
+	<a class="ico-hd arr-hd" href="javascript:window.location.href='/app/hotel_orders?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>#mp.weixin.qq.com'"></a>
+	<%else%>
+	<a class="ico-hd arr-hd" href="javascript:history.go(-1);"></a>
+	<%end%>
+	<h1>评论详情</h1>
+</header>
+<div class="contxt cont-artical">
+	<div class="page-cont">
+		<%= render :partial => 'app/hotel_comments/hotel_comments', :object => @hotel_comments, :as => :hotel_comment %>
+	</div>
+	<div class="tcenter"><% unless @hotel_comments.last_page? %><a href="/app/hotel_comments?aid=<%= params[:aid] %>&branch_id=<%= params[:branch_id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 2) %>#mp.weixin.qq.com" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a><%end%></div>
+	<div class="tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
+</div>
+
+<script>
+$( document ).ajaxStart(function() {
+	$(".isloading").css("display",'');
+	$("#more_loading").css("display","none");
+});
+
+$( document ).ajaxStop(function() {
+	$(".isloading").css("display",'none');
+	$("#more_loading").css("display","block");
+});
+</script>

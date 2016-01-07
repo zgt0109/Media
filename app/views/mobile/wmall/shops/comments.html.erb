@@ -1,0 +1,92 @@
+<section id="sec-index">
+</section><!--main section end -->
+
+<script id='ractive_shop_comments_template' type='text/ractive'>
+  <header class="box">
+    <div class="mod-nav">
+      <%= link_to mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "tleft" do %>
+        <img src="/mobile/img/wbusiness/icon-back.png">
+      <% end %>
+      {{#shop}}
+      <span>店铺名称</span>
+      <%= link_to add_comment_mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "tright" do %>
+        <img src="/mobile/img/wbusiness/icon-edit.png">
+      <% end %>
+      {{/shop}}
+    </div>
+  </header>
+  <div class="body">
+    <div class="box-comment">
+      {{#comments}}
+      <dl>
+        <dt><span>{{nickname}}</span><span class="fr fgray">{{date created_at}}</span></dt>
+        <dd>
+          <p>
+            <span class="score">
+              <span class="start" style="width:{{star_val}}px"></span>
+            </span>
+            <span>人均</span> <span class="forange">￥{{average_spend}}</span>
+          </p>
+          <p>
+            <span>点评：</span>
+            <span class="fgray">{{content}}</span>
+          </p>
+        </dd>
+      </dl>
+      {{/comments}}
+      {{^comments}}
+        <div class="mod-null">这家店铺，还没有添加评论！</div>
+      {{/comments}}
+    </div>
+    <div class="b-loading"><img src="/mobile/img/loading.gif" alt=""></div>
+  </div>
+</script>
+
+<script>
+$(function(){
+  var shop_comments = fetch_wmall_data({path: "/api/wmall/shops/<%= params[:id] -%>/comments.json"}, {supplier_id: '<%= session[:supplier_id] %>'}, options = {}) || null
+
+  if (shop_comments == null) {
+    shop_comments = {
+                      shop: {name: "店铺名称"},
+                      comments: []
+                    }
+  }
+
+  shop_comments.comments.map(function (comment, index) {
+    rank = comment.rank || 1
+    star_val = rank * 20 + (rank - 1) * 4
+
+    comment['star_val'] = star_val
+  })
+
+  var ractive_shops = new Ractive({
+    // The `el` option can be a node, an ID, or a CSS selector.
+    el: '#sec-index',
+
+    // We could pass in a string, but for the sake of convenience
+    // we're passing the ID of the <script> tag above.
+    template: '#ractive_shop_comments_template',
+
+    // Here, we're passing in some initial data
+    data: shop_comments
+  });
+
+  //顶部下拉刷新
+   document.addEventListener("touchstart",function(e){
+    var t=e.touches[0],
+      y=t.pageY;
+    $documentH = $(document).height();
+    $("body").attr("data-y",y);
+  });
+  document.addEventListener("touchmove",function(e){
+    var t=e.touches[0],
+      startY=parseInt($("body").attr("data-y")),
+      pageY=(startY - t.pageY);
+    $touchT = $(window).scrollTop() + $(window).height() +pageY;
+    if($touchT>=$documentH){
+      $(".b-loading").show();
+    }
+  });
+});
+</script>

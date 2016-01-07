@@ -1,0 +1,75 @@
+common: &common
+  host: "testing.winwemedia.com"
+  winwemedia_payment:
+    host: "http://m.wx.winwemedia.com"
+    payment_request: "/payments/request"
+  taobao:
+    app_key: "21673788"
+    app_secret: "abae122a11a8e8b39426ee2ee08a5c5f"
+  yeepay:
+    yeepay_host: "http://ok.yeepay.com/"
+    callbackurl: "http://testing.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
+    fcallbackurl: "http://testing.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
+  yeepay_api_path:
+    pay_quest: "/%{api_env}/api/pay/request"
+  alipay:
+    callback_url: "http://localhost:3000/payment/alipay/callback"
+    notify_url: "http://localhost:3000/payment/alipay/notify"
+  vip_user_pay:
+    pay_quest_url: "http://localhost:3000/app/vip_user_payments/payment"
+    callback_url: "http://localhost:3000/payment/vip_userpay/callback"
+    notify_url: "http://localhost:3000/payment/vip_userpay/notify"
+
+production:
+  <<: *common
+  winwemedia_payment:
+    host: "http://yongan.winwemedia.com"
+    payment_request: "/payments/request"
+  taobao:
+    app_key: "21674146"
+    app_secret: "2fbbdb16405d640a11579856014a145c"
+  yeepay:
+    yeepay_host: "https://ok.yeepay.com/"
+    callbackurl: "http://winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
+    fcallbackurl: 'http://winwemedia.com/payment/yeepay/%{merchantaccount}/callback'
+  alipay:
+    callback_url: "http://winwemedia.com/payment/alipay/callback"
+    notify_url: "http://winwemedia.com/payment/alipay/notify"
+  vip_user_pay:
+    pay_quest_url: "http://winwemedia.com/app/vip_user_payments/payment"
+    callback_url: "http://winwemedia.com/payment/vip_userpay/callback"
+    notify_url: "http://winwemedia.com/payment/vip_userpay/notify"
+
+staging:
+  <<: *common
+  winwemedia_payment:
+    host: "http://staging.winwemedia.com"
+    payment_request: "/payments/request"
+  taobao:
+    app_key: "21674146"
+    app_secret: "2fbbdb16405d640a11579856014a145c"
+  yeepay:
+    yeepay_host: "https://ok.yeepay.com/"
+    callbackurl: "http://staging.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
+    fcallbackurl: 'http://staging.winwemedia.com/payment/yeepay/%{merchantaccount}/callback'
+  alipay:
+    callback_url: "http://staging.winwemedia.com/payment/alipay/callback"
+    notify_url: "http://staging.winwemedia.com/payment/alipay/notify"
+  vip_user_pay:
+    pay_quest_url: "http://staging.winwemedia.com/app/vip_user_payments/payment"
+    callback_url: "http://staging.winwemedia.com/payment/vip_userpay/callback"
+    notify_url: "http://staging.winwemedia.com/payment/vip_userpay/notify"
+
+development:
+  <<: *common
+  winwemedia_payment:
+    host: "http://m.wx.winwemedia.com"
+    payment_request: "/payments/request"
+  host: "localhost:3000"
+  yeepay:
+    yeepay_host: "http://ok.yeepay.com/"
+    callbackurl: "http://localhost:3000/payment/yeepay/%{merchantaccount}/callback"
+    fcallbackurl: "http://localhost:3000/payment/yeepay/%{merchantaccount}/callback"
+  alipay:
+    callback_url: "http://localhost:3000/payment/alipay/callback"
+    notify_url: "http://localhost:3000/payment/alipay/notify"

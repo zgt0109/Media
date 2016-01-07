@@ -1,0 +1,388 @@
+html, body {
+    height: 100%
+}
+body {
+    position: relative;
+    overflow-x: hidden;
+    font-size: 12px;
+    font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+    -webkit-text-size-adjust: none;
+    background: url(/assets/weddings/bg.png) repeat-y #ffd9e5;
+}
+body, p, form, h1, h2, h3, h4, h5, h6, ul, ol, li, section, div, * {
+    padding: 0;
+    margin: 0
+}
+ul, ol, li {
+    list-style: none
+}
+img {
+    border: 0
+}
+a {
+    text-decoration: none
+}
+video {
+    display: inline-block;
+    width:100%;
+    background:#000;
+}
+::-moz-selection {
+    background: none;
+    color: #fff;
+    text-shadow: none;
+}
+::selection {
+    background: none;
+    color: #fff;
+    text-shadow: none;
+}
+img {
+    -ms-interpolation-mode: bicubic;
+}
+h1, h2, h3 {
+    color: #444;
+}
+h1 {
+    /*-webkit-text-stroke: 1px #fff;*/
+    font: 18px "\5FAE\8F6F\96C5\9ED1";
+}
+h2 {
+    /*-webkit-text-stroke: 1px #fff;*/
+    font: 16px "\5FAE\8F6F\96C5\9ED1";
+}
+h3 {
+    /*-webkit-text-stroke: 1px #fff;*/
+    font: 14px "\5FAE\8F6F\96C5\9ED1";
+}
+i,em,b,span,label{ display:inline-block; font-style:normal;}
+.hide {
+    display: none;
+}
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+.break {
+    word-spacing: normal;
+    word-break: normal;
+    word-break: break-all;
+}
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fixed-top {
+    position: fixed;
+    bottom: auto;
+    top: 0px;
+}
+.fixed-bottom {
+    position: fixed;
+    bottom: 0px;
+    top: auto;
+}
+.fixed-left {
+    position: fixed;
+    right: auto;
+    left: 0px;
+}
+.fixed-right {
+    position: fixed;
+    right: 0px;
+    left: auto;
+}
+.tleft {
+    text-align: left;
+}
+.tright {
+    text-align: right;
+}
+.tcenter {
+    text-align: center;
+}
+.fred{ color:#fe4773;}
+/*table*/
+.table {
+    height: 100%;
+    width: 100%;
+    display: table;
+    text-align: center;
+}
+.tr{ display:table-row;}
+.td {
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+/*ico*/
+.ico-prev,
+.ico-logo,
+.ico-music{height:100%; position:absolute; top:0;-webkit-tap-highlight-color: rgba(0,0,0,0);}
+.ico-prev{ background:url(/assets/weddings/ico-prev.png) no-repeat 3% center;background-size:10px 18px; width:10px; left:15px;}
+.ico-logo{ background:url(/assets/weddings/title.png) no-repeat center center;background-size:116px 18px; width:116px; left:50%; margin:0 0 0 -58px;}
+.ico-music{ background:url(/assets/weddings/ico-music.png) no-repeat left center;background-size:20px 19px; right:15px; width:20px;}
+.ico-music:active,.ico-music.active{background:url(/assets/weddings/ico-nomusic.png) no-repeat left center;background-size:20px 19px;}
+.ico-bottom{ background:url(/assets/weddings/bottom.png) repeat-x;background-size:contain; height:5px; width:100%;}
+.ico-location{ background:url(/assets/weddings/ico-location.png) no-repeat left center; background-size:9px 12px; padding:0 0 0 15px; font-size:12px;}
+/*arrow*/
+.arrow {
+    border-style: solid;
+    position: absolute;
+    border-color: transparent transparent transparent;
+    letter-spacing: 0.5em;
+    border-width: 100% 100% 0 0;
+}
+.arrow:after {
+    border-style: solid;
+    content: " ";
+    display: inline-block;
+    vertical-align: middle;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    border-radius: 0 0 0 0;
+}
+.arrow.arr-small:after {
+    border-width: 3px 3px 0 0;
+    height: 8px;
+    width: 8px;
+    border-color: #ff89a5;
+}
+.arrow.arr-big:after {
+    border-width: 2px 2px 0 0;
+    height: 20px;
+    width: 20px;
+    border-color: #ff89a5;
+}
+/*p*/
+.p-ft{ width:80%; text-decoration:underline; height:30px; margin:10px auto; position:relative;}
+.p-ft .td{}
+.p-ft .arrow{ float:right; right:-15px; margin:-15px 0 0 0;}
+/*btn*/
+.btn {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    background: #fe4773;
+    color: #fff;
+    font: 16px "\5FAE\8F6F\96C5\9ED1";
+    display: inline-block;
+    border: 1px solid #ce2d54;
+    border-radius: 5px;
+    margin: 10px auto;
+    height: 30px;
+    line-height: 30px;
+    box-shadow: 0 1px 5px #888;
+    text-align:center;
+}
+.btn:active, .btn.active {
+    box-shadow: 0 1px 5px #666;
+}
+.btn-big {
+    width: 90%;
+}
+.btn-small {
+    padding: 0 10px;
+}
+.btn-nav{ width:90%; height:35px; line-height:35px; margin:20px auto; position:relative; overflow:visible;}
+.btn-nav span,
+.btn-nav i,
+.btn-nav em{ position:absolute;}
+.btn-nav span{ width:100%; height:35px; left:0; top:0;}
+.btn-nav i,
+.btn-nav em{ border-style:dashed dashed solid;
+    width:0px;
+    height:0px; left:50%;}
+.btn-nav i{
+    border-width:22px;
+    border-color:transparent transparent #ce2d54;
+    top:-44px;
+    margin:0 0 0 -22px;}
+.btn-nav em{
+    border-width:20px;
+    border-color:transparent transparent #fe4773;
+    top:-40px;
+    margin:0 0 0 -20px;}
+.box-form .btn-big{ width:100%;}
+/*common*/
+header, .contxt, footer {
+    width: 100%;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+header, footer {
+    text-align: center;
+}
+/*header*/
+header {
+}
+.top-nav,
+.top-title{position:relative;}
+.top-nav{
+    background:#fe4773;
+    border-bottom:1px solid #c82349;
+    height:34px;
+    line-height:34px;
+
+}
+.top-title{ background:#fe4773;border-top:1px solid #fe5d84; height:50px; line-height:50px;}
+.top-title span{ float:left; font-size:16px; color:#fff; display:block; float:left; padding:0 10px; text-align:center; overflow:hidden;white-space:nowrap;}
+.top-title span img{ max-width:32px; vertical-align:middle;}
+.top-title span.title-man img{ padding:0 5px 0 0;}
+.top-title span.title-woman img{ padding:0 0 0 5px;}
+.top-title span.title-man,
+.top-title span.title-woman{ width:35%;}
+.top-title span.title-ring{ width:10%;}
+.top-title span.ico-bottom{ padding:0;}
+/*box-block*/
+.box-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+/*contxt*/
+.ad-show{ width:100%; text-align:center; overflow:hidden;}
+.ad-show img{ max-width:100%;}
+/*box*/
+.box-relative{ position:relative; height:39px; overflow:hidden; width:100%;}
+.box-relative input,
+.box-relative .btn,
+.box-form .box-relative input{position:absolute; top:0; left:0;}
+.box-relative input,
+.box-form .box-relative input{height:100%; width:100%; z-index:10;opacity:0;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+    -khtml-opacity:0;}
+.box-relative .btn{ width:90%; left:50%; margin:0 0 0 -45%; z-index:0;}
+.box-comment .box-relative .btn{margin:0 0 0 -25%;}
+.box-list{ width:96%; margin:2% auto; border:1px solid #d6ccd0; background:#fff; border-top:0;}
+.box-list li{ height:50px; border-top:1px solid #d6ccd0; overflow:hidden;}
+.box-list li a{ position:relative; width:83%; padding:0 10px 0 35px; display:block; margin:1px 0; height:48px; line-height:48px; float:left;overflow:hidden;text-overflow: ellipsis; white-space: nowrap;}
+.box-list li .arrow{ right:0;margin:-4px 0 0 0;}
+.box-list li a:active,.box-list li a.active{background:#ffe5ed;}
+.box-list li:nth-child(1) a{ background:url(/assets/weddings/nav-1.png) no-repeat 10px center; background-size:21px 21px;}
+.box-list li:nth-child(2) a{ background:url(/assets/weddings/nav-2.png) no-repeat 10px center; background-size:21px 21px;}
+.box-list li:nth-child(3) a{ background:url(/assets/weddings/nav-3.png) no-repeat 10px center; background-size:21px 21px;}
+.box-list li:nth-child(4) a{ background:url(/assets/weddings/nav-4.png) no-repeat 10px center; background-size:21px 21px;}
+.box-list li:nth-child(5) a{ background:url(/assets/weddings/nav-5.png) no-repeat 10px center; background-size:21px 21px;}
+.box-list li:nth-child(6) a{ background:url(/assets/weddings/nav-6.png) no-repeat 10px center; background-size:21px 21px;}
+.box-list li b{ font-size:16px; color:#f63f76;}
+.box-list li span{ font-size:12px; padding:0 10px;overflow:hidden;text-overflow: ellipsis; white-space: nowrap; width:68%; color:#888; display:inline-block;}
+/*box-contxt*/
+.box-contxt{ border:1px solid #d6ccd0; background:#fff; padding:10px 0; width:96%; margin:10px auto; overflow:hidden;}
+.box-contxt,
+.box-contxt.table p{font-size:12px; color:#444444;}
+.box-contxt b{ font-size:14px; color:#fe4773;}
+.box-contxt em{ font-size:14px; color:#888888;}
+.box-contxt.table{position:relative; height:auto;}
+.box-contxt.table .td{ padding:5px 0;}
+.box-contxt .arrow{ float:right; right:10px; margin:-10px 0 0 0;}
+.box-contxt.table .td:nth-child(1){ width:20%;}
+.box-contxt.table .td:nth-child(2){ width:60%;}
+.box-contxt.table .td:nth-child(3){ width:20%;}
+.box-contxt .tcenter{ width:100%; height:30px; line-height:30px; float:left;}
+/*box-form*/
+.box-form{ color:#888; line-height:28px; overflow:hidden;}
+.box-form label{ width:20%;}
+.box-form input{ color:#666; border:1px solid #dbdbdb; padding:0 10px; height:28px; border-radius:0; width:68%; margin:0 1%;}
+.box-form p{ padding:1% 5%;}
+.box-form textarea{ width:90%;border:1px solid #dbdbdb; padding:10px; resize:none;color:#666;}
+.box-form .ft{ text-align:center;}
+.box-form .ft .btn{ width:58%;}
+/*box-wall*/
+.box-wall{ overflow:hidden; padding:2%; width:92%;word-spacing: normal;
+    word-break: normal;
+    word-break: break-all;}
+.box-wall img{ max-height:39px; border:1px solid #ff89a5;}
+.box-wall .hd{ width:20%; float:left; color:#ff89a5; text-align:center; overflow:hidden;}
+.box-wall .bd{ width:78%; float:right; line-height:20px;}
+.box-wall .p-wall{ border-radius:5px; padding:5px; background:#f3f3f3; min-height:29px;}
+.box-wall tright{ color:#cccccc;}
+.box-wall .hd span{ width:100%;}
+/*box-comment*/
+.box-comment .hd{ width:20%; color:#ff91ab; float:left; overflow:hidden; text-align:center;}
+.box-comment .bd{ width:70%; float:right; margin:0 5% 0 0;}
+.box-comment .hd img{ max-height:39px; border:1px solid #ff91ab; margin:5px 0 0 0;}
+.box-comment .hd input{border:1px solid #dbdbdb; width:12px; height:12px; margin:0 5px 0 0;}
+.box-comment .hd label{ font-size:12px; color:#888;}
+.box-comment .box-form input,
+.box-comment .box-form textarea{ border-radius:5px;}
+.box-comment p{ padding:10px 0;}
+.box-comment .btn{ width:50%;}
+/*box-story*/
+.box-story .hd,
+.box-story .bd{ width:90%; margin:0 5%;}
+.box-story .hd{ border-bottom:1px dashed #ff89a5; font-size:16px; color:#f63f76; line-height:40px; text-align:center;}
+.box-story .bd{ padding:10px 0; line-height:20px; font-size:12px; color:#888; min-height:150px;}
+.box-story img{ max-width:100%;}
+/*box-map*/
+.box-map{ padding:0;}
+.box-map .hd,
+.box-map .bd{ width:94%; margin:2% 2% 0 2%; padding:1%;}
+.box-map .hd{ background:#ffe5ed; color:#444; line-height:20px;}
+.box-map .bd{}
+.box-map img{ max-width:100%; padding:10px 0;}
+
+/*box-video*/
+.box-map{ padding:0;}
+.wedding_seat{padding:10px;}
+.box-video{ padding:0; width:90%; margin:10px auto;border:10px solid #fff; background:#000;}
+.box-video video{ height:200px;}
+/*loading*/
+.loading {
+    display: inline-block;
+    color: #999;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 0 10px 0;
+    padding:0 0 0 35px;
+    /*background:url(/assets/weddings/loading.png) no-repeat 0 center;*/
+    background-size:20px 20px;
+}
+.isloading{
+    background:url(/assets/weddings/loading.gif) no-repeat 0 center;
+}
+/*map*/
+#dituContent {
+    height: 300px;
+    width: 100%;
+    margin:10px auto;
+}
+#dituContentWedding {
+    height: 100%;
+    width: 100%;
+    margin:10px auto;
+}
+/*page*/
+.page{ width:100%; text-align:center; margin:20px auto;}
+.page a{ background:#bbbbbb; color:#fff; padding:5px; border-radius:2px; border:1px solid #adadad;}
+.page a:active,.page a.current{ background:#fe4773; border-color:#ce2d54;}
+/*footer*/
+footer {
+    /*background: #e7e7e7;*/
+    color: #888888;
+    height: 30px;
+    line-height: 30px;
+    /*border-top: 1px solid #d5d5d5;*/
+}
+
+@media screen and (orientation:landscape) {
+    .box-story .bd{ padding:10px 0; line-height:20px; font-size:12px; color:#888; min-height:30px;}
+}

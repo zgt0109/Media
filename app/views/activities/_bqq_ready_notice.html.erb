@@ -1,0 +1,24 @@
+<dl class="active">
+  <dt>活动预热设置<span class="fr">查看</span></dt>
+  <dd>
+    <div class="wrap-l">
+      <div class="wrap-view">
+      </div>
+    </div>
+    <div class="wrap-r">
+      <%= form_for(@activity, validate: true, html: { id: 'ready_notice_form' }) do |f| %>
+        <%= f.fields_for :ready_activity_notice, validate: true do |ran| %>
+          <div class="p">
+            <span>活动预热说明<span class="fgray">（不能超过2000个字）</span></span>
+            <%= ran.cktext_area :description, maxlength: 2000, rows: 5, class: "activity_notice_description", style: "height: auto;" %>
+          </div>
+
+          <div class="box-form form-row">
+            <%= render 'form_submit' %>
+          </div>
+
+        <% end %>
+      <% end %>
+    </div>
+  </dd>
+</dl>

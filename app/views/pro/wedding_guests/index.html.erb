@@ -1,0 +1,65 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li> <i class="icon-home home-icon"></i> <a href="#">首页</a> </li>
+        <li> <%= link_to "微婚礼", weddings_path %> </li>
+				<li><%= link_to "宾客", wedding_guests_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <%= form_tag wedding_guests_path, :method => :get do %>
+            <div class="col-md-4 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">嘉宾姓名：</span>
+                <%= text_field_tag :username, params[:username] ,class: 'col-xs-12', placeholder: "请输入嘉宾姓名" %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">手机号码：</span>
+                <%= text_field_tag :phone, params[:phone] ,class: 'col-xs-12', placeholder: "请输入嘉宾手机号码" %>
+              </div>
+            </div>
+            <div class="col-md-3 row">
+              <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+              <%= link_to "导出Excel", params.merge(format: :xls), class: "btn btn-primary btn-sm btn-filter margin-left-10" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-sm-12 margin-top-20">
+          <table id="weddingGuestsTable" class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+              <tr>
+                <th>嘉宾姓名</th>
+                <th>手机号码</th>
+                <th>出席人数</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @wedding_guests.each do |guest| %>
+                <tr>
+                  <td><%= guest.username %></td>
+                  <td><%= guest.phone %></td>
+                  <td><%= guest.people_count %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%= paginate @wedding_guests %>
+
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+<% end %>
+

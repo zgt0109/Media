@@ -1,0 +1,57 @@
+<%= content_for :step do %>
+<div class="step-pane active" id="step3">
+  <%= form_for @activity, :url => wave_path(@activity), html: {method: :put},  validate: true  do |activity| %>
+    <%= hidden_field_tag :redirect_to,  waves_activities_path %>
+    <%= activity.hidden_field :status, value: Activity::SETTED %>
+    <%= activity.fields_for :activity_property, validate: true do |ap| %>
+    <%= render 'activities/property_form', ap: ap, activity: activity %>
+  <% end %>
+  <div class="row-fluid center">
+    <a class="btn btn-prev btn-primary btn-sm" href='<%= edit_prize_settings_wave_path(@activity) %>'> <i class="icon-arrow-left"></i> 上一步 </a>
+    <%- if @activity.can_not_edit? %>
+      <button class="btn btn-success btn-sm btn-next" onclick="location.href='/activities/waves'">
+          完成
+        <i class="icon-arrow-right icon-on-right"></i>
+      </button>
+    <%- else %>
+      <button class="btn btn-success btn-sm btn-next" type="submit">
+        完成
+        <i class="icon-arrow-right icon-on-right"></i>
+      </button>
+    <%- end %>
+  </div>
+  <%- end %>
+  </div>
+  </div>
+</div>
+</div>
+<%- end %>
+<%= render 'main_content' %>
+<%- content_for :custom_js do %>
+<script type="text/javascript">
+  $(function() {
+
+    $('#activity_activity_property_attributes_enable_prepare_settings').on('click', function(){
+      loadPrepareSettings();
+    });
+
+    function loadPrepareSettings(){
+      if($('#activity_activity_property_attributes_enable_prepare_settings').is(':checked')){
+        $('.prepare_settings').show()
+      }else{
+        $('.prepare_settings').hide()
+      }
+    }
+
+    loadPrepareSettings();
+
+    <%- if @activity.can_not_edit? %>
+      $('input,select,textarea').prop('disabled', true);
+      $('input[type=hidden]').prop('disabled', false);
+      $('.wysiwyg-editor').attr('contenteditable', false);
+    <%- end %>
+
+  });
+
+</script>
+<%- end %>

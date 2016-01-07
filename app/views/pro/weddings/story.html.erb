@@ -1,0 +1,22 @@
+<%= content_for :sidebar do %>
+  <%= render partial: 'pro/weddings/sidebar', locals: { wedding: @wedding } %>
+<% end %>
+
+<%= content_for :topbar do %>
+  <h1 class="pagecurrent">我们的故事</h1>
+<% end %>
+
+<%= form_for(@wedding, url: update_story_wedding_path, html: { id: 'wedding_story_form' }) do |f| %>
+<div class="box-form form-row">
+<div class="p">
+  <span>文章标题 <em>*</em> (必填，30个字符以内)</span>
+  <%= f.text_field :story_title, maxlength: 30, class: 'input-text' %>
+</div>
+</div>
+<div class="p">
+  <span>文章内容 <em style="color: red;">*</em> （必填）</span>
+  <%= f.cktext_area :story_content, ckeditor: { toolbar: "mini", height: 300 } %>
+</div>
+<br/>
+<p style="margin-top: 10px;"><%= f.submit '保存', name: nil, class: 'btn btn-small form-submit btn-orange' %></p>
+<% end %>

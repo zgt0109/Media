@@ -1,0 +1,4 @@
+var html = '<%= j (render :partial => 'wishes', :object => @wishes, :as => :wishes) %>'
+$(".wishes_wall").append(html);
+$(".more").remove();
+$(".wishes_wall").append('<div class="more"><div class="tcenter"><%= link_to_next_page @wishes, '点击加载更多', :remote => true, :class => "loading", :id => "more_loading" ,:style=>"display: block;padding: 0px;" %> </div></div>');

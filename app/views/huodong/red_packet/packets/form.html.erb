@@ -1,0 +1,165 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微活动', activities_path %></li>
+          <li><%= link_to '节日礼包', red_packet_packets_path %></li>
+          <li><%= link_to '新增礼包', '#' %></li>
+        </ul>
+        <%= render partial:'/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12 margin-top-20">
+            <%= render "weixin_preview", wx_title: @packet.try(:name) || '标题', wx_summary: @packet.try(:summary) || '描述' %>
+            <%= form_for @packet, url: @options[:url], method: @options[:method], validate: true, html:{class: 'form col-sm-7'} do |f| %>
+                <%= f.fields_for :activity do |activity| %>
+                    <%= activity.hidden_field :supplier_id, value: current_user.id %>
+                    <%= activity.hidden_field :status, value: 1 %>
+                    <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+                    <%= activity.hidden_field :ready_at, value: nil %>
+                    <div class="form-group">
+                      <label>
+                        活动名称
+                        <span class="required-star">*</span>
+                      </label>
+                      <div class="clearfix">
+                        <%= activity.text_field :name, class: 'col-md-8', placeholder: '请输入活动名称', maxlength: 20, id: 'wx_title'  %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        触发关键词
+                        <span class="required-star">*</span>
+                      </label>
+                      <div class="clearfix">
+                        <%= activity.text_field :keyword, class: 'col-md-8', placeholder: '请输入回复关键词', maxlength: 15 %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        微信消息图
+                        <span class="required-star">*</span>
+                      </label>
+                      <div class="clearfix">
+                        <div data-name="red_packet_setting[activity_attributes][qiniu_pic_key]" data-img = "<%= @packet.activity.pic_url.present? ? @packet.activity.pic_url : @packet.activity.default_pic_url %>" data-key="<%= @packet.activity.qiniu_pic_key %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
+                        <span class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>微信消息摘要</label>
+                      <div class="clearfix">
+                        <%= activity.text_area :summary, maxlength: 500, id: 'wx_summary', class: "col-md-12", rows: 5 %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        活动说明<span class="help-inline text-warning line-height-32">如果礼包有消费多少元才能使用的限制请一定要在活动说明中填写，如果可分享，礼包的最高额度也请一并说明</span>
+                      </label>
+                      <div class="clearfix">
+                        <%= render "shared/form_rich_text", field_name: "description", obj: activity.object, f: activity, wrapper_html_options: {class: "form-control", placeholder: "请输入活动细则"}, options: {value: activity.object.read_attribute("description"), style: "display:none"} %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        活动时间
+                        <span class="required-star">*</span>
+                      </label>
+                      <div class="clearfix">
+                        <div class="input-daterange input-group col-xs-4 no-padding">
+                          <%= datetime_range_tag activity %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group margin-bottom-15" >
+                      <label class="control-label" style="margin-bottom:-5px;">选择模板<!-- <span class="help-inline text-warning line-height-32">点击查看大图</span> --></label>
+                      <div class="clearfix">
+                        <div class="template-list">
+                          <ul class="ace-thumbnails">
+                            <li class="active">
+                              <a href="javascript:;" data-height="1000" data-width="1000" data-iframe="<%= preview_template_red_packet_packet_path(id: 1) %>" data-title="模板预览" data-toggle="modals">
+                                <img alt="" src="/assets/red_packet/v1.png">
+                                <span>礼包</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="margin-top-10">
+                        <div class="clearfix">
+                          <div class="pull-left">
+                            <div>
+                              <div class="cieldon-file" data-type="0" data-div="#img-3" data-width="200" data-height="130" data-name="red_packet_setting[activity_attributes][bg_pic_key]" data-img="<%= activity.object.try(:bg_pic_url) %>" data-key="<%= activity.object.bg_pic_key %>"></div>
+                            </div>
+                          </div>
+                          <div class="pull-left">
+                            <p>友情提示：如果不是对应尺寸背景容易变形
+                              上传图片颜色尽量和选择模版颜色相近会有更好的展示效果</p>
+                            <p><span class="help-inline text-warning line-height-32 margin-top-20">建议尺寸：宽640像素 * 高1008像素</span></p>
+                            <p>
+                              <a href="javascript:void(0);" class="btn btn-sm" id="del_bg_pic_key">删除自选背景</a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <% end %>
+                <div class="form-group">
+                  <label  style="float: left;"class="col-md-2">礼包数<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :packet_num, class: 'col-md-4', value: @packet.packet_num || -1 %>
+                    <span class="help-inline text-warning line-height-32">-1 则表示不限制个数！</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  style="float: left;" class="col-md-2">礼包金额
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="clearfix">
+                    <%= f.text_field :amount, class: 'col-md-4', value: @packet.amount.to_i %>
+                  </div>
+                </div>
+                <div class="form-group"  style="padding-left: 12px;" id="share">
+                  <label>
+                    <%= f.check_box :amount_random, class: "ace", style: "width: 200px;" %>
+                    <span class="lbl">礼包金额随机，输入金额为最高不超过金额</span>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label style="float: left;" class="col-md-3">礼包有效时间
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="clearfix">
+                    <div class="col-md-4 no-padding">
+                      <%= datetime_range_tag f %>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-2"></label>
+                  <div class="clearfix col-md-4" style="padding-left: 0; margin-right: 10px; margin-top: 10px;">
+                    <input type="submit" value="保存" class="btn btn-prev btn-sm btn-primary" style="margin-right: 10px;">
+                    <a href="javascript:window.location.href='<%= red_packet_packets_url %>';" class="btn btn-sm">取消</a>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script>
+      $(function(){
+        <% if action_name == "show" %>
+          $("form :input").prop('disabled', true);
+        <% end %>
+      });
+
+      $('#del_bg_pic_key').on('click', function() {
+          $('[name="red_packet_setting[activity_attributes][bg_pic_key]"]').val('');
+          $(".fa-plus").parents('.file-img').find('.file-btn a').removeAttr('style');
+      });
+    </script>
+<% end %>

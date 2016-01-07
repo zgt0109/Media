@@ -1,0 +1,18 @@
+<form>
+<div class="modal-body">
+    <h3 class="text-info">基本信息</h3>
+    <% @activity_forms.each do |activity_form| %>
+      <p><span><%= activity_form.field_value %>：<%= @activity_enroll.attrs(activity_form.field_name) %></span></p>
+    <% end %>
+    <h3 class="text-info">创建时间</h3>
+    <p><span><%= @activity_enroll.created_at %></span></p>
+</div>
+<div class="clearfix"></div>
+    <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-sm btn-default" data-fn="submit">确定</button> -->
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modals">关闭</button>
+    </div>
+</form>
+
+<% content_for :custom_js do %>
+<% end %>

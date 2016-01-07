@@ -1,0 +1,20 @@
+prize = '<%= @prize_title %>';
+sn_code = '<%= @sn_code %>';
+leftCount = parseInt('<%= @wx_user.gua_left_count(@activity.id) if @wx_user %>');
+var html='';
+if(<%= !@is_win %>){
+  if(leftCount > 0){
+    html+='<a class="btn btn-2" href="javascript:;" ><span>没有中奖，再来一次</span></a>';
+  }else{
+    html+='<a class="btn btn-gray" href="javascript:;"><span>今日抽奖次数已用完</span></a>'
+  }
+  sp.html('<span>'+ prize +'</span>')
+}else{
+  acid = '<%= @activity_consume_id %>';
+  html +='<a class="btn btn-1" href="javascript:;" data-sn="'+sn_code+'"><span>我要领奖</span></a>';
+  sp.html('<span>'+ prize +'</span>')
+}
+$("#sec-index").find(".btn").remove()
+$("#sec-index").append(html);
+sp.wScratchPad('clear');
+request_responsed = true;

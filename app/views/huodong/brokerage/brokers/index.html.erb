@@ -1,0 +1,69 @@
+<% content_for :brokerage_breadcrumb_li do %>
+    <li><%= link_to '经纪人管理', brokerage_brokers_path %></li>
+<% end %>
+<% content_for :brokerage_tab_content do %>
+    <div id="tab-2" class="tab-pane fade active in">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-block alert-success">
+                <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                    <li>未结算佣金为上次结算日至现在的佣金金额</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-12">
+          <%= form_for @search, url: {action: action_name}, class: 'box-form form-row', html: { method: :get } do |f| %>
+            <div class="col-md-3 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">经纪人姓名或电话号码：</span>
+                  <div class="clearfix">
+                    <%= f.text_field :name_or_mobile_like, class: 'col-xs-12', placeholder: "请输入经纪人姓名或电话号码" %>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+             </div>
+          <% end %>
+        </div>
+        <div class="col-md-12 margin-top-20">
+          <table id="couponGateTable" class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+              <tr>
+                <th style="width: 10%;">姓名</th>
+                <th style="width: 16%;">电话</th>
+                <th style="width: 16%;">客户总数</th>
+                <th style="width: 8%;">已结算佣金 (元)</th>
+                <th style="width: 8%;">未结算佣金 (元)</th>
+                <th style="width: 16%;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @brokerage_brokers.each do |brokerage_broker| %>
+                <tr>
+                  <td><%= brokerage_broker.name %></td>
+                  <td><%= brokerage_broker.mobile %></td>
+                  <td><%= brokerage_broker.clients_count %></td>
+                  <td><%= brokerage_broker.settled_commission %></td>
+                  <td><%= brokerage_broker.unsettled_commission %></td>
+                  <td>
+                      <%= modal_to '经纪人详情', brokerage_broker_path(brokerage_broker), data: {height: 350} %>
+                      <%= link_to '查看客户', brokerage_clients_path(search: {broker_id_eq: brokerage_broker.id} ) %>
+                      <%= link_to '结佣记录', brokerage_broker_commission_transactions_path(brokerage_broker)%>
+                      <%= modal_to '结佣', new_brokerage_broker_commission_transaction_path(brokerage_broker), title: :确认打款, data: { height: 232 } %>
+                </tr>
+              <% end.blank? %>
+                <tr><td colspan="8" class="green text-center">暂无数据</td></tr>
+              <%- end %>
+            </tbody>
+          </table>
+          <%= paginate @brokerage_brokers %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<%= render 'huodong/brokerage/brokerage_main_content' %>
+
+

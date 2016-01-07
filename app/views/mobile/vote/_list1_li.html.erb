@@ -1,0 +1,15 @@
+<% activity_vote_items.each_with_index do |item, index| %>
+  <li rel="<%= item.id %>">
+    <span><%#= (activity_vote_items.current_page - 1) * activity_vote_items.limit_value + index + 1 %><%= item.item_no %>、</span>
+    <p><%= truncate item.name, length: 36 %></p>
+    <div class="check-box">
+      <div class="table">
+        <div class="td"><i class="<%= 'ra' if select_count == 1 %>"></i></div>
+      </div>
+    </div>
+  </li>
+<% end %>
+<% if activity_vote_items.size == 0 %>
+	<p class="no-data">没有找到相关内容</p>
+<% end %>
+

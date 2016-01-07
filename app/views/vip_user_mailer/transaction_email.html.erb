@@ -1,0 +1,47 @@
+<%#= @notice %>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>微枚迪</title>
+</head>
+
+<body>
+  <table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+      <td valign="top">
+        <table summary="" align="center" cellpadding="0" cellspacing="0" width="592" style="border:1px solid #e0d0c1;">
+          <tbody>
+          	<tr>
+              <td height="20"></td>
+            </tr>
+            <tr>
+              <td valign="top">
+                <table cellpadding="0" cellspacing="0" width="592">
+                  <tbody>
+                    <tr>
+                      <td width="29">&nbsp;</td>
+                      <td width="534" style="color:#5f5e62; font-size:14px; font-family:Arial, Helvetica, sans-serif; line-height:18px;" valign="top"><span style="line-height:18px;">
+                        <span style="color:#555555;">
+                          您在<%= Time.now.strftime("%Y年%m月%d日 %H:%M:%S") %>提交的找回密码请求<br>
+                          <%= @notice %><br>
+                        </span>
+                        <span style="font-size:12px;">
+                          <br>
+                          这只是一封系统自动发出的邮件，请不要直接回复。
+                          <br><br>
+                        </span>
+                      </td>
+                      <td width="29">&nbsp;</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

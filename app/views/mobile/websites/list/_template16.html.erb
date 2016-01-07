@@ -1,0 +1,12 @@
+<% website_menu.sub_menus.each do |child| %>
+    <a href="<%= menu_url child %>" class="box-list box">
+      <b><%= child.name %></b>
+      <span><%= child.created_at %></span>
+      <%= image_tag child.pic.large if child.pic? %>
+      <b class="ft">查看全文<i class="arrow"></i></b>
+    </a>
+<% end %>
+
+<% content_for :pop_pop_share do %>
+    <%= render 'application/app_footer_template16' %>
+<% end %>

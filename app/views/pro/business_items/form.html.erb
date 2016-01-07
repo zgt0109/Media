@@ -1,0 +1,53 @@
+<style type="text/css">
+  .box-form .p .input-text { width: 100%; }
+</style>
+
+<p class="p-note">
+  提示：以下“ <em class="fred">*</em> ”均为必填项；
+</p>
+
+<%= form_for [@business_shop, @business_item], validate: false do |f| %>
+  <div class="box-form form-row fl">
+
+    <div class="p">
+      <span>商品名称<em>*</em><span class="fgray"></span></span>
+      <%= f.text_field :name, class: "input-text" %>
+    </div>
+    
+    <div class="p">
+      <span>商品价格</span>
+      <%= f.text_field :price, value: (@business_item.price.to_f > 0 ? @business_item.price : ''), class: "input-text" %>
+    </div>
+
+    <div class="p">
+      <span>显示顺序<em>*</em><span class="fgray">（数字越小，显示越靠前）</span></span>
+      <%= f.text_field :sort, maxlength: 5, class: "input-text" %>
+    </div>
+
+    <div class="p" style="margin-bottom: -10px">
+      <span>商品图片<em>*</em><span class="fgray">（图片建议尺寸：720像素*400像素）</span></span>
+    </div>
+
+    <div class="box-upload fl pic" rel="0">
+      <div class="upload-img">
+        <span><%= image_tag(f.object.pic.presence || 'bg_fm.jpg', id: "business_item_pic", size: "160x90") %></span>
+      </div>
+      <div class="upload-btn box-file">
+        <%= f.file_field :pic, rel: "business_item_pic", class: "img_preview", validate: @business_item.pic_cache.blank?, data: { width: 720, height: 400 } %>
+        <%= f.hidden_field :pic_cache %>
+        <a class="btn btn-big">上传图片</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="p">
+    <span>商品详情<em>*</em></span>
+    <%= f.cktext_area :description, data: { title: '商品详情' } %>
+  </div>
+
+  <div class="p">
+    <input type="submit" value="保存" class="btn btn-small btn-orange form-submit"/>
+  </div>
+
+<% end %>

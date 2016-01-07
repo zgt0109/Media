@@ -1,0 +1,28 @@
+<section class="sec-info table">
+  <% if @prizes.present? %>
+  <% @prizes.in_groups_of(3,false).each do |prize_groups| %>
+  <div class="tr">
+    <% prize_groups.each_with_index do |prize, index| %>
+    <p class="td <%= (index + 1) % 2 == 0 ? 'active' : ''%>"><span><%= prize.title %></span><br/><b><%= prize.prize%></b><%= "<br/>#{prize.prize_count}名".html_safe if @activity.try(:activity_property).try(:is_show_prize_qty)%></p>
+    <% end %>
+  </div>
+  <% end %>
+  <% else %>
+  <p class="td"><b>没有奖品</b></p>
+  <% end %>
+</section>
+
+<section class="sec-text">
+  <b>兑奖说明:</b><br/>中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
+</section>
+
+<%- if @activity.activity_status != Activity::WARM_UP && @wx_user.present? %>
+  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+    <section class="sec-list">
+      <a id="btn-list">点击查看我获得的奖品>>></a>
+    </section>
+    <section class="sec-result" id="sec-result">
+     <%= render 'my_prize'  %>
+    </section>
+  <%-end %>
+<%- end %>

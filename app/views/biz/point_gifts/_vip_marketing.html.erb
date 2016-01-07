@@ -1,0 +1,32 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <%= render 'partials/home' %>
+            <li><%= link_to '会员卡', vip_users_path %></li>
+            <li><%= link_to '会员营销', marketing_vip_cards_path %></li>
+            <%= yield :vip_breadcrumb if content_for? :vip_breadcrumb %>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="tabbable">
+                <div class="col-xs-12">
+                    <%- if controller_name == 'vip_cares' || controller_name == 'vip_message_plans' %>
+
+                    <%- else %>
+                        <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+                            <%= link_to_li '会员积分策略', point_types_path %>
+                            <%= link_to_li '积分兑换商品设置', point_gifts_path %>
+                        </ul>
+                    <%- end %>
+                    <div class="tab-content no-border padding-24">
+                        <%= yield :tab %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% end %>

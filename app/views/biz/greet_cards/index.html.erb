@@ -1,0 +1,95 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微贺卡', greet_cards_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li <% if controller_name == "greets" %>class="active"<% end %>>
+            <%= link_to "基础信息", "/greets/activity" %>
+          </li>
+          <li <% if controller_name == "greet_cards" %>class="active"<% end %>>
+            <%= link_to "贺卡图片管理", "/greet_cards" %>
+          </li>
+        </ul>
+        <div class="tab-content no-border padding-24">
+
+          <div id="tab-2" class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="control-label">贺卡顶部图片<small class="help-inline text-warning line-height-32">此图显示于手机微信选择贺卡模版页面的顶部位置</small></label>
+                  <div class="clearfix margin-top-10">
+                    <div style="width: 375px;height: 100px;float: left">
+                      <%= image_tag @greet.recommand_pic_url, id: "recommand_pic", width: "100%", height: "100%" %>
+                    </div>
+                    <div class="dropdown displayInline margin-left-10 margin-top-20 pull-left">
+                      <button class="btn btn-primary btn-sm" data-toggle="dropdown" data-target="#">图片素材</button>
+                      <div class="dropdown-menu dropdown-yellow dropdown-close fbBgHeader select-icon" role="menu" aria-labelledby="dLabel">
+                        <% 1.upto(7).each do |i| %>
+                          <p><%= image_tag "/assets/default_cards/top/#{i}.png", width: 375 %></p>
+                        <% end %>
+                      </div>
+                    </div>
+                    <div class="cieldon-file width-100px margin-top-20 margin-left-10" data-callback="upload_callback" data-name="upload_recommand_pic" data-type="1" data-div="#img-1" data-height="200"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">贺卡模板图片</label>
+                  <div class="vwebsitePicture col-sm-12 row">
+                    <ul class="ace-thumbnails thumbnails-1">
+                      <li>
+                        <a href="<%= new_greet_card_path %>">
+                          <div class="text text-block">
+                            <div class="inner">添加贺卡<br /><i class="icon-plus"></i></div>
+                          </div>
+                        </a>
+                      </li>
+                      <% @cards.each do |card| %>
+                        <%= render "photo_li", photo: card %>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    function upload_callback(key, img_url){
+      $("#recommand_pic").attr("src", img_url);
+      showTip("success","顶部图片保存成功！");
+      $.post("/greet_cards/set_recommand_pic", {greet_id: <%= @greet.id %>, recommand_pic: img_url}, function(result){
+        $("#recommand_pic").attr("src", result.recommand_pic);
+      });
+    }
+
+    $(function(){
+      $(".select-icon").on("click","img",function(){
+        var recommand_pic = $(this).attr("src");
+        if (recommand_pic != ""){
+          $.post("/greet_cards/set_recommand_pic", {greet_id: <%= @greet.id %>, recommand_pic: recommand_pic}, function(result){
+            // console.log(result);
+            $("#recommand_pic").attr("src", result.recommand_pic);
+            showTip("success","顶部图片保存成功！");
+          });
+        }
+      });
+    });
+  </script>
+<% end %>

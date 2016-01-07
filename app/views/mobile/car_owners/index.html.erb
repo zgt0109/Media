@@ -1,0 +1,64 @@
+<section id="sec-index">
+  <%= render '/mobile/car_shops/footer' %>
+  <div class="header">
+    <p>
+      <% if @car_owner.present? %>
+        <a href="<%= edit_mobile_car_owner_url(@car_owner,supplier_id: @supplier.id) %>">修改爱车信息</a>
+      <% else %>
+        <a href="<%= new_mobile_car_owner_url(supplier_id: @supplier.id) %>">添加爱车信息</a>
+      <% end %>
+      <a href="<%= car_seller_mobile_car_shops_path(supplier_id: @supplier.id) %>#mp.weixin.qq.com">联系销售</a>
+      <a href="<%= car_bespeak_mobile_car_shops_path(supplier_id: @supplier.id, bespeak_type: 1) %>">预约保养</a>
+    </p>
+  </div>
+  <div class="body">
+    <div class="mod-slider slider-hor" id="index">
+      <ul class="slider-list">
+        <li><a><img src="<%= @activity.pic_url || '/assets/mobile/wcar/bg2.jpg' %>"/></a></li>
+      </ul><!--slider-list end-->
+    </div><!--mod-slider end-->
+    <% if @car_owner.present? %>
+      <div class="mod-panel">
+        <ul class="navLine-ul">
+          <li>
+            <a>
+              <b>下次保养</b>
+              <i><img src="/assets/mobile/wcar/ico-1.png"/></i>
+              <span><%= @maintenance_day %>天</span>
+            </a>
+          </li>
+          <li>
+            <a>
+              <b>下次保险</b>
+              <i><img src="/assets/mobile/wcar/ico-2.png"/></i>
+              <span><%= @insurance_day %>天</span>
+            </a>
+          </li>
+          <li>
+            <a>
+              <b>下次年检</b>
+              <i><img src="/assets/mobile/wcar/ico-3.png"/></i>
+              <span><%= @license_day %>天</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    <% else %>
+      <div class="mod-article">
+        <p class="tcenter">添加爱车信息，享受车主关怀</p>
+        <p>
+          <b>关怀1</b>
+          <span>爱车保养信息和下次保养提醒</span>
+        </p>
+        <p>
+          <b>关怀2</b>
+          <span>爱车保险信息和下次保险提醒</span>
+        </p>
+        <p>
+          <b>关怀3</b>
+          <span>爱车年检信息和下次年检提醒</span>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</section>

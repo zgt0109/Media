@@ -1,0 +1,96 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <%= render 'partials/home' %>
+            <li><%= link_to '会员卡', vip_users_path %></li>
+            <li><%= link_to '积分策略', point_types_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <div class="tabbable">
+          <div class="col-xs-12">
+              <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+                  <%= link_to_li '会员积分策略', point_types_path %>
+                  <%= link_to_li '积分兑换商品设置', point_gifts_path %>
+              </ul>
+              <div class="tab-content no-border padding-24">
+                <div class="col-sm-12">
+                  <div class="alert alert-block alert-success">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li> 1、操作中点击“停用”后，该项积分策略将不再有效；</li>
+                      <li> 2、按钮开启积分策略则在微会员卡中生效，按钮关闭积分策略则在微会员卡中失效。</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class=" col-sm-12 ">
+                  <div class="col-md-6">
+                    <div class="widget-foot">
+                      <label>
+                        <%= check_box_tag '', '', current_user.vip_card.is_open_points?, class: 'ace ace-switch ace-switch-7', id: 'toggle-enable-points' %>
+                        <span class="lbl"></span>
+                      </label>
+                      （此功能调整将影响整个会员卡的功能，请慎重操作）
+                    </div>
+                  </div>
+                  <button class=" btn btn-sm btn-primary pull-right" data-toggle="modals" data-target="addVipPoints" data-height="800" data-title="新增积分策略" data-iframe="<%= new_point_type_path %>">新增
+                  </button>
+                </div>
+                <div class=" col-sm-12 margin-top-20">
+                  <table id="vipPoints" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                      <tr>
+                        <th>序号</th>
+                        <th>积分类型</th>
+                        <th>积分内容</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if @point_types.each_with_index do |type,index| %>
+                      <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= type.category_name %></td>
+                        <td>
+                          <% if type.consume? %>
+                          消费<%= f type.amount %>元送<%= type.points %>积分<%= '（累计）' if type.accumulative? %>
+                          <% elsif type.recharge? %>
+                          充值<%= f type.amount %>元送<%= type.points %>积分<%= '（累计）' if type.accumulative? %>
+                          <% elsif type.register? %>
+                          领卡送<%= type.points %>积分
+                          <% else %>
+                          <%= "每次签到送#{type.points}积分<br>".html_safe if type.checkin_enabled %>
+                          <%= "连续#{type.succ_checkin_days}天签到送#{type.succ_checkin_points}积分" if type.succ_checkin_enabled %>
+                          <% end %>
+                        </td>
+                        <td>
+                          <!-- <a onclick="popUrl(this)" data-name="name"  data-title="编辑积分策略" data-w="800" data-h="540" data-url="<%= edit_point_type_path(type) %>">编辑</a> -->
+                          <a href='#' data-toggle="modals" data-target="editVipPoints" data-height="800" data-title="编辑积分策略" data-iframe="<%= edit_point_type_path(type) %>">编辑</a>
+                          <%= link_to "#{type.normal? ? "停用" : "启用"}", [:edit_status, type] %>
+                          <!-- <a href="#editPoint" data-toggle="modal">编辑</a>
+                          <a href="#" data-toggle="modal" class="fgreen">停用</a> -->
+                        </td>
+                      </tr>
+                      <% end.blank? %>
+                      <tr><td colspan="4" class="green text-center">没有记录</td></tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                  <%= paginate @point_types %>
+                </div>
+              </div>
+              <!-- /.page-content -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+  <script>
+    $('#toggle-enable-points').click(function() { $.post('/vip_cards/set_is_open_points'); });
+  </script>
+<% end %>

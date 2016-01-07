@@ -1,0 +1,90 @@
+<% provide(:title, '祝福墙') %>
+<%= javascript 'application' %>
+<div class="contxt cont-walls" id="cont-walls">
+  <% if @wishes.present?  %>
+    <div class="wishes_wall">
+    <%= render :partial=> "wishes", :object => @wishes, :as => :wishes  %>
+    </div>
+      <div class="more">
+              <div class="tcenter">
+				<%= link_to_next_page @wishes, '点击加载更多', :remote => true, :class => "loading", :id => "more_loading" ,:style=>"display: block;padding: 0px;" %> </div>
+      </div>
+      <div class="tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
+
+  <% else %>
+      <div class="box-contxt box-wall_none" style="text-align: center">还没有祝福，快来当第一个祝福人吧！</div>
+  <% end %>
+  <!--<div class="tcenter"><a class="loading">点击加载更多</a></div>-->
+
+  <%#= paginate @wishes %>
+
+  <div class="box-comment">
+    <div class="box-contxt">
+      <%= form_for @wedding_wish,  :validate => true,:url=> create_wish_app_weddings_path, :html=>{:id => :wish_form} do |form| %>
+      <div class="hd">
+        <p><%= form.radio_button :gender, 1, :checked => true %>男<label for="wedding_wish_gender_1"><img src="/assets/weddings/male.jpg"/></label></p>
+        <p><%= form.radio_button :gender, 2 %>女<label for="wedding_wish_gender_2"><img src="/assets/weddings/female.jpg"/></label></p>
+      </div>
+      <div class="bd box-form">
+        <p><label>姓名</label><%= form.text_field :username,  :placeholder=> "请输入您的姓名" %></p>
+        <p><%= form.text_area :content, :id => "wall-txt", :rows=> 5, :cols => 10, :placeholder => "请在此输入您的评论"  %></p>
+      </div>
+      <% end %>
+    </div>
+    <div class="ft tcenter"><div class="box-relative"><input type="submit" class="form-submit"/><a class="btn btn-big" id="wall-btn" data-sex="0">送上祝福</a></div></div>
+  </div>
+
+</div>
+<%= render :partial => "alert"  %>
+
+<script>
+
+  $( document ).ajaxStart(function() {
+//      alert(44444444);
+      $(".isloading").css("display",'');
+      $("#more_loading").css("display","none");
+  });
+
+$( document ).ajaxStop(function() {
+//    alert(44444444);
+    $(".isloading").css("display",'none');
+    $("#more_loading").css("display","block");
+});
+
+
+
+  $(".box-relative").click(function(){
+      if( $("#wedding_wish_username").val() == '' ){
+          alert("姓名不能为空！");
+          $("#wedding_wish_username").focus();
+          return false;
+      }else if( $("#wall-txt").val() == '' ){
+          alert("评论不能为空！");
+          $("#wall-txt").focus();
+          return false;
+      }else{
+          $("#wish_form").submit();
+      }
+  })
+
+//  $(".loading").ajaxStart(function() {
+//      alert(2222222);
+//      $(this).show();
+//  });
+//  $(".loading").ajaxStop(function() {
+//      $(this).hide();
+//  });
+
+
+
+</script>
+<style type="text/css">
+  .a{
+    background: none repeat scroll 0 0 #FE4773;
+      color: #FFFFFF;
+    border: 1px solid #ADADAD;
+    border-color: #CE2D54;
+    padding: 5px;
+    border-radius: 2px 2px 2px 2px;
+  }
+</style>

@@ -1,0 +1,88 @@
+<div style="background: #fff;">
+  <div class="modal-body">
+    <div class="row">
+      <%= form_for @search, url: shake_round_show_wx_shake_path(@wx_shake_round), html: { method: :get } do |f| %>
+        <div class="col-xs-12">
+          <div class="col-xs-3 no-padding-left">
+            <div class="input-group input-group-text">
+              <span class="input-group-addon">昵称：</span>
+              <%= f.text_field :nickname_like, class: 'col-xs-12', placeholder: '请输入昵称' %>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="input-group input-group-text">
+              <span class="input-group-addon">手机号码：</span>
+              <%= f.text_field :mobile_like, class: 'col-xs-12', placeholder: '请输入手机号码' %>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <button type="submit" class="btn btn-primary btn-sm">查询</button>
+          </div>
+          <div class="col-xs-3">
+            <% all_count = @search.size%>
+            <% export_count = 2000 %>
+            <% if all_count <= export_count %>
+              <%= link_to '导出EXCEL', shake_round_show_wx_shake_path(:id => @wx_shake_round.id,:format => :xls,:search => params[:search]), class: 'btn btn-primary btn-sm pull-right' %>
+            <% else %>
+              <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= shake_round_show_wx_shake_path(:id => @wx_shake_round.id,:format => :xls,:search => params[:search])%>" data-title="导出EXCEL" data-toggle="modals" data-target="delModal" data-text='<%= data_text(all_count,(all_count/export_count.to_f).ceil, export_count) %>'>导出EXCEL</a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <div class="col-xs-12 margin-top-20">
+        <table id="couponTable" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th>昵称</th>
+              <th>手机号码</th>
+              <th>兑奖码</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @wx_shake_users.each do |user| %>
+              <% prize = user.wx_shake_prizes.where(wx_shake_round_id: @wx_shake_round.id).first %>
+              <tr>
+                <td><%= prize.try(:user_rank) %></td>
+                <td><%= user.nickname %></td>
+                <td><%= user.mobile %></td>
+                <td><%= prize.try(:sn_code) %></td>
+                <% if prize.present? %>
+                  <td id="prize_<%= prize.id %>"><%= prize.status_name %></td>
+                  <td id="status_<%= prize.id %>">
+                    <% if prize.unused? %>
+                      <%= link_to '标记为已发奖', set_prize_status_wx_shake_path(prize.wx_shake,prize_id: prize.id), method: 'post', remote: true %>
+                    <% end %>
+                  </td>
+                <% else %>
+                  <td></td><td></td>
+                <% end %>
+              </tr>
+            <% end.blank? %>
+              <tr><td colspan="6" class="green text-center">暂无活动数据</td></tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @wx_shake_users %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $('body').on('click','button[data-fn="submit"]',function(){
+            var page_exl = $('#delModal').find("[name=page_exl]:checked");
+            var url = "<%= shake_round_show_wx_shake_path(:id => @wx_shake_round.id,:format => :xls,:search => params[:search]) %>"+"<%= params[:search].present? ?  '&page_exl=' : '?page_exl='%>"+page_exl.val();
+            window.location.href=url;
+        });
+        
+        $(".btn-filter").on("click", function(){
+            setTimeout(function(){
+                $("button[data-fn=submit]").attr("type","button");
+            },200)
+        });
+    </script>
+<% end %>

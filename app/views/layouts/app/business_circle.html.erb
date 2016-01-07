@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%=  content_for?(:title) ? yield(:title) : (@website_menu.present? ? @website.name+"-"+@website_menu.name.to_s : @website.name) %></title>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/life/main.css"/>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/life/wlife.css"/>
+  <link type="text/css" rel="stylesheet" href="/assets/font/font-awesome.min.css"/>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/life/ckeditor_content.css"/>
+  <script type="text/javascript" src="/javascripts/jquery-1.8.2.min.js"></script>
+  <script src="/javascripts/app/life/main.js"></script>
+</head>
+<%= yield %>
+
+<%= render 'application/gb2big5' %>
+
+<%= render "application/app_footer" %>
+
+<a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>
+<% if @website.is_open_life_popup? && @website_popup_menus && @website_popup_menus.count > 0 %>
+  <div class="mod-navPop navPop-1">
+    <div class="navPop-wrap" id="navPop-wrap">
+      <b class="navPop-btn" id="navPop-btn"><i class="fa fa-plus" id="fa-btn" onclick="toggleToClass('#navPop-btn','active')"></i></b>
+      <% @website_popup_menus.each do |popup_menu|  %>
+        <div><a style="background-image:url(<%= popup_menu.icon.thumb%>);" href="<%= website_activity_link(popup_menu) %>">&nbsp;</a></div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<script>
+  $(function(){
+    navPop1("#navPop-wrap","#navPop-btn");
+    showBtnUp(100);
+  });
+  <% if flash[:notice] || flash[:alert] %>
+  alert("<%= flash[:notice] || flash[:alert] %>");
+  <% flash[:notice]= nil; flash[:alert] = nil %>
+  <% end %>
+</script>
+</html>

@@ -1,0 +1,221 @@
+<p class="p-note">
+  提示：以下“<span class="fred"> * </span>”均为必填项
+</p>
+<div style="margin-top: -10px;">
+  <%= form_for @ec_item, validate: true, html: {id: 'pro_ec_item'} do |f| %>
+      <div class="box-form form-row fl">
+
+        <%= f.hidden_field :supplier_id, value: current_user.id %>
+        <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+        <%= f.hidden_field :ec_shop_id, value: @ec_shop.id %>
+        <%= f.hidden_field :seller_cid, class: 'hidden_ec_seller_cat_id' %>
+
+        <div class="p" id="selects">
+          <span class="til">分类</span>
+          <%#= f.select :seller_cid, @ec_shop.show_categories,  :class => "form-address" %>
+          <% @ec_seller_cat_selects.each do |select|%>
+              <%= select_tag "ec_seller_cat_id#{select[0]}", options_for_select(select[1].to_a.collect{|t| [t.name, t.id]}, selected: params["ec_seller_cat_id#{select[0]}".to_sym]), class: "ec_seller_cat", rel: select[0]  %>
+          <% end %>
+        </div>
+
+        <div class="p">
+          <span class="til">名称<em>*</em></span>
+          <%= f.text_field :title, :class=>"input-text" %>
+        </div>
+
+
+        <div class="p">
+          <span class="til">价格<em>*</em></span>
+          <%= f.text_field :price, :class=>"input-text"%>
+        </div>
+
+
+        <div class="p" style="margin-bottom: -20px">
+          <span>图片<em>*</em><span class="fgray">（图片建议尺寸：640像素*640像素）</span></span>
+        </div>
+
+        <% index = 0 %>
+        <%= f.fields_for :ec_item_pictures do |picture| %>
+            <div class="box-upload fl pic" rel="<%= picture.object.id || 0 %>">
+              <input class="destroy" name="ec_item[ec_item_pictures_attributes][<%= index %>][_destroy]" type="hidden">
+              <div class="upload-img">
+                <span>
+                  <%= image_tag(picture.object.pic? ? picture.object.pic : '/assets/bg_fm.jpg', alt: '',  id: "ec_item_picture_#{picture.object.id}", class: 'view', size: "160x90") %>
+                </span>
+              </div>
+              <div class="upload-btn box-file">
+                <%= picture.file_field :pic, rel: "ec_item_picture_#{picture.object.id}",  class: "ec_item_picture", value:picture.object.pic? ? picture.object.pic : ''  %>
+                <a class="btn btn-big">上传照片</a>
+              </div>
+              <% unless index == 0 %>
+                  <div class="upload-btn box-file" style="margin-left: 10px">
+                    <a class="btn btn-big" onclick="remove_pic(this);"  >删除</a>
+                  </div>
+              <% end %>
+              <div class="p show_pic_advice_notice" style="margin-top:10px;padding:0;display:none">
+                <span id='show_pic_advice_text'></span>
+              </div>
+            </div>
+            <% index += 1 %>
+
+        <% end %>
+
+
+        <% if @ec_item.ec_item_pictures.blank? %>
+            <div class="box-upload fl pic" rel='0'>
+              <div class="upload-img">
+                <span><%= image_tag('/assets/bg_fm.jpg', alt: '',  id: "ec_item_picture_0", class: 'view', size: "160x90") %></span>
+              </div>
+              <div class="upload-btn box-file">
+                <input type="file" name="ec_item[ec_item_pictures_attributes][0][pic]" rel="ec_item_picture_0" class="ec_item_picture">
+                <a class="btn btn-big">上传照片</a>
+              </div>
+              <div class="p show_pic_advice_notice" style="margin-top:10px;padding:0;display:none">
+                <span id='show_pic_advice_text'></span>
+              </div>
+            </div>
+        <% end %>
+
+
+
+        <a class="btn btn-big" onclick="javascript:add_pic();" id="add_pic">添加图片</a>
+
+      </div>
+
+
+
+      <div class="p box-ck">
+        <span class="til">详情<em>*</em></span>
+        <%= f.cktext_area :description, ckeditor: { toolbar: "mini", height: 300 } %>
+      </div>
+      <p class="p-but p-but-list" style="margin-top: 10px;"><span></span><input type="submit" class="btn btn-small form-submit btn-orange" value="保存" /></p>
+
+  <% end %>
+
+  <div class="box-upload fl pic" rel="<%= @ec_item.ec_item_pictures.count + 1%>" data-template="true" style="display: none;">
+    <div class="upload-img">
+      <span><%= image_tag('/assets/bg_fm.jpg', alt: '',  id: "shop_product_pic_url", class: 'view', size: "160x90") %></span>
+    </div>
+    <div class="upload-btn box-file">
+      <input type="file" class="ec_item_picture" name="ec_item[ec_item_pictures_attributes][<%= @ec_item.ec_item_pictures.count + 1%>][pic]" rel="shop_product_pic_url">
+      <a class="btn btn-big">上传照片</a>
+    </div>
+    <div class="upload-btn box-file" style="margin-left: 10px">
+      <a class="btn btn-big" onclick="remove_pic(this);"  >删除</a>
+    </div>
+    <div class="p show_pic_advice_notice" style="margin-top:10px;padding:0;display:none">
+      <span id='show_pic_advice_text'></span>
+    </div>
+  </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+
+//        $.each($('.box-form .pic:visible'), function(){
+//            var img = new Image();
+//            img.src=$(this).find('img').attr('src');
+//
+//            if((img.width != 640 || img.height!= 640) && $(this).find('img').attr('src') != '/assets/bg_fm.jpg'){
+//                $(this).find('.show_pic_advice').show();
+//                $(this).find('.upload_pic').text('重新上传');
+//                $(this).find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+//            }
+//        });
+
+//        $('.view').one('load',function() {
+//            if($(this).closest('.pic').is(":visible")){
+//                var img = new Image();
+//                img.src=$(this).closest('.pic').find('img').attr('src');
+//
+//                if((img.width != 640 || img.height!= 640) && $(this).closest('.pic').find('img').attr('src') != '/assets/bg_fm.jpg'){
+//                    $(this).closest('.pic').find('.show_pic_advice').show();
+//                    $(this).closest('.pic').find('.upload_pic').text('重新上传');
+//                    $(this).closest('.pic').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+//                }
+//            }
+//        });
+
+        $('#pro_ec_item').on('change', '.ec_item_picture', function(){
+            $this = $(this)
+            $this_next = $this.closest('.pic').next();
+            var img = new Image();
+            setTimeout(function(){
+                img.src=$this.closest('.pic').find('img').attr('src');
+                if(img.width != 640 || img.height!= 640){
+                    $this.closest('.pic').find('.show_pic_advice_notice').show();
+                    $this.closest('.pic').find('.upload_pic').text('重新上传');
+                    $this.closest('.pic').find('#show_pic_advice_text').html("<img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为"+img.width+"*"+img.height+"，不是最佳尺寸，建议您重新上传")
+                }else{
+                    $this.closest('.pic').find('.show_pic_advice').hide();
+                }
+            }, 1000)
+        });
+        $('.form-submit').click(function() {
+            if($("#ec_item_title").val()){
+                var flag = true;
+                $.each($('.pic .upload-btn'), function(){
+                    var pic_val = $(this).closest('.pic').find('.ec_item_picture').val();
+                    if(!pic_val) pic_val = $(this).closest('.pic').find('.ec_item_picture').attr('value');
+                    if($(this).closest('.pic').is(":visible") && !pic_val){
+                        flag = false;
+                        return;
+                    }
+                });
+                if(!flag) {
+                    showTip("warning", "请上传图片");
+                    return flag;
+                }else if(!CKEDITOR.instances['ec_item_description'].getData() && flag){
+                    showTip('warning','详情不能为空');
+                    CKEDITOR.instances['ec_item_description'].focus();
+                    return false;
+                }
+            }
+        });
+
+        $(".hidden_ec_seller_cat_id").val($('.ec_seller_cat:visible:last').val());
+        $("#selects").on("change", ".ec_seller_cat", function(){
+            if($(this).val() == "-1"){
+            }
+            else{
+                $.ajax({
+                    type: "GET",
+                    url: "/ec_seller_cats/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=1',
+                    success: function(data) {
+                        return false;
+                    },
+                    error: function() {
+                        return false;
+                    }
+                });
+            }
+        });
+    });
+    function add_pic(){
+        var template = $('.pic[data-template=true]'),
+                tool = $('.box-form .pic:last');
+        var item_size = parseInt($('.box-form .pic:last').attr('rel')) + 1;
+        var new_template = template.clone(true).insertAfter(tool).show();
+        new_template.attr('data-template', false).attr('rel', item_size);
+        new_template.find('input').attr('rel', 'ec_item_picture_' + item_size);
+        new_template.find('input').attr('name', 'ec_item[ec_item_pictures_attributes][' + item_size + '][pic]');
+        new_template.find('img').attr('id', 'ec_item_picture_' + item_size);
+    }
+
+    function remove_pic(pic){
+        $(pic).closest('.pic').find('.destroy').val(1);
+        $(pic).closest('.pic').hide();
+        $(pic).closest('.pic').find('.box-upload').remove();
+    }
+</script>
+
+
+<style>
+    .form-col span {
+        width: 6.5%;
+    }
+    .form-col span { text-align: left; padding: 0; }
+</style>

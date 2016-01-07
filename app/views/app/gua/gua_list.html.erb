@@ -1,0 +1,75 @@
+<% title '获奖列表' %>
+<script>
+  document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    WeixinJSBridge.call('hideOptionMenu');
+  });
+</script>
+<%= stylesheet_link_tag 'mobile/gua' %>
+<%= stylesheet_link_tag 'mobile/addgetma' %>
+<div class="html">
+	<!-- stage-end stage-start -->
+	<div class="stage" id="stage">
+		<section class="sec-result">
+			<div class="result-hd">
+				我的奖品(<%= @activity_consumes.to_a.count %>)
+			</div>
+			<%- if @activity_consumes.to_a.count > 0 %>
+				<ul class="mod-list">
+					<% @activity_consumes.to_a.each do |consume| %>
+						<li>
+							<p>
+							<b>奖品名称：<%= consume.activity_prize.title rescue nil %></b>
+								<span>SN码：<%= consume.code %><a class="addgetma" href="javascript:;" data-ma="<%= consume.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></span>
+							</p>
+							<p>
+								<span>中奖时间：<%= consume.created_at.to_date.to_s rescue nil  %> </span>
+								<%- if consume.use_at? %>
+									<span>使用时间：<%= consume.use_at.to_date.to_s rescue nil  %></span>
+								<%- end %>
+								<span>状态：<%= consume.status_text %></span>
+							</p>
+							<% if consume.mobile.blank? %>
+				        <a class="btn" href="javascript:;" id="get_data" data-title="<%= consume.activity_prize.title rescue nil %>" data-sn="<%= consume.code %>" data-acid="<%= consume.id %>" onclick="getSuccess(this)">马上领取</a>
+				       <% end %>
+						</li>
+					<% end %>
+				</ul>
+			<%- end %>
+		</section>
+	</div>
+</div><!-- html end -->
+<%= javascript_include_tag 'mobile/gua' %>
+<%= javascript_include_tag 'mobile/qcode' %>
+<script type="text/javascript">
+	function getSuccess(self){
+    var h=$(".html").innerHeight();
+    self=$(self);
+    var sn=self.attr("data-sn");
+    var title=self.attr("data-title");
+    var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+title+'，</b><br/>兑奖SN码：'+sn+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @wx_user.try(:related_mobile) %>"/></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile();" readonly/></p></div></div></div></div>';
+    $("body").append(html);
+  }
+	function submitMobile() {
+		var aid = '<%= @activity.id %>',
+			acid = $('#get_data').data('acid'),
+    	mobile = $('#phone').val(),
+    	sn_code = $('#get_data').data('sn');
+    if (!(winwemedia_validators.mobile_reg.test(mobile))) {
+      alertMessage(1,"请输入正确的手机号码");
+      return;
+    }
+    $.ajax({
+      type: "post",
+      contentType: "application/json",
+      url: 'draw_prize?sn='+sn_code+'&acid='+acid+'&aid='+aid+'&mobile='+mobile+'&'+Math.random(),
+      dataType: 'json',
+      timeout:30000,
+      success: function (data) {
+            setTimeout(function(){alertMessage(0,"信息提交成功，我们的工作人员稍后会联系您，请牢记您的SN码");}, 2000);
+	       window.location.reload();
+      },
+      error: function(e){
+      }
+    });
+  }
+</script>

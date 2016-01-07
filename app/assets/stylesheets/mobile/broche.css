@@ -1,0 +1,111 @@
+* {margin:0;padding:0; outline: 0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%
+}
+body {
+    position: relative;
+    overflow-x: hidden;
+    font-size: 14px;
+    font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+    -webkit-text-size-adjust: none;
+}
+body, p, form, h1, h2, h3, h4, h5, h6, ul, ol, li, section, div, * {
+    padding: 0;
+    margin: 0
+}
+ul{ list-style-type:none;}
+img {
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+    display: inline-block;
+}
+a {
+    text-decoration: none;
+}
+video {
+    display: inline-block;
+    width:100%;
+    background:#000;
+}
+::-moz-selection {
+    background: none;
+    color: #fff;
+    text-shadow: none;
+}
+::selection {
+    background: none;
+    color: #fff;
+    text-shadow: none;
+}
+dl,
+ul,
+p{-webkit-margin-before:0em;-webkit-margin-after:0em;}
+p{ margin: 0;}
+.hide {
+    display: none;
+}
+.show{display: inline-block;}
+.break {
+    word-spacing: normal;
+    word-break: normal;
+    word-break: break-all;
+}
+.fl{ float:left;}
+.fr{ float:right;}
+.fw{ width: 100%;}
+.fa{ font-style:normal;}
+.tr{ display:table-row;}
+.td {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.yellow{ color: #f08300;}
+.html{margin: auto; max-width: 640px; min-height: 100%; overflow: hidden; padding: 0 0 40px; position: relative;}
+
+.img{ height: 100%; width: 100%; background: #999; position: relative;}
+.img .list{ overflow: hidden; width: 100%; height: 100%; position: relative;}
+.img img{ width: 100%; height: 100%;}
+.img .col{ position: absolute; left: 0; top: 0; height: 100%; width: 100%;}
+.img .col span{ position: absolute; left: 5%; top: 20px; height: 40px;line-height: 40px; font-size: 20px; font-weight: bold; display: block; background: rgba(0,0,0,0.6); padding:0 10px; width: 90%; border-radius: 5px 5px 0 0;}
+.img .col span.int{ top: 60px; height: auto; color: #eee; line-height: 20px; padding: 5px 10px 10px; font-size: 14px; font-weight: normal;background: rgba(0,0,0,0.4); border-radius: 0 0 5px 5px;}
+.img .col span.til{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.img .col a span{ color: #fff;}
+.img .showright{height: 100%; width: 100%; z-index: 10; display: none; position: absolute; left: 0;top: 0;}
+.img .showright .col{ width: 200%;}
+.img .showright .l{ position: absolute; left: 0; top: 0; height: 100%;width: 50%; overflow: hidden;}
+.img .showright .r{ position: absolute; right: 0; top: 0; height: 100%;width: 50%; overflow: hidden;}
+.img .showright .r .col{left: auto; right: 0; top: 0; }
+.img .showleft{height: 100%; width: 100%; z-index: 10; display: none; position: absolute; left: 0;top: 0;}
+.img .showleft .col{ width: 200%;}
+.img .showleft .l{ position: absolute; left: 0; top: 0; height: 100%;width: 50%; overflow: hidden;}
+.img .showleft .r{ position: absolute; right: 0; top: 0; height: 100%;width: 50%; overflow: hidden;}
+.img .showleft .r .col{left: auto; right: 0; top: 0; }
+.img .poi{ position: absolute; bottom: 20px; width: 100%; text-align: center; left: 0; z-index: 20;}
+.img .poi p{ display: inline-block; background: #333; margin: 0; height: 10px; width: 10px; border-radius: 5px; box-shadow: 0 0 1px 0 #fff inset; opacity: 0.7; overflow:hidden;}
+.img .poi p.active{ background: #fff;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

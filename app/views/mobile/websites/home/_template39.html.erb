@@ -1,0 +1,38 @@
+<% content_for :header do %>
+    <header>
+      <a><%= @website.name %></a>
+    </header>
+<% end %>
+
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="index">
+  <div class="index-l">
+    <% right_menus = [] %>
+    <% website_menus.each_with_index do |menu, index| %>
+      <%
+        if index % 2 == 1
+            right_menus << menu
+            next
+        end
+      %>
+
+      <%= link_to menu_url(menu), class: 'box mod-index' do %>
+          <%= menu.pic_or_icon :has_title => true, :pic_type => "custom" %>
+      <% end %>
+
+    <% end %>
+  </div>
+
+  <div class="index-r">
+    <% right_menus.each_with_index do |menu, index| %>
+        <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <small><%= menu.title %></small>
+            <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+        <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render :partial => "telphone", :locals => {:website => website} %>
+

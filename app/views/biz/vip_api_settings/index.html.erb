@@ -1,0 +1,81 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '开放接口', spec_vip_api_settings_path %></li>
+          <li><%= link_to '会员API', spec_vip_api_settings_path %></li>
+          <li><%= link_to '接口设置', vip_api_settings_path %></li>
+          <li><%= link_to '基础设置', vip_api_settings_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+            <%= link_to_li '基础设置', vip_api_settings_path %>
+            <%= link_to_li '接口调用设置', vip_external_http_apis_path %>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab1" class="tab-pane fade active in ">
+              <div class="row">
+                <div class="col-sm-12">
+                  <%= form_for @vip_api_setting, validate: true, html: { class: 'form width-1000' } do |f| %>
+                    <div class="form-group">
+                      <label class="control-label">
+                        <%= check_box_tag :open, 1, @vip_api_setting.enabled?, class: "ace ace-switch ace-switch-4", id: 'status_switcher' %>
+                        <span class="lbl"></span>
+                      </label>
+                      <small class="text-warning">开启或关闭会员卡的接口功能，请谨慎操作</small>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">接口回调域名<small class="help-inline text-warning">（可以使用IP地址和端口号，例如：www.demo.com，www.demo.com:9000，228.219.80.17）</small></label>
+                      <div class="clearfix">
+                        <%= f.text_field :callback_domain, class: 'col-sm-6', placeholder: "请输入接口回调域名" %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">HTTP认证类型<small class="help-inline text-warning">（为了安全起见，建议使用HTTP摘要认证）</small></label>
+                      <div class="clearfix">
+                        <%= f.select :auth_type, VipApiSetting.auth_type_options.unshift( ['无', ''] ) ,{},class: 'col-sm-6'%>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">参数提交类型<small class="help-inline text-warning">（如有疑问，建议使用默认配置）</small></label>
+                      <div class="clearfix">
+                        <%= f.select :args_submit_type, VipApiSetting.args_submit_type_options ,{},class: 'col-sm-6'%>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">用户名</label>
+                      <div class="clearfix">
+                        <%= f.text_field :auth_username, class: 'col-sm-6' %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">密码</label>
+                      <div class="clearfix">
+                        <%= f.text_field :auth_password, class: 'col-sm-6' %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-primary btn-sm" value="保存">
+                      <input type="button" class="btn btn-default btn-sm" value="取消">
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    $(document).on("click", "#status_switcher", function(){
+        $.post('/vip_api_settings/toggle_status', {}, null, 'script');
+    });
+  </script>
+<% end %>

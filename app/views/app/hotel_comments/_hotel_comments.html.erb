@@ -1,0 +1,16 @@
+<% @hotel_comments.each do |comment| %>
+<div class="box-cont box-comment">
+	<div class="hd">
+		<span class="tleft"><%= comment.name %>：</span>
+		<span class="tright"><%= comment.created_at %></span>
+	</div>
+	<div class="bd">
+		<%= comment.content %>
+	</div>
+	<div class="ft">
+		<% if comment.reply_content? %>
+		客服回复：<br/><%= comment.reply_content %>
+		<%end%>
+	</div>
+</div>
+<% end %>

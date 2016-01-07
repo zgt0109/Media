@@ -1,0 +1,58 @@
+<% wrapper_html_options ||= {} %>
+<% f ||= nil %>
+<% wrapper_html_options[:class] = "#{wrapper_html_options[:class]} wysiwyg-editor" %>
+<% wrapper_html_options[:data] = {} %>
+<% wrapper_html_options[:data].reverse_merge!(bucket: BUCKET_PICTURES, token:  qiniu_pictures_upload_token) %>
+<% field_name ||= "description"%>
+<% options ||= {style: "display:none"} %>
+<% options[:value] = obj.send(field_name) unless options.has_key?(:value) %>
+<% options[:class] = "#{options[:class]} wysiwyg-value-field" %>
+<%= content_tag :div, wrapper_html_options do %>
+  <%= raw (options[:value] || "#{obj.send(field_name)}") -%>
+<% end %>
+<% if f.present? %>
+  <%= f.text_area field_name, options %>
+<% else %>
+  <%= text_area_tag options.delete(:name), options.delete(:value), options %>
+<% end %>
+<% content_for :insert_to_html do %>
+<%= javascript_tag do %>
+  $(function () {
+    function set_wysiwyg_field_value(wysiwyg_instance) {
+      var self = $(wysiwyg_instance)
+      var content = self.html()
+
+      wysiwyg_value_field = self.next(".wysiwyg-value-field")
+      if ( wysiwyg_value_field.is('textarea') ) {
+        self.next(".wysiwyg-value-field").text(content)
+      };
+      if ( wysiwyg_value_field.is('input') ) {
+        self.next(".wysiwyg-value-field").val(content)
+      };
+
+    }
+
+
+    var wysiwyg_instance = $(".wysiwyg-editor"),
+    form = wysiwyg_instance.parents("form")[0];
+    if (typeof form != "undefined") {
+      current_form = $(form)
+      current_form.find("input[type=submit]").bind("click", function(){
+        current_form.find(".wysiwyg-editor").map(function (i,x){
+          set_wysiwyg_field_value(x)
+        })
+      })
+
+      /*
+      wysiwyg_instance.bind("keyup", function(){
+        set_wysiwyg_field_value(this)
+      })
+      */
+
+      wysiwyg_instance.bind("DOMSubtreeModified", function() {
+        set_wysiwyg_field_value(this)
+      });
+    }
+  })
+<% end %>
+<% end %>

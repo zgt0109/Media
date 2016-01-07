@@ -1,0 +1,30 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <li><%= link_to '站点内容', website_menus_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>以下“ <span class="required-star">*</span> ”均为必填项</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <%= render 'form' %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

@@ -1,0 +1,39 @@
+<%= form_for @album, validate: true do |f| %>
+
+  <div class="p">
+    <span>相册名称</span>
+    <%= f.text_field :name, class: 'input-text', style: 'width: 50%' %>
+    </div>
+
+    <div class="p">
+      <span>浏览方式</span>
+      <% Album::BROWSING_WAYS.each do |k, v| %>
+        <label style="width: 180px;">
+          <%= f.radio_button :browsing_way, k, :style => "float: none" %>&nbsp;<%= v%>
+          <div class="help-tips" style="vertical-align: middle;">
+            <i class="fa fa-question-circle"></i>
+            <div class="tips-info tips-right tips-bottom">
+              <%= image_tag "/assets/albums/sample#{k}.png" %>
+            </div>
+          </div>
+        </label>
+      <% end %>
+    </div>
+
+    <div class="p tcenter col-6">
+      <%= f.submit '保 存', class: 'btn btn-big form-submit btn-orange', style: 'float: none' %>
+      <%= link_to '取 消', 'javascript:;', class: 'btn btn-big', style: 'float: none; margin-left: 20px;', onclick: "$(window.parent.document).find('#pop-name').hide();" %>
+    </div>
+
+ <% end %>
+
+
+<hr />
+
+<div class="p" style="padding-bottom: 5px;">
+  <div>照片上传 　<span style="color:#999; float:none;font-size:12px; width:auto;">（建议尺寸：宽600像素 x 高400像素）</span></div>
+</div>
+
+<div class="box-photo fl" id="photoList">
+  <%= render "list" %>
+</div>

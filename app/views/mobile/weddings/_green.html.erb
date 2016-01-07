@@ -1,0 +1,156 @@
+<div class="wrap wrap-body">
+  <section id="index">
+    <header>
+      <div class="wrap">
+        <% if @wedding.pictures.present? %>
+        <div class="box-slider" id="slider">
+          <ul class="box-slider-list">
+            <% @wedding.pictures.each do |pic| %>
+            <li><a><%= image_tag pic.name.large %></a></li>
+            <% end %>
+          </ul><!--box-slider-list end-->
+          <div class="box-slider-text">
+            <div id="pagenavi" class="box-slider-page fw tcenter">
+              <% @wedding.pictures.each_with_index do |value,index| %>
+              <a href="#" class="<%= (index+1) == 1 ? 'active' : '' %>"><%= index + 1 %></a>
+              <% end %>
+            </div><!--box-slider-slider-page end-->
+          </div>
+        </div><!--box-slider end-->
+        <% end %>
+      </div>
+    </header><!-- header end -->
+    <div class="body">
+      <% if @wedding.video_url.present? %>
+      <div class="box-video box">
+        <div class="video-wrap">
+          <a onclick="playVideo('#video')"></a>
+          <!-- <video src="<%#= @wedding.video_url%>" id="video"></video> -->
+					<div data-src="<%= @wedding.video_url%>" id="video"></div>
+        </div>
+      </div><!-- box-video end -->
+      <% end %>
+      <% if @wedding.description? %>
+			<div class="des">
+				<h3>想说的话</h3>
+				<span class="ckeditor_content"><%= @wedding.description.to_s.html_safe %></span>
+			</div>
+      <% end %>
+      <div class="footer">
+        <div class="box-wrap">
+          <div class="tcenter">
+            <p class="top-time">
+							<% if @wedding.music_url.present? %>
+								<a id="playbox" class="ico-music close" onclick="playbox.init(this).play();"> <%= audio_tag(@wedding.music_url, :id=> "audio") unless judge_andriod_version.present? %> </a>
+							<% end %>
+              <b><%= date_format_full @wedding.wedding_at %></b>
+              <span><%= @wedding.wedding_at.strftime("%H:%M") rescue ''%></span>
+            </p>
+						<p>
+							沉浸在幸福中的我们<br/>
+							将在这一天<br/>
+							从此融合为一，共同编织幸福之路<br/>
+							<% if params[:title].present? %>
+							邀约<b><u><%= URI.decode params[:title] %></u></b>见证并分享我们的喜悦<br/>
+							<% end %>
+						</p>
+            <!-- <p> -->
+            <!--   <span class="ckeditor_content"><%= @wedding.description.to_s.html_safe %></span> -->
+            <!-- </p> -->
+            <div class="p">
+              <em class="fw">我们将在</em>
+              <%  if @wedding.hotel_name? %><b class="fw"><%= @wedding.hotel_name %></b><% end %>
+              <a class="fw" href="http://api.map.baidu.com/geocoder?address=<%= @wedding.show_address %>&output=html"><span class="ico"><img src="/assets/mobile/wedding/ico-address.png"/></span><%= @wedding.show_address %></a>
+              <a class="fw" href="tel:<%= @wedding.phone %>"><span class="ico"><img src="/assets/mobile/wedding/ico-phone.png"/></span><%= @wedding.phone %></a>
+              <em class="fw">举行结婚典礼，敬请喜宴！</em>
+            </div>
+            <p class="top-sculpture">
+              <span class="sculpture-male"><%= @wedding.groom %></span>
+              <span class="sculpture-female"><%= @wedding.bride %></span>
+            </p>
+          </div>
+        </div>
+
+        <p class="tcenter">
+          <a class="btn" onclick="showDiv('#order-go')">我要赴宴</a>
+          <!-- <a class="btn" onclick="showDiv('#order&#45;bless')">送上祝福</a> -->
+          <a class="btn" href="<%= list_mobile_wedding_path(@supplier,@wedding) %>">祝福墙</a>
+          <a class="btn" onclick="showPop('#pop-share')">分享喜帖</a>
+        </p>
+        <div class="box-order" id="order-bless" data-dir="top">
+          <%= form_for @wedding_wish,  :validate => true,:url=> create_wish_app_weddings_path, :html=>{:id => :wish_form} do |form| %>
+              <dl>
+                <dt class="tcenter"><span class="btn">送上祝福</span><a class="btn-close" onclick="hideDiv('#order-bless')"></a></dt>
+                <dd>
+                  <div class="order-row">
+                    <div class="fl">姓名：</div>
+                    <div class="fr"><%= form.text_field :username,  :placeholder=> "请输入您的姓名" %></div>
+                  </div>
+                  <div class="order-row">
+                    <div class="fl">手机：</div>
+                    <div class="fr"><%= form.telephone_field :mobile,  :placeholder=> "请输入您的手机号码" %></div>
+                  </div>
+                  <div class="order-row">
+                    <div class="fl">祝福：</div>
+                    <div class="fr">
+                      <%= form.text_area :content, :id => "wall-txt", :rows=> 5, :cols => 10, :placeholder => "请在此输入您的评论"  %>
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+              <p class="tcenter">
+                <!--<input type="submit" class="btn" value="确定" onclick="hideDiv('#order-bless')"/>-->
+                <a class="btn form-submit" id="wish_submit">确定</a>
+              </p>
+          <% end %>
+        </div><!--#order-bless end-->
+        <div class="box-order" id="order-go" data-dir="top">
+          <%= form_for :wedding_guest, :url=>create_guest_app_weddings_path, html:{:id => "guest_form"} do |form| %>
+              <dl>
+								<dt class="tcenter">
+								<!-- <span class="btn">赴宴信息</span> -->
+								<a class="btn-close" onclick="hideDiv('#order-go')"></a>
+								</dt>
+                <dd>
+                  <%= form.hidden_field :wx_user_id %>
+                  <div class="order-row">
+                    <div class="fl">姓名：</div>
+                    <div class="fr"><%= form.text_field :username%></div>
+                  </div>
+                  <% if @wedding.need_phone? %>
+                    <div class="order&#45;row"> 
+                     <div class="fl">手机：</div> 
+                       <div class="fr"><%= form.telephone_field :phone  %></div>
+                     </div> 
+                  <% end %>   
+                  <div class="order-row">
+                    <div class="fl">人数：</div>
+                    <div class="fr">
+                      <%= form.text_field :people_count, maxlength:2  %>
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+              <p class="tcenter">
+                <a class="btn form-submit" id="guest_submit">确定</a>
+              </p>
+
+          <% end %>
+        </div><!--#order-go end-->
+      </div><!-- footer end -->
+    </div><!-- body end -->
+  </section>
+</div><!-- wrap end -->
+<script>
+    $(function(){
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $(this.element).next("div").find("#pagenavi").children();
+                lis.removeClass("active").eq(this.index).addClass("active");
+            }
+        });
+    });
+
+</script>

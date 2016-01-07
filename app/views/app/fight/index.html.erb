@@ -1,0 +1,72 @@
+<div id="wrapper">
+  <div id="header">
+    <h1 class="title_a title_b"><img src="/assets/fight/title_b.png" width="233" height="65"></h1>
+  </div>
+
+  <div id="main_box">
+    <% if @activity.activity_prizes.count > 0 and @activity.activity_prizes.sum(:prize_count) > 0 %>
+    <div class="hd_list clear">
+      <div class="title_c">
+        <span class="ico_a"></span>
+        <p class="ico_info">奖品</p>
+      </div>
+      <div class="rt_info">
+        <div style="padding-left:15px; padding-right:10px;">
+          <table class="jp_list">
+            <% @activity.activity_prizes.each do |prize| %>
+            <% if prize.prize_count > 0 %>
+            <tr>
+              <td class="jp_name"><%= prize.title %>：</td>
+              <td class="jp_info"><%= prize.prize %> <h5>( 数量：<span><%= prize.prize_count %></span> ) </h5></td>
+            </tr>
+            <%end%>
+            <%end%>
+          </table>
+        </div>
+      </div>
+    </div>
+    <% end-%>
+
+    <% if @activity.description %>
+    <div class="hd_list clear">
+      <div class="title_c">
+        <span class="ico_b"></span>
+        <p class="ico_info">活动说明</p>
+      </div>
+      <div class="rt_info">
+        <p><%= raw @activity.description %></p>
+      </div>
+    </div>
+    <% end-%>
+
+    <% if @activity.activity_property and @activity.activity_property.special_warn %>
+    <div class="hd_list clear">
+      <div class="title_c">
+        <span class="ico_c"></span>
+        <p class="ico_info">活动规则</p>
+      </div>
+      <div class="rt_info">
+        <div style='padding: 10px'><%= raw @activity.activity_property.special_warn %></div>
+      </div>
+    </div>
+    <% end-%>
+
+    </div>
+
+    <div id="kz_begin">
+      <p>
+      <%- if @wx_user %>
+        <%- if @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+                  <a class="btn" onclick="showTips('.J-register')">开始答题</a>
+                <%- else %>
+          <a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=start" class="btn_b">开始答题</a>
+        <%- end %>
+      <%- else %>
+        <a onclick="showTips('.J-guanzhu');" class="btn_b">开始答题</a>
+      <%- end %>
+      </p>
+    </div>
+
+  </div>
+
+</div>

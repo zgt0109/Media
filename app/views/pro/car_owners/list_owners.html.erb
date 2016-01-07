@@ -1,0 +1,68 @@
+<% content_for :main_content do %>
+    <div class="main-content">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微汽车', car_shops_path %></li>
+          <li><%= link_to '车主关怀', car_owners_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger">
+            <li class="<%= action_name == 'index' ? 'active' : '' %>">
+              <%= link_to '基本信息设置', car_owners_path %>
+            </li>
+            <li class="<%= action_name == 'list_owners' ? 'active' : '' %>">
+              <%= link_to '车主信息', list_owners_car_owners_path %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-2" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="table-filter">
+                    <%= form_for @search, url: list_owners_car_owners_path, html: {method: :get} do |f| %>
+                        <div class="col-md-3 row">
+                          <div class="input-group input-group-sm input-group-text">
+                            <%= f.text_field :car_owner_like, class: 'form-control', placeholder: "请输入车主姓名查询" %>
+                            <span class="input-group-addon">
+                    <button class="btn btn-sm btn-filter btn-primary">查询</button>
+                  </span>
+                          </div>
+                        </div>
+                    <%- end %>
+                  </div>
+                </div>
+                <div class="col-md-12 margin-top-20">
+                  <table id="gatesTable" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                    <tr>
+                      <th>车主姓名</th>
+                      <th>车牌号码</th>
+                      <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @car_owners.each do |owner| %>
+                        <tr>
+                          <td><%= owner.car_owner %></td>
+                          <td><%= owner.car_license_no %></td>
+                          <td width="80">
+                            <a href="javascript:;" class="fgreen" data-toggle="modals" data-title="查看详情" data-height="400" data-iframe="<%= car_owner_path(owner) %>">查看</a>
+                            <%= link_to '删除', owner, confirm: '确定要删除？', method: :delete %>
+                          </td>
+                        </tr>
+                    <%- end %>
+                    </tbody>
+                  </table>
+                  <%= paginate @car_owners %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

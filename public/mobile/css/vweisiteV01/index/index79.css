@@ -1,0 +1,35 @@
+.html{background-image: url(../../../img/vweisiteV01/18/bg.jpg); background-position:center top; background-size: 100% auto; background-repeat: no-repeat;}
+.box{background:#4eb3d7; display: block; text-align: center;}
+.box,
+.box a{color:#fff;}
+.index{width: 80%;max-height:60%; position: absolute;left: 10%; top:20%;padding:0 10px;border-top:15px solid transparent;border-bottom:15px solid transparent; z-index: 1;background:rgba(0,0,0,0.6);overflow:hidden;}
+.index-wrap{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    width: 100%;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -o-text-size-adjust: none;
+    text-size-adjust: none;
+}
+.index-wrap:after{display:table;content:"";clear:both;}
+.mod-index{width: 31.333%; float: left; height: 45px;margin:5px 1%;-webkit-tap-highlight-color:rgba(0,0,0,0.35);}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; text-align: center; overflow: hidden;}
+.mod-index small{ font-size: 14px; display: block;word-spacing:normal; word-break:normal; word-break:break-all; height: 45px; line-height: 45px;}
+.btn-up-1{display: none;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}

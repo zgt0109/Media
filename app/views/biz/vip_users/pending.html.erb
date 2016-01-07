@@ -1,0 +1,136 @@
+<% content_for :tab do %>
+  <div id="tab-2" class="tab-pane active">
+      <% if action_name != 'deleted' %>
+      <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、此功能并非必须要使用的功能，当你设置了领取会员卡必须审核通过的选项，都会使用到此功能；</li>
+            <li> 2、会员卡申请通过后，此会员信息会进入到“微会员管理”页面；</li>
+            <li> 3、会员卡申请拒绝后，此会员信息会进入到“已拒绝列表”页面；</li>
+          </ul>
+      </div>
+      <% end %>
+      <%= form_for @search, url: request.path, html: { method: :get } do |f| %>
+      <div class="col-sm-12 no-padding">
+          <div class="col-md-3 row">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">姓名：</span>
+                <%= f.text_field :name_like , class:"col-xs-12" %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">手机号码：</span>
+                <%= f.text_field :mobile_like , class:"col-xs-12" %>
+            </div>
+          </div>
+          <div class="col-md-4">
+              <div class="input-group input-group-text">
+                  <span class="input-group-addon">申请时间：</span>
+                  <%= datetime_range_tag f, start_at: :created_at_gte, end_at: :created_at_lte %>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <%= f.submit '查询', class: 'btn btn-sm btn-primary', id: :search_vip_users %>
+            </div>
+          </div>
+      <% end %>
+          <div class="col-sm-12 no-padding  margin-top-20">
+            <div class="tabbable">
+            <%- if action_name != 'deleted' %>
+              <ul class="nav nav-tabs padding-24 tab-size-bigger">
+                <li class="<%= 'active' if action_name == 'pending' %>">
+                  <a href="<%= pending_vip_users_path %>">待审核会员</a>
+                </li>
+                <li class="<%= 'active' if action_name == 'rejected' %>">
+                  <a href="<%= rejected_vip_users_path %>">审核不通过会员</a>
+                </li>
+                <li class="<%= 'active' if action_name == 'freezed' %>">
+                  <a href="<%= freezed_vip_users_path %>">已冻结会员</a>
+                </li>
+                <li class="<%= 'active' if action_name == 'inactive' %>">
+                  <a href="<%= inactive_vip_users_path %>">待激活会员</a>
+                </li>
+              </ul>
+            <%- end %>
+
+            <%- if action_name == 'inactive' %>
+              <table class="table table-striped table-bordered table-hover  margin-top-20">
+                <thead>
+                  <tr>
+                    <th width="7%">序号</th>
+                    <th width="8%">会员卡号</th>
+                    <th width="10%">可用积分</th>
+                    <th width="10%">申请时间</th>
+                    <th width="10%">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @vip_users.each_with_index do |vip_user, index| %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= vip_user.custom_user_no %></td>
+                      <td><%= vip_user.usable_points %></td>
+                      <td><%= vip_user.created_at.to_date %></td>
+                      <td>
+                        <%= link_to '通过', [:pass,    vip_user], method: :post, confirm: '确定允许此用户成为会员？' if vip_user.pending? || vip_user.rejected? %>
+                        <%= link_to '拒绝', [:deny,    vip_user], method: :post, confirm: '确定拒绝此用户成为会员？?' if vip_user.pending? %>
+                        <%= link_to '解冻', [:normal,  vip_user], method: :post, confirm: '你确定要解冻?', title: '解冻' if vip_user.freeze? %>
+                        <%= link_to '删除', [:delete,  vip_user], method: :post, confirm: '确定删除此用户？' unless vip_user.deleted? %>
+                        <%= modal_to '详情', info_vip_user_path(vip_user), title: '详细信息' %>
+                      </td>
+                    </tr>
+                  <% end.blank? %>
+                    <tr><td colspan="5" class="green text-center">没有记录</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <table class="table table-striped table-bordered table-hover  margin-top-20">
+                <thead>
+                  <tr>
+                    <th width="7%">序号</th>
+                    <th width="8%">姓名</th>
+                    <th width="10%">手机号码</th>
+                    <th width="10%">申请时间</th>
+                    <th width="10%">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @vip_users.each_with_index do |vip_user, index| %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= vip_user.name %></td>
+                      <td><%= vip_user.mobile %></td>
+                      <td><%= vip_user.created_at.to_date %></td>
+                      <td>
+                        <%= link_to '通过', [:pass,    vip_user], method: :post, confirm: '确定允许此用户成为会员？' if vip_user.pending? || vip_user.rejected? %>
+                        <%= link_to '拒绝', [:deny,    vip_user], method: :post, confirm: '确定拒绝此用户成为会员？?' if vip_user.pending? %>
+                        <%= link_to '解冻', [:normal,  vip_user], method: :post, confirm: '你确定要解冻?', title: '解冻' if vip_user.freeze? %>
+                        <%= link_to '删除', [:delete,  vip_user], method: :post, confirm: '确定删除此用户？' unless vip_user.deleted? %>
+                        <%= modal_to '详情', info_vip_user_path(vip_user), title: '详细信息' %>
+                      </td>
+                    </tr>
+                  <% end.blank? %>
+                    <tr><td colspan="5" class="green text-center">没有记录</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
+
+            <%= paginate @vip_users %>
+          </div>
+        </div>
+    </div>
+</div>
+<% end %>
+<% content_for :vip_breadcrumb do %>
+  <li>
+    <% if action_name =~ /pending|rejected|freezed|pending/ %>
+      <%= link_to '待处理信息', pending_vip_users_path %>
+    <% elsif action_name =~ /deleted/ %>
+      <%= link_to '删除会员', deleted_vip_users_path %>
+    <% end %>
+  </li>
+<% end %>
+<%= render 'biz/vip_users/admin' %>

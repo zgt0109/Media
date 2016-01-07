@@ -1,0 +1,170 @@
+<% provide(:title, '我要订餐') if @shop_order.book_dinner? %>
+<% provide(:title, '我要叫外卖') if @shop_order.take_out? %>
+
+<div class="stage" id="stage">
+  <header>
+    <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
+    <h1>
+      <%= "订餐详情" if @shop_order.book_dinner? %>
+      <%= "外卖详情" if @shop_order.take_out?  %>
+    </h1>
+    <% if @shop_order.book_dinner? %>
+    <a href="tel:<%= @shop_order.shop_branch.book_dinner_rule.book_phone %>" class="fa fa-phone fr"></a>
+    <% else %>
+    <a href="tel:<%= @shop_order.shop_branch.take_out_rule.book_phone %>" class="fa fa-phone fr"></a>
+    <% end %>
+  </header>
+
+  <section id="sec-index">
+    <div class="body">
+      <div class="order">
+        <div class="mod-order">
+          <div class="mod-form form-hor">
+            <div class="bd">
+              <div class="form-li">
+                <div class="li-l"><b>订单号：</b></div>
+                <div class="li-r"><span class="text-red"><%= @shop_order.order_no %></span></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>您的姓名：</b></div>
+                <div class="li-r">
+                  <span><%= @shop_order.username %></span>
+                </div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>您的电话：</b></div>
+                <div class="li-r"><%= @shop_order.mobile %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>
+                    <% if @shop_order.take_out? %>
+                    送餐时间：
+                    <% else %>
+                    订餐时间：
+                    <% end %>
+                </b></div>
+                <div class="li-r"><span>
+                    <%= @shop_order.book_at %>
+                </span></div>
+              </div>
+              <a class="form-li" href="http://api.map.baidu.com/marker?location=<%= @shop_order.shop_branch.location_y%>,<%= @shop_order.shop_branch.location_x%>&title=<%=@shop_order.shop_branch.address%>&content=<%= @shop_order.shop_branch.address%>&output=html">
+                <div class="li-l"><b>
+                    <% if @shop_order.take_out? %>
+                    送餐地址：
+                    <% else %>
+                    预定门店：
+                    <% end %>
+                    
+                </b></div>
+                <div class="li-r mod-fa fa fa-location-arrow">
+                  <% if @shop_order.take_out? %>
+                  <span><%= @shop_order.address %></span>
+                  <% else %>
+                  <span><%= @shop_order.shop_branch.name %> <%= @shop_order.shop_branch.ditu_address %></span>
+                  <% end %>
+                </div>
+              </a>
+              <div class="form-li">
+                <div class="li-l"><b>备注：</b></div>
+                <div class="li-r"><span><%= @shop_order.description %></span></div>
+              </div>
+
+              <% if @shop_order.book_dinner? && @shop_order.in_queue? %>
+              <div class="form-li">
+                <div class="li-l"><b>排号信息：</b></div>
+                <div class="li-r"><span><%= @shop_order.queue_no %></span></div>
+              </div>
+              <% end %>
+              <% if @shop_order.book_dinner? && @shop_order.in_branch? %>
+              <div class="form-li">
+                <div class="li-l"><b>座位信息：</b></div>
+                <div class="li-r"><span><%= @shop_order.desk_no %></span></div>
+              </div>
+              <% end %>
+              
+            </div>
+            <div class="ft">
+              <div class="food-shopcar">
+                <div class="hd">
+                  <div class="shopcar-btn active">
+                    <a class="fl" id="shopcar-btn">
+                      <span class="mod-fa fa fa-caret-up">共：<i><%= @shop_order.total_qty %></i></span>
+                    </a>
+                    <span class="fl">
+                      <b>￥<%= @shop_order.total_amount %></b>
+                    </span>
+                    <label class="mod-fa fa fa-caret-down fr">
+                      <select class="input">
+                        <option><%= @shop_order.pay_status_name unless @shop_order.cashpay? %></option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="tcenter">
+                    <%= link_to cancel_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id), method: :post, data: { confirm: '确定要取消订单？' }, class: "btn btn-blue" do %>
+                    取消订单
+                    <% end if @shop_order.pending? %>
+                    <% if @shop_order.pay_type && !@shop_order.cashpay? && @shop_order.unfinish? %>
+                    <%= link_to "立即支付",  success_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id, again: true), class: "btn" %>
+                    <% else %>
+                    <%= link_to "再次下单", clone_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id), class: "btn" %>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="bd" id="shopcar-list">
+                  <dl>
+                    <dt></dt>
+                    <dd class="abc">
+                      <div class="wrap-scroll" id="shop_order_item_div" > 
+                        <!-- begin list -->
+                        <%= render :partial => 'shop_order_item', :collection => @shop_order.shop_order_items, :as => :shop_order_item %>
+                        <!-- end list -->
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+
+<script>
+  $(function(){
+
+    $(".like_a").find(".middle-div").each(function(){
+      var a = $(this).find("input").val();
+      $(this).replaceWith('<span>'+ a +'份</span>');
+    })
+
+    $("#shopcar-btn, #shopcar-list dt").click(function(){
+            var height = $(window).height()-115;
+            $("#shopcar-list").slideToggle(function(){
+                var flag = $(this).css("display");
+                 if(flag == "block"){
+                    $(".html").css({"overflow":"hidden","height":"100%"});
+                    $(".abc").slimScroll({
+                        height: height
+                    });
+                }else{
+                    $(".html").removeAttr("style");
+                }
+            });
+
+            $("#shopcar-btn").addClass("active");
+        });
+    $("#btn-food-cancel").click(function(){
+      alertMessage("您确定要取消吗？",function(){
+                // window.location.href="food-my.html";
+              });
+    });
+  });
+
+
+</script>
+

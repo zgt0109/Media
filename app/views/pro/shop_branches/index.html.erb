@@ -1,0 +1,102 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+        <% if current_user.industry_food? %>
+        微餐饮
+        <% end %>
+        <% if current_user.industry_takeout? %>
+        微外卖
+        <% end %>
+      </li>
+      <li>分店管理</li>
+    </ul>
+    <div class="pull-right">
+  <span class="green lighter ShowQRCodeTxt">扫描预览二维码</span>
+  <div class="showQRCode">
+    <i class="i-qrcode icon-qrcode icon-3x"></i>
+    <div class="QRCode">
+      <img src="/assets/qr.jpg">
+    </div>
+  </div>
+</div>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、请根据你的线下实体门店新增你的门店信息；</li>
+            <li>2、我们会为这里的门店生成一个登录地址，通过此地址可登录到每个门店。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="col-md-3 row">
+        <%= form_for @search, url: shop_branches_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+          <div class="input-group input-group-sm input-group-text">
+            <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入分店名称关键字" %>
+            <span class="input-group-addon">
+              <button type="submit" class="btn btn-sm btn-filter btn-primary">查询</button>
+            </span>
+          </div>
+        <% end %>
+        </div>
+        <div class="col-md-3">
+          <a href="javascript:void(0);" id="J-copy" data-clipboard-text="<%= shops_sign_in_url(current_user) %>" class="btn btn-primary btn-sm btn-filter">复制地址</a>
+          <a href="<%= shops_sign_in_url(current_user) %>" target="_blank" class="btn btn-success btn-sm btn-filter margin-left-10">登录门店管理系统</a>
+        </div>
+        <div class="col-md-3 row pull-right">
+          <%= link_to "新增", new_shop_shop_branch_path(shop_id: @shop.id), class: "btn btn-primary btn-sm pull-right" %>
+        </div>
+      </div>
+      <div class="col-sm-12 margin-top-20">
+        <table id="gatesTable" class="table table-striped table-bordered table-hover dataTable ">
+          <thead>
+          <tr>
+            <th>分店名称</th>
+            <th>分店地址</th>
+            <th>联系电话</th>
+            <th>营业时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @shop_branches.each do |shop_branch| %>
+            <tr>
+              <td>
+		<%= link_to shop_branch.name, shops_vip_deals_path(current_user, shop_branch_id: Des.encrypt(shop_branch.id.to_s)), target: '_blank' %>
+	      </td>
+              <td><%= shop_branch.ditu_address %></td>
+              <td><%= shop_branch.tel %></td>
+              <td><%= shop_branch.start_time_to_s %> - <%= shop_branch.end_time_to_s %></td>
+              <td class="txt-left-align">
+		<%= link_to "编辑", edit_shop_branch_url(shop_id: @shop.id, id: shop_branch.id) %>
+                <%= link_to '删除', shop_branch, confirm: '确认要删除？', method: :delete %>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+	<%= paginate @shop_branches %>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :custom_js do %>
+<script>
+                                                                                                  new ZeroClipboard( document.getElementById("J-copy"), {
+                                                                                                    moviePath: "/flash/ZeroClipboard.swf"
+                                                                                                  }).on( "complete", function() { showTip("success","复制成功"); } );
+                                                                                             </script>
+
+<% end %>
+
+
+<% end %>
+

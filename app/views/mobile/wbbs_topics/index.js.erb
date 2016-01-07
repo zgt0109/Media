@@ -1,0 +1,10 @@
+$(".mod-load").slideUp();
+var topics_div = $('#topics');
+<% if @wbbs_topics.last %>
+var html = "<%= j( render partial: 'wbbs_topic', collection: @wbbs_topics ) %>";
+$('#topics .mod-box:last').after( html )
+var new_top_ids = "<%= @wbbs_topics.select(&:top?).map(&:id).join(',') %>";
+var old_top_ids = topics_div.data('top-ids');
+topics_div.data('top-ids', old_top_ids + "," + new_top_ids);
+<% end %>
+$('#topics').data('topic-id', "<%= @wbbs_topics.last.try(:id) %>");

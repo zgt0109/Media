@@ -1,0 +1,16 @@
+<div class="main">
+	<div class="de-details">
+		<section>
+			<h3>账目明细</h3>
+			<div class="clear-record lanmu-content">
+				<ul class="lanmu-list">
+					<%= render partial: 'client_changes', collection: @client_changes, as: :change %>
+				</ul>
+	      <% if @client_changes.next_page %>
+	        <%= link_to_next_page @client_changes, '查看更多 ↓', remote: true, class: "listmore" %>
+	      <% end %>
+			</div>
+		</section>
+	</div>
+</div>
+

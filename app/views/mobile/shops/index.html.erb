@@ -1,0 +1,78 @@
+<% provide(:title, '我要订座') %>
+<body>
+  <div class="html">
+    <div class="main">
+      <header>
+        <h1>请选择订座门店</h1>
+      </header><!--header end-->
+      <section>
+        <div style="position:fixed;"></div>
+        <div class="box-search">
+          <div class="box-form fl">
+            <%= form_for @search, url: app_shops_url, method: :get, html: { class: '' } do |f| %>
+              <%= f.search_field :name_like, id: 'in', placeholder: '请输入您要查找的门店' %>
+              <input type="submit" value="搜索" class="btn"/>
+            <% end %>
+          </div>
+
+          <div class="fr">
+            <%= link_to  app_shop_table_orders_url(anchor: "mp.weixin.qq.com") do %>
+              <img src="/assets/micro_stores/bg_ico_order.png"/>
+              <span>我的订座</span>
+            <% end %>
+          </div>
+
+        </div>
+        <!-- begin list -->
+        <%= render :partial => 'shop_branch', :collection => @shop_branches, :as => :branch %>
+        <!-- end list -->
+
+      </section>
+      <div class="jiazai">
+        <%= link_to_next_page @shop_branches, "<img src=\"/assets/loda.png\">努力加载中...".html_safe, :remote => true, id: "next_branches" %>
+      </div>
+    </div><!--main end-->
+  </div><!--wrap end-->
+
+<%= render "application/app_footer" %>
+
+<script>
+  $(document).on("touchend",function(){
+    var maxH=$(".main").height()/2,
+      scrollTop=$(this).scrollTop();
+    if(scrollTop>=maxH){
+      // alert("刷到底了");
+      $("#next_branches").click();
+    }
+  })
+</script>
+<script type="text/javascript">
+    $(function() {
+        <% if flash[:notice] %>
+        alert("<%= flash[:notice] %>");
+        <% elsif flash[:alert] %>
+        alert("<%= flash[:alert] %>");
+        <% end %>
+        <% flash.clear %>
+    });
+</script>
+
+<style>
+.jiazai {
+  width: 75%;
+  margin: 0 auto;
+  padding: 6px;
+  text-align: center;
+}
+.jiazai a {
+  position: relative;
+  top: -5px;
+  color: #b0b0b0;
+  font-size: 12px;
+  padding-left: 5px;
+}
+</style>
+
+
+
+</body>

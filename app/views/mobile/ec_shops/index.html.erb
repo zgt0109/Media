@@ -1,0 +1,107 @@
+<% provide(:title, @shop.name) %>
+<%= content_for(:pop) do %>
+  <%= render 'application/mobile/pop' %>
+<% end %>
+<%= content_for(:topbar) do %>
+  <%= render  "application/mobile/topbar_nav" %>
+<% end %>
+
+<section>
+  <% if @ec_ads %>
+      <div class="box-img" id="slider">
+        <ul class="box-img-list">
+          <% @ec_ads.each do |w| %>
+              <li>
+                <% if w.uncheck? %>
+                    <%= image_tag w.try(:pic).try(:large) %>
+                <% else %>
+                    <%= link_to require_ec_ad_link(w) do %><%= image_tag w.try(:pic).try(:large) %><% end %>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+        <div class="box-text">
+          <span class="box-bd ellipsis fl" id="slider-span"><%= @ec_ads.try(:first).try(:title) %></span>
+          <div id="pagenavi" class="fr box-img-page">
+            <% @ec_ads.each_with_index do |w, index| %>
+                <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>"><% index + 1 %></a>
+            <% end %>
+          </div>
+          <div class="box-bg"></div>
+        </div>
+      </div>
+  <% end %>
+  <% if @categories.present? %>
+      <% @categories.each do |category| %>
+          <%next if category.products.count == 0 %>
+          <div class="bd-title"><a href="<%= mobile_ec_category_path(supplier_id: @supplier.id, id: category)  %>"><%= category.name %></a></div>
+          <div class="box-list">
+            <% @items = category.products.slice(0, 4) %>
+            <% if @items.present? %>
+                <% @items.each do |item| %>
+
+                    <div class="list-li">
+                      <a class="box-block" href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>"></a>
+                      <div class="hd"><span>
+                        <% if item.main_picture.try(:pic?) %>
+                            <%= image_tag "#{item.main_picture.pic.large}" %>
+                        <% else %>
+                            暂无图片
+                        <% end %>
+                            </span></div>
+                      <div class="bd"><b><%= item.title %></b><p><span class="fred">￥<%= f item.price%></span></p></div>
+                    </div>
+                <% end %>
+            <% end %>
+
+
+          </div>
+      <% end %>
+  <% else %>
+      <div class="bd-title"><a>没有数据</a></div>
+  <% end %>
+</section><!-- section end -->
+<script type="text/javascript">
+    //var slider=new TouchSlider({id:'slider', speed:600, timeout:6000});
+    <% unless judge_andriod_version %>
+    window.onload = resizeImg();
+    window.addEventListener("orientationchange", resizeImg, false);
+    <% end %>
+    $(function(){
+
+        <% if @ec_ads.present? %>
+        var texts=<%= @ec_ads.map(&:title).to_s.html_safe %>;
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $(this.element).next("div").find("#pagenavi").children();
+                lis.removeClass("active").eq(this.index).addClass("active");
+                $("#slider-span").html(texts[this.index]);
+            }
+        });
+
+        <% end %>
+    });
+    function resizeImg(){
+        var w=parseInt(document.body.clientWidth);
+        $(".box-list .hd").height(w*0.41);
+        $(".box-list .hd span").css({"line-height":w*0.41+"px"});
+    }
+</script>
+<style>
+        /*pageShow*/
+    .pageShow,
+    .pagebg{min-height: 100%;width: 100%; overflow: hidden;left:0; top:0; }
+    .pageShow{position:fixed; z-index: 999;}
+    .pagebg{position: absolute; z-index: 998;}
+    .pageShow img{ max-width: 100%;}
+    <% if judge_andriod_version %>
+    .box-list .hd{ position:relative; text-align:center; z-index:0; height: 100px;}
+    .box-list .hd span:first-child{ width: 100%; height: 100%; overflow: hidden; color: #ccc; line-height: 100px; vertical-align: middle; font-size: 20px;}
+    .box-list .hd img{ max-width:100%; max-height:100%;vertical-align:top;}
+    <% end%>
+    .box-img-list a {
+        width: 100%;
+    }
+</style>

@@ -1,0 +1,28 @@
+<%
+have_headline ||= :no
+start_menu = 0
+%>
+
+<%if have_headline == :yes && website_menus.present?%>
+  <div class="box mod-search">
+    <%= link_to menu_url(website_menus.first) do %>
+      <i class="ico-search"></i>
+      <b><%= website_menus.first.try(:title)%></b>
+      <small><%= website_menus.first.try(:summary)%></small>
+    <% end %>
+    <%start_menu = 1%>
+  </div>
+<%end%>
+
+<div class="index">
+  <% website_menus[start_menu..-1].each_with_index do |menu, index| %>
+    <%= link_to menu_url(menu), class: 'box mod-index' do %>
+        <% if menu.pic? && menu.font_icon.blank? %>
+          <i><%= image_tag menu.pic.custom %></i>
+        <% else %>
+          <i class="<%= menu.font_icon %>"></i>
+        <% end %>
+        <small><%= menu.title %></small>
+      <% end %>
+    <% end %>
+  </div>

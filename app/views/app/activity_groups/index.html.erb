@@ -1,0 +1,10 @@
+<%= render 'form' %>
+<div class="footer">
+ <% if @activity.pending? %>
+ <a class="btn btn-blue"><span>已经成功报名</span></a>
+ <% elsif @activity.deal_success? and @consume_code.present? %>
+ <a class="btn btn-blue"><span>您的SN码为：<%= @consume_code %></span></a>
+ <% elsif @activity.deal_failed? %>
+ <a class="btn btn-blue"><span>团购未成功</span></a>
+ <% end %>
+</div>

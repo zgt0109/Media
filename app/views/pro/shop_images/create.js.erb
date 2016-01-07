@@ -1,0 +1,5 @@
+<% if @shop_image.new_record? %>
+  showTip('warning',"上传失败: <%= j @shop_image.errors.full_messages.join(', ').html_safe %>");
+<% else %>
+  $('#shop_images').append("<%= j render(@shop_image) %>");
+<% end %>

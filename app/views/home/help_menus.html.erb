@@ -1,0 +1,88 @@
+<%= content_for :title  do%>
+    使用指南
+<% end %>
+
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '帮助中心', help_menus_path %></li>
+        </ul>
+        <%= render partial:'/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-xm-12">
+            <ul class="mod-article col-sm-8">
+              <% nav_parent_id = 1 %>
+              <% @help_menus.includes(:help_posts).each do |menu| %>
+                <% nav_sub_id = 1 %>
+                <h4 id="nav_<%= menu.id %>"><%= nav_parent_id %>
+                  <%= menu.title %>
+                  <% if menu && menu.help_url.present? %>
+                    <a href="<%= menu.help_url %>" target="_blank" class="btn btn-primary btn-xs right">查看视频教程</a>
+                  <% end %>
+                </h4>
+                <% menu.help_posts.each do |f| %>
+                    <li>
+                      <a href="<%= help_post_home_path(id: menu.id)%>"></a>
+                      <%= link_to help_post_home_path(id: menu.id, sub_id: f.id, parent_id: nav_parent_id, anchor: "nav_#{f.id}")  do %>
+                          <%= nav_parent_id %>.<%= nav_sub_id %>　<%= f.title %>
+                      <% end %>
+                    </li>
+                    <% nav_sub_id += 1 %>
+                <% end %>
+                <% nav_parent_id += 1 %>
+              <% end %>
+            </ul>
+            <div class="col-sm-3">
+              <div class="bs-docs-sidebar hidden-print affix" id="nav-sidebar">
+                <ul class="nav bs-docs-sidenav">
+                  <% @help_menus.each do |menu| %>
+                      <li nav_id="nav_<%= menu.id %>"><a href="#nav_<%= menu.id %>"><%= menu.title %></a></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.page-content -->
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script>
+        $(function(){
+            $('body').attr('data-spy', 'scroll');
+            $('body').attr('data-target', '#nav-sidebar');
+            $("#nav-sidebar").affix({
+                offset: {
+                    top: 50,
+                    bottom: 100
+                }
+            });
+            $('#nav-sidebar').scrollspy();
+            var arr = window.location.href.split('#');
+            if(arr.length>1){
+                $('.bs-docs-sidenav li').each(function(){
+                    if($(this).attr('nav_id') == arr[1]){
+                        $(this).addClass('active');
+                    }else{
+                        $(this).removeClass('active');
+                    }
+                });
+            }else{
+                $('.bs-docs-sidenav li.active').removeClass('active');
+                $('.bs-docs-sidenav li').eq(0).addClass('active');
+            }
+
+            $('.bs-docs-sidenav li').click(function(){
+                $('.bs-docs-sidenav li.active').removeClass('active');
+                $(this).addClass('active');
+            });
+
+        });
+    </script>
+<% end %>

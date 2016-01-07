@@ -1,0 +1,118 @@
+<style type="text/css">
+  .fgray {color: #999; float: none; font-size: 12px!important; width: auto; }
+  .box-form select{width: 100%;}
+</style>
+<div class="des-arrow"></div>
+<%= form_for @material, url: (@material.new_record? ? multiple_materials_url : multiple_material_url(@material)), validate: true, html: { id: 'multiple_material_form', class: 'material_form' } do |f| %>
+
+    <div class="formitem mainview" rel="0">
+      <%= f.hidden_field :material_type %>
+
+      <div class="box-form form-row fl">
+        <div class="p">
+          <span>标题<em>*</em><span class="fgray">（不能超过64个字）</span></span>
+          <%= f.text_field :title, maxlength: 64, class: 'input-text', style: "20%" %>
+        </div>
+      </div>
+
+      <div class="p">
+        <span>封面<em>*</em></span>
+        <div class="box-upload material_pic">
+          <div class="margin">
+            <div class="box-file">
+              <%= f.file_field :pic, validate: false, rel: 'preview_material_pic' %>
+              <a class="btn btn-big">上传</a>
+            </div>
+            <span class="p-file"><span class="fgray">图片建议尺寸: 720像素*400像素</span></span><br/>
+            <label><%= f.check_box :is_show_pic, :style=>"width:auto;vertical-align:top;margin:9px 0 0 0;" %>&nbsp;&nbsp;<span class="fgray">封面图片显示在正文中</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="box-form form-row fl">
+        <div class="form-address p">
+          <span>类型</span>
+          <%= f.select :reply_type, Material.reply_type_options %>
+        </div>
+
+        <div class="form-address material_activity_id">
+          <span>选择活动<em>*</em></span>
+          <%= f.select :activity_id, current_user.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @material.try(:materialable_id) }, class: "gl" %>
+        </div>
+
+        <div class="material_source_url p">
+          <span>来源<em>*</em><span class="fgray">（请输入正确的URL链接格式）</span></span>
+          <%= f.text_field :source_url, class: 'input-text', style: "20%" %>
+        </div>
+
+      </div>
+
+      <div class="p box-ck material_body">
+        <div class="p">
+          <span>正文</span>
+          <%= f.cktext_area :content, :ckeditor => {:toolbar => "mini", :height => 400} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="formitem subview hide" rel="1">
+      <div class="box-form form-row fl">
+        <input name="materials[][supplier_id]" value="<%= @material.supplier_id %>" type="hidden" />
+        <input name="materials[][material_type]" value="<%= @material.material_type %>" type="hidden" />
+
+        <p class="material_title">
+          <span>标题<em>*</em><span class="fgray">（不能超过64个字）</span></span>
+          <input class="input-text" id="material_title" maxlength="64" name="materials[][title]" size="30" style="20%" type="text">
+        </p>
+
+      </div>
+
+      <div class="p">
+        <span>封面<em>*</em></span>
+        <div class="box-upload material_pic">
+          <div class="margin">
+            <div class="box-file">
+              <input class="preview_material_pic" name="materials[][pic]" type="file" rel="preview_material_pic_1">
+              <a class="btn btn-big">上传</a>
+            </div>
+            <span class="p-file"><span class="fgray">图片建议尺寸: 720像素*400像素</span></span><br/>
+            <label>
+              <input checked="checked" name="materials[][is_show_pic]" style="width:auto;vertical-align:top;margin:9px 0 0 0;" type="checkbox" value="1">
+              <span class="fgray">封面图片显示在正文中</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="box-form form-row fl">
+        <p class="form-address">
+          <span>展示类型<em>*</em></span>
+          <%= select_tag "materials[][reply_type]", options_for_select(Material.reply_type_options), class: 'reply_type' %>
+        </p>
+
+
+        <p class="form-address material_activity_id">
+          <span>选择活动<em>*</em></span>
+          <%= select_tag "materials[][activity_id]", options_for_select(current_user.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }), selected: @material.try(:materialable_id), class: "gl" %>
+        </p>
+
+        <p class="material_source_url">
+          <span>来源<em>*</em><span class="fgray">（请输入正确的URL链接格式）</span></span>
+          <input class="input-text" name="materials[][source_url]" size="30" type="text" />
+        </p>
+
+      </div>
+
+
+      <div class="p box-ck material_body">
+        <span>正文</span>
+        <textarea cols="40" id="material_content_1" name="materials[][content]" rows="20"></textarea>
+      </div>
+
+    </div>
+
+    <p>
+      <a href="javascript:;" class="hide"><input type="button" value="" class="but-view" /></a>
+      <input type="submit" value="完成" class="btn btn-small btn-orange form-submit <%= @material.new_record? ? 'new_material_form' : '' %>" />
+    </p>
+<% end %>

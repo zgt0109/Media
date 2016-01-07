@@ -1,0 +1,13 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% website_menus.each_with_index do |menu, index| %>
+    <%= link_to menu_url(menu), class: 'box mod-index' do %>
+        <% if [0, 3].include?(index % 4) %>
+          <small><%= menu.title %></small>
+        <% else %>
+          <%= menu.pic_or_icon :has_title => true %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>

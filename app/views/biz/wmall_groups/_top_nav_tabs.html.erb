@@ -1,0 +1,34 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger">
+  <li action-name="wmall_groups_index">
+    <a href="<%= wmall_groups_path %>">
+      基本信息
+    </a>
+  </li>
+  <li action-name="wmall_group_items_index">
+    <a href="<%= wmall_group_items_path %>">
+      商品管理
+    </a>
+  </li>
+  <li action-name="wmall_group_orders_index">
+    <a href="<%= wmall_group_orders_path %>">
+      订单管理
+    </a>
+  </li>
+  <li action-name="wmall_group_orders_list">
+    <a href="<%= list_wmall_group_orders_path %>">
+      SN码核销
+    </a>
+  </li>
+  <li action-name="wmall_group_orders_bill">
+    <a href="<%= bill_wmall_group_orders_path %>">
+      账单管理
+    </a>
+  </li>
+</ul>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            $("ul.nav-tabs li[action-name=<%= controller_name %>_<%= action_name %>]").addClass("active");
+        });
+    </script>
+<% end %>

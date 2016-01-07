@@ -1,0 +1,228 @@
+<% content_for :main_content do %>
+    <div class="main-content">
+			<div class="breadcrumbs" id="breadcrumbs">
+				<ul class="breadcrumb">
+					<%= render 'partials/home' %>
+					<li><%= link_to '系统设置', account_url %></li>
+					<li><%= link_to '微客联盟', 'javascript:;' %></li>
+				</ul>
+				<%= render '/layouts/qrcode' %>
+			</div>
+      <div class="page-content">
+        <iframe src="<%= RECOMMEND_HOST %>/union-wkl/console?admin_token=<%= current_user.find_or_generate_auth_token %>" frameborder="0" width="100%" height="1000px" scrolling="no"></iframe>
+        <!--
+        <div class="col-md-12 text-center" id="showmess" style="display:none;"><button class="btn btn-primary btn-lg">加入联盟</button></div>
+        <div id="show_mess_box" style="display:none;">
+          <%= form_for :recommend_wx_mp_user, url: "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_user.find_or_generate_auth_token}", method: :put, remote: true, html: {id: "recommend_wx_mp_user_form"} do |f| %>
+						<div class="form-group">
+							<label class="control-label">微信号（自定义ID）</label>
+							<div class="clearfix">
+								<%= f.text_field :account, "v-model" => "account", class: "col-xs-4" %>
+							</div>
+						</div>
+
+            <div class="form-group">
+							<label class="control-label">上传Logo</label>
+							<div class="clearfix">
+								<%= content_tag :div, nil, id: "pic_logo", class: "cieldon-file", data: {type: "0", name: "recommend_wx_mp_user[logo_pic_key]", img: "", width: "90", height: "90"} %>
+              </div>
+            </div>
+
+            <div class="form-group no-margin-bottom">
+							<label class="control-label">上传二维码</label>
+							<div class="clearfix">
+								<%= content_tag :div, nil, id: "pic_qrcode", class: "cieldon-file", data: {type: "0", name: "recommend_wx_mp_user[qrcode_pic_key]", img: "", width: "90", height: "90"} %>
+								<span class="text-warning pull-left display-block margin-top-20 line-height-32">图片建议尺寸：90像素*90像素</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>主要服务地区<a href="javascript:;" class="text-warning display-inline margin-left-20 line-height-32 text-u-l" data-target="#myModal" data-toggle="modal">编辑</a></label>
+              <div class="clearfix">
+								<%= f.text_field :area_list, "v-model" => "area_list", id: "area_display", disabled: true, readonly: true, class: "col-xs-4" %>
+								<%= f.hidden_field :area_list, "v-model" => "area_list", id: "area" %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>分类</label>
+              <div class="clearfix">
+								<%= f.select :industry, options_for_select(["美食" ,"休闲娱乐" ,"购物" ,"丽人" ,"结婚" ,"运动健身" ,"酒店" ,"家装" ,"汽车服务" ,"微商圈" ,"房产" ,"教育" ,"医疗","企业"]), {include_blank: true}, {class: "col-xs-4", "v-model"=>"industry"} %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>功能介绍</label>
+              <div class="clearfix">
+								<%= f.text_area :description, "v-model" => "description", rows: 3, class: "col-xs-4" %>
+              </div>
+            </div>
+            <div class="form-group ">
+              <button type="button" id="submit_btn" class="btn btn-sm btn-primary" data-fn="submit">保存并生效</button>
+              <button type="button" id="disable_recommend_btn" class="btn btn-sm btn-default" data-dismiss="modals">退出联盟</button>
+            </div>
+          <% end %>
+        </div>
+        -->
+
+      </div>
+    </div>
+		<%#= render "city_select_modal" %>
+<% end %>
+
+
+<!--
+<% content_for :custom_js do %>
+  <% javascript_tag do %>
+    var rmd = new Vue({
+      el: "#recommend_wx_mp_user_form",
+      data: {
+      }
+    });
+
+		function load_city_data(){
+			var ststr = $('#area').val();
+			if(ststr){
+				var arr = ststr.split(',');
+				for(var i=0;i<arr.length;i++){
+					var str = 'input[value="'+arr[i]+'"]';
+					$(str).click();
+				}
+			}
+		}
+
+    $.ajax({
+      url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/fetch_info?auth_token=#{current_user.auth_token}" %>',
+      data: {},
+      crossDomain: true,
+      dataType: "json",
+      type: 'get',
+      success: function(data, status) {
+        <!-- console.log("fetch_info: "+ JSON.stringify(data)); -->
+				if(data.code==0){
+					$("#show_mess_box").show();
+          rmd.account = data.wx_mp_user.account;
+          rmd.description = data.wx_mp_user.description;
+          rmd.industry = data.wx_mp_user.industry;
+          rmd.area_list = data.wx_mp_user.area_list;
+          $("#pic_qrcode a").css({"background-image":"url("+data.wx_mp_user.qrcode_pic_url+")","background-size": "100% 100%","background-repeat": "no-repeat"});
+          $("#pic_qrcode input[name*=recommend_wx_mp_user]").val(data.wx_mp_user.qrcode_pic_key);
+          $("#pic_logo a").css({"background-image":"url("+data.wx_mp_user.logo_pic_url+")","background-size": "100% 100%","background-repeat": "no-repeat"});
+          $("#pic_logo input[name*=recommend_wx_mp_user]").val(data.wx_mp_user.logo_pic_key);
+				}else if(data.code=1){
+					$("#showmess").show();
+          rmd.account = data.wx_mp_user.account;
+          rmd.description = data.wx_mp_user.description;
+          rmd.industry = data.wx_mp_user.industry;
+          rmd.area_list = data.wx_mp_user.area_list;
+          $("#pic_qrcode a").css({"background-image":"url("+data.wx_mp_user.qrcode_pic_url+")","background-size": "100% 100%","background-repeat": "no-repeat"});
+          $("#pic_qrcode input[name*=recommend_wx_mp_user]").val(data.wx_mp_user.qrcode_pic_key);
+          $("#pic_logo a").css({"background-image":"url("+data.wx_mp_user.logo_pic_url+")","background-size": "100% 100%","background-repeat": "no-repeat"});
+          $("#pic_logo input[name*=recommend_wx_mp_user]").val(data.wx_mp_user.logo_pic_key);
+				}else{
+          new PNotify({ title: "公众号信息获取失败", delay: 3000, type: "error" });
+					$("#showmess").show();
+				}
+      },
+      error: function() {
+        new PNotify({ title: "公众号信息获取异常", delay: 3000, type: "error" });
+      }
+    });
+
+		$("form").on('silentSubmit', function(){
+			$.ajax({
+				url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_user.auth_token}" %>',
+				data: $("#recommend_wx_mp_user_form").serializeArray(),
+				crossDomain: true,
+				dataType: 'json',
+				type: 'post',
+				success: function(data, status){
+					if(data.code==0){
+						new PNotify({ title: data.message, delay: 3000, type: "notice" });
+					}else if(data['code']==-2){
+						new PNotify({ title: data.message, delay: 3000, type: "error" });
+					}else{
+						new PNotify({ title: data.message, delay: 3000, type: "error" });
+					}
+				},
+				error: function(e){
+					new PNotify({ title: e.message, delay: 3000, type: "error" });
+				}
+
+			});
+		});
+		$("#recommend_wx_mp_user_form").bind("ajax:success", function(event, xhr, settings) {
+			if(xhr["code"]==0){
+        new PNotify({ title: xhr["message"], delay: 3000, type: "notice" });
+			}else if(xhr['code']==-2){
+        new PNotify({ title: xhr["message"], delay: 3000, type: "error" });
+			}else{
+        new PNotify({ title: xhr["message"], delay: 3000, type: "error" });
+			}
+		});
+		$("#recommend_wx_mp_user_form").bind("ajax:error", function(xhr, status, error) {
+      new PNotify({ title: xhr["message"], delay: 3000, type: "error" });
+		});
+
+		$(function () {
+			 $('body').on('click','input[data-dq="sheng"]',function(){
+						if($(this).is(':checked')){
+								var str = 'input[data-sheng="'+$(this).val()+'"]:not(:checked)';
+								$(str).click();
+						}else{
+								var str = 'input[data-sheng="'+$(this).val()+'"]';
+								$(str).removeAttr('checked')
+						}   
+				}).on('click','button.submit-dq',function(){
+						var str = new Array();
+						$('input.quyu:checked').each(function(i){
+								var v = $(this).val();
+								str.push(v);
+						})  
+						$('#area, #area_display').val(str.join(','));
+						$('button[data-dismiss="modal"]').click();
+						$("#area").change();
+				});
+
+        load_city_data();
+
+				$("#showmess").on('click', function(){
+				  $("#showmess").hide();
+				  $("#show_mess_box").show();
+				});
+
+				$("#disable_recommend_btn").on('click', function(){
+				  $("#showmess").show();
+				  $("#show_mess_box").hide();
+					$.ajax({
+						url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/disable?auth_token=#{current_user.auth_token}" %>',
+						data: {_method: 'put'},
+						crossDomain: true,
+						dataType: "json",
+						type: 'post',
+						success: function(data, status) {
+							console.log("disable: "+ JSON.stringify(data));
+							if(data.code==0){
+								new PNotify({ title: data.message, delay: 3000, type: "notice" });
+							}else{
+								new PNotify({ title: data.message, delay: 3000, type: "error" });
+							}
+						},
+						error: function() {
+							new PNotify({ title: "退出联盟设置异常", delay: 3000, type: "error" });
+						}
+					});
+				});
+
+			var metrics = [ 
+				[ "#recommend_wx_mp_user_account", 'presence', '微信号不能为空' ],
+				[ "#recommend_wx_mp_user_industry", 'presence', '分类不能为空' ],
+				[ "#area", 'presence', '服务地区不能为空' ],
+				[ "#recommend_wx_mp_user_description", 'presence', '功能介绍不能为空' ],
+			];  
+			$("form").nod( metrics, {submitBtnSelector: '#submit_btn', silentSubmit: true} );
+
+		})
+
+
+  <% end %>
+<% end %>
+
+-->

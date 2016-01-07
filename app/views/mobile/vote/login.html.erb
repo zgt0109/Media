@@ -1,0 +1,9 @@
+<% title @activity.try(:name) %>
+
+<% if @activity.vote_status_attrs[0].eql?(Activity::HAS_ENDED_NAME) || @activity_user.persisted? %>
+  <%= render "mobile/vote/diagram#{@activity.vote_item_type}", {results: @results, activity: @activity} if @activity.vote_item_type.to_i > 0 %>
+<% else %>
+  <%= render "mobile/vote/list#{@activity.vote_item_type}", {activity_vote_items: @activity_vote_items} if @activity.vote_item_type.to_i > 0 %>
+  <%= render "mobile/vote/form" %>
+<% end %>
+

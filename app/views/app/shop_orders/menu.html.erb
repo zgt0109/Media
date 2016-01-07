@@ -1,0 +1,84 @@
+<% provide(:title, '我要订餐') if @shop_order.book_dinner? %>
+<% provide(:title, '我要叫外卖') if @shop_order.take_out? %>
+<body>
+<div class="html">
+  <div class="main">
+    <header>
+      <a class="ico ico-menu ico-list">
+        <% if params[:category_id] %>
+        <%= ShopCategory.find_by_id(params[:category_id]).name %>
+        <% else %>
+        菜品类别
+        <% end %>
+        <i></i>
+      </a>
+      <%= link_to "购物车", confirm_app_shop_order_path(@shop_order, anchor: "mp.weixin.qq.com"), class: "btn-car" %>
+      <h1><%= @shop_order.shop_branch.try(:name) %></h1>
+    </header>
+    <section id="menu_list_section">
+      <%= render :partial =>
+          'app/shop_products/shop_product', :collection => @shop_products, :as => :product, :locals => {:shop_order => @shop_order} %>
+    </section>
+  </div><!-- main end -->
+</div><!-- html end -->
+
+<%= render "application/app_footer" %>
+
+<!-- 分类 -->
+<div class="pop-nav pop">
+  <div class="hd"><span>取消</span></div>
+  <div class="pop-bd">
+    <div class="hd">
+      <span>取消</span>
+    </div>
+    <div class="bd">
+      <dl>
+        <dt>
+        <!-- menu_app_shop_order_url(@shop_order) -->
+          <a href="<%= menu_app_shop_order_url(@shop_order) %>">
+            <span>全部 (<%= @shop_branch.shop.shop_products.count %>)</span>
+            <i class="ico ico-angle-right fr"></i>
+          </a>
+        </dt>
+        <dd></dd>
+      </dl>
+      <% @shop_branch.shop.shop_categories.visitable.each do |category| %>
+        <dl>
+          <dt>
+            <a href="?category_id=<%=category.id%>">
+              <span><%= category.name %> (<%= category.shop_products.count %>)</span>
+              <i class="ico ico-angle-right fr"></i>
+            </a>
+          </dt>
+          <dd></dd>
+        </dl>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(selector){
+  $(selector).fadeIn();
+  $(selector).find(".pop-bd").addClass("on");
+}
+function hide(selector){
+  $(selector).fadeOut();
+}
+</script>
+<script type="text/javascript">
+$(function(){
+  $(".pop-nav .hd, .pop-nav .pop-bg").on("click",function(){
+    $(".pop-nav").hide();
+  });
+  $(".pop-nav .bd a").on("click",function(){
+    var self=$(this),
+      bd=self.parent(".bd");
+    bd.find("a").removeClass("active");
+    self.addClass("active");
+    $(".pop-nav").hide();
+  });
+});
+</script>
+
+</body>

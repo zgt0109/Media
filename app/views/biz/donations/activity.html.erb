@@ -1,0 +1,72 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li>微捐款</li>
+      <li>类别设置</li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微门店；</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <%= form_for @activity, url: update_activity_donations_url, validate: true, class: "form" do |f| %>
+        <%= f.hidden_field 'activity_type_id' %>
+        <%= hidden_field_tag 'aid', @activity.id %>
+        <%= render "weixin_preview", wx_title: f.object.page_title || '标题', wx_summary: f.object.try(:summary) || '描述', wx_pic: (f.object.qiniu_pic_key.blank? ? '/assets/activity_pics/11.jpg' : f.object.qiniu_pic_url) %>
+        <div class="col-xs-12 col-md-6 col-lg-7">
+          <div class="form-group">
+            <label class="control-label">类别名称<span class="required-star">*</span></label>
+            <div class="clearfix">
+              <%= f.text_field :name,  class: "col-xs-6", placeholder: '请输入名称' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">回复关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">关键词不能和其他进行中的活动的关键词重复</small></label>
+            <div class="clearfix">
+              <%= f.text_field :keyword,  class: 'col-xs-6', validate: true, placeholder: '请输入关键字' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">微信消息标题<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息标题"></span></label>
+            <div class="clearfix">
+              <%= f.text_field :page_title, class: "col-xs-6", id: 'wx_title', placeholder: '请输入消息标题' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+            <div class="clearfix">
+              <div data-name="activity[qiniu_pic_key]" data-img = "<%= f.object.qiniu_pic_url %>" data-key="<%= f.object.qiniu_pic_key || "" %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+              <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
+            <div class="clearfix">
+              <%= f.text_area :summary, rows: 5, maxlength: 255, validate: true, id: 'wx_summary', class: 'form-control', placeholder: '请输入微信消息摘要' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <input type="submit" class="btn btn-sm btn-primary" value="保存">
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

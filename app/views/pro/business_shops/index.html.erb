@@ -1,0 +1,44 @@
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<%= render 'topbar' %>
+
+<div class="box-form form-col form-search table">
+  <%= form_for @search, url: business_shops_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+    <div class="tr" style="display:inline-table;">
+      <div class="first">
+        <%= f.text_field :name_like, class: 'input-text', style:"width:200px", placeholder:"请输入店铺名称" %>
+        <input type="submit" value="查询" class="form-submit btn btn-big">
+      </div>
+      <div style="float:right;">
+        <a class="btn btn-small btn-orange" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="新增店铺" data-url="<%= new_business_shop_path %>">新增</a>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="box-table">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show" id="rows">
+    <tr>
+      <th width="20%">店铺名称 </th>
+      <th width="10%">Logo</th>
+      <th width="15%">关键词</th>
+      <th width="8%">显示顺序</th>
+      <th>是否开启此功能</th>
+      <th width="25%">操作</th>
+    </tr>
+    <% if @business_shops.each do |business_shop| %>
+      <%= render 'row', business_shop: business_shop %>
+    <% end.blank? %>
+      <tr id="no-records">
+        <td colspan="6" class="green text-center">无记录</td>
+      </tr>
+    <% end %>
+  </table>
+  <p class="p-btn"></p>
+</div>
+
+<div class="ft">
+  <%= paginate @business_shops  %>
+</div>

@@ -1,0 +1,9 @@
+<%-@questions.each  do |question| %>
+  <li style="margin-top: 10px;margin-bottom: 10px;">
+    <%= image_tag question.pic_url %>
+    <span><%= question.title %></span>
+    <div class="ckeckbox">
+      <input type="checkbox" id="question_<%= question.id %>" class="question" value="<%= question.id %>" name="activity_question_ids[]">
+    </div>
+  </li>
+<%- end %>

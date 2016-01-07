@@ -1,0 +1,58 @@
+<div class="body">
+    <div class="u-head">
+        <img src="/assets/img/package/u-head.png" alt="">
+        <div class="text">个人资料</div>
+        <div class="u-mark">
+            <img src="/assets/img/package/mark.png" alt="">
+        </div>
+    </div>
+    <div class="scroll-box">
+        <div class="form-box">
+            <div class="wrap">
+                <div class="form-t">请留下您的联系方式领取奖品</div>
+                <div class="f-li">
+                    <div class="label">姓名</div>
+                    <input name="name"  type="text" class="input" placeholder="请输入您的姓名">
+                </div>
+                <div class="f-li">
+                    <div class="label">手机</div>
+                    <input name="mobile"  type="text" class="input" placeholder="请输入您的手机号码">
+                </div>
+                <div class="btn-box t-btn-box">
+                    <div class="cell">
+                        <a href="<%= mobile_unfolds_path(activity_id: @activity.try(:id), openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>" class="t-btn">取消</a>
+                    </div>
+                    <div class="cell">
+                        <a href="javascript:;" class="t-btn t-btn-yellow form-submit">确定提交</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.form-submit').on('click', function(){
+        var name = $('input[name=name]').val();
+        var mobile = $('input[name=mobile]').val();
+        if(!name){
+            alert('请输入您的姓名');
+        } else {
+            if(!mobile){
+                 alert('请输入您的手机号码');
+            } else {
+                var url = window.encodeURI("/<%= session[:supplier_id] %>/unfolds/update_info?mobile=" + mobile + "&name="+name);
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: url,
+                    dataType: 'json',
+                    success: function (data) {
+                         if (data.status && data.status == 'ok'){
+                            location.href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) %>"
+                         }
+                    }
+                })
+            }
+        }
+    });
+</script>

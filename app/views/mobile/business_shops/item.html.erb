@@ -1,0 +1,21 @@
+<div class="<%= 'mod-box' if @template_id == 1 %> box box-detail">
+  <dl>
+    <dt><span>商品名称:</span></dt>
+    <dd><%= @item.name %></dd>
+  </dl>
+  <% if @item.price.to_f > 0 %>
+  <dl>
+    <dt><span>会员价:</span></dt>
+    <dd>￥ <%= f @item.price %></dd>
+  </dl>
+  <% end %>
+  <dl>
+    <dt><span>商品描述:</span></dt>
+  </dl>
+  <dl>
+    <dd>
+      <p><%= @item.description.to_s.html_safe %></p>
+      <%= image_tag @item.pic %>
+    </dd>
+  </dl>
+</div>

@@ -1,0 +1,137 @@
+<% content_for(:title) { '答题' } %>
+<div id="wrapper">
+	<div id="header">
+		<h1 class="title_a">第<%= @answered_questions_count%>题</h1>
+	</div>
+
+	<div id="content">
+		<div class="tit_box"><span class="time fl" id="remaining-time">20:00</span><span class="jifen fr">目前积分：<span class="jifen_num"><%= @fight_report_card.score %></span></span></div>
+		<div class="bd_box">
+			<dl class="xz_list">
+				<dt>
+					<p><%= @question.fight_question.title %></p>
+					<% if @question.fight_question.qiniu_pic_key.present? %>
+						<p><img src="<%= @question.fight_question.pic_url %>"></p>
+					<% end %>
+				</dt>
+				<%if  @question.fight_question.answer_a %>
+				<dd data-answer="A" onclick="submit_answer('A')">A：<%= @question.fight_question.answer_a %></dd>
+				<%end%>
+				<%if  @question.fight_question.answer_b %>
+				<dd data-answer="B" onclick="submit_answer('B')">B：<%= @question.fight_question.answer_b %></dd>
+				<%end%>
+				<%if  @question.fight_question.answer_c and not "".eql?(@question.fight_question.answer_c) %>
+				<dd data-answer="C" onclick="submit_answer('C')">C：<%= @question.fight_question.answer_c %></dd>
+				<%end%>
+				<%if  @question.fight_question.answer_d and not "".eql?(@question.fight_question.answer_d) %>
+				<dd data-answer="D" onclick="submit_answer('D')">D：<%= @question.fight_question.answer_d %></dd>
+				<%end%>
+				<%if  @question.fight_question.answer_e and not "".eql?(@question.fight_question.answer_e) %>
+				<dd data-answer="E" onclick="submit_answer('E')">E：<%= @question.fight_question.answer_e %></dd>
+				<%end%>
+			</dl>
+		</div>
+	</div>
+
+</div>
+</div>
+
+<!--弹出层-->
+<div id="popDiv" class="mydiv mydiv2" style="display:none;">
+
+<!--弹出内容-->
+<!-- 对 -->
+<div id="alert-right" class="show_div" style="display:none;">
+	<div class='m-box1-bd ad-form-bd ad-form-bd2' style="padding-top:0px;">
+		<div style="padding:20px 18px;">
+			<p class="sn_info2 clear"><img src="/assets/fight/sure.png" /><span class="c888" style="position:relative; top:20px;">恭喜你，答对了!
+			</span></p>
+			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
+		</div>
+	</div>
+</div>
+<!-- 错 -->
+<div id="alert-wrong" class="show_div" style="display:none;">
+	<div class='m-box1-bd ad-form-bd ad-form-bd2' style="padding-top:0px;">
+		<div style="padding:20px 18px;">
+			<p class="sn_info2 clear"><img src="/assets/fight/errow.png" /><span class="c888">对不起，您的回答错误。<br />正确的答案是：</span><span class="c444" id="correct_answer"></span></p>
+			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
+		</div>
+	</div>
+</div>
+
+<!-- 超时 -->
+<div id="alert-timeout" class="show_div" style="display:none;">
+	<div class='m-box1-bd ad-form-bd ad-form-bd2' style="padding-top:0px;">
+		<div style="padding:20px 18px;">
+			<p class="sn_info2 clear"><img src="/assets/fight/errow.png" /><span class="c888" style="position:relative; top:20px;">对不起，您的回答超时。</span>
+			</p>
+			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
+		</div>
+	</div>
+</div>
+<!--弹出内容结束-->
+
+<!-- 下面的基本操作-->
+</div>
+<div id="bg" class="bg" style="display: none;"></div>
+<iframe class="popIframe" frameborder="0" style="display:none;" ></iframe>
+<!--弹出层结束-->
+
+<script type="text/javascript">
+var second = 20, msec = 0, speed = 0, is_submit = false, is_last_question = <%= @is_last_question%>;
+
+//if(second > 0 ) $('#pre-competition-read').fadeIn();
+window.onload = setTimeout(update_remaining_time,0);
+function update_remaining_time(){
+	if(!is_submit && (second > 0 || msec > 0)){
+		setTimeout(update_remaining_time,9);
+		if(--msec == -1){
+			msec = 98;
+			second --;
+		}
+		$('#remaining-time').text((second<10 ? '0' : '')+second+(msec<10 ? ':0' : ':')+msec);
+
+	}else if(!is_submit && second == 0 && msec == 0 ){
+		//console.log(new Date().getTime()-1379930000000);
+		submit_answer('')
+	}
+}
+
+function submit_answer(opt){
+	if(is_submit)return;
+	is_submit = true;
+	speed = 2000 - (second*100 + msec)
+	if(is_last_question){
+		$('.last_question').text('答题完成,查看结果')
+	}
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url: "/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&question_id=<%= @question.fight_question_id %>&fight_paper_question_id=<%= @question.id%>&user_answer="+opt+"&speed="+speed+"&m=answer",
+		dataType: 'json',
+		timeout:30000,
+		success: function (data) {
+			if(opt == data.correct_answer){
+				$('#bg').fadeIn();
+				$('#popDiv').fadeIn();
+				$('#alert-right').fadeIn();
+			}else if(opt){
+				$('#correct_answer').text(data.correct_answer)
+				$('#bg').fadeIn();
+				$('#popDiv').fadeIn();
+				$('#alert-wrong').fadeIn();
+			}else{
+				$('#bg').fadeIn();
+				$('#popDiv').fadeIn();
+				$('#alert-timeout').fadeIn();
+			}
+		},
+		error: function(e){
+			alert('网络错误');
+		}
+	});
+}
+</script>
+
+

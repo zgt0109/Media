@@ -1,0 +1,19 @@
+<%= form_for @red_packet, url: red_packet_update_follow_packet_path(@red_packet), method: 'post', html: {class: 'form-horizontal', role: 'form', style: 'line-height: 1.5;', method: 'put'} do |f| %>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="control-label col-xs-2">红包金额：</label>
+      <%= f.text_field :min_value, class: 'col-xs-5', placeholder: '输入1-200之间的整数' %>
+      <label class="control-label ml20">元</label>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-2">预算总额：</label>
+      <%= f.text_field :total_budget, class: 'col-xs-5', placeholder: '输入不小于1.00的数值' %>
+      <label class="control-label ml20">元</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <%= f.submit '确定', class: 'btn btn-sm btn-primary', data:{fn: 'submit'}%>
+    <!--<button type="button" class="btn btn-sm btn-primary" data-fn="submit">确定</button>-->
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>

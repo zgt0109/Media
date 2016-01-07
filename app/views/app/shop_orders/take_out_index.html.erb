@@ -1,0 +1,62 @@
+<% provide(:title, '我要叫外卖') %>
+<body>
+  <div class="html">
+    <div class="main">
+      <header>
+        <%= link_to take_out_app_shops_url(anchor: "mp.weixin.qq.com"), class: "ico ico-prev" do %>
+          <img src="/assets/micro_stores/ico-prev.png"/>
+        <% end %>
+        <h1>我的外卖</h1>
+      </header>
+
+      <section>
+        <div style="position:fixed;"></div>
+        <div class="box box-order-list">
+
+          <% if @shop_orders.empty? %>
+            <a class="box-null">暂无订单</a>
+          <% else %>
+            <%= render :partial => 'take_out_order', :collection => @shop_orders, :as => :order %>
+          <% end %>
+
+        </div>
+
+      </section>
+
+      <div class="jiazai">
+          <%= link_to_next_page @shop_orders, "<img src=\"/assets/loda.png\">努力加载中...".html_safe, :remote => true, id: "next_orders", :params => { :order_type => 2 }  %>
+      </div>
+    </div>
+  </div>
+  <style>
+  #no_record{
+    padding-left: 10px;
+    background:url("") no-repeat scroll 93% center #FFFFFF;
+    text-align: center;
+  }
+  #no_record:hover {
+    color: #888888;
+    display: block;
+    font-size: 24px;
+    line-height: 40px;
+    cursor: default;
+
+  }
+  </style>
+  <style>
+    .jiazai {
+      width: 75%;
+      margin: 0 auto;
+      padding: 6px;
+      text-align: center;
+    }
+    .jiazai a {
+      position: relative;
+      top: -5px;
+      color: #b0b0b0;
+      font-size: 12px;
+      padding-left: 5px;
+    }
+  </style>
+<%= render "application/app_footer" %>
+</body>

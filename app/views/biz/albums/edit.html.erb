@@ -1,0 +1,136 @@
+<% content_for :main_content do %>
+<% @photos ||= [] %>
+  <div class="main-content ">
+    <%= render "breadcrumb" %>
+    <div class="page-content">
+      <%= form_for @album, validate: true, html: { target: '_top' } do |f| %>
+        <%= hidden_field_tag :photo_ids %>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 建议尺寸：宽不超过640像素，可支持上传格式为：jpg、png、bmp、gif。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="control-label">相册名称</label>
+              <div class="clearfix">
+                <%= f.text_field :name, class: 'col-md-8' %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class=" control-label">浏览方式</label>
+              <div class="clearfix">
+
+                <div class="col-md-8 no-padding-left ">
+                  <% Album::BROWSING_WAYS.each do |k, v| %>
+                    <label class="col-md-4 no-padding-left">
+                      <%= f.radio_button :browsing_way, k, class: "ace" %>
+                        <span class="lbl"><%= v%>
+                          <div class="dropdown-hover">
+                            <span class="icon-question-sign dropdown-toggle" data-toggle="dropdown" data-target="#"></span>
+                            <div class="dropdown-menu dropdown-yellow dropdown-close" role="menu" aria-labelledby="dLabel">
+                              <%= image_tag "/assets/albums/sample#{k}.png" %>
+                            </div>
+                          </div>
+                        </span>
+                    </label>
+                  <% end %>
+                </div>
+
+              </div>
+            </div>
+            <div class="form-group margin-top-10 ">
+              <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">保存</button> 　
+              <%= link_to "取消", "/albums", class: "btn btn-sm btn-default" %>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group ">
+              <div class="vwebsitePicture col-xs-12 row">
+                <ul class="vphotos clearfix">
+                  <li class="active">
+                    <div class="cieldon-file color6" data-album-id="<%= @album.id.to_i > 0 && @album.id || -1 %>" data-type="5" data-height="96" data-width="176" title="按ctrl可多选"></div>
+                  </li>
+                  <% @photos.each do |photo| %>
+                    <%= render "photo", {photo: photo, album_id: @album.id} %>
+                  <% end %>
+                </ul>
+              </div>
+              <div class="clearfix"></div>
+              <span class="pull-left">
+                <a class="btn btn-primary btn-sm selectall" href="javascript:;">全选照片</a>
+                <a class="btn btn-primary btn-sm cancleall" href="javascript:;">全部取消</a>
+                <a href="javascript:;"  class="btn btn-primary btn-sm  vphoto_del" >删除照片</a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      <% if @album.cover_id.present? %>
+        $('#photo_<%= @album.cover_id %>').addClass('on').siblings().removeClass('on');
+      <% end %>
+      var ids = [];
+      //10-27 微相册
+      $(".vphotos li").hover(function(){
+        $(this).addClass("hover")
+        
+      },function(){
+        $(this).removeClass("hover")
+      });
+
+      $("body").on("click",".vphotos li img,input.check1",function(){
+        if($(this).parents("li").hasClass("checked")){
+            $(this).parents("li").removeClass("checked");
+            $(this).parents("li").find("input.check1").prop("checked",false);
+        }else{
+            $(this).parents("li").addClass("checked");
+            $(this).parents("li").find("input.check1").prop("checked",true);
+        }
+      }).on("click",".vphotos li .text",function(){
+        $(this).parents("li").addClass("on").siblings().removeClass("on")
+      }).on("click",".selectall",function(){
+              $(".vphotos li").addClass("checked");
+        $("input.check1").prop("checked",true);
+
+      }).on("click",".cancleall",function(){                  //11-7修改
+              $("input.check1").prop("checked",false);
+              $(".vphotos li").removeClass("checked");
+      }).on("click",".vphoto_del",function(){
+        if($(".vphotos .ace:checked").length > 0){
+          var  message=$(this).data('message')||"确定需要删除么？";
+          confirmMessage(message,function(){
+            $(".vphotos .ace:checked").each(function() {
+              ids.push($(this).val());
+            });
+            if(ids.length > 0){
+              var get_url = "<%= delete_photo_album_path(@album) if !@album.new_record? %>" + "?photo_ids=" + ids;
+              $.getJSON(get_url, function(data) {
+                if(data.type == "success"){
+                  $(".vphotos .ace:checked").each(function() {
+                    $(this).parents("li").remove();
+                  });
+                }
+              });
+            }
+          });
+        }else{
+          showTip('warning','请先选择照片！');
+        }
+      });
+      //11-7新增
+      var tit = $(".cieldon-file").attr("title");
+      $(".file-btn p").append(tit);
+
+    });
+  </script>
+<% end %>

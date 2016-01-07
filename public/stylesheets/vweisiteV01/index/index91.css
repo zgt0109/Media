@@ -1,0 +1,26 @@
+.html{background:#fff;}
+.box{overflow:hidden;display:block;text-align:center;}
+.box,
+.box a{color:#08537b;}
+.index{overflow:hidden;padding:0 10px;}
+.index li{width:50%;float:left;padding:10px 4%;}
+.mod-btn{font-size:18px;margin:0 auto;background:#e26601;color:#fff;margin:10px 3px;border-radius:5px;}
+.mod-index h1{height:22px;padding:0 10px 2px;margin-top:10px;overflow:hidden;text-align:left;position:relative;}
+.mod-index h1:before{display:inline-block;content:"";width:3px;height:20px;overflow:hidden;position:absolute;left:3px;top:0px;background:-webkit-gradient(linear, 0 0, 0 100%, from(#2f98d2), to(#116997));background:-webkit-linear-gradient(#2f98d2, #116997);background:linear-gradient(#2f98d2, #116997);}
+.mod-index small{display:block;height:20px;font-weight:bold;font-size:14px;line-height:20px;overflow:hidden;}
+.mod-index i{height:70px;line-height:70px;overflow:hidden;text-align:center;display:block;border:1px solid #dedede;padding:1px;background:-webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#f0f0f0));background:-webkit-linear-gradient(#fff, #f0f0f0);background:linear-gradient(#fff, #f0f0f0);}
+.mod-index .fa{font-size:50px;}
+.mod-index img{width:100%;min-height:100%;vertical-align:top;}
+.mod-btn .fa{margin:0 5px 0 0;}
+.btn-up-1{background:#999;}
+.btn-up-1 .fa{background:#fff;color:#999;}
+.navPop-1 .navPop-btn{background:#999;}
+.navPop-1 .navPop-btn .fa{background:#fff;color:#999;}
+.navPop-wrap>div a{background:#999;color:#fff;}
+footer a{color:#fff;}
+@media only screen and (max-width:1080px){
+}
+@media only screen and (min-width:1224px){
+}
+@media only screen and (max-width:320px){
+}

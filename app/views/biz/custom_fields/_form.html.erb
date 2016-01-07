@@ -1,0 +1,233 @@
+<%= form_for @field, validate: true do |f| %>
+  <%- if @field.new_record? %>
+    <%= f.hidden_field :customized_id, value: params[:customized_id] %>
+    <%= f.hidden_field :customized_type, value: params[:customized_type].classify %>
+  <%- end %>
+  <%= f.hidden_field :field_format, value: @field.field_format %>
+  <%= f.hidden_field :possible_values, value: @field.possible_options.join(',') %>
+  <div class="modal-body">
+    <div class="alert alert-block alert-info ">
+      <strong class="pull-left">提示：</strong>
+      <ul class="vwebsiteHeadAlert">
+        <li>1、常用字段为系统默认提供的一些字段名称；</li>
+        <li>2、自定义字段是你可以自由设定的字段。</li>
+      </ul>
+    </div>
+    <div class="VCFields">
+      <div class="select_type">
+        <label>
+          <input name="select_type" type="radio" class="ace" value="system" <%= 'disabled' if @field.persisted? %>>
+          <span class="lbl">常用字段</span>
+        </label>
+        <label>
+          <input name="select_type" type="radio" class="ace" value="custom" <%= 'disabled' if @field.persisted? %>>
+          <span class="lbl">自定义字段</span>
+        </label>
+      </div>
+
+      <div class="radio-tab-pane">
+        <div class="form-group">
+          <label id="field_type_label">字段名称</label><span class="fontWarn" id="field_type_tip">字段名称保存后不能修改</span>
+          <div>
+            <%= f.select :field_type, options_for_system_custom_fields, {}, {disabled: @field.persisted?} %>
+          </div>
+        </div>
+        <div class="form-group field_name">
+          <label>字段名称</label>
+          <div>
+            <%= f.text_field :name %>
+          </div>
+        </div>
+
+        <div class="form-group" id="field_option">
+        </div>
+      </div>
+      <div class="form-group values_list tags" id="values_list">
+          <%- @field.possible_options.each do |option| %>
+            <span class="tag remove-value"><%= option %><button type="button" class="close remove-option">×</button></span>
+          <%- end %>
+     </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-sm btn-primary field-submit" data-fn="submit" value="保存">
+    <input type="submit" class="btn btn-sm btn-primary field-submit has_next" value="保存并新增">
+    <%= hidden_field_tag :has_next %>
+  </div>
+<%- end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(function(){
+    $('.field_name').hide();
+    $('input[value=system]').prop('checked', true);
+    <%- if @field.persisted? %>
+      <%- if @field.custom? %>
+        $('input[value=custom]').prop('checked', true).click();
+      <%- end %>
+        $('#custom_field_field_type').val('<%= @field.field_type %>')
+    <%- end %>
+    $('#custom_field_field_type').change();
+  });
+
+  $('input[name=select_type]').on('click', function(){
+    var select_type = $('input[name=select_type]:checked').val();
+    if (select_type == "system"){
+      $('#custom_field_field_type').html('<%= options_for_system_custom_fields.squish.html_safe %>');
+      $('#field_type_label').html('字段名称');
+      $('#field_type_tip').html('字段名称保存后不能修改');
+      $('#field_option').html('');
+      $('#values_list').hide();
+      $('.field_name').hide();
+    }else{
+      $('.field_name').show();
+      $('#field_type_label').html('字段类型');
+      $('#field_type_tip').html('字段类型保存后不能修改');
+      $('#custom_field_field_type').html('<%= options_for_custom_custom_fields.squish.html_safe%>');
+    }
+    $('#custom_field_field_type').change();
+  });
+
+  $('.modal-body').on('change', '#custom_field_field_type', function(){
+    var option = $(this).find("option:selected"),
+    values = option.data('values'),
+    format = option.data('format'),
+    name = option.text();
+    $('#values_list').hide();
+    if ( jQuery.inArray(name, ["单行文本", "多行文本", "单选框", "复选框", "下拉框", "日期和时间"]) == -1){
+      <%- if @field.new_record? %>
+      $('#custom_field_name').val(name);
+      <% else %>
+      $('#custom_field_name').val('<%= @field.name %>');
+      <%- end %>
+      showInputOptions(name, values);
+      $('#custom_field_possible_values').val(values);
+    }else{
+      $('#custom_field_name').val('<%= @field.name %>');
+      $('#custom_field_possible_values').val('<%= @field.possible_options.join(',') %>')
+      showInputOptions(name, '<%= @field.possible_options.join(',') %>');
+      $('#custom_field_placeholder').val('<%= @field.placeholder %>');
+    }
+    $('#custom_field_field_format').attr('value', format);
+  });
+
+  var showInputOptions = function(input_type, options){
+    var options_html = '', html = '';
+    $('#field_option').html('');
+    switch(input_type){
+      case '单行文本':
+      html = '<label>文本框默认值</label><span class="fontWarn">提示文字，如：请输入你的电话号码</span><div><input name="custom_field[placeholder]" id="custom_field_placeholder"  type="text" size="30" /></div>'
+      $('#field_option').html(html);
+      break;
+      case '多行文本':
+      html = '<label>文本框默认值</label><span class="fontWarn">提示文字，如：请输入你的电话号码</span><div><textarea name="custom_field[placeholder]" id="custom_field_placeholder" style="margin: 0px; width: 219px; height: 66px;" /></div>'
+      $('#field_option').html(html);
+      break;
+      case '性别':
+      case '婚姻状况':
+      case '星座':
+      case '血型':
+      case '生肖':
+      case '学历':
+        options.forEach(function(text){
+          options_html += '<span class="tag remove-value">'+ text + '</span>'
+        });
+        $('#values_list').html(options_html);
+        if (options.length){
+          $('#values_list').show();
+        }
+        break;
+      case '单选框':
+      case '复选框':
+      case '下拉框':
+        if (options.length){
+          options = options.split(',')
+          options.forEach(function(text){
+            options_html += '<span class="tag remove-value">'+ text + '</span>'
+          });
+          $('#values_list').html(options_html).show();
+        }else{
+          $('#values_list').html('').hide();
+        }
+        html = '<label>相关参数设置</label><span class="fontWarn">提供用户选择的选项，如：购物、旅游</span><div><input class="custom_field_values pull-left" type="text" size="30"/><a class="btn btn-sm btn-primary add-option pull-left">添加</a><div class="clearfix"></div></div>'
+        $('#field_option').html(html);
+        break;
+      default:
+      break;
+    }
+  };
+
+  $('.field-submit').on('click', function(){
+    var name = $('#custom_field_name').val();
+    var has_next = $(this).hasClass('has_next');
+    if (has_next){
+      $('#has_next').val('has_next');
+    }else{
+      $('#has_next').val('no_next');
+    }
+    <%- if @field.new_record? %>
+    var exists_names = <%= raw @object.custom_fields.normal.pluck(:name).to_json %>;
+    <%- else %>
+    var exists_names = <%= raw @object.custom_fields.normal.where("id != ?", @field.try(:id)).pluck(:name).to_json %>;
+    <%- end %>
+    if ($.inArray(name, exists_names) >= 0){
+      showTip('warning', '字段名称重复，请重新选择字段名称');
+      return false;
+    }else{
+      removeErrorMessage($('#custom_field_name'));
+      var field_format = $('#custom_field_field_format').val();
+      var possible_values = $('#custom_field_possible_values').val().split(',');
+      if(field_format == "select" || field_format == "checkbox" || field_format == "radio"){
+        if (possible_values.length < 2){
+          showTip('warning', '请添加至少2个选项');
+          return false;
+        }
+      }
+    }
+  });
+$('.modal-body').on('keyup', '.custom_field_values', function(){
+  removeErrorMessage($('.custom_field_values'));
+});
+
+
+$('.modal-body').on('click', '.add-option', function(){
+  var input = $('.custom_field_values'),
+  possible_values,
+  value = input.val(),
+  html='<span class="tag remove-value">'+value+'<button type="button" class="close remove-option">×</button></span>';
+  if ($('#custom_field_possible_values').val() == '[]'){
+    possible_values = [];
+  }else{
+    possible_values = $('#custom_field_possible_values').val().split(',');
+    possible_values = possible_values.filter(function(e){return e});
+  };
+  if(value){
+    if ($.inArray(value, possible_values) >= 0){
+      showTip('warning', '选项重复，请重新输入要添加的选项');
+    }else{
+      possible_values.push(value);
+      $('#custom_field_possible_values').val(possible_values.join(','));
+      $('#values_list').append(html).show();
+      $('.custom_field_values').val('');
+    }
+  }
+});
+
+$('.modal-body').on('click', '.remove-option', function(){
+  var select_type = $('input[name=select_type]:checked').val();
+  if (select_type == "system"){
+    showTip("warning", "常用字段的选项不能删除");
+  }else{
+    var removeItem = $(this).parents('.remove-value').text().slice(0, -1),
+    possible_values = $('#custom_field_possible_values').val().split(','),
+    values = jQuery.grep(possible_values, function(value) {  return value != removeItem; });
+    $('#custom_field_possible_values').val(values.join(','));
+    $(this).parent().fadeOut(function(){
+      $(this).remove();
+    })
+  }
+});
+</script>
+<% end %>

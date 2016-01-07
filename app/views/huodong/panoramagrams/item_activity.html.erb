@@ -1,0 +1,72 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微互动', activities_path %></li>
+      <li><%= link_to '360全景', panoramagrams_path %></li>
+      <li><%= link_to '全景图管理', list_panoramagrams_path %></li>
+      <li><%= link_to '配置微信消息', '#' %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li>
+          <a href="<%= panoramagrams_path %>">
+            基础设置
+          </a>
+        </li>
+        <li class="active">
+          <a href="<%= list_panoramagrams_path %>">
+            全景图管理
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-sm-12">
+              <%= form_for @activity, url: @activity.new_record? ? item_activity_create_panoramagram_path(@panoramagram) : item_activity_update_panoramagram_path(@panoramagram), validate: true, class: "form" do |f| %>
+                <%= render "weixin_preview", wx_title: f.object.try(:name) || '标题', wx_summary: f.object.try(:summary) || '描述' %>
+                <div class="col-xs-12 col-md-6 col-lg-7">
+                  <div class="form-group">
+                    <label class="control-label">回复关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">关键词不能和其他进行中的活动的关键词重复</small></label>
+                    <div class="clearfix">
+                      <%= f.text_field :keyword, class: 'col-xs-6', validate: true, placeholder: '请输入该全景图对应的关键字' %>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">微信消息标题<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息标题"></span></label>
+                    <div class="clearfix">
+                      <%= f.text_field :name, class: "col-xs-6", id: 'wx_title', value: @activity.name || @panoramagram.name %>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+                    <div class="clearfix">
+                      <div data-name="activity[qiniu_pic_key]" data-img = "<%= f.object.qiniu_pic_url || f.object.default_pic_url %>" data-key="<%= f.object.qiniu_pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[f.object.activity_type_id] : f.object.qiniu_pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+                      <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
+                    <div class="clearfix">
+                      <%= f.text_area :summary, rows: 5, maxlength: 255, validate: true, id: 'wx_summary', class: 'form-control', placeholder: '请输入微信消息摘要' %>
+                    </div>  
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                    <input type="reset" class="btn btn-sm btn-default" value="返回" onclick="javascript:location.href='<%= list_panoramagrams_path %>'">
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

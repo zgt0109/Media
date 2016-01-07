@@ -1,0 +1,34 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_life' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent">生活小助手</a>
+<% end %>
+
+
+<div class="box-list">
+  <p class="p-note">提示：为用户在微信上提供方便智能的生活小助手服务，让您的微信公众账号更受欢迎。</p>
+  <ul class="pluin-list fl">
+    <% @assistants.each_with_index do |a,i| %>
+        <li class="<%= first_or_last i %>">
+          <div class="pluin-hd">
+          <span>
+            <%= image_tag a.pic.try(:thumb) if a.pic.try(:thumb).present? %>
+            <i><%= a.name %></i>
+          </span>
+          </div>
+          <div class="pluin-bd">
+            <%= truncate a.description, length: 40 %>
+          </div>
+          <div class="pluin-ft">
+            <% if a.open_status current_user.id %>
+                <%= link_to " ", toggle_assistant_suppliers_path(id: a.id), method: :post, remote: true, class: "btn-pluin pluin-open", id:"toggle_#{a.id}" %>
+            <% else %>
+                <%= link_to " ", toggle_assistant_suppliers_path(id: a.id), method: :post, remote: true, class: "btn-pluin pluin-close", id:"toggle_#{a.id}" %>
+            <% end %>
+          </div>
+        </li>
+    <% end %>
+  </ul>
+</div>

@@ -1,0 +1,10 @@
+<ul class="box-nav box important">
+  <li class="<%= ['ec_shops'].include?(controller_name) ? "current pagecurrent" : '' %>"><%= link_to ec_shops_path do %><span>基本信息</span><i></i><% end %></li>
+  <li class="<%= ["ec_ads"].include?(controller_name) ? "current pagecurrent" : '' %>"><%= link_to ec_ads_path do %><span>轮播图片</span><i></i><% end %></li>
+  <li class="<%= ["ec_seller_cats"].include?(controller_name) ? "current pagecurrent" : '' %>"><%= link_to ec_seller_cats_path do %><span>分类管理</span><i></i><% end %></li>
+  <li class="<%= ["ec_items"].include?(controller_name) ? "current pagecurrent" : '' %>"><%= link_to ec_items_path do %><span>商品管理</span><i></i><% end %></li>
+  <li class="<%= ["ec_orders"].include?(controller_name) ? "current pagecurrent" : '' %>"><%= link_to ec_orders_path do %><span>订单查询</span><i></i><% end %></li>
+  <li class="<%= current_page?(alipay_suppliers_path) ? "current pagecurrent" : '' %>"><%= link_to alipay_suppliers_path do %><span>支付设置</span><i></i><% end %></li>
+	<% auth_token = current_user.find_or_generate_auth_token %>
+	<li class="hidden"><%= link_to ((Rails.env=='production') ? "http://ec.winwemedia.com/admin/site/wx_settings?auth_token=#{auth_token}" : "http://ec.testing.winwemedia.com/admin/site/wx_settings?auth_token=#{auth_token}") do %><span>微电商新版</span><i></i><% end %></li>
+</ul>

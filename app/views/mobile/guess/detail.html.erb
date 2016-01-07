@@ -1,0 +1,17 @@
+<div class="page-question">
+  <div class="title">
+    <%= image_tag @question.pic_url %>
+    <p><%= @question.title %></p>
+  </div>
+  <ul class="answers">
+    <%- @answers.each do |key, value| %>
+      <li data-key="<%= key %>"><%= value %></li>
+    <%- end %>
+  </ul>
+  <p class="sub"><a href="javascript:void(0)" class="btn submit_answer">确定</a></p>
+</div>
+<%- if @error.present? %>
+  <div class="prompt guess_errors">
+    <p><%= @error %></p>
+  </div>
+<%- end %>

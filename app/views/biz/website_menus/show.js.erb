@@ -1,0 +1,71 @@
+var str = '<option value=""></option>';
+var rel  = parseInt("<%= params[:rel].to_i %>");
+var type = parseInt("<%= params[:type].to_i %>");
+var current_select = $("#menu_category_id" + rel);
+var next_select = $("#menu_category_id" + (rel + 1));
+var select_start = '<select style="margin-left: 5px;" class="menu_category" id="menu_category_id' + (rel + 1) + '" name="menu_category_id' + (rel + 1) + '" rel="' + (rel + 1) + '" ';
+if($('.menu_category').length >= 4){
+    select_start += ' style="margin-top: 10px;" ';
+}
+select_start += '>';
+var select_end = '</select>';
+var next_select_start_val = "<%= @website_menu.children.order(:sort).first.try(:id) %>";
+
+
+<% @website_menu.children.order(:sort).each_with_index do |child, index| %>
+    if(!$('#website_menu_id').val()){
+        str += '<option value="<%= child.id%>"><%= child.name %></option>'
+    }else{
+        if(!($('#website_menu_id').val() == "<%= child.id %>")){
+            str += '<option value="<%= child.id%>"><%= child.name %></option>'
+        }
+    }
+<% end %>
+
+if(rel != 0){
+    if(next_select.length == 0){
+        current_select.after(select_start + str + select_end);
+    }else{
+        next_select.html(str);
+    }
+
+    if($('.menu_category:visible:last').val()){
+        $(".hidden_menu_category_id").val($('.menu_category:visible:last').val());
+    }else{
+        if($('.menu_category:visible:last').prev().val()){
+            $(".hidden_menu_category_id").val($('.menu_category:visible:last').prev().val());
+        }else{
+            $(".hidden_menu_category_id").val(0);
+        }
+    }
+
+
+    if(str == '<option value=""></option>'){
+       $.each($('.menu_category'), function(){
+            if(parseInt($(this).attr('rel')) > rel){
+                $(this).remove();
+            }
+       });
+
+
+    }else{
+
+        $("#menu_category_id" + (rel + 1)).show();
+
+        if($("#menu_category_id" + (rel + 1)).val() == "-1"){
+
+        }else{
+            $.ajax({
+                type: "GET",
+                url: "/website_menus/" + $("#menu_category_id" + (rel + 1)).val() + "?rel=" + (rel + 1) + "&&type=" + type,
+                success: function(data) {
+                    return false;
+                },
+                error: function() {
+                    return false;
+                }
+            });
+        }
+    }
+}
+

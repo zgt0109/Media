@@ -1,0 +1,64 @@
+<div class="col-md-12 no-padding" id='console_data'>
+<div class="col-md-3" id="subscribe_count">
+  <div class="infobox infobox-green width-100">
+    <div class="infobox-icon">
+      <i class="icon-smile"></i>
+    </div>
+    <div class="infobox-data ">
+      <span class="infobox-data-number"><%= @total_subscribe_count %></span>
+
+      <div class="infobox-content "><span class="infobox-green">关注数</span></div>
+    </div>
+    <div class="details">
+      <span><br/>昨日新增:<%= @yesterday_subscribe_count %></span></div>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="infobox infobox-blue width-100">
+    <div class="infobox-icon">
+      <i class="icon-twitter"></i>
+    </div>
+    <div class="infobox-data">
+      <span class="infobox-data-number"><%= @total_vip_user_count %></span>
+
+      <div class="infobox-content"><span class="infobox-blue">会员卡数</span></div>
+    </div>
+    <div class="details"><span><br/>昨日新增:<%= @yesterday_vip_user_count %></span></div>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="infobox infobox-pink width-100">
+    <div class="infobox-icon">
+      <i class="icon-bar-chart"></i>
+    </div>
+    <div class="infobox-data">
+      <span class="infobox-data-number"><%= @total_pv_count %></span>
+      <div class="infobox-content"><span class="infobox-pink">浏览量</span></div>
+    </div>
+    <div class="details">
+      <span><br/>昨日:<%= @yesterday_piwik_site.try(:nb_actions) || 0 -%></span>
+    </div>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="infobox infobox-red width-100">
+    <div class="infobox-icon">
+      <i class="icon-user"></i>
+    </div>
+    <div class="infobox-data">
+      <span class="infobox-data-number"><%= @total_uv_count %></span>
+
+      <div class="infobox-content"><span class="infobox-red">访客数</span></div>
+    </div>
+    <div class="details">
+      <table>
+        <tr>
+          <td><br/>昨日新增:</td>
+          <td><br/><%= @yesterday_piwik_site.try(:nb_visits) || 0 -%></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div>

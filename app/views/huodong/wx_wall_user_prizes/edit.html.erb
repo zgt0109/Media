@@ -1,0 +1,19 @@
+<%= form_tag wx_wall_user_prize_path(@wx_wall), :method => :put do %>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group margin-top-20">
+          <div class="clearfix">
+            <%= text_field_tag :sn_code, nil, class: 'col-xs-12', placeholder:"请输入SN码" %>
+            </div>
+          </div>
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">查询奖品</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% content_for :custom_js do %>
+  <% end %>

@@ -1,0 +1,12 @@
+.box-solution .bd{ padding:5px 3%; overflow:hidden;}
+.box-solution .bd a{ margin:10px 2.5%; float:left;}
+.li-ico{ width:105px; min-height:125px; text-align:center;}
+.li-ico span{ line-height:25px;}
+.box-solution .bd a.li-weixin{ width:97px;margin:10px 1.5%;}
+.li-weixin img{ box-shadow:0 0 3px #000;}
+.li-weixin .li-img{height:39px; text-align:justify; padding:5px 0;}
+.li-weixin .li-img img{ border:1px solid #ccc; padding:2px; box-shadow:none; float:left; margin:0 5px 0 0;}
+.li-weixin .li-img span.td{ width:50%;}
+.box-ft{ background:#fff; border-top:1px solid #d0d1d2; padding:20px 0; font-size:18px; color:#444; margin:90px 0 0 0;}
+.box-ft p{ padding:10px 0 20px 0;}
+.btn{ background:#00a1be; border:1px solid #008ea7; border-bottom-width:2px; height:44px; line-height:44px; width:220px; border-radius:2px; color:#fff; font-size:24px;}

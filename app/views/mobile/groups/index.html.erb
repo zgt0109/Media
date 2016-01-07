@@ -1,0 +1,95 @@
+<% title @group.name %>
+<div class="select clear">
+  <div class="select_tab select_tab2 <%#= 'hide' if @supplier.mall %>">
+    <span class="selectli"><i class="navd navd1 marr4"></i><i class="litxt"><%= @category.try(:name).presence || '类别' %></i> <i class=" fa fa-caret-down"></i></span>
+  </div>
+  <!--div class="select_tab <%#= 'hide' unless @supplier.mall %>">
+      <span class="selectli"><i class="navd navd1 marr4"></i><i class="litxt"><%#= @category.try(:name).presence || '类别' %></i> <i class="right fa fa-caret-down"></i></span>
+      <span class="selectli"><i class="navd navd2 marr4"></i><i class="litxt"><%#= params[:category_name].presence || '商圈' %></i> <i class="right fa fa-caret-down"></i></span>
+    </div-->
+  <div class="select_list auto categories">
+    <div class="select_left" style="<%#= 'width: 100%' if @group.group_categories.unroot.blank? %>">
+      <ul>
+        <% @categories.each_with_index do |c, i| %>
+            <li class="<%= 'on' if (@category.try(:root).try(:id) == c.id || (i == 0 && params[:category_id].blank?)) %>" data-id='<%= c.id %>' data-url='<%= mobile_groups_url(supplier_id: @supplier.id, category_id: c.id) %>' data-children-count='<%= c.children.count %>'>
+              <%= c.name %>
+            </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="select_right">
+      <% @categories.each_with_index do |c, i| %>
+          <%# next unless c.has_children? %>
+          <ul class="<%= 'show' if (@category.try(:root).try(:id) == c.id || (i == 0 && params[:category_id].blank?)) %>">
+            <% c.children.each do |child| %>
+                <li><%= link_to child.name, mobile_groups_url(supplier_id: @supplier.id, category_id: child.id) %></li>
+            <% end %>
+          </ul>
+      <% end %>
+    </div>
+  </div>
+  <!--div class="select_list auto mall-categories">
+    <div class="select_left" style='width: 100%'>
+      <ul>
+      </ul>
+    </div>
+    <!--div class="select_right">
+    </div>
+  </div-->
+</div>
+<div class="sp_list">
+  <ul>
+    <% @group_items.each do |item| %>
+        <li>
+          <%= link_to mobile_group_item_url(supplier_id: @supplier.id, id: item) do %>
+              <span class="left"><%= image_tag item.pic if item.pic? %></span>
+              <div class="auto">
+                <div class="h6"><%= item.name %></div>
+                <p><%= item.summary %></p>
+                <div class="auto price">
+                  <div class="left"><strong>￥<%= f item.price %></strong><span class="del padm2">￥<%= f item.market_price %></span></div>
+                  <div class="right">已售<%= item.group_orders.sum(&:qty) %></div>
+                </div>
+              </div>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :bgshadow do  %><div class="bgshadow"></div><% end %>
+
+<script>
+    $(function(){
+        $('.select').positionSticky();
+        <%# if @supplier.mall %>
+        //$.ajax({
+        //    type: "GET",
+        //    url: "<%#= WMALL_HOST %>/api/categories.json?supplier_id=<%#= @supplier.id %>",
+        //    dataType: "json",
+        //    success: function(data){
+        //      if(data.length >= 1){
+        //        var html = '';
+        //        for(var i=0; i<data.length; i++){
+        //          if(data[i]['name'] == '<%#= params[:category_name].to_s %>'){
+        //            html += '<li class="on" data-url="<%#= mobile_groups_path(supplier_id: @supplier.id) %>?category_name='+ data[i]['name'] +'" data-children-count="0">'+data[i]['name']+'</li>';
+        //            //$('.mall-categories .select_right').append('<ul class="show"></ul>');
+        //          }
+        //          else{
+        //           html += '<li data-url="<%#= mobile_groups_path(supplier_id: @supplier.id) %>?category_name='+ data[i]['name'] +'" data-children-count="0">'+data[i]['name']+'</li>';                
+        //            //$('.mall-categories .select_right').append('<ul class="" style="display: none;"></ul>');
+        //          }
+        //        }
+        //        $('.mall-categories .select_left ul').html(html);
+        //      }
+        //    }
+        //});
+        <%# end %>
+        $(document).on('click', '.categories .select_left ul li, .mall-categories .select_left ul li', function(){
+            //if(parseInt($(this).attr('data-children-count')) <= 0){
+            window.location.href = $(this).attr('data-url');
+            //}
+        });
+
+    });
+</script>

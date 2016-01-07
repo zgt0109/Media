@@ -1,0 +1,30 @@
+  <% content_for :main_content do %>
+  <div class="main-content">
+  <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li>
+          <i class="icon-home home-icon"></i>
+          <a href="#">首页</a>
+        </li>
+        <li>
+         微硬件
+       </li>
+       <li>微小票机</li>
+     </ul>
+     <%= render '/layouts/qrcode' %>
+   </div>
+    <div class="page-content">
+      <div class="row">
+        <%= link_to '导出EXCEL', recepit_export_path(format: :xls), class: 'btn btn-primary btn-sm btn-filter margin-left-5' %>
+        <ul>
+        <% @print_orders.each do |order| %>
+        <li>  
+          <%= order.shop_order.try(:order_no) %>  |  <%= order.status_name %> | <%= order.created_at %> | <%= link_to "跳过", skip_shop_order_path(order), method: :post %>  | <a href="javascript:;" data-toggle="modals" data-target="addDish" data-title="订单详情" data-height="400" data-iframe="<%= shop_order_url(order.shop_order) %>">详情</a>
+          <br/>
+        </li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <% end %>

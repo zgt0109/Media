@@ -1,0 +1,23 @@
+<% if @user_prizes.present? %>
+  <div class="note">请通过关键字“<span><%= @wx_wall.award_keyword %></span>”获取兑奖SN码</div>
+  <div class="name-list">
+    <ul>
+      <% @user_prizes.group_by { |user_prize| user_prize.wx_wall_prize_id }.each_with_index do |(prize_id, user_prizes), index| %>
+        <li class="<%= "top-#{index + 1}" if index < 3 %>">
+          <div class="num-img">
+            <span><%= user_prizes.first.prize_grade %></span>
+            <%= image_tag qiniu_img_url(user_prizes.first.prize_pic), width: 145 %>
+          </div>
+          <div class="user">
+	          <% user_prizes.each do |user_prize| %>
+              <div class="user-box">
+                <img src="<%= user_prize.avatar_url %>" width="60" height="60">
+                <span><%= user_prize.nickname %></span>
+              </div>
+	          <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

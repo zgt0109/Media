@@ -1,0 +1,118 @@
+<%= stylesheet_link_tag 'v5.1/code', 'v5.1/iconfont' %>
+<%= javascript_include_tag 'v5.1/code' %>
+<% content_for(:title) { '优折码' } %>
+
+<div class="section1">
+  <div class="w1200 bc pr item_main">
+    <div class="ele2 pa">
+      <img width="557" height="216" src="/assets/v5.1/code/banner1_ele1.png" alt="" title="" />
+    </div>
+    <div class="ele1 pa">
+      <img class="phone_bg pa" src="/assets/v5.1/code/phone.png" height="456" width="313" alt="" title="" />
+      <img class="fxt pa" src="/assets/v5.1/code/fxt.png" height="296" width="217">
+    </div>
+  </div>
+</div>
+<div class="section2">
+  <div class="w1200 bc pr">
+    <div class="se2_title tc">
+      <h1>微枚迪优折码</h1>
+      <p>附有涂层的二维码，移动互联网连接器</p>
+    </div>
+    <div class="clearfix pr se2_content">
+      <div class="fl se2_left pr">
+        <div class="se2_top pa">
+          <h2>优折码是一种附有涂层的二维码</h2>
+          <div class="se2_text">
+            <p>涂层二维码具有不可扫描的特性，可保证有价礼品的唯一获取。</p>
+            <p>涂层二维码具有一定的神秘感，可利用用户猎奇心理引领扫码，帮助用户获取真实有效粉丝。</p>
+          </div>
+        </div>
+        <img src="/assets/v5.1/code/sel.jpg" class="block pa transition" height="299" width="596" />
+      </div>
+
+      <div class="fr se2_right pr">
+        <div class="pa codeBg transition">
+          <img src="/assets/v5.1/code/ser1.png" class=" pa block" height="322" width="596">
+        </div>
+        <div class="se2_top pa">
+          <h2>优折码是移动互联网连接器</h2>
+          <div class="se2_text">
+            <p>以线下商品为流量入口，在商品上贴有或印刷涂层二维码，连接线下消费群体，建立商业新连接。</p>
+            <p>连接商家与粉丝、挖掘商品背后的营销价值、成为高价值营销活动最便捷的入口。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="section3">
+  <div class="w1200 bc pr">
+    <div class="se2_title tc">
+      <h1>连接商家与粉丝</h1>
+      <p>一物一码，连接线下消费群体，快速汇聚真实有效粉丝</p>
+    </div>
+    <div class="se3_content pr">
+      <div class="pa se3_item1">
+        <img class="block" src="/assets/v5.1/code/item3.png" width="313" height="456" />
+      </div>
+      <div class="pa se3_item2">
+        <img class="block" src="/assets/v5.1/code/business.png" height="504" width="576">
+      </div>
+      <div class="pa se3_item3">
+        <img class="block" src="/assets/v5.1/code/item1.png" width="262" height="477" />
+      </div>
+      <a href="<%= micro_channel_path %>" class="se3_more pa block tc">更多详情</a>
+    </div>
+  </div>
+</div>
+<div class="section4">
+  <div class="w1200 bc pr">
+    <div class="se2_title tc">
+      <h1>挖掘商品背后的营销价值</h1>
+      <p>依据商品自身属性，售卖衍生品，挖掘商品背后的营销价值</p>
+      <a class="sec_btn block bc tc" href="<%= fxt_path %>">更多详情</a>
+    </div>
+    <div class="pa se4_phone">
+      <img class="pa block se4_item1" src="/assets/v5.1/code/icon_1.png" width="437" height="621" />
+      <img class="pa block se4_item2" src="/assets/v5.1/code/icon_2.png" height="621" width="340" />
+      <img class="pa block se4_item3" src="/assets/v5.1/code/icon_3.png" height="621" width="437" />
+    </div>
+  </div>
+</div>
+<div class="section5">
+  <div class="w1200 bc pr">
+    <div class="se2_title tc">
+      <h1>成为高价值营销活动最便捷的入口</h1>
+      <p>扫码立即参与活动，更灵活、更便捷</p>
+    </div>
+    <div class="clearfix pr se5_content">
+      <div class="fl se5_itme1 pr">
+        <div class="se5_title pa">
+        </div>
+        <img src="/assets/v5.1/code/se5itme1.jpg" class="block pa transition"/>
+      </div>
+      <div class="fl se5_itme2 pr">
+        <img src="/assets/v5.1/code/se5itme2.jpg" class="block pa transition" />
+        <div class="se5_title pa">
+        </div>
+      </div>
+      <div class="fl se5_itme3 pr">
+        <img src="/assets/v5.1/code/se5itme3.jpg" class="block pa transition" />
+        <div class="se5_title pa">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+    <!--[if lt IE 10]> 
+    <script type="text/javascript"> 
+        $(function(){
+           $(".se4_item1").css({"opacity":"1","left":"-330px"});
+           $(".se4_item3").css({"opacity":"1","left":"215px"});
+        })
+    </script> 
+    <![endif]-->
+<% end %>

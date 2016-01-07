@@ -1,0 +1,2 @@
+<%= link_to '餐桌预定总览', shop_table_settings_url, class: "h1 #{(action_name == 'index' || action_name == 'edit') ? 'pagecurrent' : 'uncurrent' }" %>
+<%= link_to '桌位库设置', shop_table_setting_url(@shop_branch), class: "h1 #{action_name == 'show' ? 'pagecurrent' : 'uncurrent' }" %>

@@ -1,0 +1,216 @@
+<%
+unless @mobile_footer_rendered
+  @mobile_footer_rendered = true
+%>
+<%- if !Rails.env.development? %>
+  <%- wx_config = wx_config(@wx_mp_user, request.url) %>
+  <%= @supplier.try(:piwik_js_code) %>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" language="JavaScript"></script>
+  <script type="text/javascript">
+    var WeixinCustomEvent = {};
+
+    // initialize the hidden element for avoid some errors 
+    WeixinCustomEvent.initialize = function() {
+      target = document.getElementById("weixin-custom-event-id");
+
+      if (!target) {
+        target = document.createElement("input");
+        target.type = "hidden";
+        target.id = "weixin-custom-event-id";
+        target.class = "weixin-custom-event";
+
+        document.body.appendChild(target);
+      }
+    };
+
+    WeixinCustomEvent.send = function (event, data, element) {
+      var  e;
+      if ((!event) || ((typeof event) != 'string'))
+        return false;
+
+      if (!element) {
+        target = document.getElementById("weixin-custom-event-id");
+
+        if (!target) {
+          // Create default element
+          //target = document.createElement("<input type='hidden' id='weixin-custom-event-id' class='weixin-custom-event' />");
+          target = document.createElement("input");
+          target.type = "hidden";
+          target.id = "weixin-custom-event-id";
+          target.class = "weixin-custom-event";
+
+          document.body.appendChild(target);
+        }
+      }
+      else {
+        if (typeof element == 'string') {
+          target = document.getElementById(element);
+        }
+        else {
+          target = element;
+        }
+      }
+
+      if ((target) && (document.createEvent)) {
+        e = document.createEvent('CustomEvent');
+        e.initCustomEvent(event, true, false);
+        e.data = data;
+
+        target.dispatchEvent(e);
+
+        return true;
+      }
+
+      return false;
+    };
+
+    WeixinCustomEvent.initialize();
+
+  </script>
+  <script type="text/javascript">
+    wx.config({
+      debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: '<%= wx_config["app_id"] %>', // 必填，公众号的唯一标识
+      timestamp: '<%= wx_config["timestamp"] %>', // 必填，生成签名的时间戳
+      nonceStr: '<%= wx_config["noncestr"] %>', // 必填，生成签名的随机串
+      signature: '<%= wx_config["signature"] %>',// 必填，签名，见附录1
+      jsApiList: [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'closeWindow',
+        'scanQRCode'
+      ]
+    });
+
+
+    <%- if @wx_mp_user.present? && (@wx_mp_user.auth_subscribe? || @wx_mp_user.auth_service?) %>
+      <%
+      @share_image ||= @website_menu.try(:pic).to_s
+      @share_image = @supplier.try(:website).try(:logo).to_s if @share_image.blank?
+      @share_image = qiniu_image_url(@supplier.try(:website).try(:logo_key).to_s) if @share_image.blank?
+      @share_image = "/assets/logo_vcoolline.jpg" if @share_image.blank?
+      wx_share_options = generate_wx_share_options(request.base_url, request.path, request.query_parameters, @share_image.try(:to_s), @wx_user.try(:uid))
+      %>
+
+      wx.ready(function () {
+
+        //alert("wx.ready ok");
+        // 2. 分享接口
+        // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+
+        wx.onMenuShareAppMessage({
+          title: '<%= @share_title %>' || document.title,
+          desc: '<%= @share_desc %>' || document.title,
+          link: '<%= wx_share_options[:link_url] %>'.replace('&amp;', '&'),
+          imgUrl: '<%= wx_share_options[:image_url] %>',
+          trigger: function (res) {
+            //alert("trigger in AppMessage");
+            WeixinCustomEvent.send('Weixin:onMenuShareAppMessage:trigger', res);
+          },
+          success: function (res) {
+            //alert("sucess in AppMessage");
+            WeixinCustomEvent.send('Weixin:onMenuShareAppMessage:success', res);
+          },
+          cancel: function (res) {
+            //alert("cancel in AppMessage");
+            WeixinCustomEvent.send('Weixin:onMenuShareAppMessage:cancel', res);
+          },
+          fail: function (res) {
+            //alert("fail in AppMessage");
+            WeixinCustomEvent.send('Weixin:onMenuShareAppMessage:fail', res);
+          }
+        });
+
+        // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareTimeline({
+          title: '<%= @share_title %>' || document.title,
+          link: '<%= wx_share_options[:link_url] %>'.replace('&amp;', '&'),
+          imgUrl: '<%= wx_share_options[:image_url] %>',
+          trigger: function (res) {
+            //alert("trigger in Timeline");
+            WeixinCustomEvent.send('Weixin:onMenuShareTimeline:trigger', res);
+          },
+          success: function (res) {
+
+            //alert("success in Timeline");
+            WeixinCustomEvent.send('Weixin:onMenuShareTimeline:success', res);
+          },
+          cancel: function (res) {
+
+            //alert("cancel in Timeline");
+            WeixinCustomEvent.send('Weixin:onMenuShareTimeline:cancel', res);
+          },
+          fail: function (res) {
+
+            //alert("fail in Timeline");
+            WeixinCustomEvent.send('Weixin:onMenuShareTimeline:fali', res);
+          }
+        });
+
+        // 2.3 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareQQ({
+          title: '<%= @share_title %>' || document.title,
+          desc: '<%= @share_desc %>' || document.title,
+          link: '<%= wx_share_options[:link_url] %>'.replace('&amp;', '&'),
+          imgUrl: '<%= wx_share_options[:image_url] %>',
+          trigger: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareQQ:trigger', res);
+          },
+          complete: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareQQ:complete', res);
+          },
+          success: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareQQ:success', res);
+          },
+          cancel: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareQQ:cancel', res);
+          },
+          fail: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareQQ:fail', res);
+          }
+        });
+
+        // 2.4 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareWeibo({
+          title: '<%= @share_title %>' || document.title,
+          desc: '<%= @share_desc %>' || document.title,
+          link: '<%= wx_share_options[:link_url] %>'.replace('&amp;', '&'),
+          imgUrl: '<%= wx_share_options[:image_url] %>',
+          trigger: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareWeibo:trigger', res);
+          },
+          complete: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareWeibo:complete', res);
+          },
+          success: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareWeibo:success', res);
+          },
+          cancel: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareWeibo:cancel', res);
+          },
+          fail: function (res) {
+            WeixinCustomEvent.send('Weixin:onMenuShareWeibo:fail', res);
+          }
+        });
+      })
+    <%- end %>
+  </script>
+<%- end %>
+<% if Rails.env.production? %>
+<script type="text/javascript">
+  var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+  document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F70cd0b5522647a22a0c663468ebfc0df' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<% end %>
+<% end %>

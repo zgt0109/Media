@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+		<link href="/stylesheets/app/whouse/style.css" rel="stylesheet" />
+    <link href="/stylesheets/font-awesome.css" rel="stylesheet" />
+		<script type="text/javascript">
+			var search = location.search,
+			star = search.indexOf('title='),
+			end = search.indexOf('&',star),
+			title = '楼盘介绍';
+			if(end==-1){
+				end = search.length;
+			}
+			if(star != -1){
+				title = search.substring(star+6,end)
+			}
+			try{title = decodeURIComponent(title);}catch(e){}
+			title = title.replace(/[<>]/gi,'');
+			document.write("<title>"+title+"</title>");
+		</script>
+	</head>
+	<body>
+
+		<div class="wrapper" id="container">
+			<!--  start -->
+			<div class="act_top" id="actTop" style="">
+				<div class="act_top_show">
+					<img src="<%=@intro.pic_url%>" width="100%" height="175" id="bannerPic">
+					<!-- <img src="<%#=@intro.pictures.first.try :pic_url%>" width="100%" height="175" id="bannerPic" alt=''> -->
+          <% if false and @intro.pictures.present? %>
+            <span><a href="<%= pictures_app_house_intro_path(@intro) %>">共<%= @intro.pictures.count %>张图片 <i class="fa fa-picture-o"></i></a></span>
+          <% end %>
+				</div>
+			</div>
+			<!--  end -->
+			<!-- 楼盘简介 start -->
+			<div class="box box_up">
+				<!-- 收起时加上样式box_up,展开时去掉 -->
+				<h3>楼盘简介</h3>
+				<div class="box_info ckeditor_content">
+          <%=raw @intro.description.to_s%>
+          <!--
+					<ul>
+						<% @intro.description.to_s.split("\n").each do |row|%>
+							<li><%=row.to_s%></li>
+						<% end %>
+					</ul>
+          -->
+				</div>
+				<a href="javascript:void(0);" onclick="Index.switchIndex(this);return false;" class="btn_more">
+					<span>更多</span>
+				</a>
+			</div>
+			<!-- 楼盘简介 end -->
+			<!-- 地图 start -->
+			<div class="box">
+				<h3>地图</h3>
+				<div class="box_map p">
+					<div class="map_area2" id="preview">
+            <%= render "shared/baidu_map", {location_x: @intro.location_x,location_y: @intro.location_y,typed_address: @intro.typed_address, address: @intro.address}%>
+					</div>
+					<p><%=@intro.typed_address.to_s%></p>
+				</div>
+			</div>
+			<!-- 地图 end -->
+			<!-- 视频 start -->
+			<!--
+			<div class="box">
+				<h3>视频欣赏</h3>
+				<div class="box_type" style="text-align:center;" id="videoDiv">
+					<%#=raw @intro.video_url%>
+				</div>
+				<p>&nbsp;</p>
+			</div>
+			-->
+			<!-- 视频 end -->
+			<!-- 项目简介 start -->
+			<div class="box box_up">
+				<h3>项目简介</h3>
+				<div class="box_info ckeditor_content">
+
+					<%=raw @intro.project_description.to_s%>
+				</div>
+				<a href="javascript:void(0);" onclick="Index.switchIndex(this);return false;" class="btn_more">
+					<span>更多</span>
+				</a>
+			</div>
+			<!-- 项目简介 end -->
+			<!-- 交通配套 start -->
+			<div class="box box_up">
+				<h3>交通配套</h3>
+				<div class="box_info ckeditor_content">
+					<%=raw @intro.traffic.to_s%>
+				</div>
+				<a href="javascript:void(0);" onclick="Index.switchIndex(this);return false;" class="btn_more">
+					<span>更多</span>
+				</a>
+			</div>
+			<!-- 交通配套 end -->
+		</div>
+		<p>&nbsp;</p>
+
+		<script type="text/javascript" src="/javascripts/app/whouse/lib/share.js"></script>
+		<!--
+		<script src="http://qzs.qq.com/tencentvideo_v1/js/tvp/tvp.player_lite.js" type="text/javascript"></script>
+		-->
+		<script type="text/javascript" src="/javascripts/app/whouse/lib/common.js"></script>
+		<script type="text/javascript" src="/javascripts/app/whouse/lib/index.js"></script>
+
+
+		<script>
+			$(function(){
+				$(".ckeditor_content img").css({"height":"auto","width":"auto","max-width":"100%"});
+			});
+		</script>
+    <%= @supplier.try(:piwik_js_code) %>
+	</body>
+</html>

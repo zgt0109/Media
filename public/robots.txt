@@ -1,0 +1,13 @@
+User-agent: * 
+Disallow: /a 
+Disallow: /include 
+Disallow: /templets 
+Disallow: /data 
+Disallow: /dede
+Disallow: /*.js$ 
+Disallow: /*.css$ 
+Disallow: /weelog
+Disallow: /uploads
+Disallow: /model
+Disallow: /404/
+

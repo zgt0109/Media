@@ -1,0 +1,30 @@
+<% title @wx_plot[params[:type]] %>
+<div class="foot">
+  <% if @wx_plot["#{params[:type]}_phone"].present? %>
+      <p>
+        <span>如情况紧急，请联系：<%= @wx_plot["#{params[:type]}_phone"] %></span>
+        <%= link_to "tel:#{@wx_plot["#{params[:type]}_phone"]}" do %><i class="icon fa fa-phone"></i><% end %>
+      </p>
+  <% end %>
+  <div class="btn-box" style="<%= 'padding: 32px 0;' unless @wx_plot["#{params[:type]}_phone"].present? %>">
+    <%= link_to "#{params[:type] == 'repair' ? '申请报修' : '我要投诉 | 建议'}", new_repair_complain_mobile_wx_plots_path(type: params[:type], anchor: 'mp.weixin.qq.com'), class: 'btn btn-block btn-primary'%>
+  </div>
+</div>
+<div class="body">
+  <div class="repair-list">
+    <% if @repair_complains.blank? %>
+        <div class="no-repaur">无记录</div>
+    <% end %>
+    <ul>
+      <% @repair_complains.each do |f| %>
+          <li>
+            <%= link_to repair_complain_mobile_wx_plot_url(id: f.id, type: params[:type], anchor: 'mp.weixin.qq.com'), class: 'box icon-right' do %>
+                <h2><%= f.category_name %>：<%= f.wx_plot_category.try(:name) %></h2>
+                <span><%= f.created_at %></span>
+                <span class="repair-state"><%= f.status_name %></span>
+            <% end %>
+          </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

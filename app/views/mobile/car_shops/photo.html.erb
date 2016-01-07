@@ -1,0 +1,24 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-slider slider-ver" id="index">
+      <ul class="slider-list">
+        <% @generals.each do |general| %>
+          <li><a><img src="<%= general.pic_url %>"/></a></li>
+        <% end %>
+      </ul><!--slider-list end-->
+      <div class="slider-text">
+        <span class="fl slider-span" id="slider-span">
+          <%= @car_type.name %>
+        </span>
+      </div><!--slider-text end-->
+    </div><!--mod-slider end-->
+  </div>
+</section>
+<script>
+  $(function(){
+    indexSwipe("index");
+    var h=$("#index").innerHeight()-45;
+    $(".slider-list li").height(h).css({"line-height":h+"px"});
+  });
+</script>

@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+	<%= link_to_li '基础设置', wx_cards_path, {class: "#{'active' if controller_name == 'activities'}"} %>
+  <%= link_to_li '卡券管理', card_admins_wx_cards_path %>
+  <%= link_to_li '核销记录', card_consumes_wx_cards_path %>
+  <%= link_to_li '卡券报表', card_reports_wx_cards_path %>
+</ul>

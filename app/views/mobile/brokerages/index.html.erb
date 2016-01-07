@@ -1,0 +1,36 @@
+<div class="inner-bg">
+	<div class="index-activitys">
+		<section>
+			<div class="blank40"></div>
+			<div class="banner"><%= image_tag @brokerage.pic_url %></div>
+			<div class="index-descript">	 
+				<div class="box">
+					<div class="left"></div>
+					<div class="right"></div>
+					<img class="close" src="/assets/mobile/brokerage/close.png"/>	   
+				</div>
+				<div class="index-activity">
+					<%= @supplier.brokerage_activity.description.html_safe %>
+					<div class="blank10"></div>
+				</div>
+
+				<div class="box">
+					<div class="rights"></div>
+					<div class="lefts"></div>
+				</div>
+			</div>
+			<div class="blank10"></div>
+			<div class="regist-btn"><%= link_to_broker(@wx_user.try(:broker),@supplier) %></div>
+		</section>
+	</div>
+	<div class="index-details">
+		<div class="box">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+
+		<div class="index-footer">
+			<a href="#">【点击查看详情】</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+<section>
+  <div class="index-box" id='ractive_following_shops_container'>
+  </div>
+</section>
+
+<script id='ractive_following_shops_template' type='text/ractive'>
+  {{#wx_user}}
+  <div class="index-title">
+    <i class="icon icon-1"></i>
+    <span>关注列表</span>
+  </div>
+  {{/wx_user}}
+  <div class="banner-swipe-list">
+    <div>
+      {{#shops}}
+      <ul>
+        <li>
+          <a class="banner-swipe-box" href="{{url}}">
+            <div>
+              <img src="{{pic_url}}">
+              <i></i>
+            </div>
+            <span>{{name}}</span>
+          </a>
+        </li>
+      </ul>
+      {{/shops}}
+    </div>
+  </div>
+</script>
+<script>
+  $(function(){
+    var following_shops = fetch_wmall_data({path: "/api/wmall/wx_users/<%= auth_params[:wxuid] %>/following_shops.json"},<%=raw auth_params.to_json %>, options = {})
+    var ractive_shops = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_following_shops_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_following_shops_template',
+
+      // Here, we're passing in some initial data
+      data: following_shops
+    });
+  })
+</script>

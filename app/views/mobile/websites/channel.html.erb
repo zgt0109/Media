@@ -1,0 +1,25 @@
+<% title @website_menu.try(:name) %>
+
+<% stylesheet "/stylesheets/vweisiteV01/list/list#{@list_template_id}.css" %>
+
+<% template = [1,2,3,4,5,7,9,10,12,14,15].include?(@list_template_id) ? 'common_template' : "template#{@list_template_id}" %>
+
+<% if @website_menu.has_children? or @website_menu.games? %>
+  <%= render "mobile/websites/channel/#{template}", { website_menu: @website_menu, main_material: nil, child_material: nil } %>
+<% elsif @website_menu.multiple_graphic? %>
+  <%= render "mobile/websites/channel/#{template}", { website_menu: @website_menu, main_material: @main_material, child_material: @main_material.children } if @main_material %>
+<% end %>
+
+<%= render "mobile/websites/navs/nav#{@nav_template_id}", {:website_menus => @website_menus} if @nav_template_id > 0 %>
+
+<% content_for :pagination_section do %>
+  <section class="mod-page page-1">
+    <a class="btn active">上一页</a>
+    <a class="btn">下一页</a>
+  </section>
+  <!--
+  <section class="mod-page page-2">
+    <a class="btn active">上一页</a>
+    <a class="btn">下一页</a>
+  </section>-->
+<% end %>

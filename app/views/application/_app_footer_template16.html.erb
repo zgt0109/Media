@@ -1,0 +1,19 @@
+<div class="box-ft ft-3">
+  <% @website_menus.limit(3).each_with_index do |menu, index|%>
+      <% if menu.has_children? %>
+          <p class="last">
+            <img src="/assets/website/template16/bg-nav-ft.png"/>
+            <%= menu.name %>
+            <span>
+              <i></i>
+              <em></em>
+              <% menu.children.each do |sub_menu| %>
+                <a href="<%= menu_url sub_menu %>"><%= sub_menu.name %></a>
+              <% end %>
+            </span>
+          </p>
+      <% else %>
+          <a href="<%= menu_url menu %>"><%= menu.name %></a>
+      <% end %>
+  <% end %>
+</div>

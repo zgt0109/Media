@@ -1,0 +1,45 @@
+<div class="form-group">
+  <label class="control-label">展现类型<span class="required-star">*</span></label>
+  <div class="clearfix">
+    <%= f.select :reply_type, Material.reply_type_options, {} ,class: "col-xs-6" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="tab-content no-border no-padding" id="tab1">
+    <div class="tab-pane" id="tab-1">
+      <div class="form-group">
+        <label class="control-label">摘要</label>
+        <div class="clearfix">
+          <%= f.text_area :summary, id: 'wx_summary', class: 'form-control', rows: 3, maxlength: 120, placeholder: "不能超过120个字" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">正文</label>
+        <div class="clearfix">
+          <%= render "shared/form_rich_text", field_name: "content", obj: f.object, f: f, wrapper_html_options: { class: "col-xs-12" } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tab-2">
+      <div class="form-group">
+        <label class="control-label">选择活动<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.select :activity_id, current_user.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: f.object.try(:materialable_id) }, validate: true, class: 'col-xs-6' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tab-3">
+      <div class="form-group">
+        <label class="control-label">来源<span class="required-star">*</span></label>
+        <div class="clearfix">
+          <%= f.text_field :source_url, class: 'col-xs-6', placeholder: "请输入URL", validate: true %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<%if @website_popup_menu.present? %>
+  <% if @website_popup_menu.menuable %>
+  <div class="body box-article">
+    <div class="hd">
+      <h3><%= @website_popup_menu.menuable.try(:title) %></h3>
+      <span><%= date_format_full_l(@website_popup_menu.menuable.created_at) %></span>
+    </div>
+    <div class="bd">
+      <%= image_tag @website_popup_menu.menuable.pic.try(:large) if @website_popup_menu.menuable && @website_popup_menu.menuable.pic? %>
+      <div class="ckeditor_content"><p><%= raw @website_popup_menu.menuable.try(:content) %></p></div>
+    </div>
+  </div>
+  <% end %>
+<% else %>
+  <% if @website_menu.has_children? %>
+    <% title "#{@website_menu.try(:name)}" %>
+    <% content_for :website_top_pic do %>
+        <% if @website_menu.cover_pic? && ![15, 16].include?(@website.template_id)  %>
+          <% content_for :website_full_screen do %>
+            <header>
+              <div class="box-img">
+                  <%= image_tag @website_menu.cover_pic.try(:large) %>
+              </div>
+            </header>
+          <% end %>
+        <% end %>
+    <% end %>
+    <%= render "app/websites/list/template#{@website.template_id}", {:website_menu => @website_menu, :website => @website} %>
+  <% elsif @website_menu.single_graphic? || @website_menu.text? %>
+      <% title @website_menu.menuable.try(:title) %>
+    <%= render "app/websites/single_graphic/template#{@website.template_id}", {:website_menu => @website_menu} if @website_menu.menuable %>
+  <% elsif @website_menu.multiple_graphic? %>
+    <%- main_material = @website_menu.menuable
+      child_material = main_material.try(:children)
+      child_material ||= child_material.order(:sort)
+    -%>
+    <%= render "app/websites/multiple_graphic/template#{@website.template_id}", {:main_material => main_material, :child_material => child_material, :website => @website} if main_material %>
+  <% elsif @website_menu.url? %>
+      <script>
+          window.location = '<%= raw @website_menu.url %>';
+      </script>
+  <% elsif @website_menu.activity? %>
+      <script>
+          window.location = '<%= raw website_activity_link(@website_menu) %>';
+      </script>
+  <% elsif @website_menu.games? %>
+      <%= render "app/websites/list/template#{@website.template_id}", {:website_menu => @website_menu, :website => @website} %>
+
+  <% end %>
+<%end%>
+
+<% content_for :load_end_js do %>
+    <script>
+        $(".ckeditor_content img").css({"width":"auto","height":"auto"})
+    </script>
+<% end %>

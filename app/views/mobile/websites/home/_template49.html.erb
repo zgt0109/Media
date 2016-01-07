@@ -1,0 +1,91 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% website_menus.each do |menu| %>
+      <% if menu.multiple_graphic? || menu.has_sub_menus? %>
+
+          <p class="index-title">
+            <% if menu.pic? || menu.font_icon.present? %>
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+            <% end %>
+            <b><%= menu.title %></b>
+          </p>
+          <% flag = menu.is_children_pic? %>
+
+            <!--游戏/子菜单/多图文-->
+            <% if menu.has_sub_menus? %>
+                <% menu.sub_menus.in_groups_of(4, false).each do |menus| %>
+                    <ul class="navLine-ul ul-<%= flag ? 'img' : 'text'%>">
+                      <% menus.each do |child| %>
+                          <li>
+                            <%= link_to menu_url(child), class: 'box mod-index' do %>
+                                <% if flag %>
+                                    <% if child.is_a?(Assistant) %>
+                                        <i class="index-img"><%= image_tag child.pic.thumb %></i>
+                                        <small><%= child.name %></small>
+                                    <% elsif child.pic? %>
+                                        <i class="index-img"><%= image_tag child.pic.thumb %></i>
+                                        <small><%= child.name %></small>
+                                    <% elsif child.font_icon.present? %>
+                                        <i class="<%= child.font_icon %>"></i>
+                                        <small><%= child.name %></small>
+                                    <% end %>
+                                <% else %>
+                                    <i><%= child.name %></i>
+                                <% end %>
+                            <% end %>
+                          </li>
+                      <% end %>
+                    </ul>
+                <% end %>
+            <% elsif menu.multiple_graphic? %>
+                <% main_material = menu.menuable %>
+                <% if main_material.present? %>
+                  <ul class="navLine-ul ul-<%= flag ? 'img' : 'text'%>">
+                    <li>
+                      <%= link_to material_type_url(main_material, menu), class: 'box mod-index' do %>
+                          <% if flag %>
+                              <i class="index-img"><%= image_tag main_material.pic.large %></i>
+                              <small><%= main_material.title %></small>
+                          <% else %>
+                              <i><%= main_material.title %></i>
+                          <% end %>
+                      <% end %>
+                      <% main_material.children[0..2].to_a.each do |child| %>
+                          <li>
+                            <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
+                                <% if flag %>
+                                    <i class="index-img"><%= image_tag child.pic.large %></i>
+                                    <small><%= child.title %></small>
+                                <% else %>
+                                    <i><%= child.title %></i>
+                                <% end %>
+                            <% end %>
+                          </li>
+                      <% end %>
+                      </li>
+                      </ul>
+                <% end %>
+
+                <% main_material.children[3..-1].to_a.in_groups_of(4, false).each do |materials| %>
+                  <ul class="navLine-ul ul-<%= flag ? 'img' : 'text'%>">
+                    <% materials.each do |child| %>
+                        <li>
+                          <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
+                              <% if flag %>
+                                  <i class="index-img"><%= image_tag child.pic.large %></i>
+                                  <small><%= child.title %></small>
+                              <% else %>
+                                  <i><%= child.title %></i>
+                              <% end %>
+                          <% end %>
+                        </li>
+                    <% end %>
+                  </ul>
+                <% end if main_material.present? %>
+            <% end %>
+
+
+      <% end %>
+  <% end %>
+</div>

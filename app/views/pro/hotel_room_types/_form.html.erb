@@ -1,0 +1,155 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微酒店', hotels_path %></li>
+          <li><%= link_to '房型管理', hotel_room_types_path %></li>
+          <li><%= @hotel_room_type.new_record? ? '新增房型' : '编辑房型' %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <%= form_for @hotel_room_type, validate: true, html: {class: 'form width-1000', role: 'form'} do |f| %>
+                <div class="form-group">
+                  <label>选择分店<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.select :hotel_branch_id, options_for_select(@hotel_branches.pluck(:name, :id), (params[:branch_id] || @hotel_room_type.try(:hotel_branch_id))), {}, class: 'col-sm-8' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>房型名称<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :name, maxlength: 30, class: "col-sm-8", placeholder: "30字符内" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>门市价<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :price, maxlength: 13, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>优惠价</label>
+                  <div class="clearfix">
+                    <%= f.text_field :discount_price, maxlength: 13, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>每日开放预订数量<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :open_qty, maxlength: 13, class: "col-sm-8" %>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label>封面图片<span class="required-star">*</span>&nbsp;<small class="text-warning">图片建议尺寸：360像素*280像素</small></label>
+                  <div class="clearfix">
+                    <div class="cieldon-file width-100px " data-type="0" data-height="180" data-width="140" data-img="<%= f.object.pic_url %>" data-name="hotel_room_type[qiniu_pic_key]" data-key="<%= f.object.qiniu_pic_key%>" data-callback="img_callback"></div>
+                  </div>
+                  <%= hidden_field_tag :pic_is_exist, f.object.pic_url.present? ? true : false %>
+                </div>
+
+                <div class="form-group">
+                  <label>房间配置<small class="text-warning">(可选项)</small></label>
+                </div>
+
+                <div class="form-group checkbox-list">
+                  <label>
+                    <%= f.check_box :is_breakfast, class: 'ace' %>
+                    <span class="lbl">有无早饭</span>
+                  </label>
+
+                  <label>
+                    <%= f.check_box :is_broadband, class: 'ace' %>
+                    <span class="lbl">有无宽带</span>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label>房间面积</label>
+                  <div class="input-group">
+                    <%= f.text_field :area, maxlength: 13, class: "form-control" %>
+                    <span class="input-group-addon">平方米</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>房间楼层</label>
+                  <div class="input-group">
+                    <%= f.text_field :floor, maxlength: 30, class: "form-control" %>
+                    <span class="input-group-addon">楼</span>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group">
+                  <label class="col-sm-1 no-padding">
+                    <%= f.check_box :is_big_bed, class: 'ace' %>
+                    <span class="lbl">大床</span>
+                  </label>
+                  <div class="input-group col-sm-3 ">
+                    <span class="input-group-addon">规格</span>
+                    <%= f.text_field :big_bed_spec, maxlength: 30, class: "form-control" %>
+                  </div>
+                  <div class="input-group col-sm-3">
+                    <span class="input-group-addon">数量</span>
+                    <%= f.text_field :big_bed_count, maxlength: 13, class: "form-control" %>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group margin-top-20">
+                  <label class="col-sm-1 no-padding">
+                    <%= f.check_box :is_small_bed, class: 'ace' %>
+                    <span class="lbl">小床</span>
+                  </label>
+                  <div class="input-group col-sm-3">
+                    <span class="input-group-addon">规格</span>
+                    <%= f.text_field :small_bed_spec, maxlength: 30, class: "form-control" %>
+                  </div>
+                  <div class="input-group col-sm-3">
+                    <span class="input-group-addon">数量</span>
+                    <%= f.text_field :small_bed_count, maxlength: 13, class: "form-control" %>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group margin-top-20">
+                  <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
+                  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals" onclick="javascript:history.go(-1);">返回</button>
+                </div>
+
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function() {
+            $('input[type=submit]').click(function(){
+                if($('#pic_is_exist').val() == 'false' && !$('input[name="hotel_room_type[qiniu_pic_key]"]').val()){
+                    addErrorMessage($('.text-warning').eq(0), '封面图片不能为空');
+                    return false;
+                }
+            });
+        });
+        function img_callback(){
+            removeErrorMessage($('.text-warning').eq(0));
+        }
+    </script>
+<% end %>

@@ -1,0 +1,20 @@
+<header>
+    <h1>微相册/<span>Micro Album</span></h1>
+    <div class="bg-block"></div>
+</header>
+<div class="contxt">
+   <div id="container">
+      <% @album.photos.each do |photo| %> 
+        <div class="grid">
+            <a href="<%= mobile_album_url(:supplier_id => photo.album.supplier_id, :id => photo.id) %>">
+                <%= image_tag photo.pic.try(:thumb) %>
+                <p>
+                    <span><%= photo.name %></span>
+                    <i class="box-bg"></i>
+                </p>
+            </a>
+        </div>
+      <% end %>  
+    </div>
+    <a href="#" class="box-gotop"></a>
+</div>

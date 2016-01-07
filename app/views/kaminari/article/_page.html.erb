@@ -1,0 +1,5 @@
+<% if page.current? %>
+    <a href="javascript:;" class="active"><span><%= page %></span></a>
+<% else %>
+    <%= link_to "<span>#{page}</span>".html_safe, url, {:remote => remote, :rel => page.next? ? 'next' : page.prev? ? 'prev' : nil} %>
+<% end %>

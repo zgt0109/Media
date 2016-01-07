@@ -1,0 +1,80 @@
+<%= content_for :tab do %>
+<div class="tab-pane active" id="tab-2">
+  <div class="row">
+     <div class="col-sm-12">
+      <%= form_for @search, url: {action: 'chart' }, html: { method: :get } do |f| %>
+        <div class="col-md-3 row">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">选择活动：</span>
+            <%= f.select :activity_id_eq, current_user.activities.show.where(activity_type_id: 70).pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group input-group-text">
+            <span class="input-group-addon">兑奖状态：</span>
+            <%= f.select :prize_status_eq, WxParticipate.prize_status_options, { include_blank: '全部状态' }, class: "col-xs-12" %>
+          </div>
+        </div>
+       <div class="col-md-3 row pull-right">
+            <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+            <% if @total_count <= EXPORTING_COUNT %>
+                <%= link_to '导出EXCEL', chart_recommends_url(format: :xls, search: params[:search], page_exl: 1), class: 'btn btn-sm btn-primary' %>
+            <% else %>
+                <%= link_to '导出EXCEL', chart_recommends_url(format: :xls, search: params[:search]), class: 'btn btn-sm btn-primary hide', id: "a_exl" %>
+                <a class="btn btn-primary btn-sm btn-filter" data-title="数据导出" data-toggle="modals" data-target="delModal" data-text='<%= data_text(@total_count,(@total_count/EXPORTING_COUNT.to_f).ceil) %>'>导出EXCEL</a>
+            <% end if (params[:search][:activity_id_eq].present? rescue nil) %>
+        </div>
+     <%- end %>
+    </div>
+    <div class="col-xs-12 margin-top-20">
+      <table class="table table-striped table-bordered table-hover ">
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>活动名称</th>
+            <th>微信号</th>
+            <th>手机</th>
+            <th>参与时间</th>
+            <th>推荐人数</th>
+            <th>关注人数</th>
+            <th>兑奖状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- if @participates.each_with_index do |participate, index|%>
+            <tr>
+              <td><%= index + 1%></td>
+              <td><%= participate.activity.try(:name) %></td>
+              <td><%= participate.wx_user.try(:nickname)  %></td>
+              <td><%= participate.wx_user.try(:mobile) %></td>
+              <td><%= participate.created_at %></td>
+              <td><%= participate.wx_invites.recommend.count %></td>
+              <td><%=  participate.wx_invites.recommend.recommended.count %></td>
+              <td><%=participate.prize_name %></td>
+            </tr>
+          <%- end.blank? %>
+              <tr><td colspan="8" class="text-center green">没有记录</td></tr>
+          <%- end %>
+        </tbody>
+      </table>
+       <%= paginate @participates %>
+    </div>
+  </div>
+</div>
+<%- end %>
+<%= render 'settings_tab' %>
+<% content_for :custom_js do %>
+<script>
+$(".btn-filter").on("click", function(){
+    setTimeout(function(){
+    $("button[data-fn=submit]").attr("type","button");
+    },200)
+});
+$('body').on('click','button[data-fn="submit"]',function(){
+    var url = "<%= chart_recommends_url(format: :xls, search: params[:search]) %>"+"<%= params[:search].present? ? '&page_exl=' : '?page_exl=' %>"+$("[name=page_exl]:checked").val();
+    $("#a_exl").attr("href",url);
+    $("#a_exl")[0].click();
+});
+
+</script>
+<% end %>

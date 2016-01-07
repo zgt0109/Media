@@ -1,0 +1,16 @@
+<% activity_vote_items.each_with_index do |item, index| %>
+  <li rel="<%= item.id %>">
+    <span class="lih90-sign"><%#= (activity_vote_items.current_page - 1) * activity_vote_items.limit_value + index + 1 %><%= item.item_no %>、</span>
+    <div class="box"><%= image_tag "#{item.pic.large}?imageView/2/w/110/h/70", data: {src: item.pic.large.to_s} if item.pic? %></div>
+    <p><span><%= truncate item.name, length: 36 %></span></p>
+    <div class="check-box">
+      <div class="table">
+        <div class="td"><i class="<%= 'ck' if select_count > 1 %>"></i></div>
+      </div>
+    </div>
+  </li>
+<% end %>
+<% if activity_vote_items.size == 0 %>
+  <p class="no-data">没有找到相关内容</p>
+<% end %>
+

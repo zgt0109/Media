@@ -1,0 +1,93 @@
+<div id="cont1" class="cont">
+  <div class="box-des fl">
+    <% content_for :p_note do %>
+      <p class="p-note">
+        <span>提示：</span>
+        1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微调研；<br />
+        <span style="margin-left: 40px;">2、以下“<span class="required-star">*</span>”均为必填项；</span>
+      </p>
+    <%- end %>
+    <div class="des-l" style="width:230px; margin-top:30px;">
+      <div class="des-view" style="width:230px;">
+        <b id="preview_title"><%= @activity.new_record? ? "微信消息标题" : @activity.name %></b>
+        <span><%= Time.now.strftime("%Y-%m-%d") %></span>
+        <p class="img upload-preview-img-218-100">
+          <%= image_tag((@activity.pic.presence || @activity.default_pic_url), width: '218', id: 'preview_pic') %>
+        </p>
+        <p class="intro" id="preview_summary" style="margin-top: 30px;">
+          <%= @activity.new_record? ? "微信消息摘要" : @activity.summary %>
+        </p>
+      </div>
+    </div><!--des-l end-->
+    <div class="des-r" style="width:520px;">
+      <%= form_for @activity, validate: true do |f| %>
+        <%= f.hidden_field :activity_type_id %>
+        <%= f.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
+        <div class="box-form form-row fl">
+          <div class="p">
+            <span>关键字<em>*</em>
+              <span class="fgray">（用于公众账号中触发微调研，不能同其他关键字重复）</span>
+            </span>
+             <%= f.text_field :keyword, validate: true, :class => 'input-text' %>
+          </div>
+          <div class="p">
+            <span>微信消息标题<em>*</em>
+              <span class="fgray">（发送关键词后返回的微信消息标题，不能超过64个字）</span>
+            </span>
+            <%= f.text_field :name, validate: true, :class => 'input-text', maxlength: 64 %>
+          </div>
+          <div class="p">
+            <span>活动时间
+              <span class="fgray">（活动开始和结束时间，非必填）</span>
+            </span>
+            <%= f.text_field :start_at, class: 'input-date datetimepicker', style: 'width: 128px;', readonly: true %> <i>-</i> <%= f.text_field :end_at, class: 'input-date datetimepicker', style: 'width: 128px;', readonly: true %>
+          </div>
+          <div class="p">
+            <span>微信消息图片
+              <span class="fgray">（发送关键词后返回的微信消息图片，该图片也在调研详情页展示）</span>
+            </span>
+            <div class="box-upload">
+              <div class="margin">
+                <div class="box-file">
+                  <%= f.file_field :pic, rel: 'preview_pic',  data: {width: 720, height: 400}, id: 'activity_pic', class: 'img_preview'  %>
+                  <a class="btn btn-big"><span class='upload_pic' style="float:none;">上传照片</span></a>
+                </div>
+                <span class="p-file"><span class="fgray">图片建议尺寸：720像素*400像素</span></span>
+              </div>
+            </div>
+          </div><!--p-->
+
+          <div class="p">
+            <span>微信消息摘要
+              <span class="fgray">（发送关键词后返回的微信消息摘要，不能超过255个字）</span>
+            </span>
+            <%= f.text_area :summary, maxlength: 255, style:"height:100px;" %>
+          </div>
+        </div>
+        <div class="p">
+          <span>活动说明
+            <span class="fgray" style="color: #999; float: none; font-size: 12px; width: auto;">（不能超过2000个字）</span> </span>
+          <%= f.cktext_area :description, ckeditor: { toolbar: "mini", height: 300 } %>
+        </div>
+        <div class="p">
+          <span>结束后的活动说明
+            <span class="fgray">（活动结束后显示的“活动说明”，不能超过255个字）</span>
+          </span>
+          <%= text_area_tag "extend_closing_note", @activity.extend.closing_note, :maxlength => 255, :style => "height:100px;" %>
+        </div>
+        <div class="p">
+          <%= f.submit '保存', class: 'btn btn-big submit-keep form-submit btn-orange' %>
+          <a class="btn btn-big btn-remove" style="margin-left:10px;" >取消</a>
+        </div>
+      <% end %>
+    </div><!--des-r end-->
+  </div>
+</div>
+
+<script>
+$(function(){
+  $(".btn-remove").click(function(){
+    $(window.parent.document).find('#pop-name').fadeOut()
+  });
+});
+</script>

@@ -1,0 +1,12 @@
+<div class="main-container" id="main-container">
+  <div class="main-container-inner">
+    <div class="sidebar responsive sidebar-fixed" id="sidebar" <%= hide_for_temp_user %> >
+      <%= render partial: @partialLeftNav || '/layouts/partialLeftNav' %>
+      <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+      </div>
+    </div>
+    <%= yield :main_content %>
+  </div>
+
+</div>

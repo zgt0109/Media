@@ -1,0 +1,48 @@
+<%= render "slider" %>
+
+<div class="index">
+  <% index = 1 %>
+  <% website_menus.each do |menu| %>
+      <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
+      <% next if menu.multiple_graphic? && menu.menuable.blank? %>
+      <% index += 1 %>
+      <div class="index-title"><%= menu.title %></div>
+      <ul class="<%= index % 2 == 0 ? 'index-list' : 'sub-list'%>">
+        <li>
+          <% if menu.multiple_graphic? %>
+              <% main_material = menu.menuable %>
+              <%= link_to material_type_url(main_material, menu), class: 'box mod-index' do %>
+                  <div class="p">
+                    <i><%= image_tag main_material.pic.large %></i>
+                    <b><%= main_material.title %></b>
+                  </div>
+              <% end %>
+
+              <% main_material.children.each do |child| %>
+                  <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
+                      <div class="p">
+                        <i><%= image_tag child.pic.large %></i>
+                        <b><%= child.title %></b>
+                      </div>
+                  <% end %>
+              <% end %>
+
+          <% else %>
+              <% menu.sub_menus.each do |child| %>
+                  <%= link_to menu_url(child), class: 'box mod-index' do %>
+                      <div class="p">
+                        <% if child.pic? %>
+                            <i><%= image_tag child.pic.thumb %></i>
+                        <% else %>
+                            <i class="fa <%= child.try(:font_icon) %>"></i>
+                        <% end %>
+                        <b><%= child.title %></b>
+                      </div>
+                  <% end %>
+              <% end %>
+          <% end %>
+        </li>
+      </ul>
+
+  <% end %>
+</div>

@@ -1,0 +1,102 @@
+<% title @activity.try(:name) %>
+<%= stylesheet_link_tag 'mobile/gua' %>
+<div class="html">
+  <!-- stage-end stage-start -->
+  <div class="stage" id="stage">
+    <section class="sec-game">
+      <div class="sec-index" id="sec-index">
+        <div class="mod-gua"></div>
+      </div><!--#scene-index end-->
+    </section>
+    <%= render "description" %>
+  </div>
+</div><!-- html end -->
+<%= javascript_include_tag 'mobile/gua', '/javascripts/app/wScratchPad.js' %>
+<script type="text/javascript">
+  var prize = '<%= @prize_title.presence || '谢谢参与' %>';
+  var aid = '<%= params[:id] %>';
+  var acid = '<%= @activity_consume_id %>';
+  var anid = '<%= params[:anid] %>';
+  var wxmuid = '<%= session[:wx_mp_user_id] %>';
+  var sn_code = '';
+  var activity_id = '<%= params[:id] %>'
+  var request_responsed = true;
+  var leftCount = parseInt('<%= @wx_user.try(:gua_left_count, @activity.id) %>');
+  var sp;
+
+  bindGua();
+
+  // console.log(leftCount)
+
+  if(leftCount <= 0){
+    sp.wScratchPad('enabled', false);
+    $("#sec-index").find(".btn").remove();
+    var html = '<a class="btn btn-gray" href="javascript:;"><span>今日抽奖次数已用完</span></a>';
+    $("#sec-index").append(html);
+  }
+
+  $(document).on("click",".btn-1",function(){
+    getSuccess(this,function(){reset()});
+  });
+  $(document).on("click",".btn-2",function(){
+    // sp.wScratchPad('reset');
+    // $("#sec-index").find(".btn").remove();
+    window.location.reload();
+  });
+
+  function bindGua(){
+    sp =$(".mod-gua").wScratchPad({
+      width: "240",
+      height: "122",
+      image: '/images/gua/bg-fail.png',
+      image2: '<%= @activity.try(:supplier_id) == 11351 ? '/images/gua/bg-gua-wrap-11351.jpg' : '/images/gua/bg-gua-wrap.jpg' %>',
+      color:"#eee",
+      size:20,
+      realtimePercent:"true",
+      scratchMove: function(e, percent) {
+        <%- if @wx_user.blank? || @wx_user.wx_mp_user_id != session[:wx_mp_user_id].to_i %>
+          showTips(".J-guanzhu");
+        <%- elsif @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)  %>
+          showTips(".J-register");
+        <%- else%>
+          if(request_responsed && percent > 30 && percent != 100){
+            request_responsed = false;
+            if(percent != 100){
+              $.ajax({
+                type: "post",
+                dataType: "script",
+                url: 'gua?source=notice&acid='+acid+'&anid='+anid+'&wxmuid='+wxmuid+'&aid='+aid
+              })
+            }
+          }
+        <%- end %>
+      }
+    })
+  }
+  function getSuccess(self){
+    var h=$(".html").innerHeight();
+    self=$(self);
+    var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+prize+'，</b><br/>兑奖SN码：'+sn_code+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @wx_user.try(:related_mobile) %>"/></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile();" readonly/></p></div></div></div></div>';
+    $("body").append(html);
+  }
+  function submitMobile() {
+    var mobile = $('#phone').val();
+    if (!(winwemedia_validators.mobile_reg.test(mobile))) {
+      alertMessage(1,"请输入正确的手机号码");
+      return;
+    }
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      url: 'draw_prize?sn='+sn_code+'&acid='+acid+'&anid='+anid+'&wxmuid='+wxmuid+'&aid='+aid+'&mobile='+mobile+'&'+Math.random(),
+      dataType: 'json',
+      timeout:30000,
+      success: function (data) {
+        alertMessage(0,"提交成功");
+        window.location.reload();
+      },
+      error: function(e){
+      }
+    });
+  }
+</script>

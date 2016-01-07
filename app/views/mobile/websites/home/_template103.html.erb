@@ -1,0 +1,23 @@
+<%= render "slider" %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.in_groups_of(9, false).each do |menus| %>
+        <li>
+          <% menus.each do |menu| %>
+              <%= link_to menu_url(menu), class: "box mod-index" do %>
+                <div class="p">
+                  <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+                  <b><%= menu.title.to_s[0..4] %></b>
+                </div>
+              <% end %>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :document_ready_js do %>
+    mySwipe("indexList",true);
+    setSlide("#indexList");
+<% end %>

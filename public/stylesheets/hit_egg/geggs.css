@@ -1,0 +1,112 @@
+body{ background:#feeeba;}
+/*section*/
+section{margin:10px 3% 0 3%;}
+/*sec-game*/
+.sec-game{ height:250px; background: url(/assets/hit_egg/bg-game.jpg) no-repeat center top #dd4053; background-size:100% auto; position:relative; width:100%; margin:0; overflow:hidden;}
+.game-clound,
+.game-scene,
+.game-shine,
+.game-egg,
+.game-egg a,
+.game-text{position:absolute;}
+.game-clound{left:0; bottom:0; height:34px; width:100%; background:url(/assets/hit_egg/bg-cloud.png) repeat-x 0 0; background-size:contain;}
+.game-scene{width:100%; height:320px; top:-320px; left:0; background:url(/assets/hit_egg/bg-scene.png) center center no-repeat; background-size:contain;}
+.game-shine{ width:100%; height:100%; left:0; bottom:0; background:url(/assets/hit_egg/bg-shine.png) no-repeat center bottom;background-size:100% auto;opacity:0;
+filter:alpha(opacity=0);
+-moz-opacity:0;
+-khtml-opacity:0;}
+.game-egg{ width:90%; margin:0 5% 40px 5%; left:0; bottom:0;}
+.game-egg a{ width:40%; height:100px; background-position:right center; background-repeat:no-repeat; background-size:auto 100px; float:left;opacity:0;
+filter:alpha(opacity=0);
+-moz-opacity:0;
+-khtml-opacity:0;}
+.game-egg .active:after{content: " "; width:100%; height:100%;display: inline-block;}
+.game-egg .active.first:after{background:url(/assets/hit_egg/bg-chuizi.png) right top no-repeat;background-size:auto 40px;}
+.game-egg .active.second:after{ background:url(/assets/hit_egg/bg-egg.png) right center no-repeat;background-size:auto 100px;}
+.egg-1{ background-image:url(/assets/hit_egg/egg1.png); /*left:-10%;*/ left:-200%; bottom:15px; z-index:10;}
+.egg-2{ background-image:url(/assets/hit_egg/egg2.png); left:50%; margin:0 0 0 -27%;/*bottom:-10px;*/ bottom:-2000px; z-index:9;}
+.egg-3{ background-image:url(/assets/hit_egg/egg3.png); /*right:5%;*/bottom:15px; right:-200%; z-index:8;}
+.game-text{ width:100%; left:0; /*top:20px;*/ top:-1000px; background-position:center center; background-repeat:no-repeat;}
+#text-index{height:74px; background-image:url(/assets/hit_egg/text-1.png);background-size:contain;}
+#text-success{ height:100%;background-image:url(/assets/hit_egg/text-2.png); /*top:0;*/ margin:-50px 0 0 0;background-size:auto 100px;}
+#text-success .btn{ width:50%; position:absolute; left:50%; top:50%; margin:80px 0 0 -25%;}
+#text-fail{ height:100%;background-image:url(/assets/hit_egg/text-3.png); /*top:0;*/ margin:-30px 0 0 0;background-size:auto 129px;}
+#text-end{ height:80px;background-image:url(/assets/hit_egg/text-4.png); /*top:50%;*/ margin:-40px 0 0 0;background-size:auto 80px;}
+#text-start{color:#de4556; text-align:center; line-height:30px; font-weight:bold; /*top:50%;*/ height:100%;margin:-30% 0 0 0; font-size:18px;}
+#text-start span{font-size:25px; color:#dc4153; font-weight:bolder;
+    text-shadow: 2px 0px 2px #fff,-2px 0px 2px #fff,0px 2px 2px #fff,0px -2px 2px #fff;
+    -webkit-text-shadow: 2px 0px 2px #fff,-2px 0px 2px #fff,0px 2px 2px #fff,0px -2px 2px #fff;
+    -moz-text-shadow: 2px 0px 2px #fff,-2px 0px 2px #fff,0px 2px 2px #fff,0px -2px 2px #fff;
+    width:90%; text-align:center; margin:5px 5%; display:inline-block; letter-spacing:0.1em; line-height:40px;
+}
+#text-start span b{ font-size:30px; padding:0 5px;}
+/*.text-start-1{ background-image:url(../img/geggs/text-5.png);  width:162px;}*/
+.text-start-2{width:21px;}
+.number-0{background-image:url(/assets/hit_egg/number-0.png);}
+.number-1{background-image:url(/assets/hit_egg/number-1.png); width:17px;}
+.number-2{background-image:url(/assets/hit_egg/number-2.png);}
+.number-3{background-image:url(/assets/hit_egg/number-3.png);}
+.number-4{background-image:url(/assets/hit_egg/number-4.png);}
+.number-5{background-image:url(/assets/hit_egg/number-5.png);}
+.number-6{background-image:url(/assets/hit_egg/number-6.png);}
+.number-7{background-image:url(/assets/hit_egg/number-7.png);}
+.number-8{background-image:url(/assets/hit_egg/number-8.png);}
+.number-9{background-image:url(/assets/hit_egg/number-9.png);}
+.text-start-3{ background-image:url(/assets/hit_egg/text-6.png);  width:40px;}
+/*sec-text*/
+.sec-text{ background:#fffde6; padding:2%; width:90%; color:#666; line-height:20px;}
+.sec-text b{ font-weight:normal; color:#da8d13;}
+/*sec-info*/
+.sec-info{ width:94%; font-size:12px; color:#da8d13;}
+.sec-info .td{ width:auto; background:#fcd793;padding:15px 5px; width:30%;border-bottom:3px solid #feeeba;}
+.sec-info .td:first-child{}
+.sec-info .td.active{ background:#f2b054; color:#fff;}
+.sec-info span{ font-size:14px;}
+.sec-info b{ font-size:22px; font-weight:normal; line-height:40px;}
+/*sec-list*/
+.sec-list{ }
+.sec-list a{ color:#fff;background:#f2b054; height:30px; line-height:30px;padding:0 2%; width:90%;}
+.sec-list a:active,
+.sec-list a.active{ background:#fcd793;color:#da8d13;}
+/*btn*/
+.btn{ border-radius:2px; background:#408fc1; color:#fff; height:30px; line-height:30px; text-align:center; font-size:18px; border:0;}
+/*pop*/
+.pop-bd{background:rgba(255,255,255,0.5); top:50%; left:50%; border-radius:20px; padding:1%; overflow:hidden;}
+.pop-bd .box-pop{ width:100%; height:100%; background:#fff; border-radius:20px; overflow:hidden;}
+.pop-bd .hd{ height:35px; line-height:35px; background:#feeeba; font-size:16px; text-shadow:0 1px 1px #fff; border-radius:10px 10px 0 0; text-align:center; width:100%;}
+.pop-bd .bd{ background:#fff; border-radius:0 0 10px 10px; width:80%; overflow:hidden; padding:10px 10%;}
+.pop-bd b{color:#da8d13; font-weight:normal;}
+.pop-bd p{ padding:5px 0; overflow:hidden;}
+.pop-bd p span{ width:100%; line-height:25px;}
+.pop-bd input{ width:94%;}
+.pop-bd .btn{ width:100%;}
+.pop-form .pop-bd{width:78%; height:260px;margin:-130px 0 0 -40%; }
+.pop-result .pop-bd{width:78%; height:70px;margin:-35px 0 0 -40%;}
+.pop-result .box-pop{line-height:30px; padding:20px 0; text-align:center; height:30px;}
+.pop-result .box-pop span{ background-position:left center; background-repeat:no-repeat;padding:0 0 0 60px; background-size:auto 30px;}
+.result-success .box-pop span{ background-image:url(/assets/hit_egg/bg-success.png); }
+.result-fail .box-pop span{ background-image:url(/assets/hit_egg/bg-fail.png); }
+/*sec-result*/
+.sec-result{background:#f0eff4; position:fixed; top:0; left:0; z-index:100; width:100%; height:100%; margin:0; display:none; overflow:hidden;}
+/*box-page*/
+.box-page .hd,
+.box-page .bd{border-bottom:1px solid #ccc;}
+.box-page .hd{ color:#333; background:#f0eff4; height:40px; line-height:40px; padding:10px 5% 0 5%; position:fixed; top:0; left:0; width:90%; z-index:101; box-shadow:0 0 5px rgba(0,0,0,0.25);}
+.box-page .bd{ background:#fff; padding:51px 0 0 0; height:80%; overflow:auto; position:fixed; top:0; left:0;}
+.btn-back{ border-radius:5px; height:30px; line-height:30px; padding:0 10px; border:1px solid #ccc; float:right;}
+/*box-list*/
+.box-list li{ position:relative; padding:10px 5%; font-size:12px; overflow:hidden; border-bottom:1px dashed #ccc;}
+.box-list li:last-child{ border:0;}
+.box-list b{ color:#da8d13;}
+.box-list b,
+.box-list span,
+.box-list p{ width:100%; overflow:hidden; float:left;}
+/*.box-list p{ padding:5px 0;}*/
+.box-list li .btn{ width:30%; position:absolute; top:10px; right:10px;}
+@media screen and (orientation:landscape) {
+    .game-egg{ width:70%; margin:0 15% 40px 15%;}
+    .game-egg a{ width:30%;}
+    .egg-1{ margin:0 0 0 12%;}
+    .egg-2{margin:0 0 0 -18%;}
+    .egg-3{margin:0 5% 0 0;}
+}

@@ -1,0 +1,19 @@
+<div class="photo-li" id="photo_<%= picture.id %>" style="width: 235px; height: 133.33333333333334px;" >
+  <div class="li-img">
+    <img src="<%= picture.pic.large %>">
+  </div>
+  <div class="li-btn">
+    <div class="li-p" data-id="<%= picture.id %>" data-title="<%= picture.title %>">
+      <span class="fl" style="width: 80%;"><%= picture.title %></span>
+      <span class="fr" style="display: block;">
+        <% edit_picture_path   = edit_pro_website_picture_path(picture) if @website.micro_life? %>
+        <% edit_picture_path   = edit_busine_picture_path(picture) if @website.micro_circle? %>
+        <% delete_picture_path = pro_website_picture_path(picture) if @website.micro_life? %>
+        <% delete_picture_path = busine_picture_path(picture) if @website.micro_circle? %>
+        <a class="btn-edit" onclick="popUrl(this)" data-name="name" data-w="900" data-h="440" data-title="编辑图片" data-url="<%= edit_picture_path %>"></a>
+        <%= link_to '', delete_picture_path, class: 'btn-detele', method: :delete, remote: true, confirm: '确认要删除吗？' %>
+      </span>
+    </div>
+    <div class="li-bg"></div>
+  </div>
+</div>

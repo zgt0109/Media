@@ -1,0 +1,25 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="index" id="indexList">
+  <div>
+    <% website_menus.in_groups_of(9, false).each do |sub_menus| %>
+      <div>
+        <% sub_menus.in_groups_of(3, false).each do |menus| %>
+          <ul class="navLine-ul">
+            <li>
+              <% menus.each do |menu| %>
+                <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+                  <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb", :not_show_li_if_blank => true %>
+                <% end %>
+              <% end %>
+            </li>
+          </ul>
+        <% end  %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :document_ready_js do %>
+  divSwipe("indexList");
+<% end %>

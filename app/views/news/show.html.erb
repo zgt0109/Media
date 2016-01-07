@@ -1,0 +1,27 @@
+<% content_for :title, "媒体报道" %>
+<%#= render 'home/report_nav' %>
+<div class="join-bann">
+    <div class="center1200">
+        <h1>媒体报道</h1>
+        <h2>News Report</h2>
+    </div>
+</div>
+<div class="rep-bread">
+  <div class="rep-center">
+    <div class="rep-bread-txt">
+      <a class="rep-bread-link" href="<%= root_path %>">首页</a>&nbsp;-&nbsp;
+      <a class="rep-bread-link" href="/news/company?display=dashboard">媒体报道</a>&nbsp;-&nbsp;
+      <span class="rep-bread-curr">详情</span>
+    </div>
+  </div>
+</div>
+
+<div class="rep-art">
+  <div class="rep-art-center">
+    <h1 class="rep-art-tit"><%= @news.title || '新闻标题'%></h1>
+    <div class="rep-art-stit"><span class="rep-art-sitem">时间：<%= @news.created_at %></span></div>
+    <div class="rep-art-body">
+      <%= raw @news.content %>
+    </div>
+  </div>
+</div>

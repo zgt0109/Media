@@ -1,0 +1,37 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <%= render 'partials/home' %>
+            <li><%= link_to '会员卡', vip_users_path %></li>
+            <li><%= link_to '会员营销', marketing_vip_cards_path %></li>
+            <% if controller_name == 'vip_grades' %>
+                <li><%= link_to '会员卡等级管理', vip_grades_path %></li>
+            <% elsif controller_name == 'vip_privileges' %>
+                <li><%= link_to '会员卡特权管理', vip_privileges_path %></li>
+            <% elsif controller_name == 'vip_groups' %>
+                <li><%= link_to '会员分组管理', vip_groups_path %></li>
+            <% end %>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs padding-24" id="myTab">
+                        <%= link_to_li '会员卡等级管理', vip_grades_path %>
+                        <%= link_to_li '会员卡特权管理', vip_privileges_path %>
+                        <%= link_to_li '会员分组管理', vip_groups_path %>
+                    </ul>
+                    <div class="tab-content no-border padding-24">
+                        <%= yield :tab %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <%= yield :modal if content_for? :modal %>
+<% end %>

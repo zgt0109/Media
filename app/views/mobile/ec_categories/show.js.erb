@@ -1,0 +1,4 @@
+var html = '<%= j render :partial => "item", :collection => @items, :as => :item  %>'
+$(".box-list").append(html);
+$(".more").remove();
+$(".box-list").append('<div class="footer tcenter more"><%= j link_to_next_page @items, '点击加载更多', :remote => true, :class => "loading", :id => "more_loading" ,:style=>"display: block;" %>')

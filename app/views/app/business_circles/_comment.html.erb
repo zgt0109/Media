@@ -1,0 +1,29 @@
+<style type="text/css">
+  .pagination li{display: none;}
+</style>
+<div class="ft ft-comment">
+  <h3>热门评论</h3>
+  <% if @comments.present? %>
+      <% @comments.each do |comment| %>
+        <div class="ft-list">
+          <div class="fl">
+            <span class="bd-img">
+              <%= image_tag "mobile/sculpture－1.png" %>
+            </span>
+          </div>
+          <div class="fr">
+            <b><%= comment.name %></b>
+              <span>
+                <i class="fl"><%= date_format_full(comment.created_at) %> </i>
+              </span>
+            <p><%= comment.content %></p>
+            <!--<p class="hide">123</p>
+            <a class="btn-show">显示更多</a>-->
+          </div>
+        </div>
+      <% end %>
+  <% else %>
+      <div class="ft-list" style="text-align: center">没有评论</div>
+  <% end %>
+</div>
+<div class="b-loading" style="text-align: center;display:none;"><img src="/assets/albums/loading.gif" style="float:none;"></div><%= paginate @comments %>

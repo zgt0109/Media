@@ -1,0 +1,71 @@
+<style type="text/css">
+  .box-form select { float: left; margin: 1; }
+  #shop_branch_start_time_4i,#shop_branch_start_time_5i,#shop_branch_end_time_4i,#shop_branch_end_time_5i{
+    width: 12%;
+    float:none;
+  }
+  .box-form span{height: 28px;}
+  #province, #city, #district{width: 24%;}
+
+</style>
+
+<p class="p-note" style="text-align: initial;">说明：请您务必填写正确，这些将会直接显示在手机页面。</p>
+<% @shop_branch.can_validate = true %>
+<%= form_for @shop_branch, url: @url, validate: true, :html => { :class => 'box-form fl' } do |f| %>
+  <%= f.hidden_field :shop_id, value: @shop.id %>
+  <div class="p">
+    <span>分店名称<em>*</em></span>
+    <%= f.text_field :name, class: "input-text" %>
+  </div>
+  <div class="p">
+    <span>分店登录密码<em>*</em></span>
+    <%= f.password_field :password, autocomplete: :off, class: 'input-text', validate: true %>
+  </div>
+  <div class="p">
+    <span>门店电话<em>*</em></span>
+    <%= f.text_field :tel, class: "input-text" %>
+  </div>
+  <div class="p">
+    <span>手机<span class="fgray">（用于接收客户订单信息，请正确填写）</span></span>
+    <%= f.text_field :mobile, class: "input-text" %>
+  </div>
+  <% if current_user.industry_food? || current_user.industry_takeout? %>
+    <div class="p">
+      <span>订餐规则<em>*</em></span>
+      <%= f.text_area :book_dinner_rule, class: "inp", rows: 5 %>
+    </div>
+  <% end %>
+  <div class="p">
+    <span>门店地址<em>*</em></span>
+    <div class="p" ><%= address_select(@shop_branch) %></div>
+    <div class="p" style=" padding: 0; "><%= f.text_field :address, class: "input-text", size: "65" %></div>
+  </div>
+  <div class="p">
+    <div>门店地址经纬度<span class="fgray">（这个地址只是模糊定位，准确地址请地图上标记）</span></div>
+    <%= render "shared/baidu_address", {f: f, obj: @shop_branch} %>
+  </div>
+  <div class="p">
+    <span>营业时间：</span>
+
+      <% if @shop_branch.new_record? %>
+        <%= f.time_select :start_time, :default => {:hour => '0', :minute => '0'} %>  至 <%= f.time_select :end_time, :default => {:hour => '23', :minute => '59'}  %>
+        <% else %>
+        <%= f.time_select :start_time  %> 至 <%= f.time_select :end_time  %>
+      <% end %>
+
+  </div>
+
+  <p class="tcenter">
+    <input class="submit-keep form-submit btn btn-small btn-orange branch-submit" type="submit" value="保存" />
+    <a class="btn btn-small btn-close" style="float:none;margin-left:5px;">取消</a>
+  </p>
+<% end %>
+
+<script type="text/javascript">
+// $(address_select);
+$('#address_keyword').on('keyup', function(){
+  address = $(this).val();
+  $('#search_button').click();
+  // $('#shop_branch_address').val(address);
+})
+</script>

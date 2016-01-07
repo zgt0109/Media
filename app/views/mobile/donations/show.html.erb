@@ -1,0 +1,479 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+  <script src="/images/donation/cdn_djl.js" type="text/javascript" async=""></script>
+  <script type="text/javascript" async="" src="/images/donation/wxa-1.0.js"></script>
+  <script language="javascript" src="/images/donation/jquery-1.9.1.min.js"></script>
+  <script language="javascript">
+!function(){function c(c,d,e,f,g){var h,k,l,m,n,o,p,q,r,t,u,v,w,x,i=d,j=[];if(g=void 0!=g?g:!0,g&&b[c]){for(k=0,l=b[c].propList,m=l.length;m>k;k++)j.push(i[l[k]]);h=b[c].parsefn}else{n=e,o=f,p=[],q=function(a){n||(n="<%",o="%>");var b=document.getElementById(a),c=b?b.innerHTML:a;return c.replace(/\\/g,"\\\\").replace(/[\r\t\n]/g," ").split(n).join(" ").replace(/'/g,"\r").replace(new RegExp("  =(.*?)"+o,"g"),"';\n s+=$1;\n s+='").split("  ").join("';\n").split(o).join("\n s+='").split("\r").join("\\'")}(c);for(r in i)p.push(r),j.push(i[r]);h=new Function(p,"var s='';\n s+='"+q+"';\n return s"),g&&(b[c]={parsefn:h,propList:p})}try{return h.apply(a,j)}catch(s){if(t="txTpl"+Date.now(),u="var "+t+"="+h.toString(),v=document.getElementsByTagName("head")[0],w=document.createElement("script"),x=navigator.userAgent.toLowerCase(),x.indexOf("gecko")>-1&&-1==x.indexOf("khtml"))return a.eval.call(a,u),a[t].apply(a,j),void 0;w.innerHTML=u,v.appendChild(w),v.removeChild(w),a[t].apply(a,j)}}var a=window,b={};"undefined"!=typeof exports?exports.txTpl=c:a.txTpl=c}();
+var appid = 'wxc0db45f411664b2e';
+var _wxao=window._wxao||{};_wxao.appid=appid,_wxao.version="1.0",_wxao.begin=+new Date,function(){var b,c,a=function(){_wxao.jsbReady=!0};document.addEventListener?document.addEventListener("WeixinJSBridgeReady",a,!1):document.attachEvent&&(document.attachEvent("WeixinJSBridgeReady",a),document.attachEvent("onWeixinJSBridgeReady",a)),b=document.createElement("script"),b.type="text/javascript",b.async=!0,version=_wxao.version||"1.0",b.src=("https:"==document.location.protocol?"https://":"http://")+"res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/wxa/wxa-"+version+".js",c=document.getElementsByTagName("script")[0],c.parentNode.insertBefore(b,c)}();
+</script>
+  <style>
+* {margin:0;padding:0;} img{width:100%;border:none;} a{text-decoration:none;}.fl{float:left;}.fr{float:right;}
+body{font-family:"Helvetica Neue",Hiragino, Sans, GB, W3, Tahoma,Helvetica,Arial,"\5b8b\4f53",sans-serif;background:url(http://mat1.gtimg.com/gongyi/m/wx/bg_repeat.jpg) repeat;margin:0;padding:0;-webkit-text-size-adjust:none;}.none{display:none}.clear{clear:both;}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button {-webkit-appearance:none;margin:0;}
+
+.home{}
+.home .r{color:#ff4a12;}
+.home .top{width:100%;height:52px;text-align:center;}
+.home .top span{font-size:14px;color:#999b9e;line-height:52px;font-weight:bold;}
+.home .top img{width:16px;height:25px;vertical-align:middle;margin-left:3px;}
+.home .hot{width:100%;}
+.home .hot .img_big{width:100%;}
+.home .hot .btn{width:103px;height:28px;margin-left:24px;margin-top:-50px;position:absolute;}
+.home .hot .c1{margin-left:24px;margin-top:-102px;position:absolute;color:#a2a2a8;font-size:14px;}
+.home .hot .c2{margin-top:-80px;}
+.home .hot .c1 .r{margin:0 3px;}
+.home .footer{width:100%;height:33px;background:#e3e3dd;border-top:1px solid #f6f5f1;}
+.home .footer img{width:102px;height:18px;margin-left:17px;margin-top:8px;}
+.home .footer span{font-size:10px;color:#999b9e;float:right;margin-top:10px;margin-right:10px;}
+.home .type{background:#ffffff;height:44px;border-bottom:1px solid #e9e9e6;text-align:center;width:100%;}
+.home .type_bg{height:44px;width:100%;}
+.home .type .item{text-align:center;float:left;margin-top:12px;}
+.home .type .item img{width:9px;margin:auto;display:none;}
+.home .type .item .t{height:20px;font-size:14px;color:#909090;}
+.home .type .item .t span{margin:5px 12px 5px;line-height:20px;}
+.home .type .sed .t{border-radius:15px;background:#f9600d;color:#ffffff;}
+.home .type .sed img{display:block;}
+.home .fixed{position:fixed;z-index:100;top:0;}
+.home .list {margin:15px 10px 15px 12px;border:1px solid #e8e8e8;border-radius:3px;}
+.home .list .item {border-radius:3px;border-bottom:1px solid #ebebeb;}.home .list .bg1{background:#ffffff;}.home .list .bg2{background:#f9f9f8;}
+.home .list .item img{width:95px;height:72px;margin:15px;border-radius:7px;position:relative;}
+.home .list .item .t{color:#999b9e;font-size:12px;margin-right:10px;}
+.home .list .item .t .tn{height:15px;}
+.home .list .item .t .tt{font-size:18px;color:#579f23;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.home .list .item .t .td{color:#999b9e;margin-top:5px;height:29px;overflow:hidden;}
+.home .list .item .t .tp {font-size:10px;margin-top:5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.home .list .item .t .tp .r{color:#fd6512;margin:0 3px;}
+.home .list .item .t .tp img{width:9px;height:9px;margin:0 10px 0 0;border-radius:0px;vertical-align:-1px;}
+
+.detail{}
+.detail .top .hot{position:absolute; margin-top:-113px;margin-left:20px;color:#ffffff;font-size:14px;}
+.detail .top .img_mark{width:100%;height:85px;position:absolute;margin-top:-75px;}
+.detail .top .hot .r{color:#ff4a12;margin:0 3px;}
+.detail .content{position:absolute; margin-top:-70px;}
+.detail .content .box{margin-left:20px;border-left:2px solid #d7d7d6;color:#5a5451;}
+.detail .content .box .icon_1{width:12px;height:12px;}
+.detail .content .box .icon_2{width:21px;height:21px;position:absolute;margin-left:-11px;margin-top:-1px;}
+.detail .content .box .icon_3{width:12px;height:12px;position:absolute;margin-left:-7px;margin-top:10px;}
+.detail .content .box .title{margin:10px;margin-left:15px; margin-bottom:30px;}
+.detail .content .box .title .t{font-size:15px;font-weight:bold;}
+.detail .content .box .title .c{font-size:14px;margin-left:0px;line-height:20px;}
+.detail .content .box .title p{margin-top:10px;}
+.detail .content .box .pay{margin:10px;margin-left:15px;margin-bottom:20px;}
+.detail .content .box .pay span{float:left;color:#afa7a2;font-size:16px;font-weight:bold;}
+.detail .content .box .pay .edit{float:left; margin:-10px 10px 0;}
+.detail .content .box .pay .edit img{width:200px; height:36px;}
+.detail .content .box .pay .edit input{font-size:20px;font-weight:bold;border:0;position:absolute;width:118px;height:36px;margin-top:-36px;margin-left:42px;background:rgba(0,0,0,0.0);text-align:center;color:#fc7d37;}
+.detail .content .box .pay .edit .btn_l{height:44px;width:44px;position:absolute;margin-top:-40px;}
+.detail .content .box .pay .edit .r{margin-left:158px;}
+.detail .content .box .pay .btn_a{}
+.detail .content .box .pay .btn{margin-top:10px;width:95%;height:35px;line-height:35px;font-size:16px;color:#ffffff;display:inline-block;border-radius:35px;border:1px #fe7225 solid;text-align:center;background-color:#f15805;-webkit-box-shadow:inset 0 1px 0 rgba(245,179,143,0.4);box-shadow:inset 0 1px 0 rgba(245,179,143,0.4);}
+.detail .content .box .pay .btn-white {
+  background-color: white;
+  color: black;
+}
+.awesome-input{
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  outline: none;
+  width: 80%;
+}
+.detail .content .box .pay .prot{font-size:14px;color:#b0a7a2;margin-top:10px;}
+.detail .content .box .pay .prot .check{width:12px;height:12px;position:absolute;margin-top:3px;}
+.detail .content .box .pay .prot label{margin-left:20px;}
+.detail .content .box .desc{margin:10px 20px 20px 15px;}
+.detail .content .box .desc .t{font-size:15px;font-weight:bold;margin-bottom:10px;line-height:18px;}
+.detail .content .box .desc p{font-size:14px;line-height:22px;}
+.detail .content .box .desc .c{margin-left:0px;}
+.detail .content .box .desc .d{margin-left:0px;color:#8f857e;}
+.detail .content .box .desc .fb{color:#5a5552;border:1px solid #d4d4d4;background:#e6e6e6;border-radius:30px;font-size:14px;padding:5px 30px;line-height:20px;margin-bottom:10px;margin-right:10px;}
+.detail .content .box .desc .bt{border:1px solid #cacaca;color:#4c4c4c;border-radius:30px;text-align:center;background:#e0e0e0;padding:5px 0;font-size:13px;margin-top:10px;}
+.detail .content .box .desc img{width:100%;margin:5px 0;}
+.detail .content .box .desc .more{color:#fd6512;border:1px solid #d4d4d4;background:#e6e6e6;border-radius:30px;font-size:13px;padding:5px 30px;line-height:20px;margin-right:10px;text-align:center;}
+.detail .content .box .footer{width:100%;text-align:center;}
+.detail .content .box .footer img{width:102px;height:18px;margin:10px;}
+
+.detail_jz{}
+.detail_jz .top .bbg{padding-top:5px;text-align:center;color:#ffffff;margin-top:-86px;width:100%;height:86px; position:absolute;background:rgba(0,0,0,0.5); }
+.detail_jz .top .bbg img{width:16px;height:25px;vertical-align:-6px;margin-left:3px;}
+.detail_jz .top .bbg div{margin-top:10px;font-weight:bold;}
+.detail_jz .content{margin-top:15px;}
+.detail_jz .content .box .line{margin-bottom:35px;}
+.detail_jz .content .box .desc .icon_1{width:12px;height:12px;margin:0;}
+.detail_jz .content .box .desc .item{margin:13px 3px;}
+.detail_jz .content .box .desc .item span{color:#5a5451;margin-left:10px;}
+
+.feedback{}
+.feedback .top .img_mark{width:100%;height:70px;position:relative;margin-top:-66px;}
+.feedback .top .icon_bg{position:relative;margin-top:-109px;margin-left:17px;}
+.feedback .top .icon_bg .icon {border:4px solid #ffffff; width:80px;}
+.feedback .top .icon_bg .icon_mark{width:88px;}
+.feedback .top .btn_mark{float:right;position:relative;margin-top:-109px;margin-right:20px;}
+.feedback .top .btn_mark img{width:110px;height:22px;}
+.feedback .top .btn_mark span{font-size:12px;position:absolute;margin-top:-18px;margin-left:27px;color:#e0e0e0;}
+.feedback .top .title{position:relative;margin-top:-58px;margin-left:115px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#999591;}
+.feedback .top .title .t{font-size:18px;font-weight:bold;line-height:22px;color:#000000;}
+.feedback .top .title .s{font-size:12px;color:#999591;line-height:18px;}
+.feedback .top .title .d{font-size:10px;}
+.feedback .content{margin:20px;margin-top:30px;font-size:14px;color:#5a5451;line-height:22px;}
+.feedback .content img{margin:10px 0;}
+.feedback .content p .c{font-size:14px;margin-left:0px;line-height:22px;}
+.feedback .footer{width:100%;text-align:center;}
+.feedback .footer img{width:102px;height:18px;margin:10px;}
+
+.myrecord{}
+.myrecord .top .txt{width:100%;position:absolute;margin-top:-90px;line-height:22px;float:left;}
+.myrecord .top .txt .icon_bg{width:60px;height:60px;border-radius:35px;margin:0 0 30px 10px;background:rgba(255,255,255,0.3); float:left;margin-top:5px;}
+.myrecord .top .txt .icon_bg img{width:50px;height:50px;border-radius:35px;margin:5px;}
+.myrecord .top .txt .c{margin-left:90px;margin-right:10px;color:#c2bdbc;font-size:13px;}
+.myrecord .top .txt .c .r{color:#fd6512;margin:0 3px;}
+.myrecord .top .txt .c .n{font-size:17px;}
+.myrecord .top .bg{width:100%;}
+.myrecord .content .box{margin-left:20px;border-left:2px solid #d7d7d6;margin-top:20px;}
+.myrecord .content .box .icon_2{width:21px;height:21px;position:absolute;margin-left:-11px;}
+.myrecord .content .box .txt{margin-left:15px;margin-bottom:10px;}
+.myrecord .content .box .txt .mrl{float:right;margin-right:20px;}
+.myrecord .content .box .txt .mrl img{width:90px;height:23px;}
+.myrecord .content .box .txt .mrl .mrlt{position:relative;margin-top:-19px;margin-left:27px;font-size:12px;line-height:14px;color:#56504d;}
+.myrecord .content .box .txt .t{color:#9a9a9a;font-size:16px;}
+.myrecord .content .box .txt .bbr{background:#ffffff;margin:10px 20px 10px 0;border-radius:7px;border:1px solid #e2e2e2;}
+.myrecord .content .box .txt .bbr .ctx img{width:80px;height:60px;margin:15px;border-radius:7px;position:relative;}
+.myrecord .content .box .txt .bbr .ctx .t{margin-left:10px;font-size:13px;color:#56504d;margin-right:10px;}
+.myrecord .content .box .txt .bbr .ctx .t .tn{height:15px;}
+.myrecord .content .box .txt .bbr .ctx .t .tt{margin-top:2px;margin-bottom:3px;font-size:16px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.myrecord .content .box .txt .bbr .ctx .t .tt span{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;float:left;width:100%;color:#56504d;}
+.myrecord .content .box .txt .bbr .ctx .t .td{font-size:12px;color:#908c89;line-height:18px;}
+.myrecord .content .box .txt .bbr .ctx .t .td .r{color:#fd6512;margin:0 3px;font-size:13px;}
+.myrecord .content .box .txt .bbr .ctx .t .tb{color:#67615e;font-size:14px;margin-top:8;}
+.myrecord .content .box .txt .bbr .ctx .t .tb img{width:12px;height:12px;margin:0 5px 0 0;border-radius:0px;vertical-align:-2px;}
+.myrecord .content .box .txt .bbr .bt{background:#f2f2f2;font-size:13px;height:30px;border-bottom-right-radius:7px;border-bottom-left-radius:7px;}
+.myrecord .content .box .txt .bbr .bt .r{float:right;margin:7px;margin-right:20px;color:#615c59;}
+.myrecord .content .box .txt .bbr .bt .r img{width:12px;height:12px;margin-right:5px;vertical-align:-2px;}
+.myrecord .content .box .txt .bbr .bt .l{float:left;margin:7px;margin-left:20px;color:#615c59;}
+.myrecord .content .box .txt .bbr .bt .l img{width:13px;height:12px;margin-right:5px;vertical-align:-2px;}
+.myrecord .content .box .txt .bbr .lbt{border-bottom:1px dotted #d5d5d5;margin:0 20px;}.myrecord .content .box .txt .bbl .ctx{margin-left:10px;}
+.myrecord .content .box .txt .bbl .ctx .t .tn{height:13px;}
+.myrecord .content .box .footer{width:100%;text-align:center;}
+.myrecord .content .box .footer img{width:102px;height:18px;margin:10px;}
+
+.myrecord .content .list{}
+.myrecord .content .list .t{background:#e3e3e3;height:40px;border-bottom:1px solid #bfbfbf;}
+.myrecord .content .list .t span{color:#514b4a;font-size:14px;margin-left:20px;line-height:40px;}
+.myrecord .content .list .item{border-bottom:1px solid #dddddd;margin:15px 20px 0;}
+.myrecord .content .list .item .mt{font-size:16px;color:#574f4d;height:25px;}
+.myrecord .content .list .item .md{font-size:12px;margin-bottom:15px;color:#b8b8b8;}
+.myrecord .content .list .item .mm{font-size:16px;color:#fd6615;height:25px;text-align:right;margin-right:3px;}
+.myrecord .content .list .item .mrd{color:#ffffff;background:#bfbfbf;border-radius:35px;text-align:center;font-size:10px;padding:2px 8px;}
+.myrecord .content .list .item .mr{text-align:right;}
+.myrecord .content .list .footer{width:100%;text-align:center;margin-top:10px;}
+.myrecord .content .list .footer img{width:102px;height:18px;margin:10px;}
+
+.result{}
+.result .top{text-align:center;margin-top:10px;}
+.result .top .t{color:#75706b;line-height:32px;font-size:22px;}
+.result .top .t .r{color:#f9610e;margin:0 3px 20px;}
+.result .top .t9{color:#a2a29f;font-size:12px;margin-top:10px;}
+.result .top .l{margin:15px 30px;border-bottom:2px dotted #a2a29f;height:1px;}
+.result .top .d{font-size:12px;line-height:22px;color:#75706b;}
+.result .top .btn {margin:10px 10px;}
+.result .top .btn img{width:140px;}
+.result .footer img{width:102px;height:18px;margin:10px;margin-top:20px;}
+
+.notice{background:rgba(0,0,0,0.2);position:fixed;top:0;}
+.notice .dialog{width:260px;background:#ededed;margin:auto;border:1px solid #bbbbbb;}
+.notice .dialog .icon{margin:20px;margin-left:30px;float:left;}
+.notice .dialog .icon img{width:40px;}
+.notice .dialog .txt{font-size:14px;line-height:20px;color:#4e433d;margin:20px 15px 0 0;float:left;}
+.notice .dialog .bm{width:100%;height:36px;background:#fd6512;padding-top:7px;}
+.notice .dialog .bm .btn{font-size:14px;width:70px;line-height:30px;background:#ededed;text-align:center;margin:auto;color:#4e433d;}
+</style>
+  <style id="clearly_highlighting_css" type="text/css">/* selection */ html.clearly_highlighting_enabled ::-moz-selection { background: rgba(246, 238, 150, 0.99); } html.clearly_highlighting_enabled ::selection { background: rgba(246, 238, 150, 0.99); } /* cursor */ html.clearly_highlighting_enabled {    /* cursor and hot-spot position -- requires a default cursor, after the URL one */    cursor: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--cursor.png") 14 16, text; } /* highlight tag */ em.clearly_highlight_element {    font-style: inherit !important; font-weight: inherit !important;    background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow.png");    background-repeat: repeat-x; background-position: top left; background-size: 100% 100%; } /* the delete-buttons are positioned relative to this */ em.clearly_highlight_element.clearly_highlight_first { position: relative; } /* delete buttons */ em.clearly_highlight_element a.clearly_highlight_delete_element {    display: none; cursor: pointer;    padding: 0; margin: 0; line-height: 0;    position: absolute; width: 34px; height: 34px; left: -17px; top: -17px;    background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite.png"); background-repeat: no-repeat; background-position: 0px 0px; } em.clearly_highlight_element a.clearly_highlight_delete_element:hover { background-position: -34px 0px; } /* retina */ @media (min--moz-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {    em.clearly_highlight_element { background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow@2x.png"); }    em.clearly_highlight_element a.clearly_highlight_delete_element { background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite@2x.png"); background-size: 68px 34px; } } </style>
+  <style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style>
+  <script src="/images/donation/cdn_dianjiliu.js"></script>
+</head>
+<body>
+  <div id="pageContainer">
+    <div class="detail">
+      <div class="top">
+        <!-- 要变化的图片 -->
+        <!-- <img src="/images/home_upload/donation/canji.jpg" style="margin-bottom:75px;"> -->
+        <%= image_tag @donation.pic_url, style: "margin-bottom:75px;" %>
+        <img src="http://mat1.gtimg.com/gongyi/m/wx/mask_detail_1.png" class="img_mark">
+      </div>
+      <div class="content">
+        <div class="box">
+          <img src="http://mat1.gtimg.com/gongyi/m/wx/detail_icon_9.png" class="icon_2">
+          <div class="title" style="">
+            <span class="t"><%= @donation.name %></span>
+            <!-- 共同撑起残疾孤儿夫妇生活一片蓝天 -->
+            <p>
+              <span class="c">
+                <%= @donation.summary %>
+              </span>
+              <br/>
+              <br/>
+            </p>
+          </div>
+
+
+          <img src="http://mat1.gtimg.com/gongyi/m/wx/detail_icon_2.png" class="icon_2">
+          <div class="title" style="margin-bottom: 22px;">
+            <span class="t">已筹<%= @donation.donation_orders.paid.sum(:fee) + @donation.init_fee %>元</span>
+          </div>
+
+
+          <img src="http://mat1.gtimg.com/gongyi/m/wx/detail_icon_2.png" class="icon_2">
+          <style>
+            .btn-pay-money {
+              width: 30%;
+              float: left;
+              padding-right: 3%;
+            }
+          </style>
+          <div class="pay">
+          <div class="btn-pay-money">
+            <div class="btn custom-btn" style="position: relative;top: -20px;border-radius:10px;height:30px;">
+            50
+            </div>
+          </div>
+          <div class="btn-pay-money">
+            <div class="btn btn-white custom-btn" style="position: relative;top: -20px;border-radius:10px;height:30px;">
+              100
+            </div>
+          </div>
+          <div class="btn-pay-money">
+            <div class="btn btn-white custom-btn" style="position: relative;top: -20px;border-radius:10px;height:30px;">
+              其他
+            </div>
+          </div>
+            <br/>
+            <input type="text" style="display:none;float: left;font-size:16px;" class="awesome-input" id="custom_donation" value="50" placeholder="请输入捐款金额"/><span style="display:none;font-size: 16px;" id="hidden_yuan">元</span>
+            <div class="clear"></div>
+            <a href="javascript:void(0)" class="btn_a" id="btn_submit">
+              <% if @donation.soldout? %>
+              <div class="btn">该项目停止捐款</div>
+              <% else %>
+              <div onclick="custom_donation();" class="btn">我要捐款</div>
+              <% end %>
+            </a>
+
+          </div>
+                <% unless @donation.video_url.blank? %>
+    <img src="http://mat1.gtimg.com/gongyi/m/wx/detail_icon_3.png" class="icon_2">
+          <div class="title">
+            <span class="t">项目视频</span>
+          </div>
+          <span class="c cus-content">
+            <div class="video-wrap">
+              <!--<video src="<%= @donation.video_url%>" id="video"></video>-->
+              <div id="video" data-src="<%= @donation.video_url%>"></div>
+          </span>
+    <% end %>
+
+
+
+          <img src="http://mat1.gtimg.com/gongyi/m/wx/detail_icon_3.png" class="icon_2">
+          <div class="title">
+            <span class="t">项目详情</span>
+          </div>
+          <style>
+            .cus-content {
+              width: 100%;
+              overflow: hidden;
+
+            }
+             .cus-content img {
+                max-width:100%;
+                overflow: hidden;
+              }
+          </style>
+    <span class="c cus-content">
+            <%= @donation.detail.html_safe %>
+    </span>
+
+
+
+
+</span>
+<br/>
+<img style="margin-top:8px;" src="http://mat1.gtimg.com/gongyi/m/wx/detail_icon_12.png" class="icon_2">
+<div class="title">
+  <p style="margin-top:0px;">
+    善款接收及项目执行机构
+    <br/>
+    <%= @donation.qualification %></p>
+</div>
+
+<footer style="text-align: center">
+  <img style="width: 70px" src="/assets/donations/list-logo.jpg"/>
+</footer>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+  <script type="text/javascript">
+    function direct_donation(money){
+      $("#new_donation_order #donation_order_fee").val(money);
+      $("#new_donation_order").submit();
+    }
+    function custom_donation(){
+      var money = $("#custom_donation").val();
+      $("#new_donation_order #donation_order_fee").val(money);
+      $("#new_donation_order").submit();
+    }
+    function playVideo(selector){
+        var video =$(selector),
+            parent=video.parent();
+        video[0].play();
+        parent.find(".video-btn").hide();
+        parent.find("img").hide();
+    }
+    $(function(){
+      $(".custom-btn").click(function(){
+        $(".custom-btn").addClass("btn-white");
+        var m = $(this).html();
+        // alert(m);
+        $(this).removeClass("btn-white");
+        var val = parseFloat(m);
+        // alert(val);
+        if(isNaN(val)){
+          // alert('nan');
+          $("#custom_donation").show();
+          $("#hidden_yuan").show();
+          $("#custom_donation").val('');
+        }else{
+          $("#custom_donation").hide();
+          $("#hidden_yuan").hide();
+          $("#custom_donation").val(m);
+        }
+      })
+    })
+  </script>
+<div style="display:none">
+<%= form_for [:mobile, @donation_order] do |f| %>
+  <div class="des-r box-form form-row">
+    <%= f.text_field :donation_id %>
+    <%= f.text_field :wx_user_id %>
+    <div class="p">
+      <span>捐款金额 <span class="fgray"></span></span>
+      <%= f.text_field :fee, validate: true, class: "input-text", value: 0 %> <!-- 12.3 -->
+    </div>
+    <div class="p">
+      <%= f.submit "确定", disable_with: "提交中..." %>
+    </div>
+  </div>
+<% end %>
+</div>
+
+<style>
+
+.detail .content .box .title {
+  margin: 10px;
+  margin-left: 15px;
+  margin-bottom: 5px;
+}
+.pay .nedit {
+  margin: -6px 5px 0 10px;
+  float: left;
+}
+.pay .nedit input {
+  border-radius: 17px;
+  border: 1px solid #e2e4e8;
+  width: 180px;
+  font-size: 20px;
+  font-weight: bold;
+  height: 34px;
+  background: rgba(128,128,128,0.1);
+  text-align: center;
+  color: #fc7d37;
+  /*-webkit-appearance: none;*/
+}
+</style>
+
+<script>
+  $(document).ready(function(e){
+    $("form").submit(function(){
+      var fee = $("#donation_order_fee").val();
+      var val = parseFloat(fee);
+      if(val=="NaN"){
+        alert("请输入大于0的金额");
+        return false;
+      }else if(val > 0){
+        if(val >= 100000){
+          alert("金额不能大于100000");
+          return false;
+        }
+        $("#donation_order_fee").val(val.toFixed(2));
+        return true;
+      }else{
+        alert("请输入大于0的金额");
+        return false;
+      }
+    });
+    $(".needfp").click(function(){
+      // alert($(this).val());
+      $(".needfp").prop("checked",false);
+      var $t = $(this);
+      var va = $t.val();
+      $t.prop("checked",true);
+      if(va == "2"){
+        //弹出地址和邮编
+        $("#youbian_hidden").show();
+        $("#dizhi_hidden").show();
+      }else{
+        $("#youbian_hidden").hide();
+        $("#dizhi_hidden").hide();
+      }
+    })
+  });
+</script>
+
+
+
+<script type="text/javascript">
+  <% if flash[:notice] %>
+      alert('<%= flash[:notice] %>');
+  <% elsif flash[:alert] %>
+      alert('<%= flash[:alert] %>');
+  <% end %>
+  <% flash.clear %>
+</script>
+<script>
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+      WeixinJSBridge.call('hideOptionMenu');
+    });
+  </script>
+
+<script>
+  $(function(){ 
+    var video = $("#video");
+    var t = video.attr("data-src");
+    var $video = '';
+
+    if(t.indexOf('v.qq.com')>=0){
+        var id= ''; 
+        t= t.split("&");
+        $.each(t,function(i){
+            if(t[i].indexOf("vid=")>=0){
+                id=t[i].replace("vid=","");
+            }
+        });
+        $video='<iframe width="300" height="250" src="http://v.qq.com/iframe/player.html?vid='+id+'&width=300&height=250&auto=0"></iframe>';
+    }else if(t.indexOf("v.youku.com")>=0){
+        var id=t.substring(t.indexOf("id_")+3, t.indexOf(".html"));
+        $video='<div><iframe height=250 width=300 src="http://player.youku.com/embed/'+id+'" frameborder=0 allowfullscreen></iframe><br></div><div></div>';
+    }
+    video.html($video);
+  });
+</script>
+</body>
+</html>

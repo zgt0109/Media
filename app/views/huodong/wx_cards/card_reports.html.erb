@@ -1,0 +1,85 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '微信卡包', card_admins_wx_cards_path %></li>
+      <li><%= link_to '卡券报表', card_reports_wx_cards_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <%= render 'huodong/wx_cards/tabs' %>
+
+      <div class="tab-content no-border padding-24">
+        <div id="tab-3" class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-sm-12">
+              <%= form_for @search, url: card_reports_wx_cards_path, html: { method: :get } do |f| %>
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">卡券名称：</span>
+                    <% wx_cards = current_user.cards.latest.pluck(:title, :id) %>
+                    <%= f.select :consumable_id_eq, options_for_select(wx_cards), { selected: @wx_card.try(:id) }, class: "col-xs-12" %>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">日期：</span>
+                    <div class="input-group col-sm-12">
+                      <%= datetime_range_tag f, start_at: :created_at_gte, end_at: :created_at_lte, options: {class: 'daterange col-sm-12'} %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                </div>
+              <% end %>
+            </div>
+            <div class="col-md-12 margin-top-20">
+              <table id="couponGateTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>卡券名称</th>
+                    <th>卡券类型</th>
+                    <th>领取数</th>
+                    <th>消费数</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @total_consumes.present? || @used_consumes.present? %>
+                  <% 
+                    start_date=params[:search] && params[:search][:created_at_gte].present? ? Date.parse(params[:search][:created_at_gte]) : Date.today
+                    end_date=params[:search] && params[:search][:created_at_lte].present? ? Date.parse(params[:search][:created_at_lte]) : Date.today 
+                  %>
+                  <% (start_date..end_date).each do |date| %>
+                    <tr>
+                      <td><%= date %></td>
+                      <td><%= @wx_card.try(:title) %></td>
+                      <td><%= @wx_card.try(:card_type_name) %></td>
+                      <td><%= @total_consumes[date] || 0 %></td>
+                      <td><%= @used_consumes[date] || 0 %></td>
+                    </tr>
+                  <% end %>
+                  <% else %>
+                  <%= no_records_tag(5) %>
+                  <% end %>
+                </tbody>
+              </table>
+              <%#= paginate @consumes %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  // $(".daterange").datepicker({maxDate: "+1m"})
+</script>
+<% end %>

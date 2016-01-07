@@ -1,0 +1,111 @@
+<form>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class=" control-label">打印机图片展现模式</label>
+          <div class="radioTab">
+            <label>
+              <input name="VCFields" type="radio" class="ace toggle_mode" data-val="four" checked="checked" value="4">
+              <span class="lbl">四屏版
+                <div class="dropdown-hover">
+                  <span class="icon-question-sign dropdown-toggle" data-toggle="dropdown" data-target="#">
+                  </span>
+                  <div class="dropdown-menu dropdown-yellow dropdown-close" role="menu" aria-labelledby="dLabel">
+                    <img src="/assets/print/pic4.png">
+                  </div>
+                </div>
+              </span>
+            </label>
+            <label>
+              <input name="VCFields" type="radio" value="1" class="ace toggle_mode" data-val="one" >
+              <span class="lbl">巨屏版
+                <div class="dropdown-hover" style="display: inline">
+                  <span class="icon-question-sign dropdown-toggle" data-toggle="dropdown" data-target="#"></span>
+                  <div class="dropdown-menu dropdown-yellow dropdown-close" role="menu" aria-labelledby="dLabel">
+                    <img src="/assets/print/pic1.png">
+                  </div>
+                </div>
+              </span>
+            </label>
+
+          </div>
+
+          <div class="radio-tab-content">
+            <div id="radioTab1" class="radio-tab-pane">
+              <div class="form-group">
+                <label class="control-label">滚动图片上传<small class="text-warning">对应四屏版模式中编号为1的图片位置</small></label>
+                <div class="clearfix">
+
+                <div class="cieldon-file first-div" data-type="6" data-client="<%= @supplier_print_client.id %>" data-imgs-type="print"  data-car_type_id="6" data-pic_type="<%= CarPicture::GENERAL %>"  data-name="picture" data-width="140" data-height="105" data-img="<%= @main_pics.join(',') %>" >
+
+                </div>
+              </div>
+              <div class="from-group from-group-down pingxing">
+
+                <label class="control-label">下方图片上传<small class="text-warning">对应四屏版模式中编号为2、3、4的图片位置</small></label>
+                <div class="clearfix xiafangtupian">
+
+                  <div class="cieldon-file" data-name="car_shop[car_brand_attributes][qiniu_logo_key]" data-img="<%= @supplier_print_client.left_url %>" data-key="<%= @supplier_print_client.left_url %>" data-width="180" data-height="100" data-type="0" data-imgs-type="print" data-location="left_url" data-client="<%= @supplier_print_client.id %>"></div>
+
+                  <div class="cieldon-file" data-name="car_shop[car_brand_attributes][qiniu_logo_key]" data-img="<%= @supplier_print_client.center_url %>" data-key="<%= @supplier_print_client.center_url %>" data-width="180" data-height="100" data-type="0" data-imgs-type="print" data-location="center_url" data-client="<%= @supplier_print_client.id %>"></div>
+
+                  <div class="cieldon-file" data-name="car_shop[car_brand_attributes][qiniu_logo_key]" data-img="<%= @supplier_print_client.right_url %>" data-key="<%= @supplier_print_client.right_url %>" data-width="180" data-height="100" data-type="0" data-imgs-type="print" data-location="right_url" data-client="<%= @supplier_print_client.id %>"></div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</form>
+
+<% content_for :custom_js do %>
+
+<script>
+
+ $(function(){
+    //切换模式(ok)
+   $('input[name=VCFields]').on('click', function () {
+     var type = $(this).data('val');
+     if (type == 'one'){
+       $(".pingxing").hide();
+       $.ajax({
+         type: "POST",
+         url: "/supplier_print_clients/<%= @supplier_print_client.id %>/update_temp",
+         data: { temp: 2 },
+         success: function(){
+           // $("#"+d).remove();
+         }
+       });
+     }else{
+       $(".pingxing").show();
+       $.ajax({
+         type: "POST",
+         url: "/supplier_print_clients/<%= @supplier_print_client.id %>/update_temp",
+         data: { temp: 1 },
+         success: function(){
+           // $("#"+d).remove();
+         }
+       });
+     }
+   });
+ });
+
+</script>
+
+<% end %>
+<style>
+  .pingxing .cieldon-file {
+  float: left;
+  width: 33% !important;
+  }
+ .pingxing .img-file {
+  float: left;
+  }
+
+</style>

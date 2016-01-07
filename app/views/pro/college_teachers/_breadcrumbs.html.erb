@@ -1,0 +1,8 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微教育', colleges_path %></li>
+        <li><%= link_to '专业名师', college_teachers_path(@college) %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+</div>

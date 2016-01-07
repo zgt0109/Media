@@ -1,0 +1,6 @@
+var s = ''
+<% @hospital_department.hospital_doctors.online.each do |doctor| %>
+	s += "<option value='<%= doctor.id %>'><%= doctor.name %></option>";
+<% end %>
+$('.js-doctor').children('option:not(:first)').remove();
+$(".js-doctor").append(s);

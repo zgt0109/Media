@@ -1,0 +1,50 @@
+<section id='ractive_product_container'>
+</section>
+
+
+<script id='ractive_product_template' type='text/ractive'>
+  <div class="goods-detail">
+    <p><b>商品名称：</b><span>{{name}}</span></p>
+    <p><b>店铺名称：</b><span>{{shop_name}}</span></p>
+    <p><b>商品描述：</b></p>
+  </div>
+  <div class="edit-box">
+    {{& description}}
+  </div>
+</script>
+
+<script>
+  $(function(){
+
+    function get_product(id) {
+      if (typeof(id) == "undefined") { id = "<%= params[:id]%>" }
+      return products = fetch_wmall_data({path: "/api/wmall/products/"+id+".json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    }
+
+    product = get_product()
+
+    var ractive_category_products = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_product_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_product_template',
+
+      // Here, we're passing in some initial data
+      data: product
+    });
+
+    shop_path = generate_path(path='<%= mobile_wmall_shop_path %>', {id: product.shop_id});
+    $("a.navgate_to_shop").attr("href", shop_path)
+  })
+
+</script>
+
+<% content_for :foot do %>
+  <div class="footbar">
+    <div class="btn-box">
+      <%= link_to "进入商家", "#nogo", class: "btn btn-big btn-c4 navgate_to_shop"%>
+    </div>
+  </div>
+<% end %>

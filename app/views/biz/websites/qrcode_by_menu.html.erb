@@ -1,0 +1,11 @@
+<% cache(['website_menu-qrcode', @menu ? @menu : @website]) do %>
+<%
+if @menu
+  url = menu_url(@menu)
+else
+  url = mobile_index()
+end
+data_uri = Base64.encode64(@website.rqrcode(url).to_blob).gsub(/\n/, "") rescue nil
+%>
+data:image/jpeg;base64,<%= data_uri %>
+<% end %>

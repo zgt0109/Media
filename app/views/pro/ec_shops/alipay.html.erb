@@ -1,0 +1,39 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_ec_shop' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <h1 class="pagecurrent">支付宝收款</h1>
+<% end %>
+
+<p class="p-note">
+  提示：申请支付宝手机网站支付 <a href="https://b.alipay.com/order/productDetail.htm?productId=2013080604609688" target="_blank">点击查看申请教程</a>
+</p>
+
+<%= form_for current_user, url: alipay_ec_shops_url, validate: true do |f| %>
+  <div class="box-form form-row">
+    <p>
+      <span>支付宝账号</span>
+      <%= f.text_field :alipay_account_name, class: 'input-text', style: 'width: 380px;' %>
+    </p>
+
+    <p>
+      <span>支付宝应用ID</span>
+      <%= f.text_field :alipay_id, class: 'input-text', style: 'width: 380px;' %>
+    </p>
+
+    <p>
+      <span>支付宝应用KEY</span>
+      <%= f.text_field :alipay_key, class: 'input-text', style: 'width: 380px;' %>
+    </p>
+  </div>
+
+  <div class="p" >
+    <input type="submit" value="保存" class="btn btn-small form-submit btn-orange"/>
+  </div>
+<% end %>
+
+
+
+
+

@@ -1,0 +1,103 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar_life' %>
+<% end %>
+
+<%= render 'topbar' %>
+
+<div class="p-note">
+  <p>提示：1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微门户；</p>
+  <p>2、以下“<em style="color: #ff0000; padding: 0 3px;"> * </em>”均为必填项；</p>
+</div>
+
+
+<div class="box-des fl">
+
+  <div class="des-l leftbar" style="width:280px">
+    <div class="des-view" style="width:270px">
+      <b class="title preview_activity_title"><%= @website.life_activity.try(:name) || '标题' %></b>
+      <span><%= Date.today %></span>
+      <div cover="cover box-img" class="img">
+        <%= image_tag((@website.life_activity.pic.presence || '/assets/bg_fm.jpg'), id: 'preview_shop_notice_pic', class: 'view', width: 258) %>
+      </div>
+      <p class="preview_activity_summary"><%= @website.life_activity.try(:summary) %></p>
+    </div>
+  </div>
+
+  <div class="des-r rightbar" style="width:460px;">
+    <%= form_for([:pro, @website], validate: true, html: { id: 'vip_activity_form', class: 'vip_activity_form' }) do |f| %>
+      <div class="box-form form-row fl">
+        <div class="p">
+          <span>微门户名称：<em>*</em></span>
+          <%= f.text_field :name, class: 'input-text' %>
+        </div>
+
+        <%= f.fields_for :life_activity do |activity| %>
+          <div class="p">
+            <span>回复关键词<em>*</em><span class="fgray">（用于公众账号中触发微门户，不能同其他关键字重复）</span></span>
+            <%= activity.text_field :keyword, class: "input-text" %>
+          </div>
+
+          <div class="p">
+            <span>微信消息标题<em>*</em><span class="fgray">（发送关键词后返回的微信消息标题，不能超过64个字）</span></span>
+            <%= activity.text_field :name, class: "input-text activity_title" %>
+          </div>
+
+
+          <div class="p">
+            <span>微信消息图片<em>*</em><span class="fgray">（发送关键词后返回的微信消息图片）</span></span>
+            <div class="box-file">
+                <input type="file">
+                <a class="btn btn-big"><span class='upload_pic' style="float:none;">上传照片</span>
+                  <%= activity.file_field :pic, id: 'shop_notice_pic', class: 'img_preview', data: { width: 720, height: 400 }, rel: 'preview_shop_notice_pic' %>
+                </a>
+            </div>
+            <span class="p-file"><span class="fgray">（图片建议尺寸：720像素*400像素） </span></span>
+          </div>
+
+          <div class="p">
+            <span>微信消息摘要<span class="fgray">（发送关键词后返回的微信消息摘要，不能超过255个字）</span></span>
+            <%= activity.text_area :summary, rows: 5, cols: 40, maxlength: 255, placeholder: "限255字", class: 'activity_summary'  %>
+          </div>
+        <% end %>
+
+        <div class="box-upload fl">
+          <div class="p form-check">
+            <label>首页封面图片　　</label>
+            <label><%= f.check_box :is_open_cover_pic %><i><span class="fgray">（首页显示封面动态效果）</span></i></label>
+          </div>
+          <div class="upload-img">
+            <span style="line-height: 87px;">
+              <%= image_tag((f.object.home_cover_pic.presence || '/assets/bg_fm.jpg'), id: "preview_shop_logo", class: 'view', size: '160x89') %>
+            </span>
+          </div>
+          <div class="upload-btn">
+            <div class="box-file">
+              <%= f.file_field :home_cover_pic, style:"width: 380px;", rel: 'preview_shop_logo', id: 'shop_product_pic_url', class: 'not-null-img img_preview', data: { width: 720, height: 400 } %>
+              <a class="btn btn-big">上传图片</a>
+            </div>
+            <span class="p-file fgray">建议尺寸：720像素*400像素</span>
+          </div>
+        </div>
+
+        <p><input type="submit" value="保存" class="btn btn-small btn-orange"/></p>
+
+      </div>
+    <% end %>
+
+  </div>
+</div>
+<script>
+  $(function(){
+    $('.img_preview').change(function () {
+      var self = $(this), img = new Image();
+      setTimeout(function(){
+        img.src = $( '#' + self.attr('rel') + ', .' + self.attr('rel') ).attr('src')
+        self.parent().parent().siblings('.show_pic_advice').remove();
+        if( img.width != self.data('width') || img.height != self.data('height') ) {
+          var html = "<div class='show_pic_advice'><span><img src='/assets/ico-warning.png' style='width:20px;' />您的图片像素为" + img.width + "*" + img.height+ "，不是最佳尺寸，建议您重新上传</span></div>";
+          self.parent().parent().parent().append(html);
+        }
+      }, 1000);
+    });
+  });
+</script>

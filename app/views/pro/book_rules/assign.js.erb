@@ -1,0 +1,16 @@
+<% if params[:shop_branch_id] %>
+	<% shop_branch = ShopBranch.find(params[:shop_branch_id]) %>
+	<% if shop_branch.book_rules.where(:rule_type => @book_rule.rule_type).count > 0 %>
+	  var model_html = "<%= j(render 'assign', :book_rule => @book_rule) %>";
+	  $("#modal_div").empty();
+	  $("#modal_div").append(model_html);
+	  $("#modal_div").modal('show');
+	<% else %>
+	  showTip("warning", "该门店没有规则");
+	<% end %>
+<% else %>
+	var model_html = "<%= j(render 'assign', :book_rule => @book_rule) %>";
+	$("#modal_div").empty();
+	$("#modal_div").append(model_html);
+	$("#modal_div").modal('show');
+<% end %>

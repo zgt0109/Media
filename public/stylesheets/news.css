@@ -1,0 +1,25 @@
+.nav-side,
+.main{border-radius:5px; border:1px solid #bdbdbd; background:#fff; float:left; margin:10px 0;}
+.nav-side{ width:195px; margin:10px;}
+.nav-side li{ height:47px; line-height:47px; border-bottom:1px solid #bdbdbd; overflow:hidden; background:url(/assets/bg-nav.jpg) repeat-x;}
+.nav-side li.first{ border-radius:5px 5px 0 0;}
+.nav-side li.last{ border:0; border-radius:0 0 5px 5px;}
+.nav-side li.current{ background:#fbfbfb;}
+.nav-side li a{ font-size:16px; color:#818181; padding:0 0 0 20%; width:60%; height:100%; position:relative;}
+.main{ width:720px; padding:10px;}
+.main .hd{ color:#888; height:30px; line-height:30px; border-bottom:1px dashed #ccc;}
+.main b,
+.main h1,
+.main img,
+.main span{ display:block;}
+.main h1{ text-align:center; font-size:24px; line-height:30px; color:#444; padding:20px 0 20px 0;}
+.main img{ max-width:100%; padding:10px 0;}
+.main span,
+.main b{ line-height:20px; padding:10px 0;}
+/*box*/
+.list{ padding:24px 20px 25px 20px; height:auto; overflow:hidden; width:700px;}
+.list .hd{ position:relative; border-bottom:5px solid #323436; padding:0 10px; height:40px;}
+.list .hd h1{color:#1883a6;background:url(/assets/title.png) no-repeat center bottom;  position:absolute; height:55px; line-height:55px; bottom:-5px; font-size:18px; padding:0 10px; cursor:pointer;}
+.list .hd h1.uncurrent{ color:#3b3b3b; background:none;}
+.list .bd{ padding:20px 0;}
+.list .ft{ padding:20px 0;}

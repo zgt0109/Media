@@ -1,0 +1,78 @@
+<div class="black"></div>
+<div class="main">
+	<section>
+		<%= form_for(@broker, url: mobile_brokerages_path(@supplier), remote: true) do |f| %>
+			<%= f.hidden_field :supplier_id %>
+			<%= f.hidden_field :wx_user_id, value: @wx_user.id %>
+			<div class="blank10"></div>
+			<div class="mark">
+				<%= image_tag @brokerage.logo_url %>
+			</div>
+			<div class="blank20"></div>
+			<div class="text"><%= f.text_field :name, placeholder: '请输入您的姓名' %></div>
+			<div class="text">
+				<%= f.text_field :mobile, type: :tel, class: "finish", placeholder: '请输入您的手机号' %>
+				<input class="present" type="button" value="发送验证码"/>
+			</div>
+			<div class="text">
+				<input type="tel" id="captcha" name="captcha" placeholder="请输入验证码" />
+			</div>
+			<div class="blank20"></div>
+			<div class="opinion"  id="btn-state">
+				<span class="choose"></span>
+				<a href="#">我同意以上注册协议</a>
+			</div>
+			<div class="blank40"></div>
+			<div class="broker-btn"><a href="#" id="broker">提交注册</a></div>
+			<div class="blank20"></div>
+			<div class="hint">*　请输入正确的姓名、电话，否则可能无法结佣!</div>
+			<div class="tips">
+				<%= @brokerage.agreement.html_safe %>
+				<div class="cl15"></div>
+				<div class="closed"></div>
+			</div>
+		<% end %>
+	</section>
+</div>
+<script type="text/javascript">
+var back = 60;
+var inter;
+$('body').on('click','input.present',function(){
+	var reg = /^[0-9_\-]*$/;
+	if($('#brokerage_broker_mobile').val() == "" || !reg.test($('#brokerage_broker_mobile').val())){
+		alert('请输入正确的手机号码');
+	}else{
+		$.getScript("<%= send_sms_mobile_brokerages_path %>?mobile=" + $('#brokerage_broker_mobile').val());
+		$(this).removeClass('present').addClass('presents').val('再次发送（'+back+'）');
+		inter = setInterval(function(){
+			back--;
+			$('input.presents').val('再次发送（'+back+'）');
+			if(back <= 0){
+				back = 60;
+				$('input.presents').removeClass('presents').addClass('present').val('发送验证码');
+				clearInterval(inter);
+			}
+		},1000)
+	}
+});
+
+$('body').on('click','#broker',function(){
+	if($('#captcha').val() == ""){
+		alert("请输入验证码！");
+	}else if($('#brokerage_broker_name').val() == ""){
+		alert("请输入姓名！");
+	}else if($('#brokerage_broker_mobile').val() == ""){
+		alert("请输入手机号！");
+	}else{
+		$(this).prop("disabled", true);
+		$('form').submit();
+	}
+});
+
+$("#btn-state").click(function(){
+	$(".tips, .black").show();
+});
+$(".closed").click(function(){
+	$(".tips, .black").hide();
+});
+</script>

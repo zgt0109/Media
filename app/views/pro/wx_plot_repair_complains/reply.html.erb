@@ -1,0 +1,53 @@
+<%= form_for @repair_complain, url: wx_plot_repair_complain_path(@repair_complain, type: params[:type]), validate: true do |f| %>
+    <div class="modal-body">
+      <div class="row vcommunity-repair-reply col-xs-12">
+
+        <dl>
+          <% @messages.each do |f| %>
+              <dd class="text-center time"><span class="grey"><%= f.created_at %></span></dd>
+              <% if f.is_a?(WxPlotRepairComplainMessage) %>
+                  <dt>
+                    <%= f.messageable_type.to_s == 'Supplier' ?  '物业客服：' : '小区住户：'%>
+                  </dt>
+                  <dd>
+                    <%= f.content %>
+                  </dd>
+              <% else %>
+                  <dd class="text-center">
+                    <span class="badge badge-success"><%= f.status_name %></span>
+                  </dd>
+              <% end %>
+          <% end %>
+        </dl>
+
+        <%= f.fields_for :messages, @message do |m| %>
+            <%= m.hidden_field :wx_plot_repair_complain_id %>
+            <%= m.hidden_field :messageable_id %>
+            <%= m.hidden_field :messageable_type %>
+            <%= m.text_area :content, class: 'form-control', rows: 5 %>
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="modal-footer">
+      <%= f.submit '回复', class: 'btn btn-sm btn-primary' %>
+      <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+    </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            $('form input[type=submit]').click(function(){
+                if(!$('#wx_plot_repair_complain_messages_attributes_0_content').val()){
+                    showTip('warning',"请填写回复内容");
+                    $('#wx_plot_repair_complain_messages_attributes_0_content').focus();
+                    return false;
+                }
+            });
+        });
+    </script>
+<% end %>

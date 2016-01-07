@@ -1,0 +1,77 @@
+<% title '展示中心' %>
+
+<header>
+  <%= form_for @search, url: mobile_website_articles_url(supplier_id: @website.supplier_id) do |f| %>
+  <%= hidden_field_tag :article_type, params[:article_type] %>
+  <%= hidden_field_tag :category_id, params[:category_id] %>
+  <%= f.hidden_field :taggings_tag_id_eq %>
+  <div class="head-name"><span>全部分类</span></div>
+  <div class="search-box">
+    <%= f.text_field :title_like %>
+  </div>
+  <a href="javascript:;" class="hide">
+    <span class="search"></span>
+  </a>
+  <% end %>
+</header>
+
+
+<div class="product-filter">
+  <% if @category && @category.root && @category.root.tags.present? %>
+    <div class="filter-box">
+      <% @category.root.tags.order('position DESC').limit(3).each do |t| %>
+        <%= link_to t.name, 'javascript:;' %>
+      <% end %>
+    </div>
+    <div class="filter-main">
+      <% @category.root.tags.order('position DESC').limit(3).each do |t| %>
+        <div class="filter-content">
+          <% t.children.each do |tc| %>
+            <span><%= link_to tc.name, 'javascript:;', data: {id: tc.id} %></span> 
+          <% end %>
+        </div> 
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="product-list">
+  <% @articles.each do |m| %>
+    <%= link_to mobile_website_article_url(m, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: {taggings_tag_id_eq: params[:search].to_h['taggings_tag_id_eq']}), class: 'list-box' do %>
+      <div class="img">
+        <%= image_tag m.pic if m.pic? %>
+      </div>
+      <div class="product-info">
+        <h1><%= m.title %></h1>
+        <% if m.subtitle_content %><div class="product-summary"><%= raw m.subtitle_content %></div><% end %>
+        <% taggings = m.taggings.limit(2) %>
+        <% taggings.each do |t| %>
+          <% tag = t.tag %>
+          <% next unless tag.parent_id.to_i == 0 %>
+          <% sub_tagging = taggings.where(tag_id: tag.children.collect(&:id)).first %>
+          <div class="product-tags"><%= tag.name %>：<%= sub_tagging.description.present? ? sub_tagging.description : sub_tagging.name %></div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<%= paginate @articles, :theme => 'article', :window => 1 %>
+<div class="category">
+  <div class="category-main">
+    <div class="category-box">
+      <a href="javascript:;" class="category all <%= 'active' unless @category %>" data-children-count="0" data-id="" data-parent-id="0" style="display: block;">全部</a>
+      <% @categories.root.order(:position).each do |c| %>
+        <%= link_to 'javascript:;', data: {children_count: c.children_count, id: c.id, parent_id: c.parent_id.to_i}, class: "category #{@category.try(:id).to_i == c.id ? 'active' : ''}" do %>
+          <%= c.name %>
+          <% if c.children_count > 0 %>
+          <i class="fa fa-angle-right"></i>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="category-foot">
+      <a href="javascript:;" class="back disabled">上一级</a>
+      <a href="javascript:;" class="all" data-id="<%= @category.try(:id).to_i %>">确认</a>
+    </div>
+  </div>
+  <div class="category-bg"></div>
+</div>

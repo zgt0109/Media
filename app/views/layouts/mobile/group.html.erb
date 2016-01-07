@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <title><%= content_for?(:title) ? yield(:title) : "微团购" %></title>
+    <!--link rel="stylesheet" type="text/css" href="../assets/css/font/font-awesome.min.css"-->
+    <!--link rel="stylesheet" type="text/css" href="../assets/css/teambuy.css"-->
+    <%= stylesheet_link_tag "mobile/group", "font/font-awesome.min.css" %>
+    <%= yield :ckeditor_css if content_for?(:ckeditor_css) %>
+    <%= javascript_include_tag "mobile/group/main" %>
+    <%= csrf_meta_tags %>
+
+  </head>
+  <body class="<%= yield :body_class %>">
+    <%= render 'application/gb2big5' %>
+    <div class="wrap">
+      <%= yield %>
+    </div>
+
+    <%= yield :bgshadow %>
+
+    <div class="btn-up">
+      <% if "#{params[:controller]}/#{params[:action]}".eql?('mobile/groups/index') %>
+        <span class="fa-stack fa-2x">
+          <%= link_to mobile_group_orders_url(@supplier.id) do %>
+            <i class="fa fa-circle fa-stack-2x red"></i>
+            <i class="fa fa-tag fa-stack-1x fa-inverse "></i>
+          <% end %>
+      </span> 
+      <% else %>
+        <span class="fa-stack fa-2x">
+          <a href="javascript:scroll(0,0)">
+            <i class="fa fa-circle fa-stack-2x red"></i>
+            <i class="fa fa-angle-up fa-stack-1x fa-inverse"></i>
+          </a>
+        </span>
+      <% end %>
+    </div>
+   
+    <%#= render 'application/app_footer' %>
+
+    <script>
+      $(function () {
+        showBtnUp(100);
+        <% if flash[:notice] || flash[:alert] %>
+          alert("<%= flash[:notice] || flash[:alert] %>");
+          <% flash.clear %>
+        <% end %>
+      });
+    </script>
+     
+    <%= yield :document_ready_js %>
+
+  </body>
+</html>

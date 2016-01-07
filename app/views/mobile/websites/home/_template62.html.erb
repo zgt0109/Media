@@ -1,0 +1,20 @@
+<%= render "slider_full", {:has_slider_text => :no} %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <% if menu.pic? || menu.font_icon.present? %>
+                  <div class="index-img">
+                    <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+                  </div>
+            <% end %>
+            <div class="index-text">
+                <b><%= menu.title %></b>
+            </div>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>

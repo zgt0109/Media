@@ -1,0 +1,45 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_house' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="<%= house_comments_path %>" class="h1 uncurrent">评论管理</a>
+  <a href="javascript:;" class="h1 pagecurrent">评论回复</a>
+<% end %>
+
+
+<div class="box-table fl">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
+    <tr>
+      <th width="10%">姓名</th>
+      <th width="14%">电话</th>
+      <th>评论内容</th>
+    </tr>
+    <% if @house_comment %>
+    <tr>
+      <td><%= @house_comment.try(:name) %></td>
+      <td><%= @house_comment.try(:mobile) %></td>
+      <td><%= @house_comment.try(:content) %></td>
+    </tr>
+    <%else%>
+    <tr><td colspan="3"><span class="fgreen" style="float:center">还没有信息</span></td></tr>
+    <%end%>
+  </table>
+</div>
+
+<%= form_for(@house_comment, validate: true) do |f| %>
+<div class="box-form form-row fl">
+  <%= f.hidden_field :status, value: HouseComment::REPLYED %>
+  <p>
+    <%= f.text_area :reply_content, placeholder: '回复内容（限200字。）', maxlength: 200, rows: 4, row: 40, style: "width:60%;" %>
+  </p>
+
+</div>
+
+<p>
+  <input class="btn btn-big form-submit btn-orange" type="submit" value="确认回复" name="commit">
+  <input type="button" style="cursor:pointer" value="取消" class="btn btn-small" onclick="javascript:location.href='<%= house_comments_path %>'">
+</p>
+
+<% end %>
+

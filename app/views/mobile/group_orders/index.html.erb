@@ -1,0 +1,101 @@
+<% title '我的团购订单' %>
+
+<div class="ordertit_tab clear">
+  <span class="ordertit_tabli on">未付款(<%= @pending_orders.count %>)</span>
+  <span class="ordertit_tabli">未消费(<%= @paid_orders.count %>)</span>
+  <span class="ordertit_tabli">待评价(<%= @consumed_no_comments_orders.count %>)</span>
+  <span class="ordertit_tabli">退款单(0)</span>
+</div>
+<div class="orderlist">
+  <div class="orderlist_cont" style="display: block">
+    <ul>
+      <% @pending_orders.each do |group_order| %>
+        <% group_item = group_order.group_item %>
+        <li>
+          <span class="left"><%= image_tag group_item.pic_url rescue '' %></span>
+          <div class="clear">
+            <div class="h6"><%= group_item.try(:name) %></div>
+            <p>总价：<%= f group_order.total_amount %>元  数量：<%= group_order.qty %></p>
+            <%= content_tag :div do %>
+              <%= link_to '付款', edit_mobile_group_order_url(group_order, supplier_id: @supplier.id, group_item_id: group_item.try(:id)), class: 'pay_btn sure' %>
+	      <%= link_to '删除',  mobile_group_order_url(group_order, supplier_id: @supplier.id), data: {method: :delete, confirm: '确定要删除吗？'}, class: 'pay_btn del2' %>
+            <% end if group_order.pending? %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="orderlist_cont">
+    <ul>
+      <% @paid_orders.each do |group_order| %>
+        <% group_item = group_order.group_item %>
+        <li>
+          <span class="left"><%= image_tag group_item.pic_url rescue '' %></span>
+          <div class="clear">
+            <div class="h6"><%= group_item.try(:name) %></div>
+            <p>总价：<%= f group_order.total_amount %>元  数量：<%= group_order.qty %></p>
+            <div class="sn">
+              <a href="javascript:;">SN码：<%= group_order.code %></a> 
+              <div class="hide ewm"><img alt="preview" src="data:image/jpeg;base64,<%= Base64.encode64(group_order.rqrcode.to_blob).gsub(/\n/, "") %>"></div>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="orderlist_cont">
+    <ul>
+      <% @consumed_no_comments_orders.each do |group_order| %>
+        <% group_item = group_order.group_item %>
+        <li>
+          <span class="left"><%= image_tag group_item.pic_url rescue '' %></span>
+          <div class="clear">
+            <div class="h6"><%= group_item.try(:name) %></div>
+            <p>总价：<%= f group_order.total_amount %>元  数量：<%= group_order.qty %></p>
+            <div>
+              <%= link_to '去评价', mobile_group_item_url(supplier_id: @supplier.id, id: group_item.id, group_order_id: group_order.id), class: 'pay_btn sure' %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="orderlist_cont">
+    <ul></ul>
+  </div>
+  
+</div>
+
+
+<% content_for :bgshadow do %><div class="bgshadow"></div><% end %>
+
+<% content_for :document_ready_js do %>
+<script>
+    $(function () {
+        $('.ordertit_tab').positionSticky();
+        $("body").on("click",".ordertit_tabli",function(){
+            var ind = $(this).index();
+            $(".ordertit_tabli").removeClass("on").eq(ind).addClass("on")
+            $(".orderlist_cont").hide().eq(ind).show();
+        }).on("click",".del2",de_confirm).on("click",".sn a",function(){
+            //$(".bgshadow").show();
+            //$(this).siblings(".ewm").show();
+        }).on("click",".ewm,.bgshadow",function(){
+
+            $(".bgshadow").hide();
+            $(".ewm").hide();
+        })
+
+        function de_confirm(){
+            //var r = confirm("确认删除吗?");
+            //if(r==true){
+            //    $(this).parents("li").remove()
+            //}
+        }
+
+    })
+</script>
+<% end %>

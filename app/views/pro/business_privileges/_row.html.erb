@@ -1,0 +1,10 @@
+<tr id="row-<%= business_privilege.id %>">
+  <td><%= business_privilege.name %></td>
+  <td><%= business_privilege.start_at.to_s[0..15] %></td>
+  <td><%= business_privilege.end_at.to_s[0..15] %></td>
+  <td class="description"><%= business_privilege.description.html_safe %></td>
+  <td>
+    <a onclick="popUrl(this)" data-name="name" data-w="700" data-h="600" data-title="编辑优惠信息" data-url="<%= edit_business_shop_business_privilege_path(@business_shop, business_privilege) %>">编辑</a>
+    <%= link_to '删除', [@business_shop, business_privilege], data: { remote: true, method: :delete, confirm: '确定要删除该优惠信息吗？'} %>
+  </td>
+</tr>

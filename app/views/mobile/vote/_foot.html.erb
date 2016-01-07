@@ -1,0 +1,13 @@
+<div class="focus-on" style="display:none;">
+  <%= image_tag "/assets/mobile/wvote/view-public.png" %>
+</div>
+
+<% activity_status_name = @activity.vote_status_attrs[0] %>
+
+<% if @activity_user.new_record? %>
+  <div class="foot">
+    <a href="javascript:void(0);" class="btn J-ok <%= activity_status_name.eql?(Activity::HAS_ENDED_NAME) ? '' : (activity_status_name.eql?(Activity::NOT_START_NAME) ? '' : (activity_status_name.eql?(Activity::UNDER_WAY_NAME) ? 'btn-violet' : '')) %>">
+      <%= activity_status_name.eql?(Activity::HAS_ENDED_NAME) ? '活动已结束' : (activity_status_name.eql?(Activity::NOT_START_NAME) ? '活动未开始' : (activity_status_name.eql?(Activity::UNDER_WAY_NAME) ? '开始投票' : ''))%>
+    </a>
+  </div>
+<% end %>

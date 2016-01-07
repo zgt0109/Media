@@ -1,0 +1,2 @@
+showTip("success", "开启成功");
+$("#<%=@donation.id%>-btn").html('<%= link_to "停止", stop_donation_path(@donation), method: :post, remote: true, id: "#{@donation.id}-btn"%>');

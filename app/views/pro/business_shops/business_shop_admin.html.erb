@@ -1,0 +1,44 @@
+<p class="p-note">
+  提示：1、你可以创建当前商铺独立的登录账号；<br>
+  <span style="margin-left: 36px;">2、商铺后台登录地址：http://shangpu.winwemedia.com</span>
+</p>
+
+<%= form_for @business_shop_admin, url: update_business_shop_admin_business_shop_path(@business_shop), method: :put, validate: true do |f| %>
+	<div class="box-form">
+    <div class="p">
+      <span>商铺账号：</span>
+      <%= f.text_field :name, class: 'input-text', size: 12 %>@<%= current_user.bqq_account? ? current_user.api_user.try(:uid) : @website.id %>
+      <span class="fgray">（如果输入的是abc，那么你完整的登录账号是abc@<%= current_user.bqq_account? ? current_user.api_user.try(:uid) : @website.id %>）</span>
+    </div>
+    <div class="p">
+      <span>商铺密码：</span>
+      <%= f.password_field :password, autocomplete: :off, class: 'input-text', size: 12 %>
+      <%= f.hidden_field :password_confirmation %>
+    </div>
+  </div>
+<% end %>
+<p class="tcenter">
+  <input class="btn btn-small btn-orange" type="button" value="保存" onclick="save_submit()">
+</p>
+<script type="text/javascript">
+$(function() {
+  $('#business_shop_admin_password').change(function() {
+    $('#business_shop_admin_password_confirmation').val($(this).val());
+  }).blur(function() {
+    $('#business_shop_admin_password_confirmation').val($(this).val());
+  });
+});
+
+function save_submit(){
+  $('#business_shop_admin_password_confirmation').val($('#business_shop_admin_password').val());
+  if($("[name='business_shop_admin[username]']").val() == ""){
+    showTip('warning',"请设置商铺账号！");
+    return false;
+  }else if($("[name='business_shop_admin[password_digest]']").val() == ""){
+    showTip('warning',"请设置商铺密码！");
+    return false;
+  }else{
+    $('form').submit()
+  }
+}
+</script>

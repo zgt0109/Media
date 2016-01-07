@@ -1,0 +1,22 @@
+      <% if @comments.present?  %>
+          <% @comments.each do |comment| %>
+              <div class="ft-list">
+                <div class="fl">
+                                <span class="bd-img">
+                                   <%= image_tag "/assets/life/user_logo.png" %>
+                                </span>
+                </div>
+
+              <div class="fr">
+                <b><%= comment.name %></b>
+                        <span>
+                        	<i><%= date_format_full(comment.created_at) %></i>
+                        </span>
+                <p><%= comment.content %></p>
+              </div>
+              </div>
+          <% end %>
+      <% else%>
+          <p class="tcenter ft-null">暂无评论</p>
+      <% end %>
+

@@ -1,0 +1,55 @@
+<section class="content2-wrap">
+<section class="banner"><img src="/assets/img/lottery/gift.png" alt=""/></section>
+  <article class="content2 myprize-content">
+    <div class="myprize-list">
+      <% @activity_consumes.each do |consume| %>
+        <% prize = consume.activity_prize %>
+        <div class="item">
+          <header><%= prize.title %>
+            <% if consume.mobile.blank? && !consume.unsend?%>
+              <a class="receive" href="javascript:;" data-id="<%= consume.id %>" data-title="<%= consume.activity_prize.title %>" data-sn="<%= consume.code %>"></a>
+            <%- elsif consume.unused? %>
+              <a href="javascript:;" class="noreceive"></a>
+            <% elsif consume.sended? %>
+              <a href="javascript:;" class="noreceive" style="background: url('/assets/img/lottery/sended.png') no-repeat center top;background-size: 100% 100%;"></a>
+            <% elsif consume.unsend? %>
+              <a href="javascript:;" class="noreceive" style="background: url('/assets/img/lottery/unsend.png') no-repeat center top;background-size: 100% 100%;"></a>
+            <% else %>
+              <a href="javascript:;" class="noreceive" style="background: url('/assets/img/lottery/used.png') no-repeat center top;background-size: 100% 100%;"></a>
+            <% end %>
+          </header>
+          <p>
+            <%= prize.prize %>
+          </p>
+          <p>
+            sn码: <%= consume.code %>
+            <a class="addgetma" href="javascript:;" data-ma="<%= consume.rqrcode %>"><img src="/assets/img/share/maash.png">查看</a>
+          </p>
+        </div>
+      <%- end %>
+    </div>
+  </article>
+  <a href="<%= mobile_waves_path(activity_id: @activity.try(:id)) %>" class="back"></a>
+</section>
+<a class="bgcover"></a>
+<div class="pop getpri">
+    <p class="til"><img src="/assets/img/lottery/gift_pri.png"></p>
+    <p class="showpri"></p>
+    <p class="int"><%= @activity.activity_property.display_win_tip %></p>
+    <input type="text" class="inp" value="<%= @wx_user.try(:related_mobile) %>" id="phone">
+    <input type="hidden" id="acid">
+    <p class="sub"><img src="/assets/img/lottery/submit.png" id="sentp" onClick="submitMobile();"></p>
+</div>
+
+<script>
+$(function(){
+    $('a.addgetma').click(function(){
+        var src = $(this).attr('data-ma');
+        var str = '<div class="showgetma"><img src="'+src+'" /></div>';
+        $('.html').append(str);
+        $('.showgetma').click(function(){
+            $(this).remove();
+        });
+    });
+});
+</script>

@@ -1,0 +1,6 @@
+<% @wx_wall_users.each do |user| %>
+  <li>
+    <img src="<%= user.avatar_url %>" width="46" height="46">
+    <span><%= user.nickname %></span>
+  </li>
+<% end %>

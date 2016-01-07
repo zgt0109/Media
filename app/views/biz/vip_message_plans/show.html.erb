@@ -1,0 +1,9 @@
+<form>
+<div class="modal-body">
+<p>站内信标题：<%= @plan.title %></p>
+<p>发送对象：<%= given_group_name(@plan) %>(<%= @plan.vip_users_count %>)</p>
+<p>消息内容：<%= raw @plan.content %></p>
+<p>发送方式：<%= @plan.scheduled_name %></p>
+<p>发送状态：<%= @plan.status_name %></p>
+</div>
+</form>

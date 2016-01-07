@@ -1,0 +1,46 @@
+<%= form_for @photo, url: "/albums/#{@album.id}/album_photos/#{@photo.id}", validate: true, html: {target: "_top", class: 'form', role: 'form'} do |f| %>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label class="control-label">标题</label>
+        <div class="clearfix">
+          <%= f.text_field :name, class: 'col-xs-6', data: {rule: 'length', maxlength: '10'}, placeholder: '' %>
+          </div>
+        </div>
+
+        <!--
+              <div class="form-group">
+                <label class="control-label">链接</label>
+                <div class="clearfix">
+        <%#= f.text_field :url, class: 'col-xs-6', data: {rule: 'url', format: ''}, placeholder: '' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">添加图片<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <div class="cieldon-file width-100px" data-type="0" data-div="#img-1"
+                         data-height="200" data-width="360" data-attr="require:true" data-name="website_picture[pic_key]" data-img="<%#= f.object.pic_url %>" data-key="<%#= f.object.pic_key %>"></div>
+                  </div>
+          <%#= hidden_field_tag 'exist', f.object.pic_url.present? ? true : false %>
+                </div>
+
+          -->
+
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="modal-footer">          
+          <input type="submit" class="btn btn-sm btn-primary" data-fn="submit" value="确定" />
+          <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+        </div>
+      <% end %>
+      <% content_for :custom_js do %>
+        <script type="text/javascript">
+          $(function(){
+          
+          });
+        </script>
+      <% end %>
+

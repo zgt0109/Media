@@ -1,0 +1,90 @@
+<% provide(:title, '可用积分') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section id="sec-index">
+      <div class="mod-top">
+        <p><span class="mod-name">历史总积分</span><span><%= @vip_user.try(:total_points) %></span></p>
+        <p><span class="mod-name">可用积分</span><span><%= @vip_user.try(:usable_points) %></span></p>
+      </div>
+      <div class="item-box color">
+        <div class="item bg-1 <%= "cur" if params[:type] == "out" %>">
+          <a href="/app/vips/points?type=out">
+            <b><%= @points.used_points %></b>
+            <span>已使用</span>
+          </a>
+        </div>
+        <div class="item bg-1 <%= "cur" if params[:type] == "money" %>">
+          <a href="/app/vips/points?type=money">
+            <b><%= @points.by_money("money").sum(:points) %></b>
+            <span>消费奖励</span>
+          </a>
+        </div>
+        <div class="item bg-1 <%= "cur" if params[:type] == "in" %>">
+          <a href="/app/vips/points?type=in">
+            <b><%= @points.in.sum(:points) %></b>
+            <span>签到奖励</span>
+          </a>
+        </div>
+        <div class="item bg-1 <%= "cur" if params[:type] == "givens" %>">
+          <a href="/app/vips/points?type=givens">
+            <b><%= @vip_givens.sum(:value) %></b>
+            <span>节日赠送</span>
+          </a>
+        </div>
+      </div>
+      <div class="check">
+        <%= months_for_select('month', id: 'month', class: 'input input-small', selected: params[:month])%>
+        <a href="#" class="btn btn-check" id="select_date">查询</a>
+      </div>
+      <div class="card-table">
+        <table>
+          <tr>
+            <th>日期</th>
+            <% if params[:type] == "givens" %>
+              <th>名称</th>
+              <th>状态</th>
+            <% end %>
+            <th>积分</th>
+          </tr>
+          <% if params[:type] == "givens" %>
+            <% if @givens.each do |given| %>
+              <tr>
+                <td><%= (given.unused? ? given.start_at.strftime("%m-%d") : given.updated_at.strftime("%m-%d")) %></td>
+                <td><%= given.vip_care.name.to_s[0..5] %></td>
+                <td><%= given.status_name.delete("使") %></td>
+                <td><%= (given.unused? ? "+" : "-") + given.value.to_s %></td>
+              </tr>
+            <% end.blank? %>
+              <tr><td colspan="4">暂无积分记录</td></tr>
+            <% end %>
+          <% else %>
+            <% if @point_transactions.each do |point_transaction| %>
+              <tr>
+                <td><%= point_transaction.created_at.to_date %></td>
+                <td><%= params[:type] == "out" ? "-" : "+" %><%= point_transaction.points %></td>
+              </tr>
+            <% end.blank? %>
+              <tr><td colspan="2">暂无积分记录</td></tr>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>
+<script>
+  $(function(){
+    $( "#date" ).datepicker({
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+  });
+
+  $(document).on("click", "#select_date", function(){
+    window.location.href = '/app/vips/points?month=' + $("#month").val() + "&type=" + "<%= params[:type] %>";
+  });
+</script>

@@ -1,0 +1,59 @@
+<header>
+	<a class="ico-prev" href="/app/whouse?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>"></a>
+	<h1>房友印象</h1>
+	<a href="/app/whouse/comment?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>" class="ico-edit"></a>
+</header>
+<div class="contxt">
+	<% if @cover_house_pictures %>
+	<div class="box-cont cont-img">
+		<div class="flashshow">
+			<div class="flashCont" id="defaultFlash">
+				<% @cover_house_pictures.each_with_index do |picture, i| %>
+				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+	<div class="box-cont cont-impress">
+		<h1>房友印象</h1>
+		<% @house_comments.each do |comment| %>
+		<div class="box-impress">
+			<div class="hd">
+				<span class="tleft"><%= comment.name %>：</span>
+				<span class="tright"><%= comment.created_at.try(:to_date) %></span>
+			</div>
+			<div class="bd">
+				<%= comment.content %>
+				<p class="txt-reply">
+					<% if comment.reply_content %>
+					<span><%= @house.name %>销售回复：</span>
+					<span><%= comment.reply_content %></span>
+					<%end%>
+				</p>
+			</div>
+			<div class="ft"></div>
+		</div>
+		<% end %>
+		<% if !@house_comments or @house_comments.size == 0 %>
+		<div class="box-impress">
+			<div class="hd">
+				<span class="tright">目前尚无有房友留言，您也可以分享自己的印象评论哦！</span>
+			</div>
+		<% end %>
+		<div class="box-pages">
+			<%= paginate @house_comments %>
+		</div>
+
+		<!--
+			<div class="box-pages">
+				<a href="#"><</a><a href="#" class="active">1</a><a href="#">2</a><a href="#">3</a><a href="#">></a>
+			</div>
+		</div>
+		<!--
+			<div class="box-ft">
+				<a>点击加在更多</a>
+			</div>
+		-->
+	</div>

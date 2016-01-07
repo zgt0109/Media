@@ -1,0 +1,190 @@
+<% content_for :tab do %>
+<div id="VCCardSetting" class="row tab-pane fade active in">
+
+  <div class="vcsection">
+    <div class="vcsection-header">
+      <div class="vcsection-header-txt">会员卡样式</div>
+      <div class="vcsection-header-btn">
+        <input type="button" class="btn btn-sm btn-primary vcard-save-style" value="保存"></div>
+    </div>
+    <div class="vcsection-body clearfix">
+    <%= form_for @activity, validate: true, html:{id: 'vip_card_form', class: 'form col-md-12 margin-top-30', role: 'form'} do |f| %>
+      <%= f.fields_for :vip_card, @activity.vip_card do |card| %>
+        <%= card.hidden_field :settings_json %>
+        <div class="clearfix vcard-first">
+          <div class="vcindent-550">
+            <div class="vcard-card vcard-card-main">
+              <div class="vcard-elem vcard-level">会员卡</div>
+              <div class="vcard-elem vcard-logo"><img src="" alt=""></div>
+              <div class="vcard-elem vcard-number">No. 2015236541</div>
+            </div>
+            <div class="margin-top-10"> <strong>注：</strong>
+              拖动文字图片可移动位置
+            </div>
+          </div>
+          <div class="vcmargin-550">
+            <div class="form-group">
+              <input type="button" class="vcard-btn vcard-btn-selecttpl" value="选择模版"></div>
+            <div class="form-group">
+              <input type="button" class="vcard-btn vcard-btn-uploadbg" value="上传背景图">
+              <input type="file" class="vcard-hidden">
+              <span class="vcard-tips">建议尺寸：宽534像素 * 高318像素</span>
+            </div>
+<!--             <div class="cieldon-file width-100px " data-type="1" data-div="#img-2"  data-name='activity[vip_card_attributes][logo_key]' data-height="30" data-width="65" data-img="<%= @vip_card.try(:logo_url) %>" data-key="<%= @vip_card.try(:logo_key) %>" ></div>
+            <span class="fontWarn">建议尺寸：宽152像素 * 高70像素</span>
+            <div class="margin-top-10">
+              <%- if @activity.vip_card && @activity.vip_card.logo_url.present? %>
+                <%= link_to "删除图标", remove_logo_vip_card_path(@activity.vip_card), method: :post %>
+              <%- end %>
+            </div> -->
+            <div class="form-group">
+
+
+              <input type="button" class="vcard-btn vcard-btn-uploadlogo" value="上传logo">
+              <!-- <input type="file" class="vcard-hidden"> -->
+              <%= card.text_field :logo_key, type: "file", class: "vcard-hidden" %>
+              <%- if @activity.vip_card && (@activity.vip_card.logo_key.present? || @activity.vip_card.logo_url.present?) %>
+                <%= link_to "删除", remove_logo_vip_card_path(@activity.vip_card), method: :post, class: "btn btn-primary btn-sm", data: {confirm: '确定删除会员卡Logo吗?'} %>
+              <%- end %>
+              <span class="vcard-tips">建议尺寸：宽152像素 * 高70像素</span>
+            </div>
+            <div class="form-group">
+              <div class="vcard-field vcard-setcard">会员卡名称：</div>
+              <div class="vcard-control">
+                <%= card.text_field :name, class: 'vcard-setlevel', placeholder: "不能超过20个字符，建议8个字以内", maxlength: 20 %>
+              </div>
+            </div>
+            <% font_sizes = (6..17).map { |n| "#{n * 2}px" } %>
+            <div class="form-group">
+              <div class="vcard-field">会员卡名称样式：</div>
+              <%= card.select :name_font_size, font_sizes, {}, class: "vcard-select vcard-setcard vcard-select-levelfz"  %>
+              <%= card.text_field :name_bg_color, class: 'vcard-btn vcard-color vcard-color-level', type: 'button' %>
+            </div>
+            <div class="form-group">
+                <div class="vcard-field">会员卡号码样式：</div>
+                <div class="vcard-control">
+                  <%= card.select :card_font_size, font_sizes, {}, class: "vcard-select vcard-setcard vcard-select-numberfz"  %>
+                  <%= card.text_field :card_bg_color, class: 'vcard-btn vcard-color vcard-color-number', type: 'button' %>
+                </div>
+            </div>
+            <div class="form-group">
+              <input type="button" class="vcard-btn vcard-btn-carddesp" value="编辑会员卡说明" data-target="#card_description">
+              <input type="button" class="vcard-btn vcard-btn-carddesp" value="编辑积分说明" data-target="#card_points_description">
+            </div>
+            <div class="vcmodal vcard-edit" id="card_description">
+              <div class="vcmodal-main">
+                <div class="vcmodal-header">编辑会员卡说明</div>
+                <div class="clearfix vcmodal-body">
+                  <%= render "shared/form_rich_text", field_name: "description", obj: card.object, f: card, wrapper_html_options: {class: "col-md-11 activity_notice_description"}%>
+                </div>
+                <div class="vcmodal-close">×</div>
+              </div>
+            </div>
+            <div class="vcmodal vcard-edit" id="card_points_description">
+              <div class="vcmodal-main">
+                <div class="vcmodal-header">编辑积分说明</div>
+                <div class="clearfix vcmodal-body">
+                  <%= render "shared/form_rich_text", field_name: "points_description", obj: card.object, f: card, wrapper_html_options: {class: "col-md-11 activity_notice_description"}%>
+                </div>
+                <div class="vcmodal-close">×</div>
+              </div>
+            </div>
+            <div class="form-group hide">
+              <label>
+                <input type="checkbox" class="vcard-muti">
+                <span class="vcard-tips">不同等级不同会员卡卡面</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix">
+          <div class="clearfix vcard-list vcard-list-type"><div class="vcard-list-no">暂无其他等级会员卡</div></div>
+        </div>
+      <% end  %>
+    <% end  %>
+    </div>
+  </div>
+
+  <%= render 'audit_and_sms' %>
+
+  <%= render 'supplier_info' %>
+</div>
+
+<% end %>
+<%= render 'biz/vip_cards/settings_tab' %>
+
+
+<div class="vcmodal vcard-tpls">
+    <div class="vcmodal-main">
+        <div class="vcmodal-header">会员卡模板</div>
+        <div class="clearfix vcmodal-body">
+            <div class="clearfix vcard-list"></div>
+        </div>
+        <div class="vcmodal-close">×</div>
+    </div>
+</div>
+
+
+
+<% content_for :custom_js do %>
+
+<%= stylesheet_link_tag "msdropdown/dd.css", "vip/vcard" %>
+<%= javascript_include_tag "jscolor/jscolor", "msdropdown/jquery.dd.min" %>
+<%= javascript_include_tag "lib/jquery-ui" %>
+<script src="/javascripts/vscene_3.0.0/jquery.qiniuUploadImg.js"></script>
+<%= render 'vip_card_tpl' %>
+<%= render 'biz/vip_cards/vip_card_data' %>
+<%= javascript_include_tag "vip/vcard" %>
+<%#= javascript_include_tag 'vip/vcardData', 'vip/vcardTpl', "vip/vcard" %>
+
+<script>
+      $(function(){
+          $("[data-type=ajax]").each(function(){
+              var $this = $(this),
+                  $url = $this.attr("data-url");
+              $url += ".html"
+              load($this,$url);
+          });
+      });
+      function load(el,url){
+          $.get(url, function(result){
+              if(el){
+                  $(el).html(result);
+              }else{
+                  return false;
+              }
+        },"html");
+      }
+  </script>
+<!-- 替代上面异步加载的js和css ==========end========== -->
+
+<script>
+  jQuery(function($) {
+    $(".J-upload").on("click", function() {
+      $(".J-uploadBtn input").click();
+    });
+  });
+</script>
+
+<script>
+  $(function(){
+    $(".vcard-save-style").on('click', function(){
+      var vipCardSettingJson = JSON.stringify(window.vcardData);
+      $('#activity_vip_card_attributes_settings_json').val(vipCardSettingJson);
+      // alert(vipCardSettingJson)
+      // console.log(vipCardSettingJson);
+      $('#vip_card_form').submit();
+    });
+
+    $('.vcard-btn-carddesp').off("click").on('click', function(){
+        $($(this).data("target")).fadeIn();
+    });
+
+    $(".vcard-first").on('click', '.vcmodal-close', function(){
+        $(this).closest('.vcard-edit').fadeOut();
+    });
+  });
+</script>
+
+
+<% end %>

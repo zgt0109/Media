@@ -1,0 +1,6 @@
+var html = '<%= j (render partial: "commission_list", collection: @commission_list, as: :transaction) %>';
+$(".lanmu-list").append(html);
+$(".listmore").remove();
+<% if @commission_list.next_page %>
+  $(".lanmu-content").append('<%= link_to_next_page @commission_list, "查看更多 ↓", remote: true, class: "listmore" %>');
+<% end %>

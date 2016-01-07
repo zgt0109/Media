@@ -1,0 +1,8 @@
+var select_tag = '<%= j select_tag "shop_product[shop_category_id]", options_from_collection_for_select(@shop_categories, "id", "name"), prompt: "请选择分类编号", class: "col-xs-6", id: "second_level_categories" %>';
+$("#second_div").empty();
+$("#second_div").html(select_tag);
+if($("#second_div").find('option').length <= 1){
+	$("#second_div").closest('.form-group').hide();
+}else{
+	$("#second_div").closest('.form-group').show();
+}

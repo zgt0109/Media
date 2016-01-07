@@ -1,0 +1,44 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <% if params[:type] == 'wx_plot' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <li><%= link_to current_user.wx_plot.try(:owner), wx_plot_owners_path %></li>
+          <li><%= link_to '微社区设置', action_name == 'new' ? new_wbbs_community_path(type: params[:type]) :  edit_wbbs_community_path(@wbbs_community, type: params[:type]) %></li>
+      <% else %>
+          <li><%= link_to '微社区', wbbs_communities_path(type: params[:type]) %></li>
+      <% end %>
+      <%= yield :breadcrumb_li %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+          <li class="<%= 'active' if controller_name == 'wbbs_communities' && %w(edit new).include?(action_name) %>">
+            <%= link_to '微社区设置', action_name == 'new' ? new_wbbs_community_path(type: params[:type]) :  edit_wbbs_community_path(@wbbs_community, type: params[:type]) %>
+          </li>
+          <li class="<%= 'active' if action_name == 'index' && controller_name == 'wbbs_topics' %>">
+            <%= link_to '话题管理', @wbbs_community.new_record? ?  '#' : wbbs_topics_path(community_id: @wbbs_community.id, type: params[:type]) %>
+          </li>
+          <li class="<%= 'active' if action_name == 'normal_users' && controller_name == 'wbbs_topics' %>">
+            <%= link_to '用户管理', @wbbs_community.new_record? ?  '#' : normal_users_wbbs_topics_path(community_id: @wbbs_community.id, type: params[:type]) %>
+          </li>
+          <li class="<%= 'active' if action_name == 'forbidden_users' && controller_name == 'wbbs_topics' %>">
+            <%= link_to '屏蔽名单', @wbbs_community.new_record? ?  '#' : forbidden_users_wbbs_topics_path(community_id: @wbbs_community.id, type: params[:type]) %>
+          </li>
+          <li class="<%= 'active' if action_name == 'removed' && controller_name == 'wbbs_topics' %>">
+            <%= link_to '已删话题', @wbbs_community.new_record? ?  '#' : removed_wbbs_topics_path(community_id: @wbbs_community.id, type: params[:type]) %>
+          </li>
+        </ul>
+        <div class="tab-content no-border">
+          <%= yield :tab %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

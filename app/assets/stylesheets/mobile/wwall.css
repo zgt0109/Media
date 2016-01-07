@@ -1,0 +1,38 @@
+/*
+*= require mobile/winwemedia01
+*= require mobile/font-awesome
+*= require_self
+*/
+
+/*global*/
+.html{background:#585e6e;}
+header{width:100%;height:44px;background:#24262b;}
+.main{}
+.tab-box{width:100%;height:44px;padding:7px 3%;}
+.tab-box ul{width:100%;height:100%;list-style:none;border-radius:5px;border:1px solid #fff;text-align:center;overflow:hidden;}
+.tab-box li{width:50%;float:left;}
+.tab-box a{font-size:14px;color:#fff;line-height:28px;}
+.tab-box .cur{background:#fff;}
+.tab-box .cur a{color:#24262b;}
+/*index*/
+.message{position:relative;padding:10px;overflow:hidden;}
+.message li{margin-top:10px;padding-left:50px;list-style:none;position:relative;}
+.line{width:1px;height:100%;position:absolute;top:20px;left:30px;background:#fff;}
+.user-left{width:40px;padding:5px 0;background:#585e6e;position:absolute;left:0;top:5px;z-index:9;}
+.user-img{width:40px;height:40px;border-radius:50%;background:#fff;padding:2px;position:relative;}
+.user-img:after{display:block;content:"";position:absolute;width:0;height:0;right:-5px;top:15px;overflow:hidden;border-left:7px solid  #fff;border-top:5px solid transparent;border-bottom:5px solid transparent;}
+.user-img img{width:36px;height:36px;border-radius:50%;border:2px solid  #a0a191;}
+.user-time{color:#fff;font-size:12px;line-height:1;margin-top:5px;}
+.user-time span,.user-time small{display:block;text-align:right;}
+.user-time small{font-size:9px;}
+/*message*/
+.user-msg{width:100%;padding:10px;color:#333;background:#cdcfd4;border:1px solid  #fff;border-radius:5px;position:relative;}
+.user-msg:after{display:block;content:"";position:absolute;width:0;height:0;left:-5px;top:25px;overflow:hidden;border-right:5px solid  #fff;border-top:4px solid transparent;border-bottom:4px solid transparent;}
+.user-msg h1{font:bold 15px "microsoft yahei";}
+.user-msg p{min-height:36px;font-size:12px;line-height:1.5;}
+.user-msg img{max-height:75px;margin-top:5px;}
+/*photo*/
+.photo{width:100%;padding:0 15px;}
+.photo ul{list-style:none;}
+.photo li{margin-top:15px;padding:8px;border:1px solid  #fff;border-radius:5px;background:#cdcfd4;}
+.photo li img{max-width:100%;border:1px solid  #fff;border-radius:5px;}

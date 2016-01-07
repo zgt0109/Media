@@ -1,0 +1,5 @@
+<%= render "slider_full", {:has_slider_text => :yes, :show_slider_span => :no} %>
+
+<% content_for :document_ready_js do %>
+    navLineSwipe=divSwipe("navLine-menu");
+<% end %>

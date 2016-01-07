@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title><%= yield(:title) %></title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/food/winwemedia01.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/food/font/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/food/wstore.css?v=54"/>
+    <%= javascript_include_tag "mobile/food" %>
+    <%= yield :head %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+    <div class="html">
+      <div class="main">
+        <header>
+          <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
+          <h1><%= @shop_product.name %></h1>
+        </header>
+
+        <section>
+          <div class="box box-ck"><%= raw @shop_product.description %></div>
+
+          <div class="box">
+            <%= form_for @shop_product_comment, url: mobile_shop_product_comments_url(supplier_id: session[:supplier_id]), remote: true do |f| %>
+              <div class="hd">评论</div>
+              <%= f.hidden_field :shop_product_id %>
+              <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+              <div class="text"><%= f.text_area :content, class: "", cols: "30", rows: "5" %></div>
+              <div class="ft"><%= f.submit "提交", class: "btn" %></div>
+            <% end %>
+          </div>
+
+          <div class="box comment-list">
+            <div class="hd">评论列表</div>
+            <div class="bd table">
+              <% @shop_product.shop_product_comments.each do |comment| %>
+                <% unless comment.new_record? %>
+                  <p class="tr">
+                    <em class="td"><%= comment.try(:wx_user).try(:nickname) || "匿名" %></em>
+                    <b class="td"><%= comment.content %></b>
+                    <span class="td"><%= comment.created_at.strftime("%H:%M %m-%d") %></span>
+                  </p>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <script>
+      $(function(){
+        $(".ico-menu").click(function(){
+          $(this).toggleClass("active");
+        });
+      });
+    </script>
+  </body>
+</html>

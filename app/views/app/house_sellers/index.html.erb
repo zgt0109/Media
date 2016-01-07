@@ -1,0 +1,24 @@
+<body class="list">
+  <div class="html">
+    <div class="main">
+      <header>
+        <a class="ico tleft" href="javascript:history.go(-1);"><img src="/assets/house_market/12.png"/></a>
+        <h1>销售顾问</h1>
+      </header>
+      <section>
+        <% @house_sellers.each do |seller| %>
+          <a href="tel:<%= seller.phone%>" class="box-list-saler box">
+            <%= image_tag seller.try(:pic).try(:large) if seller.try(:pic?) %>
+            <p>
+              <b>姓名：</b><span><%= seller.name %></span>
+              <b>职位：</b><span><%= seller.position %></span>
+              <b>语言：</b><span><%= seller.skilled_language %></span>
+              <b class="btn-tel"><%= seller.phone %></b>
+            </p>
+          </a>
+        <% end if @house_sellers.present? %>
+      </section><!-- section end -->
+    </div><!-- main end -->
+  </div>
+  <%= @supplier.try(:piwik_js_code) %>
+</body>

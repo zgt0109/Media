@@ -1,0 +1,5 @@
+var material = $('#obj'+<%= @destroy_id %>)
+material.slideUp( function() {
+  material.remove();
+  $('#multiple_total_count').text(parseInt($('#multiple_total_count').text())-1);
+});

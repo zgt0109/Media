@@ -1,0 +1,35 @@
+<div class="body">
+    <div class="act-box">
+        <div class="wrap">
+            <img src="/com/images/act_img_1.png" alt="">
+            <img src="/com/images/act_img_2.png" alt="">
+            <div class="act_qrcode">
+                <div class="qrcode-img">
+                    <% unless Rails.env.production? %>
+                    <img src="/com/images/winwemediaerweima.png" alt="">
+                    <% else %>
+                    <img src="/com/images/winwemediaerweima.png" alt="">
+                    <% end %>
+                    <p>扫码后,用浏览器打开</p>
+                </div>
+                <div class="act-text">
+                    <p>1.登录账号和微枚迪后台登录账号一致</p>
+                    <p>2.以商户为单位，一个商户仅一次中奖机会。</p>
+                    <p>3.产品使用中，如有任何优化产品的意见及建议，</p>
+                    <p>欢迎发送至反馈邮箱：product@winwemedia.com。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+.act-box{background:url(/com/images/act_bg.jpg) center top;}
+.act_qrcode{width:530px;margin:10px auto;}
+.act_qrcode:after{display:table;content:"";clear:both;}
+.qrcode-img{float:left;text-align:center;font-size:14px;color:#3f3f3f;}
+.qrcode-img img{display:block;width:177px;height:177px;}
+.act-text{float:left;margin:40px 0;padding:0 20px;font-size:14px;color:#666;line-height:24px;}
+.act-text p{margin:0;}
+</style>

@@ -1,0 +1,120 @@
+<div class="tabbable">
+    <%= render "/biz/wmall_groups/top_nav_tabs"%>
+    <div id="tab-4" class="tab-content no-border padding-24">
+      <%= form_for @group_orders_search, url: wmall_group_orders_path, :html => { :method => :get } do |f| %>
+            <div class="row">
+              <div class="col-sm-12 margin-top-10">
+
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">商品名称：</span>
+                    <%= f.text_field :group_item_name_like, class: 'col-xs-12', placeholder: "请输入商品名称" %>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+
+                    <span class="input-group-addon">订单号：</span>
+                    <%= f.text_field :order_no_like, class: 'col-xs-12', placeholder: "请输入订单号" %>
+                  </div>
+                </div>
+                　　　
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+
+                    <span class="input-group-addon">支付流水号：</span>
+                    <%= f.text_field :payments_trade_no_like, class: 'col-xs-12', placeholder: "请输入支付流水号" %>
+                  </div>
+                </div>
+              </div>
+
+          <div class="col-sm-12 margin-top-10"> 　
+            <div class="col-md-3 row">
+              <div class="input-group input-group-text">
+
+                <span class="input-group-addon">商户名称：</span>
+                <%= text_field_tag :shop_name, params[:shop_name],class: 'col-xs-12', placeholder: "请输入商户名称" %>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">状态：</span>
+                <%= f.select :status_eq, GroupOrder.status_options, {include_blank: '全部'}, class: "col-xs-12" %>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">下单时间：</span>
+
+                <div class="input-group">
+                  <%= f.text_field :created_at_gte, class: 'datepicker input-sm form-control', value: (params[:search][:created_at_gte].try(:to_date) if params[:search]) %>
+                  <span class="input-group-addon">
+                       -
+                    </span>
+                  <%= f.text_field :created_at_lte, class: 'datepicker input-sm form-control', value: (params[:search][:created_at_lte].try(:to_date) if params[:search]) %>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 pull-left">
+              <button class="btn btn-primary btn-sm btn-filter" type="submit">查询</button>
+              <%#= link_to '查询', 'javascript:;', class: 'btn btn-primary btn-sm btn-filter', id: 'search_vip_users' %>
+              <%= link_to '导出EXCEL', wmall_group_orders_path(:format => :xls,:search => params[:search], field: params[:field], order_page: params[:order_page]) , class: 'btn btn-primary btn-sm btn-filter' %>
+            </div>
+          </div>
+          </div>
+
+    <% end %>
+
+      <div class="col-sm-12 no-padding">
+        <table id="orderManageTable" class="table table-striped table-bordered table-hover margin-top-20">
+          <thead>
+          <tr>
+            <th>订单号</th>
+            <th>支付流水号</th>
+            <th>支付方式</th>
+            <th>SN码</th>
+            <th>商品名称</th>
+            <th>所属商家</th>
+            <th>订单金额</th>
+            <th>状态</th>
+            <th>下单时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% if @wmall_group_orders.blank? %>
+            <tr><td colspan="9" style="text-align: center;">还没有订单哦!</td></tr>
+          <% else %>
+              <% @wmall_group_orders.each do |order| %>
+                  <tr>
+                    <td><%= order.order_no %></td>
+                    <td><%= order.payments.success.try(:first).try(:trade_no) %></td>
+                    <td><%= order.try(:payment_type).try(:name) %></td>
+                    <td><%= order.consumed? ? order.code : order.code.truncate(0, omission: "****")   %></td>
+                    <td title="<%= order.group_item.try(:name) %>"><span><%= truncate_u order.group_item.try(:name), length: 8 %></span></td>
+                    <td><%= order.try(:group_item).try(:groupable).try(:name)%></td>
+                    <td><%= order.total_amount %></td>
+                    <td><%= order.status_name %></td>
+                    <td><%= order.created_at %></td>
+                    <td class="txt-left-align">
+                      <%= link_to "查看","javascript:;", data: {toggle: "modals", title: "订单详情", height: "1000", iframe: wmall_group_order_path(order)}%>
+
+                      <% if order.paid? %>
+                          <%= link_to "确定消费", consume_wmall_group_order_path(order), data: {toggle: "modals", confirm: "确认消费？", target: "delModel", url: consume_wmall_group_order_path(order), method: "post"}%>
+                      <% elsif order.pending? %>
+                          <%= link_to "取消", wmall_group_order_path(order), data: {toggle: "modals", confirm: "确定要取消订单吗？", target: "delModel", url: wmall_group_order_path(order), method: "delete"}%>
+                      <% end %>
+                    </td>
+                  </tr>
+              <% end %>
+          <% end %>
+
+          </tbody>
+        </table>
+
+        <%= paginate @wmall_group_orders, :param_name => :order_page %>
+      </div>
+    </div>
+</div>

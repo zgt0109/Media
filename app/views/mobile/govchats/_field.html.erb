@@ -1,0 +1,52 @@
+<%- index = @activity.custom_fields.order(:id).pluck(:id).index(field.id) %>
+<%- value = @chat.custom_values.where(custom_field_id: field.id).first.value rescue '' %>
+<%- if %(integer string).include?(field.field_format) %>
+  <% text_pattern = field.field_format == 'integer' ? 'pattern=[0-9]*' : '' %>
+    <div class="form-li">
+      <p><%= field.name %><%= raw(field.is_required? ? '<span style="color:red">*</span>' : '' )%></p>
+      <input <%= (@chat&& @chat.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="<%= field.name == '电话' ? 'phone' : 'field_#{field.id}' %>" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" <%= text_pattern %> placeholder="<%= field.placeholder %>" />
+    </div>
+  <%- elsif %(text).include?(field.field_format) %>
+    <div class="form-li">
+      <p><%= field.name %><%= raw(field.is_required? ? '<span style="color:red">*</span>' : '' )%></p>
+      <textarea id="field_<%= field.id %>" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" placeholder="<%= field.placeholder %>" style="height: 60px;"></textarea>
+    </div>
+  <%- elsif %(datetime).include?(field.field_format) %>
+    <%- if field.name == "生日" %>
+      <%- date_class = 'maxdate' %>
+    <%- elsif index == 2 %>
+      <%- date_class = 'mindate' %>
+    <%- else %>
+      <%- date_class = 'date' %>
+    <%- end %>
+    <%- date_class = (@chat && @chat.persisted?) ? '' : date_class %>
+
+    <div class="form-li">
+      <p><%= field.name %><%= raw(field.is_required? ? '<span style="color:red">*</span>' : '' )%></p>
+      <input value="<%= value %>" id="field_<%= field.id %>" class= "<%= date_class%> <%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]" type="text" placeholder="<%= field.placeholder %>" readonly/>
+    </div>
+  <%- elsif %(select radio).include?(field.field_format) %>
+    <div class="form-li">
+      <p><%= field.name %><%= raw(field.is_required? ? '<span style="color:red">*</span>' : '' )%></p>
+        <select <%= (@chat&& @chat.persisted?) ? 'readonly disabled' : ''  %> value="<%= value %>" id="field_<%= field.id %>" style="background: #f0eef0;padding: 0;" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+          <option value="">请选择</option>
+          <%- field.possible_options.each do |option| %>
+            <%- if option.present? %>
+              <option value="<%= option %>"><%= option %></option>
+            <%- end %>
+          <%- end %>
+        </select>
+      </div>
+  <%- elsif %(checkbox).include?(field.field_format) %>
+    <div class="form-li">
+      <p><%= field.name %><%= raw(field.is_required? ? '<span style="color:red">*</span>' : '' )%></p>
+      <select <%= (@chat&& @chat.persisted?) ? 'readonly' : ''  %> value="<%= value %>" multiple="multiple" id="field_<%= field.id %>" style="background: #f0eef0;padding: 0;" class= "<%= field.is_required? ? 'is_required' : '' %> field input" data-name="<%= field.name %>" name="custom_field[<%= field.id %>]">
+        <option value="">请选择</option>
+        <%- field.possible_options.each do |option| %>
+          <%- if option.present? %>
+            <option value="<%= option %>"><%= option %></option>
+          <%- end %>
+        <%- end %>
+      </select>
+    </div>
+<%- end %>

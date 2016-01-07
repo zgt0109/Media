@@ -1,0 +1,17 @@
+<form>
+<div class="modal-body">
+    <div class="row vcommunity-repair-reply col-xs-12">
+      <dl>
+          <%- @activity.custom_fields.normal.visible.each do |field|%>
+            <%- value = field.custom_values.where(customized_type: 'Govchat', customized_id: @chat.id).first.try(:value) %>
+            <dt><%= field.name %>：</dt>
+            <dd><%= value || raw('&nbsp;&nbsp;&nbsp;') %></dd>
+          <%- end %>
+      </dl>
+      </div>
+</div>
+<div class="clearfix"></div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">关闭</button>
+</div>
+</form>

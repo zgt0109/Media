@@ -1,0 +1,214 @@
+<style>
+    #faceButton {
+        margin-left: 20px;
+        color: black;
+    }
+    .upload-img .upload-img-span img {
+        height: 90px;
+        width: 160px;
+    }
+    .box-form select, .box-form input[type=text]{width: 75%;}
+</style>
+
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <h1 class="pagecurrent"><%= @picture.new_record? ? '新增轮播图片' : '编辑轮播图片' %></h1>
+<% end %>
+
+<p class="p-note">
+  <span>提示：以下“<span class="fred" style="width:auto;float:none;">*</span>”均为必填项；</span>
+</p>
+
+<div class="box-form form-row tleft">
+  <%= form_for @picture, url: @picture.new_record? ? busine_pictures_url : busine_picture_url(@picture), validate: true, :html => { id: 'website_pictures_form' } do |f| %>
+
+      <div class="p">
+        <span>标题<em>*</em>（必填）</span>
+        <%= f.text_field :title, class: 'input-text', style: "width: 50%", :maxlength=> 10 %>
+      </div>
+
+      <div class="box-upload not_null_errors">
+        <span>图片<em>*</em></span>
+        <div class="upload-img upload-preview-img">
+          <span>
+            <%=image_tag f.object.pic? ?  f.object.pic.large : '/assets/bg_fm.jpg', id: 'preview_shop_logo', alt: '轮播图片'  %>
+          </span>
+          <!-- <i>点击查看示意图</i> -->
+        </div>
+        <div class="upload-btn">
+          <div class="box-file">
+            <!--轮播图片尺寸暂时不判断-->
+            <%# data = pro_website_picture @website %>
+            <%# if data.present? %>
+                <%#= f.file_field :pic, rel: 'preview_shop_logo', id: 'shop_product_pic_url', validate: true, class: 'image_preview', data: {width: data[0], height: data[1]} %>
+            <%# else %>
+                <%= f.file_field :pic, rel: 'preview_shop_logo', id: 'shop_product_pic_url', validate: true, class: 'image_preview' %>
+            <%# end %>
+
+            <a class="btn btn-big">上传图片</a>
+          </div>
+          <span class="p-file"></span>
+        </div>
+      </div>
+
+      <div class="p form-address" style="margin-top: 10px;">
+        <span>类型<em>*</em></span>
+        <%= f.select :menu_type, WebsitePicture.menu_type_options %>
+      </div>
+
+      <div class="p form-address">
+        <span>选择活动<em>*</em></span>
+        <%= f.select :activity_id, current_user.activities.active.starting.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @picture.try(:menuable_id) }, validate: true %>
+      </div>
+
+      <div class="p form-address">
+        <span>图文资源</span>
+        <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @picture.try(:menuable_id), include_blank: true }, validate: true %>
+        <em>*</em>
+        <%= link_to "管理图文资源", materials_url, class: 'gl', target: '_blank' %>
+      </div>
+
+      <div class="p form-address">
+        <span>图文资源</span>
+        <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @picture.try(:menuable_id), include_blank: true }, validate: true %>
+        <em>*</em>
+        <%= link_to "管理图文资源", materials_url, class: 'gl', target: '_blank' %>
+      </div>
+
+      <div class="p" id="preview_pic">
+        <span>图文预览</span>
+        <div class="box-upload">
+          <div class="margin">
+            <% if @picture.single_graphic?# or @menu.multiple_graphic? %>
+                <strong><%= @picture.menuable.try(:title) %></strong><br/>
+                <label><%= @picture.menuable.created_at.to_date rescue Date.today %></label>
+            <% else %>
+                <strong>素材标题</strong><br/>
+                <label><%= Date.today %></label>
+            <% end %>
+          </div>
+          <div class="upload-img">
+              <span style="width: 318px; height: 165px; line-height:89px; padding: 0;">
+                <% if @picture.single_graphic?# or @menu.multiple_graphic? %>
+                    <%= image_tag(@picture.menuable.try(:pic), size: '318x165', alt: '') %>
+                <% else %>
+                    <img src='/assets/bg_fm.jpg'  width='318' height='165'/>
+                <% end %>
+              </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p">
+        <span>链接<em>*</em></span>
+        <%= f.text_field :url, class: 'input-text' %>
+      </div>
+      <div class="p">
+        <span>电话<em>*</em></span>
+        <%= f.text_field :tel, class: 'input-text' %>
+      </div>
+      <div class="p" style="margin-top: 10px;">
+        <span>排序<em>*</em><span class="fgray">（值越小越排在前面）</span> </span>
+        <%= f.text_field :sort, maxlength: 5, class: 'input-text' %>       　
+      </div>
+
+      <!--<p class='tcenter'>-->
+      <p>
+        <input class="btn btn-small form-submit btn-orange" type="submit" value="保存" name="commit">
+      </p>
+  <% end %>
+</div>
+
+
+<script>
+  select_website_picture_type();
+
+  $('#website_picture_menu_type').change( function() {
+    select_website_picture_type();
+  });
+
+  function select_website_picture_type() {
+    if ( $('#website_picture_menu_type').val() == 2 ) {
+      $('#website_picture_single_material_id').parent().hide();
+      $('#website_picture_multiple_material_id').parent().hide();
+      $('#preview_pic').hide();
+      $('#website_picture_activity_id').parent().show();
+      $('#website_picture_url').parent().hide();
+      $('#website_picture_tel').parent().hide();
+    } else if ( $('#website_picture_menu_type').val() == 3 ) {
+      $('#website_picture_single_material_id').parent().show();
+      $('#website_picture_multiple_material_id').parent().hide();
+      $('#preview_pic').show();
+      $('#website_picture_activity_id').parent().hide();
+      $('#website_picture_url').parent().hide();
+      $('#website_picture_tel').parent().hide();
+    } else if ( $('#website_picture_menu_type').val() == 4 ) {
+      $('#website_picture_single_material_id').parent().hide();
+      $('#website_picture_multiple_material_id').parent().show();
+      $('#preview_pic').hide();
+      $('#website_picture_activity_id').parent().hide();
+      $('#website_picture_url').parent().hide();
+      $('#website_picture_tel').parent().hide();
+    } else if ( $('#website_picture_menu_type').val() == 6 ) {
+      $('#website_picture_single_material_id').parent().hide();
+      $('#website_picture_multiple_material_id').parent().hide();
+      $('#preview_pic').hide();
+      $('#website_picture_activity_id').parent().hide();
+      $('#website_picture_url').parent().show();
+      $('#website_picture_tel').parent().hide();
+    } else if ( $('#website_picture_menu_type').val() == 7 ) {
+      $('#website_picture_single_material_id').parent().hide();
+      $('#website_picture_multiple_material_id').parent().hide();
+      $('#preview_pic').hide();
+      $('#website_picture_activity_id').parent().hide();
+      $('#website_picture_url').parent().hide();
+      $('#website_picture_tel').parent().show();
+    }
+  }
+
+  $(function() {
+    $('#website_picture_form .form-submit').click(function(event) {
+        if ( $("#website_picture_sort").val()  ) {
+            var url_reg = /^(http|https):\/\/[a-zA-Z0-9].+$/
+            if ( $('#website_picture_menu_type').val() == 3 && !$('#website_picture_single_material_id').val() ) {
+                showTip('warning','请选择一条图文素材');
+                return false;
+            } else if ( $('#website_picture_menu_type').val() == 4 && !$('#website_picture_multiple_material_id').val() ) {
+                showTip('warning','请选择一条图文素材');
+                return false;
+            } else if ( $('#website_picture_menu_type').val() == 2 && !$('#website_picture_activity_id').val() ) {
+                showTip('warning','请选择活动');
+                return false;
+            } else if ( $('#website_picture_menu_type').val() == 6 && !$('#website_picture_url').val() ) {
+                showTip('warning','请填写链接地址');
+                return false;
+            }else if ( $('#website_picture_menu_type').val() == 6 && !url_reg.test($('#website_picture_url').val())){
+                showTip('warning','地址格式不正确，必须以http(s)://开头');
+                return false;
+            } else if ( $('#website_picture_menu_type').val() == 7 && !$('#website_picture_tel').val() ) {
+                showTip('warning','请填写联系电话');
+                return false;
+            }
+        }
+    });
+
+    $('#website_picture_single_material_id, #website_picture_multiple_material_id').change( function() {
+      $.ajax({
+        url: '/materials/'+$(this).val(),
+        type: "get",
+        dataType : "json",
+        success : function (data){
+          if(data){
+            $('#preview_pic .margin strong').html(data['title']);
+            $('#preview_pic .margin label').html(data['created_at'].slice(0,10));
+            $('#preview_pic .upload-img img').attr('src', data['pic']['large']['url']);
+          }
+        }
+      });
+    });
+
+  });
+</script>

@@ -1,0 +1,12 @@
+<% content_for :header do %>
+    <header></header>
+<% end %>
+
+<%= render "slider_full", {has_slider_text: :yes, show_slider_span: :no, align: 'fr'} %>
+
+<div class="index"></div>
+<div class="foot"></div>
+
+<% content_for :document_ready_js do %>
+    navLineSwipe=divSwipe("navLine-menu");
+<% end %>

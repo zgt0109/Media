@@ -1,0 +1,131 @@
+<% provide(:title, @item.title) %>
+<link type="text/css" rel="stylesheet" href="/stylesheets/life/ckeditor_content.css"/>
+<%= content_for(:pop) do %>
+    <%= render 'application/mobile/pop' %>
+<% end %>
+<%= content_for(:topbar) do %>
+    <%= render  "application/mobile/topbar_nav" %>
+<% end %>
+<section>
+  <div class="box-detail">
+    <% if @item_pictures.present?  %>
+        <% unless judge_andriod_version %>
+        <div class="detail-wrap">
+          <% @item_pictures.each do |pic| %>
+          <a><%= image_tag pic.pic.large if pic.pic? %></a>
+          <% end %>
+        </div>
+        <% else %>
+
+        <div class="box-img" id="slider">
+          <ul class="box-img-list">
+            <% @item_pictures.each do |pic| %>
+                <li><a><%= image_tag pic.pic.large %></a></li>
+            <% end %>
+          </ul>
+          <div class="box-text">
+            <div id="pagenavi" class="box-img-page">
+              <% @item_pictures.each_with_index do |pic, index| %>
+                <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>"><% index + 1 %></a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <% end %>
+    </div><!-- box-img end -->
+    <% end  %>
+    <div class="deail-name">
+      <b><%= @item.title %></b>
+      <span class="fl">价格：￥<%= f @item.price%></span>
+      <span class="fr">已售：<%= @item.total_sale_products %>件</span>
+    </div><!-- deail-name end -->
+    <div class="detail-btn">
+      <% if @item.selling? %>
+          <a href="<%= new_mobile_ec_order_path(supplier_id: @supplier.id, :items => [@item.id]) %>" class="btn"><%= image_tag "/assets/mobile/wshop/ico-money.png" %>立即购买</a>
+          <a class="btn btn-red" id="btn-add"><%= image_tag "/assets/mobile/wshop/ico-car-add.png" %>加入购物车</a>
+      <% else %>
+          <a class="btn" style="background: #999">此商品已下架</a>
+      <% end %>
+    </div><!-- detail-btn end -->
+    <div class="detail-tab">
+      <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_ec_comments_path(supplier_id: @supplier.id,id: @item.id) %>">商品评价(<%= @item.ec_comments.count %>)</a></div>
+      <div class="bd">
+        <div class="ckeditor_content">
+          <%= @item.description.to_s.html_safe %>
+        </div>
+        <!--<div class="box-more"></div>-->
+      </div>
+    </div>
+  </div><!-- box-detail end -->
+</section><!-- section end -->
+<a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>
+<div class="pop pop-form" id="pop-number">
+  <div class="pop-bg"></div>
+  <div class="pop-bd" style="height:170px; margin-top:-85px;">
+    <div class="box-pop">
+      <div class="hd">
+        <b>购买数量</b>
+      </div>
+      <div class="bd">
+        <%= form_for @ec_cart,:url => mobile_ec_carts_path,:method => "post",:validate => true do |f| %>
+
+        <%= f.hidden_field :ec_item_id, :value => @item.id %>
+        <p class="box-number">
+          <i onclick="change_num_item(1);">-</i>
+          <!--<input type="text" value="1"/>-->
+          <%= f.number_field :qty, :onkeyup => "only_num(this,this.onkeyup);", :onblur => "default_num_item(this);",:maxlength => 4,:size => 4%>
+          <i onclick="change_num_item(2)">+</i>
+        </p>
+        <p><input class="btn btn-close form-submit" type="submit" value="确定"/></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pop pop-result result-success" id="pop-result" style="z-index:1000;">
+  <div class="pop-bd">
+    <div class="box-pop">
+      <span>123</span>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(".ckeditor_content img").css({"width":"auto","height":"auto"})
+//    new Swipe(document.getElementById('slider'), {
+//        speed:500,
+//        callback: function(){
+//            var lis = $(this.element).next("div").children();
+//            lis.removeClass("active").eq(this.index).addClass("active");
+//        }
+//    });
+    //加入购物车
+    $("#btn-add").click(function(){
+        var h=$(document).height();
+        $("#pop-number").height(h).fadeIn();
+    });
+    function change_num_item(value){
+        var num_value = parseInt($("#ec_cart_qty").val());
+        if(value == 1){
+            if(num_value >= 2){num_value -= 1;}
+        }else if(value == 2){
+            num_value += 1;
+        }
+        $("#ec_cart_qty").val(num_value);
+    }
+    function default_num_item(txt){
+        if(!$("#ec_cart_qty").val() || $("#ec_cart_qty").val() == 0 ){
+            txt.value = txt.defaultValue;
+        }
+    }
+
+    <% if judge_andriod_version %>
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $(this.element).next("div").find("#pagenavi").children();
+                lis.removeClass("active").eq(this.index).addClass("active");
+            }
+        });
+    <% end %>
+</script>

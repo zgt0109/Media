@@ -1,0 +1,17 @@
+<% unless @website_menus.size.zero? %>
+    <div class="list6 clearfix">
+      <% @website_menus.each_with_index do |menu, i| %>
+          <%= link_to menu_url(menu), class: 'box' do %>
+              <div class="img-box">
+                <%= menu.pic_or_icon has_title: false, pic_type: "custom", pic_wrap_tag_i: :no, show_picture_material: :no, class: 'img' %>
+              </div>
+              <div class="text-box">
+                <div class="text-title"><%= menu.title %></div>
+                <% if i > 2 %>
+                    <div class="text-summary"><%= menu.summary %></div>
+                <% end %>
+              </div>
+          <% end %>
+      <% end %>
+    </div>
+<% end %>

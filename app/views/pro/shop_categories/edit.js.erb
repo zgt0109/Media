@@ -1,0 +1,9 @@
+var form_html = "<%= j(render 'form', :shop_category => @shop_category) %>";
+$('#form').html(form_html);
+$("#shop_category_name").focus();
+
+var shop_menu_id = $("#shop_menu_id").val();
+// alert(shop_menu_id);
+// var input_html = " <input id='shop_menu_id' name='shop_category[shop_menu_id]' type='hidden' value='"+shop_menu_id+"' >";
+// alert(input_html);
+$("#shop_category_name").before(input_html);

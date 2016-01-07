@@ -1,0 +1,47 @@
+<div class="cont">
+  <div class="box-des fl">
+    <div class="des-r" style="width: 100%">
+      <%= form_for @activity, validate: true do |f| %>
+      <div class="box-form form-row fl">
+        <div class="p">
+          <span>活动名称<em>*</em><span class="fgray">（不能超过64个字）</span></span>
+          <%= f.text_field :name, maxlength: 64, class: "input-text", style: "width:410px;" %>
+        </div>
+        <div style="display: none;">
+          <span>公共账号<em>*</em>（请选择一个公共账号来发布活动）</span>
+          <%= f.select :wx_mp_user_id, [current_user.wx_mp_user].map{|wx_mp_user|[wx_mp_user.name,wx_mp_user.id]}, {}, style: "width:150px;" %>
+        </div>
+        <% if @activity.groups? %>
+        <div style="display: none;">
+          <span>活动类别<em>*</em></span>
+          <%= f.select :activity_type_id, ActivityType.where(id: [14]).map{|activity_type|[activity_type.name,activity_type.id]}, {},  :class => '', style: "width:150px;" %>
+        </div>
+        <% else %>
+        <div style="display: none;">
+          <span>活动类别<em>*</em></span>
+          <%= f.select :activity_type_id, ActivityType.where(id: [3,4,5,25,28]).map{|activity_type|[activity_type.name,activity_type.id]}, {},  :class => '', style: "width:150px;" %>
+        </div>
+        <% end %>
+      </div>
+      <div class="box-form form-row fl">
+        <div class="p">
+          <span>活动预热时间 <em>*</em><span class="fgray">（请确保活动预热时间比活动开始时间早，若和活动开始时间一样，则表示该活动没有预热）</span></span>
+          <i>从</i><%= f.text_field :ready_at, style: "width:180px;", class: 'input-date datetimepicker', readonly: true %>
+          <i>到活动开始时间，活动预热结束</i>
+          <span class="ready-at-message red"></span>
+        </div>
+        <div class="p">
+          <span>活动时间 <em> *</em></span>
+          <i>从</i><%= f.text_field :start_at, style: "width:180px;", class: 'input-date datetimepicker', readonly: true %><i>到</i><%= f.text_field :end_at, style: "width:180px;", class: 'input-date datetimepicker', readonly: true %>
+          <span class="start-at-message red"></span>
+        </div>
+        <div class="p">
+          <span>活动回复关键词 <em>*</em><span class="fgray">（活动的关键词不能重复）</span></span>
+          <%= f.text_field :keyword, class: 'input-text', style: "width:410px;" %>
+        </div>
+      </div>
+      <p><input type="submit" value="下一步" class="btn btn-small form-submit" id="add_activity_validate"/></p>
+      <% end %>
+    </div>
+  </div>
+</div>

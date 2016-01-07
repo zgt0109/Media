@@ -1,0 +1,60 @@
+<%= form_for @search, url: order_trips_path, html: { method: :get, class: "col-sm-12"} do |f| %>
+  <div class="col-md-3 row">
+    <div class="input-group input-group-text">
+      <span class="input-group-addon">订单号：</span>
+      <%= f.text_field :order_no_like, class: "col-xs-12" %>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="input-group input-group-text">
+      <span class="input-group-addon">门票名称：</span>
+      <%= f.text_field :ticket_name_like, class: "col-xs-12" %>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="input-group input-group-text">
+      <span class="input-group-addon">下单时间：</span>
+      <%= text_field_tag 'order_trip[created_at_range]', @created_at_range, class: "col-xs-12 daterange" %>
+
+      <%= f.hidden_field :created_at_gte %>
+      <%= f.hidden_field :created_at_lte %>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <input type="submit" class="btn btn-primary btn-sm btn-filter" value="查询">
+  </div>
+<% end %>
+<div class="col-xs-12 margin-top-20">
+  <table id="vtripOrderTable" class="table table-striped table-bordered table-hover dataTable ">
+    <thead>
+      <tr>
+        <th>订单号</th>
+        <th>门票名称</th>
+        <th>预订数量</th>
+        <th>订单金额</th>
+        <th>下单时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "pro/trips/order_tr", collection: @trip_orders, as: :order%>
+    </tbody>
+  </table>
+</div>
+
+<% content_for :custom_js do %>
+  <%= javascript_tag do %>
+    $(function(){
+      $("button.btn-filter").datepicker().on('click', function () {
+        data_range_str = $("#order_trip_created_at_range").val()
+        if (data_range_str == "") { return true}
+
+        data_range = $("#order_trip_created_at_range").val().split(" - ")
+        $("#search_created_at_gte").val(data_range[0])
+        $("#search_created_at_lte").val(data_range[0])
+
+        return true
+      })
+    })
+  <% end %>
+<% end %>

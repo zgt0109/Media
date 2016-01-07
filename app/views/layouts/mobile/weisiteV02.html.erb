@@ -1,0 +1,194 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%= yield(:title) || '微官网' %></title>
+  <%= stylesheet_link_tag '/stylesheets/vweisiteV02/font/font-awesome', '/stylesheets/vweisiteV02/index', '/stylesheets/vweisiteV02/navLine'%>
+
+  <%= javascript_include_tag "mobile/vweisiteV01", "mobile/websiteV02/jquery", "mobile/websiteV02/swipe", "mobile/websiteV02/index" %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="theme-<%= yield :main_series %>">
+<div class="bg"  style="<%= "background-image: url(#{@website_setting.bg_image})"%>"></div>
+<%= render 'application/gb2big5' %>
+<%= yield :begin_animation_section %>
+<div class="main">
+  
+  <%= yield :nav_section %>
+  <section style="<%= 'margin-top:-50px;' if @nav_template_id == 9 %>">
+    <%= yield %>
+  </section>
+  <%= yield :share_section %>
+
+</div>
+
+<% @menu_template_id = 0 if @nav_template_id == 15 %>
+<%= render "mobile/websites/menus/menu#{@menu_template_id}", {:website_menus => @website_menus} if @menu_template_id > 0 %>
+
+<%= yield :bg_music_section %>
+
+<%= render 'application/app_footer' %>
+
+<%= render 'application/kefu' %>
+
+<%= render 'application/union' %>
+
+
+<% if @website_setting.open_bg_animation? %>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/vweisiteV01/animateBg/snower1.css"/>
+    <div class="mod-snower snower1" id="snower1">
+      <script type="text/javascript">var urls = ["/assets/mobile/vweisiteV01/animateBg/snower<%= @website_setting.bg_animation_type %>.png"]</script>
+      <script type="text/javascript" src="/javascripts/vweisiteV01/animateBg/snower1.js"></script>
+      <% height_array = [30, 30, 60, 60, 30, 30, 30, 30, 16, 30, 30, 30, 30, 30]%>
+      <script>
+          $(function(){
+              snowsFn(<%= height_array[@website_setting.bg_animation_type-1] %>);
+          });
+      </script>
+    </div>
+<% end %>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        <%= yield :document_ready_js %>
+
+        showBtnUp(100);
+
+        $("a.dev-prev").click(function(){
+            <% if @website_menu && @website_menu.try(:parent?) %>
+            location.href = "<%= mobile_index() %>";
+            <% else %>
+            history.back();
+            <% end %>
+        });
+
+        $("a.dev-next").click(function(){
+            history.go(1);
+        });
+
+        $("a.dev-index").click(function(){
+            //window.open("<%= mobile_index() %>");
+            location.href = "<%= mobile_index() %>";
+        });
+
+        $("a.dev-refresh").click(function(){
+            location.reload();
+        });
+
+        $("a.dev-tel").attr("href", "tel:<%= @shortcut_menus.phone.first.try(:tel) || "电话号码未设置" %>");
+
+        $("a.dev-member").click(function(){
+            $(this).attr("href", "<%= app_vips_url(wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>")
+        });
+
+        $("a.dev-location").click(function(){
+            $(this).attr("href", "<%= mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) %>")
+        });
+    });
+</script>
+<% if @website_setting.open_bg_music? && action_name == 'index' %>
+    <script type="text/javascript">
+        var playbox = (function(){
+            var _playbox = function(){
+                var that = this;
+                that.box = null;
+                that.player = null;
+                that.src = null;
+                that.on = false;
+                //
+                that.autoPlayFix = {
+                    on: true,
+                    evtName: ("ontouchstart" in window)?"touchend":"click"
+                }
+
+            }
+            _playbox.prototype = {
+                init: function(box_ele){
+                    this.box = "string" === typeof(box_ele)?document.getElementById(box_ele):box_ele;
+                    this.player = this.box.querySelectorAll("audio")[0];
+                    this.src = this.player.src;
+                    this.init = function(){return this;}
+                    this.autoPlayEvt(true);
+                    return this;
+                },
+                play: function(){
+                    if(this.autoPlayFix.on){
+                        this.autoPlayFix.on = false;
+                        this.autoPlayEvt(false);
+                    }
+                    this.on = !this.on;
+                    if(true == this.on){
+                        this.player.src = this.src;
+                        this.player.play();
+                    }else{
+                        this.player.pause();
+                        this.player.src = null;
+                    }
+                    if("function" == typeof(this.play_fn)){
+                        this.play_fn.call(this);
+                    }
+                },
+                handleEvent: function(evt){
+                    this.play();
+                },
+                autoPlayEvt: function(important){
+                    if(important || this.autoPlayFix.on){
+                        document.body.addEventListener(this.autoPlayFix.evtName, this, false);
+                    }else{
+                        document.body.removeEventListener(this.autoPlayFix.evtName, this, false);
+                    }
+                }
+            }
+            //
+            return new _playbox();
+        })();
+
+        playbox.play_fn = function(){
+            $("#playbox").toggleClass('close');
+
+        }
+
+        $(document).ready(function(){
+            $('body').on('click', '.mod-music', function(){
+                $('#playbox').click();
+            });
+
+            playbox.init("playbox");
+            $("#playbox")[0].className = 'ico-music close';
+//                playbox.handleEvent(document.getElementById("material_play"));
+
+
+//                var audio = document.getElementById('audio');
+//                audio.addEventListener('click',function(){
+//                    if(audio.paused){
+//                        audio.play();
+//                    }else if(audio.play){
+//                        audio.pause();
+//                    };
+//                },false);
+
+        });
+    </script>
+<% end %>
+
+  <% if current_page?(mobile_root_path) %>
+    <%= raw @website.baidu_app_js if @website.baidu_app_js.present? %>
+    <%= raw @website.analytic_scripts if @website.analytic_scripts.present? %>
+
+    <% if @supplier.try(:baidu_app) %>
+      <script type="text/javascript" name="baidu-tc-cerfication" data-appid="<%= @supplier.try(:baidu_app).try(:app_id) %>" src="http://apps.bdimg.com/cloudaapi/lightapp.js"></script>
+    <% end %>
+  <% end %>
+
+  <style>
+   .fa{line-height:inherit;}
+  </style>
+</body>
+</html>

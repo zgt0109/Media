@@ -1,0 +1,34 @@
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<%= render 'topbar' %>
+
+<p class="p-note">
+  提示：微生活现在有2套店铺模版可以选择了！在下方选择您想要的店铺模版即可。
+</p>
+
+<div class="temp-list">
+  <ul>
+    <% [1, 2].each do |i| %>
+      <li class="<%= 'active' if @website.template_id.to_i == i %>" data-template-id="<%= i %>">
+        <%= image_tag "mobile/wbusiness/template_#{i}.jpg", size: "166x280" %>
+        <span><i></i></span>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<script>
+  var lis = $('.temp-list li');
+  lis.on('click', function(event) {
+    var $this = $(this);
+        url = "<%= set_template_business_shops_path %>",
+        params = { template_id: $this.data('template-id') };
+    $.post(url, params, function(data) {
+      showTip('success', data.message);
+      lis.removeClass('active');
+      $this.addClass('active');
+    });
+  });
+</script>

@@ -1,0 +1,7 @@
+$("#search_category_parent_id_eq").empty();
+
+<% @shop_categories.each do |c| %>
+  $("#search_category_parent_id_eq").append('<option value="<%= c.id %>"><%= c.name %></option>');
+<% end %>
+
+render_shop_category_select($("#search_category_parent_id_eq").val());

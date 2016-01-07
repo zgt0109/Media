@@ -1,0 +1,35 @@
+<header>
+<a class="ico-prev" href="/app/whouse?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>"></a>
+<h1>专家点评</h1>
+</header>
+<div class="contxt">
+	<div class="box-cont cont-expert">
+		<h1>专家点评</h1>
+		<% @house_expert_comments.each_with_index do |expert_comment, i| %>
+		<div class="box-expert box-more <%= i<2 ? 'show' : 'hide'%>">
+			<div class="hd">
+				<%= image_tag expert_comment.house_expert.try(:pic_url) || '/assets/whouse/4.jpg' %>
+				<p><b>姓名：</b><span><%= expert_comment.house_expert.try(:name) %></span></p>
+				<p><b>简介：</b><span><%= expert_comment.house_expert.try(:intro) %></span></p>
+			</div>
+			<div class="bd">
+				<p><%= expert_comment.content %></p>
+			</div>
+		</div>
+		<%end%>
+	</div>
+
+	<% if @house_expert_comments.count >= 1%>
+	<div class="box-ft">
+		<a class="more" id="cont-expert" onclick="checkhide()">点击加载更多</a>
+	</div>
+	<%end%>
+</div>
+<script>
+var expert_comments_count = <%= @house_expert_comments.count %>;
+function checkhide(){
+	if(expert_comments_count && expert_comments_count <= 2 ){
+		$('#cont-expert').hide();
+	}
+}
+</script>

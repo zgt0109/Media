@@ -1,0 +1,52 @@
+<% provide(:title, '会员特权列表') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="J-slider" id="sec-index">
+      <!-- list box start -->
+      <div class="list-box">
+        <% @vip_privileges.each_with_index do |privilege,index| %>
+          <% next if privilege.limited?( @vip_user ) %>
+          <% vip_grades_count = privilege.vip_grades.visible.count %>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="#">
+                <i class="icon icon-7"></i>
+                <span><%= privilege.title %></span>
+              </a>
+            </dt>
+            <dd>
+              <p>
+                <% if privilege.money? %>
+                  <%= privilege.category_name %>：充值<%= (f(privilege.amount).to_s + "元") if privilege.amount.to_f > 0 %>赠送<%= privilege.value %>元
+                <% else %>
+                  <%= privilege.category_name %>：<%= privilege.consume? ? "消费" : "充值" %><%= (f(privilege.amount).to_s + "元") if privilege.amount.to_f > 0 %>享<%= privilege.value %><%= privilege.point? ? "倍积分" : "折" %>
+                <% end %>
+              </p>
+              <p>
+                适用范围： <%= privilege.vip_grade_names %>
+              </p>
+              <p>
+                可使用次数：<%= privilege.limit_count_for(@vip_user) %>
+              </p>
+              <p>
+                有效期：
+                <% if privilege.always_valid %>
+                  长期有效
+                <% else %>
+                  <%= (privilege.start_date.strftime("%Y-%m-%d") +" 至 "+ privilege.end_date.strftime("%Y-%m-%d")) %>
+                <% end %>
+              </p>
+              <p>
+                特权说明<br>
+                <pre><%= raw privilege.content %></pre>
+              </p>
+            </dd>
+          </dl>
+        <% end %>
+      </div>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>

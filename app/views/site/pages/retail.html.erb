@@ -1,0 +1,110 @@
+<%= stylesheet_link_tag 'v5.1/retail', 'v5.1/iconfont' %>
+<%= javascript_include_tag  'v5.1/retail', 'v5.1/lib_jq/jquery.mousewheel.min', 'v5.1/lib_jq/jquery.easing.1.3.min' %>
+<% content_for(:title) { '传统快消零售厂商转型解决方案' } %>
+
+<div class="rolling">
+  <ul class="rolling-inner">
+    <li class="page-nav rolling-cur"></li>
+    <li class="page-nav"></li>
+    <li class="page-nav"></li>
+    <li class="page-nav"></li>
+    <li class="page-nav"></li>
+  </ul>
+</div>
+<div class="container" id="container">
+  <div class="page page1">
+    <div class="logo-img bc pr">
+      <img src="/assets/v5.1/retail/pageitme1.png" class="block bc"/>
+      <i class="iconfont icon-03shangpindaquan pa"></i>
+    </div>
+    <div class="page_box1 tc">
+      <h2>传统快消零售厂商转型解决方案</h2>
+      <div class="text_animation">
+        <p>专业提供快消零售行业“互联网+“转型方案，实现全渠道、全方位、全网战略转型</p>
+        <h3>咨询热线：4000-365-711</h3>
+        <div class="page_btn bc">
+          <div class="check_bg pa"></div>
+          <a href="javascript:;" class="block pa" id="launch_qq_retail1"><span>点击咨询</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="page-circle tc">
+      <div class="pageitem2 bc clearfix">
+        <div class="fl circle circle1 transition" data-scroll="2">
+          <i class="block iconfont icon-saomajishidaozhangshoukuan"></i>
+          <span class="block">码上防伪</span>
+        </div>
+        <div class="fl circle circle2 transition" data-scroll="3">
+          <i class="block iconfont icon-shuju1"></i>
+          <span class="block">顾客数据</span>
+        </div>
+        <div class="fl circle circle3 oh tc transition" data-scroll="4">
+          <i class="block iconfont icon-yingxiaozhongxinicon"></i>
+          <span class="block">领跑同行</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page page2">
+    <div class="page_box1 tc">
+      <h2>扫一扫，码上防伪</h2>
+      <div class="text_animation">
+        <p>快消品厂商防伪、商品使用指南、使用场景、消费积分获取及兑换等扫扫优折码</p>
+        <div class="page_btn bc">
+          <div class="check_bg pa"></div>
+          <a href="javascript:;" class="block pa" id="launch_qq_retail2"><span>了解详情</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="pageImg">
+      <img class="block pa p2_pic" src="/assets/v5.1/retail/p2_pic.png" >
+    </div>
+  </div>
+  <div class="page page3">
+    <div class="page_box1 tc">
+      <h2>全方位收集顾客数据</h2>
+      <div class="text_animation">
+        <p>按照区域、时间、品类等深入了消费者购买行为及喜好从而开展营销活动，提高销售转化率及客户忠诚度。</p>
+        <div class="page_btn bc">
+          <div class="check_bg pa"></div>
+          <a href="javascript:;" class="block pa" id="launch_qq_retail3"><span>了解详情</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="pageImg">
+      <img class="block pa p3_pic" src="/assets/v5.1/retail/p3_pic.png" >
+    </div>
+  </div>
+  <div class="page page4">
+    <div class="page_box1 tc">
+      <h2>未来零售，领跑同行</h2>
+      <div class="text_animation">
+        <p>线上线下无缝连接，全方位收集顾客数据，支撑品牌全渠道策略</p>
+        <div class="page_btn bc">
+          <div class="check_bg pa"></div>
+          <a href="javascript:;" class="block pa" id="launch_qq_retail4"><span>了解详情</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="pageImg">
+      <img class="block pa p4_pic" src="/assets/v5.1/retail/p4_pic.png" >
+    </div>
+  </div>
+  <div class="page page5"></div>
+</div>
+
+<% content_for :custom_js do %>
+    <!--[if lt IE 10]>
+    <script type="text/javascript">
+        $(function(){
+            $(".page h2,.text_animation").css({"opacity":"1"});
+        })
+    </script>
+    <![endif]-->
+<script>
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 4000365711, selector: 'launch_qq_retail1'});
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 4000365711, selector: 'launch_qq_retail2'});
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 4000365711, selector: 'launch_qq_retail3'});
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 4000365711, selector: 'launch_qq_retail4'});
+</script>
+<% end %>

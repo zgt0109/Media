@@ -1,0 +1,24 @@
+<% content_for :nav_section do %>
+    <section class="mod-navLine navLine-23">
+      <div class="navLine-menu" id="navLine-menu">
+        <ul>
+          <% website_menus.in_groups_of(4, false).each do |sub_menus| %>
+              <li>
+                <% sub_menus.each do |menu| %>
+                    <%= link_to menu_url(menu) do %>
+                        <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+                    <% end %>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+      <a class="navLine-btn navLine-prev" onclick="navLineSwipe.prev()"></a>
+      <a class="navLine-btn navLine-next" onclick="navLineSwipe.next()"></a>
+    </section>
+<% end %>
+
+<% content_for :document_ready_js do %>
+    $("body").addClass("body-navLine-bottom");
+    navLineSwipe=divSwipe("navLine-menu");
+<% end %>

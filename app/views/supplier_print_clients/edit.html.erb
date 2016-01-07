@@ -1,0 +1,103 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="icon-home home-icon"></i>
+        <a href="#">首页</a>
+      </li>
+      <li>
+        微官网
+      </li>
+      <li>微官网设置</li>
+    </ul>
+    <div class="pull-right">
+      <span class="green lighter ShowQRCodeTxt">扫描预览二维码</span>
+      <div class="showQRCode">
+	<i class="i-qrcode icon-qrcode icon-3x"></i>
+	<div class="QRCode" style="display: none;">
+	  <img src="/assets/qr.jpg">
+	</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-md-12 ">
+	  <%= form_for @supplier_print_client, validate: true, html: { class: 'form' } do |f| -%>
+          <div class="form-group">
+            <label>设备ID：</label>
+            <div class="clearfix">
+	      <%= f.text_field :client_id,  class: "col-md-8", disabled: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>设备编号：</label>
+            <div class="clearfix">
+	      <%= f.text_field :client_no, class: "col-md-8", disabled: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>微信帐号：</label>
+            <div class="clearfix">
+	      <%= f.select :supplier_print_id, current_user.supplier_prints.pluck(:public_name, :id) %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>网店名称：</label>
+            <div class="clearfix">
+              <%= f.text_field :net_name,  class: "col-md-8", disabled: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>每天最大打印数量：</label>
+            <div class="clearfix">
+              <%= f.text_field :daymaxnum, class: "col-md-8", disabled: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>设备底部广告图片：
+              <span class="required-star">*</span>
+              <span class="help-inline text-warning line-height-32">建议尺寸：936像素*300像素</span>
+            </label>
+            <div class="clearfix">
+ <!--             <div class="cieldon-file" data-type="0" data-div="#img-1" data-width="310" data-height="100"><div class="file-img" style="width: 310px; height: 100px;"><div class="file-btn"><a style="width: 310px; height: 100px; background-image: url(undefined)"><p><i class="fa fa-plus"></i><small>上传图片</small></p></a><input type="file" value="上传图片" data-token="" data-bucket="" accept＝"image="" jpg,="" image="" jpeg,="" png"=""><input type="hidden" name="undefined" value="undefined"></div></div></div>-->
+
+	      	      <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="180" data-height="100" data-name="supplier_print_client[bottom_img]" data-img="<%= @supplier_print_client.bottom_img_url %>" data-key="<%= @supplier_print_client.bottom_img || "" %>"></div>
+
+
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="clearfix">
+              <label>
+		<%= f.check_box :is_banner, class: "ace" %>
+                <span class="lbl"> 是否广告设备</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>mac地址：</label>
+            <div class="clearfix">
+	      <%= f.text_field :mac, class: "col-md-8", disabled: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>状态：</label>
+	    <%= f.select :status, SupplierPrintClient.status_options, :style => "width:200px;" %> 
+          </div>
+	  
+	  <div class="form-group">
+            <label>照片打印模式：</label>
+            <div class="clearfix">
+	      <%= f.select :print_mode, SupplierPrintClient.print_mode_options %>
+            </div>
+	  </div>
+	  <div class="form-group">
+            <input type="submit" value="保存" class="btn btn-sm btn-primary">
+            <a href="javascript:void(0);" class="btn btn-sm btn-defalult">返回</a>
+	  </div>
+	  <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="contxt cont-index">
+  <div class="ad-show">
+    <img src="<%= @picture.try(:name)  %>"/>
+  </div>
+  <% if @wedding.video_url.present? %>
+  <div class="box-video">
+    <video src="<%= @wedding.video_url%>"></video>
+  </div>
+  <% end %>
+  <ul class="box-list">
+    <li><a href="<%= guest_app_weddings_path %>" class="active"><b>新婚典礼</b><span>到这里来领请帖</span><i class="arrow arr-small"></i></a></li>
+    <%if @wedding.pictures.present? %><li><a href="<%= wedding_photo_app_weddings_path %>"><b>婚纱照</b><span>快来看看我们的婚纱照吧</span><i class="arrow arr-small"></i></a></li><% end %>
+    <li><a href="<%= wish_app_weddings_path %>"><b>祝福墙</b><span>感谢您为我们送上的祝福</span><i class="arrow arr-small"></i></a></li>
+    <li><a href="<%= story_app_weddings_path %>"><b>我们的故事</b><span>从相知到相爱再到成为家人</span><i class="arrow arr-small"></i></a></li>
+    <li><a href="<%= address_app_weddings_path %>"><b>酒店地址</b><span>在这里查看婚礼地址</span><i class="arrow arr-small"></i></a></li>
+    <% if @wedding.seats_status == 1 %><li><a href="<%= seat_app_weddings_path %>"><b>宴席查询</b><span>在这里查看您的宴席座位</span><i class="arrow arr-small"></i></a></li><% end %>
+  </ul>
+</div>

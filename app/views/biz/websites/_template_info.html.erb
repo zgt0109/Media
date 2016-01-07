@@ -1,0 +1,17 @@
+<div class="box-template fr" id="tab-template" style="margin-right: 10px;"><span>模板使用提示</span>
+  <div class="temp-tip temp-right hide" style="display: none;">
+    <div>
+      <%= @website.website_setting.try(:home_template).try(:description) %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $("#tab-template").on("mouseenter","span",function(){
+            $("#tab-template").find(".temp-tip").fadeIn();
+        });
+        $(".box-tab").on("mouseleave","span",function(){
+            $("#tab-template").find(".temp-tip").fadeOut();
+        });
+    });
+</script>

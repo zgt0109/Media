@@ -1,0 +1,9 @@
+<%= render :partial => "slider", :locals => {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% website_menus.each do |menu| %>
+    <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+      <p><span><%= menu.title %></span></p>
+    <% end %>
+  <% end %>
+</div>

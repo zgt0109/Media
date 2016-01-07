@@ -1,0 +1,17 @@
+<% provide(:title, "个人中心") %>
+<%= content_for(:pop) do %>
+    <%= render 'application/mobile/pop' %>
+<% end %>
+<% content_for :topbar do %>
+  <%= render 'application/mobile/topbar_nav' %>
+<% end %>
+
+<section>
+  <!--<div class="box-img"><%#=  image_tag 'mobile/wshop/1.jpg' %> </div>-->
+  <div class="box-img" style="margin-top: 50px;"> </div>
+  <div class="box box-wrap">
+    <a href="<%= mobile_ec_orders_path(supplier_id: @supplier.id) %>" class="hd">全部订单<i class="arrow"></i></a>
+    <a href="<%= mobile_ec_addresses_path(supplier_id: @supplier.id) %>" class="hd">管理收货地址<i class="arrow"></i></a>
+  </div>
+</section>
+

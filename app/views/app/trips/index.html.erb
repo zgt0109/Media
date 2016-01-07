@@ -1,0 +1,74 @@
+<header>
+  <a href="<%= @url.present? ? @url : 'javascript:void(0);' %>" class="ico-prev tleft"><img src="/assets/mobile/wtrave/ico-back.png"></a>
+  <h1><%= @trip.name %></h1>
+  <a href="<%= order_list_app_trips_url %>" class="tright"><img src="/assets/mobile/wtrave/ico-order.png"></a>
+</header><!-- header end -->
+<section>
+  <div class="box-img" id="slider" style="visibility: visible;">
+    <ul class="box-img-list" style="list-style: none; width: 5700px; transition: 0ms; -webkit-transition: 0ms; -webkit-transform: translate3d(-4275px, 0, 0);">
+      <% @trip_ads.each do |ad| %>
+        <li style="width: 1425px; display: table-cell; vertical-align: top;"><img src="<%= ad.pic.large %>"></li>
+      <% end %>
+    </ul><!--box-img-list end-->
+    <div class="box-text">
+      <span class="box-bd ellipsis fl" id="slider-span"><%= @trip_ads.first.title %></span>
+      <div id="pagenavi" class="fr box-img-page">
+        <% @trip_ads.each_with_index do |ad,index| %>
+          <a href="#" class="<%= 'active' if index == 0 %>"><%= ad.title %></a>
+        <% end %>
+      </div><!--box-img-page end-->
+      <div class="box-bg"></div>
+    </div><!--box-text end-->
+  </div><!--box-img end-->
+  <div class="box-list">
+    <% if @trip_tickets.blank? %>
+      <div class="box-null">
+        真遗憾，暂时没有门票哦！
+      </div>
+    <% else %>
+      <% @trip_tickets.each do |ticket| %>
+        <div class="list-li">
+          <!--a href="gobuy.html" class="hd img-null">
+            暂无图片
+          </a><!-- hd end -->
+          <a class="hd" href="<%= new_order_app_trip_path(ticket) %>">
+            <img src="<%= ticket.pic.thumb if ticket.pic? %>">
+          </a>
+          <div class="bd">
+            <a href="<%= new_order_app_trip_path(ticket) %>">
+              <p class="li-name"><%= ticket.name.to_s[0..25] %></p>
+              <p class="li-intro"><%= ticket.description.to_s[0..29] %></p>
+            </a>
+            <p class="li-sale">
+              <span class="fl"><b class="fred"><%= f ticket.price %></b>元</span>
+              <a class="btn fr" href="<%= new_order_app_trip_path(ticket) %>">在线预定</a>
+              <!--a class="btn btn-gray fr">在线预定</a-->
+            </p>
+          </div><!-- bd end -->
+        </div><!-- list-li end -->
+      <% end %>
+    <% end %>
+  </div>
+</section><!-- section end -->
+<script type="text/javascript">
+$(function(){
+    var texts=<%= raw @trip_ads.collect(&:title).to_json %>;
+    new Swipe(document.getElementById('slider'), {
+        speed:500,
+        auto:3000,
+        callback: function(){
+          var lis = $(this.element).next("div").find("#pagenavi").children();
+          lis.removeClass("active").eq(this.index).addClass("active");
+          $("#slider-span").html(texts[this.index]);
+        }
+    });
+    $(".box-list .list-li").on({
+        touchstart:function(){
+            $(this).addClass("active");
+        },
+        touchend:function(){
+            $(this).removeClass("active");
+        }
+    });
+});
+</script>

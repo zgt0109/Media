@@ -1,0 +1,28 @@
+<% if @wedding.template1?%>
+<%= render "red" %>
+<% elsif @wedding.template2? %>
+    <%= render "green" %>
+<% end %>
+
+<%= content_for :custom_js do %>
+<script>
+	  var video_ele = $("#video")
+	  var src = video_ele.data("src");
+    if(src.indexOf('v.qq.com')>=0){
+        var id='';
+        src= src.split("&");
+        $.each(src,function(i){
+            if(src[i].indexOf("vid=")>=0){
+							id=src[i].substring(src[i].indexOf("vid=")+4);
+            }
+        });
+        $video='<iframe width="300" height="250" src="http://v.qq.com/iframe/player.html?vid='+id+'&width=300&height=250&auto=0"></iframe>';
+    }else if(src.indexOf("v.youku.com")>=0){
+        var id=src.substring(src.indexOf("id_")+3, src.indexOf(".html"));
+        $video='<div><iframe height=250 width=300 src="http://player.youku.com/embed/'+id+'" frameborder=0 allowfullscreen></iframe><br></div><div></div>';
+		}else{
+        $video='';
+		};
+		video_ele.after($video);
+</script>
+<% end %>

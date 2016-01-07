@@ -1,0 +1,254 @@
+<div class="tabbable">
+  <%= render "biz/groups/top_nav_tabs"%>
+  <div class="tab-content no-border"></div>
+</div>
+
+<div id="tab-2" class="tab-pane">
+  <div class="col-sm-12 no-padding">
+    <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+      <div class="widget-box transparent" id="menu">
+        <div class="widget-header">
+          <h4>
+            <i class="icon icon-cogs"></i>分类管理
+          </h4>
+
+          <div class="widget-toolbar no-border">
+            <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-toggle="render" data-target="#form" data-height="300" data-title="新增菜单" data-iframe="/group_categories/new">
+              <i class="icon-plus"></i> 分类菜单
+            </a>
+          </div>
+        </div>
+        <div class="widget-body">
+          <div id="tree1">
+            <div class="tree tree-selectable" v-component="tree" v-with="model: treeData"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6 margin-top-10" id="form">
+    </div>
+  </div>
+</div>
+
+
+<% content_for :custom_js do %>
+  <script type="text/x-template" id="tree-template">
+    <div class="tree-{{model.type}} tree-li" v-repeat="model: model.children | orderBy 'sort'"
+         v-component="{{model.type}}">
+    </div>
+  </script>
+  <script type="text/x-template" id="folder-template">
+    <div class="tree-folder-header">
+      <i class="tree-fa fa {{open ? 'fa-minus-square' : 'fa-plus-square'}}" v-on="click: open = !open"></i>
+      <div class="tree-folder-name" data-id="{{model.id}}">{{model.name}}</div>
+      <div class="tree-tools" data-id="{{model.id}}">
+        <div v-component="tree-tools" v-repeat="model: model.tools" ></div>
+      </div>
+    </div>
+    <div class="tree-folder-content" v-show="open">
+      <div class="tree-{{model.type}} tree-li" v-repeat="model: model.children | orderBy 'sort'"
+           v-component="{{model.type}}">
+      </div>
+    </div>
+  </script>
+  <script type="text/x-template" id="item-template">
+    <i class="tree-fa fa fa-circle"></i>
+    <div class="tree-item-name" data-id="{{model.id}}">{{model.name}}</div>
+    <div class="tree-tools" data-id="{{model.id}}">
+      <div v-component="tree-tools" v-repeat="model: model.tools" v-with="id: model.id"></div>
+    </div>
+  </script>
+  <script type="text/x-template" id="tree-tools">
+    <a href="{{model.url ? model.url : 'javascript:;'}}"" class="{{model.class}}" data-toggle="{{model.toggle}}" data-target="{{model.target}}" data-title="{{model.title}}" data-width="{{model.width}}" data-height="{{model.height}}" data-iframe="{{model.iframe}}" data-confirm="{{model.confirm}}" data-method="{{model.method}}"></a>
+  </script>
+  <script>
+      $(function(){
+          function setup_tree_data(children_data) {
+            var json_head ={
+                name: "分类管理",
+                children:
+                    [
+                    ]
+            }
+
+            var json = jQuery.extend(true, {}, json_head);
+            json.children = children_data;
+
+            return json
+          }
+
+          function item_data_tools(item_data) {
+            if (typeof(item_data) == "undefined") {
+              item_data = []
+            }
+
+            tools = [
+              {
+                  class:"fa fa-plus tree-add",
+                  toggle:"render",
+                  target:"#form",
+                  title:"新增分类",
+                  height:"500",
+                  iframe: "/group_categories/new?parent_id="+ item_data.id
+              },
+              {
+                  class:"fa fa-pencil tree-edit",
+                  toggle:"render",
+                  target:"#form",
+                  title:"编辑分类",
+                  height:"500",
+                  iframe: "/group_categories/" + item_data.id + "/edit"
+              },
+              {
+                  class:"fa fa-times tree-remove",
+                  toggle:"modals",
+                  method: "delete",
+                  target: "delModel",
+                  url:"/group_categories/"+ item_data.id ,
+                  confirm:"确认删除分类？"
+              },
+              {
+                  class:"fa fa-long-arrow-up tree-up",
+                  target:"/group_categories/"+ item_data.id + "/move_higher",
+              },
+              {
+                  class:"fa fa-long-arrow-down tree-down",
+                  target:"/group_categories/"+ item_data.id + "/move_lower",
+              }
+            ]
+
+            return tools
+          }
+
+          function folder_data_tools(item_data) {
+            if (typeof(item_data) == "undefined") {
+              item_data = []
+            }
+
+            tools = [
+              {
+                  class:"fa fa-plus tree-add",
+                  toggle:"render",
+                  target:"#form",
+                  title:"新增分类",
+                  height:"500",
+                  iframe: "/group_categories/new?parent_id="+ item_data.id
+              },
+              {
+                  class:"fa fa-pencil tree-edit",
+                  toggle:"render",
+                  target:"#form",
+                  title:"编辑分类",
+                  height:"500",
+                  iframe: "/group_categories/" + item_data.id + "/edit"
+              },
+              {
+                  class:"fa fa-long-arrow-up tree-up",
+                  target:"/group_categories/"+ item_data.id + "/move_higher",
+              },
+              {
+                  class:"fa fa-long-arrow-down tree-down",
+                  target:"/group_categories/"+ item_data.id + "/move_lower",
+              }
+            ]
+
+            return tools
+          }
+
+          function merge_tools_to_children_tree_data(children_tree_data) {
+            if (typeof(children_tree_data) == "undefined") {
+              return children_tree_data
+            }
+
+            if ( children_tree_data.type == "item" ) {
+              children_tree_data["tools"] = item_data_tools(children_tree_data)
+            } else if ( children_tree_data.type == "folder" ) {
+              children_tree_data["tools"] = folder_data_tools(children_tree_data)
+            };
+
+
+            var has_children = typeof(children_tree_data.children) == "undefined" ? false : true;
+
+            if (has_children) {
+              var _children = children_tree_data.children.map(function (x, i) {
+                  return x = merge_tools_to_children_tree_data(x)
+                })
+            }
+
+            return children_tree_data
+          }
+
+          var json = setup_tree_data(<%=raw category_tree_data(@group) %>)
+          merge_tools_to_children_tree_data(json)
+
+          Vue.component('tree',{
+              template: '#tree-template'
+          });
+          Vue.component('folder', {
+              template: '#folder-template',
+              data: {
+                  open: true,
+                  tool: false
+              }
+          });
+          Vue.component('item', {
+              template: '#item-template',
+              data:{
+                  tool: false
+              }
+          });
+          Vue.component('tree-tools',{
+              template:  '#tree-tools'
+          });
+          var menu = new Vue({
+              el: '#tree1',
+              data: {
+                  treeData: json
+              }
+          })
+
+          function move_lower(e) {
+            var url = $(e).attr("data-target")
+
+            $.ajax(url, {
+              async: false,
+              type: 'get',
+              success: function (data, status) {
+                var _data = setup_tree_data(data.data)
+                merge_tools_to_children_tree_data(_data)
+                menu.$set("treeData", _data)
+                //window.location.reload()
+              },
+              error: function (data, status) {
+                result = data
+              }
+            })
+          }
+          function move_higher(e) {
+            var url = $(e).attr("data-target")
+
+            $.ajax(url, {
+              async: false,
+              type: 'get',
+              success: function (data, status) {
+                var _data = setup_tree_data(data.data)
+                merge_tools_to_children_tree_data(_data)
+                menu.$set("treeData", _data)
+                //window.location.reload()
+              },
+              error: function (data, status) {
+                result = data
+              }
+            })
+          }
+
+          $(".tree-selectable").delegate(".tree-down", "click", function () {
+            move_lower(this)
+          })
+          $(".tree-selectable").delegate(".tree-up", "click", function () {
+            move_higher(this)
+          })
+      });
+  </script>
+<% end %>

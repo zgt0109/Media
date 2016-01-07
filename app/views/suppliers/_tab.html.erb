@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger">
+  <%= link_to_li '修改密码', new_password_path,class: "#{'active' if current_page?(:controller =>'passwords', :action => 'new') }" %>
+  <%#= link_to_li '修改手机号码', edit_supplier_path(current_user, :tab => 'edit_tel'), class: "#{'active' if params[:tab] == 'edit_tel' }" %>
+  <%= link_to_li '修改邮箱', edit_supplier_path(current_user, :tab => 'edit_email'), class: "#{'active' if params[:tab] == 'edit_email' }" %>
+</ul>

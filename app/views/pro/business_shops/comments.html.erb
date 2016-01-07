@@ -1,0 +1,53 @@
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<%= render 'topbar' %>
+
+<div class="box-form form-col form-search table">
+  <%= form_for @search, url: comments_business_shops_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+    <div class="tr" style="display:inline-table;">
+      <p class="first">
+        <label class="search-layout">
+          <span></span>
+          <%= f.text_field :comment_like, class: 'input-text', style:"width:200px", placeholder:"请输入评论内容" %>
+        </label>
+        <label class="search-layout">
+          <span>选择店铺名</span>
+          <%= f.select :commentable_id_eq, @website.business_shops.pluck(:name, :id), {include_blank: '全部店铺' }, :class => "input-select", :style => "width:120px;float:none;" %>
+        </label>
+        <label class="search-layout">
+          <input type="submit" value="查询" class="form-submit btn btn-big">
+        </label>
+      </p>                           
+    </div>
+  <% end %>
+</div>
+
+<div class="box-table">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show" id="rows">
+    <tr>
+      <th width="15%">用户昵称 </th>
+      <th>评论内容</th>
+      <th>评论店铺</th>
+      <th width="10%">操作</th>
+    </tr>
+    <% if @comments.each do |comment| %>
+    <tr id="row-<%= comment.id %>">
+      <td><%= comment.nickname %></td>
+      <td><%= comment.comment %></td>
+      <td><%= comment.commentable.name %></td>
+      <td><%= link_to '删除', destroy_comment_business_shops_path(comment_id: comment.id), data: { method: :delete, remote: true, confirm: '确定删除该评论？' } %></td>
+    </tr>
+    <% end.blank? %>
+      <tr id="no-records">
+        <td colspan="4" class="green text-center">无记录</td>
+      </tr>
+    <% end %>
+  </table>
+  <p class="p-btn"></p>
+</div>
+
+<div class="ft">
+  <%= paginate @comments  %>
+</div>

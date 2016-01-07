@@ -1,0 +1,38 @@
+<section id="sec-index">
+  <header>
+    <%= link_to image_tag('/mobile/img/coupons/ico-left.png'),
+                mobile_coupons_path %>
+    <h1>优惠券详情</h1>
+    <%- if @wx_user.present? %>
+      <%= link_to image_tag('/mobile/img/coupons/ico-user.png'), my_mobile_coupons_path, class: 'tright' %>
+    <%- else %>
+      <a href="javascript:;" class="tright"></a>
+    <%  end %>
+
+  </header>
+  <div class="body">
+    <%= form_tag apply_mobile_coupons_path do %>
+    <%= hidden_field_tag :id, @coupon.id %>
+    <div class="coupons-t"><%= @coupon.name %></div>
+    <div class="coupons-list">
+        <%= render 'coupon', coupon: @coupon  %>
+    </div>
+
+    <div class="btn-box">
+        <% case @coupon.link_class %>
+        <% when 'c-receive' %>
+          <% if session[:openid] %>
+            <span class="btn btn-block <%= 'btn-green' if @coupon.appliable? %>" onclick="javascript:$('form').submit();">立即领取</span>
+          <% else %>
+            <span class="btn btn-block btn-green" onclick="showTips('.J-guanzhu')">立即领取</span>
+          <%- end %>
+        <% when 'c-end' %>
+        <span class="btn btn-block">已经领完</span>
+        <% when 'c-overdue' %>
+        <span class="btn btn-block">已经过期</span>
+        <%- end %>
+    </div>
+    <% end %>
+    <%= render 'info', coupon: @coupon, consume_type: 'Consume' %>
+  </div>
+</section>

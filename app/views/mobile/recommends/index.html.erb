@@ -1,0 +1,13 @@
+<%- if @activity.setted? %>
+  <%- if @activity.activity_status == Activity::UNDER_WAY %>
+      <%- if @invites.blank? %>
+        <%= render 'init', ing: true %>
+      <%- else %>
+        <%= render 'has_prize' %>
+      <%- end %>
+  <%- else %>
+    <%= render 'init', ing: false %>
+  <%- end %>
+<%- else%>
+  <%= render 'init', ing: false %>
+<%- end %>

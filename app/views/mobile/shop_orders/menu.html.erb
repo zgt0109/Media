@@ -1,0 +1,224 @@
+<% provide(:title, '我要订餐') if @shop_order.book_dinner? %>
+<% provide(:title, '我要叫外卖') if @shop_order.take_out? %>
+
+<div class="stage" id="stage">
+  <header>
+    <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
+    <h1><%= @shop_branch.name %></h1>
+    <%= link_to "", toggle_is_show_product_pic_mobile_shop_orders_path(supplier_id: session[:supplier_id]), class: "icon icon-image fr #{@wx_user.is_show_product_pic? ? 'active' : ''}", id: "btn-image1", remote: true, method: :post %>
+  </header>
+
+  <section id="sec-index">
+    <div class="body">
+      <div class="box-search mb10 hide food-search">
+        <%= form_for @shop_order, url: search_mobile_shop_order_url(supplier_id: session[:supplier_id], id: @shop_order.id), remote: true, method: :get do |f| %>
+          <input class="input fl" name="search" type="search" placeholder="请输入您要查找的菜品">
+          <input type="submit" class="btn btn-small" value="搜索">
+        <% end %>
+      </div>
+
+      <div class="index-food">
+        <div id="categoryList" class="category">
+          <div class="category-wrap">
+            <div class="category-search">
+              <a class="fa fa-search">搜索</a>
+            </div>
+            <dl>
+              <dt class="tcenter">
+                <a href="#stage">全部</a>
+              </dt>
+            </dl>
+            <% @shop_categories.each do |category| %>
+              <dl class="subcategory">
+                <dt>
+                  <a href="#c_<%= category.id %>"><%= category.name %></a>
+                </dt>
+                <dd>
+                  <% category.children.order("sort").each do |child| %>
+                    <a href="#c_<%= child.id %>"><%= child.name %></a>
+                  <% end %>
+                </dd>
+              </dl>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="food-list" id="food-list">
+          <% @shop_categories.each do |root| %>       
+            <% unless root.has_children? %>
+              <dl>
+                <dt>
+                  <span id="<%= "c_#{root.id}" %>"><%= root.name %></span>
+                </dt>
+                <dd>
+                  <% root.shop_products.shelve.where(shop_id: @shop_branch.shop_id).order("sort").each do |product| %>
+                    <%= render 'mobile/shop_orders/shop_product', :product => product, :wx_user => @wx_user %>
+                  <% end %>
+                </dd>
+              </dl>
+            <% else %>
+              <% root.children.order('sort').each do |category| %>
+                <dl>
+                  <dt>
+                    <span id="<%= "c_#{category.id}" %>"><%= category.name %></span>
+                  </dt>
+                  <dd>
+                    <% category.children_products.shelve.where(shop_id: @shop_branch.shop_id).order("sort").each do |product| %>
+                      <%= render 'mobile/shop_orders/shop_product', :product => product, :wx_user => @wx_user %>
+                    <% end %>
+                  </dd>
+                </dl>
+              <% end %>
+            <% end %>   
+          <% end %>    
+        </div>
+
+        <div class="food-list" id="search-list" style="display:none"></div>
+
+        <div class="food-shopcar">
+          <div class="hd">
+            <a class="fl active shopcar-btn" id="shopcar-btn">
+              <span class="mod-fa fa fa-caret-up">选择：<i id="js-total-number"><%= @shop_order.total_qty %></i></span>
+              <b id="js-total-price">总价：￥<%= @shop_order.total_amount %></b>
+            </a>
+            <a href="javascript:;" class="btn btn-small fr" onclick="showPop('#pop-more')">选好了</a>
+          </div>
+          <div class="bd" id="shopcar-list">
+            <dl>
+              <dt></dt>
+              <dd class="abc">
+                <div class="wrap-scroll" id="shop_order_item_div" >
+                  <%= render :partial => 'shop_order_item', :collection => @shop_order.shop_order_items, :as => :shop_order_item %>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+    function render_footer_car(total_number, total_price, product_id, product_num){
+        $("#js-total-number").html(total_number);
+        $("#js-total-price").html("总价：￥" + total_price);
+        $(".porduct-number-of-" + product_id).val(product_num);
+    }
+
+    $(function(){
+        // plusAndMinus();
+        scrollBar();
+        showSubmenu();
+        $("#shopcar-btn, #shopcar-list dt").click(function(){
+            var height = $(window).height()-115;
+            $("#shopcar-list").slideToggle(function(){
+                var flag = $(this).css("display");
+                if(flag == "block"){
+                    $(".html").css({"overflow":"hidden","height":"100%"});
+                    $(".abc").slimScroll({
+                        height: height
+                    });
+                }else{
+                    $(".html").removeAttr("style");
+                }
+            });
+
+            $("#shopcar-btn").addClass("active");
+        });
+
+        $("#btn-image").click(function(){
+            $("#food-list .product-img").toggle();
+        });
+        
+        $("#categoryList .category-search").click(function(){
+            var self=$(this);
+            $(".box-search").slideToggle();
+            self.toggleClass("active");
+            if(self.hasClass("active")){
+                $(".box-search input[type=search]").focus();
+            }else{
+                $(".box-search input[type=search]").focusout();
+            }
+        });
+
+        $("body").on("keyup", '.js-number-change', function(){
+            var hl = $(this).parent().find(".hidden-link");
+            var origin_hl = hl.attr("href");
+            hl.attr("href", origin_hl+"&number="+$(this).val());
+            hl.click();
+        });
+
+        $("body").on("keyup", '.js-number-item-change', function(){
+            var hl = $(this).parent().find(".hidden-link");
+             var origin_hl = hl.attr("href");
+             hl.attr("href", origin_hl+"?number="+$(this).val());
+             hl.click();
+             hl.attr("href", origin_hl);
+         });
+
+        $("#categoryList a").click(function(){
+            $("#food-list").show();
+            $("#search-list").empty();
+        });
+    });
+    var scrollBar = function () {
+        var height = $(window).height() - 92;
+        $("#categoryList .category-wrap").slimscroll({
+            height:height+'px',
+            size: '2px',
+            color: '#333',
+            distance: "0px"
+        });
+    };
+    var showSubmenu = function(){
+        $("#categoryList .subcategory dt a").click(function(){
+            var self=$(this);
+            var p=self.parents(".subcategory");
+            p.toggleClass("active");
+            p.prevAll().removeClass("active");
+            p.nextAll().removeClass("active");
+            p.prevAll().find("dd").slideUp();
+            p.nextAll().find("dd").slideUp();
+        });
+    }
+</script>
+
+<script type="text/javascript">
+  $(function() {
+    <% if flash[:notice] %>
+      alert("<%= flash[:notice] %>");
+    <% elsif flash[:alert] %>
+      alert("<%= flash[:alert] %>");
+    <% end %>
+    <% flash.clear %>
+  });
+</script>
+
+<% content_for :js_pop do %>
+  <div class="mod-pop" id="pop-more" style="">
+    <div class="pop-bg" onclick="hidePop('#pop-more')"></div>
+      <div class="pop-body">
+        <div class="pop-hd pop-ul">
+          <% if @shop_order.take_out? %>
+            <%= link_to "确定", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "" %>
+          <% end %>
+
+          <% if @shop_order.book_dinner? %>
+            <% book_dinner_rule =  @shop_order.shop_branch.book_dinner_rule %>
+            <% if book_dinner_rule.is_in_branch %>
+              <%= link_to "我在店", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 1, anchor: "mp.weixin.qq.com"), class: "" unless @shop_order.ref_order %>
+            <% end %>
+            <% if book_dinner_rule.is_in_queue %>
+              <%= link_to "我在排号", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 2, anchor: "mp.weixin.qq.com"), class: "" unless @shop_order.ref_order %>
+            <% end %>
+            <% if book_dinner_rule.is_in_normal %>
+              <%= link_to "我要订餐订座", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "" %>
+            <% end %>
+          <% end %>
+
+          <a href="javascript:;" onclick="hidePop('#pop-more')">取消</a>
+      </div>
+    </div>
+  </div>
+<% end %>

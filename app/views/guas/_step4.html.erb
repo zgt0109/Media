@@ -1,0 +1,18 @@
+<% content_for :form do %>
+    <%= form_for @activity, validate: true, url: form_action, html: { class: 'form', role: :form } do |f| %>
+        <%= hidden_field_tag :step, params[:step] %>
+        <%= f.fields_for :activity_property, validate: true do |activity_property| %>
+            <%= render partial: 'activities/property_form', locals: { ap: activity_property } %>
+        <% end %>
+        <div class="form-group">
+            <% prev_url = action_name == 'show' ? activity_path(@activity, step: params[:step].to_i - 1) : edit_activity_path(@activity, step: params[:step].to_i - 1) %>
+            <a href="<%= prev_url %>" class="btn btn-prev btn-sm">
+              <i class="icon-arrow-left"></i>上一步
+            </a>
+            <% if action_name != 'show' %>
+                <button type="submit" class="btn btn-success btn-sm btn-next">完成</button>
+            <% end %>
+            <%= link_to '返回', activities_path_by_type(@activity.activity_type_id), class: "btn btn-sm" %>
+        </div>
+    <% end %>
+<% end %>

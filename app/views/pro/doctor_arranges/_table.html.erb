@@ -1,0 +1,14 @@
+<% doctor_arranges.each do |arrange| %>
+<% unless  arrange.new_record? %>
+<tr id="destroy_<%= arrange.id %>">
+  <td><%= arrange.hospital_doctor.name %> </td>
+  <td><%= arrange.hospital_department.name %></td>
+  <td><%= arrange.shop_branch.name %></td>
+  <td><%= arrange.arrange_time %></td>
+  <td><%= arrange.arrange_limit %></td>
+  <td>
+    <%= link_to "删除", arrange, method: :delete, remote: true, confirm: "确认删除？" %>
+  </td>
+</tr>
+<% end %>
+<% end %>

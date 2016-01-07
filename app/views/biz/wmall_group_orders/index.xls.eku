@@ -1,0 +1,6 @@
+__filename = "group_orders_#{Time.now.strftime("%Y%m%d%H%M%S")}.xls"
+sheet1 = xls.create_worksheet
+sheet1.row(0).concat ["订单号", "订单流水号", "支付方式", "商品名称", "所属商家", "订单金额", "状态", "下单时间"]
+@wmall_group_orders.each_with_index do |order, i|
+  sheet1.update_row i+1, order.order_no, order.payments.success.try(:first).try(:trade_no), order.try(:payment_type).try(:name), order.try(:group_item).try(:name),order.try(:group_item).try(:groupable).try(:name), order.total_amount, order.status_name,order.created_at
+end

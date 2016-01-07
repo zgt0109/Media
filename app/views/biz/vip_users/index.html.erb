@@ -1,0 +1,66 @@
+<% content_for :tab do %>
+    <div id="tab-1" class="tab-pane active row">
+      <div class="col-sm-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、针对会员基础信息进行管理，包括：金额调节（充值或消费）、积分调节（增加或减少）、冻结账户等；</li>
+            <li> 2、你还可以批量导出会员数据。</li>
+            <li> 3、会员照片建议尺寸为：413*295。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12 no-padding">
+        <%= render 'biz/vip_users/vip_users_search_form' %>
+
+        <div class="col-sm-12 margin-top-20">
+          <table id="vipData" class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+              <% if current_user.vip_card.use_vip_avatar? %><th width="7%">会员照片</th><% end %>
+              <th width="11%">会员卡号</th>
+              <th width="11%">线下会员卡号</th>
+              <th width="8%">姓名</th>
+              <th width="11%">等级</th>
+              <th width="10%">手机号码</th>
+              <th width="11%">可用余额</th>
+              <th width="11%">可用积分</th>
+              <th width="8%">状态</th>
+              <th width="16%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @vip_users.each_with_index do |vip_user| %>
+                <tr>
+                  <% if current_user.vip_card.use_vip_avatar? %><td><img src="<%= vip_user.avatar_url(size: '50x36') %>" alt="暂无"/></td><% end %>
+                  <td>
+                    <a class="break" data-toggle="modal" href="<%= vip_user_path(vip_user, type: 'show_user') %>"><%= vip_user.user_no %></a>
+                  </td>
+                  <td><%= vip_user.custom_user_no %></td>
+                  <td><%= vip_user.name %></td>
+                  <td><%= vip_user.vip_grade_name %></td>
+                  <td><%= vip_user.mobile %></td>
+                  <td id="usable_amount_<%= vip_user.id %>"><%= f vip_user.usable_amount %></td>
+                  <td id="usable_points_<%= vip_user.id %>"><%= vip_user.usable_points %></td>
+                  <td><%= vip_user.status_name %></td>
+                  <td class="tooltop">
+                    <a class="icon-jpy" title="充值消费" data-rel="tooltip" data-toggle="modals" data-target="topUpModal" href="javascript:;" data-title="<%= vip_user.name %>的充值消费" data-height="1000" data-iframe="<%= set_money_vip_user_path(vip_user) %>"></a>
+                    <a class="icon-sort" title="积分调节" data-rel="tooltip" data-toggle="modals" data-target="jfModal"  href="javascript:;" data-title="<%= vip_user.name %>的积分调节" data-height="1000" data-iframe="<%= set_point_vip_user_path(vip_user) %>"></a>
+                    <a class="icon-user" title="等级调节" data-rel="tooltip" data-toggle="modals" data-target="djModal"  href="javascript:;" data-title="<%= vip_user.name %>的等级调节" data-height="1000" data-iframe="<%= set_grade_vip_user_path(vip_user) %>"></a>
+                    <a class="icon-file-text" title="编辑会员资料" data-rel="tooltip" data-toggle="modals" href="javascript:;" data-title="会员资料" data-height="1000" data-iframe="<%= edit_vip_user_path(vip_user) %>"></a>
+                    <%= link_to '', [:freeze, vip_user], method: :post, data:{rel: 'tooltip'}, confirm: '冻结后用户在手机端微信上将无法继续使用会员卡功能，还要继续冻结此会员账号?', class: 'icon-unlock-alt', title: '冻结' if vip_user.normal? %>
+                  </td>
+                </tr>
+            <% end.blank? %>
+                <tr>
+                  <td colspan="9" class="green text-center">没有记录</td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+          <%= paginate @vip_users %>
+        </div>
+      </div>
+    </div>
+<% end %>
+<%= render 'biz/vip_users/admin' %>

@@ -1,0 +1,37 @@
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <%= link_to '店铺管理', business_shops_path, class: 'h1 uncurrent' %>
+  <h1 class="pagecurrent">商品管理</h1>
+<% end %>
+
+<div class="box-table fl tright">
+  <p>
+    <a class="btn btn-small btn-orange fr" onclick="popUrl(this)" data-name="name" data-w="800" data-h="0.8" data-title="新增商品" data-url="<%= new_business_shop_business_item_path %>">新增</a>
+  </p>
+</div>
+
+<div class="box-table">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show" id="rows">
+    <tr>
+      <th>商品名称</th>
+      <th width="11%">商品价格</th>
+      <th width="11%">显示顺序</th>
+      <th width="10%">操作</th>
+    </tr>
+    <% if @business_items.each do |business_item| %>
+      <%= render 'row', business_item: business_item %>
+    <% end.blank? %>
+      <tr id="no-records">
+        <td colspan="4" class="green text-center">无记录</td>
+      </tr>
+    <% end %>
+  </table>
+  <p class="p-btn"></p>
+</div>
+
+<div class="ft">
+  <%= paginate @business_items  %>
+</div>

@@ -1,0 +1,287 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <%= render 'bread' %>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="width-1000">
+              <%= form_for @coupon, validate: true do |f| %>
+                <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+                <%= f.hidden_field :supplier_id, value: current_user.id %>
+                <div class="form-group offline_coupon">
+                  <label>优惠券名称<span class="required-star">*</span>
+                    <small class="text-warning">不超过64个字</small>
+                  </label>
+
+                  <div class="clearfix">
+                    <%= f.text_field :name, class: "col-xs-8", maxlength: 64, validate:  true %>
+                  </div>
+                </div>
+                <div class="form-group offline_coupon">
+                    <% Coupon::COUPON_TYPES.each do |coupon_type, coupon_type_name| %>
+                        <label class="control-label">
+                          <%= f.radio_button :coupon_type, coupon_type, class: :ace %>
+                          <span class="lbl"><%= coupon_type_name %></span>
+                        </label>
+                    <% end %>
+                </div>
+
+                <div class="form-group offline_coupon">
+                  <label>优惠内容<span class="required-star">*</span>
+                  </label>
+
+                  <div class="clearfix">
+                    <label>抵用金额</label>
+                    <%= f.text_field :value, class: 'inputSmall', maxlength: 6 %>元
+
+                    <label class="margin-left-10">消费满</label>
+                    <%= f.text_field :value_by, class: 'inputSmall', value: @coupon.value_by || 0, maxlength: 6 %>元
+                    <small class="text-warning">0表示无条件</small>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>优惠券logo<span class="required-star">*</span>
+                  </label>
+
+                  <div class="clearfix">
+                    <div class="cieldon-file width-100px " data-type="0" data-height="90" data-width="90" data-img="<%= @coupon.logo_url || current_user.try(:website).try(:logo_url) %>" data-name="coupon[qiniu_logo_key]" data-key="<%= @coupon.qiniu_logo_key %>">
+                      <div class="file-img"></div>
+                    </div>
+                    <small class="text-warning pull-left display-block margin-top-20 line-height-32">图片建议尺寸：90像素*90像素</small>
+                  </div>
+                </div>
+
+                <div class="form-group offline_coupon">
+                  <label>发放优惠券总数<span class="required-star">*</span>
+                  </label>
+
+                  <div class="clearfix">
+                    <%= f.text_field :limit_count, class: 'col-sm-8', value: (@coupon.limit_count.presence || 100), maxlength: 6 %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>每人允许领取优惠券数量<span class="required-star">*</span>
+                    <small class="text-warning">-1表示不限数量</small>
+                  </label>
+                  <div class="clearfix">
+                    <%= f.text_field :people_limit_count, class: 'col-sm-8', value: (@coupon.new_record?  ? -1 :  @coupon.people_limit_count), maxlength: 6 %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>每天允许发放优惠券总数<span class="required-star">*</span>
+                    <small class="text-warning">-1表示不限数量</small>
+                  </label>
+                  <div class="clearfix">
+                    <%= f.text_field :day_limit_count, class: 'col-sm-8', value: (@coupon.new_record?  ? -1 :  @coupon.day_limit_count), maxlength: 6 %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>领取时间<span class="required-star">*</span><span class="lbl"><small class="help-inle test text-warning">领取时间段内用户才能查看和领取优惠券</small></span>
+                  </label>
+
+                  <div class="clearfix">
+                    <div class="input-group col-sm-8 no-padding">
+                      <%= datetime_range_tag f, start_at: :apply_start, end_at: :apply_end %>
+                    </div>
+                  </div>
+                </div>
+                <%- if current_user.vip_card.present? %>
+                  <div class="form-group">
+                    <div>
+                      <label class="margin-b-10 margin-top-10">
+                        <%= f.check_box :vip_only, class: 'ace'%>
+                        <span class="lbl">仅会员可领取</span>
+                        <small class="text-warning">
+                          若不勾选则所有关注粉丝可领取
+                        </small>
+                      </label>
+                    </div>
+                    <div class="checkbox-inline no-padding" id="vips">
+                      <% current_user.vip_grades.visible.sorted.each do |vip_grade| %>
+                        <label>
+                          <!-- <input name="form-field-checkbox" type="checkbox" class="ace"> -->
+                          <%= f.check_box :vip_grade_ids, {name: 'coupon[vip_grade_ids][]', class: :ace}, vip_grade.id, false %>
+                          <span class="lbl"><%= vip_grade.name %></span>
+                        </label>
+                      <% end %>
+                      <div class="clearfix"></div>
+                    </div>
+                  </div>
+                <%- end %>
+
+                <% if current_user.shop_branches.used.present? %>
+                  <div class="form-group shop_branch_list offline_coupon">
+                    <label class="control-label"><%= f.check_box :shop_branch_limited, class: 'ace' %><span class="lbl">使用门店限制<small class="help-inle test text-warning">若不选则默认为所有门店通用</small></span></label>
+                    <div class="margin-0 clearfix gateSelect">
+                      <%= address_select(OpenStruct.new(province_id: @province_id, city_id: @city_id), no_district: true) %>
+                      <span class="fgray" id="shop_branch_count">（当前已选择<font><%= @coupon.try(:shop_branch_ids).length %></font>个门店）</span>
+                    </div>
+                    <% @shop_branchs.each_with_index do |branchs,index| %>
+                      <div class="margin-0 shop_branchs" id="shop_branch_<%= branchs.first.try(:city_id) %>" style="display: <%= index == 0 ? 'block;' : 'none;' %>">
+                        <% branchs.each do |branch| %>
+                          <label class="control-label"> <%= f.check_box :shop_branch_ids, {name: 'coupon[shop_branch_ids][]'}, branch.id, false %> <%= branch.name %> </label>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+
+
+
+                <div class="form-group col-sm-8 no-padding offline_coupon">
+                  <label>使用有效期<span class="required-star">*</span><span class="lbl"><small class="help-inle test text-warning">有效期内才能核销优惠券</small></span>
+                  </label>
+
+                  <div class="clearfix">
+                    <div class="input-group col-sm-8 no-padding">
+                      <%= datetime_range_tag f, start_at: :use_start, end_at: :use_end %>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                  <label>使用说明
+                    <small class="text-warning">不能超过2000个字</small>
+                  </label>
+
+                  <div class="clearfix">
+                    <%= render "shared/form_rich_text",
+                               field_name: "description",
+                               obj: f.object,
+                               f: f,
+                               wrapper_html_options: {class: "col-md-11"} %>
+                  </div>
+                </div>
+                <div class="form-group offline_coupon">
+                  <%- if @coupon.new_record? || @coupon.state_name == '未开始' %>
+                    <%= f.submit '保存', class: 'btn btn-sm btn-primary', data: {disable_with: '保存中……'}%>
+                  <%- else %>
+                    <a class='btn btn-sm btn-primary' href='/coupons'>返回</a>
+                  <%- end %>
+                </div>
+              <% end %>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    $(function() {
+        // 该匿名函数用于执行门店限制的相关js效果，包括：
+        //    1、当没有勾选门店限制时，隐藏选择门店部分；
+        //    2、切换城市时，同时切换城市下的门店；
+        //    3、勾选和取消勾选门店时，计算已勾选的门店数量
+        (function() {
+            if(!$('#coupon_shop_branch_limited').is(':checked')) {
+                $(".shop_branch_list").find(".margin-0").hide();
+            }
+
+            $(document).on("click", "input[name='coupon[shop_branch_limited]']", function(){
+                if($(this).is(":checked")){
+                    $(".shop_branch_list").find(".margin-0").show();
+                    $("#city").change();
+                }else{
+                    $(".shop_branch_list").find(".margin-0").hide();
+                }
+            });
+
+            $(document).on("change", "#city", function(){
+                if($('#shop_branch_'+$('#city').val()).length > 0){
+                    $('.shop_branchs').hide();
+                    $('#shop_branch_'+$('#city').val()).show();
+                }else{
+                    var get_url = "<%= get_shop_point_gifts_path %>" + "?province_id=" + $('#province').val() + "&city_id=" + $('#city').val();
+                    $.get(get_url, function(html) {
+                        $('.shop_branchs').hide();
+                        $('.shop_branch_list').append(html);
+                    });
+                }
+            });
+
+            $(document).on("click", "input[name='coupon[shop_branch_ids][]']", function(){
+                var font=$('#shop_branch_count').find("font");
+                var num=parseInt(font.html()) + ( $(this).is(":checked") ? 1 : -1 );
+                font.html(num);
+            });
+        })();
+
+        (function() {
+          <%- if @coupon.persisted? && @coupon.state_name != '未开始' %>
+            $('input,textarea').attr('disabled', true);
+            $('input[type=submit]').attr('disabled',true);
+          <%- end%>
+            $vip_check_box = $('#coupon_vip_only');
+            function toggleVips() {
+              if($vip_check_box.is(':checked')) {
+                $('#vips').show();
+              } else {
+                $('#vips').hide();
+              }
+            }
+            toggleVips();
+        })();
+        $('#coupon_vip_only').on('click', function(){
+          if($(this).is(':checked')) {
+                $('#vips input[type=checkbox]').each(function(index, entry){
+                  entry.checked = true
+                });
+                $('#vips').show();
+            } else {
+              $('#vips input[type=checkbox]').each(function(index, entry){
+                  entry.checked = false
+                });
+              $('#vips').hide();
+            }
+        });
+        $('input[type="submit"]').on('click', function(event) {
+            if($('#coupon_vip_only').is(':checked') && $('input[name="coupon[vip_grade_ids][]"]:checked').length === 0) {
+              showTip('warning', '必须选择一个会员等级');
+              event.preventDefault();
+              return false;
+            }
+            if ( $('#coupon_shop_branch_limited').is(':checked') ) {
+                if ( $('input[name="coupon[shop_branch_ids][]"]:checked').length === 0 ) {
+                    showTip('warning', '门店不能为空');
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        });
+
+        $('form').submit(function(event) {
+          if(confirm("优惠券一旦开始领取，将不可以进行编辑和删除，请仔细填写和保存。")){
+              return true;
+          }else{
+            event.preventDefault();
+            return false;
+          }
+        });
+
+        var $couponTypes = $('input[name="coupon[coupon_type]"]'),
+                $couponRelatedGroups = $('.form-group').not('.offline_coupon');
+        function toggleCouponFields(couponType) {
+            if(couponType == 'offline_coupon') {
+                $couponRelatedGroups.hide();
+            } else {
+                $couponRelatedGroups.show();
+            }
+        }
+        toggleCouponFields('<%= @coupon.coupon_type %>');
+        $couponTypes.click(function() {
+            toggleCouponFields($(this).val());
+        });
+
+     });
+  </script>
+<% end %>

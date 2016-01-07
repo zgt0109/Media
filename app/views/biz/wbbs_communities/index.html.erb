@@ -1,0 +1,48 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微互动', activity_forms_path %></li>
+      <li><%= link_to '微社区', wbbs_communities_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="mod-panel">
+          <div class="panel-left">
+            <a href="<%= new_wbbs_community_path %>"><i class="fa fa-plus"></i></a>
+          </div>
+          <div class="panel-right bigger-120 text-muted line-height-32">
+            设置一个社区<br>引导用户在社区进行交流
+          </div>
+        </div>
+        <%- current_user.wbbs_communities.setted.to_a.each do |community| %>
+          <div class="mod-panel">
+            <div class="panel-left">
+              <b><%= community.name || community.activity.name %></b>
+              <div class="panel-img">
+                <%= image_tag community.logo_url %>
+              </div>
+            </div>
+            <div class="panel-right">
+              <p><b>用户数：</b><span class="text-right"><%= community.user_ids.count %></span></p>
+              <p><b>话题数：</b><span class="text-right"><%= community.wbbs_topics_count %></span></p>
+              <p><b>回复数：</b><span class="text-right"><%= community.wbbs_replies_count %></span></p>
+              <p class="panel-tools">
+                <a class="fa fa-pencil" title="编辑" href="<%= edit_wbbs_community_path(community) %>"></a>
+                <a class="fa fa-th-list" title="管理" href="<%= wbbs_topics_path(community_id: community.id) %>"></a>
+                <%= link_to "", community, title: "删除",method: :delete, data: { confirm: '确定要删除？'}, class: 'fa fa-trash-o' %>
+              </p>
+            </div>
+          </div>
+        <%- end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

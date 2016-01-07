@@ -1,0 +1,74 @@
+<% content_for :main_content do %>
+
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微汽车', car_shops_path %></li>
+      <li><%= link_to '我的4S店', car_shops_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到车微汽车；</li>
+            <li>2、以下<span class="required-star"> * </span>均为必填项；</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-xs-12 margin-top-20">
+        <%= form_for @car_shop, validate: true do |f| %>
+          <%= render "weixin_preview", wx_title: @car_activity_notice.activity.try(:name) || '标题', wx_summary: @car_activity_notice.activity.try(:summary) || '描述'  %>
+          <div class="col-xs-12 col-md-6 col-lg-7">
+            <div class="form-group">
+              <label class="control-label clearfix">4S店名称<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= f.text_field :name, class: 'col-xs-6', id: 'shop_name', placeholder: '请输入4S店名称' %>
+              </div>
+            </div>
+            <%= f.fields_for :car_brand do |car_brand| %>
+              <%= car_brand.hidden_field :supplier_id, value: current_user.id %>
+              <%= car_brand.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+              <%= car_brand.hidden_field :car_shop_id, value: @car_shop.id %>
+              <div class="form-group">
+                <label class="control-label clearfix">品牌名称<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= car_brand.text_field :name, class: 'col-xs-6', id: 'brand_name', placeholder: '请输入品牌名称' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label ">LOGO图片<span class="required-star">*</span><small class="text-warning">图片建议尺寸：54像素*54像素</small></label>
+                <div class="clearfix">
+                  <div class="cieldon-file" data-name="car_shop[car_brand_attributes][qiniu_logo_key]" data-img="<%= @car_shop.car_brand.try(:logo_url) %>" data-key="<%= @car_shop.car_brand.try(:qiniu_logo_key) %>" data-width="90" data-height="90" data-type="0"></div>
+                </div>
+              </div>
+            <%- end %>
+            <%= f.fields_for :car_activity_notices do |car_activity_notice| %>
+              <% if car_activity_notice.object.shop? %>
+                <%= car_activity_notice.hidden_field :supplier_id, value: current_user.id %>
+                <%= car_activity_notice.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+                <%= car_activity_notice.hidden_field :car_shop_id, value: @car_shop.id %>
+                <%= car_activity_notice.hidden_field :notice_type, value: '1' %>
+                <%= car_activity_notice.fields_for :activity do |activity| %>
+                  <%= render "weixin_setting", activity: activity, data_img: activity.object.pic_url, pic_data_name:"car_shop[car_activity_notices_attributes][0][activity_attributes][qiniu_pic_key]", pic_data_key: activity.object.qiniu_pic_key %>
+                  <div class="form-group">
+                   <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                  </div>
+                <%- end %>
+              <%- end %>
+            <% end %>
+          </div>
+        <%- end %>
+      </div>
+    </div>
+    <!-- /.main-content -->
+<%- end %>
+<% content_for :custom_js do %>
+
+<% end %>

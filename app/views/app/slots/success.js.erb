@@ -1,0 +1,17 @@
+$('#game-1 p').attr('data-result', '<%= @elements_hash[@activity_element_ids[0]] == 0 ? @elements.count : @elements_hash[@activity_element_ids[0]] %>');
+$('#game-2 p').attr('data-result', '<%= @elements_hash[@activity_element_ids[1]] == 0 ? @elements.count : @elements_hash[@activity_element_ids[1]] %>');
+$('#game-3 p').attr('data-result', '<%= @elements_hash[@activity_element_ids[2]] == 0 ? @elements.count : @elements_hash[@activity_element_ids[2]] %>');
+startGame(8,400,'#game-1 p');
+startGame(10,420,'#game-2 p');
+startGame(12,450,'#game-3 p');
+
+var prize = '<%=j render "prize" %>';
+var my_prize = '<%= j render "my_prize"%>';
+$("#btn-start").addClass('btn-success').html('中奖了，立即领奖&nbsp;&nbsp;>')
+$("#sec-result").html(my_prize);
+$("#pop-form").html(prize);
+$(".btn-success").click(function(){
+ var h=$(document).height();
+ $("#pop-form").height(h);
+ $("#pop-form").show();
+});

@@ -1,0 +1,102 @@
+<%= content_for(:topbar) do %>
+    <header>
+      <a href="<%= order_mobile_group_item_path(supplier_id: @supplier.id, id: @group_item.id) %>" class="ico-prev tleft" id="return_order"><img src="/assets/mobile/group/ico-back.png"/></a>
+      <h1>确认订单</h1>
+    </header><!-- header end -->
+<% end %>
+
+<section>
+  <%= form_for @group_order, :url => mobile_group_orders_path(supplier_id: @supplier.id) do |form| %>
+    <%= form.hidden_field :qty %>
+    <%= form.hidden_field :group_item_id %>
+    <%= form.hidden_field :price %>
+    <%= form.hidden_field :mobile %>
+    <%= form.hidden_field :username %>
+    <div class="box box-order">
+      <dl>
+        <dt><%= @group_item.name %></dt>
+        <dd>
+          <div class="order-row">
+            <div class="fl">单价：</div>
+            <div class="fr"><span><%= @group_item.price %></span>元</div>
+          </div>
+          <div class="order-row">
+            <div class="fl">数量：</div>
+            <div class="fr"><span><%= @group_order.qty %></span>个</div>
+          </div>
+          <div class="order-row">
+            <div class="fl">订单金额：</div>
+            <div class="fr fred"><span><%= @group_item.price * @group_order.qty %></span>元</div>
+          </div>
+          <div class="order-row">
+            <div class="fl">手机号码：</div>
+            <div class="fr"><span><%= @group_order.mobile %></span></div>
+          </div>
+          <div class="order-row">
+            <div class="fl">昵称：</div>
+            <div class="fr"><span><%= @group_order.username %></span></div>
+          </div>
+        </dd>
+      </dl>
+      <!--<dl>-->
+        <!--<dt>微信会员卡余额支付</dt>-->
+        <!--<dd>-->
+          <!--<div class="order-row">-->
+            <!--<div class="fl">订单金额：</div>-->
+            <!--<div class="fr fred">1058元</div>-->
+          <!--</div>-->
+          <!--<div class="order-row">-->
+            <!--<div class="fl">账户金额：</div>-->
+            <!--<div class="fr">1058元</div>-->
+          <!--</div>-->
+          <!--<div class="order-row">-->
+            <!--<div class="fl">还需支付：</div>-->
+            <!--<div class="fr fred">1058元</div>-->
+          <!--</div>-->
+        <!--</dd>-->
+      <!--</dl>-->
+      <dl>
+        <dt>选择支付方式</dt>
+        <dd>
+          <!--<div class="order-row">-->
+            <!--<div class="fl">货到付款</div>-->
+            <!--<div class="fr"><input type="radio" name="radio"/></div>-->
+          <!--</div>-->
+          <% if @payment_types.present? %>
+              <% @payment_types.each_with_index do |payment_type, index|%>
+                <div class="order-row">
+                  <div class="fl"><%= payment_type.name%></div>
+                  <div class="fr">
+                    <%= form.radio_button 'payment_type_id', payment_type.id, {checked: index.eql?(0)}  %>
+                  </div>
+                </div>
+              <% end %>
+          <% else %>
+              <div class="order-row">
+                <div style="text-align: center; padding: 5px 0;line-height: 20px;">没有可用的支付方式</div>
+
+              </div>
+          <% end %>
+          <!--<div class="order-row">-->
+            <!--<div class="fl">财付通支付</div>-->
+            <!--<div class="fr"><input type="radio" name="radio"/></div>-->
+          <!--</div>-->
+        </dd>
+      </dl>
+      <p class="tcenter">
+        <% if @payment_types.present?%>
+            <%= form.submit "提交订单", :class => "btn" %>
+        <% else %>
+            <a href="javascript:;" class="btn btn-gray">提交订单</a>
+        <% end %>
+      </p>
+    </div>
+  <% end %>
+</section><!-- section end -->
+<script>
+  $("#return_order").click(function(){
+      $('#new_group_order').attr('action', '<%= order_mobile_group_item_path(supplier_id: @supplier.id, id: @group_item.id) %>').attr('method', 'get')
+      $("#new_group_order").submit();
+      return false;
+  });
+</script>

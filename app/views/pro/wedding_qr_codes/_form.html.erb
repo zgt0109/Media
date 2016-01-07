@@ -1,0 +1,88 @@
+<%= form_for :qrcode, url: wedding_qr_codes_path(@wedding), remote: true, html: {class: "form-horizontal", role: "form", id: "new_qr_code"} do |f| %>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-block alert-success">
+          <strong class="pull-left">提示: </strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、方式一为系统默认，分享时的标题为系统默认选取微信消息标题。</li>
+            <li>2、方式二分享时的标题用户可自定义。</li>
+            <li>3、分享时的概要系统默认为婚礼举办地点</li>
+          </ul>
+        </div>
+        <div class="col-xs-6">
+          <p>方式一：喜帖采用默认称呼</p>
+          <p>用微信扫描二维码打开喜帖，点击右上角图片，转发给朋友或朋友圈。</p>
+          <p>
+            <!-- <img src="/assets/qr.jpg"> -->
+						<%= image_tag RQRCode::QRCode.new(URI.encode("http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}"), size: 8).to_img.resize(170,170).to_data_url %>
+          </p>
+        </div>
+        <div class="col-xs-6">
+          <p>方式二：自定义喜帖称呼</p>
+          <p>输入亲友名称，确定完后点击“生成二维码”，然后用微信扫一扫，打开链接，转发给好友。</p>
+          <div class="input-group input-group-sm width-240px pull-left">
+            <%= f.text_field :content, class: "form-control", id: "qrcode_text" %>
+          </div>
+          <!-- <button class="btn btn&#45;primary btn&#45;sm btn&#45;filter margin&#45;left&#45;5 btn_qr_code"></button> -->
+					<%= f.submit "生成二维码", class: "btn btn-primary btn-sm btn-filter margin-left-5 btn_qr_code" %>
+          <div id="qrcode"></div>
+          <!-- <p> <img src="/assets/qr.jpg"> </p> -->
+          <div>
+            <a href="#nogo" id="qr_code_list" class="btn btn-sm btn-primary" data-dismiss="modals">查看记录</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+      <%= f.submit "保存", class: "btn btn-sm btn-primary" %>
+      <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+    </div>
+  -->
+<% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    qrcode = new QRCode("qrcode", {
+      width: 170,
+      height: 170,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.L
+    });
+
+    sync_txt_to_qrcode = function(){
+      var txt = encodeURI( '<%= "http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}&title=" %>' + $("#qrcode_text").val() );
+      qrcode.makeCode(txt);
+    };
+
+    sync_txt_to_qrcode();
+    $("#qrcode_text").on('blur', function(){ sync_txt_to_qrcode(); });
+    $("#qrcode_text").on('keyup', function(){ sync_txt_to_qrcode(); });
+    $(".btn_qr_code").on('click', function(){ $("#qrcode_text").keydown(); });
+
+		$("#new_qr_code").bind("ajax:success", function(event, xhr, settings) {
+			if(xhr["code"]==0){
+				// alert('二维码保存成功！');
+				$(".btn_qr_code").after("<span class='red qr_code_msg' style='display:block'>二维码保存成功！</span>");
+				setTimeout("$('.qr_code_msg').fadeOut()",3000);
+			}else{
+				// alert('二维码保存失败！');
+				$(".btn_qr_code").after("<span class='red qr_code_msg' style='display:block'>二维码保存失败！</span>");
+				setTimeout("$('.qr_code_msg').fadeOut()",3000);
+			}
+		});
+
+
+
+
+
+    $("#qr_code_list").on('click', function(){
+      parent.location.href="/weddings/<%=@wedding.id%>/wedding_qr_codes"
+    });
+  </script>
+<% end %>

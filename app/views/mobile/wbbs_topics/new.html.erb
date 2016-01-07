@@ -1,0 +1,77 @@
+<%= render 'title' %>
+
+<% content_for :head do %>
+    <%= stylesheet_link_tag 'mobile/wbbs' %>
+    <%= javascript_include_tag 'mobile/wbbs' %>
+    <%= javascript_include_tag 'jquery-fileupload/basic' %>
+<% end %>
+
+
+<section id="sec-index">
+  <header class="untoppable">
+    <%= link_to "", mobile_wbbs_topics_path( @supplier, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
+    <a></a>
+    <a></a>
+  </header>
+  <div class="body">
+    <%= form_for(@wbbs_topic, url: mobile_wbbs_topics_path(@supplier)) do |f| %>
+        <div class="mod-form form-ver">
+          <%= f.text_area :content, rows: 7, class: :input, maxlength: WbbsTopic::MAX_CONTENT_LENGTH, placeholder: '说两句吧...' %>
+          <div class="form-btn">
+            <!-- <a class="fa fa-picture-o"></a> -->
+            <span><%= WbbsTopic::MAX_CONTENT_LENGTH %></span>
+            <%- if params[:status].present? %>
+                <%= f.hidden_field :status, value: params[:status] %>
+            <%- end %>
+            <%- if params[:receiver_id].present? %>
+                <%= f.hidden_field :receiver_id, value: params[:receiver_id] %>
+            <%- end %>
+            <%= hidden_field_tag :image_keys %>
+            <%= link_to '取消', mobile_wbbs_topics_path(@supplier), class: 'btn btn-gray' %>
+            <%= f.submit '确定', class: 'btn btn-green form-submit' %>
+          </div>
+        </div>
+        <div class="mod-uoload">
+          <a class="upload-btn upload-img">
+            <input type="file" id="uploadFile" accept="image/*" single="" data-callback="showImg">
+          </a>
+        </div>
+        <p class="padding15">最多可上传8张图片</p>
+    <% end %>
+  </div>
+</section>
+
+<%= render 'js' %>
+<script>
+    var image_keys = [];
+
+    function showImg(key, imgUrl){
+        var html = '<a class="upload-img qiniu_pics"><span><img src="'+imgUrl+'?imageView/2/w/60/h/60"/></span><i data-url="'+ key+'"></i><div class="mod-progress"><span></span></div></a>';
+        $('.mod-uoload').append(html);
+        $('.mod-progress:last').fadeOut();
+        if($('.qiniu_pics').length >= 8){
+            $(".upload-btn").fadeOut();
+        }else{
+            image_keys.push(key);
+            $('#image_keys').val(image_keys.join(','));
+        }
+    }
+
+    $(function(){
+        $('.mod-uoload').on("touched click",".upload-img i",function(){
+            $(this).parent(".upload-img").remove();
+            var removed_key = $(this).data('url');
+            for(var i = image_keys.length; i--;){
+                if (image_keys[i] === removed_key){
+                    image_keys.splice(i, 1);
+                }
+            }
+            $('#image_keys').val(image_keys.join(','));
+        });
+
+        $('#wbbs_topic_content').keyup( content_words_keyup );
+        $('.form-submit').click( validate_content_presence );
+
+    });
+
+</script>

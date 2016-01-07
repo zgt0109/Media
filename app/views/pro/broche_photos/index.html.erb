@@ -1,0 +1,89 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li><i class="icon-home home-icon"></i> <%= link_to "首页", root_path %> </li>
+          <li> <%= link_to "微房产", house_layouts_path %> </li>
+          <li><%= link_to "微楼书", broches_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+            <li>
+              <%= link_to "微楼书微信设置", broches_path(anchor: 'tab-1') %>
+            </li>
+            <li class="active">
+              <%= link_to "微楼书图片管理", broche_photos_path(anchor: 'tab-2') %>
+
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-1" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12 ">
+                  <!-- PAGE CONTENT BEGINS -->
+
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li>1,图片建议尺寸：640像素*1136像素，务必确保图片尺寸一致，以达到最佳展示效果。</li>
+                      <li>2,图片描述的字数不要太多，会影响查看照片的质量。</li>
+                      <li>3,在无wifi的情况下手机加载微楼书有可能不会流畅,为了不影响手机端用户体验,这里最多允许上传5张图片!</li>
+                    </ul>
+                  </div>
+
+
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <div class="col-md-3 row pull-right">
+                      <%= modal_to('新增'.html_safe, new_broche_photo_path, title: "新增照片", width: 800, height: 500, class: "btn btn-primary btn-sm pull-right") %>
+                    </div>
+                  </div>
+                  <div class="vwebsitePicture ">
+                    <ul class="ace-thumbnails thumbnails-1">
+
+                      <% @broche_photos.each do |photo| %>
+                          <li class="photo-li">
+                            <a href="javascript:;" title="<%= photo.title %>" data-rel="colorbox">
+                              <%= image_tag(photo.pic) %>
+                              <div class="text">
+                                <div class="inner"><%= photo.title %></div>
+                              </div>
+                            </a>
+                            <div class="tools">
+
+                              <%= link_to broche_photo_path(photo), id: "delete#{photo.id}", data: { remote: true, method: :delete, confirm: '确定删除该图片？', callback: "removePhoto(#{photo.id})" } do %><i class="icon-trash btn-fa btn-remove"></i><% end %>
+                              <%= modal_to('<i class="icon-pencil btn-fa" data-toggle="modal" data-target="#editPhotoModal"></i>'.html_safe, edit_broche_photo_url(photo), title: "编辑图片", width: 800, height: 500) %>
+                            </div>
+                          </li>
+                          <%#= render "photo_li", {photo: photo, album_id: @album.id} %>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>
+<style>
+  .text{
+    width: 150px;
+    height: 266px;
+  }
+  .vwebsitePicture .thumbnails-1 > li{
+      width: 150px;
+      height: 266px;
+  }
+</style>
+

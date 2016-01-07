@@ -1,0 +1,12 @@
+	<tr>
+  <td><img src="<%= ticket.pic_url %>" width="50px"></td>
+  <td><%= ticket.name.to_s[0..15] %></td>
+  <td><%= ticket.trip_ticket_category %></td>
+  <td><%= ticket.description.to_s[0..15] %></td>
+  <td><%= f ticket.price %></td>
+  <td>
+    <%= link_to "编辑", show_ticket_trip_path(ticket.id), class: "fgreen"%>
+    <%= link_to "#{ticket.status_name_will_be}", ticket_status_trips_path(id: ticket.id, status: ticket.status_will_be), class: "fgreen", data: {toggle: "modals", target: "delModal", confirm: "确定要#{ticket.status_name_will_be}？"}%>
+    <%= link_to "删除", destroy_ticket_trips_path(ticket_id: ticket.id), method: :post, confirm: '确定删除该门票？', class: "fgreen"%>
+  </td>
+</tr>

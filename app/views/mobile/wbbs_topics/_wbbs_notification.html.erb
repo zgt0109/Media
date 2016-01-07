@@ -1,0 +1,12 @@
+<a <%= "href=\"#{wbbs_notification.notifiable_url}\"".html_safe if wbbs_notification.notifiable_url %>  class="box-hd mod-user hd-message" data-id="<%= wbbs_notification.id %>">
+  <div class="hd-img">
+    <img src="<%= wbbs_notification.notifiable.replier_avatar %>">
+  </div>
+  <div class="hd-text">
+    <b><%= wbbs_notification.content %></b>
+    <div class="mod-tooltip">
+      <span><%= wbbs_notification.notifiable_content %></span>
+    </div>
+    <span class="tleft">来自： <%= @wbbs_community.name || @wbbs_community.activity.name %></span>
+  </div>
+</a>

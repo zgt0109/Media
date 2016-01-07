@@ -1,0 +1,9 @@
+<% if @pictures_arr.each do |pictures| %>
+  <div class="mod-env <%= cycle('fl', 'fr') %>">
+    <% pictures.each do |picture| %>
+      <%= link_to image_tag(picture.pic), flashshow_mobile_business_shop_path(@supplier.id, @business_shop.id) %>
+    <% end %>
+  </div>
+<% end.blank? %>
+	<div class="mod-null">这家店铺太懒了，还没有添加环境信息！</div>
+<% end %>

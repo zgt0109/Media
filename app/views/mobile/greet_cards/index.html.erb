@@ -1,0 +1,33 @@
+<% provide(:title, "贺卡模版") %>
+<header>
+  <div class="banner">
+    <a href="javascript:;">
+      <img src="<%= @greet.recommand_pic.presence || @greet.greet_cover_url %>" />
+    </a>
+    <span>请选择贺卡模板</span>
+  </div>
+</header>
+
+<div class="template-list">
+  <ul>
+    <% @greet.greet_cards.visitable.each do |card| %>
+    <li>
+      <div class="template-item">
+        <a href="<%= mobile_greet_card_url(supplier_id: @greet.supplier_id, id: card.id) %>">
+          <div class="item-img">
+            <% if card.recommand_title_pic.blank? %>
+            <%= image_tag(card.title_pic) %>
+            <% else %>
+            <%= image_tag(card.recommand_title_pic) %>
+            <% end %>
+          </div>
+          <div class="item-title">
+            <span><%= card.title[0,5] %></span>
+            <span class="text-red"><%= card.card_type_name %></span>
+          </div>
+        </a>
+      </div>
+    </li>
+    <% end %>
+  </ul>
+</div>

@@ -1,0 +1,102 @@
+<% content_for :main_content do %>
+    <div class="main-content">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '提醒消息', system_messages_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <%= form_for @search, url: system_messages_path, html: { method: :get } do |f| %>
+              <div class="col-sm-12">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">版块名称：</span>
+                    <%= f.select :system_message_module_id_eq, SystemMessageModule.all.collect{|t| [t.name, t.id]}, {include_blank: '全部'}, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">消息提醒时间：</span>
+                    <div class="col-xs-12">
+                      <div class="input-group">
+                        <%= f.text_field :created_at_gte, class: 'datepicker input-sm form-control', readonly: 'readonly' %>
+                        <span class="input-group-addon">-</span>
+                        <%= f.text_field :created_at_lte, class: 'datepicker input-sm form-control', readonly: 'readonly' %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 row">
+                  <%= f.submit '查询', class: 'btn btn-primary btn-sm btn-filter' %>
+                </div>
+              </div>
+          <% end %>
+          <div class="col-md-12 margin-top-20">
+            <table id="actTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+              <tr>
+                <th>时间</th>
+                <th>版块名称</th>
+                <th>消息提醒</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @messages.each do |m| %>
+                  <tr>
+                    <td><%= m.created_at %></td>
+                    <td>
+                      <%= m.system_message_module.try(:name) %>
+                    </td>
+                    <td>
+                      <%= m.content %>
+                    </td>
+                    <td>
+                      <a href="#" <%= m.view_url_attrs %> class="check_system_message_detail" data-id="<%= m.id %>" data-is-read="<%= m.is_read %>">查看</a>
+                      <%= link_to '删除', system_message_path(m), data: {method: :delete, confirm: '确认删除？'}%>
+                    </td>
+                  </tr>
+              <% end %>
+              <% if @messages.blank? %>
+                  <tr><td colspan="4" class="green text-center">无记录</td></tr>
+              <% end %>
+              </tbody>
+            </table>
+            <%= paginate @messages %>
+          </div>
+        </div>
+      </div>
+      <!-- /.page-content -->
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('.check_system_message_detail').click(function(){
+              if($(this).attr('target') == '_self'){
+                  window.location.href = '/system_messages/'+$(this).attr('data-id')+'/read'
+              }else if($(this).attr('target') == '_blank'){
+                  var self = $(this);
+                  if($(this).attr('data-is-read') == 'false'){
+                      $.ajax({
+                          url: '/system_messages/'+$(this).attr('data-id')+'/ajax_update',
+                          type: "post",
+                          success : function (data){
+                            if(data == 'succeed'){
+                                self.attr('data-is-read', 'true');
+                            }
+                          }
+                      });
+                  }
+                  window.open(self.attr('url'));
+                  return false;
+              }
+          });
+      });
+    </script>
+<% end %>

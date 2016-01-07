@@ -1,0 +1,31 @@
+<%= render 'sidebar_shop' %>
+
+<div class="right-col fl">
+  <div class="body-cotent-box">
+    <span class="box-bar top-bar"></span>
+    <div class="content content-strech clearfix">
+      <h2>图片管理</h2>
+
+      <div id="shop_image">
+        选择门店 <%= select_tag :shop_branch_id, options_for_select(current_user.shop_branches.pluck(:name, :id), @shop_branch.id) %><br/><br/>
+      </div>
+
+      <%= form_for ShopImage.new, :html => { :multipart => true, :id => "fileupload"  } do |f| %>
+        <%= f.hidden_field :shop_branch_id, value: @shop_branch.id %>
+        <%= f.file_field :pic, multiple: true, name: 'shop_image[pic]' %>
+      <% end %>
+
+      <div>
+        <ul id="shop_images">
+          <% @shop_images.each do |shop_image|%>
+            <%= render 'shop_image', shop_image: shop_image %>
+          <% end %>
+        </ul>
+      </div>
+
+
+
+    </div>
+    <span class="box-bar btm-bar"></span>
+  </div>
+</div>

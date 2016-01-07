@@ -1,0 +1,23 @@
+<div class="mod-box box-animate">
+  <dl>
+    <%- if consume_type == "Consume" %>
+      <dt>
+        <a href="<%= shops_mobile_coupons_path(id: coupon.try(:id), consume_type: consume_type) %>" class="fa fa-chevron-right box-icon fa-chevron-down">
+          <i class="icon icon-1"></i><b>适用门店</b>
+        </a>
+      </dt>
+    <%- end %>
+    <dt>
+      <a class="fa box-icon fa-chevron-down">
+        <i class="icon icon-2"></i><b>使用说明</b>
+      </a>
+    </dt>
+    <dd class="show edit">
+      <%- if consume_type == "Consume" %>
+        <%= raw coupon.description %>
+      <%- else %>
+        <%= raw @activity.activity_notices.active.first.try(:description) %>
+      <%- end %>
+    </dd>
+  </dl>
+</div>

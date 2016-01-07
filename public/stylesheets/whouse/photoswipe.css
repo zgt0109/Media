@@ -1,0 +1,103 @@
+
+body.ps-active, body.ps-building, div.ps-active, div.ps-building {
+    background: none repeat scroll 0 0 #000000;
+    overflow: hidden;
+}
+body.ps-active *, div.ps-active * {
+    display: none;
+}
+body.ps-active *:focus, div.ps-active *:focus {
+    outline: 0 none;
+}
+div.ps-document-overlay {
+    background: none repeat scroll 0 0 #000000;
+}
+div.ps-uilayer {
+    background: none repeat scroll 0 0 #000000;
+    cursor: pointer;
+}
+div.ps-zoom-pan-rotate {
+    background: none repeat scroll 0 0 #000000;
+}
+div.ps-zoom-pan-rotate * {
+    display: block;
+}
+div.ps-carousel-item-loading {
+    background: url("loader.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+div.ps-carousel-item-error {
+    background: url("error.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+div.ps-caption {
+    background: -moz-linear-gradient(center top , #303130 0%, #000101 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-bottom: 1px solid #42403F;
+    color: #FFFFFF;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 13px;
+    text-align: center;
+}
+div.ps-caption * {
+    display: inline;
+}
+div.ps-caption-bottom {
+    border-bottom: medium none;
+    border-top: 1px solid #42403F;
+    min-height: 44px;
+}
+div.ps-caption-content {
+    display: block;
+    padding: 13px;
+}
+div.ps-toolbar {
+    background: -moz-linear-gradient(center top , #303130 0%, #000101 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-top: 1px solid #42403F;
+    color: #FFFFFF;
+    display: table;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 13px;
+    height: 44px;
+    table-layout: fixed;
+    text-align: center;
+}
+div.ps-toolbar * {
+    display: block;
+}
+div.ps-toolbar-top {
+    border-bottom: 1px solid #42403F;
+    border-top: medium none;
+}
+div.ps-toolbar-close, div.ps-toolbar-previous, div.ps-toolbar-next, div.ps-toolbar-play {
+    cursor: pointer;
+    display: table-cell;
+}
+div.ps-toolbar div div.ps-toolbar-content {
+    background-image: url("icons.png");
+    background-repeat: no-repeat;
+    height: 44px;
+    margin: 0 auto;
+    width: 44px;
+}
+div.ps-toolbar-close div.ps-toolbar-content {
+    background-position: 0 0;
+}
+div.ps-toolbar-previous div.ps-toolbar-content {
+    background-position: -44px 0;
+}
+div.ps-toolbar-previous-disabled div.ps-toolbar-content {
+    background-position: -44px -44px;
+}
+div.ps-toolbar-next div.ps-toolbar-content {
+    background-position: -132px 0;
+}
+div.ps-toolbar-next-disabled div.ps-toolbar-content {
+    background-position: -132px -44px;
+}
+div.ps-toolbar-play div.ps-toolbar-content {
+    background-position: -88px 0;
+}
+@media not all, not all, only screen and (min-resolution: 240dpi) {
+div.ps-toolbar div div.ps-toolbar-content {
+    background-image: url("icons@2x.png");
+    background-size: 176px 88px;
+}
+}

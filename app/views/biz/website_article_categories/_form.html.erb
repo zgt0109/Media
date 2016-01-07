@@ -1,0 +1,154 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <% options = {'as_article' => '文章中心', 'as_product' => '展示中心'} %>
+          <li><%= link_to options[params[:category_type]], website_article_categories_url(category_type: params[:category_type]) %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="col-xs-12">
+          <div class="pull-left margin-right-20 font-size16">分类编辑</div>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+        <div class="col-xs-12">
+        <%= form_for @category, validate: true, :html => { :class => 'form', role: 'form' } do |f| %>
+        <%= f.hidden_field :website_id %>
+        <%= f.hidden_field :category_type %>
+        <%= hidden_field_tag :submit_type %>
+        <%= hidden_field_tag :category_type, params[:category_type] %>
+        <div class="form-group">
+          <label class="control-label">分类名称</label>
+          <div class="clearfix">
+            <%= f.text_field :name, class: 'col-xs-6' %>
+          </div>
+        </div>
+        <div class="form-group categories <%= 'hide' unless @category.new_record? %>">
+          <label class="control-label">上级分类</label>
+          <div class="clearfix">
+          </div>
+          <%= f.hidden_field :parent_id %>
+        </div>
+        <div class="form-group ">
+          <button class="btn btn-sm btn-primary <%= 'hide' unless @category.parent_id.to_i == 0 %> labels" type="button">保存并设置标签</button>
+          <button class="btn btn-sm btn-primary" type="button">保存</button>
+          <%= link_to '返回', website_article_categories_url(category_type: params[:category_type]), class: 'btn btn-sm btn-default'%>
+        </div>
+        <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script>
+        function show_save_set_labels(){
+          if($('#website_article_category_parent_id').val() == '0' || $('#website_article_category_parent_id').val() == ''){
+            $('.labels').removeClass('hide');
+          }
+          else{
+            $('.labels').addClass('hide');
+            $('#submit_type').val('');    
+          }
+        }
+
+        show_save_set_labels();  
+
+        var category_data = <%= raw JSON.pretty_generate(@categories.collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, select_data = [];
+        
+        function select_categories(id, parent_id){
+          if(id==0){
+            category_data.push({'id': 0, 'parent_id': parent_id})
+          }
+          var data = {'selected': id, 'categories': []}, parent = null;
+          $.each(category_data, function(i,c){
+            if(c.parent_id == parent_id){
+                data.categories.push(c);
+            }
+            if(c.id == parent_id){
+              parent = c;
+            }
+          });
+          data.categories = data.categories.sort(function(a, b){return a.position-b.position});
+          select_data.unshift(data);
+          if(data.categories.length > 0 && data.categories[0].parent_id != 0 && parent != null){select_categories(parent.id, parent.parent_id);}
+          else{
+            select_data.push({'selected': 0, 'categories': []});
+            var html = '';
+            $.each(select_data, function(i,data){
+              if(i>1){return false;}
+              html += '<select class="col-xs-3" id="category'+i+'" name="category'+i+'"><option value></option>';
+              $.each(data.categories, function(i,c){
+                if(c.id != <%= @category.id.to_i %>)
+                if(data.selected == c.id){
+                  html += '<option value="'+c.id+'" selected="selected">'+c.name+'</option>'  
+                }
+                else{
+                  html += '<option value="'+c.id+'">'+c.name+'</option>'  
+                }
+              });
+              html += '</select>'
+            });
+            $('.categories .clearfix').html(html);
+          }   
+        }   
+
+        function change_select_category(){
+          $('.categories').on('change', 'select', function(){
+            if($(this).val() == ''){
+              $(this).next().find('option').remove();
+              $(this).next().append("<option value></option>");
+              if($(this).prev().length > 0){
+                $('#website_article_category_parent_id').val($(this).prev().val());      
+              }
+              else{
+                $('#website_article_category_parent_id').val(0);  
+              }  
+            }
+            else{
+              if($(this).next().length > 0){
+                $(this).next().find('option').remove();
+                $(this).next().append("<option value></option>");
+                var categories = [], select = $(this);
+                $.each(category_data,function(k,p){
+                  if(p.parent_id == parseInt(select.val()) && p.id != <%= @category.id.to_i %>){
+                    categories.push(p);
+                  }
+                });
+                categories = categories.sort(function(a, b){return a.position-b.position});
+                $.each(categories,function(k,p){
+                  select.next().append("<option value="+p.id+">"+p.name+"</option>")
+                });  
+              }
+              $('#website_article_category_parent_id').val($(this).val());
+            }
+            show_save_set_labels();
+          });
+        }  
+        $(function(){
+          
+          <% if @category.new_record? %>
+          select_categories(<%= @category.id.to_i %>, <%= @category.parent_id.to_i %>);
+          
+          change_select_category();
+          <% end %>
+          $('.btn-primary').click(function(){
+            if($(this).hasClass('labels')){
+              $('#submit_type').val(1);
+            }
+            else{
+              $('#submit_type').val('');            
+            }
+            $('form').submit();
+          });
+        });
+        
+    </script>
+
+<% end %>

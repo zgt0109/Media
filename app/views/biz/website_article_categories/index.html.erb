@@ -1,0 +1,138 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <% options = {'as_article' => '文章中心', 'as_product' => '展示中心'} %>
+          <li><%= link_to options[params[:category_type]], website_article_categories_url(category_type: params[:category_type]) %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="col-xs-12">
+          <div class="pull-left margin-right-20 font-size16"><%= options[:name] %></div>
+          <div class="pull-left">
+            <%= link_to '新增分类', new_website_article_category_url(category_type: params[:category_type]), class: 'btn btn-primary btn-sm' %>
+            <%= link_to '返回', website_articles_url(article_type: params[:category_type]), class: 'btn btn-default btn-sm margin-left-20' %>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+        <div class="col-xs-12">
+          <div id="tree1">
+<div class="tree tree-selectable">
+                  <div class="tree-folder tree-li" menu-id='0'>
+                    <div class="tree-folder-header">
+                      <i class="tree-fa fa fa-minus-square"></i>
+                      <div class="tree-folder-name"><%= truncate_u options[params[:category_type]], length: 20 %></div>
+                      <div class="tree-tools" data-id="0">
+                        <div>
+                         <%= link_to '', new_website_article_category_url(parent_id: 0, category_type: params[:category_type]), class: 'fa fa-plus tree-add', title: '新增一级分类' %>
+                        </div>
+                        <div>
+                          <%= link_to '', 'javascript:;', class: 'fa fa-plus fa-link', title: '复制链接', data: {url: mobile_website_articles_url(supplier_id: @website.supplier_id, article_type: params[:category_type])} %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tree-folder-content">
+                      <%= render :partial=> "sub_category", :collection => @categories.root.order(:position), :as =>:sub_menu %>
+                    </div>
+                  </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script>
+        $(function(){
+            $('#tree1').on("click", ".fa-plus-square, .fa-minus-square", function () {
+                $(this).closest('.tree-folder').find('.tree-folder-content').eq(0).toggle();
+                if($(this).hasClass('fa-plus-square')){
+                  $(this).removeClass('fa-plus-square').addClass('fa-minus-square');
+                }
+                else{
+                  $(this).removeClass('fa-minus-square').addClass('fa-plus-square');                
+                }
+            });
+
+            $('.tree-tools').on('click', 'a', function(){
+                var content = $(this).closest('.tree-folder').find('.tree-folder-content');
+//                if(content.is(':hidden')){
+//                    content.hide();
+//                }else{
+//                    content.show();
+//                }
+            });
+
+            $('#tree1').on("click",".tree-up",function(){
+                var self=$(this),
+                    p = self.closest('.tree-li');
+                if(p.prev().length > 0){
+                    $.ajax({
+                        type: "GET",
+                        url: "/website_article_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=up&category_type="+self.closest('.tree-tools').attr('data-category-type'),
+                        success: function(data) {
+                            if(data['result'] == 'success'){
+ 	                      p.prev().before(p);
+                              showTip("success","操作成功");
+                              return false;
+                            }
+                            else{
+                              showTip("warning","操作失败");
+                              console.log(data);
+                              return false;
+                            }
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+            $('#tree1').on("click",".tree-down",function(){
+                var self = $(this),
+                    p = self.closest('.tree-li');
+                if(p.next().length > 0){
+                    $.ajax({
+                        type: "GET",
+                        url: "/website_article_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=down&category_type="+self.closest('.tree-tools').attr('data-category-type'),
+                        success: function(data) {
+                            if(data['result'] == 'success'){
+			      p.next().after(p);
+                              showTip("success","操作成功");
+                              return false;
+                            }
+                            else{
+                              showTip("warning","操作失败");
+                              console.log(data);
+                              return false;
+                            }
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+
+
+            $("#tree1 a.tree-code").mouseout(function(){
+                $(this).nextAll().remove();
+            });
+          $('.fa-link').click(function(){
+            window.prompt("Copy to clipboard: Ctrl+C, Enter", $(this).attr('data-url'));
+          });
+        });
+    </script>
+
+<% end %>

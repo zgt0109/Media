@@ -1,0 +1,103 @@
+/* CSS Document */
+.blank180{ height:180px; clear:both}
+.blank20{ height:20px; clear:both}
+.blank50{ height:50px; clear:both}
+.blank100{ height:100px; clear:both}
+.width-620{ width:620px !important}
+.mrg-left{ margin-left:10px;}
+.mrg-right{ margin-right:0px !important;}
+.index-banner{ width:100%; height:758px; background:url(/assets/v5/wlife/background.jpg) center center;}
+.banner-content{ width:1000px; height:350px; margin:0px auto;}
+.content-message{ width:650px; height:350px;}
+.name{ display:block; width:315px; height:65px; background-image:url(/assets/v5/wlife/name.png); background-size:100% 100%}
+.detail{ display:block; width:610px; height:77px; background-image:url(/assets/v5/wlife/detail.png); background-size:100% 100%; margin-top:40px;}
+.phone{ display:block; width:280px; height:50px; background-image:url(/assets/v5/wlife/phone.png); background-size:100% 100%; margin-top:40px; float:right}
+.button-content{ cursor:pointer; display:block; width:290px; height:65px; background-image:url(/assets/v5/wlife/button.png); background-size:100% 100%; float:right;}
+.module{ width:100%; min-height:300px; height:auto !important;}
+.module-content{ width:1000px;margin:0px auto;}
+.module-name{ display:block; width:610px; height:34px; background-image:url(/assets/v5/wlife/module-name.png); background-size:100% 100%;}
+.module-step{ width:100%; height:277px; background:url(/assets/v5/wlife/module-step.jpg) center center;}
+.wisdom{ width:100%; height:875px; background:url(/assets/v5/wlife/wisdom.jpg) center top no-repeat;}
+.partners{ width:100%; height:778px; background:url(/assets/v5/wlife/partners-bg.jpg) center top no-repeat;}
+.partners-content{ display:none; width:1000px; height:700px;margin:0px auto}
+.one{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/one.png); position:relative; left:350px; top:180px;}
+.two{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/two.png); position:relative; left:790px; top:90px;}
+.three{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/three.png); position:relative; left:390px; top:165px;}
+.four{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/four.png); position:relative; left:730px; top:0px;}
+.five{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/five.png); position:relative; left:650px; top:10px;}
+.six{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/six.png); position:relative; left:655px; top:35px;}
+.eight{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/eight.png); position:relative; left:578px; top:-345px;}
+.night{ display:block; width:80px; height:98px; background-image:url(/assets/v5/wlife/night.png); position:relative; left:337px; top:-270px;}
+.link-module{ width:1000px; min-height:200px; height:auto !important; margin:0px auto; overflow:hidden}
+.link-left{ width:650px; min-height:200px; height:auto !important; float:left; background-color:#0F0}
+.link-name{ display:block; width:140px; height:35px; background-image:url(/assets/v5/wlife/link-name.png)}
+.module-message{ position:relative; float:left; display:block; width:620px; height:60px; border:1px solid #CCCCCC; border-radius:3px; margin-bottom:10px;}
+.company-name{ display:block; width:36px; height:36px; background-image:url(/assets/v5/wlife/company-name.png); float:left; margin:12px 10px 0px 10px;}
+.link-txt{font-family:Microsoft YaHei; width:480px; height:58px; float:left; border:none; font-size:16px}
+.module-txt{ position:relative; float:left; display:block; width:302px; height:60px; border:1px solid #CCCCCC; border-radius:3px; margin-top:20px;}
+.writer-txt{font-family:Microsoft YaHei; font-size:16px; width:200px; height:58px; float:left; border:none}
+.module-left{ width:660px; min-height:100px; height:auto !important; float:left;}
+.you-name{ display:block; width:36px; height:36px; background-image:url(/assets/v5/wlife/you-ico.png); float:left; margin:12px 10px 0px 10px; background-size:100% 100%;}
+.you-email{ display:block; width:36px; height:36px; background-image:url(/assets/v5/wlife/email-co.png); float:left; margin:12px 10px 0px 10px; background-size:100% 100%;}
+.you-qq{ display:block; width:36px; height:36px; background-image:url(/assets/v5/wlife/qq.png); float:left; margin:12px 10px 0px 10px; background-size:100% 100%;}
+.you-phone{display:block; width:36px; height:36px; background-image:url(/assets/v5/wlife/phone-ico.png); float:left; margin:12px 10px 0px 10px; background-size:100% 100%;}
+.left-title{ width:100%; height:50px;}
+.title-logo{ display:block; width:285px; height:35px; background-image:url(/assets/v5/wlife/link-name.png); background-size:100% 100%;}
+
+
+
+.m-select{ margin:0px; float:left;}
+.m-select-real{display: none;}
+.m-select-simu{ margin:10px 10px 0 0; width:200px; float: left; line-height: 58px; position: relative; cursor: default; -moz-user-select: none; /*火狐*/ -webkit-user-select: none;  /*webkit浏览器*/ -ms-user-select: none;   /*IE10*/ -khtml-user-select: none; /*早期浏览器*/ user-select: none;}
+.m-select-simu:last-child{ margin-right:0px;}
+
+
+.m-select-simu-dt{ border:1px solid #ccc; border-radius:3px;height: 100%; font-size: 16px; text-indent: 20px; position: relative;}
+.m-select-simu-trip{position: absolute; right: 9px; top: 50%; margin-top: -5px; width: 0px; height: 0px; overflow: hidden; border: 11px transparent solid; border-top-color: #767f93; border-width: 10px 6px;}
+.m-select-simu-dd{border:1px solid #ccc; border-radius:3px;display: none; width: 198px !important; line-height: 40px; position: absolute; left:0px; top: 100%; background-color: #fff; text-indent: 20px; font-size: 14px;}
+.m-select-simu-item:hover{background-color: #999999; color: #fff;}
+.ico{ display:block; background-image:url(/assets/v5/wlife/idear.png); width:25px; height:36px; background-size:100% 100%}
+.module-btn{ display:block; width:100%; height:50px;float:left; margin-top:50px }
+.btn-text{ display:block; width:300px; height:60px; margin:0px auto; cursor:not-allowed; font-size:18px; border:none; background-color:#777f94; border-radius:3px; line-height:60px; text-align:center; color:#FFF; font-weight:bold}
+.btn-textnow{display:block; width:300px; height:60px; margin:0px auto; cursor:pointer; font-size:18px; border:none; background-color:#CC3333; border-radius:3px; line-height:60px; text-align:center; color:#FFF; font-weight:bold}
+.module-right{ width:320px; min-height:100px; height:auto !important; float:right;}
+.m-tips { left:auto;color: #767f93;font-size: 16px; height: 50px;right:10px;line-height: 50px;position: absolute; top:5px;white-space: nowrap;z-index:999;font-size:12px;}
+.m-tips-error { color: #fd5050;}
+.main_visual{height:692px;overflow:hidden;position:relative; background:url(/assets/v5/wlife/product-bg.jpg) center center; width:100%; }
+.main_image{height:692px;overflow:hidden;position:relative;}
+.main_image ul{width:9999px;height:692px;overflow:hidden;position:absolute;top:0;left:0}
+.main_image li{float:left;width:1000px;height:692px; margin-top:30px;}
+.main_image li span{display:block;width:100%;height:692px}
+.main_image li a{display:block;width:100%;height:692px}
+.main_image li .img_1{background:url(/assets/v5/wlife/product-one.png) center top no-repeat}
+.main_image li .img_2{background:url(/assets/v5/wlife/product-two.png) center top no-repeat}
+
+
+div.flicking_con{position:absolute;top:650px;left:50%;z-index:999;width:300px;height:21px;margin:0 0 0 -50px;}
+div.flicking_con a{float:left;width:21px;height:21px;margin:0;padding:0;background:url(/assets/v5/wlife/btn_main_img.png) 0 0 no-repeat;display:block;text-indent:-1000px}
+div.flicking_con a.on{background-position:0 -21px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

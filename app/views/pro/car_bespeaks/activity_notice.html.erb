@@ -1,0 +1,73 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微汽车', car_shops_path %></li>
+          <li><%= link_to @page, @link %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger">
+            <% if params[:bespeak_type].to_i == CarBespeak::TEST_DRIVE %>
+                <li class="<%= request.original_url =~ /car_bespeaks\/activity_notice/ ? 'active' : '' %>">
+                  <%= link_to '试驾预约微信设置', activity_notice_car_bespeaks_path(bespeak_type: 2) %>
+                </li>
+                <li class="<%= request.original_url =~ /car_bespeaks\?/ ? 'active' : '' %>">
+                  <%= link_to '试驾预约查询', car_bespeaks_path(bespeak_type: 2) %>
+                </li>
+            <%- else %>
+                <li class="<%= request.original_url =~ /car_bespeaks\/activity_notice/ ? 'active' : '' %>">
+                  <%= link_to '保养预约微信设置', activity_notice_car_bespeaks_path(bespeak_type: 1) %>
+                </li>
+                <li class="<%= request.original_url =~ /car_bespeaks\?/ ? 'active' : '' %>">
+                  <%= link_to '保养预约查询', car_bespeaks_path(bespeak_type: 1) %>
+                </li>
+            <%- end %>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="tab-1" class="tab-pane fade active in">
+              <div class="row">
+                <div class="col-xs-12">
+                  <!-- PAGE CONTENT BEGINS -->
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li>1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到<%= @page %>；</li>
+                      <li>2、以下<span class="required-star">* </span>均为必填项；</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-xs-12 margin-top-20">
+                  <%= form_for @car_activity_notice, validate: true do |f| %>
+                      <%= f.hidden_field :supplier_id %>
+                      <%= f.hidden_field :wx_mp_user_id %>
+                      <%= f.hidden_field :car_shop_id %>
+                      <%= f.hidden_field :notice_type %>
+                      <%= f.fields_for :activity do |activity| %>
+                          <%= activity.hidden_field :supplier_id %>
+                          <%= activity.hidden_field :wx_mp_user_id %>
+                          <%= activity.hidden_field :activity_type_id %>
+                          <%= activity.hidden_field :status %>
+                          <%= activity.hidden_field :ready_at %>
+                          <%= activity.hidden_field :start_at %>
+                          <%= activity.hidden_field :end_at %>
+                          <%= render "weixin_preview", wx_title: @car_activity_notice.activity.try(:name) || '标题', wx_summary: @car_activity_notice.activity.try(:summary) || '描述' %>
+                          <div class="col-xs-12 col-md-6 col-lg-7">
+                            <%= render "weixin_setting", activity: activity, data_img: @car_activity_notice.activity.pic_url, pic_data_name: "car_activity_notice[activity_attributes][qiniu_pic_key]", pic_data_key: activity.object.qiniu_pic_key %>
+                            <div class="form-group">
+                              <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                            </div>
+                          </div>
+                      <%- end %>
+                  <%- end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<%- end %>

@@ -1,0 +1,235 @@
+/* CSS Document */
+.index-descript{ display:none}
+.blank5{ height:5px; clear:both;}
+.blank10{ height:10px; clear:both;}
+.blank20{ height:20px; clear:both;}
+.blank30{ height:30px; clear:both;}
+.blank40{ height:40px; clear:both;}
+.blank60{ height:60px; clear:both;}
+.main{width:100%; min-height:100%;padding-bottom:80px;; padding:10px;background:#E5E5E5}
+.content{width:100%; min-height:100%;padding-bottom:80px;background:#E5E5E5}
+.mark{ width:100%;text-align:center;}
+.mark img{width:70%;}
+.bank-card{ width:100%; min-height:100%;padding-bottom:80px;; padding:10px}
+.clear-details{width:100%; min-height:100%;padding-bottom:80px;background:#E5E5E5; padding:10px}
+.index-activitys{width:100%;/* min-height:100%;*/padding-bottom:20px; background:#E73D4B;white-space:normal;word-break:break-all;}
+.index-activity img{width: 100%;}
+.my-client{width:100%; min-height:100%;padding-bottom:80px;background:#E5E5E5}
+
+.text{ width:100%; height:50px; border-radius:5px; background-color:#FFFFFF; margin:2px auto; color:#999999}
+.text input[type="tel"]{width:70%;height:95%;font-size:14px;color:#8f8e93;border:none; text-indent:4px; margin-left:2px;color:#999999}
+
+.text input[type="text"]{width:70%;height:95%;font-size:14px;color:#8f8e93;border:none; text-indent:4px; margin-left:2px;color:#999999}
+.text input[type="button"]{width:83px;height:30px;font-size:12px;color:#8f8e93;border:none; text-align:center; background-color:#CBCBCB;border-radius:10px; cursor:pointer; float:right; margin:10px 5px 0px 0px;color:#999999}
+.text span{ display:block; width:10x; height:10px; float:right; color:#DB0041; margin:17px 25px 0px 0px; }
+.present{ background-color:#E73D4B !important; color:#FFFFFF !important;}
+.finish{ color:#333333 !important;}
+.btn a{ display:block; width:100%; height:50px; background-color:#E73D4B; color:#FFFFFF; line-height:50px; text-align:center; margin:0px auto; border-radius:5px; font-size:16px; text-decoration:none;} 
+.enter-register{ width:80%; height:30px; line-height:30px; margin:0px auto; text-align:center }
+.enter-register a{ color:#3E62E7; font-size:14px;}
+.opinion{ width:100%; height:30px; margin:0px auto}
+.choose{ display:block; width:24px; height:20px; cursor:pointer; float:left; margin-right:10px; background-image:url(/assets/mobile/brokerage/cheacked.png); background-size:100%;}
+.opinion a{ text-decoration:underline; color:#333333; line-height:30px; font-size:12px}
+.hint{ width:100%; height:20px; line-height:20px; color:#FF3333; font-size:12px; margin:0px auto; text-align:center;}
+.way{ width:100%; height:45px; margin:0px auto}
+.way ul{ margin:0px; padding:0px;}
+.way ul li{ display:block; width:49%; height:45px; border:1px solid #FF0000; float:left; text-align:center; line-height:45px; color:#E73D4B; font-size:14px; cursor:pointer; list-style:none; margin:0px}
+.bank{ border-radius:5px 0px 0px 5px }
+.alipay{ border-radius:0px 5px 5px 0px }
+.bg{ background-color:#E73D4B; color:#FFFFFF !important;}
+.alipay-content{ display:none}
+.remark{width:100%; height:100px; border-radius:5px; margin:0px auto; background-color:#FFFFFF; line-height:30px; text-indent:4px; font-size:14px; color:#CBCBCB; white-space:normal;word-break:break-all; padding:0px; }
+.fc{ color:#333333 !important}
+.bank-title{ width:100%; height:40px; line-height:35px; margin:0px auto; font-size:14px; color:#E73D4B}
+
+.banner{ width:95%; text-align:center;  margin:0px auto;}
+.banner img{ width:100%;}
+.regist-btn a{ display:block; width:90%; height:50px; background-color:#FFF34D; border-radius:5px; margin:0px auto; text-align:center; color:#000000; font-size:18px; line-height:50px; text-decoration:none}
+.login-btn a{ display:block; width:90%; height:50px; background-color:#FAD8DB; color:#E73D4B; font-size:18px; line-height:50px; text-decoration:none; margin:0px auto; border-radius:5px; text-align:center}
+.box{width:100%;height:50px;position:relative;overflow:hidden;}
+.left{position:absolute;left:50%;top:0;margin-left:-500px;width:0;border-top:50px solid #E73D4B;border-left:1000px solid transparent;}
+.right{position:absolute;width:0;left:50%;margin-left:-500px;bottom:0;border-bottom:50px solid #FDDD85;border-right:1000px solid transparent;}
+.lefts{position:absolute;left:50%;top:0;margin-left:-500px;width:0;border-top:50px solid  #FDDD85;border-left:1000px solid transparent;}
+.rights{position:absolute;width:0;left:50%;margin-left:-500px;bottom:0;border-bottom:50px solid #E73D4B;border-right:1000px solid transparent;}
+.index-footer{ width:100%; height:40px; background-color:#FDDD85;text-align:center; }
+.index-footer a{ color:#E73D4B; font-size:14px; text-decoration:none;}
+.index-activity{ width:100%; min-height:30px; height:auto !important; background-color:#FDDD85; color:#333333}
+.index-activity p { width:90%; margin:0px auto; padding:0px; line-height:30px; font-size:14px;}
+.index-activity h1{width:90%; margin:0px auto; padding:0px; line-height:30px; font-size:14px;}
+.close{position:absolute;top: 20px; right:20px;width: 25px; cursor:pointer}
+
+.title{ width:100%; height:40px; margin:0px auto; background-color:#FFFFFF; color:#333333; text-indent:1em; font-size:14px; line-height:40px;}
+.title a{ display:block; float:right; width:10px; height:10px; margin:0px 25px 0px 0px; text-decoration:none; color:#DB0041; font-weight:bold; font-size:16px}
+.clear-type{ width:100%; min-height:100px; height:auto !important; background-color:#FFFFFF; margin:0px auto;}
+.clear-hint{ width:94%; min-height:30px; height:auto !important; line-height:25px; list-style:none; margin:0px 3%; font-size:14px; color:#999999; background-color:#FFFFFF}
+.usable{ width:49.8%; height:85px; border-bottom:1px solid #E5E5E5;float:left; text-align:center;}
+.complete{ width:49.8%; height:85px; border-left:1px solid #E5E5E5; border-bottom:1px solid #E5E5E5;float:right; text-align:center}
+.clear-name{ color:#656565; font-size:14px;}
+.money{ color:#E73E4B; font-size:20px}
+/*p{ margin:0px; padding:0px; height:30px; line-height:30px}*/
+.clear-record{ width:100%; min-height:30px; height:auto !important; margin:0px auto;}
+.clear-record ul{ margin:0px; padding:0px }
+.clear-record dl dt{ list-style:none; text-align:left;padding:0px; width:100%; height:40px; margin:1px auto; background-color:#FFFFFF; line-height:40px;  text-indent:1em; font-size:12px; color:#656565 }
+
+.fc{ color:#333333 !important;}
+.clear-record ul li{ list-style:none; text-align:left;padding:0px; 
+	width:100%; min-height:40px; height:auto !important; margin:1px auto; 
+	background-color:#FFFFFF; line-height:40px;  text-indent:1em; 
+	font-size:12px; color:#656565 }
+.second-level{ width:100%; min-height:100px; height:auto !important; background-color:#090; }
+.clear-money{ display:block; width:22%; height:40px; float:left; word-wrap:break-word;}
+.clear-moneys{ display:block; width:22%; height:40px; float:left; word-wrap:break-word; line-height:20px !important;}
+.clear-time{ display:block; width:65%; height:40px; float:left;word-wrap:break-word;}
+.clear-last{ display:block; width:15px; height:15px; float:right; margin:13px 20px 0px 0px ; background-image:url(/assets/mobile/brokerage/last.png); background-size:100%;cursor:pointer}
+.clear-time p{ margin:0px; padding:0px; height:20px !important; line-height:20px !important;}
+.clear-next{ display:block; width:15px; height:15px; float:right; margin:13px 20px 0px 0px ; background-image:url(/assets/mobile/brokerage/next.png); background-size:100%; cursor:pointer}
+.broker-btn a{ display:block; width:100% !important; height:47px; background-color:#E73D4B; color:#FFFFFF; line-height:47px; text-align:center; margin:0px auto; border-radius:10px; font-size:16px; text-decoration:none;} 
+.my-content{ width:100%; margin:0px;}
+.my-content ul{ margin:0px; padding:0px}
+.my-content ul li{ margin:1px auto; padding:0px; width:100%; height:40px; background-color:#FFFFFF; list-style:none;line-height:40px; color:#656565; font-size:14px; }
+.my-content ul li p{ margin:0px auto; padding:0px; width:100%; height:40px; background-color:#FFFFFF; line-height:40px;border-bottom:1px solid #ECECEC;}
+.state{ display:block; width:35%; float:left; text-indent:20px }
+.state img{ margin:0px 0px 0px 5px; width:10px}
+.name{display:block; width:30%; float:left}
+.phone{display:block; width:35%; float:left}
+.fc{ color:#333333 !important}
+.footer{ width:100%; height:50px; background-color:#FFFFFF; margin-top:-50px}
+.btn-state a{ display:block; width:40%; height:40px; margin:5px 5%; float:left; border-radius:5px; background-color:#BABABA; text-align:center; line-height:40px; text-decoration:none; color:#333333; font-size:16px;}
+.btn-clear a{display:block; width:40%; height:40px; margin:5px 5%; float:left;border-radius:5px; background-color:#E73D4B;text-align:center; line-height:40px; text-decoration:none; color:#FFFFFF;font-size:16px;}
+.float{display:none; position:absolute;top:30px; left:13%; width:100px;background: url(/assets/mobile/brokerage/my-bg2.png) no-repeat; background-size:20%;  z-index:99999;}
+.float p{ background-color: rgba(0,0,0,0.8);width:90%; height:30px;  border-bottom:1px solid #FFFFFF; color:#FFFFFF; font-size:12px; text-align:center; line-height:30px; cursor:pointer}
+.float p:last-child{ border-bottom:none !important}
+.homepage-content{ width:100%; height:95px; margin:0px auto; background-color:#FFFFFF; float:left}
+.person-photo{ width:25%; height:100px; float:left; text-align:center}
+.person-photo img{ width:60px; height:60px;}
+.person-details{ width:70%; height:30px; float:right; margin-right:5%; font-size:12px;}
+.person-detail{ width:70%; height:55px; border-bottom:1px solid #CBCBCB; float:right; margin-right:5%; font-size:12px;}
+.person-detail p{ height:20px; line-height:20px; margin:0px; padding:0px}
+.person-details span{ font-size:16px; color:#E73E4B; line-height:30px;}
+.my-client{ width:100%; min-height:30px; height:auto !important; background-color:#FFFFFF; margin:0px auto; padding:0px}
+.my-client dl{ margin:0px; padding:0px}
+.my-client dl dt{ position: relative;width: 100%;height:30px; font-size:14px; line-height:30px; text-indent:1em; border-bottom:1px solid #CBCBCB; color:#333333}
+.my-client dl dt a{ float:right; font-size:10px; color:#E73D4B !important; margin-right:20px; text-decoration:none}
+.my-client dl dt a span{ color:#E73D4B; font-size:16px !important; float:right; margin:0px 0px 0px 0px}
+.my-client dl dt span{ color:#E73D4B; font-size:16px; float:right; margin:0px 20px 0px 0px; cursor:pointer}
+.my-client dl dd{ height:30px; font-size:12px; line-height:30px; color:#656565; margin:0px; text-indent:17px;}
+.my-client dl dd span{ display:block; width:50%; float:left}
+.presents{ background-color:#999}
+a{ text-align:center}
+textarea{border: none;line-height: 12px;}
+textarea::-webkit-input-placeholder{padding-left: 2px;}
+
+.float p a{color: #fff;display: block; }
+.my-ca{display: block; height:30px;width:100%;}
+.my-cp{position:absolute !important; left: 0 !important;padding-left: 0 !important;
+		color: #333;font-size: 14px;}
+.inner-bg{
+	background: #FDDD85;width: 100%;height: 100%;
+}
+/*clear-details*/
+.title{
+	position: relative;
+}
+.title-top{width: 100% !important;height: 40px !important;
+	position: absolute;top: 0;left: 0;z-index: 9999;
+}
+.clear-details .clear-record ul li{
+	margin: 0;
+	border-bottom: 1px solid #ccc;
+	padding: 5px 0;
+	position: relative;
+}
+.clear-record ul li:nth-child(1){
+	padding: 0;
+}
+.clear-details li a{
+	color: #333;
+}
+.clear-details .lanmu-list p{
+	text-align: left;
+	line-height: 18px;
+}
+.clear-next{
+	position: absolute;
+	top: 2px;
+	right: -10px;
+}
+
+/*my-client*/
+.tips{
+	width: 278px;
+	background: #fff;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%,-50%);
+	z-index: 99;
+	padding-left: 20px;
+	padding-top: 17px;
+	border-radius: 3px;
+	display: none;
+	font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+	white-space:normal;word-break:break-all;
+}
+.tips h3{
+	font-size: 14px;
+	color: #e83e4b;
+	line-height: 18px;
+}
+.tips p{
+	font-size: 12px;
+	color: #333;
+	margin-bottom: 3px;
+}
+.tips .cl15{
+	height: 10px;
+}
+.tips .closed{
+	width: 25px;
+	height: 25px;
+	background: url(/assets/mobile/brokerage/redclose.png) no-repeat center center;
+	position: absolute;
+	right: -11px;
+	top: -11px;
+	z-index: 999;
+	-webkit-background-size: 25px 25px;
+	background-size: 25px 25px;
+}
+.html{
+	padding: 0;
+}
+.black{
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.8);
+	position: absolute;
+	top: 0;
+	z-index: 88;
+	display: none;
+}
+
+/*de-details*/
+.de-details h3{
+	font-size: 14px;
+	color: #e83e4b;
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+.de-details h4{
+	float: left;
+	font-weight: normal;
+	line-height: 30px;
+}
+.de-details p{
+	line-height: 30px;
+	height: 16px;	
+}
+.lanmu-content .listmore{
+	display:block;
+	text-align:center;
+	height:25px;
+	border-top:0;
+	background:#eee;
+	color:#e83e4b;
+	font:normal 12px/25px Tahoma,Verdana;
+}

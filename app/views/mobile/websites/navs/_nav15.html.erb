@@ -1,0 +1,68 @@
+<% content_for :nav_section do %>
+<section class="mod-navLine navLine-15">
+  <ul class="navLine-ul">
+      <% if @nav_menus[0] %>
+        <li>
+          <%= link_to @nav_menus[0].operation_class_name.present? && "javascript:;" || website_activity_link(@nav_menus[0]), class: @nav_menus[0].operation_class_name do %>
+              <%if @nav_menus[0].font_icon.present? %>
+                  <i class="<%= @nav_menus[0].font_icon %>"></i>
+              <% else %>
+                  <%= image_tag @nav_menus[0].icon %>
+              <% end %>
+              <small><%= @nav_menus[0].operation_title %></small>
+          <% end %>
+        </li>
+      <% end %>
+
+
+      <% if @nav_menus[1] %>
+        <li>
+          <%= link_to @nav_menus[1].operation_class_name.present? && "javascript:;" || website_activity_link(@nav_menus[1]), class: @nav_menus[1].operation_class_name do %>
+              <%if @nav_menus[1].font_icon.present? %>
+                  <i class="<%= @nav_menus[1].font_icon %>"></i>
+              <% else %>
+                  <%= image_tag @nav_menus[1].icon %>
+              <% end %>
+              <small><%= @nav_menus[1].operation_title %></small>
+          <% end %>
+        </li>
+      <% end %>
+
+    <li>
+      <div href="#" class="navLine-home" id="navLine-navPop">
+        <b class="navPop-btn" id="navPop-btn"><i class="fa fa-plus" onclick="toggleToClass('#navLine-navPop','active')"></i></b>
+        <% if @shortcut_menus.present? %>
+            <% @shortcut_menus[0..3].each do |menu| %>
+                <div>
+                    <%= link_to  website_activity_link(menu) do %>
+                        <%if menu.font_icon.present? %>
+                            <i class="<%= menu.font_icon %>"></i>
+                        <% else %>
+                            <%= image_tag menu.icon %>
+                        <% end %>
+                    <% end %>
+                </div>
+            <% end %>
+        <% end %>
+      </div>
+    </li>
+    <% @nav_menus[2..-1].to_a.each do |menu| %>
+        <li>
+          <%= link_to menu.operation_class_name.present? && "javascript:;" || website_activity_link(menu), class: menu.operation_class_name do %>
+              <%if menu.font_icon.present? %>
+                  <i class="<%= menu.font_icon %>"></i>
+              <% else %>
+                  <%= image_tag menu.icon %>
+              <% end %>
+              <small><%= menu.operation_title %></small>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+</section>
+<% content_for :document_ready_js do %>
+    $("body").addClass("body-navLine-bottom");
+    navPop1("#navLine-navPop","#navLine-navPop");
+<% end %>
+<% end if @nav_menus.present? %>
+

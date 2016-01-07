@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="description" content="Common form elements and layouts"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title><%= content_for?(:title) ? yield(:title) : "公众账号绑定流程-首页" %></title>
+
+  <%#= stylesheet_link_tag "application", :media => "all" %>
+  <%= stylesheet_link_tag "application", "application_1", "ace.min", "application_2", media: "all" %>
+  <%= csrf_meta_tags %>
+
+  <%= render 'application/baidu_tongji' %>
+</head>
+
+<body data-spy="scroll" data-target="#nav-sidebar" class="gl-body">
+  <div class="gl-top"></div>
+
+  <div class="gl-main row">
+    <div class="gl-content col-sm-12">
+      <%= yield %>
+    </div>
+  </div>
+
+  <%= javascript_include_tag "application" %>
+
+  <script type="text/javascript">
+      $(function(){
+          $('input[type=file]').each(function(){
+              $(this).attr('data-token', '<%= qiniu_pictures_upload_token%>');
+              $(this).attr('data-bucket', '<%= BUCKET_PICTURES%>');
+          });
+      });
+  </script>
+
+  <%= render 'notice' %>
+
+  <%= yield :custom_js if content_for?(:custom_js) %>
+
+</body>
+</html>
+

@@ -1,0 +1,529 @@
+zh-CN:
+  # Attributes names common to most models
+  attributes:
+    created_at: "创建时间"
+    updated_at: "更新时间"
+    id: '编号'
+
+  helpers:
+    actions: '操作'
+    titles:
+      edit: "编辑 %{model}"
+      new: "新增 %{model}"
+    links:
+      new: '新增'
+      edit: '编辑'
+      destroy: '删除'
+      cancel: '取消'
+      confirm: '确认要执行操作吗？'
+      back: '返回'
+
+  # Active Record models configuration
+  activerecord:
+    errors:
+      messages:
+        taken: "已经被使用"
+        record_invalid: "验证失败: %{errors}"
+        # Append your own errors here or at the model/attributes scope.
+
+      # You can define own errors for models or model attributes.
+      # The values :model, :attribute and :value are always available for interpolation.
+      #
+      # For example,
+      #   models:
+      #     user:
+      #       blank: "This is a custom blank message for %{model}: %{attribute}"
+      #       attributes:
+      #         login:
+      #           blank: "This is a custom blank message for User login"
+      # Will define custom blank validation message for User model and
+      # custom blank validation message for login attribute of User model.
+
+    models:
+      user: "用户"
+      address: "收货地址"
+      country: '国家'
+      province: '省份'
+      city: '城市'
+      district: '地区'
+      card_type: '礼品卡类型'
+      card: '礼品卡'
+      gift: '礼包'
+      product: '商品'
+      picture: '图片'
+      order: '订单'
+      order_detail: '订单明细'
+      payment: '支付单'
+      logistic: '物流单'
+      logistic_type: '发货方式'
+      logistic_company: '物流公司'
+      delivery_man: '配送员'
+      card_refund: '退卡'
+      gift_exchange: '礼包兑换'
+      notice: '公告'
+      notification: '消息'
+      feedback: '意见反馈'
+      admin_user: '管理员'
+      supplier_apply: '线索'
+      page: '页面'
+      wedding: '微婚礼'
+      wedding_seat: '贵宾座'
+      activity: '活动'
+      activity_property: '活动属性'
+      fight_paper: '题目设置'
+      album: '专辑'
+      website_popup_menu: '弹出菜单'
+      vip_privilege: '特权'
+      vip_card: '会员卡'
+      vip_care: '会员关怀'
+      wx_wall: '微信墙'
+      wbbs_topic: '帖子'
+      wbbs_reply: '回复'
+      point_gift: '礼品'
+      point_type: '积分策略'
+      vip_package: '会员套餐'
+      vip_package_items_vip_packages: '会员套餐服务项目'
+      vip_external_http_api: 'HTTP接口'
+      vip_user: '会员'
+      vip_importing: '导入的会员'
+      vip_importing_log: '会员导入记录'
+      vip_message_plan: '会员站内信'
+      panoramagram: '360全景图'
+      wx/card: '微信卡包'
+      brokerage/client: '全民经纪人'
+      red_packet/setting: '节日礼包'
+      wx_menu: '自定义菜单'
+
+    attributes:
+      user:
+        password: "密码"
+        username: "姓名"
+        nickname: "昵称"
+        mobile_tel: '手机'
+        tel: '电话'
+        email: "邮箱"
+        password_confirmation: "确认密码"
+        login: '昵称或邮箱'
+
+      admin_user:
+        name: "姓名"
+        email: "邮箱"
+        password: "密码"
+        password_confirmation: "确认密码"
+        login_count: "登录次数"
+        role: '角色'
+        status: '状态'
+
+      address:
+        user_id: "用户"
+        mobile_tel: '手机'
+        tel: '电话'
+        email: "邮箱"
+        countr_id: "国家"
+        province_id: "省份"
+        city_id: "城市"
+        district_id: "地区"
+        location: '地址'
+        zipcode: '邮编'
+        is_default: '默认地址'
+        sort: '排序'
+        description: '描述'
+
+      country:
+        name: '名称'
+        symbol: '符号'
+        currency: '货币'
+        sort: '排序'
+        description: '描述'
+
+      province:
+        name: '名称'
+        country_id: '国家'
+        sort: '排序'
+        description: '描述'
+
+      city:
+        name: '名称'
+        province_id: '省份'
+        sort: '排序'
+        description: '描述'
+
+      district:
+        name: '名称'
+        city_id: '城市'
+        sort: '排序'
+        description: '描述'
+
+      card_type:
+        name: '名称'
+        card_type_no: 'No.'
+        amount: '金额'
+        brand: '品牌'
+        unit: '单位'
+        onlist_at: '上架时间'
+        qty: '总数量'
+        usable_qty: '可售数量'
+        status: '状态'
+        sort: '排序'
+        description: '描述'
+
+      card:
+        card_type_id: '礼品卡类型'
+        name: '名称'
+        number: 'No.'
+        amount: '金额'
+        type: '类型'
+        way: '销售方式'
+        status: '状态'
+        description: '描述'
+
+      gift:
+        card_type_id: '礼品卡类型'
+        name: '名称'
+        gift_no: 'No.'
+        amount: '金额'
+        kind_qty: '种类数量'
+        is_primary: '主礼包'
+        status: '状态'
+        sort: '排序'
+        description: '描述'
+
+      product:
+        name: '名称'
+        product_no: 'No.'
+        price: '金额'
+        qty: '总数量'
+        usable_qty: '可售数量'
+        status: '状态'
+        description: '描述'
+
+      picture:
+        pictureable_id: '图片对象编号'
+        pictureable_type: '图片对象'
+        image_file_name: '图片名称'
+        is_primary: '主图片'
+        status: '状态'
+        sort: '排序'
+        description: '描述'
+
+      gift_exchange:
+        user_id: '用户'
+        gift_id: '礼包'
+        card_id: '礼品卡'
+        order_detail_id: '订单明细'
+        address_id: '收货地址'
+        address_info: '收货地址'
+        status: '状态'
+        description: '描述'
+
+      coupon:
+        apply_start: '领取开始时间'
+        apply_end: '领取结束时间'
+        use_start: '使用开始时间'
+        use_end: '使用结束时间'
+        use_start_use_end: '使用有效期'
+        value: '抵用金额'
+        value_by: '消费金额'
+        people_limit_count: '每人允许领取优惠券数量'
+        day_limit_count: '每天允许发放优惠券总数'
+        limit_count: '发放优惠券总数'
+        name: '优惠券名称'
+
+      card_refund:
+        user_id: '用户'
+        card_id: '礼品卡'
+        card_name: '礼品卡'
+        card_number: '礼品卡号'
+        card_amount: '礼品卡金额'
+        username: '退卡人姓名'
+        tel: '联系方式'
+        mobile_tel: '手机号码'
+        email: '联系方式'
+        bank_account: '银行帐号'
+        bank_name: '开户支行'
+        bank_username: '开户人姓名'
+        status: '状态'
+        description: '描述'
+
+      order:
+        user_id: '用户'
+        order_no: '订单号'
+        order_details_count: '订单购买数量'
+        order_details_amount: '订单明细金额'
+        shipping_fee: '运费'
+        total_amount: '订单总金额'
+        paid_amount: '支付金额'
+        paid_at: '支付时间'
+        is_paid: '已支付'
+        partner_id: '商户编号'
+        partner_name: '商户名称'
+        address_id: '收货地址'
+        address_info: '收货地址'
+        status: '状态'
+        description: '描述'
+
+      order_detail:
+        user_id: '用户'
+        order_id: '订单'
+        card_type_id: '礼品卡类型'
+        card_id: '礼品卡'
+        card_name: '礼品卡'
+        card_number: '礼品卡号'
+        amount: '礼品卡金额'
+        status: '状态'
+        description: '描述'
+
+      payment:
+        order_id: '订单'
+        order_no: '订单号'
+        order_amount: '订单金额'
+        pay_order_no: '支付订单号'
+        pay_amount: '支付金额'
+        acquiring_time: '调整时间'
+        complete_time: '完成时间'
+        state_code: '状态码'
+        partner_id: '商户编号'
+        sign_type: '认证方式'
+        sign_msg: '认证信息'
+        remark: '备注'
+        raw_info: '请求参数'
+        status: '状态'
+        description: '描述'
+
+      logistic_type:
+        name: '名称'
+        symbol: '符号'
+        logistic_company_id: '物流公司'
+        status: '状态'
+        description: '描述'
+
+      logistic_company:
+        name: '名称'
+        mobile_tel: '手机'
+        tel: '电话'
+        address: '地址'
+        complaints_tel: '投诉电话'
+        linkname: '联系人'
+        website: '网站'
+        status: '状态'
+        description: '描述'
+
+      shop_branch:
+        name: '名称'
+        tel: '电话'
+        address: '地址'
+        password: '分店密码'
+        mobile: '手机'
+
+      logistic:
+        order_id: '订单编号'
+        logistic_no: '物流单号'
+        logistic_type_id: '发货方式'
+        shipper: '配送员'
+        ship_at: '配送时间'
+        received_at: '签收时间'
+        status: '状态'
+        sort: '排序'
+        description: '描述'
+
+      delivery_man:
+        name: '名称'
+        gender: '性别'
+        mobile_tel: '手机'
+        tel: '电话'
+        emergency_contact: '紧急联系人'
+        address: '住址'
+        status: '状态'
+        description: '描述'
+
+      page:
+        title: "标题"
+        body: "内容"
+        status: '状态'
+        sort: '排序'
+
+      notice:
+        title: "标题"
+        content: "内容"
+        is_published: '是否发布'
+        operator: '操作人'
+
+      notification:
+        title: "标题"
+        content: "内容"
+        is_published: '是否发布'
+        operator: '操作人'
+
+      feedback:
+        user_id: "用户"
+        content: "内容"
+        status: '状态'
+        type: '类型'
+
+      wedding_seat:
+        name: '桌号'
+        seats_count: '座位数量'
+
+      activity:
+        activity_type: '活动类型'
+        keyword: '关键字'
+        description: '描述'
+        ready_at: '预热时间'
+        start_at: '开始时间'
+        end_at: '结束时间'
+        qiniu_logo_key: 'Logo'
+
+      activity_property:
+        coupon_count: '优惠券总数'
+        consume_day_allow_count: '优惠券每天允许发放总数'
+        get_limit_count: '每人允许领取数'
+
+      fight_paper:
+        read_time: '阅读时间设置'
+
+      album:
+        name: '专辑名称'
+        supplier: "用户"
+        supplier_id: "用户"
+        activity: "活动"
+        activity_id: "活动"
+
+      website_article:
+        content: '内容'
+
+      supplier:
+        password: '密码'
+        tel: '手机号'
+      supplier_apply:
+        contact: '联系人'
+        tel: '手机号'
+
+      website_popup_menu:
+        name: '名称'
+        sort: '排序'
+        icon: '图片'
+        font_icon: '图标'
+        tel: '电话'
+        url: '链接地址'
+
+      vip_privilege:
+        vip_grade: ''
+        title: '特权名称'
+        start_date: '开始时间'
+        end_date: '结束时间'
+        status: '状态'
+        value: '积分或折扣'
+
+      vip_card:
+        name: '会员卡名称'
+        supplier_name: '商家名称'
+      vip_care:
+        care_day: '节日时间'
+      wx_wall:
+        supplier: '商家'
+        sponsor: '主办方名称'
+        logo: 'Logo'
+        qrcode: '二维码'
+        template_id: '模板名称'
+        system_template: '系统模板'
+        template_id: '模板名称'
+        custom_template: '自定义模板'
+        material_id: '语音素材'
+        pre_join: '提前参与'
+        verify_message: '留言审核'
+        scroll_message: '留言滚动'
+        repeat_draw: '重复抽奖'
+        award_keyword: '领奖关键词'
+        status: '状态'
+
+      wbbs_topic:
+        content: '帖子内容'
+
+      wbbs_reply:
+        content: '回复内容'
+      point_gift:
+        pic: '图片'
+        points: '积分'
+        exchange_start_at_exchange_end_at: '兑换时间'
+        exchange_start_at: '兑换开始时间'
+        exchange_end_at: '兑换结束时间'
+      point_type:
+        amount: '金额'
+        points: '积分'
+      vip_user:
+        user_no: '卡号'
+        name: '姓名'
+        mobile: '手机号码'
+      vip_package:
+        vip_package_items: '服务项目'
+        price: '价格'
+      vip_package_items_vip_packages:
+        items_count: '服务项目使用次数'
+      vip_external_http_api:
+        api_type: '接口类型'
+      vip_importing:
+        user_no: '卡号'
+        name: '姓名'
+        mobile: '手机号'
+        supplier_id: '商户'
+        supplier: '商户'
+        vip_grade_id: '会员等级'
+        vip_grade_name: '会员等级'
+        total_amount: '历史总金额'
+        total_recharge_amount: '充值总额'
+        total_consume_amount: '消费总额'
+        usable_amount: '可用金额'
+        total_points: '历史总积分'
+        usable_points: '可用积分'
+        open_card_time: '开卡时间'
+        created_at: '导入时间'
+      vip_importing_log:
+        error_type: '错误类型'
+        error_msg: '错误消息'
+        line: '原始数据'
+      vip_message_plan:
+        send_at: '发送时间'
+      supplier_account:
+        company_name: '企业名称'
+        bank_name: '收款银行'
+        bank_branch: '收款银行支行'
+        bank_account: '收款银行账号'
+        username: '开户人'
+        contact: '联系人'
+        tel: '联系电话'
+        province_id: '开户银行省份'
+        city_id: '开户银行城市'
+        identity_name: '收款银行'
+        business_lisence: '营业执照注册号'
+        business_address: '营业执照所在地'
+        business_affilicated_to: '营业期限'
+        business_scope: '经营范围'
+        organization_code: '组织机构'
+        business_lisence_pic_key: '营业执照副本扫描件 '
+        identity_type: '证件类型'
+        identity_number: '证件号码'
+        email: '邮箱地址'
+        identity_avaliable_to: '证件有效期'
+        identity_pic_key: '证件复印件'
+      panoramagram:
+        qiniu_pic_key: '列表页缩略图'
+      wx/card:
+        date_info_start_at: '固定时间'
+        date_info_end_at: '固定时间'
+        gift_gift: '优惠详情'
+        general_coupon_default_detail: '优惠详情'
+        discount_discount: '折扣额度'
+        cash_reduce_cost: '减免金额'
+        sku_quantity: '库存'
+      brokerage/client:
+        mobile: '电话'
+      red_packet/setting:
+        packet_num: '礼包数'
+        amount: '礼包金额'
+        start_at: '礼包有效开始时间'
+        end_at: '礼包有效结束时间'
+      wx_menu:
+        name: '菜单名称'
+      supplier_apply:
+        tel: '手机号码'
+        contact: '联系人'

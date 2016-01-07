@@ -1,0 +1,15 @@
+__filename = "vote_users.xls"
+sheet1 = xls.create_worksheet
+system_header = ['序号', '姓名', '手机号', '投票项', '投票时间']
+sheet1.row(0).concat(system_header)
+if @activity_vote_item_ids.present?
+	row = 1
+	@activity_users_excel.each_with_index do |obj, index|
+	  sheet1[row, 0] = index + 1
+	  sheet1[row, 1] = obj.name.present? ? obj.name : '匿名用户'
+	  sheet1[row, 2] = obj.mobile.present? ? obj.mobile : '匿名用户'
+	  sheet1[row, 3] = obj.vote_options(@activity_vote_item_ids)
+	  sheet1[row, 4] = obj.created_at
+	  row += 1
+	end
+end

@@ -1,0 +1,199 @@
+<%= form_for(@gift, validate: true) do |f| %>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="control-label">礼品名称<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :name, class: "col-xs-12", placeholder: "为达到手机端浏览的最佳效果，建议输入12个字以内" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">礼品图片<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <div class="col-xs-5">
+          <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="180" data-height="100" data-name="point_gift[qiniu_pic_key]" data-img="<%= @gift.pic_url %>" data-key="<%= @gift.qiniu_pic_key || "" %>"></div>
+        </div>
+        <small class="help-inle test text-warning line-height-32">建议尺寸：宽720px * 高400px</small>
+      </div>
+    </div>
+    <div class="form-group">
+        <label>适用范围<span class="required-star">*</span></label>
+        <div class="clearfix" id="applicable_grades">
+            <div class="checkbox-inline no-padding">
+                <label>
+                    <%= f.check_box :all_grades, class: 'ace' %>
+                    <span class="lbl">所有会员</span>
+                </label>
+            </div>
+            <% current_user.vip_grades.visible.sorted.each do |grade| %>
+                <div class="checkbox-inline">
+                    <label>
+                        <%= check_box_tag 'point_gift[vip_grade_ids][]', grade.id, @gift.all_grades? || @gift.vip_grade_ids.include?(grade.id), class: 'ace grades' %>
+                        <span class="lbl"><%= grade.name %></span>
+                    </label>
+                </div>
+            <% end %>
+        </div>
+    </div>
+    <% if current_user.shop_branches.used.present? %>
+      <div class="form-group shop_branch_list">
+        <label class="control-label"><%= f.check_box :shop_branch_limited, class: 'ace' %><span class="lbl">使用门店限制<small class="help-inle test text-warning">若不选则默认为所有门店通用</small></span></label>
+        <div class="margin-0 clearfix gateSelect">
+          <%= address_select(OpenStruct.new(province_id: @province_id, city_id: @city_id), no_district: true) %>
+          <span class="fgray" id="shop_branch_count">（当前已选择<font><%= @gift.try(:shop_branch_ids).length %></font>个门店）</span>
+        </div>
+        <% @shop_branchs.each_with_index do |branchs,index| %>
+          <div class="margin-0 shop_branchs" id="shop_branch_<%= branchs.first.try(:city_id) %>" style="display: <%= index == 0 ? 'block;' : 'none;' %>">
+            <% branchs.each do |branch| %>
+              <label class="control-label"> <%= f.check_box :shop_branch_ids, {name: 'point_gift[shop_branch_ids][]'}, branch.id, false %> <%= branch.name %> </label>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <label class="control-label">兑换礼品所需积分<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">请填写数字为整数的等级值，如：1</small></label>
+      <div class="clearfix">
+        <%= f.text_field :points, class: 'col-md-8' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">库存数量*<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">-1为不限制次数</small></label>
+      <div class="clearfix">
+        <%= f.text_field :sku, class: 'col-md-8 neq0' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">每人可兑换次数<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">-1为不限制次数</small></label>
+      <div class="clearfix">
+        <%= f.text_field :people_limit_count, class: 'col-md-8 neq0' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">有效兑换时间<span class="required-star">*</span>
+      </label>
+      <div class="clearfix">
+
+        <div class="input-group col-xs-4 no-padding">
+          <%= datetime_range_tag f, start_at: :exchange_start_at, end_at: :exchange_end_at, options: {class: 'datetimerange min-width-280'} %>
+        </div>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">有效领取时间<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="礼品兑换后，使用SN码领取礼品的有效时间"></span></label>
+      <div class="VCFields">
+        <div class="radioTab">
+          <label class="control-label">
+            <%= f.radio_button :award_time_limited, false, class: :ace %>
+            <span class="lbl">不限制</span>
+          </label>
+          <label class="control-label">
+            <%= f.radio_button :award_time_limited, true, class: :ace %>
+            <span class="lbl">兑换后</span>
+          </label>
+          <label class="control-label">
+            <%= f.text_field :award_in_days, class: :inputSmall %><span class="lbl" id="font_days">天内领取</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">礼品兑换说明</label>
+      <div class="clearfix">
+        <%= f.text_area :description, rows: 5, class: 'col-xs-12' %>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <input value="确定" type="submit" class="btn btn-sm btn-primary" data-fn="submit">
+    <button type="reset" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $( "form" ).validate();
+  <% if !@gift.shop_branch_limited %>
+    $(".shop_branch_list").find(".margin-0").hide();
+  <% end %>
+  <% if !@gift.award_time_limited %>
+    $("input[name='point_gift[award_in_days]']").hide();
+    $("#font_days").hide();
+  <% end %>
+
+  var grade_checkboxes = $('#applicable_grades input:checkbox'),
+      all_grade = $('#point_gift_all_grades');
+  all_grade.click(function() { grade_checkboxes.prop('checked', $(this).is(':checked')); });
+  grade_checkboxes.not('#point_gift_all_grades').click(function(event) {
+    if($(this).is(':checked')) {
+      if ( $('#applicable_grades .grades:checked').length == grade_checkboxes.length - 1 ) {
+        all_grade.prop('checked', true);  
+      }
+    } else {
+      all_grade.prop('checked', false);
+    }
+  });
+
+
+  $(document).on("click", "input[name='point_gift[award_time_limited]']", function(){
+    if($(this).val() == "false"){
+        $("input[name='point_gift[award_in_days]']").hide();
+        $("#font_days").hide();
+        $("input[name='point_gift[award_in_days]']").val("7");
+    }else{
+        $("input[name='point_gift[award_in_days]']").show();
+        $("#font_days").show();
+    }
+    // $("input[name='point_gift[award_in_days]']").attr("disabled",$(this).val() == "false" ? true : false);
+    // $('form').resetClientSideValidations();
+  });
+
+  $(document).on("click", "input[name='point_gift[shop_branch_limited]']", function(){
+      if($(this).is(":checked")){
+          $(".shop_branch_list").find(".margin-0").show();
+          $("#city").change();
+      }else{
+          $(".shop_branch_list").find(".margin-0").hide();
+      }
+  });
+
+  $(document).on("change", "#city", function(){
+      if($('#shop_branch_'+$('#city').val()).length > 0){
+          $('.shop_branchs').hide();
+          $('#shop_branch_'+$('#city').val()).show();
+      }else{
+          var get_url = "<%= get_shop_point_gifts_path %>" + "?province_id=" + $('#province').val() + "&city_id=" + $('#city').val();
+          $.get(get_url, function(html) {
+              $('.shop_branchs').hide();
+              $('.shop_branch_list').append(html);
+          });
+      }
+  });
+
+  $(document).on("click", "input[name='point_gift[shop_branch_ids][]']", function(){
+      var font=$('#shop_branch_count').find("font");
+      var num=parseInt(font.html()) + ( $(this).is(":checked") ? 1 : -1 );
+      font.html(num);
+  });
+
+  $('input[type="submit"]').on('click', function(event) {
+      if($('#applicable_grades .grades:checked').length === 0) {
+        showTip('warning', '适用范围不能为空');
+        return false;
+      }
+      if ( $('#point_gift_shop_branch_limited').is(':checked') ) {
+          if ( $("input[name='point_gift[shop_branch_ids][]']:checked").length == 0 ) {
+              showTip('warning', '请选择使用门店');
+              return false;
+          }
+      }
+  });
+
+});
+</script>
+<% end %>

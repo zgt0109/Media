@@ -1,0 +1,76 @@
+<% content_for :sidebar do %>
+<%= render 'sidebar_house' %>
+<% end %>
+
+<% content_for :topbar do %>
+<a class="h1 pagecurrent" href="<%= house_experts_url %>">专家管理</a>
+<a class="h1 uncurrent" href="<%= house_expert_comments_url %>">点评管理</a>
+<% end %>
+
+<%= form_for(@house_expert, validate: true) do |f| %>
+<div class="box-form fl">
+  <%= f.hidden_field :house_id, value: @house_expert.try(:house_id) %>
+  <%= f.hidden_field :supplier_id, value: @house_expert.try(:supplier_id) %>
+  <%= f.hidden_field :wx_mp_user_id, value: @house_expert.try(:wx_mp_user_id) %>
+
+  <p>
+    <span>专家名称：</span>
+    <%= f.text_field :name, class: 'input-text', style: 'width: 380px;',maxlength: 50 %>
+    <i><em>*</em>（必填）</i>
+  </p>
+
+  <p>
+    <span>专家简介：</span>
+    <%= f.text_field :intro, class: 'input-text', style: 'width: 380px;',maxlength: 50 %>
+    <i><em>*</em>（必填，50字符以内）</i>
+  </p>
+
+  <div class="box-upload">
+    <div class="upload-img upload-preview-img">
+      <span><%= image_tag((@house_expert.pic_url || '/assets/house/img06.jpg'), id: 'preview_expert_pic') %></span>
+    </div>
+    <div class="upload-btn">
+      <div class="box-file">
+        <%= f.file_field :pic, rel: 'preview_expert_pic', class: 'img_preview', validate: @house_expert.new_record? %>
+        <a class="btn btn-big">上传封面</a>
+      </div>
+      <span class="p-file"><i><em>*</em></i>上传专家照片(图片建议尺寸：720像素*400像素)</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="box-form fl">
+  <p class="search">
+    <%= f.submit '确认添加', class: 'btn btn-big' %>
+  </p>
+</div>
+
+<% end %>
+
+
+<div class="box-table fl">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
+    <tr>
+      <th width="50%">已登记专家</th>
+      <th>操作</th>
+    </tr>
+    <% if @house_experts.count > 0 %>
+    <% @house_experts.each do |expert| %>
+    <tr>
+      <td><%= expert.name %></td>
+      <td>
+        <a href="<%= house_experts_path(id: expert.id) %>" class="fgreen">修改</a>&nbsp;&nbsp;&nbsp;
+        <%= link_to '删除', expert, method: :delete, :data => { :confirm => "确认删除此专家？" },  class:"fred" %></td>
+      </tr>
+      <% end %>
+      <% else %>
+      <tr><td colspan="5" class="fgreen" style="float:center">还没有信息</td></tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="ft">
+    <%= paginate @house_experts, theme: :pretty  if @house_experts.total_pages > 1%>
+  </div>
+

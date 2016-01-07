@@ -1,0 +1,14 @@
+<% content_for :content do %>
+<div class="main-container-inner">
+  <div class="main-content ">
+    <%= render "shared/group_breadcrumbs"%>
+
+    <div class="page-content">
+      <%= content_for?(:biz_page_content) ? yield(:biz_page_content) : yield %>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<%= render :template => 'layouts/application' %>
+<% render "shared/flash"%>

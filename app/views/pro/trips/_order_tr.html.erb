@@ -1,0 +1,10 @@
+<tr>
+  <td><%= order.order_no %></td>
+  <td title="<%= order.ticket_name %>"><%= truncate_u order.ticket_name, length: 12 %></td>
+  <td><%= order.qty %></td>
+  <td><%= f order.total_amount %></td>
+  <td><%= order.created_at.to_date %>
+  <th>
+    <%= link_to "查看", "javascript:void(0);", class: "fgreen", data: {toggle: "modals", height: "500", title: "预约详情", iframe: show_order_trip_path(order.id)}%>
+  </th>
+</tr>

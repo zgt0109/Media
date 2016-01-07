@@ -1,0 +1,67 @@
+<% provide(:title, '我要叫外卖') %>
+
+<div class="stage" id="stage">
+  <header>
+    <%= link_to "", mobile_shop_orders_url(supplier_id: session[:supplier_id], :order_type => 2, anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" %>
+
+    <h1><%= @shop_order.finish? ? '叫外卖成功' : '请重新支付' %></h1>
+  </header>
+
+  <section id="sec-index">
+    <div class="body">
+      <div class="order">
+        <div class="mod-order">
+          <div class="mod-form form-hor">
+
+            <div class="bd">
+              <div class="form-li">
+                <div class="li-l"><b>订单号：</b></div>
+                <div class="li-r"><span class="text-red"><%= @shop_order.order_no %></span></div>
+              </div>
+
+              <div class="form-li">
+                <div class="li-l"><b>说明：</b></div>
+                <div class="li-r"><span>请将订单号或者手机号向外卖师傅展示，确认后即可领取外卖</span></div>
+              </div>
+
+              <div class="form-li">
+                <div class="li-l"><b>支付状态：</b></div>
+                <div class="li-r">
+                  <span><%= @shop_order.total_amount %>  <%= @shop_order.pay_type_name %>  <%= @shop_order.pay_status_name %> </span>
+                </div>
+              </div>
+
+              <a class="form-li" href="tel:400">
+                <div class="li-l"><b>外卖电话：</b></div>
+                <div class="li-r mod-fa fa fa-phone"><span><%= @shop_order.shop_branch.take_out_rule.book_phone %> </span></div>
+              </a>
+                  
+              <a class="form-li" href="http://api.map.baidu.com/marker?location=<%= @shop_order.shop_branch.location_y%>,<%= @shop_order.shop_branch.location_x%>&title=<%= @shop_order.shop_branch.address%>&content=<%= @shop_order.shop_branch.address%>&output=html">
+                <div class="li-l"><b>送餐地址：</b></div>
+                <div class="li-r mod-fa fa fa-location-arrow"><span><%= @shop_order.address %></span></div>
+              </a>
+
+              <div class="form-li">
+                <div class="li-l"><b>订餐说明：</b></div>
+                <div class="li-r"><span><%= @shop_order.shop_branch.try(:take_out_rule).try(:description) %></span></div>
+              </div>
+            </div>
+
+            <div class="ft">
+              <div class="food-shopcar food-shopcar-btn">
+                <div class="hd">
+                  <div class="tcenter">
+                    <a href="<%= mobile_shop_order_url(supplier_id: session[:supplier_id], id: @shop_order) %>" class="btn">查看订单详情</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+

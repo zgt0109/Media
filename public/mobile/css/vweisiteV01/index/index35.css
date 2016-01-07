@@ -1,0 +1,71 @@
+.box{overflow: hidden;text-align: center;}
+.box,
+.box a{color:#fff;}
+.index ul,
+.index ol,
+.index li{ list-style: none;}
+.index ul{
+    padding:2px;
+}
+.index li{
+    overflow:hidden;
+    color:#fff;
+    width:50%!important;
+    height:80px;
+    float:left;
+    -webkit-background-clip:content;
+    -moz-background-clip:content;
+    background-clip:content;
+    text-align:center;
+    display: table;
+}
+.index li a{
+    color:#fff;
+    width:100%;
+    height:100%;
+    display: table-cell;
+    vertical-align: middle;
+    overflow: hidden;
+    background: #3874f6;
+    border:2px solid #fff;
+}
+.index ul>li, .index ul>ol{
+    width:50%!important;
+    position:relative;
+    overflow:hidden;
+    height:160px;
+    float:left;
+    -webkit-box-sizing:border-box;
+}
+.mod-index i,
+.mod-index small{display: block; overflow: hidden; padding: 0 5px;}
+.mod-index small{font-size: 14px;line-height: 20px;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index i > img{ max-height: 100%; vertical-align: top;}
+.mod-index > img{ width: 100%; height:76px; float: left;}
+.mod-index .fa{ font-size: 40px;}
+.index i{height: 40px; line-height:40px; overflow: hidden;text-align: center;}
+.index ul >li > a small{margin: 5px 0 0 0; max-height: 40px;}
+
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #fff;
+    color: #999;
+}
+@media screen and (orientation:landscape) {
+    .index li{height:120px;}
+    .index ul>li, .index ul>ol{height:240px;}
+    .mod-index > img{ height:114px;}
+}
+@media only screen and (max-width:1080px){
+    
+}
+@media only screen and (min-width:1224px){
+}
+@media only screen and (max-width:320px){
+    .index li{height:76px;}
+    .index ul>li, .index ul>ol{height:152px;}
+    .mod-index > img{ height:72px;}
+}

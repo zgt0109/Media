@@ -1,0 +1,494 @@
+/*
+*= require mobile/winwemedia01
+*= require_self
+*= require mobile/showshare
+*
+*/
+
+.html {
+    background: url("/assets/img/lottery/index_bg.jpg") no-repeat top left;
+    background-size: 100% auto;
+    padding: 0;
+}
+
+
+.font-size-s {
+    font-size: 12px;
+}
+
+.font-size-m {
+    font-size: 14px;
+}
+
+.font-size-l {
+    font-size: 16px;
+}
+
+.content-wrap {
+    background: url("/assets/img/lottery/game_circlea.png") no-repeat center top;
+    /*filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";*/
+    background-size: 95% auto;
+    height: 300px;
+    width: 320px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.content2-wrap {
+    background: url("/assets/img/lottery/game_content_bg.png") no-repeat center top;
+    /*filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";*/
+    background-size: 98% 100%;
+    height: 280px;
+    width: 300px;
+    margin: 0 auto;
+    position: relative;
+}
+
+@media screen and (min-width: 320px) {
+    .content-wrap {
+        margin-top: 175px;
+    }
+
+    .content2-wrap {
+        margin-top: 190px;
+    }
+}
+
+@media screen and (min-width: 480px) {
+    .content-wrap {
+        margin-top: 275px;
+    }
+
+    .content2-wrap {
+        margin-top: 280px;
+    }
+}
+
+@media screen and (min-width: 640px) {
+    .content-wrap {
+        margin-top: 375px;
+    }
+
+    .content2-wrap {
+        margin-top: 365px;
+    }
+}
+
+.content {
+    margin-left:45px;
+    margin-top: 21px;
+    position: absolute;
+    z-index: 20;
+    overflow: hidden;
+    width: 230px;
+    height: 234px
+}
+.content .strimg{ margin: 39px 0 0 33px;}
+
+.content .title, .content .footer {
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+}
+.content .title{ margin-top: 26px;}
+
+.content .table {
+    margin-top: 6px;
+    width: 110px;
+    height: 115px;
+    margin-left: 50px;
+}
+
+.content .table td {
+    background-color: #fee458;
+    width: 62px;
+    height: 52px;
+    border-radius: 4px;
+}
+
+.content .days {
+    position: relative;
+    margin-top: -110px;
+    font-size: 90px;
+    margin-left: 1px;
+    color: #2d3132;
+    font-family: arial;
+    padding: 0 0 0 54px;
+
+}
+
+.content .days-right {
+    margin-top: -108px;
+    margin-left: 160px;
+    font-size: 20px;
+    color: #fee458;
+}
+
+.content .footer {
+    margin-top: 95px;
+}
+
+.music {
+    /*background: url("/assets/img/lottery/music_btn.png") no-repeat center top;*/
+    top: 45px;
+    left: 261px;
+}
+
+.reload {
+    /*background: url("/assets/img/lottery/reload.png") no-repeat center top;*/
+    top: 208px;
+    left: 31px;
+}
+
+.info {
+    /*background: url("/assets/img/lottery/info.png") no-repeat center top;*/
+    top: 208px;
+    left: 244px;
+}
+
+.achievements {
+    /*background: url("/assets/img/lottery/achievements.png") no-repeat center top;*/
+
+    top: 46px;
+    left: 8px;
+}
+
+a.back {
+    background: url("/assets/img/lottery/back.png") no-repeat center top;
+    background-size: 100% 100%;
+    top: 260px;
+    left: 20px;
+    position: absolute;
+    height: 45px;
+    width: 45px;
+
+}
+
+.music, .reload, .info, .achievements {
+    background-size: 100% auto;
+    height: 53px;
+    width: 51px;
+    position: absolute;
+    z-index: 50;
+}
+
+.disabled {
+    background: url("/assets/img/lottery/music_none.png") no-repeat center top;
+    background-size: 100% auto;
+    height: 50px;
+    width: 50px;
+    margin-left: 4px;
+    margin-top: 4px;
+    position: absolute;
+}
+
+.content2-wrap .banner {
+    background: url("/assets/img/lottery/belt.png") no-repeat center top;
+    background-size: 80% auto;
+    top: -30px;
+    position: absolute;
+}
+
+.content2-wrap .banner img {
+    width: 90px;
+    height: 29px;
+    margin-left: 102px;
+    margin-top: 7px;
+}
+
+.prize-btn {
+    background: url("/assets/img/lottery/game_btn_bg.png") no-repeat center top;
+    background-size: 100% auto;
+    top: 35px;
+    left: 48px;
+    width: 200px;
+    height: 33px !important;
+    position: absolute;
+    z-index: 20;
+}
+
+.act-prize, .act-des {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    overflow: hidden;
+    position: absolute;
+}
+
+.act-prize {
+    background: url("/assets/img/lottery/game_gift.png") no-repeat center top;
+    background-size: 100% auto;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+
+.act-prize.active {
+    background: url("/assets/img/lottery/game_gift_hl.png") no-repeat center top;
+    background-size: 100% auto;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+
+.act-des.active {
+    background: url("/assets/img/lottery/game_intro_hl.png") no-repeat center top;
+    background-size: 100% auto;
+    left: 99px;
+    top: 3px;
+}
+
+.act-des {
+    background: url("/assets/img/lottery/game_intro.png") no-repeat center top;
+    background-size: 100% auto;
+    left: 99px;
+    top: 3px;
+}
+
+.content2 {
+    position: absolute;
+    width: 280px;
+}
+
+.content2 .tab {
+    width: 280px;
+}
+
+.content2 .tab > p {
+    width: 250px;
+}
+
+.content2 .tab > p img {
+    margin-top: 4px;
+    border-radius: 4px;
+}
+
+.content2 .item {
+    background: url("/assets/img/lottery/text_bg.png") no-repeat center top;
+    background-size: 100% 100%;
+    min-height: 40px;
+    width: 248px;
+    position: relative;
+    padding: 10px;
+    margin-bottom: 2px;
+}
+
+.content2 .item header {
+    font-size: 20px;
+    color:#ff0000;;
+    position: relative;
+}
+
+.content2 .item header small {
+    font-size: 14px;
+}
+
+.content2 .item p {
+    margin-top: 4px;
+    line-height: 1.2;
+}
+
+.slimScrollDiv {
+    left: 20px;
+    top: 76px;
+    width: 260px !important;
+}
+
+.slimScrollBar {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffe036), color-stop(1, #ffc610)) !important;
+    box-shadow: 0 1px 1px #c09351;
+}
+
+.act-con-time, .act-con-des {
+    margin-top: 10px;
+}
+
+.end-img {
+    width: 256px;
+    height: 167px;
+    margin-left: -53px;
+    margin-top: -31px;
+}
+
+.end-content p {
+    color: #f9ec59;
+}
+
+.act-end-title {
+    font-size: 22px;
+}
+
+.act-next-title {
+    font-size: 30px;
+}
+
+.end-text {
+    margin-top: -30px;
+    font-size: 20px;
+    width: 150px;
+    text-align: center;
+
+}
+
+.end-text img {
+    width: 145px;
+    height: 66px;
+}
+
+.myprize-content .slimScrollDiv {
+    top: 40px
+}
+
+a.noreceive {
+    background: url("/assets/img/lottery/receive.png") no-repeat center top;
+}
+
+a.receive {
+    background: url("/assets/img/lottery/receive_hl.png") no-repeat center top;
+}
+
+a.noreceive, a.receive {
+    background-size: 100% 100%;
+    height: 26px;
+    width: 70px;
+    display: inline-block;
+    float: right;
+}
+
+.shake-num {
+    list-style: none;
+    width: 5000px;
+    height: 170px;
+    position: absolute;
+    left: 40px;
+    top: 40px;
+}
+.shake-num li{
+    float: left;
+    padding: 0 5px;
+    width: 160px;
+}
+.shake-num li .col-bg{
+    background: url("/assets/img/lottery/gift_single_bg.png") no-repeat;
+    background-size: 150px;
+    height: 170px;
+    width: 150px;
+}
+.shake-num li .col-bg.ash{
+    background: url("/assets/img/lottery/gift_none_single_bg.png") no-repeat;
+    background-size: 150px;
+}
+.shake-num li p.num{
+    text-align: center;
+    padding: 25px 0 5px;
+}
+.shake-num li p.num img{
+    width: 75px;
+}
+.shake-num li p.num.no-p{
+    padding: 35px 0 35px;
+}
+.shake-num li p.num.no-p img{
+    width: 100px;
+}
+.shake-num li p.star{
+    text-align: center;
+    padding: 0;
+}
+.shake-num li p.star img{
+    width: 30px;
+}
+
+.shake-circle {
+    width: 230px;
+    height: 243px;
+    top: -4px;
+    left: 2px;
+    position: absolute;
+    /*background-color: deepskyblue;*/
+    /*opacity: .5;*/
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    overflow: hidden;
+    opacity: 0;
+}
+
+p.gameover{
+    text-align: center;
+    margin: -46px 0 0 -60px;
+    width: 270px;
+}
+p.gameover img.fa{
+    width: 270px;
+}
+p.gameover img.te{
+    width: 99px;
+    margin-top: -20px;
+}
+.bgcover{
+    background: rgba(0,0,0,0.7);
+    height: 100%;
+    width: 100%;
+     position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 51;
+    display: none;
+}
+.pop{
+    z-index: 52;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    display: none;
+}
+.tomorrow,.nochange{
+    margin: -45px 0 0 -90px;
+}
+.tomorrow img,.nochange img{
+    width: 180px;
+}
+.getpri{
+    width: 240px;
+    height: 250px;
+    background: url("/assets/img/lottery/game_content_bg_s.png") no-repeat bottom;
+    background-size: 240px;
+    margin: -125px 0 0 -120px;
+}
+.getpri .til,.getpri .int,.getpri .sub{
+    text-align: center;
+}
+.getpri .til img{
+    width: 219px;
+}
+.getpri .int img{
+    width: 193px;
+}
+.getpri .sub img{
+    width: 142px;
+}
+.getpri .showpri{
+    text-align: center;
+    color: #ff0000;
+    font-size: 28px;
+    padding: 0 0 10px 0;
+}
+.getpri input.inp{
+    display: block;
+    width: 207px;
+    height: 39px;
+    background: url('/assets/img/lottery/info_text_bg.png') no-repeat;
+    border: none;
+    background-size: 207px;
+    margin: 6px auto 10px;
+    font-size: 18px;
+    color: #222;
+    text-indent: 15px;
+}
+
+#palys{
+    position: fixed;
+    height: 20px;
+    background: #000;
+    color: #fff;
+    left: 0;
+    top: 20px;
+}

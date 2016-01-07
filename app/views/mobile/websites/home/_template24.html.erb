@@ -1,0 +1,21 @@
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.in_groups_of(9, false).each do |sub_menus| %>
+      <li>
+        <% sub_menus.each do |menu| %>
+          <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+            <%= menu.pic_or_icon :has_title => true, :pic_type => "thumb" %>
+          <% end %>
+        <% end  %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :document_ready_js do %>
+  divSwipe("indexList");
+  <% if @website_setting.bg_image.present? %>
+    // 静态背景图
+    //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+  <% end %>
+<% end %>

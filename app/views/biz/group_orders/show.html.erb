@@ -1,0 +1,44 @@
+<form>
+  <div class="modal-body">
+    <p>
+      <span><b>订单编号：</b></span>
+      <span><%= @group_order.order_no %></span>
+    </p>
+    <p>
+      <span><b>SN码：</b></span>
+      <span><%= @group_order.code %></span>
+    </p>
+    <p>
+      <span><b>商品名称：</b></span>
+      <span><%= @group_order.group_item.try(:name) %></span>
+    </p>
+    <p>
+      <span><b>数量：</b></span>
+      <span><%= @group_order.qty %></span>
+    </p>
+    <p>
+      <span><b>商品金额：</b></span>
+      <span><%= @group_order.price %></span>
+    </p>
+    <p>
+      <span><b>订单状态：</b></span>
+      <span><%= @group_order.status_name %></span>
+    </p>
+    <p>
+      <span><b>下单时间：</b></span>
+      <span><%= @group_order.created_at %></span>
+    </p>
+    <p>
+      <span><b>手机号码：</b></span>
+      <span><%= @group_order.mobile %></span>
+    </p>
+    <p>
+      <span><b>昵称：</b></span>
+      <span><%= @group_order.username.present? ? @group_order.username : '无' %></span>
+    </p>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modals">确定</button>
+  </div>
+</form>

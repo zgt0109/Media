@@ -1,0 +1,36 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li> <i class="icon-home home-icon"></i> <a href="#">首页</a> </li>
+          <li> <%= link_to "微婚礼", weddings_path %> </li>
+					<li><%= link_to "婚纱照", wedding_pictures_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 1、图片建议尺寸：720像素*400像素，可支持上传格式为：jpg、png、bmp、gif；</li>
+                <li> 2、上传的图片会在微婚礼手机端的首页显示。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="vwebsitePicture">
+              <%= content_tag :div, nil, class: "cieldon-file", data: {type: "6", name: "picture_name", img: "#{@pictures.map(&:pic_url).select(&:present?).join(',')}", img_ids: "#{@pictures.map(&:id).join(',')}", create_api_url: "/weddings/#{@wedding.id}/wedding_pictures", destroy_api_url: "/weddings/#{@wedding.id}/wedding_pictures", width: "180", height: "100"} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>
+

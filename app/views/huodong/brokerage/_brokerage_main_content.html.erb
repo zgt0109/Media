@@ -1,0 +1,19 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '全民经纪人', brokerage_settings_path %></li>
+      <%= yield :brokerage_breadcrumb_li if content_for?(:brokerage_breadcrumb_li) %>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable">
+      <%= render 'huodong/brokerage/tabs' %>
+      <div class="tab-content no-border padding-24">
+        <%= yield :brokerage_tab_content %>
+      </div>
+    </div>
+  </div>
+</div>

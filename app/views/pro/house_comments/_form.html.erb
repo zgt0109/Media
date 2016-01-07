@@ -1,0 +1,53 @@
+<%= form_for(@house_comment) do |f| %>
+  <% if @house_comment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@house_comment.errors.count, "error") %> prohibited this house_comment from being saved:</h2>
+
+      <ul>
+      <% @house_comment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :house_id %><br />
+    <%= f.number_field :house_id %>
+  </div>
+  <div class="field">
+    <%= f.label :supplier_id %><br />
+    <%= f.number_field :supplier_id %>
+  </div>
+  <div class="field">
+    <%= f.label :wx_mp_user_id %><br />
+    <%= f.number_field :wx_mp_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :wx_user_id %><br />
+    <%= f.number_field :wx_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :mobile %><br />
+    <%= f.text_field :mobile %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br />
+    <%= f.text_area :content %>
+  </div>
+  <div class="field">
+    <%= f.label :reply_content %><br />
+    <%= f.text_area :reply_content %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.number_field :status %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

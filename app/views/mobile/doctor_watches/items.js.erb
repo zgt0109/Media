@@ -1,0 +1,8 @@
+var s = ''
+<% @doctor_watches.each do |watch| %>
+	s += "<option value='<%= watch.id %>'><%= watch.select_time %></option>";
+<% end %>
+$('#time').empty();
+$("#time").append(s);
+//
+

@@ -1,0 +1,486 @@
+<% provide(:title, '我要订餐') if @shop_order.book_dinner? %>
+<% provide(:title, '我要叫外卖') if @shop_order.take_out? %>
+
+<div class="stage" id="stage">
+  <header>
+    <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
+    <h1>确认订单信息</h1>
+  </header>
+  <section id="sec-index">
+    <div class="body">
+      <div class="order">
+        <div class="mod-order">
+        <% if @shop_order.total_qty == 0 %>
+          <p class="box-null">
+            您的购物车为空！
+            <a href="javascript:history.go(-1);" class="btn btn-blue">
+              返回点菜
+            </a>
+          </p>
+        <% else %>
+
+        <% ref_order = ShopTableOrder.where(id: @shop_order.ref_order_id).first %>
+
+          <%= form_for @shop_order, url: success_mobile_shop_order_path(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), method: :post, :html => {class: "mod-form form-hor"} do |f| %>
+
+            <%= f.hidden_field :book_status %>
+            <%= f.hidden_field :pay_status, value: 1 %>
+            <%= f.hidden_field :ref_order_id %>
+            <div class="bd">
+              <div class="form-li">
+                <div class="li-l"><b>您的姓名：</b></div>
+                <div class="li-r">
+                  <% if ref_order %>
+                    <input type="text" name="shop_order[username]" value="<%= ref_order.username %>", id="shop_order_username", readonly="true", class="input" >
+                  <% else %>
+                    <%= f.text_field :username, placeholder: "如何称呼你", class: "input", value: @wx_user.try(:nickname) %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>您的电话：</b></div>
+                <div class="li-r">
+                  <% if ref_order %>
+                    <input type="tel" name="shop_order[mobile]" value="<%= ref_order.mobile %>", id="your_tel", readonly="true", class="input">
+                  <% else %>
+                    <%= f.telephone_field :mobile, id: "your_tel", placeholder: "请输入常用手机号码", class: "input", value: @wx_user.try(:mobile)  %>
+                  <% end %>
+                </div>
+              </div>
+
+              <% if @shop_order.shop_branch.book_dinner_rule.is_send_captcha && @shop_order.book_dinner? %>
+              <div class="form-li">
+                <div class="li-l"><b>验证码：</b></div>
+                <div class="li-r">
+                  <%= f.number_field :captcha, class: "input js-input-captcha", placeholder: "请输入验证码" %>
+                </div>
+                <div class="li-r">
+                  <%= link_to "获取验证码", send_captcha_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id), class: "js-captcha btn btn-small btn-blue", method: :post, remote: true, onclick: "send_captcha();" %>
+                  <input type="hidden" id="hidden_answer">
+                </div>
+              </div>
+              <% end %>
+              <% if @shop_order.shop_branch.take_out_rule.is_send_captcha && @shop_order.take_out? %>
+              <div class="form-li">
+                <div class="li-l"><b>验证码：</b></div>
+                <div class="li-r">
+                  <%= f.number_field :captcha, class: "input js-input-captcha", placeholder: "请输入验证码" %>
+                </div>
+                <div class="li-r">
+                  <%= link_to "获取验证码", send_captcha_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id), class: "js-captcha btn btn-small btn-blue", method: :post, remote: true, onclick: "send_captcha();" %>
+                  <input type="hidden" id="hidden_answer">
+                </div>
+              </div>
+              <% end %>
+
+              <div class="form-li">
+                <div class="li-l"><%- if @shop_order.book_dinner? %><b>订餐时间：</b><% else %><b>送餐时间：</b><% end %></div>
+                <div class="li-r">
+
+                <% if ref_order %>
+                    <label class="mod-fa fa fa-caret-down">
+                      <select class="input" name="book_date" id="select_date">
+                        <option value="<%= ref_order.booking_at.strftime("%m-%d") %>">
+                          <%= ref_order.booking_at.strftime("%m-%d") %>
+                        </option>
+                      </select>
+                    </label>
+                    <label class="mod-fa fa fa-caret-down">
+                      <select class="input" name="book_time" id="select_time">
+                        <option value="<%= ref_order.booking_at.strftime("%m-%d") %>">
+                          <%= ref_order.booking_at.strftime("%H:%M") %>
+                        </option>
+                      </select>
+                    </label>
+                <% else %>
+
+                  <% if @shop_order.take_out? %>
+                     <% take_out_rule =  @shop_order.shop_branch.take_out_rule %>
+                      <label class="mod-fa fa fa-caret-down">
+                        <select class="input" name="book_date" id="select_date">
+                        <% if take_out_rule.include_time_now %>
+                        <option value="-1">立即送出</option>
+                        <% end %>
+                        <%= take_out_rule.generate_date_range.html_safe %>
+                        </select>
+                      </label>
+                      <label class="mod-fa fa fa-caret-down aaa" id="take_out_last" style="display: none">
+                        <select class="input" name="book_time" id="select_time">
+                        <option value="-2">选择时间</option>
+                      </select>
+                    </label>
+                  <% end %>
+
+                  <% if @shop_order.book_dinner? %>
+                    <% book_dinner_rule = @shop_order.shop_branch.book_dinner_rule %>
+                    <% if @shop_order.in_queue? || @shop_order.in_branch? %>
+                    <label class="mod-fa fa fa-caret-down">
+                      <select class="input" name="book_date" id="select_date">
+                        <option value="-1">立即送出</option>
+                      </select>
+                    </label>
+                    <% else %>
+                    <label class="mod-fa fa fa-caret-down">
+                      <select class="input" name="book_date" id="select_date">
+                        <option value="-2">选择日期</option>
+                        <%= book_dinner_rule.generate_date_range.html_safe %>
+                      </select>
+                    </label>
+                    <label class="mod-fa fa fa-caret-down bbb">
+                      <select class="input" name="book_time" id="select_time">
+                        <option value="-2">选择时间</option>
+                      </select>
+                    </label>
+                    <% end %>
+                  <% end %>
+                <% end %>
+                </div>
+              </div>
+              <script>
+              $(function(){
+                onchangeselectdate();
+                $("#select_date").change(onchangeselectdate);
+              });
+              <% if @shop_order.book_dinner? %>
+                <% rule =  @shop_order.shop_branch.book_dinner_rule %>
+              <% else %>
+                <% rule = @shop_order.shop_branch.take_out_rule %>
+              <% end %>
+              function render_full_order_time(){
+                $("#select_time").empty();
+                <% rule.generate_time_range(true).each do |t|%>
+                $('#select_time')
+                .append($("<option></option>")
+                  .attr("value","<%= t %>")
+                  .text("<%= t %>"));
+                <% end %>
+              }
+              function render_bigger_order_time(){
+                $("#select_time").empty();
+                <% rule.generate_time_range(false).each do |t|%>
+                $('#select_time')
+                .append($("<option></option>")
+                  .attr("value","<%= t %>")
+                  .text("<%= t %>"));
+                <% end %>
+              }
+              function onchangeselectdate(){
+
+                if($("#select_date").val() == -1 || $("#select_date").val() == -2){
+                  $("#select_time").empty();
+                  $("#take_out_last").hide();
+                  return;
+                }else{
+                  $("#take_out_last").show();
+                }
+
+                var selected_date = new Date($("#select_date").val());
+
+                if((selected_date.getTime() > new Date().getTime())){
+                  render_full_order_time();
+                }else{
+                  render_bigger_order_time();
+                }
+              }
+
+              </script>
+
+            <% if @shop_order.book_dinner? %>
+              <% if @shop_order.book_status == 3 %>
+                <div class="form-li">
+                  <div class="li-l">
+                    <b>门店地址：</b>
+                  </div>
+                  <div class="li-r">
+                    <span class="input"><%= @shop_order.shop_branch.name %>  <%= @shop_order.shop_branch.ditu_address %></span>
+                  </div>
+                </div>
+              <% end %>
+              <% if @shop_order.book_status == 2 %>
+              <a class="form-li">
+                <div class="li-l"><b>排号信息：</b></div>
+                <div class="li-r"><span><%= f.text_field :queue_no, placeholder: "请输入您的排号", class: "input" %></span></div>
+              </a>
+              <% end %>
+
+              <% if @shop_order.book_status == 1 %>
+              <a class="form-li">
+                <div class="li-l"><b>座位信息：</b></div>
+                <div class="li-r"><span><%= f.text_field :desk_no, placeholder: "请输入座位号", class: "input" %></span></div>
+              </a>
+              <% end %>
+            <% end %>
+
+              <% if @shop_order.take_out? %>
+              <a class="form-li last" href="javascript:void(0)">
+                <div class="li-l"><b>送餐地址：</b></div>
+                <div class="li-r">
+                  <%= f.text_area :address, id: "your_address", value: @shop_order.try(:wx_user).try(:address), rows: 1, class: "input input-textarea"  %>
+                </div>
+              </a>
+              <% end %>
+
+
+              <div class="form-li last">
+                <div class="li-l"><b>备注：</b></div>
+                <div class="li-r">
+                   <%= f.text_area :description, rows:5, class: "input" %>
+                </div>
+              </div>
+            </div>
+            <div class="ft">
+               <% if @shop_order.current_price_item > 0 %>
+                  <div class="food-shopcar active">
+                  <% else %>
+                  <div class="food-shopcar">
+                  <% end %>
+                <div class="hd">
+
+                  <% if @shop_order.current_price_item > 0 %>
+                  <p class="text-red">（ 价格不含 <%= @shop_order.current_price_number %> 道时价菜 ）</p>
+                  <% end %>
+                  <div class="shopcar-btn active">
+                    <a class="fl" id="shopcar-btn">
+                      <span class="mod-fa fa fa-caret-up">共：<i id="js-total-number"><%= @shop_order.total_qty %></i></span>
+                    </a>
+                    <span class="fl">
+                      <b id="js-total-price">￥<%= @shop_order.total_amount %></b>
+                    </span>
+
+                    <span class="mod-select fr">
+                      <% payment_settings = @shop_order.supplier.payment_settings.enabled.where('payment_settings.payment_type_id not in (10007,10008)') %>
+
+                      <select name="shop_order[pay_type]">
+                        <% if @shop_order.take_out? %>
+                          <% take_out_rule =  @shop_order.shop_branch.take_out_rule %>
+
+                          <% if take_out_rule.is_pay_cash %>
+                            <option value="0">现金支付</option>
+                          <% end %>
+
+                          <% if take_out_rule.is_pay_balance %>
+                            <option value="10007">余额支付</option>
+                          <% end %>
+
+                          <%- payment_settings.each do |payment_setting| %>
+                            <% payment_type = payment_setting.payment_type %>
+                            <option value="<%= payment_type.id %>"><%= payment_type.name %></option>
+                          <%- end if take_out_rule.is_pay_online %>
+                        <% end %>
+
+                        <% if @shop_order.book_dinner? %>
+                          <% book_dinner_rule =  @shop_order.shop_branch.book_dinner_rule %>
+
+                          <% if book_dinner_rule.is_pay_cash %>
+                            <option value="0">现金支付</option>
+                          <% end %>
+
+                          <% if book_dinner_rule.is_pay_balance %>
+                            <option value="10007">余额支付</option>
+                          <% end %>
+
+                          <%- payment_settings.each do |payment_setting| %>
+                            <% payment_type = payment_setting.payment_type %>
+                            <option value="<%= payment_type.id %>"><%= payment_type.name %></option>
+                          <%- end if book_dinner_rule.is_pay_online %>
+                        <% end %>
+                      </select>
+                    </span>
+                  </div>
+                  <div class="tcenter">
+                    <a class="btn btn-blue" href="/<%= session[:supplier_id] %>/shop_orders/<%= @shop_order.id %>/menu">继续点菜</a>
+                    <input type="submit" value="确认下单" class="btn confirm-btn">
+                  </div>
+                </div>
+                <div class="bd" id="shopcar-list">
+                  <dl>
+                    <dt class="list-title"></dt>
+                    <dd class="abc">
+                      <div class="wrap-scroll" id="shop_order_item_div" >
+                        <%= render :partial => 'shop_order_item', :collection => @shop_order.shop_order_items, :as => :shop_order_item %>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+
+  function render_footer_car(total_number, total_price, product_id, product_num){
+    $("#js-total-number").html(total_number);
+    $("#js-total-price").html( total_price);
+    $(".porduct-number-of-" + product_id).val(product_num);
+  }
+
+  function send_captcha(){
+    var tel =  $("#your_tel").val();
+    if(tel == ''){
+      alert('请输入手机号码');
+      e.stopPropagation();
+      return false;
+    }else if (!test_mobile_number($("#your_tel").val())){
+      alert("手机号码格式不正确");
+      e.stopPropagation();
+      return false;
+    }
+    else{
+      var origin_link = $(".js-captcha").attr("href");
+      $(".js-captcha").attr("href", origin_link+"?number="+tel);
+      return true;
+    }
+  }
+
+  $(function(){
+    $(".confirm-btn").click(function(e){
+      if ($("#shop_order_username").val() == ''){
+        alert("姓名不能为空!");
+        e.stopPropagation();
+        return false;
+      }else if ($("#your_tel").val() == ''){
+        alert("电话号码不能为空!");
+        e.stopPropagation();
+        return false;
+      }else if ($("#your_address") && $("#your_address").val() == ''){
+        alert("送餐地址不能为空!");
+        e.stopPropagation();
+        return false;
+      }else if (!test_mobile_number($("#your_tel").val())){
+        alert("手机号码格式不正确!");
+        e.stopPropagation();
+        return false;
+      }else if(check_captcha()){
+        alert("验证码不正确!");
+        e.stopPropagation();
+        return false;
+      }else{
+        if($("#shop_order_desk_no") && $("#shop_order_desk_no").val() == ''){
+          alert("座位号不能为空!");
+          e.stopPropagation();
+          return false;
+        }
+        if($("#shop_order_queue_no") && $("#shop_order_queue_no").val() == ''){
+          alert("排号不能为空!");
+          e.stopPropagation();
+          return false;
+        }
+        // alert($("#select_time").val());
+        if($("#select_date").val() == -2){
+            alert("请选择订餐日期");
+          return false;
+        }
+        if($("#select_time").val() == -2 || $("#select_time").val() =='' || $("#select_time").val() == null ){
+          if ($("#select_date").val()  != -1){
+             alert("请选择订餐时间");
+             return false;
+           }
+        }
+
+        if (confirm("确认下单吗?")){
+          $("form").submit();
+          return true;
+        }
+        e.stopPropagation();
+        return false;
+      }
+    });
+      $("#shopcar-btn, #shopcar-list dt").click(function(){
+            var height = $(window).height()-115;
+            $("#shopcar-list").slideToggle(function(){
+                var flag = $(this).css("display");
+                if(flag == "block"){
+                    $(".html").css({"overflow":"hidden","height":"100%"});
+                    $(".abc").slimScroll({
+                        height: height
+                    });
+                }else{
+                    $(".html").removeAttr("style");
+                }
+            });
+
+            $("#shopcar-btn").addClass("active");
+        });
+    // focusForm("header",".food-shopcar",function(){
+    //   $("header").css({"top":"-46px"});
+    //   $(".food-shopcar").css({"margin-bottom":"-46px"});
+    // },function(){
+    //   $("header").removeAttr("style");
+    //   $(".food-shopcar").removeAttr("style");
+    // });
+
+    $(".input-textarea").on("focus",function(){
+      $(document).on("keyup",function(){
+        autoHeight();
+      })
+    });
+
+
+    $("body").on("keyup", '.js-number-item-change', function(){
+      var hl = $(this).parent().find(".hidden-link");
+      var origin_hl = hl.attr("href");
+      hl.attr("href", origin_hl+"?number="+$(this).val());
+      hl.click();
+      hl.attr("href", origin_hl);
+    });
+
+    autoHeight();
+
+    //load time
+    <% unless ref_order %>
+    var selected_date = $("#select_date").val();
+    if(selected_date == -1 || selected_date == -2){
+
+    }else{
+      selected_date = new Date($(this).val());
+      if((selected_date.getTime() > new Date().getTime())){
+        render_full_order_time();
+      }else{
+        render_bigger_order_time();
+      }
+    }
+    if ($("#select_time").find("option").length == 0){
+      $("#select_time").append("<option value='-2'>选择时间</option>");
+    }
+    <% end %>
+  });
+
+     function autoHeight(){
+        var $this = $(".input-textarea"),
+            $height;
+        $height = $this.height()+$this.scrollTop();
+        $this.height($height);
+    }
+
+
+  function check_captcha(){ // true means wrong
+    if($(".js-input-captcha").length == 0){
+      return false;
+    }else{
+      if($(".js-input-captcha").val() == $("#hidden_answer").val()){
+        if($(".js-input-captcha").val()  == ''){
+          return true
+        }else{
+        return false;
+      }
+      }
+    }
+    return true;
+  }
+  // 手机号码正则表达式
+  function test_mobile_number(mobile_number) {
+    if (mobile_number == undefined) {
+      return false;
+    }
+    if (winwemedia_validators.mobile_reg.test(mobile_number)){
+      return true;
+    };
+    return false;
+  }
+</script>

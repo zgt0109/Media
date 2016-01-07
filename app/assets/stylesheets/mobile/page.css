@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('http://vcl-pictures.qiniucdn.com/Fj5j_Js95FgPHzvsBjFDb3VbgPFn?v=4.0.3');
+  src: url('http://vcl-pictures.qiniucdn.com/Fj5j_Js95FgPHzvsBjFDb3VbgPFn?#iefix&v=4.0.3') format('embedded-opentype'), url('http://vcl-pictures.qiniucdn.com/FlbOE-ccIVDYG8lylAWEkVGBvWCB?v=4.0.3') format('woff'), url('http://vcl-pictures.qiniucdn.com/FpCIFDsZl5d5shFs7zi2YfctmC4Z?v=4.0.3') format('truetype'), url('http://vcl-pictures.qiniucdn.com/Fia7HF7xAKHNcZI_HV3Cn8eX70Y5?v=4.0.3#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.fa {
+  display: inline-block;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.fa-arrow-up:before {
+  content: "\f062";
+}
+* {margin: 0; padding: 0; }
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+html, body {height: 100%; }
+body{ font-size:12px;line-height:1.5;background:#efefef;}
+body.pop-cont{ background:#fff; padding:20px;}
+body:before {content: ""; height: 100%; float: left; width: 0; margin-top: -32767px; }
+ul, li, dd {list-style: none; padding: 0; margin: 0; }
+h2,
+h3{font-weight: normal;line-height: 22px; margin: 0 0 20px 0;}
+h2{ font-size: 18px; color: #0083A1;}
+h3{ font-size:18px;}
+a{color:#999;text-decoration:none;}
+.main{min-height:100%;padding:0 0 60px 0;margin:0 0 -60px 0;}
+.wrap{max-width:640px;margin:0 auto;}
+.cf{*zoom:1;}
+.cf:after{display:block;width:0;height:0;visibility:hidden;clear:both;content:"";}
+.lay-list{padding:10px 15px;border:1px solid #d1d1d1;border-radius:5px;background:#fff;box-shadow:0 0 10px 2px #e2e2e2;}
+.f-blue{color:#4b7db4;}
+.f-gray{color:#999;}
+.f-red{color:#ff4f4f;}
+/*user*/
+.user-img{width:50px;height:50px;float:left;}
+.user-info{margin-left:20px;float:left;}
+/*list-main*/
+.list-main{margin-top:10px;max-width:600px;text-align:center;}
+.list-main img{max-width:100%;}
+/*list-foot*/
+.list-foot{margin-top:10px;text-align:center;}
+.praise{display:inline-block;font-size:16px;padding:10px;line-height:20px;border:1px solid #d9d9d9;border-radius:20px;text-decoration:none;background:-webkit-linear-gradient(#ffffff,#eeeeee);background:-moz-linear-gradient(#ffffff,#eeeeee);background:-ms-linear-gradient(#ffffff,#eeeeee);background:linear-gradient(#ffffff,#eeeeee);}
+.praise i{display:inline-block;width:20px;height:17px;margin:0 10px 0 0;vertical-align:middle;background:url(/assets/mobile/share_photo/ico.png) 0 0 no-repeat;}
+.list-foot em{font-style:normal;font-size:16px;}
+.list-foot span{font-size:14px;}
+/*comment*/
+.comment{padding:0 15px 15px;width:93%;}
+.comment-list{display:none;}
+.comment-t h1{height:30px;line-height:30px;border-bottom:1px solid #d9d9d9;}
+.comment-list li{padding:5px 10px;border-bottom:1px solid #d9d9d9;}
+.comment-list .name{float:left;}
+.comment-list .time{float:right;}
+.comment-list p{margin:5px 0;}
+.comment-btn{font-size:14px;margin-top:10px;border:1px solid #d9d9d9;border-radius:20px;text-align:center;}
+.comment-btn a{display:block;float:left;width:50%;padding:5px 0;}
+.comment-btn a:first-child{border-right:1px solid #d9d9d9;}
+.comment-btn em{font-style:normal;}
+.ico-1,.ico-2{display:inline-block;vertical-align:middle;width:18px;height:18px;background:url(/assets/mobile/share_photo/ico.png) no-repeat;}
+.ico-1{background-position:0 -50px;}
+.ico-2{background-position:0 -100px;}
+/*comment add*/
+.comment-add{display:none;}
+.text{width:100%;height:80px;padding:3px 5px;margin-top:10px;border:1px solid #e2e2e2;border-radius:5px;box-shadow:0 2px 30px #EEE inset;resize:none;}
+.input{margin-top:10px;padding:5px;border:1px solid #e2e2e2;border-radius:5px;box-shadow:0 2px 30px #EEE inset;}
+.btn{font-size:16px;padding:5px 15px;border:1px solid #e2e2e2;border-radius:5px;box-shadow:0 2px 30px #EEE inset;white-space:nowrap;}
+/*footer*/
+footer{margin-top:10px;font-size:14px;text-align:center;}
+/*sidebar*/
+.top{margin-top:30px;padding:5px 0;text-align:center;color:#07a0d1;cursor:pointer;border-bottom:solid 2px #1bb3e4;background:#fff;box-shadow:0 0 10px 2px #e2e2e2;}
+.top i{font-size:16px;margin-right:10px;}

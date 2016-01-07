@@ -1,0 +1,122 @@
+# == Schema Information
+#
+# Table name: shops
+#
+#  id            :integer          not null, primary key
+#  supplier_id   :integer          not null
+#  wx_mp_user_id :integer          not null
+#  name          :string(255)      not null
+#  logo          :string(255)
+#  status        :integer          default(1), not null
+#  description   :text
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  shop_type     :integer          default(0), not null
+#
+
+class Shop < ActiveRecord::Base
+  mount_uploader :logo, ShopUploader
+  # attr_accessible :description, :name, :status
+
+  enum_attr :shop_type, :in => [['micro_store', 1, '微门店'],['book_dinner', 2, '订餐订座'],['take_out', 3, '外卖']]
+
+  validates :name, presence: true
+
+  belongs_to :supplier
+  belongs_to :wx_mp_user
+  has_many :shop_branches, dependent: :destroy
+  has_many :shop_categories, dependent: :destroy
+  has_many :shop_products, dependent: :destroy
+  has_many :shop_menus, dependent: :destroy
+  has_many :shop_order_reports, dependent: :destroy
+  has_many :activities, as: :activityable, order: :activity_type_id, dependent: :destroy
+  has_one :micro_shop_activity, class_name: 'Activity', as: :activityable, conditions: {activity_type_id: ActivityType::MICRO_STORE}
+  # has_one :book_dinner_activity, through: :activityable, source: :activityable, conditions: { activity_type_id: 6 }
+  accepts_nested_attributes_for :shop_categories, reject_if: proc { |attributes| attributes['name'] == '' }
+
+  after_create :create_default_activities
+
+  def logo_url
+    qiniu_image_url("logo/#{logo}") if logo.present?
+  end
+
+  def check_activities_exist?
+    return activities.where("activity_type_id in (?)", [6,7]).count > 0 if book_dinner?
+    return activities.where("activity_type_id = ?", 9).count > 0 if take_out?
+  end
+
+  def create_default_activities
+    now = Time.now
+
+    new_activities = []
+
+    if book_dinner?
+      new_activities = [
+        {
+          supplier_id: supplier_id,
+          wx_mp_user_id: wx_mp_user_id,
+          activity_type_id: 6,
+          activityable: self,
+          status: 1,
+          name: "微订餐",
+          keyword: "微订餐",
+          qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+          ready_at: now+1.seconds,
+          start_at: now+1.seconds,
+          end_at: now+100.years
+        },
+        {
+          supplier_id: supplier_id,
+          wx_mp_user_id: wx_mp_user_id,
+          activity_type_id: 7,
+          activityable: self,
+          status: 1,
+          name: "微订座",
+          keyword: "微订座",
+          qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+          ready_at: now+2.seconds,
+          start_at: now+2.seconds,
+          end_at: now+100.years
+        }
+      ]
+
+      update_attributes(shop_type: BOOK_DINNER)
+    elsif take_out?
+      new_activities = [
+        {
+          supplier_id: supplier_id,
+          wx_mp_user_id: wx_mp_user_id,
+          activity_type_id: 9,
+          activityable: self,
+          status: 1,
+          name: "微外卖",
+          keyword: "微外卖",
+          qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+          ready_at: now+1.seconds,
+          start_at: now+1.seconds,
+          end_at: now+100.years
+        }
+      ]
+
+      update_attributes(shop_type: TAKE_OUT)
+    end
+
+    new_activities << {
+      supplier_id: supplier_id,
+      wx_mp_user_id: wx_mp_user_id,
+      activity_type_id: 11,
+      activityable: self,
+      status: 1,
+      name: "微门店",
+      keyword: "微门店",
+      qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+      ready_at: now,
+      start_at: now,
+      end_at: now+100.years
+    }
+
+    new_activities.each do |attrs|
+      Activity.where(supplier_id: attrs[:supplier_id], wx_mp_user_id: attrs[:wx_mp_user_id], activity_type_id: attrs[:activity_type_id]).first_or_create(attrs)
+    end
+  end
+end

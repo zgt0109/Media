@@ -1,0 +1,14 @@
+/*wallet settings*/
+.fr{ float:right;}
+.block{ display:block;}
+.inline{ display:inline;}
+.in_b {display:inline-block;}
+.in_b{ *display:inline;}
+.mt10{ margin-top:10px;}
+.mt20{ margin-top:20px;}
+.ml20{ margin-left:20px;}
+.mr20{ margin-right:20px;}
+.pointer{ cursor: pointer;}
+.message{ height: 200px; background-color: #fff;}
+.form_wallet .control-label{ padding-top:4px;}
+.form_wallet .form-group{ margin-right: 0; margin-left: 0;}

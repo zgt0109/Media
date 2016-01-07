@@ -1,0 +1,35 @@
+<div class="pop pop-list">
+  <div class="pop-bg"></div>
+  <div class="pop-bd">
+    <div class="hd"><span>取消</span></div>
+    <div class="bd">
+      <% @booking_categories.each do |booking_category|%>
+          <% next if booking_category.products.count == 0 %>
+          <dl class="active">
+            <dt>
+              <%= link_to booking_category.has_children? ? 'javascript:void(0);' : mobile_booking_category_url(supplier_id: @supplier.id, id: booking_category.id), style: 'width: 100%; color: #888888;' do %>
+                  <%= booking_category.name %>
+                  <i class="arrow"></i>
+              <% end %>
+            </dt>
+            <% booking_category.children.order(:sort).each do |sub_category|%>
+                <% next if sub_category.products.count == 0 %>
+                <dd>
+                  <% if sub_category.has_children? %>
+                      <span><i></i><%= sub_category.name %></span>
+                      <p>
+                        <% sub_category.children.order(:sort).each do |category|%>
+                            <% next if category.products.count == 0 %>
+                            <%= link_to mobile_booking_category_url(supplier_id: @supplier.id, id: category.id) do %><i></i><%= category.name %><% end %>
+                        <% end %>
+                      </p>
+                  <% else %>
+                      <%= link_to mobile_booking_category_url(supplier_id: @supplier.id, id: sub_category.id) do %><i></i><%= sub_category.name %><% end %>
+                  <% end %>
+                </dd>
+            <% end if booking_category.has_children? %>
+          </dl>
+      <% end %>
+    </div>
+  </div>
+</div>

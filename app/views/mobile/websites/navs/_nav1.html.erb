@@ -1,0 +1,28 @@
+<% content_for :nav_section do %>
+  <section class="mod-navLine navLine-1">
+    <div class="navLine-menu" id="navLine-menu">
+      <ul>
+        <% website_menus.each_with_index do |menu, index| %>
+          <%if index % 4 == 0%><li><%end%>
+            <%= link_to menu_url(menu) do %>
+              <% if menu.pic? %>
+                <i><%= image_tag menu.pic.thumb %></i>
+              <% else %>
+                <i class="fa <%= menu.font_icon %>"></i>
+              <% end %>
+              <small><%= menu.title%></small>
+            <% end %>
+            <%if index % 4 == 3%></li><%end%>
+        <% end %>
+      </ul>
+    </div>
+    <a class="navLine-btn navLine-prev" onclick="navLineSwipe.prev()"></a>
+    <a class="navLine-btn navLine-next" onclick="navLineSwipe.next()"></a>
+  </section>
+
+<% end %>
+
+<% content_for :document_ready_js do %>
+  $("body").addClass("body-navLine-bottom");
+  navLineSwipe=divSwipe("navLine-menu");
+<% end %>

@@ -1,0 +1,58 @@
+.box{overflow: hidden;padding: 20px 10px;}
+.box,
+.box a{color:#fff;}
+.index{ width: 100%;}
+.index dt{color: #394165; padding: 5px 2%; line-height: 20px; font-size: 12px;}
+.index dt,
+.index dd{ width: 100%; overflow: hidden;}
+.index .index-color-0 a:nth-of-type(1){background: #f3c16f;}
+.index .index-color-0 a:nth-of-type(2){background: #ebb85a;}
+.index .index-color-0 a:nth-of-type(3){background: #d8a148;}
+.index .index-color-1 a:nth-of-type(1){background: #40bfcf;}
+.index .index-color-1 a:nth-of-type(2){background: #00b4cb;}
+.index .index-color-1 a:nth-of-type(3){background: #0195a9;}
+.index .index-color-2 a:nth-of-type(1){background: #b8da85;}
+.index .index-color-2 a:nth-of-type(2){background: #a3d05e;}
+.index .index-color-2 a:nth-of-type(3){background: #86b343;}
+.index .index-color-3 a:nth-of-type(1){background: #84bbce;}
+.index .index-color-3 a:nth-of-type(2){background: #6a9fb1;}
+.index .index-color-3 a:nth-of-type(3){background: #5295ac;}
+.index .index-color-4 a:nth-of-type(1){background: #fab3b3;}
+.index .index-color-4 a:nth-of-type(2){background: #fb9d9e;}
+.index .index-color-4 a:nth-of-type(3){background: #ff8788;}
+.index .index-color-5 a:nth-of-type(1){background: #8276d6;}
+.index .index-color-5 a:nth-of-type(2){background: #655fb7;}
+.index .index-color-5 a:nth-of-type(3){background: #5a54b9;}
+.index dd{ text-align: center;}
+.mod-index{padding:4% 0; width:32%; margin:0 0 4px 0; display: inline-block;text-align: center;background: #ccc;vertical-align: text-top;}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; text-align: center; overflow: hidden;}
+.mod-index small{ font-size: 14px; line-height: 30px; padding: 0 5px; display: block; height: 30px;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index i{height: 40px; line-height:40px; overflow: hidden;text-align: center; display: block;}
+.mod-index img{ max-height: 100%; vertical-align: top;}
+.mod-index .fa{ font-size: 40px;}
+.index-1{ width: 98.4%;}
+.index-2{ width: 48.5%;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+    .index-1{ width: 97.2%;}
+    .index-2{ width: 48.2%;}
+}
+@media only screen and (max-width:1080px){
+    .index-1{ width: 98%;}
+    .index-2{ width: 48.5%;}
+}
+@media only screen and (min-width:1224px){
+    .index-1{ width: 97%;}
+    .index-2{ width: 48.2%;}
+}
+@media only screen and (max-width:320px){
+    .index-1{ width: 98.4%;}
+    .index-2{ width: 48.8%;}
+}

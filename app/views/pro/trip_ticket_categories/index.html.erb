@@ -1,0 +1,103 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微旅游', trips_url %></li>
+        <li><%= link_to '门票分类', trip_ticket_categories_url %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <li><%= link_to '门票设置', ticket_trips_url %></li>
+          <li class="active"><%= link_to '门票分类', trip_ticket_categories_url %></li>
+        </ul>
+
+        <div class="row" id="class-tickets" style="">
+          <div class="col-sm-12">
+            <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+              <div id="menu" class="widget-box transparent">
+                <div class="widget-header">
+                  <div style="" id="new_btn" class="widget-toolbar no-border">
+                    <%= link_to new_trip_ticket_category_url(parent_id: 0), data: {remote: true, height: 300, title: '新增菜单'}, class: 'btn btn-info btn-sm menu-category click-btn' do %><i class="icon-plus"></i>   新增分类<% end %>
+                  </div>
+                </div>
+                <div class="widget-body">
+                  <div class="tree tree-selectable" id="tree1">
+                    <%= render partial: "sub_category", collection: @categories.root.order('position'), as: :category, locals: {level: 1} %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="form" class="col-md-6 col-lg-6 margin-top-10 side-form click-mes" style="display: ;">
+            <!---->
+            <!---->
+            </div>
+          
+          </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    $(function(){
+      
+      $('#tree1').on("click", ".fa-plus-square, .fa-minus-square", function () {
+        $(this).closest('.tree-folder').find('.tree-folder-content').eq(0).toggle();
+        if($(this).hasClass('fa-plus-square')){
+          $(this).removeClass('fa-plus-square').addClass('fa-minus-square');
+        }
+        else{
+          $(this).removeClass('fa-minus-square').addClass('fa-plus-square');                
+        }
+      });
+
+      $('#tree1').on("click",".tree-up",function(){
+                var self=$(this),
+                    p = self.closest('.tree-li');
+                if(p.prev().length > 0){
+                    p.prev().before(p);
+                    $.ajax({
+                        type: "POST",
+                        url: "/trip_ticket_categories/update_position?type=up&id=" + self.closest('.tree-tools').attr('data-id'),
+                        success: function(data) {
+                            showTip("success","操作成功");
+                            return false;
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+            $('#tree1').on("click",".tree-down",function(){
+                var self = $(this),
+                    p = self.closest('.tree-li');
+                if(p.next().length > 0){
+                    p.next().after(p);
+                    $.ajax({
+                        type: "POST",
+                        url: "/trip_ticket_categories/update_position?type=down&id=" + self.closest('.tree-tools').attr('data-id'),
+                        success: function(data) {
+                          showTip("success","操作成功");
+                          return false;
+                        },
+                        error: function() {
+                          showTip("warning","操作失败");
+                          return false;
+                        }
+                    });
+                }
+            });
+
+
+    });
+  </script>
+<% end %>

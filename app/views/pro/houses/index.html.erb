@@ -1,0 +1,68 @@
+<% content_for :sidebar do %>
+<%= render 'sidebar_house' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <%= render 'topbar_house' %>
+<% end %>
+
+<div class="p-note">
+  <p>提示：1、以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接预约看房页面；</p>
+  <p>2、以下“<em style="color: #ff0000; padding: 0 3px;"> * </em>”均为必填项；</p>
+</div>
+
+<div class="box-des fl">
+  <div class="des-l leftbar" style="width:280px">
+    <div class="des-view" style="width:270px;">
+      <b class="title" id="preview_title"><%= @house.activity.try(:name) || '标题' %></b>
+      <span><%= Date.today %></span>
+      <div cover="cover box-img" class="img">
+        <%= image_tag ((@house && @house.activity && @house.activity.pic?) ? @house.activity.pic.presence : @house.activity.default_pic_url), width: '258', id: 'preview_pic' %>
+      </div>
+      <p id="preview_summary"><%= @house.activity.try(:summary) %></p>
+    </div>
+  </div>
+  <div class="des-r rightbar" style="width:460px;">
+    <%= form_for @house, validate: true do |house|%>
+      <div class="box-form form-row fl">
+        <%= house.fields_for :activity do |f| %>
+          <div class="p">
+            <span>回复关键词<em>*</em><span class="fgray">（用于公众账号中触发预约看房，不能同其他关键字重复）</span></span>
+            <%= f.text_field :keyword, value: @house.new_record? ? '预约看房' : @house.activity.keyword, class: 'input-text', style: "20%", validate: true, placeholder: ' 请输入回复关键词', id: 'activity_keyword' %>
+          </div>
+
+          <div class="p">
+            <span>微信消息标题<em>*</em><span class="fgray">（发送关键词后返回的微信消息标题，不能超过64个字）</span></span>
+            <%= f.text_field :name, validate: true, class: 'input-text', style: "20%", placeholder: ' 请输入微信消息标题', id: 'activity_name' %>
+          </div>
+
+          <div class="p">
+            <span>微信消息图片<span class="fgray">（发送关键词后返回的微信消息图片）</span></span>
+            <div class="margin">
+              <div class="box-file">
+                  <input type="file">
+                  <a class="btn btn-big"><span class='upload_pic' style="float:none;">上传照片</span>
+                    <%= f.file_field :pic, rel: 'preview_pic', data: {width: 720, height: 400}, id: 'activity_pic', class: 'img_preview' %>
+                  </a>
+              </div>
+              <span class="p-file"><span class="fgray">图片建议尺寸：720像素*400像素 </span> </span>
+            </div>
+          </div>
+
+          <div class="p">
+            <span>微信消息摘要<span class="fgray">（发送关键词后返回的微信消息摘要，不能超过255个字）</span> </span>
+            <%= f.text_area :summary, class: '', maxlength: 120, style:"height:100px;", placeholder: ' 请输入微信消息摘要', id: 'activity_summary' %>
+          </div>
+        <% end %>
+        <input type="submit" value="保存" class="btn btn-small form-submit btn-orange" />
+        <input value="取消" class="btn btn-small" onclick="window.location.href = window.location.href;" style="margin-left:10px;" />
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+$(function() {
+  $('.error-message').remove();
+})
+</script>

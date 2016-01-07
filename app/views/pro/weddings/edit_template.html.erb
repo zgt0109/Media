@@ -1,0 +1,44 @@
+<% form_for @wedding, :url => update_template_wedding_path do |form| %>
+    <div class="box-form form-row">
+      <div class="p">
+         <% Wedding.template_id_options.each_with_index do |template,index| %>
+             <label class="s-template">
+               <%= image_tag("/assets/weddings/#{template[1]}.png".html_safe, :size => "320x500") %>
+               <%= form.radio_button :template_id, template[1] %>
+             </label>
+        <% end %>
+      </div>
+      <%= form.submit "保存", :class => 'btn btn-small form-submit btn-orange'  %>
+    </div>
+<% end %>
+
+
+
+
+
+<%= form_for @wedding, :url => update_template_wedding_path, html: {class: "form-horizontal"} do |f| %>
+  <div class="modal-body">
+    <div class="row template-list">
+      <ul class="ace-thumbnails">
+        <% Wedding.template_id_options.each_with_index do |template,index| %>
+					<li style="<%= cycle '', 'margin-right: 0; margin-left: 20px; width: 305px;' %>" class="<%= 'active' if @wedding.template_id == index+1 %>">
+            <a href="javascript:;" class="">
+              <%= image_tag("/assets/weddings/#{template[1]}.png".html_safe, alt: '') %>
+							<span><%= "模板#{index+1}" %></span>
+              <%= f.radio_button :template_id, template[1] %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+
+
+<% content_for :custom_js do %>
+<% end %>

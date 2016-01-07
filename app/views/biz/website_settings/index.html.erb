@@ -1,0 +1,321 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微官网', websites_path %></li>
+        <li><%= link_to '选择模版', website_settings_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+
+    <div class="page-content">
+
+
+      <div class="row">
+        <div class=" col-sm-12">
+          <div class="tabbable">
+
+            <ul class="nav nav-tabs padding-26 tab-size-bigger ">
+              <li class="active"><a data-toggle="tab" href="#template-tab-1" template-type="1">首页模板</a></li>
+              <li><a data-toggle="tab" href="#template-tab-2" template-type="2">列表页模板</a></li>
+              <li><a data-toggle="tab" href="#template-tab-3" template-type="3">详情页模板</a></li>
+              <li><a data-toggle="tab" href="#template-tab-4" template-type="4">导航栏模板</a></li>
+              <li><a data-toggle="tab" href="#template-tab-5" template-type="5">快捷菜单模板</a></li>
+
+            </ul>
+            <div class="tab-content no-border padding-26">
+
+              <div id="template-tab-1" class="tab-pane fade active in">
+                <div class=" col-sm-12 row">
+                  <!--<div class="alert alert-block alert-info">-->
+                    <!--<strong class="pull-left">提示：</strong>-->
+                    <!--<ul class="vwebsiteHeadAlert">-->
+                      <!--<li> 1、微官网的首页模板确定了微官网首页的样式，点击图片选择相关微官网的首页模板；</li>-->
+                      <!--<li> 2、首页模版6只有全屏幻灯片，没有其他元素，建议搭配导航栏模版1, 8, 17, 18, 21, 23, 24 之一；</li>-->
+                      <!--<li> 3、选择微官网首页模板以后，请仔细阅读所选模板的样式提示，可以帮助你做出更加漂亮的微官网。</li>-->
+                    <!--</ul>-->
+                  <!--</div>-->
+                </div>
+                <div class="col-sm-12 no-padding-left template-type">
+                  <a href="javascript:;" tag_id="-1" class="orange active">精选</a>
+                  <a href="javascript:;" tag_id="0" class="">全部</a>
+                  <% @website_tags.each do |tag| %>
+                      <%= link_to tag.name, "javascript:;", tag_id: tag.id %>
+                  <% end %>
+                </div>
+                <%= render 'templates', {templates: @website_templates.where(template_type: 1), template_type: 1, column: 'home_template_id'} %>
+              </div>
+
+              <div id="template-tab-2" class="tab-pane fade ">
+                <div class=" col-sm-12 row">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li> 1、微官网的列表页是指微官网中非首页，但是有下级栏目的页面，列表页模板确定了列表页的样式；</li>
+                      <li> 2、通过点击图片，选择相关微官网的列表页模板；</li>
+                      <li> 3、选择微官网列表页模板以后，请仔细阅读所选模板的样式提示，可以帮助你做出更加漂亮的微官网。</li>
+                    </ul>
+                  </div>
+                </div>
+                <%= render 'templates', {templates: @website_templates.where(template_type: 2), template_type: 2, column: 'list_template_id' } %>
+              </div>
+
+              <div id="template-tab-3" class="tab-pane fade ">
+                <div class=" col-sm-12 row">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li> 1、微官网的详情页是指微官网中终端的页面，没有下级栏目，列表页模板确定了列表页的样式；</li>
+                      <li> 2、通过点击图片，选择相关微官网的详情页模板；</li>
+                      <li> 3、选择微官网详情页模板以后，请仔细阅读所选模板的样式提示，可以帮助你做出更加漂亮的微官网。</li>
+                    </ul>
+                  </div>
+                </div>
+                <%= render 'templates', {templates: @website_templates.where(template_type: 3), template_type: 3, column: 'detail_template_id' } %>
+              </div>
+
+              <div id="template-tab-4" class="tab-pane fade ">
+                <div class=" col-sm-12 row">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li> 1、导航栏为微官网上的导航内容（非微信聊天窗口的底部自定义菜单），微官网首页在不同的首页模板下使用导航栏效果不同，建议结合手机来确定最终效果；</li>
+                      <li> 2、请分别为首页和内页（列表页和详情页）选择导航栏模板；</li>
+                      <li> 3、点击选择模板后，请点击保存按钮确认；</li>
+                    </ul>
+                  </div>
+                </div>
+                <%= render 'nav_template' %>
+              </div>
+
+              <div id="template-tab-5" class="tab-pane fade ">
+                <div class=" col-sm-12 row">
+                  <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                      <li> 1、并非所有模板都支持快捷菜单；</li>
+                      <li> 2、微官网的快捷菜单，主要用于支持快捷按钮的设定，快捷菜单功能在&lt;快捷菜单&gt;页面设定内容；</li>
+                      <li> 3、通过点击图片，选择相关微官网的快捷菜单模板；</li>
+                      <li> 4、选择微官网快捷菜单模板以后，请仔细阅读所选模板的样式提示，可以帮助你做出更加漂亮的微官网。</li>
+                    </ul>
+                  </div>
+                </div>
+                <%= render 'templates', {templates: @website_templates.where(template_type: 5), template_type: 5, column: 'menu_template_id' } %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- /.row -->
+      </div>
+      <!-- /.page-content -->
+    </div>
+  </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        function template_sorts(template){
+            var arr = [],li_attrs= {}, ul = template.closest('ul');
+            template.closest('ul').find('li').each(function(){
+                if($(this).attr('template_id') != template.attr('template_id')){
+                    arr.push($(this).attr('template_id'));
+                    li_attrs[$(this).attr('template_id')] = $(this);
+                    li_attrs[$(this).attr('template_id') + '_html'] = $(this).html();
+                }
+            });
+            arr.sort(function(a, b){return b - a});
+            arr.unshift(template.attr('template_id'));
+            li_attrs[template.attr('template_id')] = template;
+            li_attrs[template.attr('template_id') + '_html'] = template.html();
+            ul.html('');
+            $.each(arr, function(i, e){
+                ul.append(li_attrs[e]);
+            });
+            $.each(ul.find('li'), function(i, e){
+                $(e).html(li_attrs[$(e).attr('template_id') + '_html']);
+            });
+            $('#scrollTop').click();
+        }
+
+        function set_info(element){
+            var html = '<div class="modal fade modal-text" id="popup-confirm" style="display: block;">' +
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
+                    '<h4 class="modal-title">系统提示</h4>' +
+                    '</div><form role="form" action="" method="">';
+
+            html += '<div class="modal-body">' +
+                    '<p class="text-center">确认移除导航栏？</p></div>' +
+                    '<div class="clearfix"></div>';
+
+            html += '<div class="modal-footer">';
+            html += '<a href="javascript:;" class="btn btn-sm btn-primary" id="pop-confrim-submit">确定</a>';
+            html += '<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">取消</button>';
+            html += '</div></form>';
+            html += '</div>';
+
+            html += '</div></div></div>';
+            $('#popup-confirm').remove();
+            $("body").append(html);
+            $('#popup-confirm').modal('show');
+            $('#pop-confrim-submit').click(function(event) {
+                remove_nav_template(element);
+                close_modal();
+            });
+        }
+
+        function close_modal(){
+            var dc = $(parent.document),
+                    $modal = dc.find('.modal'),
+                    $modalBg = dc.find(".modal-backdrop")
+            $modal.attr('aria-hidden', true).removeClass('in');
+            $modalBg.remove();
+            $(parent.document.body).removeClass('modal-open');
+            $modal.remove();
+        }
+
+        function remove_nav_template(element){
+            var nav_type = element.attr('nav_type'),
+                self = element;
+            $.post('/website_settings/update_update_nav_template', {nav_type: nav_type, nav_template_id: 0}, function(result) {
+                if (result.errors.length ==0){
+                    if(self.closest('.col-md-6').find('.no-template').length > 0){
+                        self.closest('.col-md-6').find('.no-template').html('请选择模板');
+                    }
+                    self.parent().find('.setting').show();
+                    showTip('success',"操作成功");
+                    return false;
+                }else{
+                    showTip('warning',"操作失败");
+                    return false;
+                }
+            });
+        }
+
+        function select_template(li_template){
+            $.post("/website_settings/set_template_id", {website_setting_id: <%= @website_setting.id %>, template_id: li_template.attr("template_id"), template_type: li_template.attr("template_type")}, function(result){
+                $("li[template_type=" + li_template.attr("template_type") + "]").removeClass("active");
+                showTip('success',"设置成功");
+                li_template.addClass("active");
+                template_sorts(li_template);
+            })
+        }
+
+        $(function(){
+
+            $(".tab-content").delegate("li[template_id]", "click", function(){
+                if($(this).attr('template_type') != '1'){
+                    select_template($(this));
+                    return false;
+                }
+                var li_template = $(this), o_template = $(this).closest('ul').find('li.active');
+                var html = '<div class="modal fade modal-text" id="popup-confirm" style="display: block;">' +
+                        '<div class="modal-dialog">' +
+                        '<div class="modal-content">' +
+                        '<div class="modal-header">' +
+                        '<button type="button" class="close pop-confrim-cancel" data-dismiss="modal" aria-hidden="true">×</button>' +
+                        '<h4 class="modal-title">确认要使用 '+ li_template.attr('name') +' 号模板么？</h4>' +
+                        '</div><form role="form" action="" method="">';
+
+                html += '<form>' +
+                        '<div class="modal-body">'+
+                        '<div>'+
+                        '<table class="table  table-bordered table-hover dataTable ">'+
+                        '<tr>'+
+                        '<th>背景图</th>'+
+                        '<td><span class="blue">'+ li_template.attr('support_bg_image_name') +'</span></td>'+
+                        '<th>幻灯片</th>'+
+                        '<td><span class="blue">'+ li_template.attr('support_slide_name') +'</span></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                        '<th>微官网Logo</th>'+
+                        '<td><span class="blue">'+ li_template.attr('support_ws_logo_name') +'</span></td>'+
+                        '<th>站点标题图</th>'+
+                        '<td><span class="blue">'+ li_template.attr('support_wm_pic_name') +'</span></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                        '<th>背景音乐</th>'+
+                        '<td><span class="blue">'+ li_template.attr('support_bg_music_name') +'</span></td>'+
+                        '<th>模板类型</th>'+
+                        '<td><span class="blue">'+ li_template.attr('website_tag_name') +'</span></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                        '<th>图标形状</th>'+
+                        '<td><span class="blue">'+ li_template.attr('icon_shape_name') +'</span></td>'+
+                        '<th>滚动方式</th>'+
+                        '<td><span class="blue">'+ li_template.attr('scroll_way_name') +'</span></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                        '<th>说  明</th>'+
+                        '<td colspan="3"><span class="blue">'+ li_template.attr('description') +'</span></td>'+
+                        '</tr>'+
+                        '</table>'+
+                        '</div>'+
+                        '</div>'+
+                        '</form>';
+
+                html += '<div class="modal-footer">';
+                html += '<a href="javascript:;" class="btn btn-sm btn-primary" id="pop-confrim-submit">确定</a>';
+                html += '<button type="button" class="btn btn-sm btn-default pop-confrim-cancel" data-dismiss="modal">取消</button>';
+                html += '</div></form>';
+                html += '</div>';
+
+                html += '</div></div></div>';
+                $('#popup-confirm').remove();
+                $("body").append(html);
+                $('#popup-confirm').modal('show');
+                $('#pop-confrim-submit').click(function(event) {
+                    select_template(li_template);
+                    close_modal();
+                });
+                $('.pop-confrim-cancel').click(function(event) {
+                    li_template.removeClass('active');
+                    o_template.addClass('active');
+                    close_modal();
+                });
+            });
+
+            $('.template-type').on('click', 'a', function(){
+                $('.template-type a.active').removeClass('active');
+                $(this).addClass('active');
+                var tag_id = $(this).attr('tag_id');
+                if(tag_id == '0'){
+                    $(this).closest('.tab-pane').find('.template-list li').show();
+                }
+                else if(tag_id == '-1'){
+                    $(this).closest('.tab-pane').find('.template-list li').each(function(){
+                        if($(this).attr('boutique') == 'true'){
+                            $(this).show();
+                        }else{
+                            $(this).hide();
+                        }
+                    });
+                }else{
+                    $(this).closest('.tab-pane').find('.template-list li').each(function(){
+                        if($(this).attr('tag_id') == tag_id){
+                            $(this).show();
+                        }else{
+                            $(this).hide();
+                        }
+                    });
+                }
+            });
+
+            <% if @website_setting.home_template_id == 36 %>$(".index_nav").text("【首页模版36】不支持自定义导航栏");<% end %>
+
+            $('.no_nav').click(function(){
+                var nav_type = $(this).attr('nav_type'),
+                    self = $(this);
+                if(self.closest('.col-md-6').find('.no-template').html().trim() == '请选择模板'){return false;}
+                set_info($(this));
+            });
+
+        });
+    </script>
+<% end %>

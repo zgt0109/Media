@@ -1,0 +1,56 @@
+<section id="sec-index">
+  <header class="box">
+    <div class="mod-nav">
+      <%= link_to "返回", mobile_wmall_shop_path(auth_params.merge(id: params[:id]))%>
+      <span>环境</span>
+    </div>
+  </header>
+  <div class="body" id="ractive_shop_env_container">
+  </div><!--body end -->
+</section><!--main section end -->
+<script id='ractive_shop_env_template' type='text/ractive'>
+  <div class="mod-env fl">
+  {{#left_pictures}}
+    <a href="{{url}}"><img src="{{pic_url}}"/></a>
+  {{/left_pictures}}
+  </div>
+  <div class="mod-env fr">
+  {{#right_pictures}}
+    <a href="{{url}}"><img src="{{pic_url}}"/></a>
+  {{/right_pictures}}
+  </div>
+</script>
+<script>
+  $(function(){
+    var path = "/api/wmall/shops/<%= params[:id] %>" + "/pictures.json";
+    var shop_env = fetch_wmall_data({path: path}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+
+    var left_pictures = [], right_pictures = [];
+    shop_env.pictures.map(function (e, i) {
+      if (i % 2 == 0) {
+        left_pictures.push(e)
+      } else {
+        right_pictures.push(e)
+      }
+    })
+
+    delete shop_env.pictures
+    shop_env['left_pictures'] = left_pictures
+    shop_env['right_pictures'] = right_pictures
+
+    var ractive_shop = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_shop_env_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_shop_env_template',
+
+      // Here, we're passing in some initial data
+      data: shop_env
+    });
+
+    //divSwipe("nav-top");
+    showBtnUp(100);
+  });
+</script>

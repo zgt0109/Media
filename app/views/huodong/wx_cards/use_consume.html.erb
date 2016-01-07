@@ -1,0 +1,53 @@
+<%= form_tag confirm_use_consume_wx_cards_path do %>
+  <%= hidden_field_tag :sn_code, "" %>
+  <div class="modal-body">
+    <div class="input-group input-group-text">
+      <input type="text" id="search_sn_code" class="col-xs-12" placeholder="请输入SN码">
+      <span class="input-group-addon">
+       <a href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+     </span>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="text-info" id="item_consume">
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer" style="display:none">
+    <button type="button" class="btn btn-sm btn-primary" onclick="save_button()">确认核销</button>
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script>
+  $('#search_sn_code').keydown(function(event) { if(event.which == 13) { event.preventDefault(); return false; } });
+  function save_button(){
+    if($("#sn_code").val() == ""){
+      showTip('warning',"请先查询SN码");
+      return false;
+    }else{
+      $('form').submit();
+    }
+  }
+
+  $('.btn-filter').on("click", function(){
+    var get_url = "<%= find_consume_wx_cards_path %>" + "?sn_code=" + $("#search_sn_code").val();
+    $.get(get_url, function(data) {
+      if(data.consume_status == 1){
+        $('#sn_code').val(data.sn_code);
+        $('#item_consume').html(data.baseinfo);
+        $('.modal-footer').show();
+      }else{
+        $('#item_consume').html('');
+        showTip('warning',"SN码无效或已被使用");
+        $('.modal-footer').hide();
+        return false;
+      }
+    });
+  });
+
+</script>
+<% end %>

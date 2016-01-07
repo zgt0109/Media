@@ -1,0 +1,25 @@
+<div class="mod-top">
+  <%= website.name %>
+</div>
+
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <ul>
+    <% website_menus.each do |menu| %>
+        <li>
+          <%= link_to menu_url(menu), class: 'box mod-index' do %>
+            <h1>
+              <small>
+                <%= menu.title %>
+              </small>
+            </h1>
+
+            <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+          <% end %>
+        </li>
+
+    <% end %>
+  </ul>
+
+</div>

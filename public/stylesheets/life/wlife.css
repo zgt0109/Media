@@ -1,0 +1,158 @@
+body {
+  background:#cdcac7;
+}
+header .box-img{ height:235px;}
+header .box-img img{ min-height: 235px;}
+/*plug-menu*/
+.plug-menu{
+  -moz-box-shadow:0 0 0 4px #fff, 0 2px 5px 4px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow:0 0 0 4px #fff, 0 2px 5px 4px rgba(0, 0, 0, 0.25);
+  box-shadow:0 0 0 4px #fff, 0 2px 5px 4px rgba(0, 0, 0, 0.25);
+  color:#fff;
+  background-color: #ff6600;
+}
+.plug-phone>div{
+  -moz-box-shadow:0 0 0 3px #fff, 0 2px 5px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow:0 0 0 3px #fff, 0 2px 5px 3px rgba(0, 0, 0, 0.25);
+  box-shadow:0 0 0 3px #fff, 0 2px 5px 3px rgba(0, 0, 0, 0.25);
+}
+
+/*btn*/
+.btn-up{ background-color:#ff6600; border-radius:5px;color:#fff; font-size:40px; padding:0 8px;opacity:0.8;
+filter:alpha(opacity=80);
+-moz-opacity:0.8;
+-khtml-opacity:0.8;}
+.btn{ background:#ed7525; border:1px solid #ff6600; border-radius:5px; box-shadow:0 0 5px rgba(0, 0, 0, 0.25);-webkit-appearance:none; text-align:center; color:#fff;text-shadow:0 1px 1px rgba(0, 0, 0, 0.25); font-size:16px; height:30px; line-height:30px; width:100%;}
+.btn-share{ border-radius:5px; background:#d6d6d6; height:30px; border:1px solid #ccc; text-align:center; line-height:30px;}
+/*box-index*/
+.box-index{ background:#fff; padding:0 0 10px 0;}
+.box-index .hd,
+.box-index .bd{ width:100%; float:left;}
+.box-index .hd{ height:30px; line-height:30px; padding:0 2% 0 5%; width:93%;position:relative;}
+.box-index .hd h2{ color:#ff6600; float:left; line-height:30px; width:70%;}
+.box-index .bd{ background:#f9f7f5; border-top:1px solid #d5d4d2; border-bottom:2px solid #ff6600;}
+.box-index .hd .ico{ height: 15px; margin: 7.5px 0; line-height:15px; color:#999;}
+/*box-list*/
+.box-list{ padding:0; position:relative;}
+.box-list .bd{ padding:5px 1%; width:98%; text-align:center;}
+.box-list img{ max-width:98%;}
+.box-list .ft{overflow:hidden; height:30px; line-height:30px; padding:0 5%; width:90%; color:#888;}
+.box-list .hd{ font-size:12px; color:#c5c5c5; text-align:left; height:auto;}
+.box-list .hd b{ font-size:16px; color:#444; line-height:25px; width:100%; float:left; padding:5px 0 0 0;}
+.box-list .hd i{ width:100%; line-height:15px; float:left;}
+/*box-comment*/
+.box-comment .bd{ border-bottom:0;}
+.box-comment .hd h2{ width:60%;}
+.box-comment .ico{color:#ff6600; font-size:15px;}
+.box-comment .hd .fr{ border-radius:5px; border:1px solid #ccc; height:20px; line-height:20px; margin:4px 0; padding:0 10px 0 20px; background-position: 5px center;}
+.box-comment .hd .ico em{ font-size:12px; color:#444; padding:0 0 0 5px;}
+.box-comment .bd{ padding:10px 0;}
+.box-comment .bd .fl{ width:30%; text-align:center;}
+.box-comment .bd .fr{ width:70%;}
+.box-comment .bd label{ width:92%; float:left; margin:10px 0 0 0;}
+.box-comment .bd label .btn{ width:80%;}
+/*box-detail*/
+.box-detail .bd{ border-bottom:0;}
+.detail-row{  padding:10px 2%; width:96%; overflow:hidden;}
+.bd-share .btn-share{ width:48%; color:#444; float:left;}
+.bd-share .btn-share:first-child{ margin:0 3% 0 0;}
+.bd-share .btn-share:last-child{ margin:0 0 0 0;}
+.bd-detail{ border-top:1px solid #d5d4d2; text-align:left;}
+.bd-detail p{ line-height:20px; padding:0 0 5px 0;}
+.bd-detail p b{ width:30%; color:#444;vertical-align:top; }
+.bd-detail p span{ width:70%;color:#888;}
+.bd-title{ text-align:center; border-radius:5px; background:#ff6600; height:30px; line-height:30px; color:#fff; margin:10px 0; padding:0; width:100%;}
+.bd-detail img{ max-width:100%;}
+/*ft-comment*/
+.ft.ft-comment{ width:100%; float:left;color:#444; height:auto; padding:0; line-height:20px;}
+.ft-comment h3{ height:30px; line-height:30px; border-bottom:2px solid #ff6600; width:96%; padding:0 2%;}
+/*ft-list*/
+.ft-list{ width:100%; border-bottom:1px dashed #ccc; padding:10px 0; float:left; overflow:hidden;}
+.ft-list:last-child{ border:0;}
+.ft-list .fl{ width:30%; text-align:center;}
+.ft-list .fr{ width:68%; padding:0 2% 0 0;}
+.ft-list .fr b,
+.ft-list .fr span,
+.ft-list .fr p{ width:100%; overflow:hidden; float: left;}
+.ft-list .fr b,
+.ft-list .fr a,
+.ft-list .fr .ico {color:#ff6600;}
+.ft-list .fr i{ font-size:12px; color:#ccc; text-align:left; display:block;}
+.ft-list .fr i em{ color:#888;}
+.ft-list .fr i.fl{ width:70%;}
+.ft-list .fr i.fr{ width:30%; padding:0; margin:0;}
+.ft-list .fr a,
+.box-list.box-detail .ft,
+.box-list.box-comment .ft{ line-height:20px;}
+/*bd-img*/
+.bd-img{ width:60px; height:60px; line-height:60px; border-radius:5px; overflow:hidden;}
+.bd-img img{ max-width:100%;}
+/*bd-comment*/
+.bd-comment{ border-radius:5px; border:1px solid #ccc; width:92%;}
+.bd-comment textarea{ border:0; width:94%; line-height:20px; padding:5px 2%;margin:5px 1%;}
+.bd-comment .bd-face{ border-top:1px dashed #ccc; height:30px; line-height:30px; color:#ccc; padding:0 2%; width:96%;}
+.bd-comment .bd-face .fr{ text-align:right; width:auto;}
+/*bd-text*/
+.bd-text{ height:32px; line-height:32px;}
+.bd-text img,
+.bd-text input{ float:left; }
+.bd-text input{ border:1px solid #ccc; height:30px; line-height:30px; margin:0 0 0 5px; width:81.6%;}
+/*box-circle*/
+.box-circle,
+.box-index .bd.box-circle{ overflow:hidden; padding:10px 1%; width:98%;visibility:visible;}
+.box-circle a{ width:21%; height:110px; text-align:center; overflow:hidden; padding:0 2% 0 2%; display:block; float:left;}
+.box-circle a b{ width:60px; height:60px; border:2px solid #fff; box-shadow:0 0 5px #d5d4d2; line-height:56px; overflow:hidden; border-radius:60px; background-position: center center; background-size:60px 60px;white-space:nowrap;}
+.box-circle a b img{ max-height:60px; vertical-align:middle;}
+.box-circle a i{ line-height:20px;height:20px; font-size:14px; color:#333; width:100%;overflow:hidden;}
+.box-circle a small{font-size:12px;line-height:16px;color:#999;white-space:nowrap;}
+.note-share{ background:url(/assets/life/text.png) no-repeat right center; width:100%; height:155px; background-size:contain; top:0;}
+.slider{height: 240px; width: 100%;overflow: hidden;
+  visibility: hidden;
+  position: relative;}
+.slider-cont{overflow: hidden;
+  position: relative;height: 220px;}
+.slider .slider-li{ height: 220px; float:left;
+  width:100%;
+  position: relative;}
+.slider .box-img-page{ width: 100%; height: 10px; position: static; text-align:center;}
+.slider .box-img-page a{ width: 10px; height: 10px; padding: 0; display: inline-block; float: none; background: #ccc;}
+.slider .box-img-page a.active{ background: #000;}
+/*header*/
+
+.list header{ background:#f0843b; border-bottom:1px solid #ff6600; height:44px; position:fixed; z-index:888; left:0; top:0;}
+.list section{ padding:44px 0 0 0;}
+.list header h1{ width:75%; float:left; line-height:44px; text-align:center; color:#fff; text-shadow:0 1px 1px rgba(0, 0, 0, 0.25);}
+.list header .ico{ width:20px; float:left; height: 44px;}
+.list header .ico-arrow-left{margin:0 6% 0 2%; }
+.list header .ico-list,
+.list header .ico-home{}
+header .box-text{ height:30px; width:100%; left:0; bottom:0; line-height:30px; text-align:left;}
+
+/*box-hot*/
+.box-hot{ background:#fff; overflow:hidden; padding:0 0 5px 0;}
+.box-hot h2{color:#ff6600; float:left; line-height:30px;}
+.box-hot h2,
+.box-hot a{ margin:0 5%; width:90%; text-align:left; float:left;}
+.box-hot a{ height:auto; margin:0 5% 5px 5%; padding:5px 2%; position:relative; border-radius:5px; width:86%; font-size:12px; color:#888;}
+.box-hot a span{ width:97%;}
+.box-hot a i{ position:absolute; height:12px; right:0; top:50%; color:#444; font-size:12px; margin:-6px 5px 0 0;}
+.box-hot a:active{ background:#ff6600; color:#fff;}
+/*pop*/
+.pop-nav .pop-bd .hd{background:#f0843b; border-bottom:1px solid #ff6600; height:44px; color:#fff; line-height:44px; font-size:16px;}
+@media screen and (orientation:landscape) {
+  .ft-list .fl{ width:20%;}
+  .ft-list .fr{ width:78%; padding:0 2% 0 0;}
+  .box-comment .bd .fl{ width:20%;}
+  .box-comment .bd .fr{ width:80%;}
+  .bd-comment,
+  .box-comment .bd label{ width:95%;}
+  .bd-text input{ width:89.6%;}
+}
+.btn-up-1{ background: #fff;}
+.btn-up-1 .fa{ background: #ff6600; color: #fff;}
+.navPop-1 .navPop-btn{ background: #fff;}
+.navPop-1 .navPop-btn .fa{ background: #ff6600; color: #fff;}
+.navPop-wrap>div a{
+    background: #fff;
+    color: #ff6600;
+}

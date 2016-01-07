@@ -1,0 +1,262 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <li><%= link_to '站点内容', website_menus_path %></li>
+        </ul>
+        <!-- .breadcrumb -->
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 1、通过站点内容，设置微官网的架构、内容以及素材；</li>
+                <li> 2、左侧展示的是页面效果，在右侧设置完以后就能够在左侧看到微官网实际效果；</li>
+                <li> 3、为使PC端模拟手机端达到最佳效果，请使用谷歌（Chrome）浏览器。</li>
+              </ul>
+            </div>
+          </div>
+          <div class=" col-sm-12">
+            <div class="showOnline">
+              <iframe src="<%= mobile_root_url(supplier_id: @website.supplier_id, openid: @website.supplier.wx_users.first.try(:uid)) %>" width="320" height="460"></iframe>
+            </div>
+            <div class="col-xs-12 col-sm-offset-1 col-sm-6">
+              <div id="tree1">
+
+                <div class="tree tree-selectable">
+                  <div class="tree-folder tree-li" menu-id='0'>
+                    <div class="tree-folder-header">
+                      <i class="tree-fa fa fa-plus-square"></i>
+                      <div class="tree-folder-name"><%= truncate_u @website.name, length: 20 %></div>
+                      <div class="tree-tools" data-id="0">
+                        <div>
+                          <%= link_to '', new_website_menu_path, class: 'fa fa-plus tree-add', title: '添加一级站点' %>
+                        </div>
+                        <div>
+                          <%= link_to '',  website_path(@website), class: 'fa fa-times tree-remove', title: '删除全部站点', data: {method: :delete, confirm: '确定要清空站点数据吗？'} %>
+                        </div>
+                        <div>
+                          <a href="javascript:;" class="fa fa-qrcode tree-code" rel="popover" data-img="/assets/gm/loading.gif"></a>
+                        </div>
+                        <div>
+                          <a href="javascript:;" class="fa fa-level-down tree-level-down" title="时间倒序"></a>
+                        </div>
+                        <div>
+                          <a href="javascript:;" class="fa fa-level-up tree-level-up" title="时间顺序"></a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tree-folder-content">
+                      <%= render :partial=> "sub_menu", :collection => @website_menus.order(:sort), :as =>:sub_menu %>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+          <!-- /.modal -->
+          <!-- /.row -->
+        </div>
+        <!-- /.page-content -->
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <%= javascript_include_tag "/javascripts/jquery-ui" %>
+    <script type="text/javascript">
+        $(function () {
+          <% if current_user.can_show_introduce? %>
+            <% if params[:next_task] == '2' && current_user.try(:task1?) %>
+              // 新手任务完成弹出层
+              $(".tree .tree-folder .tree-folder-header .tree-tools").eq(0).css("display","inline").find(".tree-add").addClass("highcolor step_tip1");        //新增高亮  按钮样式  
+              $(".shadow").show();   // 添加蒙板                
+            <% elsif params[:task].present? && current_user.try(:task2?) %>
+              //显示任务完成  0 是第一个任务 1 2 3，
+              $(".shadow").show();   // 添加蒙板   
+              $(".mission_cont").show();
+              $(".mission_box2").eq(1).show().find(".mission_box_div").eq(1).show();               
+            <% end %>
+          <% end %>
+
+            $('#tree1').on("click", ".fa-plus-square, .fa-minus-square", function () {
+		var self = $(this), default_html = '<p class="mod-loading"><img src="/assets/loading.gif"></p>';                
+		if($(this).closest('.tree-folder').find('.tree-folder-content').html().trim() == default_html){
+                $.ajax({
+                  type: "GET",
+                  url: "/website_menus/" + self.closest('.tree-folder').attr('menu-id') +"/sub_menu",
+                  success: function(data) {
+                    //console.log(data);
+                    self.closest('.tree-folder').find('.tree-folder-content').eq(0).toggle();
+                    self.closest('.tree-folder').find('.tree-folder-content').html(data);
+                    if(self.hasClass('fa-plus-square')){
+                      self.removeClass('fa-plus-square').addClass('fa-minus-square');
+                    }
+                    else{
+                      self.removeClass('fa-minus-square').addClass('fa-plus-square');                
+                    }
+                    sort_menus();
+                    return false;
+                  },
+                  error: function(data) {
+                    console.log(data);
+                    return false;
+                  }
+                });
+                }
+                else{
+                  if(self.hasClass('fa-plus-square')){
+                    self.removeClass('fa-plus-square').addClass('fa-minus-square');
+                  }
+                  else{
+                    self.removeClass('fa-minus-square').addClass('fa-plus-square');                
+                  }
+                  self.closest('.tree-folder').find('.tree-folder-content').eq(0).toggle();
+                }
+            });
+
+            $('.tree-tools').on('click', 'a', function(){
+                var content = $(this).closest('.tree-folder').find('.tree-folder-content');
+//                if(content.is(':hidden')){
+//                    content.hide();
+//                }else{
+//                    content.show();
+//                }
+            });
+
+            $('#tree1').on("click",".tree-up",function(){
+                var self=$(this),
+                    p = self.closest('.tree-li');
+                if(p.prev().length > 0){
+                    p.prev().before(p);
+                    $.ajax({
+                        type: "GET",
+                        url: "/website_menus/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=up",
+                        success: function(data) {
+                            showTip("success","操作成功");
+                            return false;
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+            $('#tree1').on("click",".tree-down",function(){
+                var self = $(this),
+                    p = self.closest('.tree-li');
+                if(p.next().length > 0){
+                    p.next().after(p);
+                    $.ajax({
+                        type: "GET",
+                        url: "/website_menus/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=down",
+                        success: function(data) {
+                            showTip("success","操作成功");
+                            return false;
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+
+            $('#tree1').on('click', '.tree-zd, .tree-level-down, .tree-level-up', function(){
+                var types = {'tree-zd': 'stick', 'tree-level-down': 'desc', 'tree-level-up': 'asc'},
+                    arr = ['tree-zd', 'tree-level-down', 'tree-level-up'],
+                    self = $(this),
+                    type;
+                $.each(arr, function(i, e){
+                    if(self.hasClass(e)){
+                        type = types[e];
+                        return true;
+                    }
+                });
+                if($(this).closest('.tree-tools').attr('data-id') == '0'){
+                    window.location.href = "/websites/menus_sort?type=" + type;
+                }else{
+                    window.location.href = "/website_menus/" + $(this).closest('.tree-tools').attr('data-id') +"/sort?type=" + type;
+                }
+            });
+
+            $("#tree1").on('mouseout', 'a.tree-code', function(){
+                $(this).nextAll().remove();
+            });
+
+            $("#tree1").on('mouseover', 'a.tree-code', function(){
+                $(this).nextAll().remove();
+                var self = $(this);
+                var menu_id = self.closest('.tree-tools').attr('data-id');
+                $.get("/websites/qrcode", {menu_id: menu_id}, function(result){
+                    self.next().find("img").attr("src", result);
+                    self.next().find("img").css("width", 170);
+                    self.next().find("img").css("height", 170);
+                });
+            });
+
+
+            sort_menus();
+
+        });
+
+        function sort_menus(){
+            var start_index = null,
+                stop_index = null;
+            $.each($('.tree-li'), function(){
+
+                $(this).sortable({
+                    start: function(event, ui) {
+                        $.each($(this).find('.tree-li[parent-id=' + $(this).attr('menu-id') + ']'), function(i, e){
+                            if($(ui.item).attr('menu-id') == $(e).attr('menu-id')){
+                                start_index = i;
+                            }
+                        });
+                    },
+                    stop: function(event, ui) {
+                        $.each($(this).find('.tree-li[parent-id=' + $(this).attr('menu-id') + ']'), function(i, e){
+                            if($(ui.item).attr('menu-id') == $(e).attr('menu-id')){
+                                stop_index = i;
+                            }
+                        });
+                        if(start_index != stop_index){
+                            $.ajax({
+                                type: "GET",
+                                url: "/website_menus/" + $(ui.item).attr('menu-id') +"/update_sorts?type=sort&index=" + stop_index,
+                                success: function(data) {
+                                    showTip("success","操作成功");
+                                    return false;
+                                },
+                                error: function() {
+                                    showTip("warning","操作失败");
+                                    return false;
+                                }
+                            });
+                        }else{
+                            if(stop_index == 0){
+                                return false;
+                            }else if(stop_index == $(this).find('.tree-li').length -1){
+                                return false;
+                            }
+                        }
+                    },
+                    items:  '.tree-li[parent-id=' + $(this).attr('menu-id') + ']'
+                });
+            });
+        }
+    </script>
+<% end %>

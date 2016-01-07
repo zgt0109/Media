@@ -1,0 +1,292 @@
+<style>
+  #faceButton {
+    margin-left: 20px;
+    color: black;
+  }
+  .upload-img span img {
+      height: 90px;
+      width: 160px;
+  }
+  .box-form input[type=text], .box-form select{width: 70%;}
+</style>
+
+<% content_for :sidebar do %>
+  <%= render 'pro/business/sidebar_business' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent"><%= @website_menu.new_record? ? '新增菜单' : '编辑菜单' %></a>
+<% end %>
+
+<p class="p-note">
+  <span>提示：以下“<span class="fred" style="width:auto;float:none;">*</span>”均为必填项；</span>
+</p>
+
+<div class="box-form form-row tleft">
+<% @website_menu.can_validate = true %>
+<%= form_for @website_menu, url: (@website_menu.new_record? ?  busine_menus_url : busine_menu_url(@website_menu)), validate: true, :html => { :class => @website_menu.new_record? ? '' : 'pic', id: 'website_menu_form' } do |f| %>
+    <%= f.hidden_field :website_id %>
+    <%= f.hidden_field :parent_id if @website_menu.new_record? %>
+      <div class="p">
+        <span>名称<em>*</em>（不能超过32个字）</span>
+        <%= f.text_field :name, class: "input-text", maxlength: 32 %>
+      </div>
+
+      <div class="p hide">
+        <span>排序<em>*</em>（值越小越排在前面）</span>
+        <%= f.text_field :sort, class: "input-text", maxlength: 5 %>
+      </div>
+
+      <% if (@website_menu.parent && @website_menu.has_children?) || @website_menu.new_record?%>
+          <div class="p">
+            <span>选择样式</span>
+            <%= f.select :sort_style, WebsiteMenu.sort_style_options %>
+          </div>
+      <% end %>
+
+      <div class="box-upload fl">
+        <span>菜单图片<em>*</em></span>
+        <div class="margin">
+          <div class="box-file">
+            <%= f.file_field :pic, rel: 'preview_shop_logo', validate: @website_menu.pic.blank?, class: 'img_preview', data: { width: 720, height: 400 } %>
+            <a class="btn btn-big">上传照片</a>
+          </div>
+          <span class="p-file fgray">（图片建议尺寸：720像素*400像素）</span>
+        </div>
+        <div class="upload-img">
+          <span>
+             <%= image_tag((@website_menu.pic.presence || '/assets/bg_fm.jpg'), id: "preview_shop_logo", class: 'view') %>
+          </span>
+        </div>
+      </div>
+
+      <% if @website_menu.parent && !@website_menu.new_record?%>
+        <div class="p">
+          <span>分类<em>*</em></span>
+          <%= f.select :parent_id, @website.show_layer_menus1(@website_menu) %>
+        </div>
+      <% end %>
+
+      <% unless @website_menu.has_children? || @website_menu.parent_id == 0 %>
+        <div class="p">
+          <span>类型<em>*</em></span>
+          <%= f.select :menu_type, WebsiteMenu.menu_type_options.select{|type| [2, 3, 6, 7, 8, 10, 11, 19].include?(type.last)} %>
+        </div>
+
+        <div class="p p-style-list">
+          <span class="textarea">内容<em>*</em></span>
+          <%= f.text_area :content %>
+          <span class="fgray">（不能超过2000个字）</span>
+        </div>
+
+        <div class="p">
+          <span>联系电话<em>*</em></span>
+          <%= f.text_field :tel, class: "input-text", maxlength: 32, validate: true %>
+        </div>
+
+        <div class="p">
+          <span>链接<em>*</em></span>
+          <%= f.text_field :url, class: "input-text", validate: true %>
+        </div>
+
+        <div class="p">
+          <span>导航地址<em>*</em></span>
+          <%= f.text_field :address, class: "input-text", validate: true %>
+        </div>
+
+        <div class="p">
+          <span>选择活动<em>*</em></span>
+          <%= f.select :activity_id, current_user.activities.active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) } %>
+        </div>
+
+  <div class="p">
+    <span>选择商铺<em>*</em></span>
+    <%= f.select :activity_id, current_user.activities.active.business_shop.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, id:"website_menu_shop_activity_id" %>
+  </div>
+
+
+        <div class="p">
+          <span>选择素材<em>*</em></span>
+          <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id), include_blank: true } %>
+        </div>
+
+        <div class="p">
+          <span>选择素材<em>*</em></span>
+          <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id), include_blank: true } %>
+        </div>
+
+
+        <div id="preview_pic" class="p p-style-list p-style-list-auto">
+          <span class="til">图文预览</span>
+          <span class="inner-box">
+            <% if @website_menu.single_graphic? %>
+              <strong><%= @website_menu.try(:menuable).try(:title) rescue nil %></strong><br/>
+              <label><%= @website_menu.try(:menuable).try(:created_at).try(:to_date) rescue Date.today %></label>
+              <span class="fl"><%= image_tag(@website_menu.menuable.try(:pic), size: '318x165') %></span>
+            <% else %>
+              <strong>素材标题</strong><br/>
+              <label><%= Date.today %></label>
+              <span class="fl"><img src='/assets/bg_fm.jpg' width='318' height='165'/></span>
+            <% end %>
+          </span>
+        </div>
+
+          <!-- 会员卡 -->
+          <% if @website.supplier.vip_card %>
+          <%= hidden_field_tag 'card_branch[vip_card_id]', @card_branch.try(:vip_card_id) %>
+          <div class="p card_branch">
+            <span>会员卡名称<em>*</em>（必填，不能超过32个字）</span>
+            <%= text_field_tag 'card_branch[name]', @card_branch.try(:name), class: "input-text", style:"width: 380px;", maxlength: 32, placeholder: '请输入会员卡名称' %>
+          </div>
+          <div class="p card_branch">
+            <span>会员卡折扣名称<em>*</em>（必填，不能超过32个字）</span>
+            <%= text_field_tag 'card_branch[discount_name]', @card_branch.try(:discount_name), class: "input-text", style:"width: 380px;", maxlength: 32, placeholder: '请输入会员卡折扣名称' %>
+          </div>
+          <div class="p card_branch">
+            <span>折扣详情说明</span>
+            <%= text_area_tag 'card_branch[discount_description]', @card_branch.try(:discount_description), rows: 3, style:"width: 380px;", placeholder: '请输入会员卡折扣详情说明' %>
+          </div>
+          <div class="p card_branch">
+            <span>地址<em>*</em></span>
+            <%= text_field_tag 'card_branch[address]', @card_branch.try(:address), class: "input-text", style:"width: 380px;", placeholder: '请输入地址' %>
+          </div>
+          <div class="p card_branch">
+            <span>电话<em>*</em></span>
+            <%= text_field_tag 'card_branch[tel]', @card_branch.try(:tel), class: "input-text", style:"width: 380px;", placeholder: '请输入座机或手机号码' %>
+          </div>
+          <% end %>
+          <div class="p">
+            <span>选择服务：<em>*</em></span>
+            <%= f.select :life_assistant_id, (current_user.assistants.circles.map{|m| [m.try(:name), m.try(:id)]}) , { selected: @website_menu.try(:menuable_id) }  %>
+          </div>
+
+
+      <% end %>
+
+    <p>
+      <input class="btn btn-small form-submit btn-orange" type="submit" value="保存" name="commit">
+    </p>
+
+<% end %>
+</div>
+
+<script>
+  select_website_menu_type();
+
+  $('#website_menu_menu_type').change( function() {
+    select_website_menu_type();
+  });
+
+  function hide_website_menu_type() {
+    $('#website_menu_content').parent().hide();
+    $('#website_menu_single_material_id, #website_menu_multiple_material_id').parent().hide();
+    $('#preview_pic').hide();
+    $('#website_menu_activity_id, #website_menu_url, #website_menu_tel, #website_menu_address').parent().hide();
+    $("#website_menu_life_assistant_id, #website_menu_game_assistant_id").parent().hide();
+    $(".card_branch").hide();
+    $("#website_menu_business_shop_id").hide();
+    $('#website_menu_shop_activity_id').parent().hide();
+  }
+
+  function select_website_menu_type() {
+    hide_website_menu_type();
+    var menu_type = $('#website_menu_menu_type').val();
+    if ( menu_type == 1 ) {
+      $('#website_menu_content').parent().show();
+    } else if ( menu_type == 2 ) {
+      $('#website_menu_shop_activity_id').attr('disabled', true);
+      $('#website_menu_activity_id').attr('disabled', false);
+      hide_website_menu_type();
+      $('#website_menu_activity_id').parent().show();
+    } else if ( menu_type == 3 ) {
+      $('#website_menu_single_material_id').parent().show();
+      $('#preview_pic').show();
+    } else if ( menu_type == 4 ) {
+      $('#website_menu_multiple_material_id').parent().show();
+      $('#preview_pic').show();
+    } else if ( menu_type == 6 ) {
+      $('#website_menu_url').parent().show();
+    } else if ( menu_type == 7 ) {
+      $('#website_menu_tel').parent().show();
+    }else if ( menu_type == 9 ) {
+      $("#website_menu_game_assistant_id").parent().show();
+    } else if ( menu_type == 10 ) {
+      $("#website_menu_life_assistant_id").parent().show();
+    }else if ( menu_type == 11 ) {
+      $("#website_menu_address").parent().show();
+    }else if ( $('#website_menu_menu_type').val() == 12 ) {
+      $(".card_branch").show();
+    }else if ( menu_type == 13 ) {
+      $("#website_menu_business_shop_id").show();
+    }else if ( menu_type == 19 ) {
+      $('#website_menu_activity_id').attr('disabled', true);
+      $('#website_menu_shop_activity_id').attr('disabled', false);
+      hide_website_menu_type();
+      $('#website_menu_shop_activity_id').parent().show();
+    }
+  }
+
+
+  $(function() {
+    $('#website_menu_form .form-submit').click(function(event) {
+      var url_reg = /^(http|https):\/\/[a-zA-Z0-9].+$/;
+      if ( $('#website_menu_name').val() && $("#website_menu_sort").val()  ) {
+        if ( $('#website_menu_menu_type').val() == 3 && !$('#website_menu_single_material_id').val() ) {
+          showTip('warning','请选择一条图文素材');
+          return false;
+        } else if ( $('#website_menu_menu_type').val() == 4 && !$('#website_menu_multiple_material_id').val() ) {
+          showTip('warning','请选择一条图文素材');
+          return false;
+        } else if ( $('#website_menu_menu_type').val() == 2 && !$('#website_menu_activity_id').val() ) {
+          showTip('warning','请选择活动');
+          return false;
+        } else if ( $('#website_menu_menu_type').val() == 6 && !$('#website_menu_url').val() ) {
+          showTip('warning','请填写链接地址');
+          return false;
+        }else if ( $('#website_menu_menu_type').val() == 6 && !url_reg.test($('#website_menu_url').val())){
+            showTip('warning','地址格式不正确，必须以http(s)://开头');
+            return false;
+        } else if ( $('#website_menu_menu_type').val() == 7 && !$('#website_menu_tel').val() ) {
+          showTip('warning','请填写联系电话');
+          return false;
+        } else if ( $('#website_menu_menu_type').val() == 10 && !$('#website_menu_life_assistant_id').val() ) {
+            showTip('warning','请选择生活小助手');
+            return false;
+        } else if ( $('#website_menu_menu_type').val() == 9 && !$('#website_menu_game_assistant_id').val() ) {
+            showTip('warning','请选择游戏');
+            return false;
+        } else if ( $('#website_menu_menu_type').val() == 12 ) {
+          if ( !$('#card_branch_name').val() ) {
+            showTip('warning','会员卡名称不能为空');
+            return false;
+          } else if ( !$('#card_branch_discount_name').val() ) {
+            showTip('warning','会员卡折扣名称不能为空');
+            return false;
+          } else if ( !$('#card_branch_address').val() ) {
+            showTip('warning','会员卡地址不能为空');
+            return false;
+          } else if ( !$('#card_branch_tel').val() ) {
+            showTip('warning','会员卡电话不能为空');
+            return false;
+          }
+        }
+      }
+    });
+
+    $('#website_menu_single_material_id, #website_menu_multiple_material_id').change( function() {
+      $.ajax({
+        url: '/materials/'+$(this).val(),
+        type: "get",
+        dataType : "json",
+        success : function (data){
+          if(data){
+            $('#preview_pic .title').html(data['title']);
+            $('#preview_pic .date').html(data['created_at'].slice(0,10));
+            $('#preview_pic img').attr('src', data['pic']['large']['url']);
+          }
+        }
+      });
+    });
+
+  });
+</script>

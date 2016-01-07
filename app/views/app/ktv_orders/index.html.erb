@@ -1,0 +1,114 @@
+<%= content_for(:title, "KTV在线预定") %>
+
+<link type="text/css" rel="stylesheet" href="/stylesheets/website/main.css"/>
+<link type="text/css" rel="stylesheet" href="/stylesheets/website/template6.css"/>
+
+<div class="html">
+  <div class="main">
+    <div class="header">
+      在线预订
+    </div>
+    <div class="body box-order">
+      <%= form_for app_ktv_orders_path, remote: true do |order| %>
+        <div class="box">
+          <p>您提交订单后，我们通常会在30分钟内通过短信或电话告知预订结果。</p>
+        </div>
+        <% if @activity.extend.tel.present? %>
+        <div class="box">
+          <a class="table" href="tel:<%= @activity.extend.tel %>">
+            <span  class="td ico-phone"><%= @activity.extend.tel %></span>
+            <i class="td arrow"></i>
+          </a>
+        </div>
+        <% end %>
+        <div class="box">
+          <div class="hd">房间</div>
+          <div class="bd table box-form">
+            <p class="tr">
+              <label class="td"><input type="radio" name="ktv_order[room_type]" checked='checked' value="1"/><i>迷你房</i></label>
+              <label class="td"><input type="radio" name="ktv_order[room_type]" value="3"/><i>大房</i></label>
+            </p>
+            <p class="tr">
+              <label class="td"><input type="radio" name="ktv_order[room_type]" value="2"/><i>小房</i></label>
+              <label class="td"><input type="radio" name="ktv_order[room_type]" value="4"/><i>Party</i></label>
+            </p>
+            <p class="tr">
+              <label class="td"><input type="radio" name="ktv_order[room_type]" value="5"/><i>中房</i></label>
+            </p>
+          </div>
+        </div>
+        <div class="box">
+          <div class="hd">酒水</div>
+          <div class="bd table box-form">
+            <p class="tr">
+              <label class="td"><input type="checkbox" name="ktv_order[drinks][]" value="啤酒" /><i>啤酒</i></label>
+              <label class="td"><input type="checkbox" name="ktv_order[drinks][]" value="汽水" /><i>汽水</i></label>
+            </p>
+            <p class="tr">
+              <label class="td"><input type="checkbox" name="ktv_order[drinks][]" value="伏加特" /><i>伏加特</i></label>
+              <label class="td"><input type="checkbox" name="ktv_order[drinks][]" value="鸡尾酒" /><i>鸡尾酒</i></label>
+            </p>
+            <p class="tr">
+              <label class="td"><input type="checkbox" name="ktv_order[drinks][]" value="红酒" /><i>红酒</i></label>
+            </p>
+          </div>
+        </div>
+        <div class="box">
+          <div class="hd">预订人姓名<span style='color:red'>*</span></div>
+          <div class="bd box-form">
+            <input type="text" name="ktv_order[username]" id="ktv_order_username" />
+          </div>
+          <div class="hd">联系手机<span style='color:red'>*</span></div>
+          <div class="bd box-form">
+            <input type="text" name="ktv_order[phone]" id="ktv_order_phone" />
+          </div>
+          <div class="hd">人数</div>
+          <div class="bd box-form">
+            <select id="ktv_order_people_num" name="ktv_order[people_num]">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10人或以上</option>
+            </select>
+          </div>
+
+          <div class="hd">备注</div>
+          <div class="bd box-form">
+            <textarea rows="5" name="ktv_order[description]"></textarea>
+          </div>
+        </div>
+        <%= order.submit '提交预约', class: 'btn submit-order' %>
+      <% end %>
+    </div><!-- body end -->
+  </div><!-- main end -->
+</div><!-- html end -->
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery_ujs' %>
+<script type="text/javascript">
+  $('.submit-order').on('click', function(event){
+    var username = $('#ktv_order_username').val();
+    var phone = $('#ktv_order_phone').val();
+    if (!username){
+      alert('预定人姓名不能为空')
+      event.preventDefault();
+      return false;
+    }
+    if (!phone){
+      alert('联系手机不能为空')
+      event.preventDefault();
+      return false;
+    }
+    var reg = /^[0-9_\-]*$/;
+    if (!reg.test(phone)){
+      showTip('warning',"电话号码格式不对，正确格式如下：\n座机号码：区号-座机号码(或)\n手机号码：11位手机号码");
+      event.preventDefault();
+      return false;
+    }
+  })
+</script>

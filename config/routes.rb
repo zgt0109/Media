@@ -1,0 +1,314 @@
+# -*- coding: utf-8 -*-
+Wp::Application.routes.draw do
+
+  root to: 'home#index'
+
+  # resources :logged_exceptions
+
+  require 'sidekiq/web'
+  # authenticate :supplier do
+    mount Sidekiq::Web => '/sidekiq'
+  # end
+
+  # match 'pages/newbusiness', via: [:get, :post], as: :newbusiness
+
+  match "auth_agent/wx_oauth", to: "auth_agent#wx_oauth"
+  match "auth_agent/wx_oauth_callback", to: "auth_agent#wx_oauth_callback"
+
+  resources :password_resets do
+    post :resend_email, on: :member
+  end
+
+  resources :sessions, only: :create
+  match 'sign_in'  => 'sessions#new',     as: :sign_in
+  match 'sign_out' => 'sessions#destroy', as: :sign_out
+  match 'secret'   => 'sessions#secret'
+  match 'register' => 'suppliers#new', as: :register
+
+  # match :oa, :yeahsite, controller: :sites
+
+  match :verify_code, :validate_image_code, controller: :home
+  match :helpers, :games, :help_menus, :console, :account, controller: :home
+  # match 'solution' => 'home#solution', as: :solution
+  # match '/home/pay' => 'home#pay'
+  # match 'solution/:name' => 'home#solution'
+  # match 'navigation' => 'home#navigation', as: :navigation
+  # match 'navigation/:name' => 'home#navigation'
+  match 'home/introduce' => 'home#show_introduce'
+
+  # match 'zhidahao' => 'static#zhidahao', as: :zhidahao
+  # match '/static/app' => 'static#app'
+  # match '/static/mobile' => 'static#mobile'
+
+  match 'supplier_footer' => 'suppliers#supplier_footer', as: :supplier_footer
+  post  'update_supplier_footer' => 'suppliers#update_supplier_footer', as: :update_supplier_footer
+
+
+  match '/recepit/print',  :to => "pro::shop_branch_print_templates#recepit"
+  match '/printlog',       :to => "pro::shop_branch_print_templates#printlog"
+  match '/recepit/export', :to => "pro::shop_branch_print_templates#export_print_data"
+
+  match "/404", :to => "home#not_found", as: :four_o_four, constraints: {format: :html}
+  match "/500", :to => "home#error", as: :five_o_o, constraints: {format: :html}
+
+  # match "/fxt/ad_owner" => "fxt#ad_owner"
+  # match "/fxt/operators" => "fxt#operators"
+
+  resources :home, only: :index do
+    get :help_post, on: :member
+  end
+
+  resources :flow_reports, only: :index
+  resources :operating_reports, only: :index do
+    get :subscribes, :keyword, :activity_hit, :message_hit, on: :collection
+  end
+
+  resources :system_messages, only: [:index, :destroy] do
+    member do
+      get :read
+      post :ajax_update
+    end
+    post :read_all, :api, on: :collection
+  end
+
+  resources :sms_expenses, only: :index
+  resources :sms_orders, except: [:edit, :show, :update] do
+    get :alipayapi, :cancel, on: :member
+    collection do
+      get :callback
+      post :notify
+      get :merchant
+      post :payment_request
+    end
+  end
+
+  resources :payment_settings do
+    post :enable, :disable, on: :member
+  end
+
+  resources :payments, only: [:new, :create] do
+    get :alipayapi, on: :member
+
+    collection do
+      get :callback, :merchant
+      post :notify, :payment_request
+    end
+  end
+
+  post "/wxpay/notify", :to => "wxpay#notify", as: :wxpay_notify
+  post "/wxpay/notify_hongbao", :to => "wxpay#notify_hongbao"
+  match "/wxpay/index", :to => "wxpay#index"
+  match "/wxpay/warning" => "wxpay#warning"
+  match "/wxpay/payfeedback" => "wxpay#payfeedback"
+  match "/wxpay/pay", :to => "wxpay#pay"
+  match "/wxpay/test", :to => "wxpay#test"
+  match "/wxpay/success", :to => "wxpay#success"
+  match "/wxpay/fail", :to => "wxpay#fail"
+  match "/wxpay/yaic_pay", :to => "wxpay#yaic_pay"
+  match "/wxpay/yaic_faild", :to => "wxpay#yaic_faild"
+  match "/wxpay/hongbao_pay", :to => "wxpay#hongbao_pay"
+  match "/wxpay/hongbao_faild", :to => "wxpay#hongbao_faild"
+
+  resources :wxpay, only: :index do
+    collection do
+      get :ali_pay, :ali_faild
+    end
+  end
+
+  resources :yeepay, only: :new do
+    get :pay, :callback, on: :collection
+  end
+
+  namespace :payment do
+    get 'yeepay/pay', to: "yeepay#pay"
+    match 'yeepay/:merchantaccount/callback', to: "yeepay#callback", via: [:post, :put, :get]
+    match 'yeepay/notify', to: "yeepay#notify", via: [:post, :put, :get]
+
+    get 'alipay/pay', to: "alipay#pay"
+    get 'alipay/callback', to: "alipay#callback"
+    match 'alipay/notify', to: "alipay#notify", via: [:post, :put, :get]
+
+    get 'vip_userpay/callback', to: "vip_userpay#callback"
+    match 'vip_userpay/notify', to: "vip_userpay#notify", via: [:post, :put, :get]
+    get 'wxpay/pay', to: "wxpay#pay"
+    get 'wxpay/success', to: "wxpay#success"
+    get 'wxpay/fail', to: "wxpay#fail"
+    get 'wxpay/test', to: "wxpay#test"
+    match 'wxpay/notify', to: "wxpay#notify", via: [:post, :put, :get]
+  end
+
+  match "/tenpay/callback", :to => "tenpay#callback", as: :tenpay_callback
+  match "/tenpay/notify",   :to => "tenpay#notify",   as: :tenpay_notify
+  match "/tenpay/pay",      :to => "tenpay#pay",      as: :tempay_pay
+
+  match "/app/donation_orders/callback", :to => "tenpay#callback", as: :tenpay_callback
+
+  resources :news, only: [:index, :show] do
+    get :qa, :info, :company, on: :collection
+  end
+  resources :feedbacks, only: [:index, :create, :show]
+
+  resources :binds, only: :index do
+    post :rebind, :index, :step1, on: :collection
+    get :rebind, :bind_process, :binding, :bind_validate, :step1, :step2, :binded, on: :collection
+  end
+
+  resources :assistant_suppliers, only: [] do
+    post :toggle, on: :collection
+  end
+
+  resources :activity_prize_elements, only: [:create, :update, :destroy]
+
+  resources :activity_prizes, except: [:index] do
+    get :probability, on: :collection
+  end
+
+  resources :leaving_messages, only: [:index, :create, :edit, :destroy] do
+    collection do
+      get :set_template, :edit_activity
+      post :set_header_bg, :upload, :set_template_save, :update_activity
+      put :update_activity
+    end
+
+    post :forbid_replier, :cancel_forbid_replier, :deny, :check, on: :member
+  end
+
+  resources :suppliers, only: [:new, :create, :update, :edit] do
+    get :sms_switch, :send_sms,  on: :collection
+    post :open_sms, :close_sms, :send_message, :send_text_message, :update_tel, on: :collection
+  end
+
+  resources :supplier_applies, only: [:new, :create] do
+    get :free, :send_sms, on: :collection
+  end
+
+  resources :supplier_prints do
+    collection do
+      get :activities
+    end
+    member do
+      put :update_activities
+    end
+  end
+
+  resources :wifi_clients, only: [:index, :create, :update] do
+    get :mobile, on: :collection
+  end
+
+  match "/member/bind", :to => "wifi_clients#bind" #给潮wifi调用的接口
+  match "/member/modify_bind", :to => "wifi_clients#modify_bind" #给潮wifi调用的接口
+
+  resources :supplier_print_settings, :supplier_print_pictures
+  resources :supplier_print_clients do
+    resources :supplier_print_pictures
+    member do
+      post :update_pics, :delete_pics, :update_temp
+    end
+  end
+
+  resources :api, only: [] do
+    collection do
+      get :msg_test, :service, :callback, :map_url
+      post :service
+    end
+  end
+  match '/server/:code' => 'api#service', via: [:post, :get]
+  match '/:app_id/callback' => 'api#service', via: [:post, :get]
+
+  # match '/bqq/auth' => 'bqq#auth', via: :post
+  # match '/bqq/login' => 'bqq#login', as: :bqq_login
+  # match '/api/bqq/website_menus' => 'bqq#website_menus'
+  # match '/api/bqq/autoreply' => 'bqq#autoreply'
+
+  resources :passwords, only: [:new, :create]
+
+  resources :questions do
+    post :destroy_multi, on: :collection
+  end
+
+  resources :materials, :multiple_materials
+  resources :materials_audios, only: [:index, :create, :destroy]
+
+  resources :wx_replies, only: [:new, :create, :update]
+  resources :wx_menus do
+    get :up_menu, :down_menu, :menus, on: :collection
+  end
+
+  resources :wx_mp_users, except: [:edit, :show, :destroy] do
+    post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
+    get :welcome, :reply, :qrcode, :oauth, on: :collection
+  end
+
+  resources :activities do
+    member do
+      post :stop, :active, :delete, :deal_failed, :deal_success, :prepare_settings
+      post :start_settings, :rule_settings, :prize_settings
+
+      put :prepare_settings, :start_settings, :rule_settings, :prize_settings
+
+      get :survey, :vote_form, :edit_prepare_settings, :edit_start_settings
+      get :edit_rule_settings, :edit_prize_settings, :vote_items
+      get :edit_group, :show_group, :vote_qrcode, :vote_qrcode_download
+      post :update_vote_items
+      get :statistics
+    end
+
+    collection do
+      get :new_group
+      get :old_coupons, :guas, :wheels, :fights, :groups, :votes, :surveys, :hit_eggs, :slots, :aids, :vote_form, :waves, :unfolds, :recommends, :guesses
+      get 'user_data', as: :votes_user_data
+      get 'diagram',   as: :votes_diagram
+      get 'survey'
+      get :associated_activities
+    end
+
+    get :consumes, :report, on: :collection
+  end
+
+  resources :old_coupons, :guas, :wheels, :hit_eggs, only: [ :create, :update ]
+
+  resources :activity_consumes, only: [:index, :show] do
+    post :used, on: :member
+  end
+
+  resources :fight_questions
+  resources :fight_papers  do
+    get :user_data, on: :collection
+    get :use_code, on: :member
+  end
+
+  resources :activity_survey_questions do
+    collection do
+      get :diagram, :user_data, :update_sorts
+    end
+  end
+
+  resources :channel_statistics, only: :index
+  resources :channel_qrcodes, except: :show do
+    get :download, :qrcode_download, on: :member
+    get :index_json, on: :collection
+  end
+  resources :channel_types, except: :show  do
+    get :index_json, on: :collection
+  end
+
+  resources :addresses, only: []  do
+    get :cities, :districts, on: :collection
+  end
+
+  resources :datacube_vips, only: :index do
+    get :point, :amount, on: :collection
+  end
+
+  resources :platforms, only: :index do
+    get :bind, on: :collection
+  end
+
+  namespace :site do
+    resources :dev_logs do
+      # get :oa, :fxt, on: :collection
+    end
+  end
+  # match :micro_channel, :h5_marketing, :large_customer, :optimal_code, :store, :electricity, :retail, :agents_inquiry, controller: 'site/pages'
+
+end

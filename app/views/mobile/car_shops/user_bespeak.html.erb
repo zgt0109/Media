@@ -1,0 +1,36 @@
+<section id="sec-index">
+  <%= render 'footer' %>
+  <div class="body">
+    <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>预约<%= params[:bespeak_type] == "1" ? "保养" : "试驾" %></div>
+    <% @user_bespeaks.each do |bespeak| %>
+      <div class="mod-box">
+        <dl>
+          <dt>
+            <a>
+              <b>我的<%= params[:bespeak_type] == "1" ? "保养" : "试驾" %></b>
+            </a>
+          </dt>
+          <dd class="show">
+            <div class="mod-form form-hor">
+              <div class="form-li">
+                <div class="li-l"><b>预约时间：</b></div>
+                <div class="li-r"><%= bespeak.bespeak_date %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b><%= params[:bespeak_type] == "1" ? "保养" : "试驾" %>车型：</b></div>
+                <div class="li-r"><%= bespeak.car_type.try(:name) %></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>订单状态：</b></div>
+                <div class="li-r"><em class="<%= bespeak.visited? ? "green" : "red" %>"><%= bespeak.status_name %></em></div>
+              </div>
+              <% if bespeak.unvisit? %>
+                <a href="<%= delete_bespeak_mobile_car_shops_path(car_bespeak_id: bespeak.id, supplier_id: @supplier.id) %>" class="btn" onclick="if (confirm('确认取消预定?')){return true;};return false;">取消预定</a>
+              <% end %>
+            </div>
+          </dd>
+        </dl>
+      </div>
+    <% end %>
+  </div>
+</section>

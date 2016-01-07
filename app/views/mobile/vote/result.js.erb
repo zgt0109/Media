@@ -1,0 +1,15 @@
+<% if @activity.vote_status_attrs[0].eql?(Activity::HAS_ENDED_NAME) || @activity_user.persisted? %>
+  var html = '<%= j (render "mobile/vote/diagram#{@activity.vote_item_type}_li", {results: @results, activity: @activity}) %>';
+  $(".results ul").append(html);
+  $(".mod-load").remove();
+  <% if @results.try(:next_page) %>
+    $(".results").append('<div class="mod-load"><span class="tips">下拉加载更多</span><span class="jiazai"><i class="fa fa-spinner fa-spin "></i> 正在加载...</span><%= link_to_next_page @results, "加载更多", remote: true, style: 'display:none;' %></div>');
+  <% end %> 
+<% else %>
+  var html = '<%= j (render "mobile/vote/list#{@activity.vote_item_type}_li", {activity_vote_items: @activity_vote_items, select_count: @activity.activity_property.try(:get_limit_count).to_i}) %>';
+  $(".lanmu-content ul").append(html);
+  $(".mod-load").remove();
+  <% if @activity_vote_items.try(:next_page) %>
+    $(".lanmu-content").append('<div class="mod-load"><span class="tips">下拉加载更多</span><span class="jiazai"><i class="fa fa-spinner fa-spin "></i> 正在加载...</span><%= link_to_next_page @activity_vote_items, "加载更多", remote: true, style: 'display:none;' %></div>');
+  <% end %> 
+<% end %>

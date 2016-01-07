@@ -1,0 +1,1 @@
+$("#hotel_room_type_id").html('<%=  j select_tag :hotel_room_type_id, options_for_room_type("hotel_room_setting", @hotel_branch_id, params[:hotel_room_type_id]), prompt: "全部"%>');

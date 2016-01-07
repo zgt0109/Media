@@ -1,0 +1,72 @@
+var str = '';
+var rel  = parseInt("<%= params[:rel].to_i %>");
+var type = parseInt("<%= params[:type].to_i %>");
+var current_select = $("#booking_category_id" + rel);
+var next_select = $("#booking_category_id" + (rel + 1));
+var select_start = '<select class="col-xs-2 margin-right-5 booking_category" id="booking_category_id' + (rel + 1) + '" name="booking_category_id' + (rel + 1) + '" rel="' + (rel + 1) + '">';
+var select_end = '</select>';
+var next_select_start_val = "<%= @booking_category.children.order(:sort).first.try(:id) %>";
+
+if(type == 2){
+    str += '<option value="-1">不限</option>'
+}
+
+<% @booking_category.children.order(:sort).each_with_index do |child, index| %>
+    str += '<option value="<%= child.id%>"><%= child.name %></option>'
+<% end %>
+
+<% if @booking_category.allow_menu_layer %>
+    if(rel != 0){
+        if(next_select.length == 0){
+            current_select.after(select_start + str + select_end);
+        }else{
+            next_select.html(str);
+        }
+        if(str == ""){
+            if(type == 2){
+                $.each($('.booking_category'), function(){
+                    if(parseInt($(this).attr('rel')) > rel){
+                        $(this).html('<option value="-1">不限</option>');
+                    }
+                });
+            }else{
+                $.each($('.booking_category'), function(){
+                    if(parseInt($(this).attr('rel')) > rel){
+                        $(this).remove();
+                    }
+                });
+            }
+            $(".hidden_booking_category_id").val(<%= @booking_category.id %>);
+        }else{
+            if(type == 2){
+                $.each($('.booking_category'), function(){
+                    if(parseInt($(this).attr('rel')) > (rel+1)){
+                        $(this).html('<option value="-1">不限</option>');
+                    }
+                });
+                $(".hidden_booking_category_id").val(<%= @booking_category.id %>);
+            }else{
+                $(".hidden_booking_category_id").val(next_select_start_val);
+            }
+
+            $("#booking_category_id" + (rel + 1)).show();
+
+            if($("#booking_category_id" + (rel + 1)).val() == "-1"){
+
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: "/booking_categories/" + $("#booking_category_id" + (rel + 1)).val() + "?rel=" + (rel + 1) + "&&type=" + type,
+                    success: function(data) {
+                        return false;
+                    },
+                    error: function() {
+                        return false;
+                    }
+                });
+            }
+        }
+    }
+<% else %>
+    $(".hidden_booking_category_id").val(<%= @booking_category.id %>);
+<% end %>

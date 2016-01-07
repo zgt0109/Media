@@ -1,0 +1,19 @@
+<%= render "slider_full", {:has_slider_text => :no} %>
+
+<div class="index" id='indexList'>
+  <ul>
+    <% website_menus.in_groups_of(4, false).each do |menus| %>
+        <li>
+            <% menus.each do |menu| %>
+              <%= link_to menu_url(menu), :class => 'box mod-index' do %>
+                  <small><%= menu.title %></small>
+              <% end %>
+            <% end %>
+        </li>
+    <% end %>
+  </ul>
+</div>
+
+<% content_for :document_ready_js do %>
+    divSwipe("indexList");
+<% end %>

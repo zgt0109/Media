@@ -1,0 +1,41 @@
+<% if website_menus.present? %>
+    <div class="index" id="index">
+      <% website_menus[0..4].each do |menu| %>
+          <%= link_to menu_url(menu), class: "box mod-index on" do %>
+              <% if menu.pic? || menu.font_icon.present? %>
+                <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+              <% else %>
+                <i><small><%= menu.title %></small></i>
+              <% end %>
+
+          <% end %>
+      <% end %>
+      <div class="start-1"></div>
+      <div class="start-2"></div>
+    </div>
+
+
+    <% content_for :document_ready_js do %>
+        var $index=$("#index"),
+            $a=$index.find(".mod-index"),
+            $main=$index.find(".index-main");
+        setTimeout(function(){
+            $a.addClass("on");
+        },"2000s","ease-in");
+        $main.click(function(){
+            $index.removeAttr("style");
+            $a.removeAttr("style");
+            if($a.hasClass("on")){
+                $a.toggleClass("on");
+                $index.css({"-webkit-transition-delay":"1s"}).toggleClass("move");
+            }else{
+                $index.toggleClass("move");
+                $a.css({"-webkit-transition-delay":"2s"}).toggleClass("on");
+            }
+        });
+        <% if @website_setting.bg_image.present? %>
+            // 静态背景图
+            //$(".html").css("background-image", "url(<%= @website_setting.bg_image %>)");
+        <% end %>
+    <% end %>
+<% end %>

@@ -1,0 +1,85 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <%= render "breadcrumb" %>
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li <% if controller_name == "wx_walls" %>class="active"<% end %>>
+          <%= link_to "微信墙管理", "/wx_walls" %>
+        </li>
+        <li <% if controller_name == "wx_wall_messages" %>class="active"<% end %>>
+          <%= link_to "留言管理", "/wx_wall_messages" %>
+        </li>
+        <li <% if controller_name == "wx_wall_datas" %>class="active"<% end %>>
+          <%= link_to "数据统计", "/wx_wall_datas" %>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24  ">
+        <div id="tab-3" class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="col-md-3 row">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">选择活动：</span>
+                  <%= select_tag :id, options_for_select(current_user.wx_walls.show.order('id DESC').map{|a|[a.name,a.id]}, params[:id]), class: "col-xs-12" %>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <a href="javascript:location.reload();" class="btn btn-sm btn-success">刷新统计</a>
+              </div>
+            </div>
+            <div class="col-md-12 margin-top-20">
+              <div class="tab-content no-padding no-border">
+                <div id="sub-tab-1" class="tab-pane fade active in">
+                  <table id="peopleDataTable" class="table table-striped table-bordered table-hover dataTable ">
+                    <thead>
+                      <tr>
+                        <th>统计</th>
+                        <th>人数</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if @wx_wall %>
+                        <tr>
+                          <td>微信墙参与人数统计</td>
+                          <td><%= @wx_wall_users_count %> 人</td>
+                        </tr>
+                        <tr>
+                          <td>微投票参与人数统计</td>
+                          <td><%= @vote_users_count %> 人</td>
+                        </tr>
+                        <tr>
+                          <td>摇一摇参与人数统计</td>
+                          <td><%= @shake_users_count %> 人</td>
+                        </tr>
+                        <tr>
+                          <td>微报名参与人数统计</td>
+                          <td><%= @enroll_users_count %> 人</td>
+                        </tr>
+                      <% else %>
+                        <tr>
+                          <td colspan="2" class="green text-center">没有记录</td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $("ul.breadcrumb").append("<li><a href='/wx_walls'>数据统计</a></li>");
+  $('#id').on('change', function() {
+    window.location.href='<%= wx_wall_datas_url %>?id='+$(this).val();
+  });
+});
+</script>
+<% end %>

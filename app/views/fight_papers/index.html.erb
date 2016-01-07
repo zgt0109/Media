@@ -1,0 +1,122 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+	<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微活动', activities_path %></li>
+      <li><%= link_to '一战到底', fights_activities_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+	<div class="page-content">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="alert alert-block alert-info ">
+					<strong class="pull-left">注意：</strong>
+					<ul class="vwebsiteHeadAlert">
+						<li>本赛季共持续<%= @fight_papers.count%>天</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<ul class="nav-list">
+					<% @fight_papers.each_with_index do |fight_paper, p_i| -%>
+						<li class="<%= 'open' if p_i == params[:paper_index].to_i %>">
+							<a href="javascript:;" class="dropdown-toggle">
+								<span class="menu-text"> 第<%= fight_paper.the_day %>天（<%= fight_paper.active_date %>） </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<div class="col-md-12 row dropdown-menu modal-body">
+								<%= form_for fight_paper do |f| %>
+				      		<%= hidden_field_tag "activity_id", params[:activity_id] %>
+				      		<%= hidden_field_tag "paper_index", p_i %>
+									<div class="col-md-7">
+										<div class="alert alert-block alert-info ">
+											<strong class="pull-left">注意：</strong>
+											<ul class="vwebsiteHeadAlert">
+												<li>1、阅读时间为倒计时，时间结束后，阅读文字消失，进入答题环节；</li>
+												<li>2、赛前阅读文字不设置，则直接进入答题。</li>
+											</ul>
+										</div>
+										<div class="form-group">
+											<label class="control-label">赛前阅读说明</label>
+											<div class="clearfix">
+												<%= f.text_area :description, rows: 5, maxlength: 200, class: "form-control", placeholder: "赛前阅读文字，参赛粉丝将被要求在指定时间内认真阅读相关的信息，该文字的内容将作为您的自定义题目的答案依据。200个字符以内" %>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label">阅读时间设置（秒）<span class="required-star">*</span><small class="help-inline text-warning line-height-32">阅读时间必须大于10秒且小于60秒</small></label>
+											<div class="clearfix">
+												<%= f.text_field :read_time, class: 'col-xs-12' %>
+											</div>
+										</div>
+										<div class="form-group">
+											<input type="submit" class="btn btn-sm btn-primary form-submit submit-keep save-question" value="保存"/>
+										</div>
+									</div>
+									<div class="col-md-5">
+										<% if fight_paper.the_day == 1 and current_user.fight_questions.used.count == 0 %>
+											<div class="form-group" onclick="javascript:location.href='<%= new_fight_question_path %>'"><label class="control-label">您的题库是空的，请先设置题目</label></div>
+			              <% else %>
+			                <% questions_options = current_user.fight_questions.used.order("created_at desc").map{|q| [truncate_u(q.title),q.id]} %>
+			                <% fight_paper.fight_questions_with_default.each_with_index do |fight_question, i| %>
+												<div class="form-group">
+													<% if i == 0 %><label class="control-label">题目</label><% end %>
+													<div class="clearfix">
+														<%= select_tag "fight_paper[fight_question_ids][]", options_for_select(questions_options, fight_question.id), include_blank: true, data: "select_#{p_i}_#{i}", class: "col-xs-10" %>
+														<!--div class='red tip fight-select-message<%#= "#{p_i}#{i}"%>'></div-->
+													</div>
+												</div>
+											<% end %>
+											<div class="form-group">
+												<a href="javascript:void(0);" class="btn btn-sm btn-primary add_question">增加题目</a>
+											</div>
+										<% end %>
+									</div>
+								<% end %>
+							</div>
+							<div class="clearfix"></div>
+						</li>
+ 					<% end %>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $('.page-content').on('click', '.add_question', function(){
+    var questions_size = $(this).closest(".col-md-5").find("select").length,
+      last_select = $(this).closest(".col-md-5").find('select:last');
+    if(questions_size >= 30){
+      showTip('warning','不能超过30个题目');
+    }else{
+      var new_select = last_select.closest(".form-group").clone();
+      if(new_select.find("a").length<=0){
+	      new_select.find("select").after('<a href="javascript:;"class="col-xs-2 line-height-32">删除</a>');
+      }
+      new_select.insertAfter(last_select.closest(".form-group"));
+    }
+  });
+
+  $('.page-content').on('click', '.col-xs-2', function(){
+    $(this).closest(".form-group").remove();
+  });
+
+  $(function() {
+  	$('form').each(function(index, el) {
+  		$(el).validate({
+        rules: {
+          "fight_paper[read_time]" : {
+            required: true,
+            digits: true,
+            min: 10,
+            max: 60
+          }
+        }
+      });
+  	});
+  })
+</script>
+<% end %>

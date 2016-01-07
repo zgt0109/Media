@@ -1,0 +1,68 @@
+<script>
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+      WeixinJSBridge.call('hideOptionMenu');
+    });
+</script>
+
+<%= provide(:title, '我的优惠券') %>
+
+<section id="sec-index">
+  <header>
+    <%= link_to image_tag('/mobile/img/coupons/ico-left.png'), mobile_coupons_path %>
+    <h1>我的优惠券</h1>
+    <a href="javascript:;" class="tright"></a>
+  </header>
+  
+  <div class="body">
+    <div class="tab-box">
+      <ul>
+        <li class="active">
+          <a href="javascript:void(0);">全部</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);">可使用</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);">已使用</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);">已过期</a>
+        </li>
+      </ul>
+    </div>
+    <div class="coupons-list">
+      <div class="tab-page active">
+        <% @consumes.each do |consume| %>
+          <%= render 'consume', consume: consume %>
+        <%- end %>
+      </div>
+      <div class="tab-page">
+        <% @consumes.select { |c| c.can_use? }.each do |consume| %>
+          <%= render 'consume', consume: consume %>
+        <%- end %>
+      </div>
+      <div class="tab-page">
+        <% @consumes.select { |c| c.used? }.each do |consume| %>
+          <%= render 'consume', consume: consume  %>
+        <%- end %>
+      </div>
+      <div class="tab-page">
+        <% @consumes.select { |c| c.expired? }.each do |consume| %>
+            <%= render 'consume', consume: consume  %>
+        <%- end %>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+$(function(){
+    $(".tab-box a").on("click",function(){
+        var $this = $(this),
+            $parent = $this.parent(),
+            $index = $parent.index(),
+            $content = $(".coupons-list .tab-page");
+        $parent.addClass("active").siblings().removeClass("active");
+        $content.removeClass("active").eq($index).addClass("active");
+    });
+})
+</script>

@@ -1,0 +1,2 @@
+$('.vipcard-r #add_to_group option[value=<%= params[:id] %>]').remove();
+$(".vipcard-group").html('<%= j render "groups", vip_groups: @vip_groups %>');

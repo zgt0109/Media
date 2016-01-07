@@ -1,0 +1,23 @@
+<!doctype html>
+  <html class="<%= @html_class || action_name %>">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+      <link rel="shortcut icon" href="/favicon.ico" />
+      <meta name="keywords" content="<%= content_for?(:keywords) ? yield(:keywords) : "微枚迪" %>" />
+      <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "微枚迪" %>" />
+      <meta name="viewport" content="width=1200" />
+      <title><%= content_for?(:title) ? yield(:title) : "首页" %></title>
+      <%= yield :custom_css if content_for?(:custom_css) %>
+      <%= stylesheet_link_tag "home", media: "all" %>
+      <%= javascript_include_tag "home" %>
+      <%= csrf_meta_tags %>
+      <%= render 'application/baidu_tongji' %>
+    </head>
+    <body>
+    <%= render 'header_v5.1' %>
+    <%= content_for?(:content) ? yield(:content) : yield %>
+    <%= render 'footer_v5' unless @no_footer %>
+    <%= yield :custom_js if content_for?(:custom_js) %>
+    </body>
+  </html>

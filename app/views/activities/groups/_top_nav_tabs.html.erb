@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger">
+  <li class='<%= side_menu_status(controller="activities",action="groups", {}, active = "active")%>'>
+    <%= link_to "我的团购", groups_activities_path%>
+  </li>
+  <li class='<%= side_menu_status(controller="activities",action="consumes", {}, active = "active")%>' >
+    <%= link_to "SN码管理", consumes_activities_path(activity_type_id: 14)%>
+  </li>
+</ul>

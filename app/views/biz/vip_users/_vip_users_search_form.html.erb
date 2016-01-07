@@ -1,0 +1,95 @@
+<%= form_for @search, html: {method: :get} do |f| %>
+    <div class="col-sm-12 margin-top-10">
+        <div class="col-md-3 row">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">会员卡号：</span>
+                <%= f.text_field :user_no_like, class: "col-xs-12" %>
+            </div>
+        </div>
+
+        <% if f.object.class.to_s =~ /VipUser/ %>
+        <div class="col-md-3">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">线下会员卡号：</span>
+                <%= f.text_field :custom_user_no_like, class: "col-xs-12" %>
+            </div>
+        </div>
+        <% end %>
+
+        <div class="col-md-3">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">姓名：</span>
+                <%= f.text_field :name_like, class: "col-xs-12" %>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">手机号码：</span>
+                <%= f.text_field :mobile_like, class: "col-xs-12" %>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-9 margin-top-20">
+        <div class="col-md-4 row">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">余额：</span>
+                <div class="input-group">
+                    <%= f.text_field :usable_amount_gte, class: 'input-sm form-control' %>
+                    <span class="input-group-addon input-group-addon-text">
+                    -
+                    </span>
+                    <%= f.text_field :usable_amount_lte, class: 'input-sm form-control' %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">积分：</span>
+                <div class="input-group">
+                    <%= f.text_field :usable_points_gte, class: 'input-sm form-control' %>
+                    <span class="input-group-addon input-group-addon-text">
+                    -
+                    </span>
+                    <%= f.text_field :usable_points_lte, class: 'input-sm form-control' %>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="input-group input-group-text">
+                <span class="input-group-addon">等级：</span>
+                <% options = [['全部等级', '']] + current_user.vip_card.vip_grades.visible.sorted.pluck(:name, :id) %>
+                <%= f.select :vip_grade_id_eq, options, {}, class: "col-xs-12" %>
+            </div>
+        </div>
+    </div>
+    <div class="margin-top-20 pull-left">
+        <%= f.submit '查询', class: "btn btn-sm btn-primary" %>
+        <% if controller_name == 'vip_users' %>
+            <% exporting_count = 1500 %>
+            <% if @total_count <= exporting_count %>
+                <%= link_to '导出EXCEL', vip_users_path(format: :xls, search: params[:search], page_exl: 1), class: 'btn btn-sm btn-primary' %>
+            <% else %>
+                <%= link_to '导出EXCEL', vip_users_path(format: :xls, search: params[:search]), class: 'btn btn-sm btn-primary hide', id: "a_exl" %>
+                <a class="btn btn-primary btn-sm btn-filter" data-title="会员资料导出" data-toggle="modals" data-target="delModal" data-text='<%= data_text(@total_count,(@total_count/exporting_count.to_f).ceil, exporting_count) %>'>导出EXCEL</a>
+            <% end %>
+        <% end %>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script>
+  $(".btn-filter").on("click", function(){
+    setTimeout(function(){
+      $("button[data-fn=submit]").attr("type","button");
+    },200)
+  });
+
+  $('body').on('click','button[data-fn="submit"]',function(){
+    var url = "<%= vip_users_path(format: :xls, search: params[:search]) %>"+"<%= params[:search].present? ? '&page_exl=' : '?page_exl=' %>"+$("[name=page_exl]:checked").val();
+    $("#a_exl").attr("href",url);
+    $("#a_exl")[0].click();
+  });
+</script>
+<% end %>

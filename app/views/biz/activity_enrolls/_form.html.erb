@@ -1,0 +1,14 @@
+<div class="box-form form-col tleft">
+  <form>
+      <% @activity_forms.each do |activity_form| %>
+      <div class="p" style="padding:0">
+        <span style="text-align:left;width:24%;"><%= activity_form.field_value %>：</span>
+         <%= @activity_enroll.attrs(activity_form.activity_form_field.name) %>
+      </div>
+      <% end %>
+      <div class="p" style="padding:0; margin-bottom:20px;">
+         <span style="text-align:left;width:24%;">创建时间：</span>
+        <%= @activity_enroll.created_at %>
+      </div>
+  </form>
+</div>

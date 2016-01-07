@@ -1,0 +1,57 @@
+<%- messages.each do |message| %>
+  <div class="box box-comment" mid="<%= message.id %>">
+    <div class="hd" onclick="javascript:showBox(<%= message.id %>);">
+      <b><%= message.nickname %></b>
+    </div>
+    <div class="bd">
+      <p><%= message.body %></p>
+      <span><%= message.created_at %></span>
+      <%= form_for @message, :html=> {:id => "form_#{message.id}"}, url: app_leaving_messages_path, validate: true do |f| %>
+        <div class="box-form box-message" id="box_<%= message.id %>">
+          <%= f.hidden_field :parent_id, value: message.id %>
+          <%- if @replier %>
+            <%= f.hidden_field :replier_id %>
+            <%= f.hidden_field :replier_type %>
+          <%- end %>
+          <%= f.text_area :body, id: "message_body_#{message.id}", class: 'message_body', placeholder: "回复,限255个字符...", rows: 3, maxlength: 255 %>
+          <input type="button" id="reply_<%= message.id %>" value="确定" class="reply_button btn btn-small form-submit" onclick="javascript:reply(<%= message.id %>)"/>
+        </div>
+      <%- end %>
+    </div>
+    <%- if message.children.present?  %>
+      <div class="ft">
+        <div class="box">
+          <ul class="table">
+            <% children = message.children %>
+            <% children = children.audited if @activity.audited? %>
+            <%- count = children.count %>
+            <%- children.order("created_at DESC").each_with_index do |child, index| %>
+              <li class="tr <%= 'first' if index < 3 %> <%= 'last' if (index == count - 1 && count <= 3) %> "><b class="td">回复:</b><span class="td" style="word-break: break-all;"><%= child.body %></span></li>
+            <%- end %>
+          </ul>
+          <%- if count > 3 %>
+            <a class="btn-more" id="more_<%= message.id %>" onclick="javascript:retract(<%= message.id %>, <%= count %>)"><span>查看所有<%= count%>条回复</span></a>
+          <%- end %>
+        </div>
+      </div>
+    <%- end %>
+  </div>
+<%- end %>
+<script>
+  $("textarea,input[type='text']").on({
+        focusin:function(){
+            $(".btn-up").fadeOut();
+        },
+        focusout:function(){
+            $(".btn-up").fadeIn();
+        },
+    });
+   $(".btn-up, .btn").on({
+        touchstart:function(){
+            $(this).addClass("active");
+        },
+        touchend:function(){
+             $(this).removeClass("active");
+        }
+    });
+</script>

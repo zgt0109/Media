@@ -1,0 +1,46 @@
+<%
+unless @mobile_footer_rendered
+  @mobile_footer_rendered = true
+%>
+
+  <%= @supplier.try(:piwik_js_code) %>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var config = {
+        link: location.href.replace("wxuid=", "origin_wxuid=").replace("openid=", "origin_openid="),
+        img_url: '<%= @share_photo.try(:pic_url) %>',
+        // img_width: '200',
+        // img_height: '200',
+        desc: document.title,
+        title: document.title
+      };
+
+      // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+      document.addEventListener('WeixinJSBridgeReady', function() {
+        var WJ = WeixinJSBridge;
+        // 发送给好友
+        WJ.on('menu:share:appmessage', function() {
+          WJ.invoke('sendAppMessage', config, function(res) {
+            // _report('sendAppMessage', res.err_msg);
+          });
+        });
+        // 发送到朋友圈
+        WJ.on('menu:share:timeline', function() {
+          WJ.invoke('shareTimeline', config, function(res) {
+            // _report('shareTimeline', res.err_msg);
+          });
+        });
+
+        // 发送到微博
+        WJ.on('menu:share:weibo', function() {
+          WJ.invoke('shareWeibo', config, function(res) {
+            // _report('shareWeibo', res.err_msg);
+          });
+        });
+      });
+
+    });
+  </script>
+
+<%end%>

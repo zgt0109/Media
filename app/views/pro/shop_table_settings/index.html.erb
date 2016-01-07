@@ -1,0 +1,76 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li>
+            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+                <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+                <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to "餐桌管理", shop_table_settings_path(industry_id: 10001) %>
+          </li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="tabbable">
+            <ul class="nav nav-tabs padding-24 tab-size-bigger">
+              <li class="active">
+                <%= link_to '餐桌预定总览', shop_table_settings_path(industry_id: 10001) %>
+              </li>
+              <li>
+                <%= link_to '桌位库设置', shop_table_setting_url(@shop_branch, industry_id: 10001) %>
+              </li>
+            </ul>
+            <div class="tab-content no-border padding-24">
+              <div id="tab-1" class="tab-pane fade active in">
+
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <table id="orderTablesTable" class="table table-striped table-bordered table-hover dataTable ">
+                      <thead>
+                      <tr>
+                        <th>日期</th>
+                        <th>开放大厅数量</th>
+                        <th>预定大厅数量</th>
+                        <th>开放包间数量</th>
+                        <th>预定包间数量</th>
+                        <th>操作</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <% @shop_table_settings.each do |shop_table_setting| %>
+                          <tr>
+                            <td><%= shop_table_setting.date %></td>
+                            <td><%= shop_table_setting.open_hall_count %></td>
+                            <td><%= shop_table_setting.hall_table_booking_count_by_date %></td>
+                            <td><%= shop_table_setting.open_loge_count %></td>
+                            <td><%= shop_table_setting.loge_table_booking_count_by_date %></td>
+                            <td>
+                              <a title="编辑" data-toggle="modals" href="javascript:;" data-title="编辑" data-height="1000" data-iframe="<%= edit_shop_table_setting_path(shop_table_setting) %>">编辑</a>
+                            </td>
+                          </tr>
+                      <% end %>
+                      <% if @shop_table_settings.blank? %>
+                          <tr><td colspan="6">无记录</td></tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                    <%= paginate @shop_table_settings %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

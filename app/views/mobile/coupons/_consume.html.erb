@@ -1,0 +1,32 @@
+<a href="<%= user_detail_mobile_coupons_path(id: consume.id, consume_type: consume.class.name) %>" class="box  <%= consume.link_class %>">
+  <div class="cp-info">
+    <dl class="cp-price">
+      <%- if consume.is_a?(Consume)%>
+        <dd class="coin">&yen;</dd>
+        <dt><%= consume.coupon.value %></dt>
+      <%- end %>
+      <dd>
+        <%- if consume.is_a?(Consume)%>
+          <b>元优惠券</b>
+          <span>满<%= (consume.coupon.value_by>0) ? consume.coupon.value_by : 0 %>元可用</span>
+        <%- else %>
+          <b>优惠券</b>
+        <%- end %>
+      </dd>
+    </dl>
+    <div class="cp-time">有效期
+      <%- if consume.is_a?(Consume)%>
+        <%= consume.coupon.use_end.presence || '永久有效' %>
+      <%- else %>
+        <%= consume.expire_at.presence || '永久有效' %>
+      <%- end %>
+    </div>
+  </div>
+  <div class="cp-logo">
+    <%- if consume.is_a?(Consume)%>
+      <img src="<%= consume.coupon.logo_url %>" />
+    <%- else %>
+      <img src="<%= consume.supplier.try(:website).try(:logo_url) %>">
+    <%- end %>
+  </div>
+</a>

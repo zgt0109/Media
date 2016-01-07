@@ -1,0 +1,16 @@
+<% if @items.each do |item| %>
+  <a class="mod-product" href="<%= item_mobile_business_shop_path(@supplier.id, @business_shop, item_id: item.id) %>
+    ">
+    <div class="list-img">
+      <%= image_tag item.pic, height: "100%" %></div>
+    <div class="list-text"> <b><%= item.name %></b>
+      <% if item.price.to_f >  
+      0 %>
+      <span class="fred tright">
+        <small>会员价：￥</small>
+        <%= f item.price %></span>
+      <% end %></div>
+  </a>
+<% end.blank? %>
+  <div class="mod-null">这家店铺太懒了，还没有添加商品！</div>
+<% end %>

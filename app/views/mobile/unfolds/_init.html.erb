@@ -1,0 +1,23 @@
+<div class="body">
+<div class="package-box">
+    <img src="/assets/img/package/package-1.jpg" alt="">
+</div>
+<a id="spin" class="p-btn participate" style="cursor: pointer;">
+    <img src="/assets/img/package/btn.png" alt="">
+    <div class="text">拆包有奖</div>
+</a>
+<div class="btn-box">
+    <div class="cell">
+        <a href="<%= rules_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid] ) %>" class="btn">
+            <span>游戏规则</span>
+        </a>
+    </div>
+    <%- if !@subscribed%>
+        <div class="cell">
+            <a href="javascript:;" class="btn" onclick="showPop('#pop-share')">
+                <span>关注我们</span>
+            </a>
+        </div>
+    <%- end %>
+</div>
+</div>

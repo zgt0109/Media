@@ -1,0 +1,53 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+            <li><%= link_to '微活动', activities_path %></li>
+            <%= yield :breadcrumb_li if content_for?(:breadcrumb_li) %>
+        </ul>
+        <%= render partial:'/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+        <%- if @activity_type_id.try(:to_i) == 71 %>
+            <div class="alert alert-block alert-success">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、拆包有奖活动只适用开通高级接口且设置了OAuth2.0网页授权回调页面域名的认证服务号。</li>
+              </ul>
+            </div>
+        <%- elsif @activity_type_id.try(:to_i) == 70 %>
+            <div class="alert alert-block alert-success">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、推荐有奖活动只适用开通高级接口且设置了OAuth2.0网页授权回调页面域名的认证服务号。</li>
+              </ul>
+            </div>
+        <%- end %>
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-24 tab-size-bigger " id="myTab">
+                <li class="<%= 'active' if %w(old_coupons guas wheels slots aids hit_eggs waves unfolds recommends guesses guess_reports).include?(action_name) %>"><%= link_to_activities_by_type(@activity_type_id) %></li>
+                <%- if @activity_type_id.try(:to_i) == 70 %>
+                     <li class="<%= 'active' if action_name == 'chart' %>"><%= link_to '统计数据', chart_recommends_path %></li>
+                <%- end %>
+                <li class="<%= 'active' if controller_name == 'fight_questions' %>"><%= link_to '题库管理', fight_questions_path if @activity_type_id.to_i == 8 %></li>
+                 <%- if @activity_type_id.try(:to_i) == 71 %>
+                     <li class="<%= 'active' if action_name == 'consumes' %>"><%= link_to 'SN码管理', consumes_unfolds_path %></li>
+                 <%- elsif @activity_type_id.try(:to_i) == 70 %>
+                     <li class="<%= 'active' if action_name == 'consumes' %>"><%= link_to 'SN码管理', consumes_recommends_path %></li>
+                 <%- elsif @activity_type_id.try(:to_i) == ActivityType::GUESS || controller_name =~ /guess/ %>
+                     <li class="<%= 'active' if controller_name =~ /guess_questions/ %>"><%= link_to '题库管理', guess_questions_path %></li>
+                     <li class="<%= 'active' if action_name == 'consumes' %>"><%= link_to 'SN码管理', consumes_guesses_path %></li>
+                     <li class="<%= 'active' if controller_name =~ /guess_reports/ %>"><%= link_to '美图猜猜报表', guess_reports_path %></li>
+                 <%- else %>
+                     <li class="<%= 'active' if action_name == 'consumes' %>"><%= link_to 'SN码管理', consumes_activities_path(activity_type_id: @activity_type_id) %></li>
+                     <li class="<%= 'active' if action_name == 'report' %>"><%= link_to report_name(@activity_type_id), report_activities_path(activity_type_id: @activity_type_id) %></li>
+                 <%- end %>
+                </ul>
+                <div class="tab-content no-border padding-24">
+                    <%= yield :tab_content %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

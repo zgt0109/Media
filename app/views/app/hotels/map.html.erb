@@ -1,0 +1,24 @@
+<header>
+	<a class="ico-hd arr-hd" href="javascript:history.go(-1);"></a>
+    <h1>酒店位置</h1>
+</header>
+<div id="container"></div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9c72e3ee80443243eb9d61bebeed1735"></script>
+<script type="text/javascript">
+$('#container').css({
+        width: $(window).width(),
+        height: $(window).height()
+    });
+
+var map = new BMap.Map("container");
+var myGeo = new BMap.Geocoder();
+
+myGeo.getPoint("<%= params[:address] %>", function(point){
+    if (!point) {
+        point = new BMap.Point(121.507137, 31.24475);
+    }
+    map.centerAndZoom(point, 15);
+    map.addOverlay(new BMap.Marker(point));
+}, "<%= params[:city_name] %>");
+</script>
+

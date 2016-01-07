@@ -1,0 +1,130 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <%= render "breadcrumb" %>
+  <div class="page-content">
+    <div class="tabbable">
+      <%= render "top_navs" %>
+      <div class="tab-content no-border padding-24">
+        <div id="tab-2" class="tab-pane fade active in">
+          <div class="row">
+            <div class="col-md-12 col-lg-12">
+              <%= form_for @search, url: albums_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+              <div class="col-md-3 row">
+                <div class="input-group input-group-sm input-group-text">
+                  <%= f.text_field :name_like, class: 'form-control', placeholder:"请输入查询信息" %>
+                  <span class="input-group-addon">
+                  <input type="submit" class="btn btn-primary btn-sm" value="查询" />
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-3 row pull-right">
+                <%= link_to "新增相册", new_album_path, class: "btn btn-primary btn-sm pull-right" %>
+              </div>
+              <% end %>
+            </div>
+            <div class="col-md-12 margin-top-20">
+              <table id="albumsTable" class="table table-striped table-bordered table-hover dataTable ">
+                <thead>
+                  <tr>
+                    <th>专辑名称</th>
+                    <th>图片数量</th>
+                    <th>浏览方式</th>
+                    <th>手机端显示</th>
+                    <th>创建日期</th>
+                    <th>更新日期</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @albums.each_with_index do |album, i| %>
+                  <tr id="album-row-<%= album.id %>">
+                    <td><%= album.name %></td>
+                    <td><%= album.photos_count %></td>
+                    <td><%= Album::BROWSING_WAYS[album.browsing_way] %></td>
+                    <td>
+                      <label>
+                        <input name="switch-field-1" url="<%= visible_album_path(id: album.id) %>" class="ace ace-switch ace-switch-4" type="checkbox" <%if album.visible%> checked <% end %>>
+                        <span class="lbl"></span>
+                      </label>
+                    </td>
+                    <td><%= album.created_at.to_date %></td>
+                    <td><%= album.updated_at.to_date %></td>
+                    <td>
+                      <%= link_to '编辑', edit_album_path(album) %>
+                      <%= link_to '删除', album_path(album), data: { method: :delete, confirm: '确定要删除该相册？' } %>
+                      <%= link_to '评论管理', comments_albums_path(id: album.id) %>
+                      <%= link_to '上移', sort_album_path(id: album.id, type: 'sort_up', from_id: @search.relation[@albums.default_per_page * (@albums.current_page - 1) + i - 1].try(:id)), method: :post, style: "display:#{album.id == @album_first_id ? 'none':''};" %>
+                      <%= link_to '下移', sort_album_path(id: album.id, type: 'sort_down', from_id: @search.relation[@albums.default_per_page * (@albums.current_page - 1) + i + 1].try(:id)), method: :post, style: "display:#{album.id == @album_last_id ? 'none':''};"  %>
+                    </td>
+                  </tr>
+                  <% end %>
+                  <% if @albums.blank? %>
+                    <tr><td colspan="7" class="green text-center">无记录</td></tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @albums %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+    $(function(){
+        $('#breadcrumbs>ul').append("<li><%= j link_to '相册管理', albums_path %></li>");
+        $('#albumsTable').on('click', 'a.sort_up, a.sort_down, input[url]', function(){
+            var p = $(this).closest('tr'), self = $(this);
+            $.post($(this).attr("url"), function(result){
+                if(result['type'] == 'success'){
+                    if(self.hasClass('sort_up')){
+                        p.prev().find('.sort_up').show();
+                        p.prev().find('.sort_down').show();
+                        p.prev().before(p);
+                    }else if(self.hasClass('sort_down')){
+                        p.next().find('.sort_up').show();
+                        p.next().find('.sort_down').show();
+                        p.next().after(p);
+                    }
+                    if(self.hasClass('sort_up')){
+                        if(p.prev().length == 0){
+                            self.hide();
+                        }else{
+                            self.show();
+                        }
+                        if(p.next().length == 0){
+                            self.next().hide();
+                        }else{
+                            self.next().show();
+                            if(p.next().next().length == 0){
+                                p.next().find('.sort_down').hide();
+                            }
+                        }
+                    }
+                    if(self.hasClass('sort_down')){
+                        if(p.prev().length == 0){
+                            self.prev().hide();
+                        }else{
+                            self.prev().show();
+                            if(p.prev().prev().length == 0){
+                                p.prev().find('.sort_up').hide();
+                            }
+                        }
+                        if(p.next().length == 0){
+                            self.hide();
+                        }else{
+                            self.show();
+                        }
+
+                    }
+                }
+                showTip(result['type'], result['info']);
+            });
+        });
+    });
+
+</script>
+<% end %>

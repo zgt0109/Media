@@ -1,0 +1,68 @@
+<% title @activity.try(:name) %>
+<%= stylesheet_link_tag 'mobile/wheel' %>
+<%= javascript_include_tag 'mobile/wheel' %>
+<section class="sec-game">
+  <% if @activity_notice.stopped? || ["已结束","已终止"].include?(show_activity_status(@activity)) %>
+    <div class="sec-end" id="sec-end">
+      <p>活动已结束
+          下次记得早点来哦~</p>
+    </div><!--#scene-end end-->
+  <% else %>
+    <div class="sec-start" id="sec-start">
+      <div class="table">
+        <p class="td">
+          <em><%= @activity.start_at.strftime("%Y年%m月%d日") %></em>正式开始...<br/>敬请关注！<br/>
+          <span>离活动开始还有</span><br/>
+          <b id="remainTime"></b><br/>
+        </p>
+      </div>
+    </div><!--#scene-start end-->
+    <script type="text/javascript">
+      $(function(){
+        var sysSecond = <%= @activity.start_at - Time.now %>;
+        var countdownTimer = null;
+        //将时间减去1秒，计算天、时、分、秒
+        function SetRemainTime() {
+          if (sysSecond > 1) {
+            sysSecond = sysSecond - 1;
+            var second = Math.floor(sysSecond % 60);             // 计算秒
+            var minite = Math.floor((sysSecond / 60) % 60);      //计算分
+            var hour = Math.floor((sysSecond / 3600) % 24);      //计算小时
+            var day = Math.floor((sysSecond / 3600) / 24);        //计算天
+            $("#remainTime").html(day + "天" + hour + "小时" + minite + "分" + second + "秒");
+          } else {//剩余时间小于或等于0的时候，就停止间隔函数
+            window.clearInterval(countdownTimer);
+            window.setTimeout(function() {
+              window.location.reload();
+            }, 1000);
+           //这里可以添加倒计时时间为0后需要执行的事件
+          }
+        }
+        if (sysSecond > 0) {
+          countdownTimer = window.setInterval(SetRemainTime, 1000);
+        }
+      })
+    </script>
+  <% end %>
+</section>
+<section class="sec-info sec-bg-top">
+	<% @activity.activity_prizes.each do |prize| %>
+		<p><b><%= prize.title %><% if @activity.activity_property.is_show_prize_qty? %>（共<%= prize.prize_count %>个）<% end %></b><span><%= prize.prize %></span></p>
+	<% end %>
+  <i>活动奖项:</i>
+</section>
+<section class="sec-text sec-bg-bottom">
+  <em></em>亲，中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
+</section>
+<%- if @wx_user %>
+  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+    <a href="list?aid=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
+   <%- end %>
+<%- end %>
+<section class="sec-detail sec-bg-top sec-bg-bottom">
+  <i>活动说明:</i>
+  <em></em>
+  <div class="mod-cke">
+    <%= raw @activity_notice.description rescue '' %>
+  </div>
+</section>

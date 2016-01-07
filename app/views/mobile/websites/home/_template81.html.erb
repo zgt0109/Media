@@ -1,0 +1,42 @@
+<% content_for :header do %>
+    <header></header>
+<% end %>
+
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index" id="indexList">
+  <ul>
+    <% website_menus.in_groups_of(2, nil).each do |menus| %>
+        <% menus.each do |menu| %>
+            <li>
+              <%= link_to menu_url(menu), class: "box mod-index" do %>
+                <div class="index-img">
+                  <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                </div>
+                <div class="index-text">
+                    <p>
+                      <small><%= menu.title %></small>
+                      <!--<span></span>-->
+                    </p>
+                </div>
+              <% end if menu %>
+            </li>
+        <% end %>
+    <% end %>
+  </ul>
+</div>
+
+<% if @shortcut_menus.present? %>
+    <div class="tool">
+      <div class="tool-text">
+        <p>使用工具</p>
+      </div>
+      <div class="tool-link">
+        <% @shortcut_menus[0..3].each do |menu| %>
+            <%= link_to website_activity_link(menu) do %>
+                <%= menu.title.present? ? menu.title : menu.menu_type_name %>
+            <% end %>
+        <% end %>
+      </div>
+    </div>
+<% end %>

@@ -1,0 +1,46 @@
+<a href="javascript:scroll(0,0)" class="btn-up ico-up"></a>
+<div class="pop pop-list">
+  <div class="pop-bg"></div>
+  <div class="pop-bd">
+    <div class="hd"><span>取消</span></div>
+    <div class="bd">
+      <% @categories.each do  |category| %>
+          <% next if category.products.count == 0 %>
+          <dl class="active">
+            <dt>
+              <%= link_to category.has_children? ? 'javascript:void(0);' : mobile_ec_category_path(supplier_id: @supplier.id, id: category), style: 'width: 100%;' do %>
+                  <%= category.name %>
+                  <i class="arrow"></i>
+              <% end %>
+            </dt>
+
+            <% category.children.normal.order(:sort_order).each do |sub_category|%>
+                <% next if sub_category.products.count == 0 %>
+                <dd>
+                  <% if sub_category.has_children? %>
+                      <span><i></i><%= sub_category.name %></span>
+                      <p>
+                        <% sub_category.children.normal.order(:sort_order).each do |child|%>
+                            <% next if child.products.count == 0 %>
+                            <%= link_to mobile_ec_category_path(supplier_id: @supplier.id, id: child) do %><i></i><%= child.name %><% end %>
+                        <% end %>
+                      </p>
+                  <% else %>
+                      <%= link_to mobile_ec_category_path(supplier_id: @supplier.id, id: sub_category) do %><i></i><%= sub_category.name %><% end %>
+                  <% end %>
+                </dd>
+            <% end if category.has_children? %>
+
+
+          </dl>
+
+      <% end  if @categories%>
+    </div>
+
+  </div>
+</div>
+<style>
+  dt a{
+      color: #888888;
+  }
+</style>

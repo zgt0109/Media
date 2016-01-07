@@ -1,0 +1,61 @@
+<html slick-uniqueid="3"><head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<title><%= @panoramagram.name %></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<script type="text/javascript" src="http://imgcache.qq.com/c/=/club/life/trade/weixin/share.js,/club/life/trade/libs/3dview.js,/club/life/trade/libs/swfobject.js?max_age=864000"></script>
+		<script>
+		  document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+		    WeixinJSBridge.call('hideOptionMenu');
+		  });
+		</script>
+		<link rel="stylesheet" href="http://imgcache.qq.com/c/=/lifestyle/app/wx_house/css/3dview.css?max_age=864000">
+	</head>
+	<body style="margin-top: 0px;background:#000">
+		<script type="text/javascript" src="http://imgcache.qq.com/c/=/club/life/trade/libs/pano2vr_player.js,/club/life/trade/libs/skin.js?max_age=864000"></script>
+		<script type="text/javascript" src="http://trade.qq.com/fangchan/static/sharedata.js?max_age=86400"></script>
+		<div id="container" style="width:100%;height:100%;"><div style="top: 0px; left: 0px; position: relative;"><div style="top: 0px; left: 0px; width: 1364px; height: 319px; overflow: hidden; position: absolute; z-index: 0; -webkit-user-select: none;"><canvas width="1364" height="319"></canvas></div><div style="top: 0px; left: 0px; width: 1364px; height: 319px; overflow: hidden; position: absolute; z-index: 1000; -webkit-user-select: none; cursor: auto;"><div class="ggskin ggskin_image" style="position: absolute; left: 592px; top: 157.5px; width: 180px; height: 6px; -webkit-transform-origin: 50% 50%; visibility: hidden; -webkit-transition: none; transition: none;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAAGCAYAAABqz7RMAAAAMUlEQVRYhe3SUQkAIBQEQbV/zcuhJYQHx0yC/did5C4ocaYD4CdDU8XQVDE0VQxNlQee5gO6BibsywAAAABJRU5ErkJggg==" style="position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;"><div class="ggskin ggskin_text" style="position:absolute;left: 1px;top:  -29px;width: 200px;height: 20px;-webkit-transform-origin: 50% 50%;visibility: inherit;border: 0px solid #000000;color: #838383;text-align: left;white-space: nowrap;padding: 0px 1px 0px 1px;overflow: hidden;"><b>正在载入... 100%</b></div><div class="ggskin ggskin_rectangle" style="position: absolute; left: 0px; top: 0px; width: 181px; height: 6px; -webkit-transform-origin: 0% 50%; visibility: inherit; background-color: rgb(197, 197, 197); border: 0px solid rgb(229, 229, 229); -webkit-transform: translate(0px, 0px) rotate(0deg) scale(1, 1) scale(1, 1); background-position: initial initial; background-repeat: initial initial;"></div></div></div><canvas style="top: 0px; left: 0px; width: 1364px; height: 319px; overflow: hidden; position: absolute; z-index: 900; -webkit-user-select: none; visibility: hidden;" width="1364" height="319"></canvas><div style="top: 0px; left: 0px; position: absolute; padding: 3px; visibility: hidden; z-index: 1100;"></div></div></div>
+		<script type="text/javascript">
+		 
+		// check for CSS3 3D transformations and WebGL
+		if (ggHasHtml5Css3D() || ggHasWebGL()) {
+	
+			// create the panorama player with the container
+			pano=new pano2vrPlayer("container");
+			// add the skin object
+			skin=new pano2vrSkin(pano);
+			// load the configuration
+      pano.readConfigUrl("/<%= @supplier.id %>/panoramagrams/<%= @panoramagram.id %>/panorama.xml");
+			// hide the URL bar on the iPhone
+			hideUrlBar();
+		} else if (swfobject.hasFlashPlayerVersion("9.0.0")) {
+			var flashvars = {};
+			var params = {};
+			params.quality = "high";
+			params.bgcolor = "#ffffff";
+			params.allowscriptaccess = "sameDomain";
+			params.allowfullscreen = "true";
+			var attributes = {};
+			attributes.id = "pano";
+			attributes.name = "pano";
+			attributes.align = "middle";
+			flashvars.skinxml="http://imgcache.gtimg.cn/club/life/trade/libs/skin.xml?max_age=864000";
+			/*flashvars.panoxml=location.pathname.replace(/[\w\d_]+\.html.*$/i,"")+"ok.xml"*/
+			flashvars.panoxml= "/<%= @supplier.id %>/panoramagrams/<%= @panoramagram.id %>/panorama.xml";
+			params.base=".";
+			swfobject.embedSWF(
+				"http://imgcache.gtimg.cn/club/life/trade/libs/pano2vr_player.swf?max_age=864000", "container", 
+				"100%", document.documentElement.clientHeight-44,
+				"9.0.0", "", 
+				flashvars, params, attributes);
+			
+		} 
+		</script>
+		<noscript>
+			&lt;p&gt;&lt;b&gt;Please enable Javascript!&lt;/b&gt;&lt;/p&gt;
+		</noscript>
+		<div class="view_change" style="display: none;"><a href="javascript:void(0);" onclick="goBack();return false">切换位置</a></div>	
+	
+
+</body></html>

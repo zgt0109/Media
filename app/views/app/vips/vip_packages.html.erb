@@ -1,0 +1,146 @@
+<div class="html theme-1 vip-bg" id="html">
+    <div class="stage" id="stage">
+        <section id="sec-index">
+            <div class="tab-box tab-1">
+                <a class="<%= 'cur' if params[:type].blank? %>" href="<%= vip_packages_app_vips_path %>">全部</a>
+                <a class="<%= 'cur' if params[:type] == 'unexpired' && params[:status] == 'unused' %>" href="<%= vip_packages_app_vips_path(type: 'unexpired',status: 'unused') %>">可使用</a>
+                <a class="<%= 'cur' if params[:status] == 'used' %>" href="<%= vip_packages_app_vips_path(type: 'unexpired',status: 'used') %>">已使用</a>
+                <a class="<%= 'cur' if params[:type] == 'expired' %>" href="<%= vip_packages_app_vips_path(type: 'expired',status: 'unused') %>">已过期</a>
+            </div>
+            <% if params[:type].blank? %>
+              <% if @vip_packages.blank? %>
+                <div class="no-box">
+                    <div class="no-coupons-icon"></div>
+                    <div class="text">暂无套餐</div>
+                </div>
+              <% else %>
+                <div class="vip-box">
+                  <% @vip_packages.each do |package| %>
+                    <div class="coupons vip-coupons c-normal">
+                        <a href="<%= vip_package_show_app_vips_path(id: package.id) %>">
+                            <div class="coupons-l">
+                                <div class="c-name">
+                                    <div class="coupons-img"></div>
+                                    <span><%= truncate_utf(package.name) %></span>
+                                </div>
+                                <div class="coupons-num"><%= package.vip_package_items.pluck(:name).join("+") %></div>
+                            </div>
+                            <div class="coupons-r">
+                                <div class="price"><small>&yen;</small><%= package.price %></div>
+                                <div class="old-price">&yen;<%= package.old_price %></div>
+                                <p>有效期</p>
+                                <div class="c-time">购买起<%= package.expiry_num %>个月内</div>
+                            </div>
+                        </a>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="no-box hide" id="unused">
+                <div class="no-coupons-icon"></div>
+                <div class="text">暂无套餐，快去购买吧！</div>
+                <a href="<%= vip_packages_app_vips_path %>" >立即购买</a>
+              </div>
+              <div class="no-box exceed-box hide" id="used">
+                <div class="no-coupons-icon"></div>
+                <div class="text">暂无已使用套餐</div>
+              </div>
+              <div class="no-box exceed-box hide" id="expired">
+                <div class="no-coupons-icon"></div>
+                <div class="text">暂无过期套餐</div>
+              </div>
+              <div class="list-box detail-box no-margin J-slider">
+                <% @vip_packages_vip_users.each do |vpvu| %>
+                  <% 
+                    vip_package_item_consumes = vpvu.vip_package_item_consumes.select("count(*) count, vip_package_item_consumes.*").where(status: (params[:status] == 'unused' ? VipPackageItemConsume::UNUSED : VipPackageItemConsume::USED)).group("vip_package_item_id")
+                    
+                    vip_package_items_vip_packages = vpvu.vip_package.vip_package_items_vip_packages.where("items_count=-1 and vip_package_item_id not in (?)",vip_package_item_consumes.collect(&:vip_package_item_id).presence || '')
+                  %>
+                  <% if vip_package_item_consumes.present? || vip_package_items_vip_packages.present? %>
+                    <dl>
+                      <dt class="border">
+                        <a class="icon-right vip-name" href="#">
+                          <span><%= truncate_utf(vpvu.vip_package.name) %></span>
+                          <span class="num vip-num"><%= vip_package_item_consumes.length+vip_package_items_vip_packages.length %></span>
+                        </a>
+                      </dt>
+                      <dd>
+                        <% vip_package_item_consumes.each do |consume| %>
+                        <% 
+                          if params[:type] == 'unexpired'
+                            div_class = params[:status] == 'unused' && consume.count != 0 ? 'c-normal c-use' : 'c-used'
+                          else
+                            div_class = 'c-exceed'
+                          end
+                        %>
+                          <% if !consume.vip_package.deleted? && consume.vip_package_item.normal? %>
+                            <div class="coupons vip-coupons <%= div_class %>">
+                              <a href="<%= params[:type] == 'unexpired' && params[:status] == 'unused' ? my_consume_show_app_vips_path(id: consume.id, vp_id: vpvu.vip_package.id, vpvu_id: vpvu.id) : 'javascript:;' %>">
+                                <div class="coupons-l">
+                                  <div class="c-name">
+                                    <div class="coupons-img"></div>
+                                    <span><%= consume.package_item_name %></span>
+                                  </div>
+                                  <div class="coupons-num"><%= params[:status] == 'used' ? "已使用：#{consume.count}次" : "使用剩余：#{consume.use_count(consume.count,consume.vip_package_item_id)}" %></div>
+                                </div>
+                                <div class="coupons-r">
+                                  <div class="price"><small>&yen;</small><%= consume.package_item_price %></div>
+                                  <div class="old-price"></div>
+                                  <p>有效期</p>
+                                  <div class="c-time"><%= vpvu.expired_at.to_date %></div>
+                                </div>
+                              </a>
+                            </div>
+                          <% end %>
+                        <% end %>
+                        <% vip_package_items_vip_packages.each do |vpivp| %>
+                          <% 
+                            if params[:type] == 'unexpired'
+                              div_class = params[:status] == 'unused' ? 'c-normal c-use' : 'c-used'
+                            else
+                              div_class = 'c-exceed'
+                            end
+                          %>
+                          <div class="coupons vip-coupons <%= div_class %>">
+                            <a href="<%= params[:type] == 'unexpired' && params[:status] == 'unused' ? my_consume_show_app_vips_path(vp_id: vpvu.vip_package.id, vpvu_id: vpvu.id, vpi_id: vpivp.vip_package_item_id) : 'javascript:;' %>">
+                              <div class="coupons-l">
+                                <div class="c-name">
+                                  <div class="coupons-img"></div>
+                                  <span><%= vpivp.vip_package_item.name %></span>
+                                </div>
+                                <div class="coupons-num"><%= params[:status] == 'used' ? "已使用：#{vpivp.used_count(vpvu.id)}次" : "使用剩余：不限次" %></div>
+                              </div>
+                              <div class="coupons-r">
+                                <div class="price"><small>&yen;</small><%= vpivp.vip_package_item.price %></div>
+                                <div class="old-price"></div>
+                                <p>有效期</p>
+                                <div class="c-time"><%= vpvu.expired_at.to_date %></div>
+                              </div>
+                            </a>
+                          </div>
+                        <% end %>
+                      </dd>
+                    </dl>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+        </section>
+    </div>
+</div>
+<script>
+$(function(){
+  if($('.J-slider dl').length <= 0){
+    $('.J-slider').hide();
+    <% if params[:type] == 'unexpired' && params[:status] == 'unused' %>
+      $('#unused').show();
+    <% elsif params[:status] == 'used' %>
+      $('#used').show();
+    <% else %>
+      $('#expired').show();
+    <% end %>
+  }
+});
+
+</script>

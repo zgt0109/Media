@@ -1,0 +1,141 @@
+<div class="gl-ct-inner2">
+
+  <div class="step" id="step">
+    <div class="step-bar">
+    
+      <div class="step-bar-cont active" id="list1">
+        <span class="title">验证微信公众账号</span>
+
+        <div class="step-num">
+          <span class="count">1</span>
+        </div>
+      </div>
+      
+      <div class="step-bar-cont" id="list2">
+        <span class="title">创建智能机器人</span>
+
+        <div class="step-num">
+          <span class="count">2</span>
+        </div>
+      </div>
+      <div class="step-bar-cont" id="list3">
+        <span class="title">桥接微信公众平台</span>
+
+        <div class="step-num">
+          <span class="count">3</span>
+        </div>
+      </div>
+      
+      <div class="step-bar-cont" id="list4">
+        <span class="title">启动智能模式</span>
+
+        <div class="step-num">
+          <span class="count">4</span>
+        </div>
+      </div>
+      
+      <div class="step-bar-cont" id="list5">
+        <span class="title">验证绑定结果</span>
+
+        <div class="step-num">
+          <span class="count">5</span>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="step-content">
+      <div class="details show" id="detail1">
+        <div class="pic">
+          <img src="/assets/guide_line/8.jpg">
+        </div>
+      </div>
+
+      <div class="details " id="detail2">
+        <div class="pic">
+          <img src="/assets/guide_line/9.jpg">
+        </div>
+      </div>
+
+      <div class="details " id="detail3">
+        <div class="pic">
+          <img src="/assets/guide_line/10.jpg">
+        </div>
+      </div>
+      
+      <div class="details">
+        <div class="pic">
+          <img src="/assets/guide_line/11.jpg">
+        </div>
+      </div>
+      
+      <div class="details last" id="detail4">
+        <div class="pic ">
+          <img class="pull-left" src="/assets/guide_line/7.png">
+
+          <div class="up-success">用个人微信账号往您的公众账号发送一条消息<span class="green">“为爱升级”</span>，如收到回复<span class="green">“升级成功”</span>，说明您已经升级成功。
+          </div>
+          <div class="tools align-center">
+            <label class="grey">未收到回复？<a href="<%= rebind_binds_url %>">重新绑定</a></label>
+            <a href="<%= console_url %>" class="btn btn-primary form-control">升级成功，下一步</a>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="/javascripts/step/jquery.js"></script>
+<script src="/javascripts/step/step.js"></script>
+<script type="text/javascript">
+function checkProcess(){
+  $.ajax({
+    type: "GET",
+    contentType: "application/json",
+    url: 'bind_process?r=' + Math.random(),
+    dataType: 'json',
+    timeout:30000,
+    success: function (d) {
+      // {st: 0, process: 0, checked: 0, percent: 0}
+      // console.log(JSON.stringify(d))
+      setProcess(d.percent);
+      setCheckbox(d.process);
+      if (d.st == 1){
+        //window.setTimeout(function() {window.location.href='<%= bind_validate_binds_url %>'}, 500);
+        $('.details').removeClass('show');
+        $('#list5').addClass('active');
+        $('#detail4').addClass('show');
+      }else if(d.st < 0){
+       //showTip('warning','绑定过程中出现问题, 您可以重试或者手动绑定.');
+       err_info = d.error_msg + "您可以重试或者手动绑定。";
+       alert(err_info);
+       window.location.href='<%= params[:type] == 'rebind' ? rebind_binds_url : rebind_binds_url %>'
+     }else{
+       window.setTimeout(checkProcess,1000);
+     }
+   },
+   error: function(e){}
+ });
+}
+
+function setCheckbox(l){
+  for(var i=2; i<=l; i++){
+    $('.step-content .details').removeClass('show');
+    //$('#list'+i).attr('checked', true)
+    $('#list'+i).addClass('active');
+    $('#detail'+l).addClass('show');
+  }
+}
+
+function setProcess(p){
+  $('#show_p_txt').text('正在升级，请稍候（'+p+'%)');
+  $('#show_p_img').css('width', p+'%')
+}
+
+$(function(){
+  window.setTimeout(checkProcess,500);
+});
+</script>

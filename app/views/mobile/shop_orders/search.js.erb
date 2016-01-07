@@ -1,0 +1,8 @@
+var html = '';
+// alert(html);
+<% @shop_products.each do |product| %>
+    html += '<%= j render 'mobile/shop_orders/shop_product', :product => product, :wx_user => @wx_user %>';
+<% end %>
+$("#search-list").html(html);
+$("#food-list").hide();
+$("#search-list").show();

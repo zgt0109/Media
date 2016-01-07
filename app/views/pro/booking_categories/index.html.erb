@@ -1,0 +1,101 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微服务', bookings_path %></li>
+          <li><%= link_to '分类管理', booking_categories_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-info ">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、设置微服务商品的类别；</li>
+                <li>2、在商品归类后，再修改类别信息或者新增子类别，请注意维护商品的所属类别。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+              <div class="widget-box transparent" id="menu">
+                <div class="widget-header">
+                  <h4>
+                    <i class="icon icon-cogs"></i>分类管理
+                  </h4>
+                  <div class="widget-toolbar no-border">
+                    <%= link_to new_booking_category_path(parent_id: 0), class: 'btn btn-info btn-sm menu-category', data: {remote: true}, title: '新增子目录' do %>
+                        <i class="icon-plus"></i> 新增分类
+                    <% end %>
+                  </div>
+                </div>
+                <div class="widget-body">
+                  <div id="tree1">
+                    <div class="tree tree-selectable">
+                      <%= render :partial=> "sub_menu", :collection => @booking_categories.root.order(:sort), :as =>:sub_menu %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6 margin-top-10" id="form">
+            </div>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#tree1').on("click", ".fa-plus-square", function () {
+                $(this).closest('.tree-folder').find('.tree-folder-content').eq(0).toggle();
+            });
+
+            $('#tree1').on("click",".tree-up",function(){
+                var self=$(this),
+                    p = self.closest('.tree-li');
+                if(p.prev().length > 0){
+                    p.prev().before(p);
+                    $.ajax({
+                        type: "GET",
+                        url: "/booking_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=up",
+                        success: function(data) {
+                            showTip("success","操作成功");
+                            return false;
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+            $('#tree1').on("click",".tree-down",function(){
+                var self = $(this),
+                    p = self.closest('.tree-li');
+                if(p.next().length > 0){
+                    p.next().after(p);
+                    $.ajax({
+                        type: "GET",
+                        url: "/booking_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=down",
+                        success: function(data) {
+                            showTip("success","操作成功");
+                            return false;
+                        },
+                        error: function() {
+                            showTip("warning","操作失败");
+                            return false;
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+<% end %>

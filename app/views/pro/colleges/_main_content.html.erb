@@ -1,0 +1,24 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <%= render 'partials/home' %>
+                <li><%= link_to '微教育', colleges_path %></li>
+            </ul>
+            <%= render '/layouts/qrcode' %>
+        </div>
+
+        <div class="page-content">
+            <div class="tabbable">
+                <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+                    <%= link_to_li '微信消息设置', message_colleges_path %>
+                    <%= link_to_li '基本信息设置', colleges_path %>
+                    <%= link_to_li '查看报名信息', college_college_enrolls_path(current_user.college.try(:id) || 0) %>
+                </ul>
+                <div class="tab-content no-border padding-24">
+                    <%= yield :tab_content %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

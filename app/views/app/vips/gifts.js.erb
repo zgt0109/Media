@@ -1,0 +1,10 @@
+$('.list-box').append('<%= j render(:partial => "gift") %>');
+<% if @gifts.try(:last_page?) %>
+  $('.page').remove();
+<% else %>
+  $('.page').replaceWith('<%= j paginate(@gifts) %>');
+<% end %>
+$(".loading").hide();
+// $(".mod-box dl dt").unbind('click');
+
+$(".btn-exchange").unbind('click').click(exchangeGift);

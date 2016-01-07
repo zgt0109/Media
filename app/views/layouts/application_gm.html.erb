@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= content_for?(:title) ? yield(:title) : current_user.bqq_account? ? '移动版网站' : "微枚迪 客户ID: #{current_user.try(:id)}" %></title>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.css"/>
+  <%= stylesheet_link_tag "application_gm", media: "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+
+<!--[if lt IE 9]>
+<div class="browsehappy"><p class="warp">系统检测到您<i> 所使用的浏览器 </i>版本比较低，推荐使用<b> Firefox </b>或<b> Chrome </b>浏览器打开，否则将无法体验完整的产品功能。<a class="btn-close"></a></p></div>
+<![endif]-->
+
+<!--[if IE]>
+<script src=”http://html5shiv.googlecode.com/svn/trunk/html5.js”></script>
+<![endif]-->
+
+<div class="html">
+  <div class="main">
+
+    <%#= render current_user.bqq_account? ? 'header_bqq' : 'header_gm' %>
+
+    <div class="body">
+<!--    
+      <div class="tips">
+        <div class="warp">微枚迪的小伙伴们：1月24日凌晨03:00至04:00对微枚迪机房和服务器进行升级，升级期间网站和手机端可以正常访问，暂停微枚迪后台维护服务。</div>
+      </div>
+-->
+      <div class="warp">
+
+        <div class="wl">
+          <%= yield :sidebar %>
+          <%#= render 'help_gm' %>
+        </div>
+
+        <div class="wr">
+          <div class="box box-main">
+            <div class="hd box-tab">
+              <%= yield :topbar %>
+              <hr>
+            </div>
+
+            <div class="bd">
+              <%= yield :p_note if content_for?(:p_note) %>
+              <%= yield %>
+            </div>
+
+            <% if content_for?(:paginate) %>
+              <div class="ft"><%= yield :paginate %></div>
+            <% end %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%#= render 'footer_gm' %>
+
+<%= yield :pop %>
+
+<%= render 'notice' %>
+
+<% if current_user.test_account? or current_user.trial_account? %>
+  <%= render 'custom_service' %>
+<% elsif current_user.normal_account? %>
+  <%= render 'custom_service_qq_only' %>
+<% end %>
+
+<script type="text/javascript">
+  $(function(){
+  <% if !current_user.bqq_account? && current_user.show_introduce == 0 %>
+    introductory(); // 引导页
+  <% end %>
+  })
+</script>
+</body>
+</html>

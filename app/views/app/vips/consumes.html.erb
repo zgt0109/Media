@@ -1,0 +1,53 @@
+<% provide(:title, '消费记录') %>
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="mod-top">
+        <p><span class="mod-name">剩余金额</span><span><%= f @vip_user.try(:usable_amount) %>元</span></p>
+        <p><span class="mod-name">消费总额</span><span><%= f @pay_down %>元</span></p>
+        <p><span class="mod-name">消费奖励积分</span><span><%= @point_transactions.sum(:points) %>分</span></p>
+      </div>
+      <div class="check">
+        <%= months_for_select('month', id: 'month', class: 'input input-small', selected: params[:month])%>
+        <a href="#" class="btn btn-check" id="select_date">查询</a>
+      </div>
+      <div class="card-table">
+        <table>
+          <tr>
+            <th>消费来源</th>
+            <th>消费金额</th>
+            <th>日期</th>
+          </tr>
+          <% if @vip_user_transactions.each do |vip_user_transaction| %>
+            <tr data-id="<%= vip_user_transaction.id %>">
+              <td><%= vip_user_transaction.amount_source_name %></td>
+              <td><%= vip_user_transaction.out? ? "-" : "+" %><%= vip_user_transaction.amount %></td>
+              <td><%= vip_user_transaction.created_at.strftime("%m-%d") %></td>
+            </tr>
+          <% end.blank? %>
+            <tr><td colspan="3">暂无消费记录</td></tr>
+          <% end %>
+        </table>
+      </div>
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>
+<script>
+  $(function(){
+    $( "#date" ).datepicker({
+      autoSize: true,
+      dateFormat: 'yy-mm-dd',
+      dayNamesMin:["周日","周一","周二","周三","周四","周五","周六"],
+      monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+    });
+    $('tr[data-id]').click(function(event) {
+      var id = $(this).data('id');
+      location.href = '<%= consume_app_vips_path %>?id=' + id;
+    });
+  });
+
+  $(document).on("click", "#select_date", function(){
+    window.location.href = '/app/vips/consumes?month='+$("#month").val();
+  });
+</script>

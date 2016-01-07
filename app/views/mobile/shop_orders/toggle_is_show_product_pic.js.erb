@@ -1,0 +1,7 @@
+<% if @wx_user.is_show_product_pic %>
+  $(".product-img").show();
+  $(".icon.icon-image.fr").addClass("active");
+<% else %>
+  $(".product-img").hide();
+  $(".icon.icon-image.fr").removeClass("active");
+<% end %>

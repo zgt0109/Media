@@ -1,0 +1,30 @@
+
+  <dt>订单详情</dt>
+  <dd>
+    <ul class="shopcar-list">
+      <% @carts.each do |ec_cart|%>
+          <li class="shopcar-info">
+            <% if ec_cart.ec_item.main_picture.try(:pic?) %>
+                <span class="info-fl"><%= image_tag ec_cart.ec_item.main_picture.pic.thumb  %></span>
+            <% else %>
+                <span class="img-null info-fl">暂无<br/>图片</span>
+            <% end %>
+            <p><% item = ec_cart.ec_item %>
+              <b><%= ec_cart.ec_item.title %></b>
+                          <span class="box-number">
+                            <span class="fl"><em>数量：</em><i onclick="update_cart(<%= item.id%>,1, <%= @carts.map(&:id)%>);">-</i>
+                              <%= hidden_field_tag "ec_cart_ids[]", ec_cart.id %>
+                              <%= text_field_tag "qty", ec_cart.qty, :id => "item_value_#{item.id}", :onkeyup => "only_num(this,this.onkeyup);", :onblur => "default_num(this, #{item.id});",:maxlength => 4, :onchange => "ajax_submit_price(#{item.id},#{@carts.map(&:id)});" %>
+                              <i onclick="update_cart(<%= item.id%>, 2, <%= @carts.map(&:id)%>);">+</i>
+                            </span>
+                            <span class="fr">￥<%= f ec_cart.ec_item.price %></span></span>
+            </p>
+          </li>
+      <% end %>
+      <li class="shopcar-total">
+        <p class="tright">总金额：<b>￥<%= f @carts.sum{|cart| cart.qty * cart.ec_item.price } %></b></p>
+        <% if @address.present? %><p class="tright"><input type="submit" value="去结算" class="btn btn-red"/></p><% end %>
+      </li>
+    </ul>
+  </dd>
+</dl>

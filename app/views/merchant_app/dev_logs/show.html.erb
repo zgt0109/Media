@@ -1,0 +1,43 @@
+<% title "升级公告" %>
+<% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="visable1=true;visable2=true"<% end %>
+<% content_for :header do %>
+  <header>
+    <%= link_to merchant_app_dev_logs_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <span class="text">升级公告</span>
+    <a href="javascript:;"></a>
+  </header>
+<% end %>
+
+<div class="up-main">
+  <div class="up-title">{{order.title}}</div>
+  <div class="up-time">{{order.created_at}}</div>
+  <div class="edit" ng-bind-html="order.content"></div>
+</div>
+
+<script>
+var app = angular.module('app', ['infinite-scroll', 'ngSanitize']);
+
+function customersController($scope,$http) {
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/dev_logs/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    .success(function(response) {
+        if(response.result == 'success'){
+ 	        $scope.order = response.data;
+        } else{
+          console.log(response); 
+        }
+
+    }).error(function(response) {
+      console.log(response);
+    });
+    
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/dev_logs/#{params[:id]}/mark?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    .success(function(response) {
+	    console.log(response);
+    }).error(function(response) {
+      console.log(response);
+    });
+}
+customersController.inject = ['$scope', '$http'];
+app.controller('customersController', customersController);
+
+</script>

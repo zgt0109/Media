@@ -1,0 +1,17 @@
+.html{height:100%; background-position:center top; background-size: 100% auto; background-repeat: no-repeat;}
+.stage{height:100%;overflow:hidden;}
+.box{font-size:16px;background:rgba(0,0,0,0.5); display: block; text-align: center;}
+.box,
+.box a{color:#ccc;}
+.index{width: 60%; position: absolute;left: 20%; bottom:10%; z-index: 1;}
+.index-wrap{-webkit-tap-highlight-color: rgba(0, 0, 0, 0);width: 100%;}
+.mod-index{width: 48%; float: left; height: 45px;margin:5px 1%;padding:0 5px;-webkit-tap-highlight-color:rgba(0,0,0,0.35);}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; text-align: center; overflow: hidden;}
+.mod-index small{ font-size: 14px; display: block;word-spacing:normal; word-break:normal; word-break:break-all; height: 45px; line-height: 45px;}
+.btn-up-1{display: none;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}

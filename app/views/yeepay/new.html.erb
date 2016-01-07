@@ -1,0 +1,62 @@
+<% title '支付' %>
+
+<table width="50%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:solid 1px #107929">
+		  <tr>
+		  	<td height="30" colspan="2" bgcolor="#6BBE18"><span style="color: #FFFFFF">感谢您使用易宝支付平台</span></td>
+		  </tr>
+		  <tr>
+		  	<td colspan="2" bgcolor="#CEE7BD">易宝支付产品通用支付接口演示：</td>
+		  </tr>
+			<form method="get" action="/yeepay_payments/payapi" targe="_blank">
+		  <tr>
+		  	<td align="left" width="30%">&nbsp;&nbsp;商户订单号</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="p2_Order" id="p2_Order", value="<%= PaymentYeepay.generate_order_no %>" /></td>
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;支付金额</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="p3_Amt" id="p3_Amt" value="0.01" />&nbsp;<span style="color:#FF0000;font-weight:100;">*</span></td>
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;商品名称</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="p5_Pid" id="p5_Pid"  value="productname"/></td>
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;商品种类</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="p6_Pcat" id="p6_Pcat"  value="producttype"/></td>
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;商品描述</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="p7_Pdesc" id="p7_Pdesc"  value="productdesc"/></td>
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;接收支付成功数据的地址</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="p8_Url" id="p8_Url" value="http://localhost/HTMLcommon/callback.php" />&nbsp;<span style="color:#FF0000;font-weight:100;">*</span></td>
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;商户扩展信息</td>
+		  	<td align="left">&nbsp;&nbsp;<input size="50" type="text" name="pa_MP" id="pa_MP"  value="userId or other"/></td>
+      </tr>
+		 
+		  <tr>
+		  	<td align="left">&nbsp;&nbsp;支付通道编码</td>
+		  	<td align="left">&nbsp;&nbsp;<input type="text" name="pd_FrpId" /><!--支付通道编码在易宝支付产品(HTML版)通用接口使用说明中-->
+      </tr>
+		  <tr>
+		  	<td align="left">&nbsp;</td>
+		  	<td align="left">&nbsp;&nbsp;<input type="submit" value="马上支付" /></td>
+      </tr>
+    </form>
+      <tr>
+      	<td height="5" bgcolor="#6BBE18" colspan="2"></td>
+      </tr>
+      </table></td>
+        </tr>
+      </table>
+
+
+<script>
+$('#payments-save').on('click', function() {
+  $(this).closest('form').submit();
+  return false;
+});
+</script>

@@ -1,0 +1,1001 @@
+
+<div class="main-content ">
+
+  <%= render 'breadcrumbs' %>
+
+  <div class="page-content">
+    <div class="row">
+      <% if current_sub_account.can_any?(%w[manage_vip_consume manage_vip_recharge manage_vip_point manage_vip_money_adjustment manage_vip_package_release]) %>
+        <div class="col-sm-12 gl-ct-description">
+          <div class="col-xs-12"><label>快捷交易</label></div>
+          <div class="col-xs-12 vip-deals overflow-hidden">
+            <%- if  current_sub_account.can?('manage_vip_consume')%>
+              <div class="inline margin-right-20">
+                <a href="#consume" class="btn btn-app btn-success" data-toggle="modal">
+                  <i class="icon-jpy bigger-230"></i>
+                  消费
+                </a>
+              </div>
+            <%- end %>
+            <%- if  current_sub_account.can?('manage_vip_recharge')%>
+              <div class="inline margin-right-20">
+                <a href="#charge" class="btn btn-app btn-info" data-toggle="modal">
+                  <i class="icon-heart bigger-230"></i>
+                  充值
+                </a>
+              </div>
+            <%- end %>
+            <%- if  current_sub_account.can?('manage_vip_point')%>
+              <div class="inline margin-right-20">
+                <a href="#pointAdjust" class="btn btn-app btn-warning" data-toggle="modal">
+                  <i class="icon-edit bigger-230"></i>
+                  积分调节
+                </a>
+              </div>
+            <%- end %>
+            <%- if  current_sub_account.can?('manage_vip_money_adjustment')%>
+              <div class="inline margin-right-20">
+                <a href="#moneyAdjust" class="btn btn-app btn-danger" data-toggle="modal">
+                  <i class="icon-edit bigger-230"></i>
+                  金额调节
+                </a>
+              </div>
+            <%- end %>
+            <%- if  current_sub_account.can?('manage_vip_package_release')%>
+              <div class="inline margin-right-20">
+                <a href="#release" class="btn btn-app btn-pink" data-toggle="modal">
+                  <i class="icon-share bigger-230"></i>
+                  套餐发放
+                </a>
+              </div>
+            <%- end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if current_sub_account.can_any?(%w[manage_vip_package_write_off manage_marketing_sncode manage_vip_gift_exchange]) %>
+        <div class="col-sm-12">
+          <div class="col-xs-12"><label>业务核销</label></div>
+          <div class="col-xs-12 vip-deals overflow-hidden">
+            <%- if  current_sub_account.can?('manage_vip_package_write_off')%>
+              <div class="inline margin-right-20">
+                <a href="#consumes" class="btn btn-app btn-default" data-toggle="modal">
+                  <i class="icon-check bigger-230"></i>
+                  套餐核销
+                </a>
+              </div>
+            <%- end %>
+            <%- if current_sub_account.can_manage_marketing_sncode? %>
+              <div class="inline margin-right-20">
+                <a href="#marketing_sncode" class="btn btn-app btn-purple" data-toggle="modal">
+                  <i class="icon-check bigger-230"></i>
+                  活动核销
+                </a>
+              </div>
+            <%- end %>
+            <%- if current_sub_account.can?('manage_vip_gift_exchange')%>
+              <div class="inline margin-right-20">
+                <a href="#vip_gift_exchange" class="btn btn-app btn-inverse" data-toggle="modal">
+                  <i class="icon-check bigger-230"></i>
+                  礼品核销
+                </a>
+              </div>
+            <%- end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <!-- /.page-content -->
+</div>
+
+<%- if current_sub_account.can_manage_marketing_sncode? %>
+ <div class="modal fade" id="marketing_sncode">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-7">&times;</button>
+        <h4 class="modal-title">活动核销</h4>
+      </div>
+      <%= form_tag shops_use_consume_path(supplier_id: current_shop_supplier.id), id: "form-6", class: "form", data:{action: 'use_consume'}, role: "form" do %>
+        <%= hidden_field_tag :code, nil %>
+        <%= hidden_field_tag :consume_class, nil %>
+        <%= hidden_field_tag :consume_id, nil %>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="control-label">活动类型</label>
+            <div class="clearfix">
+              <%= select_tag :activity_type, options_for_select(ActivityType.sn_markets), prompt: '请选择活动类型' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="clearfix">
+              <input type="text" id="marketing_search_code" class="col-md-8" placeholder="请输入SN码">
+              <a id="submit_sncode" href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+            </div>
+            <div class="margin-top-10 markets_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>活动类型:</td>
+                  <td class="markets_type"></td>
+                </tr>
+                <tr>
+                  <td  class="markets_name_label">活动名称:</td>
+                  <td class="markets_name"></td>
+                </tr>
+                <tr>
+                  <td>SN码:</td>
+                  <td class="markets_sn"></td>
+                </tr>
+                <tr>
+                  <td>领取人:</td>
+                  <td class="vip_user_name"></td>
+                </tr>
+                <tr>
+                  <td>手机号码:</td>
+                  <td class="markets_mobile"></td>
+                </tr>
+                <tr>
+                  <td>领取时间:</td>
+                  <td class="markets_apply_at"></td>
+                </tr>
+                <tr>
+                  <td>状态:</td>
+                  <td class="markets_status"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer" style="display:none">
+          <button class="btn btn-sm btn-primary confirm_markets" data-target="#form-6" data-disable-with="确认核销">确认核销</button>
+          <button class="btn btn-default btn-sm" id="markets_close" data-dismiss="modal"  data-target="#form-6" onclick="javascript:$('#marketing_sncode').find('.markets_info').hide();">关闭</button>
+        </div>
+      <%- end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+
+<%- if  current_sub_account.can?('manage_vip_consume')%>
+<div class="modal fade" id="consume">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-1">&times;</button>
+        <h4 class="modal-title">会员消费</h4>
+      </div>
+      <%= form_tag shops_save_money_path(supplier_id: current_shop_supplier.id), id: "form-1", class: "privelege_form form", data:{action: 'save_money'}, role: "form" do %>
+        <%= hidden_field_tag :direction, 4 %>
+        <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
+        <%= hidden_field_tag :vip_user_id, nil %>
+        <%= hidden_field_tag :source, 'branch' %>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <select class="select_type">
+                <option value="user_no">会员卡号</option>
+                <option value="mobile">手机号</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="clearfix">
+              <%= text_field_tag :option_value, nil, class: 'col-md-8', placeholder:"请输入会员卡号" %>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>姓名:</td>
+                  <td class="name"></td>
+                </tr>
+                <tr>
+                  <td>余额:</td>
+                  <td class="usable_amount"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">金额<small class="text-warning">金额必须大于0</small></label>
+            <div class="clearfix">
+              <%= text_field_tag :amount, nil, class: 'col-md-8 amount', placeholder:"请输入金额数" %>
+            </div>
+            <div class="text-info">
+              <div class="privilege_list"></div>
+              <label>
+                实际支付:<span class="red" id="pay_amount">0</span>元<br>
+                获得积分:<span class="red" id="given_points">0</span>分
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">支付方式</label>
+            <div class="clearfix">
+              <%= select_tag :payment_type, options_for_select(VipUserTransaction.payment_type_options[0, 2]) %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>备注</label>
+            <div class="form-group">
+              <%= text_area_tag :description, nil, class: 'col-md-8', placeholder: "备注有助于日后查看消费详情", rows: 5 %>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-primary save_consume" data-target="#form-1" data-disable-with="保存">保存</button>
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" data-target="#form-1">关闭</button>
+        </div>
+      <% end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+
+<%- if  current_sub_account.can?('manage_vip_recharge')%>
+<div class="modal fade" id="charge">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" data-target="#form-2" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">会员充值</h4>
+      </div>
+
+      <%= form_tag shops_save_money_path(supplier_id: current_shop_supplier.id), id: "form-2", class: "privelege_form form", data:{action: 'save_money'}, role: "form" do %>
+        <%= hidden_field_tag :direction, 3 %>
+        <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
+        <%= hidden_field_tag :vip_user_id, nil %>
+        <%= hidden_field_tag :source, 'branch' %>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <select class="select_type">
+                <option value="user_no">会员卡号</option>
+                <option value="mobile">手机号</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="clearfix">
+              <%= text_field_tag :option_value, nil, class: 'col-md-8', placeholder:"请输入会员卡号" %>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>姓名:</td>
+                  <td class="name"></td>
+                </tr>
+                <tr>
+                  <td>余额:</td>
+                  <td class="usable_amount"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">金额<small class="text-warning">金额必须大于0</small></label>
+            <div class="clearfix">
+              <%= text_field_tag :amount, nil, class: 'col-md-8 amount', placeholder:"请输入金额数" %>
+            </div>
+            <div class="text-info">
+              <div class="privilege_list"></div>
+              <label>
+                  实际支付:<span class="red" id="pay_amount">0</span>元<br>
+                  获得积分:<span class="red" id="given_points">0</span>分<br>
+                  赠送金额:<span class="red" id="given_moneys">0</span>元
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>备注</label>
+            <div class="form-group">
+              <%= text_area_tag :description, nil, class: 'col-md-8', placeholder: "备注有助于日后查看充值详情", rows: 5 %>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-primary save_recharge" data-target="#form-2" data-disable-with="保存">保存</button>
+          <button class="btn btn-default btn-sm" data-dismiss="modal"  data-target="#form-2">关闭</button>
+        </div>
+      <%- end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+<%- if  current_sub_account.can?('manage_vip_point')%>
+<div class="modal fade" id="pointAdjust">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-3">&times;</button>
+        <h4 class="modal-title">会员积分调节</h4>
+      </div>
+
+      <%= form_tag shops_save_point_path(supplier_id: current_shop_supplier.id), id: "form-3", class: "form", data:{action: 'save_point'}, role: "form" do %>
+        <%= hidden_field_tag :direction_type, nil %>
+        <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
+        <%= hidden_field_tag :vip_user_id, nil %>
+        <%= hidden_field_tag :source, 'branch' %>
+
+       <!--  <div class="alert alert-block alert-info  margin-top-10 no-margin-bottom">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>金额调节不计算积分策略和特权的相关优惠;
+            </li>
+          </ul>
+        </div> -->
+
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <select class="select_type">
+                <option value="user_no">会员卡号</option>
+                <option value="mobile">手机号</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="clearfix">
+              <%= text_field_tag :option_value, nil, class: 'col-md-8', placeholder:"请输入会员卡号" %>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>姓名:</td>
+                  <td class="name"></td>
+                </tr>
+
+                <tr>
+                  <td>积分:</td>
+                  <td class="usable_points"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">积分<small class="text-warning">积分必须大于0</small></label>
+            <div class="clearfix">
+              <%= text_field_tag :points, nil, class: 'col-md-8 amount', placeholder:"请输入积分数" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">备注</label>
+            <div class="clearfix">
+              <%= text_area_tag :description, nil, class: 'col-md-8', placeholder: "备注有助于日后查看积分详情", rows: 5 %>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+          <button data-target="#form-3" class="btn btn-sm btn-primary point_add" data-disable-with="增加">增加</button>
+          <button data-target="#form-3" class="btn btn-sm btn-primary point_reduce" data-disable-with="减少">减少</button>
+        </div>
+      <% end %>
+
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+<%- if  current_sub_account.can?('manage_vip_money_adjustment')%>
+<div class="modal fade" id="moneyAdjust">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-4">&times;</button>
+        <h4 class="modal-title">会员金额调节</h4>
+      </div>
+      <%= form_tag shops_save_money_path(supplier_id: current_shop_supplier.id), id: "form-4", class: "form", data:{action: 'save_money'}, role: "form" do %>
+        <%= hidden_field_tag :direction, nil %>
+        <%= hidden_field_tag :direction_type, nil %>
+        <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
+        <%= hidden_field_tag :vip_user_id, nil %>
+        <%= hidden_field_tag :source, 'branch' %>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <select class="select_type">
+                <option value="user_no">会员卡号</option>
+                <option value="mobile">手机号</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="clearfix">
+              <%= text_field_tag :option_value, nil, class: 'col-md-8', placeholder:"请输入会员卡号" %>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>姓名:</td>
+                  <td class="name"></td>
+                </tr>
+                <tr>
+                  <td>余额:</td>
+                  <td class="usable_amount"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>金额<small class="text-warning">金额必须大于0</small></label>
+            <div class="clearfix">
+              <%= text_field_tag :amount, nil, class: 'col-md-8 amount', placeholder:"请输入调节的金额数" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>备注</label>
+            <div class="clearfix">
+              <%= text_area_tag :description, nil, class: 'col-md-8', placeholder: "备注有助于日后查看金额调节详情", rows: 5 %>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+          <button data-target="#form-4" class="btn btn-sm btn-primary money_add" data-disable-with="增加">增加</button>
+          <button data-target="#form-4" class="btn btn-sm btn-primary money_reduce" data-disable-with="减少">减少</button>
+        </div>
+      <%- end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+<%- if  current_sub_account.can?('manage_vip_package_release')%>
+<div class="modal fade" id="release">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-5">&times;</button>
+        <h4 class="modal-title">会员套餐发放</h4>
+      </div>
+      <%= form_tag shops_save_release_path(supplier_id: current_shop_supplier.id), id: "form-5", class: "form", data:{action: 'save_release'}, role: "form" do %>
+        <%= hidden_field_tag :vip_user_id, nil %>
+        <%= hidden_field_tag :select_type, "user_no", class: "select_type" %>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <%= text_field_tag :option_value, nil, class: 'col-md-8', placeholder:"请输入会员卡号" %>
+              <a href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>会员卡号:</td>
+                  <td class="vip_user_no"></td>
+                </tr>
+                <tr>
+                  <td>会员姓名:</td>
+                  <td class="name"></td>
+                </tr>
+                <tr>
+                  <td>手机号码:</td>
+                  <td class="vip_user_mobile"></td>
+                </tr>
+                <tr>
+                  <td>余额:</td>
+                  <td class="usable_amount"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>选择会员套餐</label>
+            <div class="clearfix">
+              <% options = current_shop_branch.available_vip_packages.active.latest.map{|a|["#{truncate_utf(a.name)}(#{f a.price}元)",a.id]} rescue [] %>
+              <%= select_tag :vip_package_id,
+                  options_for_select(
+                  options.insert(0,['请选择会员套餐',''])
+                  )
+              %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>支付方式</label>
+            <div class="clearfix">
+              <% payment_types = [['请选择',''],['会员卡余额支付',VipPackagesVipUser::BY_BALANCE],['现金支付',VipPackagesVipUser::BY_CASH]] %>
+              <%= select_tag :payment_type, options_for_select(payment_types) %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>备注</label>
+            <div class="clearfix">
+              <%= text_area_tag :description, nil, class: 'col-md-8', placeholder: "备注有助于日后查看金额调节详情", rows: 5 %>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-primary save_release" data-target="#form-5" disabled="true" data-disable-with="保存">保存</button>
+          <button class="btn btn-default btn-sm" data-dismiss="modal"  data-target="#form-5">关闭</button>
+        </div>
+      <%- end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+<%- if  current_sub_account.can?('manage_vip_package_write_off')%>
+<div class="modal fade" id="consumes">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-6">&times;</button>
+        <h4 class="modal-title">会员套餐核销</h4>
+      </div>
+      <%= form_tag shops_update_consumes_path(supplier_id: current_shop_supplier.id), id: "form-6", class: "form", data:{action: 'update_consumes'}, role: "form" do %>
+        <%= hidden_field_tag :sn_code, nil %>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <input type="text" id="search_sn_code" class="col-md-8" placeholder="请输入SN码">
+              <a href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>服务项目:</td>
+                  <td class="item_name"></td>
+                </tr>
+                <tr>
+                  <td>SN码:</td>
+                  <td class="sn"></td>
+                </tr>
+                <tr>
+                  <td>会员姓名:</td>
+                  <td class="vip_user_name"></td>
+                </tr>
+                <tr>
+                  <td>手机号码:</td>
+                  <td class="vip_user_mobile"></td>
+                </tr>
+                <tr>
+                  <td>发放时间:</td>
+                  <td class="create_time"></td>
+                </tr>
+                <tr>
+                  <td>有效期至:</td>
+                  <td class="out_time"></td>
+                </tr>
+                <tr>
+                  <td>状态:</td>
+                  <td class="status"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer" style="display:none">
+          <button class="btn btn-sm btn-primary update_consumes" data-target="#form-6" disabled="true" data-disable-with="确认核销">确认核销</button>
+          <button class="btn btn-default btn-sm" id="myReset" data-dismiss="modal"  data-target="#form-6" onclick="javascript:$('#consumes').find('.user_info').hide();">关闭</button>
+        </div>
+      <%- end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+
+<%- if current_sub_account.can?('manage_vip_gift_exchange') %>
+<div class="modal fade" id="vip_gift_exchange">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-8">&times;</button>
+        <h4 class="modal-title">礼品核销</h4>
+      </div>
+      <%= form_tag shops_use_exchange_path(supplier_id: current_shop_supplier.id), id: "form-8", class: "form", data:{action: 'use_exchange'}, role: "form" do %>
+        <%= hidden_field_tag :gift_code, nil %>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="clearfix">
+              <input type="text" id="search_code" class="col-md-8" placeholder="请输入SN码">
+              <a href="javascript:void(0);" class="btn btn-sm btn-primary btn-filter">查询</a>
+            </div>
+            <div class="margin-top-10 user_info" style="display:none">
+              <table class="text-info">
+                <tr>
+                  <td>礼品券名称:</td>
+                  <td class="point_gift_name"></td>
+                </tr>
+                <tr>
+                  <td>SN码:</td>
+                  <td class="sn"></td>
+                </tr>
+                <tr>
+                  <td>兑换日期:</td>
+                  <td class="created_at"></td>
+                </tr>
+                <tr>
+                  <td>有效日期:</td>
+                  <td class="expired_at"></td>
+                </tr>
+                <tr>
+                  <td>状态:</td>
+                  <td class="status">有效</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer" style="display:none">
+          <button class="btn btn-sm btn-primary vip_gift" data-target="#form-8" disabled="true" data-disable-with="确认核销">确认核销</button>
+          <button class="btn btn-default btn-sm" id="myReset" data-dismiss="modal"  data-target="#form-8" onclick="javascript:$('#vip_gift_exchange').find('.user_info').hide();">关闭</button>
+        </div>
+      <%- end %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<%- end %>
+
+<script>
+
+     var cloneModal;
+    $(document).on('show.bs.modal', '.modal', function (e) {
+        cloneModal = $(this).clone();
+    }).on('hidden.bs.modal', '.modal',function (e) {
+        $(this).remove();
+        $('body').append(cloneModal);
+    });
+
+//活动查询
+$(document).on("click", '#submit_sncode', function(){
+  var form = $(this).closest("form");
+  var code = form.find('#marketing_search_code').val();
+  var activity_type= $('#activity_type').val();
+  if(activity_type == ""){
+    showTip("warning", "请选择活动类型");
+    return false;
+  }
+
+  if(code == ""){
+    showTip("warning", "请输入SN码");
+    return false;
+  }
+
+  var action = form.data('action');
+  var get_url = "<%= shops_find_consume_path(supplier_id: current_shop_supplier.id) %>" + "?code="+code+"&activity_type="+activity_type;
+  $.get(get_url, function(data) {
+    if(data.find_status > 0){
+      form.find('#code').val(data.code);
+      form.find('#consume_class').val(data.consume_class);
+      if(data.find_status == 2){
+        $('.markets_name_label').text('优惠券名称: ')
+      }
+      form.find('#consume_id').val(data.consume_id);
+      form.find('.markets_type').html(data.activity_type);
+      form.find('.markets_name').html(data.activity_name);
+      form.find('.markets_sn').html(data.code);
+      form.find('.vip_user_name').html(data.name);
+      form.find('.markets_mobile').html(data.mobile);
+      form.find('.markets_apply_at').html(data.created);
+      form.find('.markets_status').html(data.status);
+      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+ action);
+      form.find('.markets_info').show();
+      form.find('.modal-footer').show();
+    }else{
+      form.find('.text-info td').html('');
+      form.find('#code').val(data.code);
+      form.find('#consume_class').val('');
+      form.find('#consume_id').val('');
+      if (data.find_status == -1){
+        showTip("warning", "此SN码不能在该门店使用");
+      }else{
+        showTip("warning", "SN码无效或已被使用");
+      }
+    }
+  });
+});
+
+
+//活动核销
+$('#marketing_sncode').on("click", '.confirm_markets', function(e){
+
+  $(this).attr('disabled', true);
+
+  if($('#consume_class').val() == ""){
+    showTip("warning", "请选择活动类型");
+    e.preventDefault();
+    return false;
+  }
+  if($('#marketing_sncode #code').val() == ""){
+    showTip("warning", "SN码无效或已被使用");
+    e.preventDefault();
+    return false;
+  }
+  $('#marketing_sncode form').submit();
+
+});
+
+//套餐核销
+$('#consumes').on("click", '.update_consumes', function(e){
+  if($('#sn_code').val() == ""){
+    showTip("warning", "SN码无效或已被使用");
+    e.preventDefault();
+    return false;
+  }else{
+    $('#consumes form').submit();
+  }
+});
+
+//礼品核销
+$('#vip_gift_exchange').on("click", '.vip_gift', function(e){
+  if($('#gift_code').val() == ""){
+    showTip("warning", "SN码无效或已被使用");
+    e.preventDefault();
+    return false;
+  }else{
+    $('#vip_gift_exchange form').submit();
+  }
+});
+
+function showTip(type, str) {
+    PNotify.removeAll();
+    type = {
+        "success": "",
+        "warning": 'error'
+    }[type];
+    var delay = type == 'error' ? 3000 : 1000;
+    new PNotify({
+        title: '通知',
+        text: str,
+        type: type,
+        remove: true,
+        delay: delay,
+        styling: 'fontawesome'
+    });
+    return false;
+}
+
+//套餐发放
+var package_price = <%= raw Hash[current_shop_supplier.vip_packages.active.latest.pluck(:id, :price)].to_json %>
+$('#release').on("click", '.save_release', function(e){
+  var select_id = $("#vip_package_id").val();
+  if($('#vip_package_id').val() == ""){
+    showTip("warning", "请选择会员套餐");
+    e.preventDefault();
+    return false;
+  }else if($("#release #payment_type").val() == ""){
+    showTip('warning',"请选择支付方式");
+    e.preventDefault();
+    return false;
+  }else if($("#release #payment_type").val() == "1" && package_price[parseFloat(select_id)] > parseFloat($('#release .usable_amount').html())){
+    showTip('warning',"余额不足");
+    e.preventDefault();
+    return false;
+  }else{
+    $('#release form').submit();
+  }
+});
+
+//发放套餐默认余额支付
+$('#release').on("change", '#vip_package_id', function(){
+  var get_url = "<%= shops_use_usable_amount_path(supplier_id: current_shop_supplier.id) %>" + "?vip_user_id=" + $("#release #vip_user_id").val() + "&vip_package_id=" + $("#vip_package_id").val();
+  $.getJSON(get_url, function(data) {
+    $("#release #payment_type").val(data.status ? "<%= VipPackagesVipUser::BY_BALANCE %>" : "<%= VipPackagesVipUser::BY_CASH %>");
+  });
+});
+
+//充值
+$('#charge').on("click", '.save_recharge', function(){
+  $('#charge form').submit();
+});
+
+//消费
+$('#consume').on("click", '.save_consume', function(){
+  var usable_amount = parseFloat($('#consume .usable_amount').text()),
+    amount = parseFloat($('#consume #pay_amount').text());
+  if ($('#payment_type').val() != 2 && amount > usable_amount){
+    var form_group =  $('#consume #amount').closest('.form-group');
+    if (!form_group.hasClass('has-error')){
+      form_group.addClass('has-error');
+      form_group.closest('.form-group').append('<div for="amount" class="help-block">余额不足</div>');
+    }
+  }else{
+    $('#consume form').submit();
+  }
+});
+
+//金额调解中的金额增加减少
+$('#moneyAdjust').on("click", '.money_add', function(){
+  $('#moneyAdjust #direction').val(1);
+  $('#moneyAdjust form').attr('data-direction', 'add')
+  $('#moneyAdjust form').submit();
+});
+
+$('#moneyAdjust').on("click", '.money_reduce', function(){
+  $('#moneyAdjust #direction').val(2);
+  var usable_amount = parseFloat($('#moneyAdjust .usable_amount').text()),
+      amount = parseFloat($('#moneyAdjust #amount').val());
+  if (amount > usable_amount){
+    var form_group =  $('#moneyAdjust #amount').closest('.form-group');
+    if (!form_group.hasClass('has-error')){
+      form_group.addClass('has-error');
+      form_group.closest('.form-group').append('<div for="amount" class="help-block">余额不足</div>');
+    }
+  }else{
+    $('#moneyAdjust form').submit();
+  }
+});
+
+//积分调节
+$('#pointAdjust').on("click", '.point_add', function(){
+  $('#pointAdjust #direction_type').val(1);
+  $('#pointAdjust form').submit();
+});
+$('#pointAdjust').on("click", '.point_reduce', function(){
+  $('#pointAdjust #direction_type').val(2);
+  var usable_points = parseFloat($('#pointAdjust .usable_points').text()),
+    points = parseFloat($('#pointAdjust #points').val());
+  if (points > usable_points){
+    var form_group =  $('#pointAdjust #points').closest('.form-group');
+    if (!form_group.hasClass('has-error')){
+      form_group.addClass('has-error');
+      form_group.closest('.form-group').append('<div for="points" class="help-block">积分不足</div>');
+    }
+  }else{
+    $('#pointAdjust form').submit();
+  }
+});
+
+//充值和消费表单中的特权显示
+$(document).on(".privelege_form input", '#amount', function(){
+  var form = $(this).closest("form");
+  var direction_type = form.find('#direction').val();
+  var vip_user_id = form.find('#vip_user_id').val();
+  var amount = parseFloat($(this).val());
+  if (vip_user_id && direction_type){
+    if(amount > 0){
+      // var url = "/vip_users/"+vip_user_id+"/transaction_check?source=branch" + "&amount=" + amount + '&direction_type=' + direction_type
+      var url = "/shops/"+"<%= current_shop_supplier.id %>"+"/transaction_check?source=branch&id=" + vip_user_id + "&amount=" + amount + '&direction_type=' + direction_type
+      $.getScript(url);
+    }else{
+      form.find('.privilege_item').each(function(){
+        $(this).get(0).checked = false;
+      })
+      form.find('#pay_amount').text(0);
+      form.find('#given_points').text(0);
+      form.find('#given_moneys').text(0);
+    }
+  }
+});
+
+//查询方式
+$(document).on("change", '.select_type', function(){
+  var form = $(this).closest("form"),
+    select_type = form.find('.select_type').val();
+  if(select_type == "user_no"){
+    form.find('input[name="option_value"]').attr('placeholder', '请输入会员卡号')
+  }else{
+    form.find('input[name="option_value"]').attr('placeholder', '请输入手机号码')
+  }
+  form.find('input[name="option_value"]').change();
+});
+
+//查询用户
+
+$(document).on("change", 'input[name="option_value"]', function(){
+  var form = $(this).closest("form");
+  var modal = $(this).closest(".modal").attr('id');
+  var action = form.data('action');
+  var get_url = "<%= shops_find_vip_user_path(supplier_id: current_shop_supplier.id) %>" + "?select_type=" + form.find('.select_type').val() + "&option_value=" + $(this).val() + "&modal=" + modal;
+  $.get(get_url, function(data) {
+    if(data.user_status == "正常"){
+      form.find('#vip_user_id').val(data.vip_user_id);
+      form.find('.name').html(data.name);
+      form.find('.usable_amount').html(data.usable_amount);
+      form.find('.usable_points').html(data.usable_points);
+      form.find('.vip_user_no').html(data.vip_user_no);
+      form.find('.vip_user_mobile').html(data.vip_user_mobile);
+      // form.attr("action","/vip_users/"+data.vip_user_id+"/"+action);
+      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+action+"?id="+data.vip_user_id);
+      var html = "";
+      data.usable_privileges.map(function(entry){
+        html+='<label class="privilege"><input disabled name="form-field-checkbox" type="checkbox" id=privilege'+ entry[0] +' class="ace privilege_item"><span class="lbl">'+ entry[1] +'</span></label><br>'
+      })
+      form.find('.user_info').show();
+      form.find('.privilege_list').html(html);
+      form.find('#option_value').closest('.form-group').removeClass('has-error');
+      form.find('#option_value').closest('.form-group').find('.help-block').remove();
+      form.find('button').attr('disabled', false);
+      form.find("#amount").trigger('input');
+    }else{
+      form.find(".privilege_list").html('');
+      form.find('#vip_user_id').val("");
+      form.find('.user_info').hide();
+      form.find('#pay_amount').text(0);
+      form.find('#given_points').text(0);
+      form.find('#given_moneys').text(0);
+      form.attr("action","");
+      var form_group = form.find('#option_value').closest('.form-group');
+      if (!form_group.hasClass('has-error')){
+        form_group.addClass('has-error');
+        form_group.append('<div for="option_value" class="help-block">用户'+ data.user_status +'</div>');
+      }
+      form.find('button').attr('disabled', true);
+    }
+  });
+});
+
+//套餐核销
+$(document).on("change", '#search_sn_code', function(){
+  var form = $(this).closest("form");
+  var action = form.data('action');
+  var get_url = "<%= shops_find_vip_package_item_path(supplier_id: current_shop_supplier.id) %>" + "?sn_code=" + form.find('#search_sn_code').val();
+  $.get(get_url, function(data) {
+    if(data.find_status == 1){
+      form.find('.form-group').removeClass('has-error');
+      form.find('.form-group .help-block').remove();
+      form.find('#sn_code').val(data.sn_code);
+      form.find('.item_name').html(data.item_name);
+      form.find('.sn').html(data.sn_code);
+      form.find('.vip_user_name').html(data.vip_user_name);
+      form.find('.vip_user_mobile').html(data.vip_user_mobile);
+      form.find('.create_time').html(data.create_time);
+      form.find('.out_time').html(data.out_time);
+      form.find('.status').html(data.status);
+      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+ action);
+      form.find('.user_info').show();
+      form.find('button').attr('disabled', false);
+      form.find('.modal-footer').show();
+    }else{
+      form.find('.form-group .help-block').remove();
+      form.find('#sn_code').val("");
+      form.find('.user_info').hide();
+      form.attr("action","");
+      form.find('button').attr('disabled', true);
+      form.find('.form-group').addClass('has-error');
+      form.find('.form-group').append('<div class="help-block">SN码无效或已被使用</div>');
+      form.find('.modal-footer').hide();
+    }
+  });
+});
+
+//礼品核销
+$(document).on("change", '#search_code', function(){
+  var form = $(this).closest("form");
+  var action = form.data('action');
+  var get_url = "<%= shops_exchange_info_path(supplier_id: current_shop_supplier.id) %>" + "?code=" + form.find('#search_code').val();
+  $.get(get_url, function(data) {
+    if(data.find_status == 1){
+      form.find('.form-group').removeClass('has-error');
+      form.find('.form-group .help-block').remove();
+      form.find('#gift_code').val(data.gift_code);
+      form.find('.point_gift_name').html(data.point_gift_name);
+      form.find('.sn').html(data.gift_code);
+      form.find('.created_at').html(data.created_at);
+      form.find('.expired_at').html(data.expired_at);
+      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+ action);
+      form.find('.user_info').show();
+      form.find('button').attr('disabled', false);
+      form.find('.modal-footer').show();
+    }else{
+      form.find('.form-group .help-block').remove();
+      form.find('#gift_code').val("");
+      form.find('.user_info').hide();
+      form.attr("action","");
+      form.find('button').attr('disabled', true);
+      form.find('.form-group').addClass('has-error');
+      form.find('.form-group').append('<div class="help-block">SN码无效或已被使用</div>');
+      form.find('.modal-footer').hide();
+    }
+  });
+});
+</script>

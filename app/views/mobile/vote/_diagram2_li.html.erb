@@ -1,0 +1,12 @@
+<% results.each_with_index do |f, index| %>
+  <li>
+    <span class="lih90-sign"><%#= (results.current_page - 1) * results.limit_value + index + 1 %><%= f.item_no%>、</span>
+    <div class="box"><%= image_tag "#{f.try(:pic).try(:large)}?imageView/2/w/110/h/70", data: {src: f.try(:pic).try(:large).to_s} if f.try(:pic?) %></div>
+    <p><span><%= truncate f.name, length: 36 %></span></p>
+    <%= div_for f, class: 'line' do %>
+      <label><b style="width:<%= f.item_per %>%;"></b></label>
+      <span class="count"><%= f.item_per %>%</span>
+    <% end if activity.allow_show_vote_percent? %>
+    <%= content_tag_for :span, f, class: 'nu' do %><%= f.item_select_count %>票<% end if activity.allow_show_vote_count? %>
+  </li>
+<% end %>

@@ -1,0 +1,22 @@
+var tree1_dom = "<%= j(render :partial=> "pro/shop_categories/sub_menu", :collection => @shop_categories, :as =>:sub_menu) %>";
+$("#tree1").html(tree1_dom);
+$("#new_btn").show();
+$(".tree-item").each(function(){
+	if($(this).parent().hasClass("tree-folder-content")){
+
+	}else{
+		if($(this).attr("data-level") == "1"){
+			$(this).remove();
+		}
+
+	}
+});
+// $(".side-form").find("form")[0].reset();
+// $("#shop_category_name").val('');
+// $("#shop_category_sort").val(0);
+
+
+  var p_id = "<%= @shop_category.parent_id %>";
+  $("#square-parent-id-"+p_id).click();
+
+showTip("success", "操作成功");

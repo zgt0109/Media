@@ -1,0 +1,32 @@
+<% index = 1 %>
+<div class="form-group tag_childrens">
+  <label class="control-label">标签项</label>
+  <div class="clearfix">
+    <div class="col-md-6 no-padding-left no-padding-right">
+      <%= f.fields_for :children do |tg| %>
+        <div class="input-group input-group-sm input-group-text margin-top-10 tag_children">
+          <%= tg.check_box :_destroy, checked: false, style: 'display:none;' %>
+          <%= tg.text_field :name, class: 'col-xs-12'%>
+          <span class="input-group-btn">
+            <% if index == @tag.children.count || @tag.children.count == 0 %>
+              <input type="button" class="btn btn-sm btn-filter btn-primary" value="添加" id="add">
+            <% else %>
+              <input type="button" class="btn btn-sm btn-filter btn-primary" value="删除" id="delete">
+            <% end %>
+          </span>
+        </div>
+        <% index += 1 %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="input-group input-group-sm input-group-text margin-top-10 tag_children" style="display:none;" template='true'>
+  <input style="display:none;" type="checkbox" value="1">
+  <input class="col-xs-12" size="30" type="text">
+  <span class="input-group-btn">
+    <input type="button" class="btn btn-sm btn-filter btn-primary" value="添加" id="add">
+  </span>
+</div>
+
+

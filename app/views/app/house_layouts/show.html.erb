@@ -1,0 +1,75 @@
+<body class="article">
+<div class="html">
+<div class="main">
+  <header>
+    <a class="ico tleft" href="<%= app_house_layouts_path(aid: @activity.id)%>"><img src="/assets/house_market/12.png"/></a>
+    <h1>户型展示</h1>
+    <a class="btn-list ico tright"><img src="/assets/house_market/13.png"/></a>
+  </header>
+  <section>
+
+    <div class="box-img">
+      <div class="box-img" id="slider">
+        <ul class="box-img-list">
+          <% @house_pictures.each do |picture|%>
+              <li><%= image_tag picture.path.large %></li>
+          <% end %>
+        </ul><!-- box-img-list end -->
+        <div id="pagenavi" class="box-img-page">
+          <% @house_pictures.each_with_index do |p, index| %>
+              <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>"><% index + 1 %></a>
+          <% end %>
+        </div><!-- box-img-page end -->
+      </div><!-- box-img end -->
+    </div>
+  </section><!-- section end -->
+</div><!-- main end -->
+</div><!-- html end -->
+<div class="pop pop-list">
+  <div class="pop-bg"></div>
+  <div class="pop-bd">
+    <div class="hd"><span>取消</span></div>
+    <div class="bd">
+      <% @house_layouts.each do |h| %>
+          <dl>
+            <dt>
+              <a href="<%= app_house_layout_path(h)%>" style="width: 100%">
+                <b><%= h.layout_number%></b>
+                <br>
+                <span><%= h.name %></span>
+                <i class="arrow"></i>
+              </a>
+            </dt>
+          </dl>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+    $(function(){
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $(this.element).next("div").children();
+                lis.removeClass("active").eq(this.index).addClass("active");
+            }
+        });
+        $(".btn-list").click(function(){
+            var h=$(".html").height();
+            $(".pop").height(h).fadeIn();
+        });
+        $(".pop-list .hd").click(function(){
+            $(".pop").fadeOut();
+        });
+    });
+</script>
+</div>
+  <%= @supplier.try(:piwik_js_code) %>
+</body>
+<style>
+
+    .main {
+        padding-bottom: 0px;
+    }
+</style>

@@ -1,0 +1,20 @@
+<% if @activity_user.survey_finish? %>
+<div class="body">
+  <div class="end">
+    <div class="end-img-3"></div>
+    <div class="end-text">您已完成调研，感谢您的参与！</div>
+  </div>
+  <%- if @activity.associated_activity.present? %>
+    <div class="btn-box mt-10px">
+      <div class="cell">
+        <a href="<%= @activity.associated_activity.respond_mobile_url.try(:+, '&hide_menu=hide') %>" class="btn btn-bigest btn-danger">抽 奖</a>
+      </div>
+    </div>
+  <%- end %>
+  <div class="btn-box mt-10px">
+    <div class="cell">
+      <a href="<%= list_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id) %>" class="btn btn-bigest btn-primary">查看我的调研</a>
+    </div>
+  </div>
+</div>
+<% end %>

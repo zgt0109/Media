@@ -1,0 +1,159 @@
+<div class="main-content">
+  <!-- 这里是内容 start-->
+  <!--新手任务 代码块-->
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <!-- page-content start-->
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24" id="myTab">
+            <li class="active">
+              <%= link_to settings_red_packets_path do %>
+                  <i class="green icon-home bigger-110"></i>红包设置
+              <% end %>
+            </li>
+            <li class="">
+              <%= link_to "红包管理", red_packets_path %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div id="vipInfo" class="tab-pane active">
+              <div class="form-group clearfix">
+                <h3 class="text-info fl">关注红包</h3>
+                <label class="fl mt20 ml20">
+                  <%= check_box_tag "status", '1', RedPacket::FollowRedPacket.follow.normal.where(supplier_id: @current_user.id).first.present?, class: 'ace ace-switch ace-switch-7' %>
+                  <span class="lbl"></span>
+                </label>
+              </div>
+              <div class="form-group">
+                <p>
+                  <strong class="pointer btn btn-primary btn-sm btn-filter" data-toggle="<%= @current_user.red_packets.follow.normal.present? ? 'modals' : '' %>" data-target="weisiteModal" data-title="金额设置" data-width="600" data-height="440" data-iframe="<%= set_value_red_packets_path %>">金额设置</strong>
+                  <span class="ml20">开启后默认关注用户赠送固定1元红包,红包预算总额默认为100元。</span>
+                  <!--<span class="ml20">当前设置为3元随机红包。</span>-->
+                </p>
+              </div>
+              <div class="form-group">
+                <h3 class="text-info">普通红包</h3>
+                <%= link_to "创建红包", new_red_packet_path, class: "btn btn-primary btn-sm btn-filter" %>
+              </div>
+              <div class="form-group">
+                <h3 class="text-info">手动红包
+                  <small class="ml20 mt20">商户可以导出openid用于支付平台手动发放红包</small>
+                </h3>
+              </div>
+              <div class="form-group">
+                <p>
+                  <span>所有粉丝openid导出</span>
+
+                  <%- wx_users_count = @current_user.wx_users.subscribe.count %>
+                  <% if wx_users_count <= EXPORTING_COUNT %>
+                      <%= link_to 'EXCEL', export_red_packets_path(format: :xls, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
+                      <%= link_to 'TXT', export_red_packets_path(formt: :txt, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
+                  <% else %>
+                      <%#= link_to 'EXCEL', export_red_packets_path(format: :xls, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20', id: "a_exl" %>
+                      <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= export_red_packets_path(format: :xls, receive_type: RedPacket::RedPacket::ALL_FANS)%>" data-title="所有粉丝openid导出EXCEL" data-toggle="modals" data-target="delModal" data-text='<%= data_text(wx_users_count,(wx_users_count/EXPORTING_COUNT.to_f).ceil) %>'>EXCEL</a>
+                      <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= export_red_packets_path(format: :txt, receive_type: RedPacket::RedPacket::ALL_FANS)%>" data-title="所有粉丝openid导出TXT" data-toggle="modals" data-target="delModal" data-text='<%= data_text(wx_users_count,(wx_users_count/EXPORTING_COUNT.to_f).ceil) %>'>TXT</a>
+                  <% end %>
+
+                  <%#= link_to 'EXCEL', export_red_packets_path(format: :xls, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
+                  <%#= link_to 'TXT', export_red_packets_path(formt: :txt, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
+                  <!--<a href="#" class="btn btn-primary btn-sm btn-filter ml20">EXCEL</a>-->
+                  <!--<a href="#" class="btn btn-primary btn-sm btn-filter ml20">TXT</a>-->
+                </p>
+
+                <p>
+                  <span>所有会员openid导出</span>
+                  <%- vip_users_count = @current_user.vip_users.normal.count %>
+                  <% if vip_users_count <= EXPORTING_COUNT %>
+                      <%= link_to 'EXCEL', export_red_packets_path(format: :xls, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_VIPS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
+                      <%= link_to 'TXT', export_red_packets_path(formt: :txt, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_VIPS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
+                  <% else %>
+                      <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= export_red_packets_path(format: :xls, receive_type: RedPacket::RedPacket::ALL_VIPS)%>" data-title="所有会员openid导出EXCEL" data-toggle="modals" data-target="delModal" data-text='<%= data_text(vip_users_count,(vip_users_count/EXPORTING_COUNT.to_f).ceil) %>'>EXCEL</a>
+                      <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= export_red_packets_path(format: :txt, receive_type: RedPacket::RedPacket::ALL_VIPS)%>" data-title="所有会员openid导出TXT" data-toggle="modals" data-target="delModal" data-text='<%= data_text(vip_users_count,(vip_users_count/EXPORTING_COUNT.to_f).ceil) %>'>TXT</a>
+                  <% end %>
+                </p>
+              </div>
+
+              <div class="mt20">
+                <a href="#" data-toggle="modals" data-target="weisiteModal" data-title="微信支付V3设置" data-width="600" data-height="580" data-iframe="<%= payment_setting_new_red_packets_path %>" class="fl btn btn-primary btn-sm btn-filter mr20">微信红包支付绑定</a>
+                <a href="#"  class="fl btn btn-primary btn-sm btn-filter functional_test">红包功能测试</a>
+                <div class="col-md-5 fl hidden send_test">
+                  <%= form_tag test_pay_red_packets_path, validate: true do %>
+                  <div class="col-md-8">
+                    <div class="input-group input-group-text col-md-12">
+                      <input type="text" class="form-control" placeholder="输入测试账户的openid（手动红包中查询）" name="test_openid" id="test_openid">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <input type="submit" class="btn btn-primary btn-sm test-btn" value="发送">
+                  </div>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- page-content end-->
+</div>
+<!--新手任务 代码块 -end -->
+
+<!-- 这里是内容 end-->
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+
+        $('body').on('click','button[data-fn="submit"]',function(){
+            var page_exl = $('#delModal').find("[name=page_exl]:checked");
+            var url = $('#delModal').find('form')[0].action + "&page_exl="+page_exl.val();
+            window.location.href=url;
+        });
+
+        $(".btn-filter").on("click", function(){
+            setTimeout(function(){
+                $("button[data-fn=submit]").attr("type","button");
+            },200)
+        });
+
+        $(".test-btn").click(function(){
+            if(!$("#test_openid").val()){
+                showTip('warning', '测试账户的openid不能为空');
+                return false;
+            }
+        })
+        $('#status').click(function() {
+            var url = "<%= off_or_on_red_packets_path %>";
+            $.post(url, 'script',function(){
+                if($(".pointer").attr("data-toggle").length > 1){
+                    $(".pointer").attr("data-toggle",'')
+                }else{
+                    $(".pointer").attr("data-toggle",'modals')
+                }
+            });
+        });
+
+        $(function(){
+            var isShown = 0;
+            $(".functional_test").on("click",function(){
+                if( isShown == 0 ){
+                    $(".send_test").removeClass("hidden");
+                    isShown = 1;
+                }else{
+                    $(".send_test").addClass("hidden");
+                    isShown = 0;
+                }
+            })
+        })
+    </script>
+
+<% end %>

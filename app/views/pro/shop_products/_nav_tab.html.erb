@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs padding-24 tab-size-bigger">
+  <% if can_see? %>
+  <li>
+    <%= link_to "菜单管理", shop_menus_path %>
+  </li>
+  <% end %>
+  <li class="<%= controller_name == 'shop_products' ? 'active' : '' %>">
+    <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <%= link_to "菜单设置", shop_products_path(industry_id: 10001) %>
+    <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+        <%= link_to "菜单设置", shop_products_path(industry_id: 10002) %>
+    <% end %>
+  </li>
+  <li class="<%= controller_name == 'shop_categories' ? 'active' : '' %>">
+    <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <%= link_to "菜单分类", shop_categories_path(industry_id: 10001) %>
+    <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+        <%= link_to "菜单分类", shop_categories_path(industry_id: 10002) %>
+    <% end %>
+  </li>
+</ul>

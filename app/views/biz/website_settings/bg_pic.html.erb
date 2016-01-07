@@ -1,0 +1,98 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微官网', websites_path %></li>
+          <li><%= link_to '首页背景图', bg_pic_website_settings_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="alert alert-block alert-info">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、首页背景图是指在微官网首页展示的一张静态背景图片；</li>
+                <li>2、支持图片上传格式为：jpg、png、bmp、gif；</li>
+                <li>3、并非所有模板都支持首页背景图，是否支持请参考所选模板的风格提示，在&lt;模板样式&gt;栏目；</li>
+                <li>4、图片最佳分辨率，请参考你所选择模板的风格提示，在&lt;模板样式&gt;栏目。</li>
+              </ul>
+            </div>
+          </div>
+          <div class=" col-sm-12 ">
+            <%= form_for(@website_setting, url: update_bg_pic_website_settings_path, method: :post, html: {id: 'edit_website_setting'}) do |f| %>
+                <%= f.hidden_field :bg_pic_template_id %>
+                <div>
+                  <label>
+                    首页背景图
+                    <span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content="上传微官网的首页背景图片" ></span>
+                    <input class="btn btn-sm btn-primary cancel-bg-pic" type="button" value="取消首页背景图">
+                  </label>
+                </div>
+
+                <div class="template-list">
+                  <div class="clearfix"></div>
+                  <ul class="ace-thumbnails ">
+                    <li class="custom <%= @website_setting.bg_pic_ul.present? ? 'active' : ''%>">
+                      <a href="javascript:;" class="">
+                        <div class="img-template background-color-grey1">
+                          <div class="cieldon-file" data-type="0" data-height="240" data-width="160" data-name="website_setting[bg_pic_key]" data-img="<%= @website_setting.bg_pic_ul %>" data-key="<%= @website_setting.bg_pic_key %>"></div>
+                        </div>
+                        <span>自定义背景</span>
+                      </a>
+                    </li>
+                    <% WebsiteSetting.read_bg_images.each do |file| %>
+                        <li class="system-provide <%= @website_setting.bg_pic_template_id == file[0] ? 'active' : '' %>"  data-style_index="<%= @website_setting.bg_pic_template_id %>" bg_pic_id='<%= file[0] %>'>
+                          <a href="javascript:;" class="">
+                            <img alt="" src="<%= file[1]%>" style="height: 240px;width: 160px;">
+                            <span>背景图片<%= file[0] %></span>
+                          </a>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          $('.template-list').on('click', 'li.system-provide', function(){
+              $('.template-list li.active').removeClass('active');
+              $(this).addClass('active');
+              $('#website_setting_bg_pic_template_id').val($(this).attr('bg_pic_id'));
+              $("input[name='website_setting[bg_pic_key]']").val('');
+              $('form.edit_website_setting').submit();
+          });
+          $('.template-list').on('change', 'li.custom', function(){
+              bg_pic_key_submit($("input[name='website_setting[bg_pic_key]']").val());
+          });
+
+          $('.cancel-bg-pic').on('click', function(){
+              $('#website_setting_bg_pic_template_id').val('');
+              $("input[name='website_setting[bg_pic_key]']").val('');
+              $('form.edit_website_setting').submit();
+          });
+
+      });
+      function bg_pic_key_submit(val){
+          setTimeout(function(){
+              if(val != $("input[name='website_setting[bg_pic_key]']").val()){
+                  $('#website_setting_bg_pic_template_id').val('');
+                  $('form.edit_website_setting').submit();
+              }
+              else{bg_pic_key_submit(val);}
+          }, 50);
+      }
+    </script>
+<% end %>

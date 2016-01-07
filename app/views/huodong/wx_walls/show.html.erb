@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>微信墙</title>
+  <%= stylesheet_link_tag "wx_wall" %>
+  <style type="text/css">
+    .disabled { pointer-events: none; cursor: default; }
+  </style>
+</head>
+<body>
+<div class="html theme-<%= @wx_wall.system_template? ? (@wx_wall.template_id.presence || "1") : "user" %>" style="<%= "background-image:url(#{@wx_wall.custom_template_url})" if @wx_wall.custom_template.present? %>">
+  <!-- header start -->
+  <div class="header">
+    <div class="wrap clearfix">
+      <div class="logo pull-left">
+        <%= image_tag qiniu_img_url(@wx_wall.logo, default_pic: 'wx_wall/logo.png'), size: '180x60' %>
+      </div>
+      <div class="pull-right">
+        <div class="h-title">
+          <div class="h-list" id="h-title">
+            <ul>
+              <li>
+                <p>搜索 <span class="text"><%= @wx_wall.supplier.wx_mp_user.name %></span> 或扫描二维码关注</p>
+                <p>并发送“<%= @wx_wall.activity.keyword %>”即可体验</p>
+              </li>
+              <li>
+                <p><%= @wx_wall.activity.name %></p>
+                <p><%= @wx_wall.activity.summary %></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="code inline-block">
+          <img src="<%= @wx_wall.supplier.wx_mp_user.qrcode_url || '/assets/wx_wall/user-code.jpg' %>">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- header end -->
+  <!-- section start -->
+  <section class="stage J-mark-1">
+    <div class="main">
+      <div class="wrap">
+        <div class="message" id="message">
+          <ul>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- section end -->
+  <!-- section start -->
+  <% if @wx_wall.signin_check == 'true' %>
+    <section class="stage J-mark-0">
+      <div class="main">
+        <div class="signin-box">
+          <input id="signin_user_ids" type="hidden" value="<%= @wx_wall_users.first.try(:id) %>">
+          <% if @wx_wall_users.first %>
+            <div class="signin-item">
+              <img src="<%= @wx_wall_users.first.avatar_url %>">
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+  <!-- section end -->
+  <% if @pictures.count > 0 %>
+    <section class="stage J-mark-2">
+      <%= render 'photo' %>
+    </section>
+  <% end %>
+  <!-- section end -->
+  <% if @wx_wall.random_mode? && @wx_wall_prizes.count > 0 %>
+    <%= render 'prizes' %>
+  <% elsif @wx_wall.free_mode? %>
+    <%= render 'prizes_2' %>
+  <% end %>
+  <!-- section end -->
+  <% if @wx_wall.vote %>
+    <section class="stage J-mark-4">
+      <div class="main">
+        <div class="wrap">
+          <div class="vote-main">
+            <div class="vote-t">
+              <h1><%= @wx_wall.vote.name %></h1>
+              <p>请发送<span class="keyword"><%= @wx_wall.vote.keyword %></span>参与投票</p>
+              <div class="num">共<b><%= @wx_wall.vote.activity_user_vote_items.count('distinct(wx_user_id)') %></b>人参与</div>
+            </div>
+            <div id="container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% end %>
+  <!-- section end -->
+  <!-- section end -->
+  <% if @wx_wall.enroll %>
+    <section class="stage J-mark-5">
+      <div class="main">
+        <div class="wrap signup-main">
+          <div class="detail-box">
+            <div class="detail-title">
+              <img src="/assets/wx_wall/title-v2.png" alt="">
+            </div>
+            <div class="detail-li">
+              <span>回复 </span>
+              <b class="d-keyword">“<%= @wx_wall.enroll.keyword %>” </b>
+            </div>
+            <div class="detail-li">
+              <span>即可参与 </span>
+              <b class="d-keyword">“<%= @wx_wall.enroll.name %>”</b>
+              <span>活动</span>
+            </div>
+            <div class="d-t"><b>活动详情</b></div>
+            <div class="d-edit">
+              <%= raw @wx_wall.enroll.description %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% end %>
+  <!-- section end -->
+  <!-- footer -->
+  <div class="foot clearfix text-center">
+    <div class="foot-main">
+      <div class="f-logo">
+        <div class="foot-logo"></div>
+      </div>
+      <div class="head-icon">
+        <a class="cur" href="javascript:void(0);" onclick="animageTop(this,'.J-mark-1',false)">
+          <i class="icon icon-1"></i>
+          <span class="f-tip">
+            微信墙
+          </span>
+        </a>
+        <% if @wx_wall.signin_check == 'true' %>
+          <a href="javascript:void(0);" onclick="animageTop(this,'.J-mark-0',true)">
+            <i class="icon icon-20"></i>
+            <span class="f-tip">
+              签到
+            </span>
+          </a>
+        <% end %>
+        <% if @wx_wall.picture_check == 'true' && @pictures.count > 0 %>
+          <a href="javascript:void(0);" onclick="animageTop(this,'.J-mark-2',true)">
+            <i class="icon icon-2"></i>
+            <span class="f-tip">
+              照片
+            </span>
+          </a>
+        <% end %>
+        <% if @wx_wall.prize_check == 'true' && ((@wx_wall.random_mode? && @wx_wall_prizes.count > 0) || @wx_wall.free_mode?) %>
+          <a href="javascript:void(0);" onclick="animageTop(this,'.J-mark-3',true)">
+            <i class="icon icon-3"></i>
+            <span class="f-tip">
+              抽奖
+            </span>
+          </a>
+        <% end %>
+        <% if @wx_wall.vote_check == 'true' && @wx_wall.vote %>
+          <a href="javascript:void(0);" onclick="animageTop(this,'.J-mark-4',true)">
+            <i class="icon icon-4"></i>
+            <span class="f-tip">
+              投票
+            </span>
+          </a>
+        <% end %>
+        <% if @wx_wall.shake_check == 'true' && @wx_wall.shake %>
+          <a href="<%= wx_shake_sites_path(id: @wx_wall.shake.activityable_id, supplier_id: Des.encrypt(current_user.id.to_s)) %>" target="_blank">
+            <i class="icon icon-13"></i>
+            <span class="f-tip">
+              微信“摇一摇”
+            </span>
+          </a>
+        <% end %>
+        <% if @wx_wall.enroll_check == 'true' && @wx_wall.enroll %>
+          <a href="javascript:void(0);" onclick="animageTop(this,'.J-mark-5',true)">
+            <i class="icon icon-21"></i>
+            <span class="f-tip">
+              微报名
+            </span>
+          </a>
+        <% end %>
+        <a href="javascript:void(0);" class="J-full" data-full="false">
+          <i class="icon icon-22"></i>
+          <span class="f-tip">
+            全屏
+          </span>
+        </a>
+      </div>
+      <div class="msg-tools">
+        <div class="tools-pos">
+          <div class="tools-table">
+            <a href="javascript:void(0);" class="J-start">
+              <i class="icon icon-14"></i>
+            </a>
+            <a href="javascript:void(0);" class="J-prev">
+              <i class="icon icon-15"></i>
+            </a>
+            <a href="javascript:void(0);" class='J-stop'>
+              <i class="icon icon-17"></i>
+            </a>
+            <a href="javascript:void(0);" class="J-next">
+              <i class="icon icon-18"></i>
+            </a>
+            <a href="javascript:void(0);" class="J-end">
+              <i class="icon icon-19"></i>
+            </a>
+          </div>
+          <canvas id="process" width="58" height="58"></canvas>
+        </div>
+      </div>
+      <% if @wx_wall.material %>
+        <div class="music p-absolute J-music">
+          <i class="icon icon-5"></i>
+          <audio id="bgMusic" src="<%= @wx_wall.material.qiniu_audio_url %>" loop="loop" autoplay="autoplay"></audio>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="qcode">
+    <div class="qcode-bg"></div>
+    <div class="qcode-main">
+      <img src="<%= @wx_wall.supplier.wx_mp_user.qrcode_url || '/assets/wx_wall/user-code.jpg' %>" width="320" height="320">
+      <p>微信扫一扫，发送”<span class=text-yellow><%= @wx_wall.activity.keyword %></span>”即可参与</p>
+    </div>
+  </div>
+
+</div>
+<%= javascript_include_tag "wx_wall" %>
+<script type="text/javascript">
+var message_num;
+$(function(){
+  reSize();
+  function reSize(){
+        var $docHeight = $(window).height(),
+            $headH = $(".header").outerHeight(),
+            $footH = $(".foot").outerHeight(),
+            $htmlH = $docHeight - $headH -$footH,
+            $marginTop = ($htmlH%190)/2,
+            $msg = $("#message")
+            $len = $msg.find("li").length;
+            message_num = parseInt($htmlH/190);
+        if($len < message_num){
+            var html = "";
+            for(var i=0;i<message_num -$len;i++){
+                html +="<li></li>";
+            }
+            $msg.find("ul").prepend(html);
+        }
+        if($len >message_num){
+            $msg.find("li:gt("+(message_num-1)+")").remove();
+        }
+        $(".html").height($htmlH);
+        $("#message").height(message_num*190).css("margin-top",$marginTop);
+    }
+  fullScreenToggle();
+  $.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?last_id=0&num=' + message_num + '&direction=down' + '&user_id=' + $('#users-ul').data('last-id'));
+  $(window).resize(function(){
+    reSize();
+    $(".head-icon .cur").trigger("click");
+  });
+  $(".code img").on("click",function(){
+      $(".qcode").fadeIn();
+  });
+  $(".qcode").on("click",function(){
+      $(".qcode").fadeOut();
+  });
+  // 图片列表滚动
+  $('#photo-list').bxSlider({
+    pause: 5000,
+    prev_image: '',
+    prev_text:"",
+    next_image: '',
+    next_text: '',
+    pager:false,
+    wrapper_class: 'slides_wrap',
+    auto: true,
+    auto_controls: true
+  });
+  $('#marquee-slide').bxSlider({
+    pause: 3000,
+    prev_image: '',
+    prev_text:"",
+    next_image: '',
+    next_text: '',
+    pager:false,
+    wrapper_class: 'showSlide',
+    auto: true,
+    auto_controls: true
+  });
+  $('#user-list').kxbdSuperMarquee({
+      isMarquee:true,
+      scrollAmount:0,
+      newAmount:10,
+      eventA:'click',
+      eventB:'mouseup',
+      controlBtn:{up:'#goT'},
+      direction: 'up',
+      loop: 0
+  });
+  $('#h-title').kxbdSuperMarquee({
+      distance:60,
+      direction:'up'
+  });
+  // 显示幻灯片
+  $(".play-btn").on("click",function(){
+    var $this = $(this),
+      $list = $('#photo-list'),
+      $slide = $('#marquee-slide'),
+            $btn = $(".slides_wrap .auto_controls .auto_link"),
+            $pop = $(".J-slideshow");
+    if($this.hasClass("played")){
+      $this.removeClass("played");
+      $this.find("span").text("播放幻灯片");
+      $(".slideshow").fadeOut();
+            $btn.trigger("click");
+    }else{
+            if($btn.text() == "stop"){
+                $btn.trigger("click");
+            }
+      $this.addClass("played");
+      $this.find("span").text("返回图片列表");
+      $pop.fadeIn(800);
+    }
+  });
+  // 播放图片
+  $(".slides_wrap img").on("click",function(){
+      var $this = $(this),
+          $pop = $(".J-imgshow"),
+          $btn = $(".slides_wrap .auto_controls .auto_link"),
+          $show_btn = $(".play-btn"),
+          url = $this.attr("src");
+      $pop.find(".slideshow-main img:eq(0)").attr("src",url);
+      $show_btn.addClass("played");
+      $show_btn.find("span").text("返回图片列表");
+      if($btn.text() == "stop"){
+          $btn.trigger("click");
+      }
+      $pop.fadeIn(800);
+  })
+  // 幻灯片暂停
+  $(".showSlide .auto_controls a").on("click",function(){
+    $(".slide-nav .icon-8").toggleClass("icon-8-1");
+  });
+  $(".showSlide .prev,.showSlide .next").on("click",function(){
+      var $btn = $(".showSlide .auto_controls a");
+      if($btn.text() == "start"){
+          $(".slide-nav .icon-8").addClass("icon-8-1");
+      }
+  });
+  // 中奖名单
+  $(".btn-show").on("click",function(){
+      $.get('<%= winner_list_wx_wall_path(@wx_wall) %>');
+  });
+  $(".J-close").on("click",function(){
+      $(".pop-list").hide();
+  });
+  // 音乐控制
+  $(".J-music").on("click",function(){
+      var $this = $("#bgMusic")[0],
+          $icon = $(this).find(".icon");
+      if($this.paused){
+          $this.play();
+      }else{
+          $this.pause();
+      }
+      $icon.toggleClass("icon-5-1");
+  });
+  $(".tools-table").on("click","a",function(){
+      var $this = $(this);
+      if($this.is(".J-play")){
+          canvas.init();
+          $(this).removeClass("J-play").addClass("J-stop").html('<i class="icon icon-17"></i>');
+      }else if($this.is(".J-stop")){
+          canvas.push();
+          $(this).removeClass("J-stop").addClass("J-play").html('<i class="icon icon-16"></i>');
+      }else if($this.is(".J-prev")){
+          canvas.clear();
+          var last_id = $("#message li").first().attr("data-id");
+          $.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?last_id=' + last_id + '&num=' + message_num + '&direction=top');
+          // msgLoad("#message",html,"top");
+      }else if($this.is(".J-next")){
+          canvas.clear();
+          var last_id = $("#message li").last().attr("data-id");
+          $.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?last_id=' + last_id + '&num=' + message_num + '&direction=down');
+          // msgLoad("#message",html);
+      }else if($this.is(".J-start")){
+          canvas.clear();
+          var last_id = $("#message li").first().attr("data-id");
+          $.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?last_id=' + last_id + '&num=' + message_num + '&direction=start');
+          // msgLoad("#message",(html+html),"start");
+      }else if($this.is(".J-end")){
+          canvas.clear();
+          var last_id = $("#message li").last().attr("data-id");
+          $.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?last_id=' + last_id + '&num=' + message_num + '&direction=end');
+          // msgLoad("#message",(html+html),"end");
+      }
+  });
+  canvas.init();
+});
+
+// 滚动切换
+var gaming;
+function animageTop(self,el,push){
+    window.clearInterval(gaming);
+    var $this = $(self),
+        $top = parseInt($(el).offset().top)-94,
+        $scrollTop = $(".html")[0].scrollTop;
+    if(push){
+      if($(".tools-table a").eq(2).is(".J-stop")){ $(".tools-table a").eq(2).click(); }
+    }else{
+      if($(".tools-table a").eq(2).is(".J-play")){ $(".tools-table a").eq(2).click(); }
+    }
+    $this.addClass("cur").siblings().removeClass("cur");
+    $(el).show();
+    $(".html").animate({scrollTop:$top+$scrollTop},800);
+    if(el == '.J-mark-3'){
+        gaming = window.setInterval(function(){$.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?type=J-mark-3&user_id=' + $('#users-ul').data('last-id'))},3000);
+    }else if(el == '.J-mark-4'){
+        gaming = window.setInterval(function(){$.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?type=J-mark-4')},10000);
+    }else if(el == '.J-mark-0'){
+        gaming = window.setInterval(function(){$.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?type=J-mark-0&signin_user_ids=' + $('#signin_user_ids').val())},2000);
+    }
+}
+// 添加信息
+function addMsg(user,img,msg,time){
+  var html = '<li class="hide"> <div class="user-left"> <div class="user-img"> <img src="'+img+'"/> </div> </div> <div class="user-msg"> <h1>'+user+'</h1> <p>'+msg+'</p> <div class="user-time">'+time+'</div> </div> </li>'
+  var msgBox = $(".message ul");
+  setTimeout(function(){
+    msgBox.find("li:eq(0)").before(html);
+    msgBox.find("li:eq(0)").show("800");
+  },3000);
+}
+// 阻止冒泡
+function stopPropagation(e) {
+    e = e || window.event;
+    if(e.stopPropagation) { //W3C阻止冒泡方法
+        e.stopPropagation();
+    } else {
+        e.cancelBubble = true; //IE阻止冒泡方法
+    }
+}
+var canvas = {
+    auto:"",
+    rt: -0.5,
+    init: function(){
+        canvas.push();
+        var context = $("#process")[0].getContext("2d");
+        canvas.ratote(context,0.004);
+    },
+    ratote :function (context,speed){
+        context.clearRect(0, 0, 58, 58);
+        context.beginPath();
+        context.arc(29, 29, 25, 0, Math.PI * 2);
+        context.strokeStyle = '#fff';
+        context.lineWidth = 2;
+        context.stroke();
+        context.beginPath();
+        context.arc(29, 29, 25, Math.PI * -0.5, Math.PI * canvas.rt);
+        context.strokeStyle = '#51686b';
+        context.lineWidth = 2;
+        context.stroke();
+        canvas.rt += speed;
+        if(canvas.rt < -0.5 || canvas.rt >1.5){
+          canvas.rt = -0.5;
+          var last_id = $("#message li").last().attr("data-id");
+          $.getScript('<%= get_message_wx_wall_path(@wx_wall) %>?last_id=' + last_id + '&num=' + message_num + '&direction=down');
+        }
+        canvas.auto = setTimeout(function(){
+            canvas.ratote(context,speed);
+        },10);
+    },
+    push: function(){
+        clearInterval(canvas.auto);
+        canvas.auto="";
+    },
+    clear: function(){
+        var context = $("#process")[0].getContext("2d");
+        context.clearRect(0, 0, 58, 58);
+        context.clearRect(0, 0, 58, 58);
+        context.beginPath();
+        context.arc(29, 29, 25, 0, Math.PI * 2);
+        context.strokeStyle = '#fff';
+        context.lineWidth = 2;
+        context.stroke();
+        canvas.rt=-0.5;
+    }
+}
+// 全屏切换
+var fullScreenToggle = function(){
+    $(".J-full").on("click",function(e) {
+        var $this = $(this),
+            isFull = $this.attr("data-full");
+        if(isFull =="false"){
+            fullScreen();
+            $this.attr("data-full",true);
+        }else{
+            quitFullScreen();
+            $this.attr("data-full",false);
+        }
+    });
+    $(document).on("keyup",function(e){
+        var e = e || event;
+        if(e.keyCode == 27){
+            quitFullScreen();
+            $(".J-full").attr("data-full",false);
+        }
+    });
+    function fullScreen(){
+        var docElm = document.documentElement,
+            s = docElm.webkitRequestFullscreen || docElm.requestFullScreen || docElm.webkitRequestFullScreen || docElm.mozRequestFullScreen;
+        s && s.call(docElm);
+    }
+    function quitFullScreen(){
+        var doc  = document,
+            s = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitCancelFullScreen || doc.webkitCancelFullScreen || doc.msExitFullscreen;
+        s && s.call(doc);
+    }
+}
+// 投票
+<% if @wx_wall.vote %>
+  showVoteChart(<%= raw @vote_items.map(&:name).to_json %>, <%= raw json_for_vote_items( @vote_items, @wx_wall.template_id ) %>, '<%= vote_word_color(@wx_wall.template_id) %>');
+<% end %>
+
+<% if @wx_wall.stopped? %>
+  $('body').addClass('disabled');
+  alert('活动已停止');
+<% end %>
+
+<%# if !@wx_wall.activity.starting? %>
+  // $('.J-mark-3').addClass('disabled');
+<%# end %>
+</script>
+
+<script type="text/javascript">
+  ;(function ($) {
+    $.fn.vcSignIn = function(options){
+      var oBox = $(this),
+        defaults = {
+          element : ".signin-item",
+          maxNum : 100
+        },
+        opt = $.extend({},defaults,options),
+        oItem = oBox.find(opt.element),
+        iWidth = parseInt(oBox.width()),
+        iHeight = parseInt(oBox.height()),
+        iItem_width = oItem.eq(0).width(),
+        iItem_height = oItem.eq(0).height();
+    var setPos = function (obj){
+      var oObj = obj,
+        left = parseInt(Math.random()*(iWidth - iItem_width - 40) + 20),
+        top = parseInt(Math.random()*(iHeight - iItem_height - 40) + 20);
+      oObj.css({"left":left+"px","top":top+"px"}).fadeIn();
+      maxNum();
+    }
+    oItem.each(function(){
+      var oSelf = $(this);
+      setPos(oSelf);
+    });
+    function maxNum(){
+      oItem = oBox.find(opt.element);
+      if(oItem.length>=opt.maxNum && opt.maxNum){
+        oItem.eq(0).fadeOut(function(){
+          $(this).remove();
+        });
+      }
+    }
+    return {
+      setPos:setPos
+    }
+  }
+  })(jQuery);
+  var cont;
+  $(function(){
+    cont = $(".signin-box").vcSignIn({
+      maxNum:30
+    });
+  });
+  function add_signin(url){
+    var html = $('<div class="signin-item"><img src="'+url+'"></div>');
+    $(".signin-box").append(html);
+    cont.setPos(html);
+  }
+</script>
+
+<%= yield :custom_js if content_for?(:custom_js) %>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<div class="main-content">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微WiFi', '#' %></li>
+      <li><%= link_to '设置', '#' %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="tabbable">
+       <iframe src="<%= HOTEL_HOST %>/wifi/wifi/config?admin_token=<%= current_user.find_or_generate_auth_token %>" frameborder="0" width="100%" height="500px" scrolling="no"></iframe>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<% provide(:title, "订单详情") %>
+<% content_for :topbar do %>
+  <header>
+    <a href="<%= mobile_ec_orders_path(supplier_id: @supplier.id)%>" class="ico-prev"><%= image_tag 'mobile/wshop/ico-back.png' %></a>
+    <h1>订单详情</h1>
+  </header>
+<% end %>
+
+<section>
+  <div class="box-order box-p">
+    <p><b>订单号：</b><span><%= @order.order_no %></span></p>
+    <p><b>总金额：</b><span><%= f @order.total_amount %>元</span></p>
+    <p><b>收货人：</b><span><%= @order.username %></span></p>
+    <p><b>电   话：</b><span><%= @order.tel %></span></p>
+    <p><b>地   址：</b><span><%= @order.address %></span></p>
+    <p>
+      <b>订单状态：</b>
+      <span class="fred"><%= @order.status_name %></span>
+      <%= link_to '去支付', pay_mobile_ec_order_path(@order.supplier_id, @order), class: 'btn btn-red' if @order.pending? and @order.supplier.can_pay? %>
+    </p>
+  </div>
+  <form>
+    <dl class="box-orderList">
+      <dt>商品清单</dt>
+      <dd>
+        <ul class="shopcar-list">
+          <% @order.order_items.each do |order_item| %>
+            <li class="shopcar-info">
+              <% if order_item.ec_item.present? && order_item.ec_item.main_picture.present? %>
+                <span class="info-fl"> <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id, id: order_item.ec_item ) %>"><%= image_tag order_item.ec_item.main_picture.pic.thumb %></a></span>
+              <% else %>
+                <span class="img-null info-fl">暂无<br/>图片</span>
+              <% end %>
+              <p>
+                <b>
+                  <% if order_item.ec_item.present? %>
+                  <%= link_to  order_item.ec_item.try(:title), mobile_ec_item_path(supplier_id: @supplier.id, id: order_item.ec_item ), :style => "color:#666" %>
+                  <% else %>
+                      <%=  order_item.ec_item.try(:title) %>
+                  <% end %>
+                      </b>
+                <span class="fl">数量：<%= order_item.qty %>件</span>
+                <span class="fr">￥<%= f order_item.total_price %></span>
+              </p>
+            </li>
+          <% end %>
+        </ul>
+      </dd>
+    </dl>
+  </form>
+</section>
+

@@ -1,0 +1,58 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微汽车', car_shops_path %></li>
+      <li><%= link_to '车型管理', car_types_path %></li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、图片建议尺寸：700像素*525像素，可支持上传格式为：jpg、png、bmp、gif；</li>
+            <li> 2、最多上传10张图片。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div>
+          <div class="cieldon-file" data-type="6"  data-car_type_id="<%= @car_type.id %>"   data-pic_type="<%= CarPicture::GENERAL %>" data-name="picture" data-width="140" data-height="105" data-img="<%= @car_pictures %>" >
+        </div>
+      </div>
+      <div class="col-sm-12 margin-top-20">
+        <%= link_to '返回', :back, class: 'btn btn-sm btn-default' %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $(document).on('click', '.file-del', function(){
+    var style = $(this).parents('.file-img').find('.file-btn a').attr('style'),
+      pic_url = style.replace('background-image: url(','').replace(')',''),
+      // fix IE
+      comma= '"',
+      re = new RegExp(comma, 'g'),
+      pic_url = pic_url.replace(re, '').replace(';', '');
+    renderModal({
+      title: '删除图片',
+      text: "确定要删除吗？",
+      action:"/car_pictures/remove?car_type_id=<%= @car_type.id %>&pic_url="+pic_url,
+      method:"post",
+      btns: 2
+    });
+  })
+  $(function(){
+    <%- if @car_type.car_pictures.general.count >= 10 %>
+      $('input[type=file]:first').parents(".file-img").hide();
+    <%- end %>
+  })
+</script>
+<% end %>

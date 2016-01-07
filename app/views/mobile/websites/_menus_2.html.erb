@@ -1,0 +1,16 @@
+<% website_menus.each_with_index do |menu, index| %>
+  <%if index % 2 == 0%><div class="index"><%end%>
+  <%= link_to menu_url(menu), class: 'box mod-index' do %>
+        <div class="index-img">
+          <% if menu.pic? && menu.font_icon.blank? %>
+            <i><%= image_tag menu.pic.thumb %></i>
+          <% else %>
+            <i class="<%= menu.font_icon %>"></i>
+          <% end %>
+        </div>
+        <div class="index-text">
+          <b><%= menu.title %></b>
+        </div>
+      <% end %>
+  <%if index % 2 == 1%></div><%end%>
+<% end %>

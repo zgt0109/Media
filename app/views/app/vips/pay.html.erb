@@ -1,0 +1,17 @@
+<script type="text/javascript">
+function fetch_and_goto_pay_url() {
+  $.ajax({
+      url: '<%= payment_request_payments_url %>',
+      data: <%=raw @payment_request_params.to_json%>,
+      type: 'post',
+      success: function(data, status) {
+        pay_url = data["pay_url"]
+        // console.log("pay_url is" + pay_url)
+        if (typeof(pay_url) != 'undefined'){
+          window.location.href= pay_url;
+        }
+      }
+  });
+}
+fetch_and_goto_pay_url();
+</script>

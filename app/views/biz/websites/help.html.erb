@@ -1,0 +1,76 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar_websites' %>
+<% end %>
+
+<% content_for :topbar do %>
+    <a href="<%= help_websites_path %>" class="h1 pagecurrent">帮助中心</a>
+<% end %>
+<div class="eidt-cont" style="margin-top: -20px;">
+  <!-- edit cont start -->
+  <h2>1、基本信息设置</h2>
+  <p class="text">使用<%= agent_name %>的微官网前首先进行微官网设置，首先是基本信息设置，设置基本信息中的微官网名称、回复关键词、微信消息标题、微信消息图片、微信消息摘要、微官网LOGO、背景音乐、背景动画、设置完后点击保存。</p>
+  <p>
+    <img src="/assets/website/help/image003.png">
+    <img src="/assets/website/help/image005.png">
+  </p>
+  <h2>2、选择模版</h2>
+  <p class="text"><%= agent_name %>在首页、列表页、详情页、导航栏、快捷菜单模块中为您提供多个模版，鼠标单机即可选取；鼠标在移动到每个模版上时，请注意白色提示款，提示框对于每一个模版做了详细说明，请注意选取您适合的模版。</p>
+  <p><img src="/assets/website/help/image009.png"></p>
+  <h2>3、站点内容</h2>
+  <h3>3.1模块添加</h3>
+  <p class="text">站点内容即为在主面板中添加内容模块。在相应的模块内容里面点击“+”， 即可把内容添加到该模块中，例如下图，在《宝马-中国》后面点击“+”添加了《宝马车型》 ，宝马车型即为《宝马-中国》的子模块，以此类推，《宝马X5》即为《宝马车型》的子模块。</p>
+  <p><img src="/assets/website/help/image011.png"></p>
+  <h3>3.2模块内容编辑</h3>
+  <p><img src="/assets/website/help/image014.png"></p>
+  <p class="text">点击上图红色框内小图标即可编辑模块内容，点击“X”即可删除模块，点击上下箭头则可以调整模块排列位置。</p>
+  <p class="text">编辑界面如下图：</p>
+  <p><img src="/assets/website/help/image018.png"></p>
+  <table>
+    <tbody><tr>
+      <td>
+        <p class="text">站点名称即为在列表页模块（主界面）中的名称，标题图即为在列表页模块中显示的图片，模块分类可以选择此模块的所属位置。</p>
+        <p class="text">操作类型即为此模块的显示方式，有多个活动类型可供选择，活动类型在基础服务或行业解决方案中编辑。</p>
+        <p class="text">例如，本模块活动内容为“宝马车系”，那么应该在“微汽车”设置中选取进行设置，选择“车系管理”，添加车系，然后设置“车型管理”；如下图。</p>
+      </td>
+      <td><img src="/assets/website/help/image020.png"></td>
+    </tr>
+    </tbody></table>
+  <p><img src="/assets/website/help/image025.png"></p>
+  <table>
+    <tbody><tr>
+      <td>
+        <p class="text">最后，在编辑站点界面的最下端选择相应的活动，每一个活动都需要提前编辑。</p>
+        <p class="text">点击保存，设置完成。</p>
+      </td>
+      <td><img src="/assets/website/help/image023.png"></td>
+    </tr>
+    </tbody></table>
+  <h2>4、首页轮播图</h2>
+  <p class="text">首页轮播图即为在微官网首页最上端一次循环显示的图片。</p>
+  <p class="text">注：1、上传的图片会在微官网的首页显示，最多支持上传5张图片；</p>
+  <p class="text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、图片建议尺寸：720像素*400像素，可支持上传格式为：jpg、png、bmp、gif。</p>
+  <p class="text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、并非所有模板都支持首页轮播图，是否支持请参考你所选择模板的风格提示，在&lt;模板样式&gt;栏目；</p>
+  <p class="text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4、图片最佳分辨率，请参考你所选择模板的风格提示，在&lt;模板样式&gt;栏目。</p>
+  <p class="text">点击“添加图片”，弹出如下图；</p>
+  <p><img src="/assets/website/help/image028.png"></p>
+  <h2>5、快捷菜单</h2>
+  <p class="text">即为弹出菜单，点击“新增”即可添加。</p>
+  <p><img src="/assets/website/help/image031.png"></p>
+  <p class="text">添加方法同上面几部操作，这里不做详细说明。</p>
+  <h2>6、二维码</h2>
+  <p><img src="/assets/website/help/image034.png"></p>
+  <p class="text">系统在您绑定<%= agent_name %>之后自动生成与您微官网匹配的二维码，将微官网地址生成二维码，可以拓宽您的推广渠道，用户只要扫一扫二维码，就可以通过浏览器打开您的微官网。</p>
+  <h2>7、个性化域名</h2>
+  <p><img src="/assets/website/help/image038.png"></p>
+  <h2>8、流量统计</h2>
+  <p class="text">流量统计为您的微官网进行实时数据统计，便于您在考查市场情况，制定营销方案。</p>
+  <div class="p-note">
+    <p>注：1、<%= agent_name %>是业内首家推出详细网站流量分析的平台；</p>
+    <p>2、<%= agent_name %>流量分析功能不仅仅针对微官网，所有的<%= agent_name %>页面我们都加载了流量统计代码；</p>
+    <p>3、当前支持在不同时段内针对PV、UV、IP、跳出率、访问时长等维度进行分析统计。</p>
+  </div>
+  <p><img src="/assets/website/help/image045.png"></p>
+  <p><img src="/assets/website/help/image043.png"></p>
+  <p><img src="/assets/website/help/image040.png"></p>
+  <!-- edit cont end -->
+</div>

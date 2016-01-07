@@ -1,0 +1,60 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '意见反馈', feedbacks_url %></li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="alert alert-block alert-info">
+            <ul class="vwebsiteHeadAlert">
+              <li>亲爱的微枚迪用户～微枚迪的进步离不开您的帮助，您对微枚迪的的每一次建议，都能够帮助我们为您提供更好的产品，更加优质的服务！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <%= form_for @feedback, validate: true, html: { class: 'form', role: 'form' } do |f| %>
+            <%#= f.select :feedback_type, Feedback.feedback_type_options %>
+              <div class="form-group">
+                <div class="clearfix">
+                  <%= f.text_area :content, rows: 5, class: 'col-sm-12' %>
+                </div>
+                <div class="clearfix margin-top-10">
+                  <input type="submit" value="提交" class="btn btn-sm btn-primary"/>
+                  <!--<a class="line-height-28 margin-left-5">添加截图</a>-->
+                </div>
+              </div>
+          <% end %>
+        </div>
+        
+        <%#= paginate @feedbacks, theme: :pretty %>
+        
+        <% @feedbacks.each do |feedback| %>
+        <div class="col-xs-12 no-padding">
+          <div id="profile-feed-1" class="profile-feed col-sm-12">
+            <div class="profile-activity clearfix">
+              <div>
+                <%= feedback.content %>
+                <div class="time">
+                  <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                  <%= feedback.created_at %>
+                  <span class="text-primary"><%= feedback.replied? ? 1 : 0 %>条回复</span>
+                </div>
+              </div>
+
+              <div class="tools action-buttons"><%= link_to '查看回复', feedback, class: 'blue' if feedback.replied? %></div>
+            </div>
+          </div>
+        </div>
+        <% end %>
+        
+        <%= paginate @feedbacks %>
+      </div>
+    </div>
+  </div>
+<% end %>

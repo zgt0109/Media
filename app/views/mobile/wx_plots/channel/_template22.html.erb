@@ -1,0 +1,111 @@
+<% if @bulletins.present? %>
+    <div class="mod-slider" id="index">
+      <ul class="slider-list">
+        <% @bulletins.each_with_index do |bulletin, index| %>
+            <li class="<%= 'play' if index == 0 %>">
+              <%= link_to bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: bulletin.id, anchor: 'mp.weixin.qq.com'), class: 'box mod-index' do %>
+                  <%= image_tag bulletin.pic if bulletin.pic? %>
+              <% end %>
+            </li>
+        <% end %>
+        <div class="prev hide">
+          <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="next">
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </ul>
+    </div>
+    <script>
+        $(function(){
+            $(".prev,.next").on("click",function(){
+                var $this = $(this);
+                if($this.is(".prev")){
+                    move("prev");
+                }else{
+                    move("next");
+                }
+            });
+            touchMove(document,move);
+        });
+        function move(direction){
+            var $box = $("#index"),
+                    $this = $box.find(".play"),
+                    $index = $this.index(),
+                    $len = $box.find("li").length,
+                    $prev = $this.prev(),
+                    $next = $this.next(),
+                    time = 1500;
+            switch (direction){
+                case "right":
+                case "prev":
+                    if($index > 0){
+                        $(".next,.prev").hide();
+                        $prev.attr("class","play close");
+                        setTimeout(function(){
+                            $(".next").show().removeClass("hide");
+                            $this.removeClass("play");
+                            $prev.removeClass("close");
+                            if($index != 1)
+                                $(".prev").show();
+                        },time);
+                    }
+                    break;
+                case "left":
+                case "next":
+                    if($index < $len-1){
+                        $(".next,.prev").hide();
+                        $this.attr("class","open");
+                        $next.attr("class","play");
+                        setTimeout(function(){
+                            $(".prev").show().removeClass("hide");
+                            $this.removeClass("open");
+                            if($index != $len-2)
+                                $(".next").show();
+                        },time);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        function touchMove(el,callback){
+            var el = el || document,
+                    defaults ={},
+                    moves = {},
+                    sen = 50,
+                    direction = "default";
+            $(el).on("touchstart",function(e){
+                var $doc = $(this),
+                        t = event.touches[0];
+                defaults.x = moves.x = t.pageX;
+                defaults.y = moves.y = t.pageY;
+            });
+            $(el).on("touchmove",function(e){
+                var move = event.touches[0];
+                moves.x = move.pageX;
+                moves.y = move.pageY;
+            });
+            $(el).on("touchend",function(){
+                var endX = moves.x - defaults.x,
+                        endY = moves.y - defaults.y,
+                        flag = Math.abs(endX)-Math.abs(endY);
+                if(flag>0){
+                    if(endX > sen){
+                        direction = "right";
+                    }else if(endX < - sen){
+                        direction = "left";
+                    }
+                }else{
+                    if(endY > sen){
+                        direction = "down";
+                    }else if(endY < -sen){
+                        direction = "top";
+                    }
+                }
+                callback(direction);
+            });
+        }
+    </script>
+<% end %>
+

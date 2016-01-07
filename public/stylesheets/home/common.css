@@ -1,0 +1,110 @@
+*:focus{outline:none;}
+html,body {
+	min-height:100%;
+	color:#999;
+	font-size:12px;
+	font-family:Microsoft YaHei,Helvitica,Verdana,Tohoma,Arial,san-serif;
+	line-height:1.8;
+	margin:0;
+	padding: 0;
+	text-decoration: none;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+	margin:0;
+	padding:0;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset, img {
+	border:0;
+}
+address, caption, cite, code, dfn,  th, var {
+	font-style:normal;
+	font-weight:normal;
+}
+ol, ul {
+	list-style: none outside none;
+	margin:0;
+	padding: 0;
+}
+caption, th {
+	text-align:left;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+a {
+	color:#999;
+	text-decoration: none;
+}
+img{border:0 none;}
+form{display:block;min-height:100%;}
+.cf,ul,ol,li{*zoom:1;}
+.cf:after,ul:after,ol:after,li:after{display:table;content:"";clear:both;}
+.fl{float:left;}
+.fr{float:right;}
+.hide{display:none;}
+.mt20{margin-top:20px;}
+.ml20{margin-left:20px;}
+.text-red{color:#f00;}
+.text-blue{color:#03c;}
+.text-orange{color:#ff6c00;}
+.text-green{color:#83b62b;}
+.text-center{text-align:center;}
+.text-right{text-align:right;}
+/*edit*/
+.edit{width:100%;overflow:hidden;color:#000;line-height:1.8;}
+.edit img{max-width:775px;overflow:hidden;}
+/*layout*/
+.wrap{width:1000px;margin:0 auto;}
+/*head*/
+body{padding-top:125px;}
+.head{width:100%;height:73px;border-top:6px solid #0083a1;min-width:1000px;background:#fff;position:fixed;top:0;z-index:199;}
+.head img{display:block;}
+.nav{width:100%;height:52px;text-align:center;background:#0083a1;position:fixed;top:73px;z-index:199;}
+.nav li{width:130px;float:left;}
+.nav a{display:block;font:bold 16px/52px "Microsoft Yahei";color:#fff;}
+.nav .active,.nav a:hover{color:#0083a1;background:#e4f5f9;}
+/*banner*/
+.banner img{display:block;}
+/*foot*/
+.foot-t{height:6px;margin-top:-6px;background:transparent url(/images/home/bg.gif);position:relative;z-index:9;}
+.foot{background:#0083a1;position:relative;z-index:9;}
+.help{padding:30px 0;border-bottom:1px solid #0096b8;}
+.help .wrap{border-left:1px solid #0096b8;border-right:1px solid #006177;}
+.help dl{width:173px;height:185px;padding-left:75px;float:left;border-right:1px solid #0096b8;border-left:1px solid #006177;}
+.help dt{font:bold 16px/30px "Microsoft Yahei";color:#fff;}
+.help a{font-size:14px;color:#fff;line-height:26px;}
+.weixin-code{margin-top:25px;}
+.copyright{font-size:14px;border-top:1px solid #006177;padding:10px 0;text-align:center;color:#fff;}
+.copyright a{color:#fff;}
+/*sidebar*/
+.sidebar{width:100px;padding-bottom:10px;text-align:center;background:#0083a1;position:fixed;top:20%;right:0;z-index:999;}
+.consultation{padding:25px 0;background:#00b9e3;text-align:center;}
+.hot-line{padding:15px 0;background:#a1c93c;}
+.hot-line a{font:bold 14px "microsoft yahei";color:#fff;}
+.hot-line:before{display:block;content:"";width:38px;height:24px;margin:0 auto 10px;background:url(/images/home/main.png) -60px 0 no-repeat;}
+.agent{padding:20px 0;background:#00b9e3;}
+.agent a{display:inline-block;width:50px;margin:0 auto;font:bold 22px "microsoft yahei";color:#fff;}
+.agent:after{display:inline-block;width:9px;height:14px;vertical-align:top;margin-top:25px;content:"";background:url(/images/home/main.png) -100px 0 no-repeat;}
+/*分页*/
+.page{margin-top:10px;text-align:right;font-size:14px;line-height:1;}
+.page em{font-style:normal;font-family:simsun;}
+.page a,.page span{padding:0 6px;margin:0 3px;}
+.page a{color:#666;}
+.page span,.page a:hover{color:#fff;background:#83b62b;}
+/*btn*/
+.regedit-btn{display:block;width:127px;height:42px;margin:45px auto;background:url(/images/home/regedit.png);}
+/*input*/
+.input{ height: 30px; padding: 0 5px; border:1px solid #ccc; width: 80%;}
+.textarea{ height: 60px; padding:5px; border:1px solid #ccc;resize:none; width: 80%;}
+.select{height:32px;padding:2px;border:1px solid #ccc;margin:0 10px 0 0;line-height:28px;}
+/*message*/
+.error-message{color:#f36700;margin-left:8px;}
+.tips-message{color:#333;margin-left:8px;}
+.error-message:before,.tips-message:before{display:inline-block;content:"";width:14px;height:14px;margin-right:5px;vertical-align:middle;background:url(/images/home_upload/tips-icon.png) no-repeat;}
+.tips-message:before{background-position:-14px 0;}
+input.error{border-color:#f36700;}

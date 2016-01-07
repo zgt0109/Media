@@ -1,0 +1,38 @@
+<% provide(:title, @hospital.name) %>
+<section id="index">
+	<header>
+		<div class="wrap">
+			<a href="<%= mobile_hospital_doctor_path(id: @hospital_doctor.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+			<h1>评论</h1>
+			<a href="<%= new_mobile_hospital_comment_path(supplier_id: @supplier.id, id: @hospital_doctor.id) %>" class="ico-comment"><img src="/assets/mobile/whospital/ico-comment.png"/></a>
+		</div>
+	</header><!-- header end -->
+	<div class="body">
+		<div class="box-comment">
+			<div class="comment-list">
+			<% if @hospital_comments.count == 0 %>
+				<div class="box-null">
+					真遗憾，暂时没有评论哦！
+				</div><!--box-null end-->
+			<% else %>
+				<% @hospital_comments.each do |comment| %>
+				<div class="comment-li">
+					<div class="fl">
+						<span class="comment-img">
+							<%= image_tag "/assets/life/user_logo.png" %>
+						</span>
+					</div>
+					<div class="fr">
+						<p><%= comment.content %></p>
+						<span>
+							<i class="fl"><%= comment.try(:nickname) %> </i>
+							<i class="fr"><%= date_format_full(comment.created_at) %></i>
+						</span>
+					</div>					
+				</div><!--comment-li end-->
+				<% end %>
+			<% end %>
+			</div><!--comment-list end-->
+		</div><!--box-comment end-->
+	</div><!-- body end -->
+</section>

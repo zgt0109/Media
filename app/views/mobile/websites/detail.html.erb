@@ -1,0 +1,105 @@
+<% title @material.present? ? @material.title : @website_menu.try(:name) %>
+
+<% stylesheet "/stylesheets/vweisiteV01/article/article#{@detail_template_id}.css" %>
+
+<% content_for :header do %>
+    <header></header>
+<% end if @detail_template_id == 7 %>
+
+<div class="article ckeditor_content" id="article">
+<% if @detail_template_id == 7 %><div class="article-wrap"><% end %>
+<% if @material %>
+  <div class="hd">
+    <h1><%= @material.title %></h1>
+    <small><%= @material.try(:summary).present? ? @material.try(:summary) : @material.created_at %></small>
+  </div>
+
+  <div class="bd">
+    <%= image_tag @material.pic.try(:large) if @material.pic? && @material.is_show_pic %>
+    <%= raw @material.content %>
+  </div>
+
+<% elsif @website_popup_menu %>
+  <div class="hd">
+    <h1><%= @website_popup_menu.try(:name) %></h1>
+    <small><%= @website_popup_menu.try(:summary).present? ? @website_popup_menu.try(:summary) : @website_popup_menu.created_at %></small>
+  </div>
+
+  <div class="bd">
+    <%= image_tag @website_popup_menu.pic.try(:large) if @website_popup_menu.pic? %>
+    <%= raw @website_popup_menu.try(:summary) %>
+  </div>
+
+<% elsif @website_menu.contact_by_qq? %>
+  <div class="hd">
+    <h1><%= @website_menu.try(:name) %></h1>
+    <small><%= @website_menu.try(:summary).present? ? @website_menu.try(:summary) : @website_menu.created_at %></small>
+  </div>
+
+  <div class="bd tcenter">
+    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=<%= @website_menu.qq %>&amp;site=qq&amp;menu=yes" target="_blank">
+      <img alt="点击这里给我发消息" src="http://wpa.qq.com/pa?p=2:761044928:53" title="点击这里给我发消息" border="0" />
+    </a>
+    <!-- <iframe name="hideiframe" width='10' height='10' style='display: none;'></iframe> -->
+  </div>
+  
+<% elsif @website_menu.mobile_qq? %>
+  <div class="hd">
+    <h1><%= @website_menu.try(:name) %></h1>
+    <small><%= @website_menu.try(:summary).present? ? @website_menu.try(:summary) : @website_menu.created_at %></small>
+  </div>
+
+  <div class="bd tcenter">
+    <script charset='utf-8' src='http://wpa.b.qq.com/cgi/wpa.php'></script>
+    <script>
+      BizQQWPA.add({ 
+         aty: '1', //接入到指定工号 
+         a: '1001', //指定工号1001接入 
+         type: '1', //使用按钮类型 WPA 
+         nameAccount: '<%= @website_menu.qq %>', //营销 QQ 号码 
+         parent: 'biz_qq' //将 WPA 放置在 ID 为 testAdd 的元素里 
+       });
+    </script>
+  </div>
+  <div id="biz_qq" style="margin-top: 10px;"></div>
+<% else %>
+  <div class="hd">
+    <h1><%= @website_menu.try(:name) %></h1>
+    <small>
+      <%#= @website_menu.summary.present? ? @website_menu.summary : @website_menu.created_at %>
+      <% if @website_menu.subtitle_type == WebsiteMenu::SHOW_CREATED_AT %>
+        <%= @website_menu.created_at %>
+      <% elsif @website_menu.subtitle_type == WebsiteMenu::SHOW_CONTENT %>
+        <%= @website_menu.subtitle %>
+      <% end %>
+    </small>
+  </div>
+
+  <div class="bd">
+    <%#= image_tag @website_menu.pic.try(:large) if @website_menu.pic? %>
+    <%= raw @website_menu.content %>
+  </div>
+<% end %>
+<% if @detail_template_id == 7 %></div><% end %>
+</div>
+
+<%= render "mobile/websites/navs/nav#{@nav_template_id}", {:website_menus => @website_menus} if @nav_template_id > 0 %>
+
+<%= render "iscroll", {:selector => "#article"} if @detail_template_id == 7 %>
+
+<% content_for :share_section do %>
+  <% unless @detail_template_id == 7 %>
+    <% if false && wx_browser? %>
+    <section class="mod-share share-1">
+        <a class="share-btn" onclick="showPop('#pop-share')"><span class="ico-share">发送给朋友</span></a>
+        <a class="share-btn" onclick="showPop('#pop-share')"><span class="ico-pyq">分享到朋友圈</span></a>
+    </section>
+    <% end %>
+  <% end %>
+<% end %>
+
+<script>
+$(function(){
+  $(".ckeditor_content img").css({"height":"auto","width":"auto","max-width":"100%"});
+});
+</script>

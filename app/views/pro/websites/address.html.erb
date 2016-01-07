@@ -1,0 +1,36 @@
+<% content_for :sidebar do %>
+  <% if @website.micro_life? %>
+    <%= render 'sidebar_life' %>
+  <% elsif @website.micro_circle? %>
+    <%= render 'pro/business/sidebar_business' %>
+  <% end %>
+<% end %>
+
+
+<%= render 'topbar' %>
+
+<div class="p-note">
+  <p>提示：以下“<span class="fred" style="width:auto;float:none;">*</span>”均为必填项；</p>
+</div>
+<% @website.can_validate = true %>
+<%= form_for @website, url: (@website.micro_life? ? pro_website_path(@website) : busines_path(@website)), validate: true do |f| %>
+
+    <div class="box-form form-row fl">
+
+      <div class="p form-address">
+        <span>所在地区</span>
+        <%= address_select(@website, name_prefix: 'website', style: 'width: 198px') %>
+      </div>
+
+      <div class="p">
+        <span>详细地址<em>*</em></span>
+        <%= f.text_field :address, class: 'input-text', validate: true %>
+      </div>
+
+      <div class="p">
+        <%= f.submit '保存', class: 'btn btn-small btn-orange form-submit' %>
+      </div>
+
+    </div>
+
+<% end %>

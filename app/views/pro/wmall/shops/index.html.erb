@@ -1,0 +1,263 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li>
+          <i class="icon-home home-icon"></i>
+          <%= link_to "首页", root_path %>
+        </li>
+
+        <li>
+          <%= link_to "微商圈", pro_wmall_shops_path %>
+        </li>
+        <li>商铺管理</li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="alert alert-block alert-info">
+        <strong class="pull-left">提示：</strong>
+        <ul class="vwebsiteHeadAlert">
+          <li> 1、针对会员基础信息进行管理，包括：金额调节（充值或消费）、积分调节（增加或减少）、冻结账户等；</li>
+          <li> 2、你还可以批量导出会员数据。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="pull-left">
+        <select class="J-select" data-val="1">
+          <option>全部商铺</option>
+          <option>分类一</option>
+          <option>分类二</option>
+          <option>分类三</option>
+        </select>
+
+      </div>
+      <div class="pull-right">
+				<%= link_to "添加商铺", new_pro_wmall_shop_path, class: "btn btn-primary btn-sm" %>
+				<button class="btn btn-primary btn-sm" data-target="shopMenuModal" data-toggle="modals" data-title="分类管理" data-ajax="0" data-url="/api/wmall/categories.json" data-data='{}' data-successFn="menuSuccess" data-confirmFn="menuConfirm" data-shown="menuShownFn" data-width="1000">
+          分类管理
+        </button>
+      </div>
+    </div>
+    <div class="col-sm-12 margin-top-20">
+      <table id="table-1" class="table table-striped table-bordered table-hover dataTable J-dataTables">
+        <thead>
+        <tr>
+          <th>操作</th>
+          <th>商铺名称</th>
+          <th>商铺编号</th>
+          <th>LOGO</th>
+          <th>关键词</th>
+          <th>分类</th>
+          <th>子账户</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- /.modal -->
+<!-- /.page-content -->
+
+</div>
+<% end %>
+<script id="sellTemplate" type="text/x-jquery-tmpl">
+  <form class="form" role="form">
+  <div class="form-group">
+            <label>销售名称<span class="required-star">*</span></label>
+
+            <div class="clearfix">
+              <input type="text" class="col-md-8">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>销售职位<span class="required-star">*</span></label>
+
+            <div class="clearfix">
+              <input type="text" class="col-md-8">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>电话<span class="required-star">*</span></label>
+
+            <div class="clearfix">
+              <input type="text" class="col-md-8">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>语言<span class="required-star">*</span></label>
+
+            <div class="clearfix">
+              <input type="text" class="col-md-8">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>头像<span class="required-star">*</span></label>
+
+            <div class="clearfix">
+              <div class="temporary-div" style="width: 200px;height: 260px;"></div>
+              <button class="btn btn-primary btn-sm margin-top-10">上传照片</button>
+            </div>
+          </div>
+  </form>
+</script>
+<script id="treeTemplate" type="text/x-jquery-tmpl">
+  {%if children.length>0%}
+    {%tmpl folderTemplate%}
+  {%else%}
+    {%tmpl itemTemplate%}
+  {%/if%}
+</script>
+<script id="itemTemplate" type="text/x-jquery-tmpl">
+<div class="tree-item" data-id="${id}" data-name="${name}" data-level="${level}">
+    <i class="tree-fa icon-circle"></i>
+    <div class="tree-item-name">${name}</div>
+</div>
+</script>
+<script id="folderTemplate" type="text/x-jquery-tmpl">
+<div class="tree-folder" data-id="${id}" data-name="${name}">
+    <div class="tree-folder-header" data-level="${level}">
+        <i class="tree-fa icon-plus"></i>
+        <div class="tree-folder-name">${name}</div>
+    </div>
+    <div class="tree-folder-content" {%if level!="0"%}style="display: none;"{%/if%}>
+        {%each children%}
+            {%if $value.children.length>0%}
+                {%tmpl($value) folderTemplate%}
+            {%else%}
+                {%tmpl($value) itemTemplate%}
+            {%/if%}
+        {%/each%}
+    </div>
+</div>
+</script>
+<script id="categoryManageTemplate" type="text/x-jquery-tmpl">
+<div class="clearfix">
+<div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+  <div class="widget-box transparent" id="menu">
+    <div class="widget-header">
+      <div class="widget-toolbar no-border">
+        <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-title="新增菜单">
+          <i class="icon-plus"></i> 新增菜单
+        </a>
+      </div>
+    </div>
+    <div class="widget-body">
+      <div id="tree1" class="tree tree-selectable"></div>
+    </div>
+  </div>
+</div>
+<div class="col-md-6 col-lg-6 margin-top-10" id="form">
+
+</div>
+</div>
+</script>
+<script id="categoryTemplate" type="text/x-jquery-tmpl">
+<div class="widget-box transparent">
+<div class="widget-header widget-header-flat">
+<h4 class="">${title}</h4>
+</div>
+<div class="widget-body">
+<form role="form" method="post" action="">
+  <div class="form-group margin-top-10">
+    <label class="control-label">分类名称：<span class="required-star">*</span></label>
+
+    <div class="clearfix"><input type="text" class="col-xs-8" placeholder=""></div>
+    <span class="help-block"></span></div>
+  <div class="form-group">
+    <label class="control-label">上级分类：<span class="required-star">*</span></label>
+
+    <div class="clearfix"><select class="col-sm-8">
+      <option value="0">顶级菜单</option>
+    </select></div>
+  </div>
+  <div class="text-left"><input type="submit" class="btn btn-primary btn-sm" value="保存">　　
+    <input type="reset" class="btn btn-default btn-sm" value="取消"></div>
+</form>
+</div>
+</div>
+</script>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+    $(function () {
+        App.init({
+            "fn":{
+                "menuSuccess":function(json){
+									var json = {}
+                    var html = $("#categoryManageTemplate").tmpl(json);
+                    var $body='';
+                    $.each(html, function (i) {
+                        var r = html[i].outerHTML;
+                        if (r) {
+                            $body += r;
+                        }
+                    });
+                    return $body;
+                },
+                "menuShownFn":function(selector){
+                    drawTree({
+                        "target": "#tree1",
+                        "url": "/api/wmall/categories.json",
+                        "data": {},
+                        "successFn": function (json) {
+                            $("#treeTemplate").tmpl(json).appendTo("#tree1");
+                        },
+                        "upFn":function(current,prev){
+                            // console.log(prev);
+                        },
+                        "downFn":function(current,next){
+                            // console.log(next);
+                        },
+                        "tools": {
+                            "level0":'editCategory,del,up,down',
+                            "addCategory": '<a href="javascript:;" class="icon-plus menu-category tree-btn" data-title="新增菜单"></a>',
+                            "editCategory": '<a href="javascript:;" class="icon-pencil menu-category tree-btn" data-title="编辑菜单"></a>',
+                            "del": '<a href="javascript:;" class="icon-remove menu-del tree-btn"></a>',
+                            "up": '<a href="javascript:;" class="icon-long-arrow-up tree-up tree-btn" data-fn="upFn"></a>',
+                            "down": '<a href="javascript:;" class="icon-long-arrow-down tree-down tree-btn" data-fn="downFn"></a>'
+                        }
+                    });
+                    $("#menu").cieldonmenuedit({
+                        "form": "#form",
+                        "categoryFn": function (selector) {
+                            var json = {};
+                            var title=selector.attr("data-title");
+                            json= $.extend({"title":title},json);
+                            var html = $("#categoryTemplate").tmpl(json);
+                            var $body = '';
+                            $.each(html, function (i) {
+                                var r = html[i].outerHTML;
+                                if (r) {
+                                    $body += r;
+                                }
+                            });
+                            return $body;
+                        },
+                        "itemFn":function(selector){
+                            var json = {};
+                            var html = $("#itemEditTemplate").tmpl(json);
+                            var $body = '';
+                            $.each(html, function (i) {
+                                var r = html[i].outerHTML;
+                                if (r) {
+                                    $body += r;
+                                }
+                            });
+                            return $body;
+                        }
+                    });
+                }
+            }
+        });
+
+        //Table.vbussinessShopTable();
+    })
+
+</script>
+<% end %>

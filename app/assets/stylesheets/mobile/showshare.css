@@ -1,0 +1,16 @@
+/* alert tips */
+.alert,
+.alert *{-webkit-box-sizing:border-box;box-sizing:border-box;}
+.alert{display:none;position:fixed;width:100%;height:100%;left:0;top:0;background:#fef6e1;z-index:99;}
+.alert-m{width:100%;height:100%;padding:0 20px;color:#666;line-height:24px;overflow:hidden;}
+.alert-img{width:119px;height:118px;margin:20px auto;background:url(/assets/app/alert-img.png) no-repeat;-webkit-background-size:100%;background-size:100%;}
+.alert-num{width:20px;height:20px;display:inline-block;color:#fff;border-radius:1000px;text-align:center;line-height:20px;margin-right:5px;background:#5ab6b4;}
+.alert-text{color:#5ab6b4;margin:0 5px;}
+.alert-btn{display:inline-block;height:30px;line-height:30px;padding:0 20px;margin:3px 0;border-radius:1000px;color:#fff;background:#5ab6b4;}
+.alert-f{position:absolute;width:100%;padding:0 50px;left:0;bottom:20px;}
+.alert-f-btn{display:block;width:100%;height:40px;line-height:40px;margin:0 auto;text-align:center;border-radius:3px;color:#fff;background:#5ab6b4;}
+.alert-c h1{font-weight:normal;font-size:18px;}
+.text-center{text-align:center;}
+.alert-btn-box{display:table;width:100%;padding:20px 0;table-layout:fixed;}
+.alert-cell{display:table-cell;padding:0 5px;}
+.cell-4{width:40%;}

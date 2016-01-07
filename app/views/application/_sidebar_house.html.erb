@@ -1,0 +1,31 @@
+<ul class="box-nav box important">
+  <li class="<%= "current pagecurrent" if controller_name =~ /house_intros/ %>">
+    <%= link_to house_intros_path do %><span>楼盘简介</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /houses|house_layouts|house_pictures|panorama/i) ? "current pagecurrent" : '' %>">
+    <%= link_to houses_url do %><span>户型图设置</span> <i></i><% end %>
+  </li>
+  <li class="<%= "current pagecurrent" if controller_name =~ /house_bespeaks/ %>">
+    <%= link_to house_bespeaks_path do %><span>预约看房查询</span> <i></i><% end %>
+  </li>
+  <li class="<%= "current pagecurrent" if controller_name =~ /house_sellers/ %>">
+    <%= link_to house_sellers_path do %><span>销售顾问管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= "current pagecurrent" if controller_name =~ /house_impressions/ %>">
+    <%= link_to house_impressions_path do %><span>房友印象管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= "current pagecurrent" if controller_name =~ /house_live_photos/ %>">
+    <%= link_to house_live_photos_path do %><span>实景拍摄管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= "current pagecurrent" if controller_name =~ /house_reviews/ %>">
+    <%= link_to house_reviews_path do %><span>专家点评管理</span> <i></i><% end %>
+  </li>
+  <!--
+  <li class="<%= (controller_name =~ /house_comments/i) ? "current pagecurrent" : '' %>">
+    <%= link_to house_comments_url do %><span>评论管理</span> <i></i><% end %>
+  </li>
+  <li class="<%= (controller_name =~ /house_expert/i) ? "current pagecurrent" : '' %>">
+    <%= link_to house_experts_url do %><span>专家点评</span> <i></i><% end %>
+  </li>
+  -->
+</ul>

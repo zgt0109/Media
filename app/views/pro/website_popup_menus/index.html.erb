@@ -1,0 +1,33 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_life' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent">弹出菜单</a>
+<% end %>
+
+<% content_for :p_note do %>
+  <div class="p-note">
+    <p>提示：最多只能添加4个弹出菜单；</p>
+  </div>
+<% end %>
+
+<div class="box-table fl tright">
+  <p>
+    <span class="p-plugin fl">开启此功能：</span>
+    <%= link_to '', ([:toggle_popup, :pro, @website]), method: :post, remote: true, class: "btn-pluin fl pluin-#{@website.is_open_life_popup? ? 'open' : 'close'}" %>
+    <a class="btn btn-small btn-orange new-pop-menu <%= 'hide' if @menus.size >= 4 %>" onclick="popUrl(this)" data-name="name" data-w="600" data-h="500" data-title="新增菜单" data-url="<%= new_pro_website_popup_menu_path %>">新增</a>
+  </p>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
+    <thead>
+      <tr>
+        <th width="80">图标</th>
+        <th>类型</th>
+        <th width="300">描述</th>
+        <th width="50">排序</th>
+        <th width="80">操作</th>
+      </tr>
+    </thead>
+    <%= render 'tbody' %>
+  </table>
+</div>

@@ -1,0 +1,56 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '意见反馈', feedbacks_url %></li>
+        <li><%= link_to '查看详情', '#' %></li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="mod-feed col-xs-8 clearfix">
+              <i class="fa fa-user pull-left feed-img"></i>
+              <div class="feed-content pull-left">
+                <%= @feedback.content %>
+                <div class="time text-muted">
+                  <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                  <%= @feedback.created_at %>
+                </div>
+              </div>
+            </div>
+            <div class="mod-feed col-xs-8 clearfix">
+              <i class="fa fa-users pull-right feed-img"></i>
+              <div class="feed-content pull-right">
+                <%= @feedback.reply %>
+                <div class="time text-muted">
+                  <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                  <%= @feedback.updated_at %>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-xs-12 margin-top-10">
+            <form class="form " role="form">
+              <div class="form-group">
+                <!--<div class="clearfix">
+                  <textarea rows="5" class="col-sm-12"></textarea>
+                </div>-->
+                <div class="clearfix margin-top-10">
+                  <%= link_to '返回', feedbacks_url, class: "btn btn-sm btn-default" %>
+                  <!--<input type="submit" value="提交" class="btn btn-sm btn-primary"/>
+                  <a class="line-height-28 margin-left-5">添加截图</a>-->
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+      <!-- /.page-content -->
+    </div>
+<% end%>

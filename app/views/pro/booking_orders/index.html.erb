@@ -1,0 +1,105 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微服务', bookings_path %></li>
+          <li><%= link_to '订单管理', booking_orders_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+
+        <div class="row">
+
+          <%= form_for @search, :html => { :method => :get } do |f| %>
+              <div class="col-sm-12">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">联系人：</span>
+                    <%= f.text_field :username_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">联系电话：</span>
+                    <%= f.text_field :tel_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12 margin-top-10">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">订单号：</span>
+                    <%= f.text_field :order_no_like, class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">状态：</span>
+                    <%= f.select :status_eq, options_for_select(BookingOrder.status_options, include_blank: '全部'), {}, class: 'form-control' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <%= f.submit '查询', class: 'btn btn-primary btn-sm btn-filter' %>
+                </div>
+              </div>
+          <% end %>
+          <div class="col-md-12 margin-top-20">
+            <table id="orderTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+              <tr>
+                <% unless BookingOrder.flow_suppliers.include?(current_user.id) %>
+                    <th>商品名称</th>
+                <% end %>
+                <th>订单号</th>
+                <th>联系人</th>
+                <th>联系电话</th>
+                <th>状态</th>
+                <% if BookingOrder.flow_suppliers.include?(current_user.id) %>
+                    <th>地址</th>
+                <% else %>
+                    <th>预定时间</th>
+                <% end %>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @booking_orders.each do |order| %>
+                  <tr>
+                    <% unless BookingOrder.flow_suppliers.include?(current_user.id) %>
+                        <td title="<%= order.booking_item.try(:name) %>"><span><%= truncate_u order.booking_item.try(:name), length: 8 %></span></td>
+                    <% end %>
+                    <td><%= order.order_no %></td>
+                    <td title="<%= order.username %>"><%= truncate_u order.username , length: 4 %></td>
+                    <td><%= order.tel %></td>
+                    <td><%= order.status_name %></td>
+                    <% if BookingOrder.flow_suppliers.include?(current_user.id) %>
+                        <td><%= order.address %></td>
+                    <% else %>
+                        <td><%= order.booking_at.try(:to_date) %></td>
+                    <% end %>
+                    <td class="txt-left-align">
+                      <% if order.pending? %>
+                          <%= link_to '完成', complete_booking_order_path(order), data: {method: :post, confirm: '确认完成？'} %>
+                          <%= link_to '取消', cancele_booking_order_path(order), data: {method: :post, confirm: '确认取消？'} %>
+                      <% end %>
+                      <%= link_to '查看', 'javascript:;', data: {toggle: 'modals', height: '1000', title: '订单详情', iframe: booking_order_path(order)}%>
+                    </td>
+                  </tr>
+              <% end %>
+              <% if @booking_orders.blank? %>
+                <tr><td colspan="<%= BookingOrder.flow_suppliers.include?(current_user.id) ? 6 : 7 %>"></td></tr>
+              <% end %>
+              </tbody>
+            </table>
+            <%= paginate @booking_orders %>
+          </div>
+        </div>
+      </div>
+      <!-- /.page-content -->
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

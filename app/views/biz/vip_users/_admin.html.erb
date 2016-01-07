@@ -1,0 +1,27 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+            <li><%= link_to '会员卡', vip_users_path %></li>
+            <li><%= link_to '微会员管理', vip_users_path %></li>
+            <%= yield :vip_breadcrumb if content_for? :vip_breadcrumb %>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+            <ul class="nav nav-tabs padding-24" id="myTab">
+                <%= link_to_li '微会员管理', vip_users_path %>
+                <%= link_to_li '待处理信息', pending_vip_users_path, class: "#{'active' if %w(pending rejected freezed).include?(action_name)}"  %>
+                <%= link_to_li '删除会员', deleted_vip_users_path %>
+                <%= link_to_li '会员导入管理', vip_importings_path %>
+                <%= link_to_li '会员卡统计', vip_statistics_path, class: "#{'active' if controller_name == 'vip_statistics'}" %>
+            </ul>
+            <div class="tab-content no-border padding-24">
+                <%= yield :tab %>
+            </div>
+      </div>
+    </div>
+  </div>
+<% end %>

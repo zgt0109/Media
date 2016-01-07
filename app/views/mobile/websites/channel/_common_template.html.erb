@@ -1,0 +1,73 @@
+<% if website_menu.cover_pic? %>
+  <div class="mod-slider slider-hor" id="index">
+    <ul class="slider-list">
+      <li><a><%= image_tag website_menu.cover_pic.custom %></a></li>
+    </ul>
+    <div class="slider-text">
+      <span class="fl slider-span" id="slider-span"><%= website_menu.name %></span>
+    </div>
+  </div>
+<% end %>
+
+<% if main_material %>
+  <div class="list">
+    <ul>
+      <li>
+        <%= link_to material_type_url(main_material, website_menu) do %>
+          <% if main_material.pic? %>
+          <div class="list-img">
+            <b><%= image_tag main_material.pic.thumb %></b>
+          </div>
+          <% end %>
+          <div class="list-text">
+            <h1><%= main_material.title %></h1>
+            <h2><%= main_material.summary.present? ? main_material.summary : main_material.created_at %></h2>
+          </div>
+        <% end %>
+      </li>
+      <% child_material.each do |child| %>
+        <li>
+          <%= link_to material_type_url(child, website_menu) do %>
+            <% if child.pic? %>
+            <div class="list-img">
+              <b><%= image_tag child.pic.thumb %></b>
+            </div>
+            <% end %>
+            <div class="list-text">
+              <h1><%= child.title %></h1>
+              <h2><%= child.summary.present? ? child.summary : child.created_at %></h2>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% elsif website_menu %>
+  <div class="list">
+    <ul>
+      <% menus = website_menu.games? ? website_menu.sub_menus : website_menu.sub_menus.includes(:menuable, :website) %>
+      <% menus.each do |child| %>
+        <li>
+          <%= link_to menu_url(child) do %>
+            <% if child.pic? or child.font_icon.present? %>
+            <div class="list-img">
+              <b>
+                <% if child.pic? %>
+                  <%= image_tag child.pic.thumb %>
+                <% else %>
+                  <i class="<%= child.font_icon %>"></i>
+                <% end %>
+              </b>
+            </div>
+            <% end %>
+
+            <div class="list-text">
+              <h1><%= child.try(:name) %></h1>
+              <%= "<h2>#{child.summary}</h2>".html_safe if child.summary %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

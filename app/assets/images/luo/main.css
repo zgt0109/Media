@@ -1,0 +1,60 @@
+/* Www.DongGe.org */
+/* Common */
+body {font:16px "",Tahoma,Arial; background: url('bg.gif');}
+* {margin: 0; padding: 0; border: 0; outline:none;}
+ul,li {list-style: none;}
+p {clear: left; line-height: 21pt; text-indent: 4px; margin-top: 5px;}
+a{color: #333; text-decoration:none}a:hover{color: red;}
+
+.mt {margin-top: 25px;}
+.red {color: red;}
+.yell {background: yellow;}
+.a777{color:#888;}
+.fs {font-family: ;}
+.fs24 {font-size: 24px;}
+.blue{color:blue;}
+.f4{color:blue;font-size:20px;}
+.cen {text-align: center;}
+.b {font-weight: bold;}
+.fo {font-style: oblique;}
+.tu {text-decoration: underline;}
+.fs16 {font-size: 16px;}
+
+.f1 {margin-bottom: 34px; color: red; text-align: center; font-family: ; font-size: 26px; font-weight: bold;}
+.f2 {font-size: 18px;color:red;}
+.f3 {font-size: 26px;color:red;}
+.f5 {font-size: 24px;color:red;}
+.f6{font-size: 24px;color:red;font-weight: bold;}
+.f7 {margin-bottom: 0px; color: red; font-family: ; font-size: 24px; font-weight: bold;}
+.line {margin-bottom: 10px; border-top: #C7CDD6 solid 1px; box-shadow:0px 1px 3px #ccc;}
+
+/* Page */
+.page {overflow: hidden; width: 700px; margin: 60px auto 20px; background: white; border: #d5d5d5 solid 1px; border-radius:2px; box-shadow: 0px 1px 3px #ccc;}
+
+.footer {overflow: hidden; width: 700px; margin: 0 auto 15px; color: white; text-align: center;}
+.footer a,.footer a:hover {color: white;}
+
+.form {overflow: hidden; width: 250px; margin: 15px auto; padding: 15px; text-align: center; border: #d5d5d5 solid 1px; border-radius:2px; box-shadow: 0px 1px 3px #ccc;}
+
+.title {padding: 13px 0; background: red; color: white; text-align: center; font-family: ; font-size: 26px;}
+.b-t {padding: 10px 0 10px 30px; color: black; font-family: ; font-size: 22px;}
+.b-1 {padding: 30px 60px; background: #FFFFBB; font-weight: bold;}
+.b-c {overflow: hidden; padding: 30px 40px; }
+
+.b-2 {overflow: hidden; width: 500px; margin: 15px auto; padding: 15px; border: black solid 1px; background: white; color: blue;}
+.b-3 {overflow: hidden; margin: 15px 0;}
+.b-3 img {float: left; width: 120px; height: 150px;}
+.b-3 .c {float: left; margin: 90px 0 0 20px; font-weight: bold;}
+
+input {width: 130px; padding: 2px; border: #bbbbbb solid 1px; font-size: 16px; }
+textarea {width: 500px; height: 120px; padding: 2px; border: #bbbbbb solid 1px; font-size: 16px;}
+
+.sub {width: 150px; padding: 5px 0; background: red; text-align: center; color: white; font-weight: bold;}
+.zh {overflow: hidden; clear: left; width: 500px; margin: 20px auto; padding: 15px; border: black solid 1px; color: blue; font-weight: bold;}
+.case {overflow: hidden; }
+.case ul {}
+.case li {overflow: hidden; float: left; width: 604px; margin-bottom: 12px; padding: 7px; border: #d5d5d5 solid 1px; border-radius:3px;}
+.case .tit {padding-bottom: 10px;}
+.case img {float: left; width: 67px; }
+.case .cont {margin-left: 75px; }
+.case .cont p {clear: none; text-indent: 20px; margin-top: 0; margin-bottom: 5px; color: #999999; font-size: 12px; line-height: 150%;}

@@ -1,0 +1,9 @@
+<%= javascript_include_tag 'jquery' %>
+
+<script>
+  $parent_doc = $(parent.document);
+  $parent_doc.find('.pop').fadeOut(function() {
+    $(this).remove();
+  });
+  parent.showTip('success', '保存成功');
+</script>

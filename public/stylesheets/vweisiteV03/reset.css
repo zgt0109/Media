@@ -1,0 +1,38 @@
+*{margin:0;padding:0;outline:0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+*,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+html{font-size:20px;height:100%;}
+body{max-width:640px;margin:0 auto;font-family:arial,"\5FAE\8F6F\96C5\9ED1";line-height:1.5;height:100%;}
+body,p,form,h1,h2,h3,h4,h5,h6,ul,ol,li,section,div,*{padding:0;margin:0}
+img{border:0;-ms-interpolation-mode:bicubic;vertical-align:middle;display:inline-block;}
+a{color:#333;text-decoration:none;}
+video{display:inline-block;width:100%;background:#000;}
+::-moz-selection{}
+::selection{}
+dl,ul,p{-webkit-margin-before:0em;-webkit-margin-after:0em;}
+p{margin:0;}
+iframe{border:0;}
+.hide{display:none;}
+.show{display:inline-block;}
+.clearfix{}
+.clearfix:after{content:"";display:table;clear:both;}
+.box{display:block;position:relative;}
+.img{max-width:100%;}
+.main{width:100%;min-height:100%;overflow:auto;padding-bottom:1.5rem;position:relative;z-index:2;}
+.bg{width:100%;height:100%;position:fixed;left:0;top:0;-webkit-background-size:cover;background-size:cover;background-position:center top;}
+footer{text-align:center;color:#ccc;font-weight:normal;margin-top:-1.5rem;font-size:.6rem;padding:.3rem 0px;position:relative;z-index:2;}
+.loading{padding:1rem;height:3rem;font-size:.7rem;line-height:1rem;color:#666;text-align:center;}
+/*text*/
+.text-left{text-align:left;}
+.text-center{text-align:center;}
+.text-right{text-align:right;}
+/*icon*/
+.box:after{display:inline-block;width:1rem;height:1rem;background-image:url(/assets/mobile/vweisiteV03/icon.png);background-repeat:no-repeat;-webkit-background-size:auto 1rem;background-size:auto 1rem;}
+/*mod-music*/
+.mod-music{ position: fixed; top:0; right:0;z-index: 10; display: block; overflow: hidden; width:1.5rem; height: 1.5rem;margin:1rem;}
+.mod-music .fa{ font-size: 1.5rem;}
+.music-2{ color: #fff; text-shadow: 1px 0 1px rgba(0,0,0,0.5);}
+.music-2 .fa,
+.music-4 .fa{ position:relative;}
+.music-2.open .fa:after,
+.music-4.open .fa:after{ content: " "; position: absolute; width: 2px; height:40px; background: #fff; top: 0; left: 12px;-webkit-transform:rotate(120deg);}
+.music-4.open .fa:after{ left: 12px; top:-5px;}

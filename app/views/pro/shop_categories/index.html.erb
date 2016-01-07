@@ -1,0 +1,169 @@
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <% if can_see? %>
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li>
+        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
+        <% end %>
+        <% if current_user.industry_takeout? ||  session[:current_industry_id] == 10002 %>
+        <%= link_to "微外卖", shops_path(industry_id: 10002) %>
+        <% end %>
+      </li>
+
+      <li>
+        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <%= link_to "菜单分类", shop_categories_path(industry_id: 10001) %>
+        <% end %>
+        <% if current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+        <%= link_to "菜单分类", shop_categories_path(industry_id: 10002) %>
+        <% end %>
+      </li>
+    </ul>
+    <%= render partial:'/layouts/qrcode' %>
+    <% end %>
+  </div>
+  
+  <div class="page-content">
+    <div class="row">
+
+    <div class="tabbable">
+      <%= render 'pro/shop_products/nav_tab' %>
+
+      <div class="tab-content no-border padding-24">
+        <div id="tab-1" class="tab-pane fade active in">
+          <div class="col-xs-12">
+            <div class="alert alert-block alert-success">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li> 菜单分类最多可设置10个自定义栏目 分类名称不能大于20个字符或10个中文。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12 <%= 'hide' if current_user.is_a?(SubAccount) %>">
+            <%= select_tag "shop_menu_id", options_from_collection_for_select(current_user.shop.shop_menus, "id", "menu_no"), prompt: "请选择菜单编号" %>
+          </div>
+
+          <div class="col-sm-12">
+           <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+             <div class="widget-box transparent" id="menu">
+               <div class="widget-header">
+                <h4>
+                  <i class="icon icon-cogs"></i>菜单管理
+                </h4>
+
+                <div class="widget-toolbar no-border" id="new_btn" style="display: none">
+                  <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-title="新增菜单" data-height="300" data-parent-id>
+                    <i class="icon-plus"></i>   新增菜单分类
+                  </a>
+                </div>
+              </div>
+              <div class="widget-body">
+               <div id="tree1" class="tree tree-selectable">
+                <%#= render :partial=> "sub_menu", :collection => current_user.shop.shop_categories.root.order(:sort), :as =>:sub_menu %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-6 margin-top-10 side-form" id="form"></div>
+
+      </div>
+
+
+      </div>
+    </div>
+  </div>
+  
+</div>
+</div>
+</div>
+
+<% content_for :custom_js do %>
+
+<script type="text/javascript">
+
+  $(function () {
+    $(document).on("click",".tree-add, .menu-category",function(){
+      var parent_id = $(this).closest('.current').attr("data-id");
+      var shop_menu_id = $("#shop_menu_id").val();
+      var url = "<%= new_shop_category_path %>?shop_menu_id=" + shop_menu_id + "&parent_id=";
+      if(parent_id){
+        url += parent_id
+      }
+      // alert('to ajax');
+      $.get(url,function(html){
+        // alert('ajax ok');
+      });
+    });
+    $(document).on("click",".ico-delete",function(){
+      var self = $(this),
+      p=self.parent().parent()[0].tagName;
+      if(p=="DT"||p=="dt"){
+        self.parents("dl").remove();
+      }else{
+        self.parents(p).remove();
+      }
+    });
+
+    $(".side-form").on("click", ".btn-primary", function(){
+      // alert('ddd');
+      if($("#shop_category_name").val() == ""){
+        alert("请输入分类名称");
+        return false;
+      }
+    });
+
+    $(".tree-folder-header, .tree-item", function () {
+      $(this).find(".tree-btn").hide();
+    });
+    $('#tree1').on("mouseenter", ".tree-folder-header, .tree-item", function () {
+      $(this).find(".tree-btn").show();
+    });
+    $('#tree1').on("mouseleave", ".tree-folder-header, .tree-item", function () {
+      $(this).find(".tree-btn").hide();
+    });
+    $('#tree1').on("click", ".fa-plus-square", function () {
+      $(this).closest('.current').find('.tree-folder-content').toggle();
+    });
+
+    $('.tree-tools').on('click', 'a', function(){
+      var content = $(this).closest('.current').find('.tree-folder-content');
+      if(content.is(':hidden')){
+        content.hide();
+      }else{
+        content.show();
+      }
+    });
+
+    $('.ace-switch-4').click(function(){
+      $(this).next().next().click();
+    });
+
+    $("#shop_menu_id").change(function(){
+      if($(this).val() == ''){
+        $("#tree1").empty();
+        $("#new_btn").hide();
+      }else{
+        var url = "/shop_menus/"+$(this).val()+"/categories";
+        $.get(url,function(html){
+
+        });
+      }
+    });
+
+
+<% unless @shop_menu_id.blank? %>
+  $("#shop_menu_id").val(<%= @shop_menu_id %>);
+  var url = "/shop_menus/<%= @shop_menu_id %>/categories";
+        $.get(url,function(html){
+
+        });
+<% end %>
+
+  });
+
+
+</script>
+<% end %>

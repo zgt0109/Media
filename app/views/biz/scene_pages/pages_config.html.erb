@@ -1,0 +1,74 @@
+<%= content_for :breadcrumb_li do %>
+  <%- if @activity.nil? %>
+    <li><%= link_to '新增微场景', new_scene_path %></li>
+  <%- else %>
+    <li><%= link_to  '微场景设置', pages_config_scene_pages_path(activity_id: @activity.id) %></li>
+  <%- end %>
+<%- end %>
+
+<%= content_for :tab do %>
+<style type="text/css">
+  .enroll, .link, .vote, .reservation, .surveys, .tel{display: none;}
+</style>
+
+<div class="custom-main margin-top-20">
+  <div class="custom-left">
+    <div class="phone-view">
+      <div class="phone-main">
+        <div class="page-view">
+          <%- if @scene_html.content.blank? %>
+            <p class="empty">你的场景还是空的，<br>赶紧点击下边按钮添加一个页面吧！</p>
+          <%- else %>
+            <%= raw @scene_html.content %>
+          <%- end %>
+        </div>
+      </div>
+      <a href="javascript:;" class="swipe-left">
+        <i class="fa fa-angle-left"></i>
+      </a>
+      <a href="javascript:;" class="swipe-right">
+        <i class="fa fa-angle-right"></i>
+      </a>
+    </div>
+    <a href="javascript:;" class="add-page">
+      <i class="fa fa-plus"></i>
+      新增页面
+    </a>
+    <a href="javascript:;" class="save-page hide" data-fn="savePage">
+      保存
+    </a>
+  </div>
+  <div class="custom-right"></div>
+</div>
+<%- end %>
+
+<%= render "biz/scenes/header" %>
+
+<%= content_for :custom_js do %>
+  <script type="text/javascript" src="/javascripts/jquery-ui.js"></script>
+  <script src="http://api.map.baidu.com/api?v=2.0&ak=9c72e3ee80443243eb9d61bebeed1735" type="text/javascript"></script>
+  <%= javascript_include_tag '/ueditor/ueditor.config.js', '/ueditor/ueditor.all.min.js', 'lib/bootstrap.min.js', 'vscene' %>
+
+  <script type="text/javascript">
+    createPanel.link = "<%= escape_javascript(render(:partial => 'options')) %>";
+
+    function savePage(html){
+      $.ajax({
+        type: 'POST',
+        url: '/scene_pages/save_html',
+        data: {page_html: html, activity_id: <%= @activity.try(:id) %>},
+        success: function(data){}
+      })
+    };
+
+    $('.custom-right').on('change', '.menuable_option', function(){
+      var scene_menuable_type = $(this).val(),
+        cgroup = $(this).parents('.c-group');
+      $('.custom-right .link_options').hide();
+      if(scene_menuable_type){
+        //链接
+        cgroup.siblings('.' + scene_menuable_type).show();
+      }
+    });
+  </script>
+<%- end %>

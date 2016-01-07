@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta id="eqMobileViewport" name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title><%= @activity.try(:name) %></title>
+    <%= stylesheet_link_tag 'mobile/scenes' %>
+    <script type="text/javascript">
+      var config = {
+        "start": 0,
+        "direction": "<%=  @activity.extend.scene_type == "0" ? 'vertical' : 'horizontal' %>",
+        "lottery": "<%= @activity.splash_url %>" ? "<%= @activity.splash_url %>" : false,
+        "music": "<%= @activity.bg_music_url %>" ? "<%= @activity.bg_music_url %>" : false,    // 页面是否有音乐
+        "loading": {
+            "bgColor": "#fff",
+            "loadingSrc": "<%= qiniu_image_url('FtUHsTRBLe6P8dX0-b5svadqgtGf') %>"
+        },
+        list:[]
+      }
+    </script>
+  </head>
+<body>
+  <%= yield %>
+  <%= render 'application/app_footer' %>
+</body>
+</html>
+

@@ -1,0 +1,29 @@
+<div class="html theme-1 <%= 'vip-bg' if @amount_status %>" id="html">
+  <div class="stage" id="stage">
+    <section id="sec-index">
+      <div class="mod-success vip-success">
+        <p><span class="c-6">套餐名称：</span><%= truncate_utf(@package.name) %></p>
+        <p><span class="c-6">套餐价格：</span><%= @package.price %>元</p>
+        <p><span class="c-6">当前余额：</span><%= @vip_user.try(:usable_amount) %>元<%= '（余额不足）' unless @amount_status %></p>
+      </div>
+      <% if @amount_status %>
+        <div class="form-list mt">
+          <a href="<%= by_usable_amount_app_vips_path(id: @package.id) %>" class="btn btn-biger">确定购买</a>
+        </div>
+      <% else %>
+        <div class="btn-box">
+          <div class="btn-cell cell-4">
+            <a href="<%= vip_package_show_app_vips_path(id: @package.id) %>" class="btn btn-biger btn-gray">取消购买</a>
+          </div>
+          <div class="btn-cell">
+            <% if @supplier && @supplier.can_pay? && @vip_user && @vip_user.normal? %>
+              <a href="/app/vips/go_recharge?vip_package_id=<%= @package.id %>#mp.weixin.qq.com" class="btn btn-biger">前往充值</a>
+            <% else %>
+              <a href="tel:<%= @vip_card.phone_num %>" class="btn btn-biger">联系商家</a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </section>
+  </div>
+</div>

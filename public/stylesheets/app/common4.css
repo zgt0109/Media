@@ -1,0 +1,77 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+  margin:0;
+  padding:0;
+}
+body {
+  font-family:Microsoft YaHei, Helvitica, Verdana, Tohoma, Arial, san-serif;
+}
+.page-url {
+  margin-top:10px;
+  border-top:1px solid #E5E5E5;
+  text-align:center;
+}
+.page-url-link {
+  font-size:14px;
+  line-height:2.5;
+  text-decoration:none;
+  text-shadow:0 1px white;
+  -webkit-text-shadow:0 1px #fff;
+  -moz-text-shadow:0 1px #fff;
+  color:#CACACA;
+}
+
+
+
+
+/*==========================================================*/
+#cover,#content{
+  position: relative;
+  max-width : 480px;
+  margin: 0px auto;
+}
+#cover{
+  padding: 6px;
+  background-color: #dedede;
+}
+#cover .title{ visibility:hidden; height:0;}
+#cover img{
+  display: block;
+}
+#content{
+  padding: 0 10px;
+  margin-top: 15px;
+}
+.menu-btn{
+  position: relative;
+  text-decoration: none;
+  overflow: hidden;
+  min-width: 23%;
+  float: left;
+  margin-bottom: 10px;
+  outline: none;
+  width: 30%;
+  height:130px;
+}
+.menu-mid{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.menu-btn .text{
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  color: white;
+  bottom: 0;
+  text-align: center;
+  font-size: 13px;
+  z-index: 2;
+}
+.menu-btn img{ width:0px; height:0px; visibility:hidden;
+}
+#menu-btn-1{ background:url(/assets/app/cover1.png) center center no-repeat;-moz-border-radius: 15px;  -webkit-border-radius: 15px;border-radius:15px;box-shadow: 3px 3px 3px 0px lightgray;}
+#menu-btn-2{ background:url(/assets/app/cover2.png) center center no-repeat;-moz-border-radius: 15px;  -webkit-border-radius: 15px;border-radius:15px;box-shadow: 3px 3px 3px 0px lightgray;}
+#menu-btn-3{ background:url(/assets/app/cover3.png) center center no-repeat;-moz-border-radius: 15px;  -webkit-border-radius: 15px;border-radius:15px;box-shadow: 3px 3px 3px 0px lightgray;}
+#menu-btn-4{ background:url(/assets/app/cover4.png) center center no-repeat;-moz-border-radius: 15px;  -webkit-border-radius: 15px;border-radius:15px;box-shadow: 3px 3px 3px 0px lightgray;}
+#menu-btn-5{ background:url(/assets/app/cover5.png) center center no-repeat;-moz-border-radius: 15px;  -webkit-border-radius: 15px;border-radius:15px;box-shadow: 3px 3px 3px 0px lightgray;}
+#menu-btn-6{ background:url(/assets/app/cover6.png) center center no-repeat;-moz-border-radius: 15px;  -webkit-border-radius: 15px;border-radius:15px;box-shadow: 3px 3px 3px 0px lightgray;}

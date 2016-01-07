@@ -1,0 +1,57 @@
+/*
+ *= require mobile/winwemedia01
+ *= require_self
+ */
+.html{background:#e8f2f8;}
+header{font-size:17px;padding:10px;text-align:center;color:#fff;background:#00a0e9;}
+.body{padding:10px;}
+/* global */
+.mt-10px{margin-top:10px;}
+.text-blue{color:#00a0e9;}
+.table{display:table;width:100%;}
+.cell{display:table-cell;padding:0 5px;}
+.cell:first-child{padding-left:0;width:40%;}
+.cell:last-child{padding-right:0;}
+.btn-box{display:table;width:100%;}
+.btn{font-size:16px;line-height:40px;height:40px;}
+.btn-primary{color:#fff;background:#00a0e9;}
+.btn-danger{color:#fff;background:#e8645a;}
+.text-box{width:100%;margin-bottom:10px;padding:10px;border:1px solid #eee;border-radius:5px;background:#fff;}
+.text-title{font-family:15px;color:#444;}
+.text-main{font-size:14px;line-height:24px;color:#777;}
+.form{margin-bottom:20px;}
+.form-box{border:1px solid #eee;border-radius:5px;background:#fff;}
+.form-box .form-li{height:44px;margin:0;padding:5px;border:none;border-bottom:1px solid #eee;border-radius:0;background:none;}
+.form-box .form-li:last-child{border:none;}
+.form-box .label{line-height:34px;color:#444;}
+.tips{font-size:12px;margin-top:5px;color:#999;}
+.end{margin-bottom:20px;text-align:center;}
+.end-img-1{width:64px;height:66px;margin:30px auto 20px;background:url(/assets/img/investigation/end-img-1.png);-webkit-background-size:100%;background-size:100%;}
+.end-img-2{width:92px;height:59px;margin:30px auto 20px;background:url(/assets/img/investigation/end-img-2.png);-webkit-background-size:100%;background-size:100%;}
+.end-img-3{width:112px;height:82px;margin:30px auto 20px;background:url(/assets/img/investigation/end-img-3.png);-webkit-background-size:100%;background-size:100%;}
+.end-img-4{width:72px;height:66px;margin:30px auto 20px;background:url(/assets/img/investigation/end-img-4.png);-webkit-background-size:100%;background-size:100%;}
+.end-text{font-size:15px;color:#444;}
+.done{padding:10px 30px;text-align:center;}
+.done-text{font-size:18px;padding:5px 0;color:#ef4c50;}
+.done-tips{padding:5px 0;color:#999;border-top:1px solid #ccc;}
+.topic{position:relative;z-index:2;padding:10px 20px;background:#fff;-webkit-box-shadow:0 4px 4px #e3e3e3;hbox-shadow:0 4px 4px #e3e3e3;}
+.topic-text{font-size:15px;line-height:20px;color:#444;}
+.list{margin-bottom:20px;padding:0 10px;}
+.list-ul{padding:0 5px;list-style:none;border-radius:0 0 5px 5px;background:#fff;}
+.item{position:relative;padding:10px 10px 10px 35px;border-bottom:1px dashed #ccc;}
+.item:last-child{border:none;}
+.item-text{line-height:24px;overflow:hidden;}
+.item-pic{overflow:hidden;}
+.item-pic img{width:100%;}
+.checkbox{position:absolute;top:14px;left:10px;width:16px;height:16px;border:1px solid #d1d1d1;border-radius:1000px;background:#f9f9f9;}
+.checked{background:#f7f7f7;color:#00a0e9;}
+.checked .checkbox{border:none;background:#00a0e9 url(/assets/img/investigation/checked.png) no-repeat center center;-webkit-background-size:10px 8px;background-size:10px 8px;}
+
+.topic-list{padding:0 10px;}
+.topic-ul{list-style:none;}
+.topic-list{counter-reset:index 0;}
+
+.topic-list .item{counter-increment:index;padding:10px 35px 10px 10px;}
+.topic-list .box{color:#666;}
+.topic-list .item:before{display:inline;content:counter(index) "、";color:#666;}
+.topic-list .item:after{display:block;content:"";width:9px;height:15px;background:url(/assets/img/investigation/arrow-right.png);-webkit-background-size:100%;background-size:100%;position:absolute;right:10px;top:10px;}

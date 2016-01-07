@@ -1,0 +1,332 @@
+<!--[if IE 6]>
+<script type="text/javascript" src="http://dev.baidu.com/wiki/static/map/tuan/js/DD_belatedPNG_0.0.8a-min.js"></script>
+<script>DD_belatedPNG.fix("#float_search_bar");</script>
+<![endif]-->
+<style>
+    #preview{
+        border: 1px solid #bfd2e1;
+        width: 500px;
+        height: 368px;
+        font-family: Arial, Helvetica, sans-serif,"宋体";
+    }
+    #map_container{
+        height: 368px;
+        width: 498px;
+    }
+    #float_search_bar{
+        /*z-index: 2012;*/
+        z-index: 10;
+        position: absolute;
+        width: 498px;
+        height: 35px;
+        line-height:20px;
+        background: url("/assets/baidu_map_search_bar.png") repeat-x;
+        background-position: 0 -21px;
+        padding: 3px 0 0 10px;
+    }
+    #float_search_bar label, #float_search_bar span{
+        color: #0787cb;
+        font-size: 14px;
+    }
+    #float_search_bar input{
+        width: 180px;
+        height: 20px;
+        margin-top: 1px;
+    }
+    #float_search_bar input:focus{
+        outline: none;
+    }
+    #search_button{
+        align-items: flex-start;
+        text-align: center;
+        border: 0;
+        padding: 0px 6px 3px;
+        box-sizing: border-box;
+        color: white;
+        width: 77px;
+        height: 20px;
+        background: url("/assets/baidu_map_search_bar.png") no-repeat;
+        background-position: 0 0;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+    .BMap_stdMpCtrl{
+        margin-top: 29px;;
+    }
+    .BMap_scaleCtrl{
+        margin-left: 25px;
+    }
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+<script type="text/javascript">
+
+    //获取页面加载完后生成地图所需的数据（address:地址元素，lng:经度元素，lat:纬度元素）
+    var address = document.getElementsByClassName("bd_map_address")[0],
+        lng = document.getElementsByClassName("bd_map_lng")[0],
+        lat = document.getElementsByClassName("bd_map_lat")[0],
+    //获取隐藏域元素
+        is_address = document.getElementById("is_address"),
+        is_just = document.getElementById("is_just"),
+        is_new = document.getElementById("is_new");
+
+    function getUrlParas(){
+        var hash = location.hash,
+            para = {},
+            tParas = hash.substr(1).split("&");
+        for(var p in tParas){
+            if(tParas.hasOwnProperty(p)){
+                var obj = tParas[p].split("=");
+                para[obj[0]] = obj[1];
+            }
+        }
+        return para;
+    }
+    var para = getUrlParas(),
+        center = para.address?decodeURIComponent(para.address) : (address.value ? address.value : "百度大厦"),
+        city = para.city?decodeURIComponent(para.city) : "北京市";
+
+    var marker_trick = false;
+    var map = new BMap.Map("map_container");
+    map.enableScrollWheelZoom();
+
+    //添加地图控件
+    var opts = {type: BMAP_NAVIGATION_CONTROL_LARGE}
+    map.addControl(new BMap.NavigationControl(opts));
+
+    opts = {offset: new BMap.Size(150, 5)}
+    map.addControl(new BMap.ScaleControl(opts));
+
+    map.addControl(new BMap.OverviewMapControl());
+
+    //初始化marker
+    var marker = new BMap.Marker(new BMap.Point(116.404, 39.915), {
+        enableMassClear: false,
+        raiseOnDrag: true
+    });
+
+
+    var local = new BMap.LocalSearch(map, {
+        renderOptions:{map: map},
+        pageCapacity: 1
+    });
+
+
+
+    //创建地址解析器实例
+    var myGeo = new BMap.Geocoder();
+
+
+    if(address.value){
+        if(lng.value && lat.value){
+            //存在经纬度的情况
+            marker = new BMap.Marker(new BMap.Point(lng.value, lat.value), {
+                enableMassClear: false,
+                raiseOnDrag: true
+            });
+            map.centerAndZoom(new BMap.Point(lng.value, lat.value), 19);
+        }else{
+            //不存在经纬度， 存在地址的情况
+            local.search(address.value);
+        }
+
+    }else{
+        //地址和经纬度都不存在的情况
+        var myCity = new BMap.LocalCity();
+        myCity.get(function(result){
+            address.value = result.name;
+            local.search(result.name);
+        });
+    }
+
+    window.onload = function(){
+        document.getElementById("search_button").onclick = function(){
+            is_just.value = '1';
+            is_new.value = '0';
+            local.search(address.value);
+        };
+        address.onkeyup = function(e){
+            is_just.value = '1';
+            is_address.value = '2';
+            is_new.value = '0';
+            map.clearOverlays();
+            marker.show();
+            var me = this;
+            e = e || window.event;
+            var keycode = e.keyCode;
+            if(keycode === 13){
+                local.search(address.value);
+            }
+        };
+    };
+
+    lng.onkeyup =  function(e){
+        reposition();
+    };
+    lat.onkeyup =  function(e){
+        reposition();
+    };
+
+    //改变经纬度重新查找地址和定位
+    function reposition(){
+
+        if(!lng.value || !lat.value){
+            is_address.value = '3'; //经度或纬度为空
+            return;
+        }
+        if(parseFloat(lng.value) >= 0 && parseFloat(lng.value) <= 180 && parseFloat(lat.value) >= 0 && parseFloat(lat.value) <= 90){
+
+            marker.hide();
+            var point = new BMap.Point(lng.value, lat.value);
+
+            //反向地理编码(通过经纬度定位地址)
+            myGeo.getLocation(point, function(result){
+                if (result){
+                    address.value = result.address;
+                }
+            });
+
+            marker = new BMap.Marker(point, {
+                enableMassClear: false,
+                raiseOnDrag: true
+            });
+
+            marker.enableDragging();
+            map.clearOverlays();
+            map.addOverlay(marker);
+            map.centerAndZoom(point, 19);
+        }else{
+            if(parseFloat(lng.value) < 0 || parseFloat(lng.value) > 180 || !parseFloat(lng.value)){
+                showTip('warning','经度范围有误，请重新输入')
+                lng.focus();
+            }else{
+                showTip('warning','纬度范围有误，请重新输入');
+                lat.focus();
+            }
+        }
+    }
+
+    //点击地图时的处理
+    map.addEventListener("click", function(e){
+        if(!(e.overlay)){
+            map.clearOverlays();
+            marker.show();
+            marker.setPosition(e.point);
+            setResult(e.point.lng, e.point.lat);
+
+            //反向地理编码(通过经纬度定位地址)
+            myGeo.getLocation(new BMap.Point(e.point.lng, e.point.lat), function(result){
+                if (result){
+                    address.value = result.address;
+                }
+            });
+        }
+    });
+
+    marker.enableDragging();
+    //将标注点加入地图
+    map.addOverlay(marker);
+
+    //标注点划动时的处理
+    marker.addEventListener("dragend", function(e){
+        setResult(e.point.lng, e.point.lat);
+
+        //反向地理编码(通过经纬度定位和更新地址)
+        myGeo.getLocation(new BMap.Point(e.point.lng, e.point.lat), function(result){
+            if (result){
+                address.value = result.address;
+            }
+        });
+    });
+
+
+
+    local.setSearchCompleteCallback(function(results){
+        if(local.getStatus() !== BMAP_STATUS_SUCCESS){
+            if(address.value){
+
+                is_address.value = '1';
+                marker.hide();
+                try{
+                    //地址查不到时，反向将地址解析成经纬度在查询一次
+                    myGeo.getPoint(address.value, function(point){
+
+                        if(point) {
+                            if(is_just.value){
+                                marker = new BMap.Marker(new BMap.Point(point.lng, point.lat), {
+                                    enableMassClear: false,
+                                    raiseOnDrag: true
+                                });
+                            }else{
+                                if(lng.value && lat.value){
+                                    marker = new BMap.Marker(new BMap.Point(lng.value, lat.value), {
+                                        enableMassClear: false,
+                                        raiseOnDrag: true
+                                    });
+                                    is_just.value = '1';
+                                }
+                            }
+
+                            marker.enableDragging();
+
+                            map.clearOverlays();
+                            map.addOverlay(marker);
+                            map.centerAndZoom(point, 19);
+                            setResult(point.lng, point.lat);
+                            is_address.value = '';
+                        }else{
+
+                        }
+                    }, "");
+                }
+                catch(e){
+
+                }
+
+            }else{
+                showTip('warning','请填写导航地址');
+            }
+
+        } else {
+            marker.hide();
+            is_address.value = '';
+        }
+        showLocation();
+    });
+
+    local.setMarkersSetCallback(function(pois){
+        if(is_new.value == '1'){map.setZoom(11);}
+        for(var i=pois.length; i--; ){
+            var marker = pois[i].marker;
+            setResult(marker.getPosition().lng, marker.getPosition().lat);
+            marker.addEventListener("click", function(e){
+                marker_trick = true;
+                var pos = this.getPosition();
+                setResult(pos.lng, pos.lat);
+            });
+        }
+    });
+    document.getElementById("float_search_bar").onkeydown=function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==13){ // enter 键
+            return false;
+        }
+    };
+
+    /*
+     * setResult : 定义得到标注经纬度后的操作
+     * 请修改此函数以满足您的需求
+     * lng: 标注的经度
+     * lat: 标注的纬度
+     */
+    function setResult(x, y){
+        lng.value = x;
+        lat.value = y;
+    }
+
+    function showLocation(){
+        setTimeout(function(){
+            if($('.BMap_noprint').eq(1)){$('.BMap_noprint').eq(1).click();}
+            else{showLocation();}
+        }, 50);
+    }
+</script>

@@ -1,0 +1,45 @@
+.box{overflow: hidden;display: block; padding: 10px;}
+.box,
+.box a{color:#fff;}
+.index{width:100%;text-align:left;overflow: hidden;}
+.index .index-1:nth-child(1){ background: #c26700;}
+.index .index-1:nth-child(2){background: #361d00;}
+.index a:nth-child(2){ background: #ff971e;}
+.index a:nth-child(3){ background: #a0c84e;}
+.index a:nth-child(4){ background: #b352a3;}
+.index a:nth-child(5){ background: #55abdc;}
+.index a:nth-child(6){ background: #6a75d1;}
+.index a:nth-child(7){ background: #63c53c;}
+.index a:nth-child(8){ background: #2c9489;}
+.index a:nth-child(9){ background: #ff6162;}
+.index a:nth-child(10){ background: #76caca;}
+.index a:nth-child(11){ background: #2a80b9;}
+.index a:nth-child(12){ background: #e9c500;}
+.mod-index{width: 47%; display: inline-block; height: 100px; margin: 2% 2% 0 2%; vertical-align: text-top; float: left; overflow: hidden;}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; text-align: center; overflow: hidden;}
+.mod-index small{ font-size: 18px; line-height: 30px; display: block; height: 30px;word-spacing:normal; word-break:normal; word-break:break-all;}
+.mod-index i{height: 50px; line-height:50px; overflow: hidden;text-align: center; display: block;}
+.mod-index img{ max-height: 100%; vertical-align: top;}
+.mod-index .fa{ font-size: 50px;}
+.index-1{ width:96%; padding: 10px; margin: 2% 2% 0 2%;}
+.index-1 > *{ text-align: left; width:auto; height: 100%; vertical-align: middle;}
+.index-1 p:first-child i{ width: 100px; height: 80px; line-height: 80px; text-align: right;}
+.index-1 p:first-child i img{ max-height: 50px; vertical-align: middle;}
+.index-1 > *:last-child{ width:80%; text-align: center; padding: 0 10px; overflow: hidden;}
+.index-1 span{ font-size: 30px; height: 30px; word-spacing:normal; word-break:normal; word-break:break-all; overflow: hidden; display: block;}
+.index-1 b{ font-size: 24px; font-weight: 100;}
+.index-1 small{ font-size: 18px;}
+.index-row .mod-index:nth-child(2n){
+    margin-left: 0;
+}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+
+}

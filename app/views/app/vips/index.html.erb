@@ -1,0 +1,230 @@
+<div class="html theme-<%= @vip_card.template_id %> <%= "no-card" if !@vip_user.try :normal? %> <%= "add-nav" if @vip_card.template_id == 2 %>" id="html">
+  <div class="stage index" id="stage">
+    <!-- 会员卡首页 start -->
+    <section class="index" id="sec-index">
+
+      <% if @vip_user.try(:inactive?) %>
+      <div class="card-img card-active"> <!-- no-card 没有领卡显示领卡按钮 -->
+        <div class="img-bg-active">
+          <div class="tips">已有积分</div>
+          <div class="integral">
+            <span><%= @vip_user.try(:usable_points) %></span>
+            <span class="state">未激活</span>
+          </div>
+        </div>
+
+        <div class="img-bg">
+          <div class="vcard-wp">
+            <div class="vcard-card">
+              <div class="vcard-elem vcard-level"></div>
+              <div class="vcard-elem vcard-logo"><img src="" alt=""></div>
+              <div class="vcard-elem vcard-number"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-btn">
+          <%= link_to "激活会员卡享受积分", inactive_app_vips_path, class: "btn btn-reg J-reg" %>
+        </div>
+      </div>
+      <% else %>
+      <div class="card-img"> <!-- no-card 没有领卡显示领卡按钮 -->
+        <div class="vcard-wp">
+            <div class="vcard-card">
+                <div class="vcard-elem vcard-level"></div>
+                <div class="vcard-elem vcard-logo"><img src="" alt=""></div>
+                <div class="vcard-elem vcard-number"></div>
+            </div>
+        </div>
+
+        <div class="card-btn">
+          <% if @vip_card.stopped? %>
+            <a class="btn btn-reg">商家已停用会员卡</a>
+          <% elsif @vip_user %>
+            <% if @vip_user.pending? %>
+              <a class="btn btn-reg">您的会员卡正在审核中</a>
+            <% elsif @vip_user.rejected? %>
+              <a class="btn btn-reg">您的会员卡申请已被拒绝</a>
+            <% elsif @vip_user.freeze? %>
+              <a class="btn btn-reg">您的会员卡已被冻结</a>
+            <% end %>
+          <% else %>
+            <div class="card-btn">
+              <%= link_to "点击领取会员卡", signup_app_vips_path, class: "btn btn-reg" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+
+      <!-- tab box start -->
+      <div class="item-box no-card-hide">
+        <div class="item">
+          <a href="/app/vips/consumes">
+            <b><%= f @vip_user.try(:usable_amount) %></b>
+            <span>当前金额</span>
+          </a>
+        </div>
+        <%- if @supplier && @supplier.can_recharge? && @vip_user && @vip_user.normal? %>
+          <div class="item cur">
+            <a href="/app/vips/go_recharge#mp.weixin.qq.com">
+              <b><i class="img img-1"></i></b>
+              <span>会员卡充值</span>
+            </a>
+          </div>
+        <% end %>
+        <div class="item">
+          <a href="/app/vips/points?type=out">
+            <b><%= @vip_user.try(:usable_points) %></b>
+            <span>可用积分</span>
+          </a>
+        </div>
+      </div>
+      <!-- tab box end -->
+      <!-- list box start -->
+      <div class="main">
+        <div class="list-box no-card-hide">
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="<%= my_mobile_coupons_path(supplier_id: session[:supplier_id]) %>">
+                <i class="icon icon-2"></i>
+                <span>会员优惠券</span>
+                <div class="num"><%= @coupons_count %></div>
+              </a>
+            </dt>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="<%= vip_packages_app_vips_path %>">
+                <i class="icon icon-2"></i>
+                <span>会员卡套餐</span>
+                <div class="num"><%= @item_consumes %></div>
+              </a>
+            </dt>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="<%= gifts_app_vips_path(wxmuid: session[:wx_mp_user_id]) %>">
+                <i class="icon icon-3"></i>
+                <span>积分换礼品</span>
+                <div class="num"><%= @supplier.point_gifts.exchangeable.count %></div>
+              </a>
+            </dt>
+          </dl>
+          <%if @vip_card.checkin_enabled? && @vip_user.try(:normal?) && @vip_card.template_id != 2 %>
+            <dl class="pos big">
+              <dt class="border">
+                <a class="icon-right" href="/app/vips/signin">
+                  <i class="icon icon-1"></i>
+                  <span>签到赚积分</span>
+                  <% if @vip_user.vip_user_signs.today.present? %>
+                    <div class="num">已签到</div>
+                  <% else %>
+                    <div class="num num-gray">未签到</div>
+                  <% end %>
+                </a>
+              </dt>
+            </dl>
+          <%end%>
+        </div>
+        <% if @vip_user && @vip_user.normal? %>
+          <div class="list-box no-card-hide">
+            <% if @vip_card.template_id != 2 %>
+              <dl>
+                <dt class="border">
+                  <a class="icon-right" href="/app/vips/notes">
+                    <i class="icon icon-4"></i>
+                    <span>会员通知</span>
+                    <%if @message_count && @message_count>0 %>
+                      <div class="num">NEW</div>
+                    <%end%>
+                  </a>
+                </dt>
+              </dl>
+            <% end %>
+            <dl class="pos">
+              <dt class="border">
+                <a class="icon-right" href="/app/vips/print">
+                  <i class="icon icon-5"></i>
+                  <span>扫描我的会员卡</span>
+                </a>
+              </dt>
+            </dl>
+            <dl>
+              <dt class="border">
+                <a class="icon-right" href="/app/vips/information">
+                  <i class="icon icon-6"></i>
+                  <span>个人账户</span>
+                </a>
+              </dt>
+            </dl>
+          </div>
+        <% end %>
+        <div class="list-box">
+          <dl class="pos no-card-hide">
+            <dt class="border">
+              <a class="icon-right" href="/app/vips/privileges#mp.weixin.qq.com">
+                <i class="icon icon-7"></i>
+                <span>会员特权</span>
+              </a>
+            </dt>
+          </dl>
+          <dl class="no-card-pos">
+            <dt class="border">
+              <a class="icon-right" href="/app/vips/description?type=spec">
+                <i class="icon icon-8"></i>
+                <span>会员卡说明</span>
+              </a>
+            </dt>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="/app/vips/shops#mp.weixin.qq.com">
+                <i class="icon icon-9"></i>
+                <span>适用门店</span>
+              </a>
+            </dt>
+          </dl>
+        </div>
+        <div class="list-box">
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="/app/vips/map?address=<%= @vip_card.address%>&city_name=<%= @vip_card.city.try(:name)%>&supplier_name=<%= URI.escape(@vip_card.supplier_name.to_s) %>&location=<%= @vip_card.location_x%>, <%= @vip_card.location_y%>">
+                <i class="icon icon-10"></i>
+                <span>地址：<%= "#{@vip_card.city.try(:province).try(:name)}#{@vip_card.city.try(:name)}#{@vip_card.district.try(:name)}#{@vip_card.address}" %></span>
+              </a>
+            </dt>
+          </dl>
+          <dl>
+            <dt class="border">
+              <a class="icon-right" href="http://api.map.baidu.com/marker?location=<%= @vip_card.location_y%>,<%= @vip_card.location_x%>&title=<%= @vip_card.address%>&content=<%= @vip_card.address%>&output=html">
+                <i class="icon icon-11"></i>
+                <span>一键导航</span>
+              </a>
+            </dt>
+          </dl>
+          <dl class="pos">
+            <dt class="border">
+              <a class="icon-right" href="tel:<%= @vip_card.phone_num %>">
+                <i class="icon icon-12"></i>
+                <span><%= @vip_card.phone_num %></span>
+              </a>
+            </dt>
+          </dl>
+        </div>
+        <div class="v3-line">
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+      </div>
+      <!-- list box end -->
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+  <%= render 'footbar' %>
+</div>
+<script>
+  $('.card-disnormal').show();
+</script>

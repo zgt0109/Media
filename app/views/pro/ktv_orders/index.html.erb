@@ -1,0 +1,78 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微服务', bookings_path %></li>
+        <li><%= link_to 'ktv预定管理', ktv_orders_path %></li>
+        <li><%= link_to '基本信息', ktv_orders_path %></li>
+      </ul>
+      <%= render partial: '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+    <div class="tabbable">
+    <ul class="nav nav-tabs padding-24 tab-size-bigger " id="myTab">
+      <li class="active">
+        <%= link_to '基本信息', ktv_orders_path %>
+      </li>
+      <li>
+        <%= link_to '预订管理', orders_ktv_orders_path %>
+      </li>
+
+    </ul>
+    <div class="tab-content no-border padding-24">
+    <div id="tab-1" class="tab-pane fade active in">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-block alert-success">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、设置KTV预定基础信息以及微信关键字回复内容；</li>
+              <li>2、以下“ <span class="required-star">*</span> ”均为必填项；</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-12">
+
+          <%= render "weixin_preview", wx_title: @activity.name, wx_summary: @activity.summary,  wx_pic: @activity.pic_url %>
+          <%= form_for @activity, validate: true  do |activity| %>
+              <div class="col-sm-7">
+                <%= render "weixin_setting", activity: activity, data_img: @activity.try(:pic_url), pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.try(:qiniu_pic_key) %>
+                <div class="form-group">
+                  <label class="control-label">预约电话</label>
+
+                  <div class="clearfix">
+                    <%= text_field_tag "activity[extend][tel]", @activity.extend.tel, class: 'col-xs-6 ' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <input type="submit" class="btn btn-sm btn-primary submit-ktv" value="保存">
+                </div>
+              </div>
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+
+
+    </div>
+    </div>
+
+
+    </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $('.submit-ktv').on('click', function(){
+            var tel = $('#activity_extend_tel').val();
+            var reg = /^[0-9_\-]*$/;
+            if (!reg.test(tel)){
+                showTip('warning',"电话号码格式不对，正确格式如下：\n座机号码：区号-座机号码(或)\n手机号码：11位手机号码");
+                return false;
+            }
+        })
+    </script>
+<% end %>

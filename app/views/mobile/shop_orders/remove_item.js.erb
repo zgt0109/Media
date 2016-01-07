@@ -1,0 +1,13 @@
+<% if (@item.nil? || @item.destroyed?) %>
+
+render_footer_car(<%= @shop_order.total_qty %>, "<%= @shop_order.total_amount %>", <%= @product.id %> , 0);
+var pop_html = '<%= j render :partial => 'shop_order_item', :collection => @shop_order.shop_order_items, :as => :shop_order_item %>';
+$("#shop_order_item_div").empty();
+$("#shop_order_item_div").html(pop_html);
+<% else %>
+
+render_footer_car(<%= @shop_order.total_qty %>, "<%= @shop_order.total_amount %>", <%= @product.id %> ,<%= @item.qty %>);
+var pop_html = '<%= j render :partial => 'shop_order_item', :collection => @shop_order.shop_order_items, :as => :shop_order_item %>';
+$("#shop_order_item_div").empty();
+$("#shop_order_item_div").html(pop_html);
+<% end %>

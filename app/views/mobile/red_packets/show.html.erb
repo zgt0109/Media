@@ -1,0 +1,17 @@
+<div class="body">
+  <div class="package-box">
+    <img src="<%= @activity.bg_pic_url || "/assets/red_packet/index_info.jpg" %>" alt="">
+  </div>
+  <div class="l_detail" id="wrapper">
+    <div class="topbtns">
+      <a href="<%= mobile_red_packets_path %>"><img class="toptips" src="/assets/red_packet/prompt2.png" /></a>
+    </div>
+    <div class="hd">
+      <h3>礼包详情</h3>
+      <p>我的礼包总金额为：<%= @red_packet_release.award_amount %>元</p>
+      <p>SN码：<%= @red_packet_release.consume.code %></p>
+      <p>状态：<%= @red_packet_release.consume.status_text %></p>
+      <%= image_tag @red_packet_release.consume.rqrcode, id: "show" %>
+    </div>
+  </div>
+</div>

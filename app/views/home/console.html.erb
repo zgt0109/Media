@@ -1,0 +1,217 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li><i class="icon-home home-icon"></i><a href="<%= console_url %>">首页</a></li>
+        <li><a href="javascript:;">控制台</a></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <!--新手任务 代码块-->
+      <% if current_user.can_show_introduce? && !current_user.try(:task4?) %>
+      <div class="mission_tit auto"> <span class="left">新手任务</span></div>
+      <!--
+        //   miss_wait / miss_active / miss_finish 样式 未完成 进行中 完成
+      -->
+      <ul class="mission_bar auto">
+        <li class="miss_wait <%= show_introduce_class(1) %>">
+          <h6><span class="miss_in">任务一：</span>手机试玩 <span class="miss_num">1</span></h6>
+        </li>
+        <li class="miss_wait <%= show_introduce_class(2) %>">
+          <h6><span class="miss_in">任务二：</span>站点内容 <span class="miss_num">2</span></h6>
+        </li>
+        <li class="miss_wait <%= show_introduce_class(3) %>">
+          <h6><span class="miss_in">任务三：</span>营销互动 <span class="miss_num">3</span></h6>
+        </li>
+        <li class="miss_wait <%= show_introduce_class(4) %>">
+          <h6><span class="miss_in">任务四：</span>首次关注 <span class="miss_num">4</span></h6>
+        </li>
+      </ul>
+      <% end %>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <% if current_user.try(:expired?) %>
+            <div class="alert alert-block alert-warning margin-top-10">
+              <button type="button" class="close margin-left-15" data-dismiss="alert">
+                <i class="icon-remove"></i>
+              </button>
+              <i class="icon-warning-sign text-warning"></i>
+              提示：您的账号使用期限已过，请联系平台客服人员进行续费。
+            </div>
+          <% end %>
+
+          <% unless current_user.try(:wx_mp_user).try(:active?) %>
+            <div class="alert alert-block alert-warning margin-top-10">
+              <button type="button" class="close margin-left-15" data-dismiss="alert">
+                <i class="icon-remove"></i>
+              </button>
+              <i class="icon-warning-sign text-warning"></i>
+              提示：你目前还没有绑定微信公众账号
+              ，暂无法在微信中使用。
+              <a class="pull-right green" href="<%= platforms_url %>">现在绑定</a>
+            </div>
+          <% end %>
+
+          <% unless current_user.wx_mp_user.try(:qrcode_url) %>
+            <div class="alert alert-block alert-warning margin-top-10">
+              <button type="button" class="close margin-left-15" data-dismiss="alert">
+                <i class="icon-remove"></i>
+              </button>
+              <i class="icon-warning-sign text-warning"></i>
+              提示：你目前还没有上传微信公众账号二维码
+              ，将无法获得推广资源。
+              <a class="pull-right" href="javascript:;" data-toggle="modals" data-height="350" data-iframe="<%= qrcode_wx_mp_users_url %>" data-title="二维码管理">现在上传</a>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="col-md-12 no-padding" id='console_data'>
+          <!-- <p class="mod-loading"><img src="/assets/loading.gif"/></p> -->
+          <%#= render 'console_data' %>
+        </div>
+
+    <div class="col-md-12 margin-top-20 no-padding">
+      <div class="col-md-6 ">
+        <div class="widget-box ">
+          <div class="widget-header">
+            <h4 class="smaller">进行中的活动 <small class=""><a href="<%= activities_url %>" class="grey" target="_blank">more</a></small></h4>
+          </div>
+
+          <div class="widget-body index-box-info">
+            <div class="widget-main">
+            <% if @activities.count == 0 %>
+              <div class="empty align-center">
+                <i class="fa fa-frown-o fa-5x"></i>
+                <span class="display-block">暂无进行中的活动</span>
+              </div>
+            <% else %>
+              <ul class="feeds">
+              <% @activities.order('activities.created_at desc').each do |activity| %>
+                <li>
+                  <div class="col1">
+                    <div class="cont">
+                      <div class="cont-col1">
+                        <div class="label label-sm label-info"><i class="fa fa-check"></i></div>
+                      </div>
+
+                      <div class="cont-col2">
+                        <div class="desc"><%= activity.name %></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col2">
+                    <div class="date"><%= activity.start_at || activity.created_at %></div>
+                  </div>
+                </li>
+              <% end %>
+              </ul>
+            <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 ">
+        <div class="widget-box ">
+          <div class="widget-header">
+            <h4 class="smaller">后台公告 <small class=""><a href="<%= site_dev_logs_url %>" class="grey" target="_blank">more</a></small></h4>
+          </div>
+
+          <div class="widget-body index-box-info">
+            <div class="widget-main">
+              <ul class="feeds">
+                <% DevLog.vcl.order('created_at desc').limit(20).each do |dev_log| %>
+                    <li>
+                      <div class="col1">
+                        <div class="cont">
+                          <div class="cont-col1">
+                            <div class="label label-sm label-default">
+                              <i class="fa fa-bell-o"></i>
+                            </div>
+                          </div>
+
+                          <div class="cont-col2">
+                            <div class="desc"><%= link_to dev_log.title.to_s, site_dev_log_path(dev_log), target: '_blank' %></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col2">
+                        <div class="date"><%= dev_log.created_at %></div>
+                      </div>
+                    </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <% unless current_user.try(:industry_ec?) %>
+    <div class="col-md-12 margin-top-20 ">
+      <h3 class="header blue">常用功能</h3>
+      <div class="margin-center">
+        <ul class="no-margin index-tools-list">
+          <li class="col-md-2"><a href="/websites" class="color-1">微官网</a></li>
+          <li class=" col-md-2"><a href="/vip_cards" class="color-2">微会员卡</a></li>
+          <li class=" col-md-2"><a href="/coupons" class="color-3">优惠券</a></li>
+          <li class=" col-md-2"><a href="/wx_mp_users/welcome" class="color-4">微信设置</a></li>
+          <li class=" col-md-2"><a href="/materials" class="color-5">素材管理</a></li>
+          <li class=" col-md-2"><a href="/helpers" class="color-6">生活助手</a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <%#= render 'auth_tel' %>
+
+    <% end %>
+<!--
+    <div class="col-md-12 margin-top-20 no-padding">
+      <div id="chart-1" class="col-md-6">
+        <p class="mod-loading"><img src="/assets/loading.gif"/></p>
+      </div>
+      <div id="chart-2" class="col-md-6">
+        <p class="mod-loading"><img src="/assets/loading.gif"/></p>
+      </div>
+    </div>
+
+    <div class="col-md-12 margin-top-20 no-padding">
+      <div id="chart-3" class="col-md-6">
+        <p class="mod-loading"><img src="/assets/loading.gif"/></p>
+      </div>
+      <div id="chart-4" class="col-md-6">
+        <p class="mod-loading"><img src="/assets/loading.gif"/></p>
+      </div>
+    </div>
+    -->
+    <div class="col-md-12 margin-top-20"></div>
+    </div>
+    </div>
+    <!-- /.page-content -->
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    function load_chart(){
+      $.ajax({
+          type: "GET",
+          url: "/console.js",
+          success: function(data) {
+            return false;
+          },
+          error: function() {
+            return false;
+          }
+        });
+    }
+    // load_chart();
+  </script>
+<% end %>

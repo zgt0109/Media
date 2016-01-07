@@ -1,0 +1,51 @@
+<div class="main">
+	<div class="">
+		<section>
+			<div class="homepage-content">
+				<div class="blank5"></div>
+				<div class="person-photo"><img src="<%= @wx_user.headimgurl || '/assets/mobile/brokerage/person-logo.png' %>"/></div><div class="person-detail"><div class="blank10"></div><P><%= @broker.name %></P><P><%= @broker.mobile %></P></div>
+				<div class="person-details">推荐人数:<span><%= @broker.clients_count %></span>人　总佣金:<span><%= @broker.total_commission %></span>元</div>
+			</div>
+			<div class="blank10"></div>
+			<div class="my-client">
+				<dl>
+					<dt>
+						<a href="<%= my_clients_mobile_brokerages_path(@supplier) %>" class="my-ca">
+				   		<p class="my-cp">我的客户</p>
+				   		<span>></span>
+				   	</a>
+					</dt>
+					<% @supplier.brokerage_commission_types.enabled.map{|t| [t.mission_type,t.mission_type_name]}.in_groups_of(2,false).each do |types| %>
+						<dd class="fc">
+							<% types.each do |type| %>
+								<span><%= type[1] %><a> <%= @broker.clients.client_type_count(type[0]).count %></a></span>
+							<% end %>
+						</dd>
+					<% end %>
+				</dl>
+			</div>
+			<div class="blank10"></div>
+			<div class="my-client">
+				<dl>
+					<dt><h4 style="float:left;font-weight:normal;">我的佣金</h4>
+						<% if @broker.bank_account_name.blank? && @broker.alipay_account_name.blank? %>
+							<a href="<%= edit_mobile_brokerage_path(@supplier,@broker) %>">
+								<span style="font-size: 12px !important;">绑定结算账户&nbsp;&nbsp; > </span>
+							</a>
+						<% else %>
+							<a href="<%= commission_list_mobile_brokerages_path(@supplier) %>">
+								<span style="font-size: 12px !important;">结算明细&nbsp;&nbsp; > </span>
+							</a>
+						<% end %>
+					</dt>
+					<dd class="fc">
+						<span style="float:left;">已结佣 <%= @broker.settled_commission %>元</span>
+						<span style="float:right;">可结佣 <%= @broker.unsettled_commission %>元</span>
+					</dd>
+				</dl>
+			</div>
+			<div class="blank40"></div>
+			<div class="broker-btn"><a href="<%= put_clients_mobile_brokerages_path(@supplier) %>">推荐客户</a></div>
+		</section> 
+	</div>
+</div>

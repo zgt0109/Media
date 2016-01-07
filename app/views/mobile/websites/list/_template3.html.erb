@@ -1,0 +1,19 @@
+  <% website_menu.sub_menus.each do |child| %>
+    <div class="box box-list box-book">
+      <div class="hd"></div>
+      <div class="bd">
+        <a class="bg-arrow table" href="<%= menu_url child %>">
+            <% if child.pic? %>
+                <span class="fl box-circle td">
+                    <b style="background-image:url(<%= child.pic.try(:thumb)%>)"></b>
+                </span>
+            <% end %>
+          <span class="<%= child.pic? ? "fr td" : "fw td" %>">
+            <b><%= child.name %></b>
+            <!--<i><%#= date_format_full_l(child.created_at)  %></i>-->
+          </span>
+        </a>
+      </div>
+      <div class="ft"></div>
+    </div>
+  <% end %>

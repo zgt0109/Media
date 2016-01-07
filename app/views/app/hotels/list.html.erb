@@ -1,0 +1,30 @@
+<%= javascript_include_tag 'jquery','jquery_ujs' %>
+<header>
+	<a class="ico-hd arr-hd" href="javascript:window.location.href='/app/hotels?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>'"></a>
+	<h1><%= @hotel.try(:name) %></h1>
+</header>
+<div class="contxt cont-artical">
+	<div class="box-cont box-list-hotel">
+		<%= render :partial => 'app/hotels/hotel_branches', :object => @hotel_branches, :as => :hotel_branch %>
+	</div>
+	<div class="tcenter"><% unless @hotel_branches.last_page? %><a href="/app/hotels/list?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a><%#= link_to_next_page @hotel_branches, "点击查看更多...", class: "loading", :remote => true %><%end%></div>
+	<div class="tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
+</div>
+<script>
+/*
+$("body").on("click",".list-li", function(event){
+	var branch_id = $(this).attr('data-branch-id');
+	window.location.href = "<%= app_hotels_path %>/"+branch_id+"?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=1";
+
+});
+*/
+$( document ).ajaxStart(function() {
+	$(".isloading").css("display",'');
+	$("#more_loading").css("display","none");
+});
+
+$( document ).ajaxStop(function() {
+	$(".isloading").css("display",'none');
+	$("#more_loading").css("display","block");
+});
+</script>

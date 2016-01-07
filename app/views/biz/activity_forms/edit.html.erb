@@ -1,0 +1,27 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_business' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <!--a href="javascript:void(0);"class="h1 uncurrent" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="查看报名" data-url="<%#= activity_form_path(id: @activity.id) %>">微报名详情</a-->
+  <%#= link_to "微报名详情", activity_form_path(id: @activity.id), class: 'h1 uncurrent' %>
+  <%= link_to "微报名管理", activity_forms_url, class: 'h1 uncurrent' %>
+  <h1 class="pagecurrent">活动字段设置</h1>
+  <%= link_to '用户数据', activity_enrolls_url, class: 'h1 uncurrent' %>
+<% end %>
+
+<p class="p-note">注意：数字设置越大的排在越后面显示！</p>
+
+<div class="box-form fl form-col">
+  <div class="form">
+    <%= form_for @activity, url: activity_form_url(id: @activity.id), validate: true do |f| %>
+      <%= f.fields_for :activity_forms do |activity_form| %>
+        <div class="p">
+          <span style="text-align: left; width: 100px;"><%= activity_form.object.field_value %>：</span>
+          <%= activity_form.text_field :sort, class: 'input-text' %>
+        </div>
+      <% end %>
+      <div class="p"><input class="submit-keep form-submit btn btn-big btn-orange" type="submit" value="保存" style="margin: 0;" /></div>
+      <% end %>
+  </div>
+</div>

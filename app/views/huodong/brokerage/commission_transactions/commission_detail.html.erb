@@ -1,0 +1,38 @@
+<%= form_for(@brokerage_commission_transaction, url: brokerage_broker_commission_transactions_path(@brokerage_broker), remote: true) do |f| %>
+<div class="page-content">
+  <div class="tabbable">
+    <div class="tab-content no-border padding-24">
+      <div class="row">
+        <div class=" col-sm-12">
+          <div class="clearfix"></div>
+            <table id="menuTable" class="table table-striped table-bordered table-hover">
+              <thead>
+                  <tr>
+                    <th>客户姓名</th>
+                    <th>客户状态</th>
+                    <th>已结佣金</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <% if @brokerage_commission_transactions.each do |brokerage_commission_transaction| %>
+                <tr>
+                  <td><%= brokerage_commission_transaction.created_at %></td>
+                  <td><%= brokerage_commission_transaction.commission %></td>
+                  <td>已结佣</td>
+                </tr>
+              <% end.blank? %>
+                <tr><td colspan="8" class="green text-center">暂无数据</td></tr>
+              <%- end %>
+            </tbody>
+          </table>
+          <%= paginate @brokerage_commission_transactions %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <%= f.submit "确定", class: "btn btn-sm btn-primary" %>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+<% end %>

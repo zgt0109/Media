@@ -1,0 +1,106 @@
+<%= form_for(@vip_grade, validate: true) do |f| %>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>
+                等级名称
+                <span class="required-star">*</span>
+            </label>
+            <div class="clearfix">
+                <%= f.text_field :name, class: 'col-md-8', validate: true %>
+            </div>
+        </div>
+        <% if @vip_grade.normal? %>
+            <div class="form-group">
+                <label>等级定义<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="用于区分添加的会员卡等级的高低，数值越大级别越高，如：1-10的等级，1为最低级别，10为最高级别"></span></label>
+                <div class="clearfix">
+                    <%= f.text_field :sort, maxlength: 5, class: 'col-md-8', placeholder:"请填写数字为整数的等级值，如：1", validate: true %>
+                </div>
+            </div>
+            <div class="VCCondition">
+                <label>
+                    等级条件<span class="required-star">*</span>
+                </label>
+                <div class="radioTab">
+
+                    <label>
+                        <%= f.radio_button :category, 1, checked: @vip_grade.by_time?, class: :ace, data: { toggle: :radioTab, target: :usedTime } %>
+                        <span class="lbl">按使用时间</span>
+                    </label>
+                    <label>
+                        <%= f.radio_button :category, 2, checked: @vip_grade.by_points?, class: :ace, data: { toggle: :radioTab, target: :sumPoint } %>
+                        <span class="lbl">按累计积分</span>
+                    </label>
+                    <label>
+                        <%= f.radio_button :category, 3, checked: @vip_grade.by_recharging?, class: :ace, data: { toggle: :radioTab, target: :sum } %>
+                        <span class="lbl">按累计充值金额</span>
+                    </label>
+                    <label>
+                        <%= f.radio_button :category, 4, checked: @vip_grade.by_consuming?, class: :ace, data: { toggle: :radioTab, target: :sumConsum } %>
+                        <span class="lbl">按累计消费金额</span>
+                    </label>
+                </div>
+                <div class="radio-tab-content">
+                    <div id="usedTime" class="radio-tab-pane <%= 'hide' if !@vip_grade.by_time? %>">
+                        <div class="form-group">
+                            <label class="control-label">时间条件<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">自领卡之日起计算</small></label>
+                            <div class="clearfix">
+                                <% options = [["半年",6],["一年",12],["两年",24],["三年",36],["四年",48],["五年",60]] %>
+                                <%= f.select :value, options_for_select(options, @vip_grade.value), {}, disabled: !@vip_grade.by_time? %>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sumPoint" class="radio-tab-pane  <%= 'hide' if !@vip_grade.by_points? %>">
+                        <div class="form-group">
+                            <label class="control-label">积分<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">只能填写数字</small></label>
+                            <div class="clearfix">
+                                达到
+                                <%= f.text_field :value, class: :inputSmall, disabled: !@vip_grade.by_points? %>分</div>
+                        </div>
+                    </div>
+                    <div id="sum" class="radio-tab-pane  <%= 'hide' if !@vip_grade.by_recharging? %>">
+                        <div class="form-group">
+                            <label class="control-label">金额<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">只能填写数字</small></label>
+                            <div class="clearfix">
+                                达到
+                                <%= f.text_field :value, class: :inputSmall, disabled: !@vip_grade.by_recharging? %>元</div>
+                        </div>
+                    </div>
+                    <div id="sumConsum" class="radio-tab-pane  <%= 'hide' if !@vip_grade.by_consuming? %>">
+                        <div class="form-group">
+                            <label class="control-label">金额<span class="required-star">*</span><small class="help-inle test text-warning line-height-32">只能填写数字</small></label>
+
+                            <div class="clearfix">
+                                达到
+                                <%= f.text_field :value, class: :inputSmall, disabled: !@vip_grade.by_consuming? %>元</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>等级说明</label>
+                <div class="clearfix">
+                    <%= f.text_area :description, rows: 5, class: "col-xs-12" %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <input type="submit" value="保存" class="btn btn-sm btn-primary" data-fn="submit">
+        <input type="reset" value="取消" class="btn btn-sm btn-default" data-dismiss="modals">
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+  $(function() {
+    $('input:radio').click(function(event) {
+        var $this=$(this);
+        var id = "#" + $this.data('target');
+        $('.radio-tab-pane').removeClass('hide').hide();
+        $(".radio-tab-pane input, .radio-tab-pane select").attr("disabled",true);
+        $(id).show().find("input, select").attr("disabled",false);
+        $('form').resetClientSideValidations();
+      });
+  })
+</script>
+<% end %>

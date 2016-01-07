@@ -1,0 +1,142 @@
+<div class="photo-li li-add">
+  <a class="btn-add" id="<%= @album.new_record? ? 'new_record' : '' %>">    
+    <%- unless @album.new_record?  %>
+      <%= file_field_tag "pic", multiple: true, :id => "album_photo_upload_input" %>
+    <%- end %>
+    <span class="box-progress">
+      按住 Ctrl 可多选
+      <i style="width:0.00%" id="progress_bar"></i>
+    </span>
+  </a>
+</div><!--photo-li end-->
+
+<%- if @photos.present? %>
+  <% @photos.each do |photo| %>
+    <div class="photo-li">
+      <div class="li-img">
+        <%= image_tag(photo.pic.large) if photo.pic? %>
+      </div>
+      <div class="li-btn">
+        <div class="li-p">
+          <span class="fl" id="title_span<%= photo.id %>"><%= photo.name %></span>
+          <span class="fr">
+            <a class="btn-edit"  data-url="<%= album_photo_path(@album, photo)%>" data-id="<%= photo.id %>"></a>
+            <%= link_to '', delete_url, id: "delete#{photo.id}", class: 'btn-detele', data: { remote: true, method: :delete, confirm: '确定删除该图片？', callback: "removePhoto(#{photo.id})" } %>
+          </span>
+        </div>
+        <div class="li-bg"></div>
+      </div>
+    </div><!--photo-li end-->
+  <%- end %>
+<%- end %>
+
+<script>
+
+<%- unless @album.new_record?  %>
+  var remotePreviewImage = function(file_input) {
+    file_input.fileupload({
+      url:"/album_photos/upload",
+      formData:{ "album_id": <%= @album.id %> },
+      dataType: 'script',
+      replaceFileInput: false,
+      progress: function(e, data){
+        // This is what makes everything really cool, thanks to that callback
+        // you can now update the progress bar based on the upload progress
+        var percent = Math.round((e.loaded / e.total) * 100)
+        $('#progress_bar').css('width', percent + '%')
+      }
+    });
+  }
+  remotePreviewImage($("#album_photo_upload_input"));
+<%- end %>
+
+
+function updateTitle(id){
+  $obj=$('#title'+id)
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    data: {name: $obj.val()},
+    url: $obj.data('url'),
+    success: function(data) {
+
+    },
+    error: function() {
+      showTip('warning','更新失败');
+    }
+  });
+}
+
+$(function(){
+  renderPhotoLi(720,400,$("#photoList"),3);
+  $(document).on("click",".photo-li .btn-edit",function(){
+      var self=$(this),
+          p=self.parents(".li-p"),
+          fl=p.find("span.fl"),
+          title=fl.html();
+          url = self.data('url');
+          id = self.data('id')
+      p.find("span.fr").fadeOut();
+      self.parents(".photo-li").addClass("active");
+      fl.animate({
+          width:"100%"
+      },function(){
+          fl.html('<form><input type="text"  id="title'+id+'" onblur="updateTitle('+id+')" value="'+title+'" data-url="'+url+'" data-id="'+id+'" /></form>');
+      });
+  });
+
+
+
+  $('#new_record').click(function(){
+    if($('#album_name').val()){
+      showTip('warning','请先保存相册名称');
+    }
+    else{
+      showTip('warning','请先输入相册名称');
+    }
+  });
+
+  $(document).on("mouseenter",".photo-li",function(){
+    var self=$(this);
+    self.addClass("hover");
+    if(self.hasClass("active")){
+        self.find("span.fl").css({"width":"100%"});
+        self.find("span.fr").hide();
+    }else{
+      if(self.find("input")){
+        var title=self.find("input").val();
+        self.find("span.fl").html(title);
+      }
+    }
+  });
+  $(document).on("mouseleave",".photo-li",function(){
+    var self=$(this);
+    self.removeClass("hover");
+    if(self.hasClass("active")){
+      var p=self.find(".li-p"),
+        fl=p.find("span.fl"),
+        title=p.find("input").val();
+      fl.animate({
+          width:"80%"
+      },function(){
+        self.removeClass("active");
+        fl.html(title);
+        p.find("span.fr").fadeIn();
+      });
+    }
+  });
+  $(document).on("blur",".photo-li input", function(){
+       var self=$(this),
+          p=self.parents(".li-p"),
+          fl=p.find("span.fl"),
+          title=self.val();
+      fl.animate({
+          width:"80%"
+      },function(){
+          self.parents(".photo-li").removeClass("active");
+          fl.html(title);
+          p.find("span.fr").fadeIn();
+      });
+  });
+});
+</script>

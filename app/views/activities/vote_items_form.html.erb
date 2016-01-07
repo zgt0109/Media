@@ -1,0 +1,15 @@
+<p class="p-note">
+  <span>提示：</span>
+  <span>以下“ <span class="fred">*</span> ”均为必填项；</span>
+</p>
+<%= form_for @activity, validate: true do |f| %>
+    <%= f.fields_for :activity_vote_items do |item| %>
+        <div class="margin" style="min-height: 30px;">
+          <%= item.text_field :name, class: "item_input_name input-text", disabled: (@activity.persisted? ? true : false) %>
+          <%- unless @activity.persisted? %>
+              <a class="del" href="javascript:void(0)" disabled="<%=@activity.persisted? ? true : false %>" >删除</a>
+              <%= item.check_box '_destroy', style:'display:none', disabled: (@activity.persisted? ? true : false) %>
+          <% end %>
+        </div>
+    <% end %>
+<% end %>

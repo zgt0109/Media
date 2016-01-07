@@ -1,0 +1,45 @@
+<style>
+.input-check-forbid{cursor: not-allowed; background-color: #767f93;}
+</style>
+
+<div class="modal fade auth_tel_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog" id="auth_tel_modal">
+    <div class="row">
+      <div class="modal-content col-md-8 col-md-offset-2">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">为确保您的帐号信息安全，请进行手机号码验证</h4>
+        </div>
+
+        <%= form_for current_user, validate: true, method: 'post', url: update_tel_suppliers_path do |f| %>
+          <div class="modal-body">
+            <div class="form-group m-input-text">
+              <label for="tel" class="control-label">手机号:</label>
+              <div class="clearfix">
+                <%= f.text_field :tel, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group m-input-text m-input-check">
+              <label for="message-text" class="control-label">验证码:</label>
+              <div class="clearfix">
+                <input class="input-focus radius-tr0 radius-br0 validate col-md-8" id="captcha" name="captcha" type="text" data-tip="请输入验证码" />
+                <a class="input-check clickable btn btn-sm btn-primary col-md-4">发送验证码</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary col-md-2">确定</button>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    <%= render "suppliers/send_sms.js.erb" %>
+  </script>
+<% end %>

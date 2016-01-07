@@ -1,0 +1,30 @@
+body{background: #fff;}
+.html{ background: url(../../../img/vweisiteV01/70/bg-panel.png) no-repeat top left; background-size: contain;}
+.index{margin:0 30px; background:url(../../../img/vweisiteV01/70/bg-index.png) repeat-y; background-size: contain; padding: 50px 0 0 0; text-align: center;}
+.index .bd{ background: url(../../../img/vweisiteV01/70/bg-menuvice.png) repeat-y center top; background-size: 100% 160px; overflow: hidden;}
+.index .hd{color: #ff7300; font-size: 26px;}
+.mod-index{ height: 30px; line-height: 30px; width: 100%; display: block; color: #fef1dd; padding: 0 50px; overflow: hidden;}
+.mod-index:nth-child(4n+1){margin-top: 10px;}
+.mod-index:nth-child(4n+2){margin-top: 10px;}
+.mod-index:nth-child(4n+3){margin-top: 6px;}
+.mod-index:nth-child(4n+4){margin-top: 4px; margin-bottom: 20px;}
+
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+
+}
+@media only screen and (max-width:1080px){
+
+}
+@media only screen and (min-width:1224px){
+
+}
+@media only screen and (max-width:320px){
+}

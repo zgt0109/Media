@@ -1,0 +1,104 @@
+<% title "商品一览" %>
+<% content_for :booking_top_pic do %>
+    <header>
+
+      <a href="<%= mobile_bookings_url(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <a href="<%= @booking.tel? ? "tel:#{@booking.tel}" : "#" %>"><img src="/assets/mobile/wserver/ico-phone.png"/></a>
+      <a href="<%= mobile_booking_orders_path(supplier_id: @supplier.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
+      <a class="btn-list"><img src="/assets/mobile/wserver/ico-list.png"/></a>
+    </header>
+<% end %>
+<div class="box-img" id="slider">
+  <ul class="box-img-list">
+    <% @booking_ads.each do |booking_ad|%>
+        <li><%= image_tag booking_ad.pic.try(:large) if booking_ad.pic? %></li>
+    <% end %>
+  </ul>
+  <div class="box-text">
+    <span class="box-bd ellipsis fl" id="slider-span"><%= @booking_ads.first.try(:title) %></span>
+    <div id="pagenavi" class="fr box-img-page">
+      <% @booking_ads.each_with_index do |booking_ad, index|%>
+          <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>">
+            <% index + 1 %>
+          </a>
+      <% end %>
+    </div><!--box-img-page end-->
+    <div class="box-bg"></div>
+  </div>
+</div>
+<% if @booking_categories.present? && @supplier.booking_items.count > 0  %>
+   <% @booking_categories.each do |booking_category| %>
+        <% @items = booking_category.products.slice(0, 6) %>
+        <% next unless @items.present? %>
+        <div class="bd-title"><a href="<%= mobile_booking_category_url(supplier_id: @supplier.id, id: booking_category.id)%>"><%= booking_category.name %></a></div>
+        <div class="box-list">
+          <% if @items.present? %>
+              <% @items.each do |item| %>
+                  <% picture = item.booking_item_pictures.first %>
+                  <div class="list-li">
+                    <a class="box-block" onclick="javascript:location.href='<%= mobile_booking_item_url(item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>'"></a>
+                    <div class="hd">
+                          <span>
+                            <%= picture.try(:pic?) ? (image_tag picture.pic.try(:large)) : "暂无图片" %>
+                          </span>
+                    </div>
+                    <div class="bd">
+                      <b><%= item.name %></b>
+                      <p>
+                        <span class="fred">￥<%= f item.price %></span>
+                      </p>
+                    </div>
+                  </div>
+              <% end %>
+          <% end %>
+        </div>
+    <% end %>
+<% else %>
+    <div class="bd-title">没有数据</div>
+<% end %>
+
+<% content_for :pop do %>
+  <%= render 'categories' %>
+<% end %>
+
+<script type="text/javascript">
+    //var slider=new TouchSlider({id:'slider', speed:600, timeout:6000});
+    <% unless judge_andriod_version %>
+    window.onload = resizeImg();
+    window.addEventListener("orientationchange", resizeImg, false);
+    <% end %>
+    $(function(){
+
+        <% if @booking_ads.present? %>
+        var texts=<%= @booking_ads.map(&:title).to_s.html_safe %>;
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $(this.element).next("div").find("#pagenavi").children();
+                lis.removeClass("active").eq(this.index).addClass("active");
+                $("#slider-span").html(texts[this.index]);
+            }
+        });
+
+        <% end %>
+    });
+    function resizeImg(){
+        var w=parseInt(document.body.clientWidth);
+        $(".box-list .hd").height(w*0.41);
+        $(".box-list .hd span").css({"line-height":w*0.41+"px"});
+    }
+</script>
+<style>
+        /*pageShow*/
+    .pageShow,
+    .pagebg{min-height: 100%;width: 100%; overflow: hidden;left:0; top:0; }
+    .pageShow{position:fixed; z-index: 999;}
+    .pagebg{position: absolute; z-index: 998;}
+    .pageShow img{ max-width: 100%;}
+    <% if judge_andriod_version %>
+    .box-list .hd{ position:relative; text-align:center; z-index:0; height: 100px;}
+    .box-list .hd span:first-child{ width: 100%; height: 100%; overflow: hidden; color: #ccc; line-height: 100px; vertical-align: middle; font-size: 20px;}
+    .box-list .hd img{ max-width:100%; max-height:100%;vertical-align:top;}
+    <% end%>
+</style>

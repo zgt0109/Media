@@ -1,0 +1,69 @@
+<% content_for :tab_content do %>
+    <div id="tab-2" class="tab-pane fade active in">
+        <div class="row">
+            <div class="col-md-12">
+                <%= form_for(@college, validate: true, html: { multipart: true, class: :form }) do |f| %>
+                    <div class="form-group">
+                        <label class="control-label">学院名称<span class="required-star"></span></label>
+                        <div class="clearfix">
+                            <%= f.text_field :name, class: 'col-xs-6' %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">联系电话
+                            <span class="required-star"></span>
+                            <span class="help-inline text-warning line-height-32">请务必填写正确，此号码将作为咨询电话出现在手机页面中</span>
+                        </label>
+                        <div class="clearfix">
+                            <%= f.text_field :tel, class: 'col-xs-6' %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">LOGO上传
+                            <span class="required-star"></span>
+                            <span class="help-inline text-warning line-height-32">图片建议尺寸：640像素*120像素</span>
+                        </label>
+                        <div class="clearfix">
+                            <div id="logo" class="pull-left margin-right-10"></div>
+                            <div class="cieldon-file width-100px" data-img="<%= @college.logo_url %>" data-key="<%= @college.qiniu_logo_key %>" data-type="1" data-div="#logo" data-name="college[qiniu_logo_key]" data-height="60" data-width="320"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">底部广告图上传
+                            <span class="required-star"></span>
+                            <span class="help-inline text-warning line-height-32">图片建议尺寸：640像素*120像素</span>
+                        </label>
+                        <div class="clearfix">
+                            <div id="banner" class="pull-left margin-right-10"></div>
+                            <div class="cieldon-file width-100px" data-img="<%= @college.add_pic_url %>" data-key="<%= @college.qiniu_add_pic_key %>" data-type="1" data-div="#banner" data-name="college[qiniu_add_pic_key]" data-height="60" data-width="320"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-sm" value="保存">
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+<% end %>
+
+<%= render 'pro/colleges/main_content' %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(':submit').click(function(){
+        branch_tel = $("[name='college[tel]']").val();
+        mobile_reg = /^\d{11}$/;
+        //兼容格式: 国家代码(2到3位)-区号(2到4位)-电话号码(7到8位)-分机号(3位)"
+        tel_reg =  /^(([0\+]\d{2,3}-)?(0\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/
+        if (!mobile_reg.test(branch_tel) && !tel_reg.test(branch_tel) ){
+          showTip('warning','联系电话输入有误，请重新输入');
+          event.preventDefault();
+        }else{
+          $('form').submit();
+        };
+      });
+    </script>
+<% end %>
+
+

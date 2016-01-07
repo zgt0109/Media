@@ -1,0 +1,56 @@
+<dl class="active">
+  <dt>活动开始设置<span class="fr">查看</span></dt>
+  <dd>
+    <div class="wrap-l">
+      <div class="wrap-view">
+        <b class="preview_active_notice_title"><%=  @activity.active_activity_notice.title %></b>
+        <span><%= Date.today %></span>
+        <span class="img upload-preview-img-218-100">
+          <img src="<%= @activity.active_activity_notice.pic %>" class="active_notice_pic">
+        </span>
+        <span class="intro preview_active_notice_summary">
+          <%= @activity.active_activity_notice.summary || @activity.active_activity_notice.description %>
+        </span>
+      </div>
+    </div>
+    <div class="wrap-r">
+      <%= form_for(@activity, validate: true, html: { id: 'active_notice_form' }) do |f| %>
+        <%= f.fields_for :active_activity_notice, validate: true do |aan| %>
+          <div class="box-form form-row">
+            <div class="p">
+              <span>活动开始微信消息标题<em>*</em><span class="fgray">（不能超过64个字）</span></span>
+              <%= aan.text_field :title, maxlength: 64, class: "activity_title input-text", rel: 'active_notice_title' %>
+            </div>
+
+            <div class="p">
+              <span>活动开始微信消息图片<em>*</em></span>
+              <div class="box-upload">
+                <div class="margin">
+                  <div class="box-file">
+                    <%= aan.file_field :pic, class: 'img_preview', rel: 'active_notice_pic' %>
+                    <a class="btn btn-big">上传图片</a>
+                  </div>
+                  <span class="p-file fgray">（图片建议尺寸：720像素*400像素） </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p">
+              <span>活动开始微信消息摘要<span class="fgray">（不能超过128个字）</span></span>
+              <%= aan.text_area :summary, maxlength: 128, rows: 5, class: "activity_summary", rel: 'active_notice_summary', style: 'height: auto;' %>
+            </div>
+          </div>
+
+          <div class="p">
+            <span>活动开始说明<span class="fgray">（不能超过2000个字）</span></span>
+            <%= aan.cktext_area :description, rows: 5, maxlength: 2000, class: "activity_notice_description", style: 'height: auto;' %>
+          </div>
+
+          <div class="box-form form-row">
+            <%= render 'form_submit' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </dd>
+</dl>

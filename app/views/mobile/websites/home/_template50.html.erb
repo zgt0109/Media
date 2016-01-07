@@ -1,0 +1,14 @@
+<%= render "slider", {:has_slider_text => :yes} %>
+
+<div class="index">
+  <% website_menus.in_groups_of(7, false).each do |sub_menus| %>
+      <% sub_menus.each_with_index do |menu, index| %>
+          <%= link_to menu_url(menu), class: 'box mod-index' do %>
+              <% if index == 1 || index == 5 %>
+                  <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
+              <% end %>
+              <small><%= menu.title %></small>
+          <% end %>
+      <% end %>
+  <% end %>
+</div>

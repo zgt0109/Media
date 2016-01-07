@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title><%= content_for?(:title) ? yield(:title) : "360全景" %></title>
+
+    <%= stylesheet_link_tag "mobile/panoramagram" %>
+    <style>
+        .html{ padding: 0}
+        .full-list ul li{ padding: 0 3px; margin-top: 3px; position: relative;}
+        .full-list ul li img{ width: 100%;}
+        .full-list ul li a{ color: #fff;}
+        .full-txt{ min-width: 134px;  font-size: 16px; text-align: center; padding: 0 5px; position: absolute;right: 3px;bottom: 0; color: #fff; height: 30px; line-height: 30px;background: rgba(51,51,51,0.8);display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+        .mod-load{   text-align: center; width:100%; margin-top: 5px;text-align: center; color: #666; line-height: 22px;}
+        .imgcent table{ width: 100%; height: 100%;}
+        .mod-load .tips{ display: block}
+        .mod-load .jiazai{ display: none;}
+        .mod-load.loading .tips{ display: none;}
+        .mod-load.loading .jiazai{ display: block;}
+
+    </style>
+    <%= javascript_include_tag "mobile/panoramagram" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <%= render 'application/gb2big5' %>
+    <div class="html" id="html">
+      <div class="stage" id="stage">
+        <%= yield %>
+      </div>
+    </div>
+
+    <a href="javascript:scroll(0,0)" class="btn-pop btn-up"><i class="fa fa-arrow-up"></i></a>
+    <div class="loading fixed-top"></div>
+    <script type="text/javascript">
+      $(function(){
+        // topRefresh(300);
+        showBtnUp(100);
+
+        <% if flash[:notice] || flash[:alert] %>
+          alert('<%= flash[:notice] || flash[:alert] %>');
+        <% end %>
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<% content_for(:title, @shop_branch.name) %>
+<section class="index" id="sec-index">
+  <header>
+    <% if request.referrer.to_s.include?(@href) %>
+    <%= link_to '', @href, class: 'icon-left' %>
+    <% else %>
+    <a></a>
+    <% end %>
+    <h1><%= @shop_branch.name %></h1>
+  </header>
+  <div class="body">
+    <div class="mod-slider slider-hor" id="index" style="visibility: visible;">
+      <ul class="slider-list">
+        <% if @shop_branch.qiniu_pictures.each do |branch| %>
+        <li><img src="<%= branch.pic_url %>"></li>
+        <% end.blank? %>
+        <li><img src="/assets/micro_stores/default.png"></li>
+        <% end %>
+      </ul>
+      <div class="slider-text">
+        <div id="pagenavi" class="fr slider-page">
+          <% if @shop_branch.qiniu_pictures.each_with_index do |branch,index| %>
+          <a class="<%= "active" if index == 0 %>"><%= index + 1 %></a>
+          <% end.blank? %>
+          <a class="active">1</a>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="mod-box box-animate">
+      <dl>
+        <dt>
+          <a href="javascript:;" class="fa box-icon">
+            <i class="fa icon icon-3"></i><b class="w-small"><%= @shop_branch.ditu_address %></b>
+            <div class="mark"><%= @shop_branch.human_distance_to(@wx_user) if @wx_user.try(:location_x).present? %></div>
+          </a>
+        </dt>
+      </dl>
+      <dl>
+        <dt>
+          <a href="javascript:;" class="fa box-icon">
+            <i class="fa icon icon-4"></i><b class="w-small">营业时间：<%= @shop_branch.business_hours %></b>
+          </a>
+        </dt>
+      </dl>
+      <% if @wx_user %>
+      <dl>
+        <dt>
+          <%# if @wx_user.try(:location_x).present? %>
+            <!--a target="_blank" href="<%#= baidu_map_location_http(@wx_user.location_x,@wx_user.location_y,@shop_branch.location_y,@shop_branch.location_x,@shop_branch.name,@shop_branch.city.name) %>" class="fa icon-right box-icon"><i class="fa icon icon-2"></i><b class="w-small">一键导航</b></a-->
+          <%# else %>
+            <a target="_blank" href="<%= baidu_map_address_http(@shop_branch.location_y,@shop_branch.location_x,@shop_branch.ditu_address) %>" class="fa icon-right box-icon"><i class="fa icon icon-2"></i><b class="w-small">一键导航</b></a>
+          <%# end %>
+        </dt>
+      </dl>
+      <% end %>
+      <dl>
+        <dt>
+          <a href="tel:<%= @shop_branch.tel %>" class="fa icon-right box-icon">
+            <i class="fa icon icon-1"></i><b class="w-small"><%= @shop_branch.tel %></b>
+          </a>
+        </dt>
+      </dl>
+    </div>
+  </div>
+</section>
+<script>
+$(function(){
+    indexSwipe("index");
+});
+</script>

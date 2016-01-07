@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+<style>
+    <!--
+    * {margin:0;padding:0; outline: 0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+    *,
+    *:before,
+    *:after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    html, body {
+        height: 100%
+    }
+    body {
+        position: relative;
+        overflow-x: hidden;
+        font-size: 14px;
+        font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+        -webkit-text-size-adjust: none;
+    }
+    body, p, form, h1, h2, h3, h4, h5, h6, ul, ol, li, section, div, * {
+        padding: 0;
+        margin: 0
+    }
+    img {
+        border: 0;
+        -ms-interpolation-mode: bicubic;
+        vertical-align: middle;
+        display: inline-block;
+    }
+    /*slider*/
+    .mod-slider{ width: 100%;position:relative; overflow:hidden;}
+    .slider-hor{ height: 170px;}
+    .slider-ver{ height: 100%; position: fixed; top:0; left: 0; z-index: 10;}
+    .mod-slider ul,
+    .mod-slider li{ list-style: none;}
+    .slider-list,
+    .slider-text{position: absolute; width: 100%;left:0;}
+    .slider-list{ height: 100%; top:0; z-index: 0;}
+    .slider-list li,
+    .slider-list li > a{width: 100%; height: 100%; overflow: hidden;display: block; text-align:center;}
+    .slider-hor img{ width: 100%; max-height:170px;}
+    .slider-ver img{ max-width:100%;}
+    .slider-text{ z-index: 1;}
+    .slider-hor .slider-text{padding:50px 10px 5px 10px;bottom: 0;background: rgba(0,0,0,0.5); color: #fff;height: 30px; line-height: 20px;}
+    .slider-ver .slider-text{padding:50px 10px 5px; z-index: 1000; bottom: 0;background: rgba(0,0,0,0.5); height: 50px; overflow: hidden;}
+    .slider-ver .slider-text.active{height:100%;}
+    .slider-span{ overflow: hidden;text-overflow:ellipsis; white-space:nowrap; cursor: pointer;}
+    .slider-hor .slider-span{ width: 60%; text-align: left;}
+    .slider-ver .slider-span{ width:100%; height:50px;margin-top:-50px; line-height: 25px; color: #fff; display: block; font-weight: bold;padding:0 5%;}
+    .slider-p{color: #fff; line-height: 20px; text-align: left;word-spacing:normal; word-break:normal; word-break:break-all; padding: 10px 5%;width: 100%;height:100%; overflow:hidden;position:relative;}
+    .slider-wrap{
+        z-index: 1;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        width: 100%;
+        -webkit-transform: translateZ(0);
+        -moz-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        -o-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-text-size-adjust: none;
+        -moz-text-size-adjust: none;
+        -ms-text-size-adjust: none;
+        -o-text-size-adjust: none;
+        text-size-adjust: none;
+    }
+    -->
+</style>
+</head>
+<body onload="loaded()">
+<div class="mod-slider slider-ver" id="index">
+    <ul class="slider-list">
+			<% @pictures.each do |it| %>
+        <li>
+						<%=link_to image_tag(it.path.to_s, alt: ""), "#nogo" %>
+        </li>
+			<% end %>
+    </ul><!--slider-list end-->
+    <div class="slider-text">
+      <span class=" slider-span" id="slider-span">
+        <p>
+        <%=@house_layout.layout_number%>&nbsp;&nbsp;&nbsp;&nbsp;<%=@house_layout.name.truncate(12)%>
+        </p>
+        <p>
+        <%=@house_layout.intro%>&nbsp;&nbsp;&nbsp;&nbsp;<%="约#{@house_layout.reference_area.to_s}平米"%>
+        </p>
+      </span>
+        <div class="slider-p" id="slider-p">
+					<div class="slider-wrap">
+            <%= simple_format @house_layout.description.to_s %>
+					</div>
+        </div>
+    </div><!--slider-text end-->
+</div><!--mod-slider end-->
+<%= javascript_include_tag '/javascripts/app/whouse/lib/jquery.js' %>
+<script src="/javascripts/app/whouse/lib/swipe.js"></script>
+<script src="/javascripts/app/whouse/lib/iscroll.js"></script>
+<script>
+    $(function(){
+			indexSwipe("index",[]);
+        $(".slider-text").click(function(){
+            $(this).toggleClass("active");
+						if(myScroll){
+							myScroll.destroy();
+						}
+						loaded();
+        });
+				var h=$("#index").innerHeight()-45;
+				$(".slider-list li").height(h).css({"line-height":h+"px"});
+		});
+    //首页幻灯片
+    function indexSwipe(idNmane,texts){
+        new Swipe(document.getElementById(idNmane), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                if(texts){
+                    var lis = $(this.element).next("div").find("#pagenavi").children();
+                    lis.removeClass("active").eq(this.index).addClass("active");
+                    $("#slider-span").html(texts[this.index]);
+                }
+            }
+        })
+    }
+
+    //页面滚动
+    var myScroll;
+    function loaded () {
+        myScroll = new IScroll('#slider-p', {
+            scrollbars: true,
+            mouseWheel: true,
+            interactiveScrollbars: true,
+            shrinkScrollbars: 'scale',
+            fadeScrollbars: true,
+            click: true
+
+        });
+    }
+
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+</script>
+  <%= @supplier.try(:piwik_js_code) %>
+</body>
+</html>

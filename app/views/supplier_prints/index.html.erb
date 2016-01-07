@@ -1,0 +1,141 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to "微硬件", dashboard_supplier_prints_url %></li>
+      <li><%= link_to "微打印机", dashboard_supplier_prints_url %></li>
+      <li><%= link_to "帐号管理", '#' %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li>
+          <%= link_to "基础设置", activities_supplier_prints_path(activity_id: 46) %>  
+        </li>
+        <li class="active">
+          <%= link_to "帐号管理", supplier_prints_path(activity_id: 42) %>
+        </li>
+        <li>
+          <%= link_to "设备管理", supplier_print_clients_path %>
+        </li>
+      </ul>
+      <div class="tab-content no-border padding-24">
+        <div id="tab-2" class="tab-pane active in">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="alert alert-block alert-info"> 
+                <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                  <li>请输入您的公共用户和二维码，保存后获取具体的账号信息。</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <%= form_for @big_supplier_print, validate: true,:html =>
+              {:class => "print"} do |f| -%>
+              <%= f.hidden_field :machine_type %>
+              <h4 class="text-info">大打印机账号信息</h4>
+
+              <div class="form-group margin-top-20">
+                <label class="control-label">
+                  公共用户名
+                  <span class="required-star">*</span>
+                </label>
+                <div class="clearfix">
+                  <%= f.text_field :public_name, class: "col-md-8", validate: true %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">商家编号 <span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :supplier_id,  class: "col-md-8", value: @current_user.id %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">URL <span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :url,  class: "col-md-8" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">Token <span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :token, class: "col-md-8", value: @current_user.id %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">
+                  二维码
+                  <span class="required-star">*</span>
+                </label>
+                <div class="clearfix">
+                  <div class="cieldon-file" data-type="0" data-div="#img-1" data-width="150" data-height="150" data-name="supplier_print[pic]" data-img="<%= @big_supplier_print.pic_url %>" data-key="<%= @big_supplier_print.pic || "" %>"></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm margin-top-20">绑定</button>
+              </div>
+
+              <div class="clearfix"></div>
+              <div>
+                <hr class="hr-10">
+              </div>
+              <% end %>
+
+              <%= form_for @small_supplier_print, validate: true, :html =>
+              {:class => "print"} do |f| -%>
+              <%= f.hidden_field :machine_type %>
+              <h5 class="text-info margin-top-20">小打印机账号信息</h5>
+              <div class="form-group margin-top-20">
+                <label class="control-label">
+                  公共用户名
+                  <span class="required-star">*</span>
+                </label>
+                <div class="clearfix">
+                  <%= f.text_field :public_name, class: "col-md-8", validate: true %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">商家编号 <span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :supplier_id, class: "col-md-8", value: @current_user.id %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">URL <span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :url, class: "col-md-8" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Token <span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= f.text_field :token, class: "col-md-8", value: @current_user.id %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">
+                  二维码
+                  <span class="required-star">*</span>
+                </label>
+                <div class="clearfix">
+                  <div class="cieldon-file" data-type="0" data-div="#img-1" data-width="150" data-height="150" data-name="supplier_print[pic]" data-img="<%= @small_supplier_print.pic_url %>" data-key="<%= @small_supplier_print.pic || "" %>"></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm margin-top-20">绑定</button>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

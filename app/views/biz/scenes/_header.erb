@@ -1,0 +1,36 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微互动', activity_forms_path %></li>
+      <li><%= link_to '微场景', scenes_path %></li>
+      <%= yield :breadcrumb_li %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  
+  <%- if controller_name == 'scenes' && action_name == 'index' %>
+    <div class="page-content">
+      <div class="row">
+        <div class="tabbable">
+          <div class="tab-content no-border">
+            <%= yield :tab %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%- else %>
+    <div class="page-content">
+      <div class="custom-tab">
+        <ul>
+            <li class="<%= %w(new edit).include?(action_name) ? 'active' : '' %>"><a href="<%= @activity.persisted? ? edit_scene_path(id: @activity.id) : "javascript:;" %>">微场景编辑</a></li>
+            <li class="<%= (%w(scene_pages).include?(controller_name) && %w(index).include?(action_name)) ? 'active' : '' %>"><a href="<%= @activity.persisted? ? scene_pages_path(activity_id: @activity.id) : "javascript:;" %>">浏览方式</a></li>
+            <li class="<%= %w(pages_config).include?(action_name) ? 'active' : '' %>"><a href="<%= @activity.persisted? ? pages_config_scene_pages_path(activity_id: @activity.id) : "javascript:;" %>">页面编辑</a></li>
+        </ul>
+      </div>
+      <%= yield :tab %>
+    </div>
+  <%- end %>
+</div>
+<% end %>

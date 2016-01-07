@@ -1,0 +1,6 @@
+var html = '<%= j (render partial: "client_changes", collection: @client_changes, as: :change) %>';
+$(".lanmu-list").append(html);
+$(".listmore").remove();
+<% if @client_changes.next_page %>
+  $(".lanmu-content").append('<%= link_to_next_page @client_changes, "查看更多 ↓", remote: true, class: "listmore" %>');
+<% end %>

@@ -1,0 +1,36 @@
+<section class="sec-info">
+  <%- @prizes.each do |prize| %>
+    <p><b><%= prize.title %>
+      <%- if @activity.try(:activity_property).try(:is_show_prize_qty) %>
+        （共<%= prize.prize_count %>个）
+       <%- end %></b><br/><span>一次摇出
+      <% ids = prize.activity_element_ids.to_s.split(',').map(&:to_i) %>
+      <%if ids.uniq.length == 1%>
+      3个“<%= @elements.find { |e| e.id == ids.first }.try(:name)%>”，
+      <%else%>
+        <% ids.each do |eid|%>
+          1个“<%= @elements.find { |e| e.id == eid }.try(:name)%>”，
+        <%end%>
+      <%end%>
+      获得<%= prize.prize %>。</span></p>
+    <i></i>
+  <%- end%>
+  <i></i>
+</section>
+
+<section class="sec-text">
+  <i>兑奖说明:</i>亲，中奖后请务必点击“ <b style="font-weight: normal;color: #5fb40b;">我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
+</section>
+
+<% if @activity.activity_status != Activity::WARM_UP %>
+  <%- if @wx_user %>
+    <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+      <section class="sec-list">
+        <a id="btn-list">点击查看我获得的奖品>>></a>
+      </section>
+      <section class="sec-result" id="sec-result">
+        <%= render "my_prize" %>
+      </section>
+     <%- end %>
+  <%- end %>
+<%- end %>

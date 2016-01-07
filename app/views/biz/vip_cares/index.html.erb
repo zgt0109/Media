@@ -1,0 +1,88 @@
+<% content_for :vip_breadcrumb do %>
+    <li><%= link_to '会员关怀', vip_cares_path %></li>
+<% end %>
+
+<% content_for :tab do %>
+  <div id="festivalCare" class="tab-pane active">
+      <div class="row">
+          <%= form_for @search, url: vip_cares_path, html: { method: :get } do |f| %>
+            <div class="col-sm-12">
+              <div class="col-md-3 row">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">节日名称：</span>
+                  <%= f.text_field :name_like, class: 'col-xs-12' %>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">发送对象：</span>
+                  <%= f.hidden_field :given_group_type_eq, value: 'VipGroup' %>
+                  <select name="search[given_group_id_eq]" class="col-xs-12">
+                    <%= content_tag :option, value: '',  selected: ( @given_group_id_eq == '' ) do %>
+                      请选择
+                    <% end %>
+                    <%= content_tag :option, value: -1,  selected: ( @given_group_id_eq == -1 ) do %>
+                      全部用户
+                    <% end %>
+                    <%= content_tag :option, value: -2,  selected: ( @given_group_id_eq == -2 ) do %>
+                      未分组
+                    <% end %>
+                    <%= options_for_select(current_user.vip_card.vip_groups.pluck(:name, :id), selected: @given_group_id_eq) %>
+                    <%= options_for_select((1..12).map{|a|[a.to_s+"月份生日的会员",'month'+a.to_s ]}, selected: 'month'+@care_month_eq.to_s) %>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">节日时间：</span>
+                  <%= f.text_field :care_day_eq, class: 'col-xs-12 datepicker' %>
+                </div>
+              </div>
+              <div class="col-md-3 row pull-right">
+                <button class="btn btn-primary btn-sm btn-filter">查询</button>
+                <a href="javascript:;" class="btn btn-sm btn-primary btn-filter pull-right" data-toggle="modals" data-target="weisiteModal" data-title="新增会员关怀" data-width="820" data-width="" data-height="1000" data-iframe="<%= new_vip_care_path %>">新增</a>
+              </div>
+            </div>
+          <% end %>
+          <div class=" col-sm-12 margin-top-20">
+              <table id="festivalCareTable" class="table table-striped table-bordered table-hover dataTable ">
+                  <thead>
+                      <tr>
+                          <th>序号</th>
+                          <th>节日名称</th>
+                          <th>目标人群</th>
+                          <th>节日时间</th>
+                          <th>发送时间</th>
+                          <th>操作</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <% if @vip_cares.each_with_index do |care, index| %>
+                      <tr id="row-<%= care.id %>">
+                        <td><%= index + 1 %></td>
+                        <td><%= care.name %></td>
+                        <td><%= care.festival? ? given_group_name(care) : "#{care.care_month}月份过生日的会员" %></td>
+                        <td><%= care.festival? ? care.care_day : "#{care.care_month}月份"  %></td>
+                        <td><%= care.message_send_at  %></td>
+                        <td>
+                          <%- if care.unsent? %>
+                            <a data-toggle="modals" href="javascript:;" data-title="编辑会员关怀" data-width="820" data-height="1000" data-iframe="<%= edit_vip_care_path(care) %>">编辑</a>
+                            <%= link_to '删除', vip_care_path(care), method: 'delete', confirm: "你确定要删除会员关怀‘#{care.name}’?", data: {height: 160, weight: 350} %>
+                          <%- else %>
+                            <a data-toggle="modals" href="javascript:;" data-title="会员关怀详情" data-width="820" data-height="1000" data-iframe="<%= vip_care_path(care) %>">详情</a>
+                          <%- end %>
+                        </td>
+                      </tr>
+                    <% end.blank? %>
+                      <tr><td colspan="6" class="green text-center">无记录</td></tr>
+                    <% end %>
+                  </tbody>
+              </table>
+
+              <%= paginate @vip_cares %>
+          </div>
+      </div>
+  </div>
+<% end %>
+
+<%= render 'biz/point_gifts/vip_marketing' %>

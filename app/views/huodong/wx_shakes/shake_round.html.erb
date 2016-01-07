@@ -1,0 +1,93 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微现场', wx_walls_path %></li>
+        <li><%= link_to '摇一摇', wx_shakes_path %></li>
+        <li><%= link_to '活动数据', shake_round_wx_shakes_path %></li>
+      </ul>
+      <%= render partial: '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger ">
+          <li>
+            <a href="<%= wx_shakes_path %>">
+              摇一摇管理
+            </a>
+          </li>
+          <li class="active">
+            <a href="<%= shake_round_wx_shakes_path %>">
+              活动数据
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content no-border padding-24">
+          <div class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-md-12">
+              </div>
+              <div class="col-sm-12">
+                <%= form_for @search, url: shake_round_wx_shakes_path, class: 'box-form form-row', html: { method: :get } do |f| %>
+                  <div class="col-md-3 row">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">活动名称：</span>
+                      <% activities = current_user.activities.show.shake.order('id DESC').pluck(:name, :id) %>
+                      <%= f.select :activity_id_eq, options_for_select(activities.insert(0,['请选择活动','']), (params[:search][:activity_id_eq] if params[:search])), {}, class: "col-xs-12" %>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">活动时间：</span>
+                      <%= datetime_range_tag f, start_at: :created_at_gte, end_at: :created_at_lte, options: {class: 'daterange col-sm-12'} %>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+                  </div>
+                  <div class="col-md-3">
+                    <%= link_to '导出EXCEL', shake_round_wx_shakes_path(:format => :xls,:search => params[:search]) , class: 'btn btn-primary btn-sm btn-filter' %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-12 margin-top-20">
+                <table class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>活动名称</th>
+                      <th>轮次</th>
+                      <th>活动时间</th>
+                      <th>参与人数</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if @wx_shake_rounds.each do |shake_round| %>
+                      <tr>
+                        <td><%= truncate_u shake_round.activity.name, length: 16 %></td>
+                        <td><%= shake_round.shake_round %></td>
+                        <td><%= shake_round.created_at %></td>
+                        <td><%= shake_round.shake_user_num %></td>
+                        <td>
+                          <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                            <a class="icon-bar-chart" data-height="800" data-width="1000" data-toggle="modals" data-title="<%= shake_round.activity.name %>第<%= shake_round.shake_round %>轮" data-iframe="<%= shake_round_show_wx_shake_path(shake_round) %>" title="活动数据"></a>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end.blank? %>
+                      <tr><td colspan="5" class="green text-center">暂无活动数据</td></tr>
+                    <% end %>
+                  </tbody>
+                </table>
+                <%= paginate @wx_shake_rounds %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

@@ -1,0 +1,109 @@
+<%= content_for :breadcrumb_li do %>
+<%- if @activity.nil? %>
+<li><%= link_to '新增微场景', new_scene_path %></li>
+<%- else %>
+<li><%= link_to  '微场景设置', pages_config_scene_pages_path(activity_id: @activity.id) %></li>
+<%- end %>
+<%- end %>
+<%= content_for :tab do %>
+<div class="custom-main margin-top-20">
+  <div class="custom-left">
+    <div class="phone-view">
+      <div class="phone-main" id="splash_image" style="background-image: url(<%= @activity.splash_url %>);">
+      </div>
+    </div>
+  </div>
+  <%= form_for @activity, url: scene_path(id: @activity.id), validate: true do |f| %>
+    <%= hidden_field_tag :scene_type,  0 %>
+    <%= hidden_field_tag :pages_config_scene_pages_path %>
+    <div class="custom-right">
+      <div class="c-panel page-panel active">
+        <div class="c-group">
+          <label class="label-name"> 翻页方式 </label>
+          <div class="c-box">
+            <ul class="view-type">
+              <li>
+                <p><img src="assets/horizontal.jpg" alt=""></p>
+                <p>
+                  <label>
+                    <input type="radio" name="scene_type" class="ace" value='1' checked>
+                    <span class="lbl">左右滑动</span>
+                  </label>
+                </p>
+              </li>
+              <li>
+                <p><img src="assets/vertical.jpg" alt=""></p>
+                <p>
+                  <label>
+                    <input type="radio" name="scene_type" class="ace" value='0'>
+                    <span class="lbl">上下滑动</span>
+                  </label>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="c-group">
+          <label class="label-name"> 引导按钮 </label>
+          <div class="c-box">
+          <%= text_field_tag "introduce_url", @activity.extend.introduce_url, placeholder: "请输入自定义链接", class: "col-sm-12"  %>
+          </div>
+        </div>
+        <div class="c-group">
+          <label class="label-name"> 背景音乐 </label>
+          <div class="c-box">
+            <%= select_tag :audio_id, options_for_select(current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id]}, @activity.extend.audio_id), prompt: "请选择", class: "col-sm-12" %>
+          </div>
+        </div>
+        <div class="c-group">
+          <label class="label-name" style="width: 120px;">开场涂层
+          <%- if @activity.extend.splash_key.present? %>
+            <a href="javascript:;" id="remove_splash">删除</a></label>
+          <%- else %>
+            <a href="javascript:;" id="remove_splash" style="display:none">删除</a></label>
+          <%- end %>
+
+          <div class="c-box">
+            <div data-height="486" data-type="1" data-div="#splash_image" class="cieldon-file width-100px" data-img="<%= @activity.splash_url %>" data-name="splash_key" data-key="<%= @activity.extend.splash_key %>" data-callback="showDelete"></div>
+            <small class="help-inline text-warning line-height-30">图片建议尺寸：860像素*1280像素</small>
+          </div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="c-next" value="保存">
+      </div>
+    </div>
+  <%- end %>
+</div>
+<%- end %>
+<%= render "biz/scenes/header" %>
+<%= content_for :custom_js do %>
+<script type="text/javascript">
+$('form.edit_activity').on('submit', function(){
+  var url = $('#introduce_url').val(),
+    source_url_rep = /^(http|https):\/\/[a-zA-Z0-9].+$/i;
+  if(url && !source_url_rep.test(url)){
+    showTip('warning', '自定义链接格式不正确，必须以http(s)://开头');
+    return false;
+  }
+});
+var showDelete= function(){
+  $(document).find('#remove_splash').show();
+}
+$(document).on('click', '#remove_splash', function(){
+  $('input[name=splash_key]').val('');
+  $('#splash_image').css('background-image', '');
+  $(this).hide();
+});
+ $(function(){
+    <%- if @activity.persisted? %>
+      <%- if @activity.extend.scene_type.nil? || @activity.extend.scene_type == "0" %>
+          $('input[name=scene_type][value=0]').trigger('click');
+       <%- else %>
+         $('input[name=scene_type][value=1]').trigger('click');
+       <%- end %>
+    <%- end %>
+  })
+</script>
+<%- end %>

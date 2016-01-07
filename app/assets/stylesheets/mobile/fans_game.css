@@ -1,0 +1,16 @@
+/*
+*= require mobile/game
+*= require_self
+*/
+
+*{-webkit-box-sizing:border-box;box-sizing:border-box;}
+body{max-width:640px;margin:0 auto;}
+.game-list{}
+.game-list .box{display:table;width:100%;padding:10px;color:#333;text-decoration:none;}
+.game-img{width:80px;height:80px;float:left;margin-right:10px;border-radius:5px;overflow:hidden;}
+.game-img img{width:100%;min-height:100%;}
+.game-name,
+.game-start{display:table-cell;vertical-align:middle;border-bottom:1px solid #ccc;}
+.game-name{width:70%;}
+.game-start{width:30%;text-align:right;}
+.btn{color:#fff;border-radius:2px;font-size:12px;padding:5px 10px;background:#f6ad00;}

@@ -1,0 +1,8 @@
+<%= javascript_include_tag 'jquery', 'main' %>
+
+<script type="text/javascript">
+  var $parent_doc = $(parent.document);
+  $parent_doc.find('.pop').fadeOut(function() { $(this).remove(); });
+  parent.showTip('success', '<%= flash[:notice] %>');
+  $parent_doc.find('#article-row-<%= @website_article.id %>').replaceWith('<%= j render "pro/website_articles/row", website_article: @website_article %>');
+</script>

@@ -1,0 +1,38 @@
+<div class="main-content">
+  <!-- 这里是内容 start-->
+  <!--新手任务 代码块-->
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <!-- page-content start-->
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-24" id="myTab">
+            <li class="">
+              <%= link_to settings_red_packets_path,validate: true do %>
+                  <i class="green icon-home bigger-110"></i>红包设置
+              <% end %>
+            </li>
+            <li class="active">
+              <%= link_to "红包管理", red_packets_path %>
+            </li>
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <%= render 'form' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- page-content end-->
+</div>
+<!--新手任务 代码块 -end -->
+
+<!-- 这里是内容 end-->

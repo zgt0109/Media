@@ -1,0 +1,23 @@
+<%- if @questions.present? %>
+  $('#questions').append("<%= j render(partial: 'question', object: @questions) %>");
+
+  <%- @activity.guess_activity_questions.to_a.each do |relation|%>
+    var dom = document.getElementById('question_<%= relation.question_id %>');
+    if(dom){
+      dom.checked = true;
+    }
+  <%- end %>
+
+  <%- if @activity.can_not_edit? || @activity.stopped?  %>
+    $('input,select').prop('disabled', true);
+  <% end %>
+
+
+  check_prizes_count();
+
+<%- else %>
+  showTip('success', '题目已经加载完毕')
+<%- end %>
+<%- if !@has_more %>
+  $('.load_more').hide();
+<%- end %>

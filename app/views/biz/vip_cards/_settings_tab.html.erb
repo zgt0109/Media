@@ -1,0 +1,31 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+            <li><%= link_to '会员卡', vip_cards_path %></li>
+            <li><%= link_to '基础设置', vip_cards_path %></li>
+            <%= yield :vip_breadcrumb if content_for? :vip_breadcrumb %>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="tabbable">
+            <ul class="nav nav-tabs padding-24" id="myTab">
+                <%= link_to_li '微信设置', vip_cards_path %>
+                <%= link_to_li '会员卡设置', settings_vip_cards_path %>
+                <%= link_to_li '会员资料设置', conditions_vip_cards_path %>
+                <%= link_to_li '模板选择', template_vip_cards_path %>
+            </ul>
+            <div class="tab-content no-border padding-24">
+              <%= yield :tab %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+

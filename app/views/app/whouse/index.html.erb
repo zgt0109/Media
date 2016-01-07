@@ -1,0 +1,99 @@
+<header>
+	<!--<a class="ico-prev" href="javascript:history.go(-1);"></a>-->
+	<h1><%= @house.present? ? @house.name : '没有房产信息' %></h1>
+</header>
+<div class="contxt">
+	<% if @cover_house_pictures %>
+	<div class="box-cont cont-img">
+		<div class="flashshow">
+			<div class="flashCont" id="defaultFlash">
+				<% @cover_house_pictures.each_with_index do |picture, i| %>
+				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+	<% if @house %>
+	<div class="box-cont cont-listTxt">
+		<a href="/app/whouse/intro?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>" class="box-block"><span class="visuallyhidden">链接</span></a>
+		<p><span class="tleft"><%= @house.name %><em class="ico-intro"><%= @house.house_type_name %></em></span><span class="tright">售价：<b><%= @house.price > 0 ? "#{f @house.price}元/平米" : '待定' %></b></span></p>
+		<p><b>楼盘详情：</b><span><%= @house.intro %></span></p>
+	</div>
+	<% end %>
+
+	<% if @house_layouts and @house_layouts.count>0 %>
+	<div class="box-cont cont-house">
+		<h1>户型展示</h1>
+		<% @house_layouts.each_with_index do |layout, i| %>
+		<div class="box-house box-more <%= i<2 ? 'show' : 'hide' %>">
+			<a href="/app/whouse/layout?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&hlid=<%= layout.id %>#mp.weixin.qq.com" class="box-block"><span class="visuallyhidden">链接</span></a>
+			<div class="hd">
+				<%= image_tag (layout.house_picture_id? ? layout.house_picture.try(:path) : '/assets/whouse/1.gif'), size: (i<2 ? '' : '309x113') %>
+				</div>
+				<div class="bd">
+					<p><b>户型：</b><span><%= layout.layout_number%>   <%= layout.name%></span><em class="ico-intro"><%= layout.sales_heat_name%></em></p>
+					<p><b>面积：</b><span>约<%=f layout.reference_area%>平米</span></p>
+					<p><b>价格：</b><span><% if (layout.price/10000.0)>0.009 %><%= f (layout.price/10000.0) %>万元<%else%>待定<%end%></span></p>
+				</div>
+			</div>
+			<% end %>
+		</div>
+		<% if @house_layouts.count > 2 %>
+		<div class="box-ft">
+			<a class="more" id="cont-house">查看全部<%= @house_layouts.count %>种户型</a>
+		</div>
+		<% end %>
+		<% end %>
+
+		<%## if @house_comments and @house_comments.count > 0 %>
+		<div class="box-cont cont-impress">
+			<h1>房友印象</h1>
+			<% @house_comments.each do |comment| %>
+			<div class="box-impress">
+				<div class="hd">
+					<span class="tleft"><%= comment.name %>：</span>
+					<span class="tright"><%= comment.created_at.try(:to_date) %></span>
+				</div>
+				<div class="bd">
+					<%= comment.content %><br/>
+					<p class="txt-reply">
+						<% if comment.reply_content %>
+						<span><%= @house.name %>销售回复：</span>
+						<span><%= comment.reply_content %></span>
+						<% end %>
+					</p>
+				</div>
+				<div class="ft"></div>
+			</div>
+			<% end if @house_comments %>
+		</div>
+		<%# end %>
+		<div class="box-ft">
+			<a href="/app/whouse/impress?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>">点击查看更多或参与评论</a>
+		</div>
+
+		<% if @house_expert_comments and @house_expert_comments.count > 0 %>
+		<div class="box-cont cont-expert">
+			<h1>专家点评</h1>
+			<% @house_expert_comments.each do |expert_comment| %>
+			<div class="box-expert">
+				<div class="hd">
+					<%= image_tag expert_comment.house_expert.try(:pic_url) || '/assets/whouse/4.jpg' %>
+					<p><b>姓名：</b><span><%= expert_comment.house_expert.try(:name) %></span></p>
+					<p><b>简介：</b><span><%= expert_comment.house_expert.try(:intro) %></span></p>
+				</div>
+				<div class="bd">
+					<p><%= expert_comment.content %></p>
+				</div>
+			</div>
+			<%end%>
+		</div>
+		<% if @house_expert_comments.count >= 1%>
+		<div class="box-ft">
+			<a href="/app/whouse/expert_comments?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>">点击查看更多专家点评</a>
+		</div>
+		<%end%>
+		<%end%>
+	</div>

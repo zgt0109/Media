@@ -1,0 +1,79 @@
+<style type="text/css">
+.p_span{margin-top: 11px; font-size: 14px;}
+</style>
+<% content_for :sidebar do %>
+  <%= render 'sidebar_ec_shop' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <h1 class="pagecurrent">订单详情</h1>
+<% end %>
+
+<div class="box-text text-col">
+  <p> 
+    <b>商店：</b>
+    <span class="p_span"><%= @ec_shop.name %></span>
+  </p>
+  <p> 
+    <b>订单号：</b>
+    <span class="p_span"><%= @ec_order.order_no %></span>
+  </p>
+  <p> 
+    <b>收货人姓名：</b>
+    <span class="p_span"><%= @ec_order.username %></span>
+  </p>
+  <p>
+    <b>手机号：</b>
+    <span class="p_span"><%= @ec_order.tel %></span>
+  </p>
+  <p>
+    <b>收货地址：</b>
+    <span class="p_span"><%= @ec_order.address %></span>
+  </p>
+  <p>
+    <b>订单状态：</b>
+    <span class="p_span"><%= @ec_order.status_name %></span>
+  </p>
+  <p>
+    <b>下单时间：</b>
+    <span class="p_span"><%= @ec_order.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
+  </p>
+  <p>
+    <b>订单总金额：</b>
+    <span class="p_span"><%= @ec_order.total_amount %></span>
+  </p>
+  <p>
+    <b>描述：</b>
+    <span class="p_span"><%= @ec_order.description %></span>
+  </p>
+  <p>
+      <b><input type="button" class="btn btn-small" value="返回" onclick="javascript:location.href='<%= ec_orders_path %>'"></b>
+  </p>
+</div>
+
+<div class="bd box-table">
+  <table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+    <tr>
+      <th>商品名称或id</th>
+      <th>数量</th>
+      <th>单价</th>
+      <th>总价</th>
+    </tr>
+    <% if @ec_order_items.blank? %>
+      <tr>
+        <td colspan="4" class="fgreen tcenter">无记录</td>
+      </tr>
+    <% else %>
+      <% @ec_order_items.each do |order_item| %>
+      <tr>
+        <td><%= order_item.ec_item.present? ? order_item.ec_item.title : order_item.ec_item_id  %></td>
+        <td><%= order_item.qty %></td>
+        <td><%= f order_item.price %></td>
+        <td><%= f order_item.total_price %></td>
+      </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+</div>

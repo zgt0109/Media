@@ -1,0 +1,19 @@
+<% title @wx_plot.try(:bulletin) %>
+
+<% stylesheet "/stylesheets/vweisiteV01/list/list#{@list_template_id}.css" %>
+
+<% template = [1,2,3,4,5,7,9,10,12,14,15].include?(@list_template_id) ? 'common_template' : "template#{@list_template_id}" %>
+
+<%= render "mobile/wx_plots/channel/#{template}" %>
+
+<% content_for :pagination_section do %>
+    <section class="mod-page page-1">
+      <a class="btn active">上一页</a>
+      <a class="btn">下一页</a>
+    </section>
+    <!--
+    <section class="mod-page page-2">
+      <a class="btn active">上一页</a>
+      <a class="btn">下一页</a>
+    </section>-->
+<% end %>

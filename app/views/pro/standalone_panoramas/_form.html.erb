@@ -1,0 +1,82 @@
+<% content_for :main_content do %>
+	<div class="main-content ">
+		<div class="breadcrumbs" id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home home-icon"></i>
+					<a href="#">首页</a>
+				</li>
+				<li> <%= link_to "微房产", house_layouts_path %> </li>
+				<li><%= link_to "全景图", house_layout_house_layout_panoramas_path(@house_layout) %></li>
+			</ul>
+			<!-- .breadcrumb -->
+			<%= render '/layouts/qrcode' %>
+		</div>
+		<div class="page-content">
+      <div class="row">
+        <%= form_for [@house_layout, @standalone_panorama], html: {class: "", role: "form"} do |f| %>
+          <%# <%= hidden_field_tag "panorama_id", @panorama.id %>
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-success">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、添加720全景图图片，您需要添加一个压缩文件（每一个户型只能添加一个），具体请参考  <a href="http://views720.<%= QINIU_DOMAIN %>/360%E5%BA%A6%E5%85%A8%E6%99%AF%E5%88%B6%E4%BD%9C.docx" target="_blank">如何制作一个720度全景?</a></li>
+								<li>2、请先将720全景制作的文件先放入一个文件夹中（文件夹名字使用字母），然后在压缩成“.zip”格式文件，大小无限制；  </li>
+								<li>3、720全景文件全部上传完成之后才能在手机中展示成功，可能会因为您的网速问题而影响上传速度缓慢，请您不要着急！  </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="col-md-4 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">全景图名称<span class="required-star">*</span>：</span>
+                <%= f.text_field :name, class: "col-xs-12" %>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 margin-top-20">
+            <div class="clearfix">
+              <%= f.hidden_field :file_url %>
+              <%= f.hidden_field :file_name %>
+              <%=file_field_tag "file", data: {url: "http://up.qiniu.com", bucket: BUCKET_VIEWS720, 'form-data'=>{token: qiniu_standalone_panorama_upload_token }}, class: "standalone_panorama_uploader hidden" %>
+              <a class="btn btn-sm btn-primary" id="standalone_panorama_upload_btn">上传文件</a>
+							<span class="upload_progress"><%= @standalone_panorama.file_name %></span>
+            </div>
+          </div>
+          <div class="col-sm-12 margin-top-20">
+            <button type="submit" class="btn btn-sm btn-primary" data-fn="submit">确定</button>
+            <!-- <button type="button" class="btn btn&#45;sm btn&#45;default" data&#45;dismiss="modals"></button> -->
+						<%= link_to "取消", house_layout_house_layout_panoramas_path(@house_layout), class: "btn btn-sm btn-default" %>
+          </div>
+        <% end %>
+      </div>
+		</div>
+	</div>
+<% end %>
+
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $('form .btn[type=submit]').on('click', function(e){
+    var input = $('#standalone_panorama_name');
+    var panorama_name = input.val();
+    var panorama_name_reg = /.+/;
+    //兼容格式: 国家代码(2到3位)-区号(2到4位)-电话号码(7到8位)-分机号(3位)"
+    //var tel_reg =  /^(([0\+]\d{2,3}-)?(0\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/
+    //var tel_reg =  /^((\d{2,3}-)?(\d{2,4})-)?(\d{7,8})(-(\d{3,}))?$/ //add 400- number
+    if (!panorama_name_reg.test(panorama_name) ){
+      addErrorMessage(input, '全景图名字不能为空');
+      e.preventDefault();
+    }else{
+      removeErrorMessage(input);
+    }
+  })
+</script>
+
+<script>
+  $("#standalone_panorama_upload_btn").click(function(){
+      $(".standalone_panorama_uploader").click();
+  });
+  standalone_panorama_uploader();
+</script>
+<% end %>
+

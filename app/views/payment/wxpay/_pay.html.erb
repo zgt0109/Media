@@ -1,0 +1,18 @@
+<%= form_tag  @payment.callback_url, :method => :get do  %>
+    <%= hidden_field_tag 'supplier_id', @payment.supplier_id %>
+    <%= hidden_field_tag 'out_trade_no', @payment.out_trade_no %>
+    <%= hidden_field_tag 'trade_no', @payment.trade_no %>
+    <%= hidden_field_tag 'status', @status %>
+    <%= hidden_field_tag 'amount', @payment.amount %>
+    <%= hidden_field_tag 'subject', @payment.subject %>
+    <%= hidden_field_tag 'body', @payment.body %>
+    <%= hidden_field_tag 'quantity', @payment.quantity %>
+    <%= hidden_field_tag 'state', @payment.state %>
+<% end %>
+<script>
+    $(function(){
+        $("a#supplier").click(function(){
+            $("form").submit();
+        })
+    })
+</script>

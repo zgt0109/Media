@@ -1,0 +1,35 @@
+<%= form_tag use_consume_red_packet_releases_path, remote: true, method: :post do |f| %>
+    <%= hidden_field_tag :id, @consume.try(:id) %>
+    <div class="modal-body">
+        <div class="form-group">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th width="80">选择门店</th>
+                        <th>店名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center"><%= radio_button_tag :shop_branch_id, '', true %></td>
+                    <td>商户总部</td>
+                  </tr>
+                  <!--<%# @shop_branches.each do |branch| %>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center"><%#= radio_button_tag :shop_branch_id, branch.id %></td>-->
+                      <!--<td><%#= branch.name %></td>-->
+                    <!--</tr>-->
+                  <!--<%# end %>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <%= render 'partials/modalFooter' %>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+  $('tr').click(function(event) {
+    $(this).find(':radio').prop('checked', true);
+  });
+</script>
+<% end %>

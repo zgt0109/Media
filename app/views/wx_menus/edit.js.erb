@@ -1,0 +1,7 @@
+$("#form").html("<%= escape_javascript(render :partial => 'form') %>");
+$(function(){
+  $('#quick_select_link').val($('#wx_menu_url').val());
+})
+select_wx_menu_type();
+    
+

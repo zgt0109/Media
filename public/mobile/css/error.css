@@ -1,0 +1,65 @@
+html, body {
+	height: 100%
+}
+body {
+	position: relative;
+	overflow-x: hidden;
+	font-size: 12px;
+	font-family: arial, "\5FAE\8F6F\96C5\9ED1";
+	-webkit-text-size-adjust: none;
+	background:url(/mobile/img/error/bg.jpg) no-repeat center top #00a9e1;
+	background-size:100% auto;
+}
+body, p, form, h1, h2, h3, h4, h5, h6, ul, ol, li, section, div, * {
+	padding: 0;
+	margin: 0
+}
+ul, ol, li {
+	list-style: none
+}
+img {
+	border: 0
+}
+a {
+	text-decoration: none
+}
+video {
+	display: inline-block;
+	width:100%;
+	background:#000;
+}
+::-moz-selection {
+ background: none;
+ color: #fff;
+ text-shadow: none;
+}
+::selection {
+	background: none;
+	color: #fff;
+	text-shadow: none;
+}
+img {
+	-ms-interpolation-mode: bicubic;
+}
+h1, h2, h3 {
+	color: #444;
+}
+h1 {
+	/*-webkit-text-stroke: 1px #fff;*/
+	font: 18px "\5FAE\8F6F\96C5\9ED1";
+}
+h2 {
+	/*-webkit-text-stroke: 1px #fff;*/
+	font: 16px "\5FAE\8F6F\96C5\9ED1";
+}
+h3 {
+	/*-webkit-text-stroke: 1px #fff;*/
+	font: 14px "\5FAE\8F6F\96C5\9ED1";
+}
+i,em,b,span,label,a{ display:inline-block; font-style:normal;}
+.cont-error{ width:100%; height:246px; position:relative; top:50%; left:50%; margin:-123px 0 0 -50%;}
+.cont-404{ background:url(/mobile/img/error/404.png) no-repeat center center; background-size:contain;}
+.cont-500{ background:url(/mobile/img/error/500.png) no-repeat center center; background-size:contain;}
+@media screen and (orientation:landscape) {
+
+}

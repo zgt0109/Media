@@ -1,0 +1,31 @@
+<div class="widget-box transparent">
+  <div class="widget-header widget-header-flat">
+    <h4 class="">新增科室</h4>
+  </div>
+  <div class="widget-body">
+    <%= form_for @hospital_department, validate: true, html: { class: 'form', role: 'form' } do |f| %>
+        <%= f.hidden_field :parent_id %>
+
+        <div class="form-group margin-top-10">
+          <label class="control-label">科室名称：<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.text_field :name, class: 'col-xs-8', placeholder: "" %>
+          </div>
+
+          <label class="control-label">排序：<span class="required-star">*</span></label>
+          <div class="clearfix">
+            <%= f.text_field :sort, maxlength: 5, class: 'col-xs-8', placeholder: "" %>
+          </div>
+
+           <label class="control-label">诊室路线指引：</label>
+          <div class="clearfix">
+            <%= f.text_area :road, class: 'col-xs-8', placeholder: "长度不超过100个字符", style: "height: 100px" %>
+          </div>
+        </div>
+        <div class="text-left">
+          <input type="submit" class="btn btn-primary btn-sm" value="保存">　　
+          <input type="reset" class="btn btn-default btn-sm" value="取消" onclick="javascript:location.href='<%= hospital_departments_path %>'">
+        </div>
+    <% end %>
+  </div>
+</div>

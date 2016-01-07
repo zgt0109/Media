@@ -1,0 +1,28 @@
+body{ background:#f2f2de;}
+.box{overflow: hidden;display: inline-block; padding: 10px;}
+.box,
+.box a{color:#fff;}
+.index{margin:8px;text-align:center;overflow: hidden;}
+.index a{ float: left; border: 2px solid #f2f2de; border-left:0; border-top:0;}
+.mod-index:nth-child(6n+1){width:33.33333%; background: #00cc00;}
+.mod-index:nth-child(6n+2){width:66.66666%; background: #fff; color: #666; border-right:0;}
+.mod-index:nth-child(6n+3){width:33.33333%; background: #927758;}
+.mod-index:nth-child(6n+4){width:33.33333%; background: #927758;}
+.mod-index:nth-child(6n+5){width:33.33333%; background: #927758; border-right:0;}
+.mod-index:nth-child(6n+6){width:99.99999%; background: #fff; color: #666; border-right:0; text-align: right; padding-right: 20px;}
+.mod-index > *{vertical-align: middle; display: table-cell; width: 100%; overflow: hidden;}
+.mod-index small{ font-size: 18px; line-height: 20px; display: block; height: 20px;word-spacing:normal; word-break:normal; word-break:break-all; margin: 10px 0 0 0;}
+.mod-index i{height: 50px; line-height:50px; overflow: hidden;display: block;}
+.mod-index img{ max-height: 100%; vertical-align: top;}
+.mod-index .fa{ font-size: 50px;}
+.btn-up-1{ background: #999;}
+.btn-up-1 .fa{ background: #fff; color: #999;}
+.navPop-1 .navPop-btn{ background: #999;}
+.navPop-1 .navPop-btn .fa{ background: #fff; color: #999;}
+.navPop-wrap>div a{
+    background: #999;
+    color: #fff;
+}
+@media screen and (orientation:landscape) {
+
+}

@@ -1,0 +1,28 @@
+<% content_for :form do %>
+    <div class="step-pane active" id="step4">
+        <%= render 'biz/slots/prizes' %>
+
+        <% if action_name == 'edit' && @activity.activity_prizes.count < 6 %>
+        <div class="form-group">
+            <input type="button" class="btn btn-sm btn-primary" value="新增奖项"data-toggle="modals" data-title="新增奖品设置" data-height="1000" data-iframe="<%= new_activity_prize_path(activity_id: @activity.id) %>" />
+        </div>
+        <%- end %>
+        
+        <div class="row-fluid center">
+            <% prev_url = action_name == 'show' ? activity_path(@activity, step: params[:step].to_i - 1) : edit_activity_path(@activity, step: params[:step].to_i - 1) %>
+            <a href="<%= prev_url %>" class="btn btn-prev btn-sm">
+              <i class="icon-arrow-left"></i>上一步
+            </a>
+            <% if action_name == 'show' %>
+                <a href="<%= activity_path(@activity, step: params[:step].to_i + 1) %>" class="btn btn-success btn-sm btn-next">
+                    下一步<i class="icon-arrow-right icon-on-right"></i>
+                </a>
+            <% else %>
+                <a href="<%= edit_activity_path(@activity, step: params[:step].to_i + 1) %>" class="btn btn-success btn-sm btn-next">
+                    下一步<i class="icon-arrow-right icon-on-right"></i>
+                </a>
+            <% end %>
+            <%= link_to '返回', activities_path_by_type(@activity.activity_type_id), class: "btn btn-sm" %>
+        </div>
+    </div>
+<% end %>

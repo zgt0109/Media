@@ -1,0 +1,21 @@
+defaults: &defaults
+  access_key: 'rnSju14NS7v0hiwky1SMMJhGogoUkOme0lLERyQP'
+  secret_key: 'CRDw3usa6KxxOaGBRBOVO8EWR7Fhpyh6SYqc4Rbc'
+  bucket_pictures: 'img-asset'
+  bucket_media: 'media-asset'
+  bucket_views720: 'media-asset'
+  bucket_wmall: 'img-asset'
+  domain: 'winwemedia.com'
+  domain_old: 'qiniucdn.com'
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

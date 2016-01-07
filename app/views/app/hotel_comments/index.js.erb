@@ -1,0 +1,4 @@
+var html = '<%= j (render :partial => 'app/hotel_comments/hotel_comments', :object => @hotel_comments, :as => :hotel_comment) %>'
+$(".contxt").append(html);
+$("div.tcenter").remove();
+$(".contxt").append('<div class="tcenter"><% unless @hotel_comments.last_page? %><a href="/app/hotel_comments?aid=<%= params[:aid] %>&branch_id=<%= params[:branch_id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 2) %>#mp.weixin.qq.com" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a><%end%></div>');

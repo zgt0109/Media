@@ -1,0 +1,19 @@
+<tr>
+  <td><%= order.order_no %></td>
+  <td><%= order.payments.success.try(:first).try(:trade_no) %></td>
+  <td><%= order.try(:payment_type).try(:name) %></td>
+  <td><%= order.code %></td>
+  <td title="<%= order.group_item.try(:name) %>"><span><%= truncate_u order.group_item.try(:name), length: 8 %></span></td>
+  <td><%= order.total_amount %></td>
+  <td><%= order.status_name %></td>
+  <td><%= order.created_at %></td>
+  <td class="txt-left-align">
+    <%= link_to "查看","javascript:;", data: {toggle: "modals", title: "订单详情", height: "1000", iframe: group_order_path(order)}%>
+
+    <% if order.paid? %>
+      <%= link_to "确定消费", consume_group_order_path(order), data: {toggle: "modals", confirm: "确认消费？", target: "delModel", url: consume_group_order_path(order), method: "post"}%>
+    <% elsif order.pending? %>
+      <%= link_to "取消", group_order_path(order), data: {toggle: "modals", confirm: "确定要取消订单吗？", target: "delModel", url: group_order_path(order), method: "delete"}%>
+    <% end %>
+  </td>
+</tr>

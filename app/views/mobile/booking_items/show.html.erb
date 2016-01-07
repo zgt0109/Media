@@ -1,0 +1,131 @@
+<% title "商品详情" %>
+<% content_for :booking_top_pic do %>
+    <header>
+      <a href="<%= mobile_bookings_url(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <a href="<%= @booking.tel? ? "tel:#{@booking.tel}" : "#" %>"><img src="/assets/mobile/wserver/ico-phone.png"/></a>
+      <a href="<%= mobile_booking_orders_url(supplier_id: @supplier.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
+      <a class="btn-list"><img src="/assets/mobile/wserver/ico-list.png"/></a>
+    </header>
+<% end %>
+
+<div class="box-detail">
+
+      <% unless judge_andriod_version %>
+          <div class="detail-wrap">
+            <% @booking_item.booking_item_pictures.each do |picture| %>
+                <a><%= image_tag picture.pic.large if picture.pic? %></a>
+            <% end %>
+            <% if @booking_item.booking_item_pictures.count == 0 %>
+                <a>暂无图片</a>
+            <% end %>
+          </div>
+      <% else %>
+
+          <div class="box-img" id="slider">
+            <ul class="box-img-list">
+              <% @booking_item.booking_item_pictures.each do |picture| %>
+                  <li><a><%= image_tag picture.pic.large if picture.pic?%></a></li>
+              <% end %>
+              <% if @booking_item.booking_item_pictures.count == 0 %>
+                  <li><a>暂无图片</a></li>
+              <% end %>
+            </ul>
+            <div class="box-text">
+              <div id="pagenavi" class="box-img-page">
+                <% @booking_item.booking_item_pictures.each_with_index do |pic, index| %>
+                    <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>"><% index + 1 %></a>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+
+
+    <!--<div class="detail-wrap">-->
+      <!--<%# @booking_item.booking_item_pictures.each do |picture| %>-->
+          <!--<a><%#= image_tag picture.pic.large if picture.pic? %></a>-->
+      <!--<%# end %>-->
+      <!--<%# if @booking_item.booking_item_pictures.count == 0 %>-->
+          <!--<a>暂无图片</a>-->
+      <!--<%# end %>-->
+    <!--</div>-->
+
+  <div class="detail-name">
+    <b><%= @booking_item.name %></b>
+    <span class="fl">价格：￥<%= f @booking_item.price %></span>
+    <% if @booking_item.no_limit? %>
+        <span class="fw tright">总数：<%= @booking_item.qty %></span>
+        <span class="fw tright">剩余：<%= @booking_item.surplus_qty %></span>
+    <% elsif @booking_item.time_limit? %>
+        <span class="fw tright">预定日期为：<%= @booking_item.start_at %>到<%= @booking_item.end_at %></span>
+    <% elsif @booking_item.day_qty_limit? %>
+        <span class="fw tright">每日：<%= @booking_item.limit_qty %></b></span>
+        <span class="fw tright">剩余：<%= @booking_item.surplus_qty %></b></span>
+    <% end %>
+  </div>
+
+  <div class="detail-btn">
+    <% if @booking_item.is_able_booking %>
+        <a href="<%= new_mobile_booking_order_path(supplier_id: @supplier.id, booking_item_id: @booking_item.id) %>"  class="btn btn-red">
+          <img src="/assets/mobile/wserver/ico-car-add.png"/>
+          立即预定
+        </a>
+    <% else %>
+        <a onclick="javascript:not_booking_info();" class="btn btn-gray">
+          <img src="/assets/mobile/wserver/ico-car-add.png"/>
+          立即预定
+        </a>
+    <% end %>
+  </div>
+
+  <div class="detail-tab">
+    <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_booking_comments_path(supplier_id: @supplier.id, booking_item_id: @booking_item.id) %>">商品评价(<%= @booking_item.booking_comments.count %>)</a></div>
+    <div class="bd">
+      <div class="detail-bd">
+        <%= raw @booking_item.description.to_s %>
+      </div>
+      <!--<div class="box-more"></div>-->
+    </div>
+  </div>
+
+  <input type=hidden id="booking_item_limit_type" value="<%= @booking_item.limit_type %>">
+
+</div>
+
+<% content_for :pop do %>
+  <%= render 'mobile/bookings/categories' %>
+<% end %>
+
+<script type="text/javascript">
+  $(function(){
+
+    $('.detail-bd img').css('max-width', '100%');
+    //点击显示更多
+    $(".detail-tab .box-more").click(function(){
+      var self=$(this), bd=self.parents(".bd").find(".detail-bd");
+      self.toggleClass("active");
+      bd.toggleClass("active");
+    });
+
+  });
+  function not_booking_info(){
+      if($("#booking_item_limit_type").val() == 1){
+        alert("商品已经预定完了");
+      }else if($("#booking_item_limit_type").val() == 2){
+        alert("商品预定期限已过，不能在预定了");
+      }else if($("#booking_item_limit_type").val() == 3){
+        alert("今天商品预定量已经达到饱和，不能再预定了");
+      }
+      return false;
+  }
+  <% if judge_andriod_version %>
+  new Swipe(document.getElementById('slider'), {
+      speed:500,
+      auto:3000,
+      callback: function(){
+          var lis = $(this.element).next("div").find("#pagenavi").children();
+          lis.removeClass("active").eq(this.index).addClass("active");
+      }
+  });
+  <% end %>
+</script>

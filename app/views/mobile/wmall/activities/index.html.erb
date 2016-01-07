@@ -1,0 +1,41 @@
+<section>
+  <div class="activities" id="ractive_activities_container">
+  </div>
+</section>
+
+<script id='ractive_activities_template' type='text/ractive'>
+  <ul>
+    {{#activities}}
+    <li>
+      <a href="{{url}}">
+        <div class="a-img">
+          <img src="{{pic_url}}">
+        </div>
+        <div class="a-info">
+          <b>{{name}}</b>
+          <span>{{end_date}}</span>
+          <span>有效期：{{start_date}}至{{end_date}}</span>
+        </div>
+      </a>
+    </li>
+    {{/activities}}
+  </ul>
+</script>
+
+<script>
+  $(function(){
+    var activities = fetch_wmall_data({path: "/api/wmall/activities/list.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+
+    var ractive_activities = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_activities_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_activities_template',
+
+      // Here, we're passing in some initial data
+      data: {activities: activities}
+    });
+  })
+</script>

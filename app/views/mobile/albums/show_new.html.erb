@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>微相册</title>
+    <%= stylesheet_link_tag "/stylesheets/albums/photoswipe", media: "all" %>
+    <%= javascript_include_tag 'mobile/lib/jquery' %>
+    <%= javascript_include_tag "/javascripts/app/albums/lib/klass.min" %>
+    <%= javascript_include_tag "/javascripts/app/albums/lib/code.photoswipe-3.0.5" %>
+    <script type="text/javascript">
+      (function(window, PhotoSwipe){
+
+        document.addEventListener('DOMContentLoaded', function(){
+
+          var
+          options = {
+            preventHide: false,
+            getImageSource: function(obj){
+              return obj.url;
+            },
+            getImageCaption: function(obj){
+              return obj.caption;
+            },
+            getToolbar:function(){
+                return '<div id="btn-close" class="' + PhotoSwipe.Toolbar.CssClasses.close + '">' + '<div class="' + PhotoSwipe.Toolbar.CssClasses.toolbarContent + '"></div></div>' +
+                       '<div class="' + PhotoSwipe.Toolbar.CssClasses.play + '">' +'<div class="' + PhotoSwipe.Toolbar.CssClasses.toolbarContent + '"></div></div>' +
+                       '<div class="' + PhotoSwipe.Toolbar.CssClasses.previous + '"><div class="' + PhotoSwipe.Toolbar.CssClasses.toolbarContent + '"></div></div>' +
+                       '<div class="' + PhotoSwipe.Toolbar.CssClasses.next + '"><div class="' + PhotoSwipe.Toolbar.CssClasses.toolbarContent + '"></div></div>' +
+                       '<div class="' + PhotoSwipe.Toolbar.CssClasses.comment + '"><div class="' + PhotoSwipe.Toolbar.CssClasses.toolbarContent + '"></div></div>';
+                       //这里添加评论数量 12
+            }
+          },
+          instance = PhotoSwipe.attach(<%= @photos_json.html_safe %>, options);
+          instance.show(<%= @index %>);
+        }, false);
+
+      }(window, window.Code.PhotoSwipe));
+      function closeShow(){
+        window.location.href = "<%= list_mobile_album_path(supplier_id: @photo.album.supplier_id, id: @photo.album.id)%>";
+      }
+      function commetnLink(){
+        window.location.href = $(".album_photo").val();
+      }
+      var coms = [];
+      <% @photos.each do |f| %>
+      coms.push({id: "<%= f.id %>", comment_url: "<%= comments_mobile_album_url(id: f.id) %>", comment_counts: "<%= f.comments.count%>"});
+      <% end %>
+      function next(){
+          //alert('next');
+          var index = 0,
+              com = null;
+          $.each(coms, function(i, e){
+            if(parseInt($('.album_photo').attr('rel')) == parseInt($(e).attr("id"))){
+                index = i;
+            }
+          });
+          if(index == coms.length - 1){
+              com = coms[0];
+          }else{
+              com = coms[index + 1];
+          }
+          if(com){
+              $('.album_photo').val(com["comment_url"]);
+              $('.album_photo').attr('rel', com["id"]);
+//              $('#comments_count').html('评论(' + com["comment_counts"] + ')');
+          }
+      }
+      function previous(){
+          //alert('previous');
+          var index = 0,
+              com = null;
+          $.each(coms, function(i, e){
+              if(parseInt($('.album_photo').attr('rel')) == parseInt($(e).attr("id"))){
+                  index = i;
+              }
+          });
+          if(index == 0){
+              com = coms[coms.length -1];
+          }else{
+              com = coms[index -1];
+          }
+          //alert(com);
+          if(com){
+              $('.album_photo').val(com["comment_url"]);
+              $('.album_photo').attr('rel', com["id"]);
+//              $('#comments_count').html('评论(' + com["comment_counts"] + ')');
+          }
+
+      }
+
+      $(function() {
+          $(".ps-active").delegate("a", "click", function(){
+            alert(1);
+          });
+      });
+
+    </script>
+  </head>
+  <body>
+    <input type="hidden" class="album_photo" value="<%= comments_mobile_album_url(id: @photo.id)%>" rel="<%= @photo.id %>"/>
+    <script type="text/javascript">
+        $(function() {
+            if($('.album_photo').attr('rel')){
+                var arr = $('.album_photo').val().split("/");
+                arr[arr.length - 2] = $('.album_photo').attr('rel');
+                $('.album_photo').val(arr.join("/"));
+            }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微小区', wx_plots_path %></li>
+          <%= link_wx_plot_url(params[:type], false, {navigation: true})%>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="row">
+
+          <%= form_for @search, url: wx_plot_repair_complains_path(type: params[:type]), html: {method: :get } do |f| %>
+              <%= hidden_field_tag :type, params[:type]%>
+              <div class="col-sm-12">
+                <div class="col-md-3 row">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">搜索：</span>
+                    <%= f.text_field :content_like, placeholder: '请输入具体内容进行搜索', class: 'col-xs-12' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">类别：</span>
+                    <%= f.select :wx_plot_category_id_eq, @categories.collect{|t| [t.name, t.id]}, {include_blank: '全部'}, class: 'form-control' %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group input-group-text">
+                    <span class="input-group-addon">状态：</span>
+                    <%= f.select :status_eq, WxPlotRepairComplain.status_options, {include_blank: '全部'}, class: 'form-control' %>
+                  </div>
+                </div>
+                <div class="col-md-3 row pull-right">
+                  <%= f.submit '查询', class: 'btn btn-primary btn-sm' %>
+                  <%= link_to '类别管理', 'javascript:;', class: 'btn btn-sm btn-primary pull-right', data: {toggle: 'modals', target: 'keywordModal', title: "类别管理", width: '', height:"600", iframe: wx_plot_categories_path(category: params[:type] == 'repair' ? '1' : '2,3')}%>
+                  <%= link_to '通知设置', 'javascript:;', class: 'btn btn-sm btn-primary pull-right margin-right-10', data: {toggle: 'modals', title: "#{@wx_plot.send(params[:type])}通知设置", height: '600px', iframe: sms_setting_wx_plot_categories_path(category: params[:type] == 'repair' ? '1' : '2,3', type: params[:type], module_id: params[:type] == 'repair' ? 1 : 2)}%>
+                </div>
+              </div>
+          <% end %>
+          <div class="col-sm-12">
+            <table id="" class="table table-striped table-bordered table-hover margin-top-20">
+              <thead>
+              <tr>
+                <th>
+                  创建时间
+                </th>
+                <th>
+                  类别
+                </th>
+                <th>
+                  <%= params[:type] == 'repair' ? '报修申请用户' : '投诉建议用户' %>
+                </th>
+                <th>
+                  手机号
+                </th>
+                <th width="15%">
+                  房间号
+                </th>
+                <th width="15%">
+                  说明
+                </th>
+                <th>
+                  状态
+                </th>
+                <th>
+                  操作
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+                <% @repair_complains.each do |f| %>
+                    <tr>
+                      <td><%= f.created_at %></td>
+                      <td><%= f.wx_plot_category.try(:name) %></td>
+                      <td><%= f.nickname %></td>
+                      <td><%= f.phone %></td>
+                      <td><%= f.room_no %></td>
+                      <td><%= f.content %></td>
+                      <td><%= f.status_name %></td>
+                      <td>
+                        <div class="table-tools">
+                          <%= link_to '查看', 'javascript:;', data: {toggle: 'modals', target: 'keywordModal', title: '查看',  height: '600', iframe: wx_plot_repair_complain_path(f, type: params[:type])}%>
+                          <%= link_to '回复', 'javascript:;', data: {toggle: 'modals', target: 'keywordModal', title: '回复',  height: '600', iframe: reply_wx_plot_repair_complain_path(id: f.id, type: params[:type])} unless f.cancel? %>
+                          <%= link_to '更改状态', 'javascript:;', data: {toggle: 'modals', target: 'keywordModal', title: '更改状态', iframe: change_wx_plot_repair_complain_path(id: f.id, type: params[:type])} if f.allow_change? %>
+                        </div>
+                      </td>
+                    </tr>
+                <% end %>
+                <% if @repair_complains.blank? %>
+                  <tr><td colspan="8" class="green text-center">无记录</td></tr>
+                <% end %>
+              </tbody>
+            </table>
+            <div class="clearfix">
+              <%= paginate @repair_complains %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

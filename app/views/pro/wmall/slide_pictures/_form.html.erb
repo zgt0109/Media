@@ -1,0 +1,17 @@
+<%= form_for(@pro_wmall_slide_picture) do |f| %>
+  <% if @pro_wmall_slide_picture.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pro_wmall_slide_picture.errors.count, "error") %> prohibited this pro_wmall_slide_picture from being saved:</h2>
+
+      <ul>
+      <% @pro_wmall_slide_picture.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

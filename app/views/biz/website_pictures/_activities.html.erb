@@ -1,0 +1,41 @@
+<label class="control-label">选择具体活动<span class="required-star">*</span></label>
+<div class="clearfix">
+  <table id="menuTable" class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th></th>
+      <th>活动标题</th>
+      <th>触发关键字</th>
+      <% if @is_exist_activity_time %><th width="30%">活动时间</th><% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% @activities.each_with_index do |activity, index| %>
+        <tr>
+          <td>
+            <% if @picture.present? %>
+                <% if [12, 13, 14, 15, 16].include? (@picture.menu_type.to_i) %>
+                    <% is_activity = @activities.collect(&:id).include?(@picture.menuable_id) %>
+                    <input id="website_picture_activity_id_<%= activity.id %>" name="website_picture[activity_id]" type="radio" value="<%= activity.id%>" <%= is_activity ? (@picture.menuable_id == activity.id ? 'checked' : '') : (index == 0 ? 'checked' : '') %>>
+                <% else %>
+                    <input id="website_picture_activity_id_<%= activity.id %>" name="website_picture[activity_id]" type="radio" value="<%= activity.id%>" <%= (index == 0 ? 'checked' : '') %>>
+                <% end %>
+            <% else %>
+                <input id="website_picture_activity_id_<%= activity.id %>" name="website_picture[activity_id]" type="radio" value="<%= activity.id%>" <%= (index == 0 ? 'checked' : '') %>>
+            <% end %>
+          </td>
+          <td><%= activity.name %></td>
+          <td><%= activity.keyword %></td>
+          <% if @is_exist_activity_time %>
+              <td><%= activity.try(:start_at) %><br><%= activity.try(:end_at) %></td>
+          <% end %>
+        </tr>
+    <% end %>
+    <% if @activities.count == 0 %>
+        <tr><td colspan="<%= @is_exist_activity_time ? 5 : 4%>">您当前尚未创建相关活动</td></tr>
+    <% end %>
+    </tbody>
+  </table>
+  <%#= paginate @activities %>
+  <!--<div class="clearfix"></div>-->
+</div>

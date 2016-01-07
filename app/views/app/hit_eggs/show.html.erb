@@ -1,0 +1,100 @@
+<% if [Activity::NOT_START, Activity::WARM_UP].include?(@activity.activity_status) %>
+  <% content_for(:title) { "#{@activity.name}活动预热中" } %>
+    <section class="sec-game">
+      <div class="game-scene" id="scene"></div>
+      <div class="game-shine" id="shine"></div>
+      <div id="scene-start">
+        <div class="game-text table" id="text-start">
+          <p class="td">
+            <%= date_format_full_l @activity.start_at %>正式开始<br/>敬请关注！<br/>
+            <% over_time =  Time.diff(Time.now,@activity.start_at)%>
+            <% over_time[:day] += over_time[:week] * 7 %>
+            <span>离活动开始还有 <br/>
+
+            <% if over_time[:minute].to_i > 0 %>
+              <b><%= "#{over_time[:year]}年".html_safe if over_time[:year].to_i > 0 %>
+              <%= "#{over_time[:month]}月".html_safe if over_time[:month].to_i > 0 %>
+              <%= "#{over_time[:day]}天".html_safe if over_time[:day].to_i > 0 %>
+              <%= "#{over_time[:hour]}时".html_safe if over_time[:hour].to_i > 0 %>
+              <%= "#{over_time[:minute]}分".html_safe if over_time[:minute].to_i > 0 %></b>
+            <% end %>
+
+            </span>
+          </p>
+        </div>
+      </div><!--#scene-start end-->
+    </section>
+    <script>
+        $("#text-start").animate({
+            top:"50%"
+        },"fast");
+    </script>
+    <%= render "prize_and_tip"%>
+    <section class="sec-text">
+      <b>活动预热说明:</b><br/>
+      <%= simple_format @activity.try(:ready_activity_notice).try(:description).to_s.html_safe %>
+    </section>
+<% elsif @activity.activity_status == Activity::UNDER_WAY %>
+  <% content_for(:title) { "#{@activity.name}活动进行中" } %>
+    <section class="sec-game">
+      <div class="game-scene" id="scene"></div>
+      <div class="game-shine" id="shine"></div>
+      <div id="scene-index">
+        <div class="game-text" id="text-index"></div>
+        <div class="game-egg">
+          <a class="egg-1 href" id="egg1" data-r="0"></a>
+          <a class="egg-2 href" id="egg2" data-r="1"></a>
+          <a class="egg-3 href" id="egg3" data-r="2"></a>
+        </div>
+      </div><!--#scene-index end-->
+    </section>
+    <%= render "prize_and_tip"%>
+    <section class="sec-text">
+      <b>活动说明:</b><br/>
+      <%= simple_format @activity.try(:active_activity_notice).try(:description).to_s.html_safe %>
+    </section>
+<% else %>
+    <section class="sec-game">
+      <div id="scene-end">
+        <div class="game-text" id="text-end"></div>
+      </div><!--#scene-end end-->
+    </section>
+     <%= render "prize_and_tip"%>
+    <section class="sec-text">
+      <b>活动说明:</b><br/>
+      <%= simple_format @activity.try(:active_activity_notice).try(:description).to_s.html_safe %>
+    </section>
+    <script>
+        $("#text-end").animate({
+            top:"50%"
+        },"fast");
+    </script>
+<% end %>
+
+<script>
+    var flag = true
+    $(".game-egg a").click(function(){
+      <%- if @wx_user  %>
+        <%- if @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+          showTips(".J-register");
+        <%- else%>
+          if(flag){
+              var self=$(this);
+              self.addClass("active").addClass("first");
+              setTimeout(function(){
+                  self.removeClass("first").addClass("second");
+                  $("#scene-index").delay(1000).fadeOut(function(){
+                      var url = "<%= hit_egg_app_hit_eggs_path(id: @activity.id) %>";
+                      var data = $("#new_activity_enroll").serialize();
+                      $.get(url, data, 'script');
+                  });
+              },1000);
+          }
+        <%- end %>
+        flag = false
+      <%- else %>
+        showTips('.J-guanzhu');
+      <%- end %>
+    });
+
+</script>

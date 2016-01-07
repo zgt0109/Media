@@ -1,0 +1,91 @@
+<section id='ractive_category_shops_container'>
+</section>
+
+<script id='ractive_category_shops_template' type='text/ractive'>
+  {{#category_shops:i}}
+  <div class="index-box">
+    {{#category}}
+    <div class="index-title">
+      <i class="icon icon-1"></i>
+      <span>{{name}}</span>
+      <a href="{{url}}" class="more">更多<span>&gt;</span></a>
+    </div>
+    {{/category}}
+    <div class="banner-swipe-list" id="swipe-{{i}}">
+      <div class="swipe-box">
+        {{#shops_batch_array:i}}
+        <ul>
+          {{#.}}
+            <li>
+              <a class="banner-swipe-box" href="{{url}}">
+                <div>
+                  <img src="{{pic_url}}">
+                  <i></i>
+                </div>
+                <span>{{name}}</span>
+              </a>
+            </li>
+           {{/.}}
+        </ul>
+        {{/shops_batch_array}}
+      </div>
+      <div class="banner-swipe-nav">
+        {{#swipe_nav_array:i}}
+          <a href="javascript:void(0);" class="{{active}}">{{index}}</a>
+        {{/swipe_nav_array}}
+      </div>
+    </div>
+  </div>
+
+  {{/category_shops}}
+</script>
+
+<script>
+  $(function(){
+    var category_shops = fetch_wmall_data({path: "/api/wmall/shops/list.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+
+    category_shops.map(function (item, index) {
+      var shops_batch_array = [], swipe_nav_array = [], batch_index = 0;
+      item.shops.each_slice(8, function(shops) {
+        shops_batch_array.push(shops)
+        swipe_nav_array.push(batch_index)
+        batch_index += 1
+      });
+
+      item["shops_batch_array"] = shops_batch_array
+      item["swipe_nav_array"] = swipe_nav_array
+      delete item.shops
+    })
+
+
+    var ractive_category_shops = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#ractive_category_shops_container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#ractive_category_shops_template',
+
+      // Here, we're passing in some initial data
+      data: {category_shops: category_shops}
+    });
+  })
+</script>
+
+<script>
+  function bSwipe(id){
+    var swipe=new Swipe(document.getElementById(id), {
+      speed:500,
+      callback: function(){
+        var lis = $(this.element).next(".banner-swipe-nav").children();
+        lis.removeClass("active").eq(this.index).addClass("active");
+      }
+    });
+  }
+  $(function(){
+    $(".banner-swipe-list").each(function(i){
+      var $id = $(this).attr("id");
+      bSwipe($id);
+    })
+  });
+</script>

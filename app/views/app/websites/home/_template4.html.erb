@@ -1,0 +1,40 @@
+<% if website_pictures.present? %>
+    <% content_for :website_top_pic do %>
+        <header>
+          <div class="box-img" id="slider">
+            <ul class="box-img-list">
+              <% website_pictures.each do |w| %>
+                  <li>
+                    <% if w.url.present? %>
+                        <a href="<%= w.url%>"><%= image_tag w.pic.try(:large)%></a>
+                    <% else %>
+                        <%= image_tag w.pic.try(:large)%>
+                    <% end %>
+                  </li>
+              <% end %>
+            </ul>
+            <div class="box-text">
+      <span class="box-bd ellipsis" id="slider-span">
+        <%= website_pictures.first.title %></span>
+              <div id="pagenavi" class="fr box-img-page">
+                <% website_pictures.each_with_index do |w, index| %>
+                    <a href="#" class="<%= (index+1) == 1 ? 'active' : ' ' %>"><% index + 1 %></a>
+                <% end %></div>
+            </div>
+          </div>
+        </header>
+    <% end %>
+<% end %>
+
+
+  <% groups = website_menus.in_groups_of(2, false) %>
+  <% groups.each_with_index do |menus, index| %>
+      <div class="box-index <%= groups.count-1 == index ? 'last' : 'first' %>">
+      <% menus.each do |menu| %>
+      <a class="" href="<%= menu_url menu %>">
+        <span><%= image_tag menu.pic if menu.pic? %></span>
+        <span class="table"><b class="td"><%= menu.name %></b></span>
+      </a>
+      <% end %>
+      </div>
+  <% end %>

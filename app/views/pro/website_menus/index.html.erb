@@ -1,0 +1,30 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar_life' %>
+<% end %>
+
+<% content_for :topbar do %>
+  <a href="javascript:;" class="h1 pagecurrent">菜单管理</a>
+<% end %>
+
+<div class="box-des">
+  <div class="des-l">
+    <iframe id="preview" height="460" width="320" frameborder="0" src="<%= app_lives_url(id: @website.id, aid: @website.activity_id, openid: WxUser.first.uid, wxmuid: @website.wx_mp_user_id) %>" name="preview"></iframe>
+    <div>按 Alt + 方向键左(←) 可返回上一层</div>
+  </div>
+  <div class="des-r menu-list">
+    <dl class="active">
+      <dt>
+        <b><%= truncate_u @website.name, length: 20 %></b>
+        <span>
+          <a class="ico-add" onclick="popUrl(this)" data-name="new_pro_website_menu" data-w="600" data-h="500" data-title="添加一级菜单" title="添加一级菜单" data-url="<%= new_pro_website_menu_url %>"></a>
+          <%= link_to '', [:pro, @website], method: :delete, data: { confirm: '确定要清空菜单吗？'},  title: '清空菜单', class: 'ico-delete' %>
+        </span>
+      </dt>
+      <dd id="menu-root">
+        <% @website_menus.root.order(:sort).each do |menu| %>
+          <%= render "sub_menu", sub_menu: menu %>
+        <% end %>
+      </dd>
+    </dl>
+  </div>
+</div>

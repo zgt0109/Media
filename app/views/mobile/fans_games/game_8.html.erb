@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; minimum-scale=1; user-scalable=no;">
+<meta name="keywords" content="壹心理游戏,辨色大比拼">
+<meta name="description" content="辨色大比拼通过有趣的心理游戏训练你的眼睛和大脑的反应协调能力">
+<meta property="og:image" content="logo.jpg">
+<title>最坑人的辨色大比拼!</title>
+<%= stylesheet_link_tag "/stylesheets/fans_game/bdsstyle", media: "all" %>
+<%= javascript_include_tag "jquery","/javascripts/fans_game/logger" %>
+<body>
+<div class="wrapper">
+	<div class="splash">
+    	<h1><span class="green">红</span> 还是 <span class="red">绿</span>?</h1>
+    	<p><a href="index.html" class="button">继续</a></p>
+    </div>
+    <div class="howto" style="display: none;">
+    	<h1>怎么玩?</h1>
+        <p>你的颜色敏感度测试? 你的右脑怎么样?<br>做完这个测试，你就知道了!</p>
+        <p>下面让我们来测试下!</p>
+        <h2>规则</h2>
+        <p><strong>选择你看到的字的颜色!</strong></p>
+    	<p><a href="index.html" class="button">开始游戏!</a></p>
+    </div>
+	<ul class="hud">
+        <li class="timeCount"></li>
+        <li class="totalQuest" style="display: none;">问题 1 / 20</li>
+    </ul>
+    <div class="all_quest">
+        <div class="quest1" style="display: none;">
+        	<p class="sequence">字的颜色是什么?</p>
+            <h1 class="green">橙</h1>
+            <div class="answer">
+            	<ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">红</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="dui">绿</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">橙</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">蓝</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest2" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="red">黑</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="dui">红</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">黄</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest3" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="yellow">黄</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">黄</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest4" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="blue">红</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">黄</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">橙</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">红</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">蓝</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest5" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="black">黑</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">橙</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">黑</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest6" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="yellow">绿</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="dui">黄</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">红</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest7" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="orange">黄</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">黄</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="dui">橙</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">绿</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest8" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="blue">蓝</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="dui">蓝</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">黄</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">红</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest9" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="yellow">绿</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="dui">黄</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">黑</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest10" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="orange">红</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">红</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="dui">橙</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">绿</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest11" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="red">橙</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">红</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest12" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="orange">黑</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="dui">橙</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">蓝</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest13" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="yellow">黄</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">橙</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">黄</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest14" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="black">蓝</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="dui">黑</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">红</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest15" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="brown">绿</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">橙</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">黄</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">褐</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest16" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="brown">褐</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">蓝</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="dui">褐</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">黄</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest17" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="green">红</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="dui">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">红</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">橙</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest18" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="brown">橙</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="dui">褐</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">橙</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">黄</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">红</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest19" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="blue">绿</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">黑</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="cuo">红</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="dui">蓝</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="quest20" style="display: none;">
+            <p class="sequence">字的颜色是什么?</p>
+            <h1 class="black">褐</h1>
+            <div class="answer">
+                <ul>
+                    <li><a href="index.html" class="option_a" data-verify="cuo">绿</a></li>
+                    <li><a href="index.html" class="option_b" data-verify="cuo">红</a></li>
+                    <li><a href="index.html" class="option_c" data-verify="dui">黑</a></li>
+                    <li><a href="index.html" class="option_d" data-verify="cuo">蓝</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="result" style="display: none;">
+        	<h1>你的分数</h1>
+            <p>你的答案<span class="score">0</span></p>
+            <div class="fb_plugin">
+            <p><br><br><br></p>
+            <p><a href="<%= mobile_fans_game_url(supplier_id: @supplier.id,id:8) %>" class="button retry">再玩一次</a>&nbsp;&nbsp;<a href="<%= mobile_fans_games_path(supplier_id: @supplier.id) %>" class="button ">更多精彩</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="hint">
+        <ul>
+            <li class="tick" style="display: none;">对!</li>
+            <li class="cross" style="display: none;">错!</li>
+        </ul>
+    </div>
+    <div class="copyrights"><p style="font-size:17px;"><a href="<%= mobile_fans_games_path(supplier_id: @supplier.id) %>" title="更多游戏">更多游戏</a></p>
+    <script src="/javascripts/fans_game/saved_resource"></script>
+    </div>
+</div>
+<script>
+window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,1)},0)});
+$(document).ready(function(){
+    var i,
+        totalQuest,
+        timeUp,
+        score,
+        howto=$('.howto'),
+        allQuest=$('.all_quest'),
+        splash=$('.splash'),
+        timeCountDiv=$(".timeCount"),
+        totalQuestDiv=$('.totalQuest'),
+        tickIcon=$('.tick'),
+        crossIcon=$('.cross');
+    init();
+    function init(){
+        i=1;
+        totalQuest=20;
+        timeUp=3500;
+        score=0;
+        $('.result').hide();
+        howto.hide();
+        $('.hint ul').children().hide();
+        allQuest.children().hide();
+        totalQuestDiv.hide().html('问题 '+i+' / '+totalQuest);
+        splash.show()
+    }
+    $('.splash a').click(function(e){
+        e.preventDefault();
+        splash.hide();
+        howto.fadeIn('slow')
+    });
+    $('.howto a').click(function(e){
+        e.preventDefault();
+        howto.hide();startGame()
+    });
+    $('.answer a').click(function(e){
+        var ans=$(this).data('verify');
+        var default_ans="dui";
+        e.preventDefault();
+        $('.answer a').addClass('disable_click');
+        if(ans===default_ans){
+            score+=1;
+            tickIcon.fadeIn('slow',function(){
+                $(this).fadeOut('fast')
+            })
+        }else{
+            crossIcon.fadeIn('slow',function(){
+                $(this).fadeOut('fast')
+            })}
+            $('.quest'+i).fadeOut('slow',function(){
+                if(i<totalQuest&&timeUp>=1){
+                    i++;$('.quest'+i).fadeIn('slow',function(){
+                        $('.answer a').removeClass('disable_click')
+                    })
+                }else{
+                    showResult();
+                    clearInterval(timeLoop)
+                }
+                totalQuestDiv.html('问题 '+i+' / '+totalQuest)
+            })
+        });
+    $('.retry').click(function(e){
+        e.preventDefault();
+        init()
+    });
+    function startGame(){
+        $('.quest1').show();
+        timeCountDiv.show();
+        totalQuestDiv.show();
+        timeLoop=setInterval(timeUpCount,1000/60)
+    }
+    function timeUpCount(){
+        var time=parseInt(timeUp);
+        var minutes=Math.floor(time/60);
+        var seconds=time%60;
+        if(timeUp>=1){
+            timeUp--
+        }else{
+            showResult();
+            clearInterval(timeLoop)
+        }
+        timeCountDiv.html("时间 "+minutes+":"+seconds)
+    }
+    function showResult(){
+        allQuest.children().hide();
+        totalQuestDiv.hide();
+        timeCountDiv.hide();
+        $('.result .score').html('答对'+score+'个题，共'+totalQuest+'题.色感'+score*5+'分；');
+        $('.result').fadeIn('slow');dp_submitScore(score)
+    }
+});
+</script>
+<script language="javascript">
+var mebtnopenurl = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:8) %>';
+window.shareData = {
+        "imgUrl": "<%= MOBILE_DOMAIN %>/images/fans_game/game_8.jpg",
+        "timeLineLink": "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:8) %>",
+        "tTitle": "最坑人的辨色大比拼！",
+        "tContent": "全世界最坑的辨色大比拼，1分钟内让你抓狂不已！"
+};
+function dp_submitScore(t){
+	dp_share(t);
+}
+function dp_share(t){
+    if(15>t && t> 5) {
+        document.title = "我的辨色力是"+t*5+"分！还不错吧！求超越！！！";
+        $('.result .score').append("还不错哦，眼脑协调能力正常！");
+    }else if(20>t && t>15){
+        document.title = "我的辨色力是"+t*5+"分！很不错噢！求超越！！！";
+        $('.result .score').append("好厉害，你的眼脑协调反应能力超强耶！");
+    }else if(t==20){
+        document.title = "我的辨色力是"+t*5+"分！满分了！求追平！！！";
+        $('.result .score').append("你的色感是满分！完美的色感和眼脑协调能力！");
+    }else{
+        document.title = "想知道你的色感和眼脑协调能力吗，来测下就知道！";
+        $('.result .score').append("你的色感好差哦！多练习几次吧！");
+    }
+	window.shareData.tTitle = document.title;
+}
+function dp_Ranking(){
+	document.location.href = "<%= mobile_fans_games_url(supplier_id: @supplier.id) %>";
+}
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    WeixinJSBridge.on('menu:share:appmessage', function(argv) {
+        WeixinJSBridge.invoke('sendAppMessage', {
+            "img_url": window.shareData.imgUrl,
+            "link": window.shareData.timeLineLink,
+            "desc": window.shareData.tContent,
+            "title": window.shareData.tTitle
+        }, function(res) {
+        	document.location.href = mebtnopenurl;
+        })
+    });
+    WeixinJSBridge.on('menu:share:timeline', function(argv) {
+        WeixinJSBridge.invoke('shareTimeline', {
+            "img_url": window.shareData.imgUrl,
+            "img_width": "640",
+            "img_height": "640",
+            "link": window.shareData.timeLineLink,
+            "desc": window.shareData.tContent,
+            "title": window.shareData.tTitle
+        }, function(res) {
+        	document.location.href = mebtnopenurl;
+        });
+    });
+}, false);
+</script>
+<%= render "application/mobile/hide_share" %>
+</body>
+</html>

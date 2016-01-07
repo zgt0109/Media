@@ -1,0 +1,39 @@
+<% provide :title, '我的反馈' %>
+<section id="sec-index">
+  <div class="msg-list">
+    <%- if @chats.each do |chat|%>
+      <div class="msg-box">
+        <div class="msg-t"><%= chat.chat_type_name %></div>
+        <div class="msg-main">
+          <div class="msg-time"><%= chat.created_at.to_s %></div>
+          <div class="msg-self">
+            <div class="msg-text">
+              <p><%= chat.body %></p>
+            </div>
+          </div>
+          <%- if chat.reply.present? %>
+            <div class="msg-time"><%= chat.reply.created_at.to_s %></div>
+            <div class="msg-reply">
+              <div class="msg-text">
+                <p><%= chat.reply.body %></p>
+              </div>
+            </div>
+           <%- else %>
+             <div class="msg-nothing">
+                <span>暂无回复</span>
+              </div>
+          <%- end %>
+        </div>
+      </div>
+    <%- end.blank? %>
+    <div class="msg-box"
+      <div class="msg-main">
+            <div class="no-msg">
+                <p>暂无互动记录</p>
+                <p>您还未与我们互动,我们欢迎与您的互动</p>
+            </div>
+        </div>
+     </div>
+    <%- end %>
+  </div>
+</section>

@@ -1,0 +1,219 @@
+<% provide(:title, '我要订座') %>
+
+<body>
+<div class="html">
+<div class="main">
+  <header>
+    <%= link_to app_shops_url(anchor: "mp.weixin.qq.com"), class: "ico ico-prev" do %>
+      <img src="/assets/micro_stores/ico-prev.png"/>
+    <% end %>
+    <h1><%= @shop_table_order.shop_branch.name %></h1>
+  </header>
+  <section>
+    <div style="position:fixed;"></div>
+    <%= form_for @shop_table_order, url: confirm_app_shop_table_orders_url do |f|%>
+      <%= f.hidden_field :shop_branch_id %>
+      <div class="box box-order">
+        <div class="hd">
+          <b>预订时间</b>
+          <p id="time">
+            <span class="fl">
+              <img src="/assets/micro_stores/ico-day.png"/>
+            </span>
+            <span class="fr">
+              <input type="hidden" name="day" value=""/>
+              <select name="day" class="daynum input-day"></select>
+            </span>
+          </p>
+          <p>
+            <span class="fl">
+              <img src="/assets/micro_stores/ico-time.png"/>
+            </span>
+            <span class="fr">
+              <select name="minutes" class="input-time">
+                <option value="00">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+              </select>
+              <i>:</i>
+              <input type="hidden" name="shop_table_order[booking_at(5i)]" value=""/>
+              <select name="fen" class="input-time">
+                <option value="00">00</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </span>
+          </p>
+        </div>
+        <div class="bd">
+          <b>餐桌选择</b>
+          <label>
+            <span class="fl">
+              <!-- <input name="radio" type="radio"/> -->
+              <%= f.radio_button :table_type, ShopTableOrder::LOGE_TABLE %>
+            </span>
+            <span class="fr">
+              <i>只要包厢</i>
+            </span>
+          </label>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::LOGE_TABLE_FIRST %>
+            </span>
+            <span class="fr">
+              <i>优先包厢，大厅也可</i>
+            </span>
+          </label>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::HALL_TABLE %>
+            </span>
+            <span class="fr">
+              <i>只要大厅</i>
+            </span>
+          </label>
+          <label>
+            <span class="fl">
+              <%= f.radio_button :table_type, ShopTableOrder::HALL_TABLE_FIRST %>
+            </span>
+            <span class="fr">
+              <i>优先大厅，包厢也可</i>
+            </span>
+          </label>
+        </div>
+          <div class="ft">
+            <b>用餐人数</b>
+            <p>
+              <%= f.telephone_field :booking_count, options_for_select(1..12), {}, :class=> "select-num" %>
+            </p>
+          </div>
+          <div class="ft">
+            <b>联系电话</b>
+            <p>
+              <%= f.text_field :mobile, placeholder: '请输入电话', value: @wx_user.try(:mobile)  %>
+            </p>
+            <p>
+              <input class="btn form-submit" type="submit" value="确认订座"/>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </section>
+</div><!-- main end -->
+</div><!-- html end -->
+
+<%= render "application/app_footer" %>
+
+  <script type="text/javascript">
+    $(function(){
+      $('.form-submit').click(function() {
+        $shop_table_order_mobile = $('#shop_table_order_mobile');
+        if ( !$shop_table_order_mobile.val() ) {
+          $shop_table_order_mobile.focus();
+          return false;
+        } else if ( !test_mobile_number($shop_table_order_mobile.val()) ) {
+          alert('手机号码格式不正确');
+          $shop_table_order_mobile.focus();
+          return false;
+        } else if ( !check_description() ) {
+          return false;
+        }
+      });
+
+      function numbox(){
+        var left = 0;
+        $( "#numbox p.left" ).on( "click", swipeleftHandler );
+        $( "#numbox p.right" ).on("click",swiperightHandler)
+        function swipeleftHandler( event ){
+          if(left<=-122){
+            return false
+          }
+          left -=30;
+          $("#numbox").find('ul').clearQueue().stop().animate({'left':-left});
+          $('#getnum').val(parseInt($('#getnum').val())-1)
+          $('#getnumspan').html(parseInt($('#getnumspan').html())-1)
+
+        }
+        function swiperightHandler( event ){
+          if(left>=213){
+            return false
+          }
+          left +=30;
+          $("#numbox").find('ul').clearQueue().stop().animate({'left':-left});
+          $('#getnum').val(parseInt($('#getnum').val())+1)
+          $('#getnumspan').html(parseInt($('#getnumspan').html())+1)
+        }
+      }
+      numbox()
+
+      function addday(){
+        var xq = ['日','一','二','三','四','五','六']
+        var dayth = [31,29,31,30,31,30,31,31,30,31,30,31]
+        var daytime = new Date()
+        if(daytime.getFullYear()%4){
+          dayth[1]=28;
+        }
+        var text = '';
+        getmonth = daytime.getMonth()
+        getday = daytime.getDate()
+        gethours = daytime.getHours()
+        getxq = daytime.getDay()
+
+        if((getday+15)>dayth[getmonth]){
+          for(var i=getday;i<=dayth[getmonth];i++){
+            text +='<option value="'+daytime.getFullYear()+'-'+(getmonth+1)+'-'+i+'">'+(getmonth+1)+'-'+i+'</option>';
+          }
+
+          for(var i=1;i<(getday+15-dayth[getmonth]);i++){
+            text +='<option value="'+daytime.getFullYear()+'-'+(getmonth+2)+'-'+i+'">'+(getmonth+2)+'-'+i+'</option>';
+          }
+        }else{
+          for(var i=getday;i<(getday+15);i++){
+            text +='<option value="'+daytime.getFullYear()+'-'+(getmonth+1)+'-'+i+'">'+(getmonth+1)+'月'+i+'号</option>';
+          }
+        }
+
+        $('#time').find('select[name="day"]').append(text)
+      }
+      addday();
+
+    });
+
+    // 手机号码正则表达式
+    function test_mobile_number(mobile_number) {
+      if (mobile_number == undefined) {
+        return false;
+      }
+      var mobile_reg = /^\d{11}$/;
+      if (mobile_reg.test(mobile_number)){
+        return true;
+      };
+      return false;
+    }
+
+  </script>
+</body>

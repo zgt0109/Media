@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title><%= content_for?(:title) ? yield(:title) : "微投票" %></title>
+
+  <%= stylesheet_link_tag "mobile/wvote" %>
+  <%= javascript_include_tag "mobile/wvote" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+  <% @not_show_mark = true %>
+
+  <%= render 'application/gb2big5' %>
+
+  <div class="black">
+    <div class="load">
+      <img src="/assets/mobile/wvote/loading.gif" alt="">    
+    </div>
+  </div>
+
+  <div class="html <%= yield :div_html_classs %>" id="html" style="<%= yield :div_html_style %>">
+    <%= yield :html_stage_header %>
+
+    <div class="stage <%= yield :div_stage_classs %>" id="stage">
+      <section id="sec-index">
+        <%= yield :sec_index_body_header %>
+        <div class="body">
+          <%= yield %>
+        </div>
+        <%= yield :body_after_foot %>
+      </section>
+    </div>
+
+    <%= yield :stage_after_foot %>
+    <%= yield :stage_after_pop %>
+  </div>
+
+  <%= yield :html_after_pop %>
+
+  <%= render 'application/app_footer' %>
+
+  <script type="text/javascript">
+    $(function(){
+        $(".ckeditor_content img").css({"height":"auto","width":"auto","max-width":"100%"});
+        <% if flash[:notice] || flash[:alert] %>
+          alert('<%= flash[:notice] || flash[:alert] %>');
+        <% flash.clear %>
+        <% end %>
+    });
+  </script>
+  
+  <%= yield :body_append %>
+</body>
+</html>

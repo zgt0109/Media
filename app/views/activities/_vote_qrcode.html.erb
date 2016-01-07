@@ -1,0 +1,69 @@
+<div class="new-addhd">
+  <h3>链接地址：</h3>
+  <input class="button copy-button" type="button" name="anniu2" data-clipboard-text="<%= activity.activity_qrcode_url %>" id="copy-button-<%= activity.id %>" value="复制链接地址">
+  <span style=" font-size: 14px; position: absolute; top: 16px; right: 140px; ">添加上链接只能用于微信端打开 用在别的浏览器出错</span> 
+  <div class="close" data-target="qrocde-<%= activity.id %>">×</div>
+  <span id="tbid"><%= activity.activity_qrcode_url %></span> 
+</div>
+
+<div class="new-addbd">
+  <div class="img"><%= image_tag "data:image/jpeg;base64,#{Base64.encode64(activity.vote_qrcode_download).gsub(/\n/, "")}" %></div>
+  <div class="col-md-7 margin-top-20">
+    <table id="couponSNTable" class="table table-striped table-bordered table-hover dataTable ">
+      <thead>
+        <tr>
+          <th>二维码边长（cm）</th>
+          <th>建议扫描距离（米）</th>
+          <th>下载链接</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td title="优惠券6">8cm</td>
+          <td>0.5米</td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <%= link_to vote_qrcode_download_activity_url(activity, type: 258) do %><i class="ace-icon fa fa-arrow-down "></i><% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td title="优惠券6">12cm</td>
+          <td>0.8米</td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <%= link_to vote_qrcode_download_activity_url(activity, type: 344) do %><i class="ace-icon fa fa-arrow-down "></i><% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td title="优惠券6">15cm</td>
+          <td>1米</td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <%= link_to vote_qrcode_download_activity_url(activity, type: 430) do %><i class="ace-icon fa fa-arrow-down "></i><% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td title="优惠券6">30cm</td>
+          <td>1.5米</td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <%= link_to vote_qrcode_download_activity_url(activity, type: 860) do %><i class="ace-icon fa fa-arrow-down "></i><% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td title="优惠券6">50cm</td>
+          <td>2.5米</td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <%= link_to vote_qrcode_download_activity_url(activity, type: 1280) do %><i class="ace-icon fa fa-arrow-down "></i><% end %>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

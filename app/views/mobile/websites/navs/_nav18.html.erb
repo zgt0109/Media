@@ -1,0 +1,18 @@
+<% content_for :nav_section do %>
+    <section class="mod-navLine navLine-18">
+      <ul class="navLine-ul">
+        <% website_menus[0..4].each do |menu| %>
+            <li>
+              <%= link_to menu_url(menu) do %>
+                  <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
+                  <%= menu.title %>
+              <% end %>
+            </li>
+        <% end %>
+      </ul>
+    </section>
+<% end %>
+
+<% content_for :document_ready_js do %>
+    $("body").addClass("body-navLine-bottom");
+<% end %>

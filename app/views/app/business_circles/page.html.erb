@@ -1,0 +1,96 @@
+<body class="list">
+<div class="html">
+  <div class="main">
+    <header>
+      <a class="ico ico-arrow-left" href="<%= redirect_back_life_or_circle_to_page  %>"></a>
+      <h1 class="ellipsis"><%= @website_menu.name %></h1>
+      <a class="ico ico-list"></a>
+    </header><!-- header end -->
+
+    <% if @website_menu.has_children? %>
+        <section>
+          <%= render "list", :object => @website_menu  %>
+        </section><!-- section end -->
+
+    <% elsif @website_menu.article? %>
+        <section>
+          <% if @website_menu.website_articles.as_default.present? %>
+              <% @website_menu.website_articles.as_default.order("sort DESC, updated_at DESC").each do |article| %>
+                  <div class="box box-index box-list">
+                    <a href="<%= detail_app_business_circle_path(article, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id]) %>" class="box-block"></a>
+                    <div class="hd">
+                      <b><%= article.title %></b>
+                      <i><%= date_format_full(article.created_at) %></i>
+                    </div>
+                    <div class="bd">
+                      <img src="<%= article.pic %>">
+                    </div>
+                    <div class="ft">
+                      <span>查看全文</span>
+                      <a class="ico ico-angle-right fr"></a>
+                    </div>
+                  </div>
+              <% end %>
+          <% else %>
+              <div class="box box-index box-list">
+                <div class="ft" style="text-align: center;padding: 10px;">
+                  <span>还没有数据哦！</span>
+                </div>
+              </div>
+          <% end %>
+        </section><!-- section end -->
+
+
+    <% end %>
+
+
+  </div><!-- main end -->
+</div><!-- html end -->
+
+<div class="pop-nav pop">
+  <div class="pop-bg"></div>
+  <div class="pop-bd">
+    <div class="hd"><span>取消</span></div>
+    <div class="bd">
+      <% @website_menu.parent.children.sorted.each do |child| %>
+      <dl>
+        <dt><a href="<%= website_activity_link(child) %>"><span><%= child.name %></span><i class="ico ico-angle-right fr"></i></a></dt>
+        <dd></dd>
+      </dl>
+      <% end if @website_menu.parent %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".ico-list").on("click",function(){
+            $(".pop-nav").show();
+            $(".pop-nav .pop-bd").addClass("on");
+        });
+        $(".pop-nav .hd, .pop-nav .pop-bg").on("click",function(){
+            $(".pop-nav").hide();
+        });
+        $(".pop-nav .pop-bd dt").on("click",function(){
+            var self=$(this),
+                    parent=self.parents(".bd"),
+                    dt=parent.find("dt");
+            parent.find("dl").removeClass("active");
+            dt.removeClass("active");
+            dt.find(".ico").removeClass("ico-angle-down").addClass("ico-angle-right");
+            self.find(".ico").removeClass("ico-angle-right").addClass("ico-angle-down");
+            self.parent("dl").andSelf().addClass("active");
+        });
+        $(".pop-nav dd a").on("click",function(){
+            var self=$(this),
+                    dd=self.parent("dd");
+            dd.find("a").removeClass("active");
+            self.addClass("active");
+            $(".pop-nav").hide();
+        });
+    });
+</script>
+<style>
+    .box-list-arrow img{max-height: 50px;}
+
+</style>
+</body>

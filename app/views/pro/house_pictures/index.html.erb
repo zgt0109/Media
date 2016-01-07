@@ -1,0 +1,36 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li> <i class="icon-home home-icon"></i> <a href="#">首页</a> </li>
+      <li> <%= link_to "微房产", house_layouts_path(anchor: "tab-2") %> </li>
+      <li><%= link_to "户型图管理", house_pictures_path(house_layout_id: @house_layout.id) %></li>
+    </ul>
+    <!-- .breadcrumb -->
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li> 1、图片建议尺寸：640像素*1136像素，务必确保图片尺寸一致，以达到最佳展示效果。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div>
+          <%= content_tag :div, nil, class: "cieldon-file", data: {type: "6", name: "house_picture[pic_key]", img: "#{@house_pictures.map(&:pic_url).select(&:present?).join(',')}", img_ids: "#{@house_pictures.map(&:id).join(',')}", create_api_url: "/house_pictures?house_layout_id=#{@house_layout.try(:id)}&house_id=#{@house_layout.try(:house).try(:id)}", destroy_api_url: "/house_pictures", width: "160", height: "284"} %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% content_for :custom_js do %>
+<% end %>
+

@@ -1,0 +1,82 @@
+<div class="html theme-<%= @vip_card.template_id %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <%= form_tag('/app/vips/passwd', method: :post) do %>
+      <%= hidden_field_tag :password, nil %>
+      <%= hidden_field_tag :return_to, params[:return_to].presence %>
+      <section id="sec-index">
+        <div class="top-tips">
+          <%= @vip_user.password_digest.blank? ? "为确保支付安全请设置支付密码" : "请设置新的支付密码" %>
+        </div>
+        <div class="password">
+          <div class="password-box">
+            <ul>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+            <input type="password" class="psw" id="password1"/>
+            <a href="javascript:void(0);" class="hide J-psw"></a>
+          </div>
+        </div>
+      </section>
+      <section class="transition-right">
+        <div class="top-tips">
+          <%= @vip_user.password_digest.blank? ? "请再次填写以确认并设置邮箱地址" : "请再次填写以确认" %>
+        </div>
+        <div class="password tcenter">
+          <div class="password-box">
+            <ul>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+            <input type="password" class="psw" id="password2"/>
+          </div>
+        </div>
+        <% if @vip_user.password_digest.blank? %>
+          <div class="mod-roem form-ver">
+            <div class="form-li">
+              邮箱地址
+            </div>
+            <div class="form-li">
+              <%= text_field_tag :password_email, nil, class: 'input', placeholder: '请输入邮箱地址' %>
+            </div>
+            <div class="form-li">
+              <p class="c-red">*邮箱用于支付密码的找回请正确填写，邮箱错误将无法找回支付密码</p>
+            </div>
+          </div>
+        <% end %>
+        <div class="ft">
+          <input type="button" value="确认" class="btn btn-biger"/>
+        </div>
+      </section>
+    <% end %>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>
+<script>
+  $(function(){
+    $(".J-psw").transitions(".stage","right");
+  });
+  $(".btn-biger").on("click", function(){
+    var password1 = $('#password1').val(),
+        password2 = $('#password2').val();
+    if(password1 != password2){
+      alert("两次密码不符合，请重新输入!");
+      window.location.reload();
+    }else if($("#password_email").length>0 && !$('#password_email').val().match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)){
+      alert("邮箱地址不正确！");
+      return false;
+    }else{
+      $('#password').val(password2);
+      $('form').submit();
+    }
+  }); 
+</script>

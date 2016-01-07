@@ -1,0 +1,270 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微官网', websites_path %></li>
+        <li><%= link_to '微官网设置', websites_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-block alert-info ">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li> 1、根据需求，设置以下内容，加“ <span class="required-star">*</span> ”号均为必填项；</li>
+              <li> 2、通过"模板样式"确定微官网样式，通过"站点内容"来维护微官网内容，通过"首页轮播图"和"快捷菜单"来确定效果；</li>
+              <li> 3、上述工作完成后，你的微官网就建成了。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <%= render "weixin_preview", wx_title: @activity.try(:name) || @website.try(:name) || '微官网', wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
+
+          <%= form_for(@activity, validate: true, html: {class: 'form col-sm-7', id: 'edit_website_activity'}) do |f| %>
+            <%= f.hidden_field :status, value: Activity::SETTED %>
+            <%#= f.hidden_field :activity_type_id, value: ActivityType::WEBSITE %>
+            <%#= f.hidden_field :wx_mp_user_id %>
+            <%#= f.hidden_field :name %>
+
+            <%= f.fields_for :website, @website do |w| %>
+              <%#= w.hidden_field :wx_mp_user_id %>
+              <%#= w.hidden_field :supplier_id %>
+              <div class="form-group">
+                <label class="control-label">微官网名称<span class="required-star">*</span></label>
+                <div class="clearfix">
+                  <%= w.text_field :name, class: 'col-xs-6', maxlength: 12, "data-maxlength" => 12, "data-error" => "最好不要超过12个字", "data-rule" => "length", :placeholder => "请输入微官网名称,最好不要超过12个字" %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">回复关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">关键词不能和其他进行中的活动的关键词重复</small></label>
+                <div class="clearfix">
+                  <%= f.text_field :keyword, class: 'col-xs-6', placeholder: '' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微信消息标题<span class="required-star">*</span><small class="help-inline text-warning line-height-32">发送关键词后返回的微信消息标题</small></label>
+                <div class="clearfix">
+                  <%= f.text_field :name, class: 'col-xs-6', id: 'wx_title' %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+                <div class="clearfix">
+                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[qiniu_pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg"%>" data-key="<%= @activity.qiniu_pic_key %>"></div>
+                  <small class="text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微信消息摘要<span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
+                <%= f.text_area :summary, class: "form-control", rows: 3, maxlength: 128, placeholder: "请输入微信消息摘要", id: 'wx_summary' %>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label">微官网LOGO
+                  <!--<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="可在分享、个性二维码及部分官网首页模板中显示"></span>-->
+                  <span class="help-inline text-warning line-height-32">可在分享、个性二维码及部分官网首页模板中显示</span>
+                </label>
+                <div class="col-sm-12 no-padding-left">
+                  <div class="cieldon-file width-100px " data-type="0" data-height="90" data-width="90"  data-name="activity[website_attributes][logo_key]" data-img="<%= w.object.logo_url %>" data-key="<%= w.object.logo_key %>"></div>
+                  <small class="text-warning pull-left display-block margin-top-20 line-height-32">图片建议尺寸：90像素*90像素</small>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <%= w.fields_for :website_setting do |ws| %>
+                <div class="form-group">
+                  <audio id="material_audio_player" src=""></audio>
+                  <label class="margin-b-10 margin-top-10">
+                    <%= ws.check_box :open_bg_music, data: {toggle: 'div', target: '#background_music'}, class: 'ace' %>
+                    <span class="lbl">开启背景音乐<small class="help-inline text-warning">仅适用于部分模板</small></span>
+                  </label>
+
+                  <div class="<%= ws.object.open_bg_music ? '' : 'hide'%>" id="background_music">
+                    <div class="width-100px pull-left margin-right-10">
+                      <div class="file-btn">
+                        <a href="javascript:;" class="btn btn-primary btn-sm">上传背景音乐</a>
+                        <%= ws.file_field :bg_music, value: '上传背景音乐', class: 'pull-left' %>
+                      </div>
+                    </div>
+
+                    <i class="icon-volume-up pull-left"></i>
+                    <i class="icon-play pull-left" data-audio-src="<%= ws.object.bg_music_absolute_path.to_s %>"></i>
+                    <span class="line-height-32 pull-left"><%= ws.object.read_attribute('bg_music') %></span>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="margin-b-10">
+                    <%= ws.check_box :open_begin_animation, id: 'drawcontrol', class: 'ace', data: {toggle: 'div', target: '#start_animate'}, class: 'ace'%>
+                    <span class="lbl">开启开场动画</span>
+                  </label>
+
+                  <div class="<%= ws.object.open_begin_animation ? '' : 'hide'%>" id="start_animate">
+                    <label class="margin-right-5 ">选择动画效果</label>
+                    <%= ws.select :begin_animation_type, WebsiteSetting.begin_animation_type_options %>
+                    <label class="margin-right-5 ">仅首次显示</label>
+                    <label data-id="1" class="openoff">
+                      <%= ws.check_box :first_display, class: 'ace ace-switch ace-switch-7' %>
+                      <!--input type="checkbox" name="switch-field-1" class="ace ace-switch ace-switch-7 website-setting-first-diaplay"-->
+                      <span class="lbl"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="margin-b-10">
+                    <%= ws.check_box :open_bg_animation, id: 'backcontrol', data: {toggle: 'div', target: '#background_animate'}, class: 'ace' %>
+                    <span class="lbl">开启背景动画</span>
+                  </label>
+
+                  <div class="<%= ws.object.open_bg_animation ? '' : 'hide'%>" id="background_animate">
+                    <label class="margin-right-5">选择动画效果</label>
+                    <%= ws.select :bg_animation_type, WebsiteSetting.bg_animation_type_options %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>流量智能分流<a id="copy-button-1" data-clipboard-text="<%= ws.object.analytic_script(mobile_root_url(supplier_id: @website.supplier_id)) %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制代码</a></label>
+                  <%= ws.text_area :analytic_script, rows: 6, readonly: true, value: @website.new_record? ? '' : ws.object.analytic_script(mobile_root_url(supplier_id: @website.supplier_id)), class: 'form-control', placeholder: '' %>
+                  <span class="fontWarn">只要将此段代码复制到PC网站的&lt;body&gt;和&lt;/body&gt;之间，当用户使用手机访问PC网站时就会自动跳转到微官网。</span>
+                </div>
+
+                <div class="form-group">
+                  <label>
+                    <span class="lbl">百度直达号验证代码设置 <small class="help-inline text-warning">用于将微官网跟百度直达号对接，如无直达号则无需填充此项</small></span>
+                  </label>
+                  <%= w.text_area :baidu_app_js, rows: 6, class: 'form-control', placeholder: '请将百度直达号给出的验证代码复制到此，复制完成后点击保存' %>
+                  <span class="fontWarn">微官网网址：<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}" %></span>
+                  <a id="copy-button-2" data-clipboard-text="<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
+                  <br/>
+                  <span class="fontWarn">微官网Sitemap链接：<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}/sitemap.html" %></span>
+                  <a id="copy-button-3" data-clipboard-text="<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}/sitemap.html" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
+                </div>
+
+                <div class="form-group">
+                  <label>
+                    <span class="lbl">第三方统计代码 <small class="help-inline text-warning">用于对微官网首页进行统计分析，如无此需求则无需填充此项</small></span>
+                  </label>
+                  <%= w.text_area :analytic_scripts, rows: 6, class: 'form-control', placeholder: '请将百度统计代码或者其他第三方统计代码复制到此，复制完成后点击保存' %>
+                </div>
+              <% end %>
+            <% end %>
+
+            <div class="form-group">
+              <input class="btn btn-sm btn-primary" type="submit" value="保存">&nbsp;&nbsp;
+              <%= link_to [:stop, @website.activity], method: :post do %>
+                <input type="button" value="停用" class="btn btn-sm btn-default"/>
+              <% end unless @website.activity.stopped? %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+      $(function(){
+          <% if params[:task].present? && current_user.try(:task1?) %>
+            //显示任务完成  0 是第一个任务 1 2 3，
+            $(".shadow").show();   // 添加蒙板   
+            $(".mission_cont").show();
+            $(".mission_box2").eq(0).show().find(".mission_box_div").eq(1).show();               
+          <% end %>
+
+          var audio_tag = $('#material_audio_player');
+          var audio = document.getElementById('material_audio_player');
+
+          $('#background_music i.icon-play, i.icon-pause').on("click", function () {
+              if(!$(this).attr('data-audio-src')){
+                  showTip('warning', '还没有音乐，请上传音乐');
+                  return false;
+              }
+              if ($(this).hasClass("icon-play")) {
+                  if ($(this).data('audio-src') != audio_tag.attr('src')) {
+                      audio_tag.attr('src', $(this).data('audio-src'));
+                  }
+                  audio.play();
+                  $(this).removeClass("icon-play");
+                  $(this).addClass("icon-pause");
+              }
+              else {
+                  audio.pause();
+                  $(this).removeClass("icon-pause");
+                  $(this).addClass("icon-play");
+              }
+          });
+          $('#background_music i.icon-volume-up, i.icon-volume-off').on("click", function () {
+              if(audio.muted){
+                  audio.muted = false;
+                  $(this).removeClass('icon-volume-off');
+                  $(this).addClass('icon-volume-up');
+              }else{
+                  audio.muted = true;
+                  $(this).removeClass('icon-volume-up');
+                  $(this).addClass('icon-volume-off');
+              }
+          });
+          function auto_file_upload(file_input_id, form_id) {
+              var upload_file = function() {
+                  var music_regex = /(\.mp3)|(\.wma)|(\.wav)|(\.amr)/i;
+                  var filename    = $('#' + file_input_id).val();
+                  if ( music_regex.test(filename)) {
+                      $('#' + form_id).submit();
+                  } else {
+                      showTip('warning', '文件格式不正确');
+                  };
+              }
+              var upload_input = $('#' + file_input_id);
+              if(navigator.userAgent.match(/msie/i)) {
+                  upload_input.click(function(event) {
+                      setTimeout(function() {
+                          if(upload_input.val().length > 0) {
+                              upload_file();
+                          }
+                      }, 0);
+                  });
+              } else {
+                  upload_input.change(upload_file);
+              }
+          }
+
+          if ($('#activity_website_attributes_website_setting_attributes_bg_music').length > 0) {
+              auto_file_upload('activity_website_attributes_website_setting_attributes_bg_music', 'edit_website_activity');
+          };
+
+          var clip=[], ids = [];
+          $('.copy-button').each(function(i){
+              ids[i] = $(this).attr('id');
+              clip[i] = new ZeroClipboard($(this), {
+                  moviePath: "/flash/ZeroClipboard.swf"
+              } );
+
+              clip[i].on( "load", function(client) {
+                  client.on( "complete", function(client, args) {
+                      if(args['current_element_id'] == ids[i]){
+                          showTip('success', '内容已复制到剪贴板');
+                      }
+                  });
+              });
+          });
+          
+          $('form').on('input', '#activity_website_attributes_name', function(){
+            $('form #activity_name').val($(this).val());
+          });
+
+      });
+    </script>
+<% end %>

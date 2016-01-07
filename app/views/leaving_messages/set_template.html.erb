@@ -1,0 +1,133 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微留言', edit_activity_leaving_messages_path %></li>
+        <li><%= link_to '模版设置', set_template_leaving_messages_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+        <%= render "top_navs" %>
+        <div class="tab-content no-border padding-24">
+
+          <div id="tab-2" class="tab-pane fade active in">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>顶部图片<small class="text-warning">建议尺寸：640像素 * 152像素</small></label>
+                  <div class="dropdown-hover">
+                    <span class="icon-question-sign dropdown-toggle" data-toggle="dropdown" data-target="#"></span>
+                    <div class="dropdown-menu dropdown-yellow dropdown-close" role="menu" aria-labelledby="dLabel">
+                      <img alt="Sample" src="/assets/leaving_messages/bg-header-demo.jpg" />
+                    </div>
+                  </div>
+
+                  <div class="clearfix margin-top-10">
+                    <div style="width: 421px;height: 85px; float: left">
+                      <%= image_tag @template.header_bg, :id => "header_bg", :title => "微留言顶部图片预览", :style => "width: 100%; height: 100%" %>
+                    </div>
+                    <div class="dropdown displayInline margin-left-10 margin-top-20 pull-left">
+                      <button class="btn btn-primary btn-sm" data-toggle="dropdown" data-target="#">图片素材</button>
+                      <div class="select-icon dropdown-menu dropdown-yellow dropdown-close fbBgHeader" role="menu" aria-labelledby="dLabel">
+                        <% 1.upto(3).each do |i| %>
+                          <p><%= image_tag "/assets/leaving_messages/bg-header-#{i}.jpg", width: 400, height: 80, style: "cursor: pointer;" %></p>
+                        <% end %>
+                      </div>
+                    </div>
+                    <div class="cieldon-file width-100px margin-top-20 margin-left-10" data-callback="upload_callback" data-name="upload_header_bg" data-type="1" data-div="#img-1" data-height="200"></div>
+                  </div>
+                </div>
+                <div class="form-group feedbackTemplate">
+                  <label>模板选择</label>
+                  <div class="clearfix">
+                    <ul class="ace-thumbnails temp-message">
+                      <% 1.upto(3) do |i| %>
+                        <li style_index="<%= i %>">
+                          <a href="javascript:;" class="">
+                            <%= image_tag "/assets/leaving_messages/template_demo_#{i}.jpg", width: 230 %>
+                            <span>微留言模版<%= i %></span>
+                          </a>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    function upload_callback(key, img_url){
+      $("#header_bg").attr("src", img_url);
+      showTip("success","顶部图片保存成功！");
+      $.post("/leaving_messages/set_header_bg", {template_id: <%= @template.id %>, header_bg: img_url}, function(result){
+        $("#header_bg").attr("src", result.header_bg);
+        showTip("success","顶部图片保存成功！");
+      });
+    }
+
+    $(document).click(function(e){
+      if($(e.target).is(".btn.btn-big")){
+
+      }else {
+        if($(e.target).is(".select-icon a,.select-icon div,.scrollBox *")){
+
+        }else{
+          $(".icon-box.title").hide();
+        }
+      }
+    });
+    
+    $(function(){
+      $(".select-icon").on("click",".btn",function(){
+        $(".icon-box").show();
+        $(".icon-tab").on("click","a",function(){
+          var $this =$(this),
+          $index = $this.index(),
+          $list = $(".icon-list");
+          $this.addClass("active").siblings().removeClass("active");
+          $list.not($list.eq($index)).fadeOut("200",function(){
+            $list.eq($index).fadeIn("200",function(){
+              yAoscroll("#scroll","#content","#scroll_bot","#scroll_top");
+            });
+          });
+        });
+
+      });
+      $(".select-icon").on("click","img",function(){
+        var header_bg = $(this).attr("src");
+        if (header_bg != ""){
+          $.post("/leaving_messages/set_header_bg", {template_id: <%= @template.id %>, header_bg: header_bg}, function(result){
+            $("#header_bg").attr("src", result.header_bg);
+            showTip("success","顶部图片保存成功！");
+          });
+        }
+      });
+
+      $(".temp-message li").click(function(){
+        $.post("/leaving_messages/set_template_save", {template_id: <%= @template.id %>, template_template_id: $(this).attr("style_index")}, function(result){
+          //$(".temp-message li a").removeClass("active");
+          //$(".temp-message li[style_index=" + result.template_template_id + "]").addClass("active");
+          $("#header_bg").attr("src", result.header_bg);
+          showTip("success","模版保存成功！");
+        });
+      });
+
+      $(".temp-message li[style_index=<%= @template.template_id %>]").addClass("active");
+
+    });
+
+  </script>
+<% end %>

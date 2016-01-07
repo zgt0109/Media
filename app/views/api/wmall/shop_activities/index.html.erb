@@ -1,0 +1,21 @@
+<h1>Listing api_wmall_shop_activities</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @api_wmall_shop_activities.each do |api_wmall_shop_activity| %>
+  <tr>
+    <td><%= link_to 'Show', api_wmall_shop_activity %></td>
+    <td><%= link_to 'Edit', edit_api_wmall_shop_activity_path(api_wmall_shop_activity) %></td>
+    <td><%= link_to 'Destroy', api_wmall_shop_activity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Shop activity', new_api_wmall_shop_activity_path %>

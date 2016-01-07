@@ -1,0 +1,8 @@
+<div class="col-md-6 row" id="tags">
+  <% article.tags.each do |tag| %>
+    <label class="margin-b-10 margin-right-20">
+      <%= f.check_box :tag_ids, {name: 'website_article[tag_ids][]', class: 'ace'}, tag.id, false %>
+      <span class="lbl"><%= tag.name %></span>
+    </label>
+  <% end %>
+</div>

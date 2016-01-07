@@ -1,0 +1,89 @@
+<% provide(:title, @hospital.name) %>
+<section id="index">
+	<header>
+		<div class="wrap">
+			<a href="<%= mobile_hospital_comments_path(id: @hospital_doctor.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+			<h1>写评论</h1>
+		</div>
+	</header><!-- header end -->
+
+	<div class="body">
+		<div class="box-comment">
+			<div class="comment-form">
+				<div class="hd">
+					<h2 class="ellipsis">发表评论</h2>
+					<a class="ico ico-heart fr"><em><%= @hospital_comments.count %></em></a>
+				</div>
+				<div class="bd">
+					<div class="fl">
+						<span class="comment-img">
+							<%= image_tag "/assets/life/user_logo.png" %>
+						</span>
+					</div>
+					<div class="fr">
+						<%= form_for @hospital_comment, url: mobile_hospital_comments_path, method: :post do |f| %>
+						<%= hidden_field_tag "id", @hospital_doctor.id  %>
+						<%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+							<div class="comment-input">
+								<%= f.text_area :content, :rows => 3,  :placeholder => "请输入您的评论", maxlength: 140 %>
+								<div class="bd-face">
+									<!--<a class="ico icon-smile"></a>-->
+									<span class="fr" id="limit_word_count">140</span>
+								</div>
+							</div>
+							<div class="comment-text">
+								<%= f.text_field :nickname, value: @wx_user.try(:nickname), placeholder: "请输入您的昵称" %>
+							</div>
+							<div class="comment-btn">
+								<input type="submit" class="btn fw form-submit" value="发布"/>
+							</div>
+						<% end %>
+					</div>
+				</div>
+			</div>
+			<h3>热门评论</h3>
+			<div class="comment-list">
+			<% if @hospital_comments.count == 0 %>
+				<div class="box-null">
+					真遗憾，暂时没有评论哦！
+				</div><!--box-null end-->
+			<% else %>
+				<% @hospital_comments.each do |comment| %>
+				<div class="comment-li">
+					<div class="fl">
+						<span class="comment-img">
+							<%= image_tag "/assets/life/user_logo.png" %>
+						</span>
+					</div>
+					<div class="fr">
+						<p><%= comment.content %></p>
+						<span>
+							<i class="fl"><%= comment.try(:nickname) %> </i>
+							<i class="fr"><%= date_format_full(comment.created_at) %></i>
+						</span>
+					</div>
+				</div><!--comment-li end-->
+				<% end %>
+			<% end %>	
+			</div><!--comment-list end-->
+		</div><!-- box-comment end -->
+	</div>
+</section>
+
+<script>
+$(".btn").click(function(){
+	if($("#hospital_comment_content").val() == ''){
+		alert("评论不能为空！");
+		$("#hospital_comment_content").focus();
+		return false;
+	}else{
+		$(".new_hospital_comment").submit();
+	}
+});
+
+$("#hospital_comment_content").keydown(function(){
+	var current_count = $(this).val().length;
+	var ret = 140 - current_count;
+	$("#limit_word_count").text(ret);	
+});
+</script>

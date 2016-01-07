@@ -1,0 +1,21 @@
+<h1>Listing pro_wmall_shop_accounts</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @pro_wmall_shop_accounts.each do |pro_wmall_shop_account| %>
+  <tr>
+    <td><%= link_to 'Show', pro_wmall_shop_account %></td>
+    <td><%= link_to 'Edit', edit_pro_wmall_shop_account_path(pro_wmall_shop_account) %></td>
+    <td><%= link_to 'Destroy', pro_wmall_shop_account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Shop account', new_pro_wmall_shop_account_path %>

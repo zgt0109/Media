@@ -1,0 +1,26 @@
+<% if @website_setting.open_bg_music? %>
+    <% content_for :bg_music_section do %>
+        <input type="button" style="display: none;" value='播放' id="material_play">
+        <a id="playbox" class="ico-music open" onclick="playbox.init(this).play();">
+          <% if judge_andriod_version.blank? %>
+            <audio src="<%= @website_setting.bg_music_qiniu_url %>" id="audio" />
+          <% end %>
+        </a>
+
+        <% if @template_id == 16 %>
+            <!--适用于模版1,5,6,7,8,9,10,11,12,13,14,16-->
+            <a class="mod-music music-1 open" onclick="toggleToClass(this,'open')"><span></span></a>
+        <% elsif @template_id == 2 %>
+            <!--适用于模版2,-->
+            <a class="mod-music music-4 main-color-1" onclick="toggleToClass(this,'open')">
+              <span><i class="fa fa-headphones"></i></span>
+            </a>
+        <% else %>
+            <!--适用于模版1,3,4,5,6,7,8,9,10,11,12,13,14,15-->
+            <a class="mod-music music-4 main-color-1" onclick="toggleToClass(this,'open')">
+              <span><i class="fa fa-headphones"></i></span>
+            </a>
+        <% end %>
+
+    <% end %>
+<% end %>

@@ -1,0 +1,41 @@
+<div class="box-form form-row tleft">
+  <p>
+    <span style="font-size:20px;color:green;"><%= @message.try(:nickname) %></span>
+    <p style="line-height: 10px;"><%= @message.body %></p>
+    <p style="line-height: 10px;"><%= @message.created_at %></p>
+  </p>
+  <%- if @message.parent.nil? %>
+    <%= form_for current_user.leaving_messages.new, remote: true do |f| %>
+      <%= f.hidden_field :replier_id, value: current_user.id %>
+      <%= f.hidden_field :replier_type, value: "Supplier" %>
+      <%= f.hidden_field :parent_id, value: @message.id %>
+      <%= f.hidden_field :status, value: 2 %>
+      <p>
+        <%= f.text_area :body, placeholder: "回复...", rows: 3 %>
+      </p>
+      <p>
+        <input type="submit" value="回复" class="btn btn-big form-submit create_reply" />
+      </p>
+    <% end %>
+  <%- end %>
+  <div class="box-text text-col fl" id="message_children">
+    <%- if @children.present? %>
+      <%= render "children" %>
+    <%- end %>
+  </div>
+</div>
+
+<script>
+  $(function(){
+    $(".create_reply").on({
+      click:function(){        
+        if (!$('#leaving_message_body').val()){
+          showTip('warning','请输入内容');
+          return false;
+        }                
+        $(".create_reply").attr("disabled", true);
+        $("form.new_leaving_message").submit();
+      }
+    });
+  });
+</script>

@@ -1,0 +1,100 @@
+<% content_for :pop do %>
+    <div class="pop" id="pop-name" style="display: block;">
+      <div class="pop-bg"></div>
+      <div class="pop-border" style="width:620px; height:280px; margin:-140px 0 0 -310px;"></div>
+      <div class="pop-bd" style="width:600px; height:260px; margin:-130px 0 0 -300px;">
+        <div class="hd">微官网数据初始化</div>
+        <div class="bd">
+          <img src="/assets/gm/loading.gif" alt="数据初始化" class="initial_img"/>
+          <div class="describe1">
+            <p>数据初始化进行中...</p>
+          </div>
+          <div class="describe2">
+            <p>为了方便快速上手创建您专属的微官网，系统会初始化帮您创建一个微官网样例，直接手机扫描二维码就可以看效果哦，任何修改都可以做到所见即所得~</p>
+          </div>
+          <form>
+            <input type="submit" class="btn btn-green initialize" value="初始化">
+            <input type="submit" class="btn btn-small btn-remove cancel" value="取消">
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $('.cancel').click(function(){
+                $('.pop').css('display', 'none');
+                $.get("/websites/create_initial_data", {is_initialize: 0}, function(result){
+                    window.location.href = '/websites';
+                });
+                return false;
+            });
+            $('.initialize').click(function(){
+                $('.pop').css('display', 'block');
+                $('.initial_img').show();
+                $('.describe1').show();
+                $('.initialize').hide();
+                $('.cancel').hide();
+                $('.describe2').hide();
+                $.get("/websites/create_initial_data", {is_initialize: 1}, function(result){
+                    handle(result);
+                });
+                return false;
+            });
+            function handle(type){
+                var msg = '',
+                    msg_type = 'warning';
+                switch (type) {
+                    case "0":
+                        msg = "数据初始化失败";
+                        break;
+                    case "1":
+                        msg = "数据初始化成功";
+                        msg_type = "success";
+                        break;
+                    case "2":
+                        msg = "参数错误";
+                        break;
+                    default:
+                        msg = ''
+                }
+                if(msg){
+                    showTip(msg_type, msg);
+                }
+                window.setTimeout(function(){window.location.href = '/websites';}, 2000);
+            }
+        });
+    </script>
+    <style>
+        .describe1{
+            font-size: 16px;
+            padding: 0 35px;
+            line-height: 2;
+            display: none;
+        }
+        .describe2{
+            font-size: 16px;
+            text-align: left;
+            padding: 0 35px;
+            line-height: 2;
+        }
+        .initialize{
+            width: 100px;
+            margin-left: -5px;
+            background-color: rgb(101, 173, 133);
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .cancel{
+            width: 100px;
+            height: 38px;
+            margin-left: 60px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .initial_img{
+            margin-top: 33px;
+            display: none;
+        }
+    </style>
+<% end %>

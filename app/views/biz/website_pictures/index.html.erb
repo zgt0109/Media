@@ -1,0 +1,137 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微官网', websites_path %></li>
+        <li><%= link_to '首页幻灯片', website_pictures_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <!-- PAGE CONTENT BEGINS -->
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li> 1、上传的图片会在微官网的首页显示，最多支持上传<span class="red">5</span>张图片；</li>
+              <li> 2、支持图片上传格式为：jpg、png、bmp、gif；</li>
+              <li>3、并非所有模板都支持首页轮播图，是否支持请参考所选模板的风格提示，在&lt;模板样式&gt;栏目；
+              </li>
+              <li>4、图片最佳分辨率，请参考你所选择模板的风格提示，在
+                &lt;模板样式&gt;栏目。
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="vwebsitePicture form-group">
+            <ul class="ace-thumbnails thumbnails-1 clearfix">
+              <li>
+                <%= link_to new_website_picture_path do %>
+                    <div class="text text-block">
+                      <div class="inner">添加图片<br><i class="icon-plus"></i></div>
+                    </div>
+                <% end %>
+              </li>
+              <% @pictures.each do |picture| %>
+                  <li id="photo_<%= picture.id %>" data-id="<%= picture.id %>">
+                    <a href="javascript:;" title="<%= picture.title %>" data-rel="colorbox" data-id="<%= picture.id %>" data-title="<%= picture.title %>">
+                      <img alt="150x150" src="<%= picture.pic_url %>" />
+                      <div class="text">
+                        <div class="inner"><%= picture.title %></div>
+                      </div>
+                    </a>
+                    <div class="tools">
+                      <%= link_to 'javascript:;' do %>
+                        <i class="icon-trash btn-fa btn-remove"></i>
+                        <i class="icon-pencil btn-fa btn-edit"></i>
+                      <% end %>
+                      <%= link_to '', website_picture_path(picture), data: {method: :delete, confirm: '确定要删除吗？'}, style: 'display: none;', class: 'remove-picture' %>
+                      <%= link_to '', edit_website_picture_path(picture), style: 'display: none;', class: 'edit-picture' %>
+                    </div>
+                  </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <%= form_for @website.website_setting, validate: true do |f| %>
+          <div class="form-group">
+            <label class="control-label">幻灯片底栏</label>
+            <div class="widget-foot inline">
+              <label>
+                <%= f.check_box :is_wp_open_bottom, class: 'ace ace-switch ace-switch-7' %>
+                <span class="lbl"></span>
+              </label>
+            </div>
+            <div class="row line-height-32">
+              <div class="col-xs-4">
+                <span class="pull-left">底栏颜色：</span>
+                <%= f.text_field :wp_bottom_color, class: 'pull-left', value: f.object.wp_bottom_color %>
+              </div>
+              <div class="col-xs-4">
+                <span class="pull-left">透明度：</span>
+                <%= f.text_field :wp_bottom_opacity, class: 'pull-left', value: f.object.wp_bottom_opacity  %>
+              </div>
+            </div>
+            <div class="row line-height-32">
+              <div class="col-xs-4">
+                <span class="pull-left">文字颜色：</span>
+                <%= f.text_field :wp_font_color, class: 'pull-left', value: f.object.wp_font_color  %>
+              </div>
+              <div class="col-xs-4">
+                <span class="pull-left">透明度：</span>
+                <%= f.text_field :wp_font_opacity, class: 'pull-left', value: f.object.wp_font_opacity  %>
+              </div>
+            </div>
+          </div>
+          <div class="form-group ">
+            <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
+          </div>
+          <% end %>
+        </div>
+
+
+        <!-- /.row -->
+      </div>
+      <!-- /.page-content -->
+    </div>
+
+  </div>
+  </div>
+
+<% end %>
+<% content_for :custom_js do %>
+    <%= javascript_include_tag "jscolor/jscolor.js", "msdropdown/jquery.dd.min.js" %>
+    <%= stylesheet_link_tag "msdropdown/dd.css" %>
+    <script type="text/javascript">
+        var bottomColorPicker = new jscolor.color(document.getElementById('website_setting_wp_bottom_color'), {})
+        var fontColorPicker = new jscolor.color(document.getElementById('website_setting_wp_font_color'), {})
+        $('.btn-remove').click(function(){
+            $(this).closest('.tools').find('.remove-picture').click();
+        });
+        $('.btn-edit').click(function(){
+            window.location.href = $(this).closest('.tools').find('.edit-picture').attr('href');
+        });
+        function is_upload(){
+            var flag;
+            jQuery.ajax({
+                type: "get",
+                url: '/websites/pictures',
+                dataType: "json",
+                async: false,
+                success: function(data){
+                    if(parseInt(data) >= 5){
+                        showTip('success','最多支持上传5张图片');
+                        flag = false;
+                    }else{
+                        flag = true;
+                    }
+                }
+            });
+            return flag;
+        }
+    </script>
+<% end %>

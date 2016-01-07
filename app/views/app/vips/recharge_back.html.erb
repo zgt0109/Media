@@ -1,0 +1,16 @@
+<% provide(:title,  @order.paid? ? '充值成功' : '充值失败') %>
+<div class="html theme-<%= @vip_card.template_id %> <%= "no-card" if !@vip_user.try :normal? %> <%= "add-nav" if @vip_card.template_id == 2 %>" id="html">
+  <div class="stage" id="stage">
+    <!-- 会员卡首页 start -->
+    <section id="sec-index">
+      <div class="mod-success c-6">
+        <i class="img img-2"></i>
+        <%= @order.paid? ? "充值成功#{@order.pay_amount}元" : '充值失败' %>
+      </div>
+      <div class="form-list mt">
+        <%= link_to '完成', @vip_package_id.present? ? buy_vip_package_app_vips_path(id: @vip_package_id) : app_vips_path, class: 'btn btn-big' %>
+      </div>
+    </section>
+    <!-- 会员卡首页 end -->
+  </div>
+</div>

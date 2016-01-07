@@ -1,0 +1,8 @@
+<li class="photo-li">
+  <a href="javascript:;" data-rel="colorbox">
+    <%= image_tag(picture.pic_url) %>
+  </a>
+  <div class="tools">
+    <a href="<%= del_picture_micro_shop_branch_path(picture) %>" id="delete<%= picture.id %>" data-confirm='确定删除该图片？' data-method='get' data-remote='true'><i class="icon-trash btn-fa btn-remove"></i></a>
+  </div>
+</li>

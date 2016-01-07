@@ -1,0 +1,99 @@
+<div class="tabbable">
+  <%= render "biz/groups/top_nav_tabs"%>
+  <div class="tab-content no-border"></div>
+</div>
+
+<div id="tab-4" class="tab-pane">
+  <%= form_for @group_orders_search, url: orders_groups_path, html: {method: :get} do |f| %>
+    <div class="col-sm-12 margin-top-10">
+      <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">订单号：</span>
+          <%= f.text_field :order_no_like, class: 'col-xs-12', placeholder: "请输入订单号"  %>
+        </div>
+      </div>
+
+　　　 <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">支付流水号：</span>
+          <%= f.text_field :payments_trade_no_like, class: 'col-xs-12', placeholder: "请输入支付流水号"  %>
+        </div>
+      </div>
+
+　　　 <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">SN码：</span>
+          <%= f.text_field :code_like, class: 'col-xs-12', placeholder: "请输入SN码"  %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 margin-top-10"> 　 
+      <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">下单时间：</span>
+            <%= datetime_range_tag f, start_at: :created_at_gte, end_at: :created_at_lte, options: {class: 'daterange col-sm-12'} %>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="input-group input-group-text">
+          <span class="input-group-addon">状态：</span>
+          <%= f.select :status_eq, GroupOrder.status_options, {include_blank: '全部'}, class: "col-xs-12" %>
+        </div>
+      </div>
+
+      <div class="col-md-3 pull-left">
+        <button class="btn btn-primary btn-sm btn-filter" type="submit">查询</button>
+        <%#= link_to '查询', 'javascript:;', class: 'btn btn-primary btn-sm btn-filter', id: 'search_vip_users' %>
+        <%# link_to '导出EXCEL', vip_records_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) , class: 'btn btn-primary btn-sm btn-filter' %>
+
+        <% all_search_count = @group_orders_search.count %>
+        <% if all_search_count <= EXPORTING_COUNT%>
+          <%= link_to '导出EXCEL', orders_groups_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) , class: 'btn btn-primary btn-sm btn-filter' %>
+        <% else %>
+          <a class="btn btn-primary btn-sm btn-filter ml20" data-url="<%= orders_groups_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) %>" data-title="导出EXCEL" data-toggle="modals" data-target="delModal" data-text='<%= data_text(all_search_count,(all_search_count/EXPORTING_COUNT.to_f).ceil) %>'>导出EXCEL</a>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-sm-12 no-padding">
+    <table id="orderManageTable" class="table table-striped table-bordered table-hover margin-top-20">
+      <thead>
+        <tr>
+          <th>订单号</th>
+          <th>支付流水号</th>
+          <th>支付方式</th>
+          <th>SN码</th>
+          <th>商品名称</th>
+          <th>订单金额</th>
+          <th>状态</th>
+          <th>下单时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "biz/group_orders/order_tr", collection: @group_orders, as: :order%>
+      </tbody>
+    </table>
+
+    <%= paginate @group_orders, :param_name => :order_page, :params => { :anchor => 'tab-4' } %>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $('body').on('click','button[data-fn="submit"]',function(){
+            var page_exl = $('#delModal').find("[name=page_exl]:checked");
+            var url = "<%= orders_groups_path(:format => :xls,:search => params[:search], field: params[:field], q: params[:q]) %>"+"<%= (params[:search].present? || params[:field].present? || params[:q].present? ) ? '&page_exl=' : '?page_exl='%>"+page_exl.val();
+            window.location.href=url;
+        });
+        
+        $(".btn-filter").on("click", function(){
+            setTimeout(function(){
+                $("button[data-fn=submit]").attr("type","button");
+            },200)
+        });
+    </script>
+<% end %>

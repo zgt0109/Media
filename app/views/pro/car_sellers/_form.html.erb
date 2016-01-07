@@ -1,0 +1,50 @@
+<%= form_for(@car_seller, validate: true) do |f| %>
+  <%= f.hidden_field :supplier_id %>
+  <%= f.hidden_field :wx_mp_user_id %>
+  <%= f.hidden_field :seller_type, value: params[:seller_type] || 1 %>
+  <div class="alert alert-block alert-info" style="margin-bottom: 0px;">
+    <strong class="pull-left">提示：</strong>
+    <ul class="vwebsiteHeadAlert">
+      <li>1、以下<span class="required-star">* </span>均为必填项；</li>
+    </ul>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="control-label">销售名称<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">销售职位<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :position, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">电话<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :phone, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">语言<span class="required-star">*</span></label>
+      <div class="clearfix">
+        <%= f.text_field :skilled_language, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">头像<span class="required-star">*</span></label><span class="help-inline text-warning line-height-32"> 图片建议尺寸：200像素*260像素</small>
+      <div class="clearfix">
+        <div class="cieldon-file width-100px" data-name="car_seller[qiniu_pic_key]" data-type="0" data-key="<%= @car_seller.qiniu_pic_key %>" data-img="<%= @car_seller.pic_url %>" data-height="260px" data-width="200px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-sm btn-primary" data-fn="submit" value="确定">
+    <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

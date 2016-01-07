@@ -1,0 +1,137 @@
+<div class="warpVMS">
+  <div class="vMicroShow">
+    <div class="vMSHead">
+      <span class="title">这里显示&lt;微信消息标题&gt;</span><br>
+      <span class="grey"><%= Date.today %></span>
+    </div>
+    <div class="vMSImg">
+      <% if @activity.try(:pic_url).present? %>
+          <div class="vMSImg">
+            <span id="img-1" style="display: block; width: 100%; height: 200px; background-image: url(<%= @activity.try(:pic_url) %>); background-size: 100%; background-repeat: no-repeat no-repeat;"></span>
+            <!-- <span style="top: 38%;left: 36%; color: #999;font-size: 24px;position: absolute;font-weight: bold">封面图片</span> -->
+          </div>
+      <% else %>
+          <div class="vMSImg">
+            <span id="img-1" style="display:block; width:100%; height:100%;"></span>
+            <!-- <span style="top: 38%;left: 36%; color: #999;font-size: 24px;position: absolute;font-weight: bold">封面图片</span> -->
+          </div>
+      <% end %>
+    </div>
+    <div class="vMSFoot">
+      <p class="grey">这里显示你输入的 &lt;微信消息摘要&gt;</p>
+    </div>
+  </div>
+</div>
+<%= form_for @activity, validate: true, :html => {:class => 'col-xs-12 col-md-6 col-lg-7'} do |f| %>
+    <div class="form-group ">
+      <label class="control-label">活动名称<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.text_field :name, :class => "col-xs-8 activity_name_input", maxlength: 64, validate: true, placeholder: "请输入微团购名称,最好不要超过8个字" %>
+      </div>
+    </div>
+    <div class="form-group ">
+      <label class="control-label">活动回复关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">关键词不能和其他进行中的活动的关键词重复</small></label>
+
+      <div class="clearfix">
+        <%= f.text_field :keyword, :class => "col-xs-8", maxlength: 64, validate: true, placeholder: "不能超过64个字" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">团购图片上传
+        <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
+
+      <div class="clearfix">
+        <%= content_tag :div, nil, class: "cieldon-file  width-80px", data: {type: "1", div: "#img-1", name: "activity[qiniu_pic_key]", img: "#{@activity.try(:qiniu_pic_url)}", key: "#{@activity.try(:qiniu_pic_key)}", height: "200"} %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
+      <%= f.text_area :summary, maxlength: 255, class: "form-control activity_summary_input", placeholder: "不能超过255个字.", rows: "5" %>
+    </div>
+    <div class="form-group">
+      <label class="control-label">商品名称<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <%= f.fields_for :activity_property do |activity_property_form| %>
+            <%= activity_property_form.text_field :item_name, validate: true, class: "col-md-8", placeholder: "不能超过10个字" %>
+        <% end %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">团购描述</label>
+
+      <div class="clearfix">
+        <%= render "shared/form_rich_text", field_name: "description", obj: @activity, f: f, wrapper_html_options: {class: "form-control"} %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">特别提醒</label>
+
+      <div class="clearfix">
+        <%= f.fields_for :activity_property do |activity_property_form| %>
+            <%= render "shared/form_rich_text", field_name: "special_warn", obj: @activity.activity_property, f: activity_property_form, wrapper_html_options: {class: "form-control", placeholder: "不能超过255个字"} %>
+        <% end %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">活动预热时间<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        从<%= f.text_field :ready_at, class: 'date-time inputSmall width-30', :validate => {:presence => false} %>到活动开始时间
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label">活动时间<span class="required-star">*</span></label>
+
+      <div class="clearfix">
+        <div class="input-group input-group col-md-8 no-padding-left no-padding-right">
+                <span class="input-group-addon">
+                <i class="icon-calendar bigger-110"></i>
+                </span>
+          <%= f.text_field :date_range, class: "form-control datetimerange" %>
+        </div>
+      </div>
+    </div>
+    <%= f.fields_for :activity_property do |activity_property_form| %>
+        <div class="form-group">
+          <label class="control-label">最低成团人数<span class="required-star">*</span></label>
+
+          <div class="clearfix">
+            <%= activity_property_form.text_field :min_people_num, validate: true, class: "col-md-8" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">每个用户最多购买数量<span class="required-star">*</span></label>
+
+          <div class="clearfix">
+            <%= activity_property_form.text_field :get_limit_count, validate: true, class: "col-md-8" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">团购价格<span class="required-star">*</span></label>
+
+          <div class="clearfix">
+            <%= activity_property_form.text_field :coupon_price, validate: true, class: "col-md-8" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">原价格<span class="required-star">*</span></label>
+
+          <div class="clearfix">
+            <%= activity_property_form.text_field :item_price, validate: true, class: "col-md-8" %>
+          </div>
+        </div>
+        <%= f.hidden_field :activity_type_id %>
+        <%= f.hidden_field :wx_mp_user_id %>
+    <% end %>
+    <div class="form-group ">
+      <% unless params[:action].eql?("show_group") %>
+          <input type="submit" class="btn btn-sm btn-primary" value="保存">
+          <%= link_to '停止', [:stop, @activity], method: :post, :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))}, class: "btn btn-sm btn-default" if @activity.allow_stop? %>
+      <% else %>
+          <%= link_to "返回", :back, class: "btn btn-sm btn-default" %>
+      <% end %>
+    </div>
+<% end %>
+<div class="clearfix"></div>

@@ -1,0 +1,13 @@
+<div class="col-md-12">
+  <div class="row template-list">
+    <ul class="ace-thumbnails">
+      <% count = templates.count %>
+      <% select_template = templates.where(style_index: @website_setting[column].to_i).first || templates.last %>
+      <%= render 'template', {template: select_template, li_class: 'active', template_type: template_type, index: count - templates.index(select_template)} if select_template.is_permit_current_supplier(current_user) %>
+      <% templates.each_with_index do |template, index| %>
+        <% next if select_template.id == template.id %>
+        <%= render 'template', {template: template, li_class: '', template_type: template_type, index: count - templates.index(template)} if template.is_permit_current_supplier(current_user) %>
+      <% end %>
+    </ul>
+  </div>
+</div>

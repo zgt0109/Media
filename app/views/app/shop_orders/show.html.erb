@@ -1,0 +1,62 @@
+<% provide(:title, '我要订餐') if @shop_order.book_dinner? %>
+<% provide(:title, '我要叫外卖') if @shop_order.take_out? %>
+<body>
+  <div class="html">
+    <div class="main">
+      <header>
+        <%= link_to app_shop_orders_url(:order_type => @shop_order.order_type, anchor: "mp.weixin.qq.com"), class: "ico ico-prev" do %>
+           <img src="/assets/micro_stores/ico-prev.png"/>
+        <% end %>
+        <h1>
+          <%= "订餐详情" if @shop_order.book_dinner? %>
+          <%= "外卖详情" if @shop_order.take_out?  %>
+        </h1>
+      </header>
+
+      <section>
+        <div style="position:fixed;"></div>
+        <div class="box menu-order">
+          <div class="hd">订单概要</div>
+            <div class="bd">
+              <div class="fl">
+                <p><b>总数量：</b><span id="total_number"><%= @shop_order.total_qty %>份</span></p>
+                <p><b>总价格：</b><span><b><%= f @shop_order.total_amount %></b>元</span></p>
+                <p><b>您的电话：</b><span><%= @shop_order.mobile %></span></p>
+                <% if @shop_order.address %>
+                  <p><b>外送地址: </b><span><%= @shop_order.address %></span></p>
+                <% end %>
+              </div>
+              <div class="fr">
+                <%= link_to [:app, @shop_order], method: :delete, data: { confirm: '确定要取消订单？' }, class: "btn confirm-btn" do %>
+                  取消订单
+                <% end if @shop_order.pending? %>
+              </div>
+          </div>
+        </div><!--menu-order end-->
+
+        <div class="box menu-order">
+          <div class="hd">菜单明细</div>
+          <div class="bd table">
+          <% @shop_order.shop_order_items.each do |item| %>
+
+              <p class="tr">
+                <em class="td"><%= item.product_name %></em>
+                <b class="td"><%= format("%.2f", item.price) %>
+                  <i>元/例</i>
+                </b>
+                <span class="td box-number">
+                  *<%= item.qty %>
+                </span>
+              </p>
+
+          <% end %>
+          </div>
+        </div><!--menu-order end-->
+
+      </section>
+    </div>
+  </div>
+
+<%= render "application/app_footer" %>
+
+</body>

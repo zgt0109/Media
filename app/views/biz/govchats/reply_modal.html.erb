@@ -1,0 +1,30 @@
+<%= form_tag reply_govchat_url(@chat) do %>
+<div class="modal-body">
+    <div class="form-group">
+        <div class="clearfix">
+          <%- if @chat.reply.present? %>
+          	<textarea class="col-xs-12 chatbody" rows="5"   disabled><%= @chat.reply.body %></textarea>
+         <%- else %>
+         	<textarea class="col-xs-12 chatbody" rows="5" placeholder="" name="body"></textarea>
+         <%- end %>
+        </div>
+      </div>
+</div>
+<div class="clearfix"></div>
+<div class="modal-footer">
+  <%- unless @chat.reply.present? %>
+  <button type="submit" class="btn btn-sm btn-primary form-submit" data-fn="submit">回复</button>
+  <%- end%>
+  <button type="button" class="btn btn-sm btn-default" data-dismiss="modals">取消</button>
+</div>
+<%- end %>
+<% content_for :custom_js do %>
+<script type="text/javascript">
+  $('.form-submit').on('click', function(){
+    if(!$('.chatbody').val()){
+      showTip('warning', '请输入内容')
+      return false;
+    }
+  })
+</script>
+<% end %>

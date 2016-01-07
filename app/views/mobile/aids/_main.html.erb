@@ -1,0 +1,199 @@
+<%
+  if @activity_user.present? 
+    head_image_url = @activity_user.try(:wx_user).try(:headimgurl) ? @activity_user.wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png"
+  else
+    head_image_url = @wx_user.try(:headimgurl) ? @wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png"
+  end
+%>
+
+<div class="bgfefedc">
+  <%= render 'banner' %>
+
+  <div class="timer">
+    <% case @activity.activity_status %>
+    <% when Activity::WARM_UP %>
+      <strong class="timer-txt timer-end">距离活动开始还有</strong>
+    <% when Activity::UNDER_WAY %>
+      <strong class="timer-txt timer-end">距离活动结束还有</strong>
+    <% when Activity::HAS_ENDED %>
+      <strong class="timer-txt timer-end">活动已结束</strong>
+    <% when Activity::HAS_STOPPED %>
+      <strong class="timer-txt timer-end">活动已停止</strong>
+    <% end %>
+
+    <% if @activity.activity_status != Activity::HAS_ENDED && @activity.activity_status != Activity::HAS_STOPPED %> 
+      <span class="timer-time">
+        <span class="timer-time-count">00</span>天
+	<span class="timer-time-count">00</span>时
+	<span class="timer-time-count">00</span>分
+	<span class="timer-time-count">00</span>秒
+      </span>
+    <% end %>
+  </div>
+
+  <div class="main">
+    <div class="main-portrait">
+      <img src="<%= head_image_url %>" width="140" height="140" class="img-full head-image">
+    </div>
+    <div class="main-name"><%= @activity_user.try(:wx_user).try(:nickname) %></div>
+    <div class="main-rank">当前排名<strong class="main-rank-strong"><%= get_rank(@activity_user) if @activity_user.present? %></strong></div>
+    <div class="main-count">助力数：<strong class="main-count-strong"><%= number_to_currency(get_points(@activity_user), unit: '', precision: 0) if @activity_user.present? %></strong></div>
+    <% if rank_reached? %>
+      <div class="main-praise">干的漂亮</div>
+    <% else %>
+      <div class="main-praise">继续努力</div>
+    <% end %>
+
+    <div class="main-effect"></div>
+
+    <% case @activity.activity_status %>
+    <% when Activity::UNDER_WAY %>
+      <% if self? %>
+        <div class="main-action">
+          <a href="javascript:;" class="btn main-btn main-btn-full main-btn-share">邀请好友助力</a>
+        </div>
+      <% else # self? %>
+        <% if aided? @wx_user.id %>
+          <div class="main-action">
+            <%= link_to "邀请好友为他助力", "javascript:;", class: "btn main-btn main-left main-btn-share" %>
+            <% if self_joined? %>
+              <%= link_to "查看我的助力", mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+            <% else #self_joined %>
+              <%= link_to "我也要参与", mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+            <% end #self_joined %>
+          </div>
+        <% else #aided? %>
+          <div class="main-action">
+            <%= link_to "助好友一臂之力", friend_aid_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id, owner_openid: @owner_user.uid), method: "post", remote: true, class: "btn main-btn main-left main-btn-help main-btn-help" %>
+            <%= link_to "邀请好友为他助力", "javascript:;", class: "btn main-btn main-left main-btn-share main-btn-hidden" %>
+
+            <% if self_joined? %>
+              <%= link_to "查看我的助力", mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+            <% else #self_joined %>
+              <%= link_to "我也要参与", mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+            <% end #self_joined %>
+          </div>
+        <% end #aided? %>
+      <% end # self? %>
+    <% when Activity::HAS_ENDED %>
+      <% if self? %>
+        <% if prized? %>
+          <% if received? && !auto_retry_received? %>
+            <div class="main-action">
+              <% if accepted? %>
+                <a href="javascript:;" class="btn main-btn main-btn-full"><%= "您的" + (@prize.present? && @prize.title.to_s || '') + "已领取" %></a>
+              <% else %>
+                <a href="<%= award_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>" class="btn main-btn main-btn-full">兑取奖品</a>
+              <% end %>
+            </div>
+          <% else # received? %>
+            <div class="main-action">
+              <a href="javascript:;" class="btn main-btn main-btn-full main-btn-getprize">领取奖品</a>
+            </div>
+          <% end # receved?%>
+        <% else # prized? %>
+          <div class="main-action">
+            <a href="javascript:;" class="btn main-btn main-btn-full">很遗憾没有获奖</a>
+          </div>
+        <% end # prized? %>
+      <% else  # self? %> 
+        <% if prized? %>
+          <div class="main-action">
+            <% if self_joined? %>
+              <a href="javascript:;" class="btn main-btn main-left"><%= "您朋友获得"+ (@prize.present? && @prize.title.to_s || '') %></a>
+              <%= link_to "查看我的助力", mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id), class: "btn main-btn main-right" %>
+            <% else #self_joined  %>
+              <a href="javascript:;" class="btn main-btn main-btn-full"><%= "您朋友获得"+ (@prize.present? && @prize.title.to_s || '') %></a>
+            <% end #self_joined %>
+          </div>
+        <% else #prized? %>
+          <div class="main-action">
+            <% if self_joined? %>
+              <a href="javascript:;" class="btn main-btn main-left">您朋友没有获奖</a>
+              <%= link_to "查看我的助力", mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id), class: "btn main-btn main-right" %>
+            <% else #self_joined %>
+              <a href="javascript:;" class="btn main-btn main-btn-full">您朋友没有获奖</a>
+            <% end #self_joined %>
+          </div>
+        <%end #prized? %>
+      <% end # self? %>
+    <% end %>
+  </div>
+</div>
+
+<div class="division1">
+  <%= image_tag "/assets/mobile/aids/global_division1.png", size: "640x40", class: "img-full", alt: "" %>
+</div>
+
+<div class="division2">
+  <%= image_tag "/assets/mobile/aids/global_division2.png", size: "640x39", class: "img-full", alt: "" %>
+</div>
+
+<div class="share">
+  <div class="share-img">
+    <%= image_tag "/assets/mobile/aids/share_img.png", size: "304x301", class: "img-full", alt: "" %>
+  </div>
+</div>
+
+<%= content_for :custom_js do %>
+
+<script type="text/javascript">
+
+// 倒计时
+$(function(){
+  String.prototype.zeroFill = function(){
+    return (this + "").replace(/\b(?=(\d)$)/g,'0');
+  }        
+
+  function getCountDown(aimDate){
+    var dateDeadLine = aimDate,
+    timestampDeadLine = new Date(dateDeadLine).getTime(),
+    timestampNow = new Date().getTime(),
+    timestampDiff = timestampDeadLine - timestampNow,
+    s = 1000,
+    m = 60 * s,
+    h = 60 * m,
+    d = 24 * h;
+
+    if(timestampDiff > 0){
+      return [
+        (Math.floor(timestampDiff/d) + "").zeroFill(),
+        (Math.floor((timestampDiff%d)/h) + "").zeroFill(),
+        (Math.floor((timestampDiff%d%h)/m) + "").zeroFill(),
+        (Math.floor((timestampDiff%d%h%m)/s) + "").zeroFill()
+      ]
+    }
+    else{
+      return false;
+    }
+  }
+
+  var wpTime = $('.timer-time-count'),
+  wpTimeEnd = $('.timer-end'),
+  setCountDown = function(aimDate){
+    var countdown = getCountDown(aimDate);
+
+    if(countdown){
+      wpTime.each(function(i){
+        $(this).text( countdown[i] );
+      });
+                
+      setTimeout(function(){
+        setCountDown(aimDate);
+      }, 1000);
+    }
+    else{
+      //wpTimeEnd.text("活动已结束");
+      return false;
+    }
+  };
+
+  if(wpTime.length){
+    var endTime = "<%= @activity.end_at.strftime("%Y/%m/%d %H:%M:%S") %>";
+    setCountDown(endTime);
+  }
+});
+
+</script>
+
+<% end %>

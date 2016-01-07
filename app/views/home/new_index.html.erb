@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <meta name="format-detection" content="telephone=no">
+  <meta content="telephone=no" name="format-detection">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>媒体报道_微枚迪winwemedia_微信营销推广行业领导品牌</title>
+  <meta name="keywords"  content="微枚迪、微信营销、微枚迪媒体报道"/>
+  <meta name="description"  content="微枚迪是国内首款最完备的微信营销行业解决方案，依托微信公众平台，为企业重新定义微信公众账号，解决企业线上线下（O2O）互动、口碑营销难题。"/>
+  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag "/stylesheets/common.css", media: "all" %>
+  <%= stylesheet_link_tag "/stylesheets/index.css", media: "all" %>
+  <!-- <%= stylesheet_link_tag "/stylesheets/vcool.css", media: "all" %> -->
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+
+  <div class="header" style="z-index: 999">
+    <div class="top">
+      <div class="warp">
+      <div class="nav-top">
+
+        </div>
+        <a class="logo" href=""><span class="visuallyhidden">微信营销行业解决方案领导品牌</span></a>
+
+      </div>
+    </div>
+
+    <div class="box-login">
+      <div class="login-cont">
+        <%= form_tag sessions_path, :remote => true, style: 'z-index:999999999999px;', class: 'hd' do %>
+        <p><h1>登录微枚迪</h1></p>
+
+        <p class="form" id="login-name">
+          <%= text_field_tag :login, params[:login], class: "txt", id: "account-place" %>
+        </p>
+
+        <p class="form" id="login-pswd">
+          <%= password_field_tag :password, nil, id: "password-place" %>
+        </p>
+
+        <p><a class="btn-login">登录</a></p>
+        <input id="hidden_login_submit" style="display:none" type="submit"/>
+        <% end %>
+
+        <div class="bd"><img src="/assets/home/qrcode_for_gh_c3d524c7de16_1280.jpg" width="145" height="145"/></div>
+        <div class="ft"></div>
+      </div>
+    </div>
+
+    <div class="flash flash-green">
+      <div class="flashCont warp">
+        <a id="flash0" class="flash-li current"><img src="/assets/home/ad1.jpg"/></a>
+        <a id="flash1" class="flash-li" ><img src="/assets/home/ad2.jpg"/></a>
+        <a id="flash2" class="flash-li" ><img src="/assets/home/ad3.jpg"/></a>
+        <a id="flash3" class="flash-li" ><img src="/assets/home/ad4.jpg"/></a>
+        <p class="flashpage">
+          <a id="flashpage0" class="current">1</a>
+          <a id="flashpage1">2</a>
+          <a id="flashpage2">3</a>
+          <a id="flashpage3">4</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="nav">
+      <div class="warp">
+        <a class="index-website" href="#index-website" class="current">微官网</a>
+        <a class="index-member" href="#index-member">微会员卡</a>
+        <a class="index-mark" href="#index-mark">微互动营销</a>
+        <a class="index-bussiness" href="#index-bussiness">微领先业务</a>
+        <a class="index-trade" href="#index-trade">行业解决方案</a>
+        <a class="index-custom" href="#index-custom">个性化定制</a>
+        <a class="index-weibo" href="#index-weibo">微动中国</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="contxt">
+    <div class="warp">
+      <div class="box-cont index-website">
+        <span class="visuallyhidden">微枚迪微信营销第一招白鹤晾翅展品牌微官网</span>
+        <p>
+          微官网是企业的微信门户，将企业文化、新闻动态、产品服务、市场活动等内容通过网页的形式将品牌轻松送入5亿用户朋友圈。<br/>
+          <i></i>
+          <em>●</em> 无需繁琐难记的网络域名，关键词直接访问；<br/>
+          <em>●</em> 无需费劲的浏览器跳转，微信直接打开网站；<br/>
+          <em>●</em> 无需繁冗难懂的信息轰炸，重要信息清晰突出。<br/>
+          <a href="javascript:void(0);" class="btn"><span class="visuallyhidden">申请使用微枚迪的微官网</span>
+          </a>
+        </p>
+      </div>
+      <div class="box-cont index-member">
+        <span class="visuallyhidden">微枚迪微信营销第二招满城尽带黄金卡微会员卡</span>
+        <p>
+          微会员卡是移动互联网时代企业会员管理平台（CRM），用微信轻松享受会员服务，时尚还倍儿有面子。<br/>
+          <i></i>
+          <em>●</em> 会员VIP特权可以按月、按活动调整，随时派送，节约成本；<br/>
+          <em>●</em> 用户信息完整收集，用户特征惊喜分类，用户营销精准高效；<br/>
+          <em>●</em> 会员消费行为数据分析，及时调整企业营销决策，掌控全局。<br/>
+          <a href="javascript:void(0);" class="btn"> <span class="visuallyhidden">申请使用微枚迪的微会员卡</span></a>
+        </p>
+      </div>
+
+      <div class="box-cont index-mark">
+        <span class="visuallyhidden">微枚迪微信营销第三招乾坤大挪移微互动营销</span>
+        <p>
+          优惠券+刮刮卡+大转盘+一战到底<br/>
+          利用“小惊喜”“好运气”将5亿微信用户轻松挪移到企业门店、网店。实现老客户多次消费，并在朋友圈分享、口碑传播。<br/>
+          <i></i>
+          <em>●</em> 优惠券，为商家量身定制，根据成本及时调控；<br/>
+          <em>●</em> 刮刮卡、大转盘抽奖模块，给客户再来的理由；<br/>
+          <em>●</em> 一战到底，知识与奖励结合，品牌深入人心。<br/><a href="javascript:void(0);" class="btn"> <span class="visuallyhidden">申请使用微枚迪的微互动营销</span></a>
+        </p>
+      </div>
+
+      <div class="box-cont index-bussiness">
+        <span class="visuallyhidden">微枚迪微信营销第四招润物细无声微领先业务</span>
+        <p>
+          微调研+微投票+微门店+微团购+微统计<br/>
+          从前期调研，到门店的地址查询，团购模型的建立，用户数据分析，全业务流程管理，构建企业微信业务生态圈。<br/>
+          <i></i>
+          <em>●</em> 了解你的客户，了解你的市场，迫不及待；<br/>
+          <em>●</em> 为客户导航位置，建立自己的团购平台，势在必行；<br/>
+          <em>●</em> 建立自己的客户数据库，发挥鱼塘效应，分组分类，志在必得。<br/><a href="javascript:void(0);" class="btn"> <span class="visuallyhidden">申请使用微枚迪的微领先业务</span></a>
+        </p>
+      </div>
+
+      <div class="box-cont index-trade">
+        <span class="visuallyhidden">微枚迪微信营销第五招会当凌绝顶，一览众山小微+行业</span>
+        <p>
+          微商城、微餐饮、微房产、微酒店、微教育、微医疗、微汽车……<br/>
+          深挖行业需求，结合业务需求，开发整合解决方案。<br/>
+          更多行业解决方案陆续开放申请中……<br/><a href="javascript:void(0);" class="btn"> <span class="visuallyhidden">申请使用微枚迪的微+行业</span></a>
+        </p>
+      </div>
+
+      <div class="box-cont index-custom">
+        <span class="visuallyhidden">微枚迪微信营销第六招数风流人物，还看今朝个性化定制</span>
+        <p>
+          因需而变，微枚迪为您而变。<br/>
+          针对每个行业，每家企业，每个需求，量身定制尊享独一无二的个性化解决方案，帮助企业勇攀行业巅峰。<br/><a href="javascript:void(0);" class="btn"> <span class="visuallyhidden">申请使用微枚迪的个性化定制</span></a>
+        </p>
+      </div>
+      <div class="box-cont index-weibo">
+        <span class="visuallyhidden">微枚迪微信营销第六招数风流人物，还看今朝个性化定制</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer tcenter">
+  <div class="warp">
+    <p class="nav-ft">
+
+    <p>
+      地址：安徽省宿州市埇桥区汴河路中央广场C区1306室 联系电话：0557-3097799 传真：0557-3097799
+      <br/>
+      沪ICP备13009389号-5
+    </p>
+  </div>
+</div>
+<div class="pop">
+  <div class="pop-bd"></div>
+  <div class="pop-bg"></div>
+</div>
+
+  <style>
+  .btn-login {
+    cursor: pointer;
+  }
+  .nav-top {
+    background: url(/assets/home/wxlogo_10.png) no-repeat;
+    background-size: 120px Auto;
+    float: left;
+    margin-top: 5px;
+    width: 140px;
+  }
+  .btn {
+    background: url(/assets/home/btn.png) no-repeat;
+    width: 190px;
+    height: 60px;
+  }
+  </style>
+  <script type="text/javascript">
+  $(".btn-login").click(function(){
+    $("#hidden_login_submit").click();
+  })
+  </script>
+
+  <%= javascript_include_tag "/javascripts/common.js", media: "all" %>
+  <%= javascript_include_tag "/javascripts/jquery.placeholder.js", media: "all" %>
+  <script>
+  $(function(){
+    $('#password-place').placeholder('密码');
+    $('#account-place').placeholder('帐号');
+  })
+  </script>
+</body>
+</html>

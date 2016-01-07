@@ -1,0 +1,7 @@
+var model_html = "<%= j(render 'model', :doctor_arrange => @doctor_arrange) %>";
+$("#edit_modal").empty();
+$("#edit_modal").append(model_html);
+$('.timepicker').attr('readonly', 'readonly').clockpicker({
+        autoclose: true
+    });
+$("#edit_modal").modal('show');

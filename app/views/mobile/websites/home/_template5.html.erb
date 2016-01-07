@@ -1,0 +1,7 @@
+<%= render "slider_full", {:has_slider_text => :yes} %>
+
+<%= render "text_menus", {:website_menus => website_menus} %>
+
+<% content_for :document_ready_js do %>
+  divSwipe("indexList");
+<% end %>

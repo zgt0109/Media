@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="swipe" id="swipe">
+    <ul>
+      <% @photos.each do |photo| %>
+      <li data-id="<%= photo.id %>">
+        <span class="bgmohu" ></span>
+        <div class="pic"><span><img src="<%= photo.img_url %>"/></span></div>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div class="foot_bar">
+  <span class="left">
+    <a href="<%= list_mobile_album_path(supplier_id: @supplier.id, id: @photos.first.try(:album_id)) %>">查看全部</a>
+  </span>
+  <span class="right coment_btn">
+    <a href="javascript:;" id="comment">相关评论</a>
+  </span>
+</div>
+<%= javascript_include_tag "mobile/albums/swipe", "mobile/albums/app" %>
+<script>
+$(function(){
+  var h1= $("html").height()-44;
+  $(".imgcent").height(h1);
+  $(".container,swipe li").height(h1);
+  $(window).on("resize",function(){
+    var h1= $("html").height()-44;
+    $(".imgcent").height(h1)
+    $(".container,swipe li").height(h1);
+  })
+
+  $("body").on("click","#comment",function(){
+    var data_id = $(".swipe li.cur").attr("data-id");
+    $(this).attr("href","/<%= @supplier.id %>/albums/"+ data_id +"/comments");
+  })
+
+})
+</script>
