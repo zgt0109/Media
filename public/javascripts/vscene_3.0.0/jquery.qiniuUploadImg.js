@@ -37,7 +37,7 @@
 					xhr.onreadystatechange = function(response) {
 						if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
 							var blkRet = JSON.parse(xhr.responseText);
-							var imgUrl = 'http://' + o.bucket + '.qiniucdn.com/' + blkRet.key;
+							var imgUrl = 'http://' + o.bucket + '.winwemedia.com/' + blkRet.key;
 							
 							$.isFunction(o.fnUploadComplete) && o.fnUploadComplete(self, fileCount, j, imgUrl);
 						}

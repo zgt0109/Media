@@ -7,6 +7,13 @@ namespace :dev do
     :create_website_menus,
   ]
 
+  desc 'created suppliers'
+  task :create_suppliers => :environment do
+    puts 'Starting create suppliers ******'
+    supplier = Supplier.where(nickname: 'wemedia').first_or_create(name: '微枚迪', password: 111111, password_confirmation: 111111, is_gift: true)
+    puts "created supplier: #{supplier.name}"
+  end
+
   task :update_product_category_ids => :environment do
     count = 0
     ShopProduct.find_each do |product|

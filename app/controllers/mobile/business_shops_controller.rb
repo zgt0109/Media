@@ -10,7 +10,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     @vip_user = @supplier.vip_users.where(wx_user_id: session[:wx_user_id]).first
     session[:wx_mp_user_id] = @supplier.wx_mp_user.id
     @privileges = @business_shop.business_privileges
-    @vip_card_pic = @vip_card_branch.try(:pic).try(:large).presence || @vip_card.cover_pic.presence || 'http://vcl-pictures.qiniucdn.com/FudiRXyXaCchVosPYrv22Ws9do1F'
+    @vip_card_pic = @vip_card_branch.try(:pic).try(:large).presence || @vip_card.cover_pic.presence || 'http://media-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
     render "template_#{@template_id}"
   end
 
@@ -20,7 +20,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     session[:wx_mp_user_id] = @supplier.wx_mp_user.id
     @privileges = @business_shop.business_privileges
 
-    @vip_card_pic = @vip_card_branch.try(:pic).try(:large).presence || @vip_card.cover_pic.presence || 'http://vcl-pictures.qiniucdn.com/FudiRXyXaCchVosPYrv22Ws9do1F'
+    @vip_card_pic = @vip_card_branch.try(:pic).try(:large).presence || @vip_card.cover_pic.presence || 'http://media-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
   rescue
     return render text: '请求页面不存在'
   end

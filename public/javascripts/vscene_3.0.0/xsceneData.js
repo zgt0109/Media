@@ -58,7 +58,7 @@ xconfig.xsceneDesp =
             {
                 "type": "img",
                 "props": {
-                    "src": "http://vcl-pictures.qiniucdn.com/Fsbe8BUv-xDcdwgipiGgNzgLXqhq",
+                    "src": "http://media-asset.winwemedia.com/Fsbe8BUv-xDcdwgipiGgNzgLXqhq",
                     "width": 57,
                     "left": 63,
                     "top": 214,
@@ -74,7 +74,7 @@ xconfig.xsceneDesp =
             }
         ],
         "name": "新建页面",
-        "backgroundImage": "http://vcl-pictures.qiniucdn.com/Fny2kUq2Nzz00Z-50iXqwIvIOyiY",
+        "backgroundImage": "http://media-asset.winwemedia.com/Fny2kUq2Nzz00Z-50iXqwIvIOyiY",
         "backgroundColor": "rgba(255, 255, 0, 1)",
         "data-href": "http://www.baidu.com",
         "data-href-sys": "http://www.baidu.com",
@@ -87,7 +87,7 @@ xconfig.xsceneDesp =
             {
                 "type": "img",
                 "props": {
-                    "src": "http://vcl-pictures.qiniucdn.com/Ft2v0h8GlO9lsnjklSoNaKnQBe-B",
+                    "src": "http://media-asset.winwemedia.com/Ft2v0h8GlO9lsnjklSoNaKnQBe-B",
                     "width": 30,
                     "left": 10,
                     "top": 48,
@@ -131,7 +131,7 @@ xconfig.xsceneDesp =
             {
                 "type": "img",
                 "props": {
-                    "src": "http://vcl-pictures.qiniucdn.com/Fsbe8BUv-xDcdwgipiGgNzgLXqhq",
+                    "src": "http://media-asset.winwemedia.com/Fsbe8BUv-xDcdwgipiGgNzgLXqhq",
                     "width": 30,
                     "left": 11,
                     "top": 205,

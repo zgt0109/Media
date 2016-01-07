@@ -39,7 +39,7 @@ namespace :baidu do
     params = {
       access_token: api_app.access_token,
       app_name: 'mike',
-      app_logo: 'http://vcl-pictures.qiniucdn.com/Ftkh0D4AOzhrsimGtDqN8tYfzPed',
+      app_logo: 'http://media-asset.winwemedia.com/Ftkh0D4AOzhrsimGtDqN8tYfzPed',
       app_query: 'mike',
       app_url: 'http://m.winwemedia.com/mike',
       custom_id: '19585',

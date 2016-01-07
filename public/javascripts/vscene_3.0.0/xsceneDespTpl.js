@@ -39,7 +39,7 @@
         img: {
             type: 'img',
             props: {
-                'src': 'http://vcl-pictures.qiniucdn.com/Ftvknu0qGnfzDRjh4Jn-tYc3nAaV',  //图片路径
+                'src': 'http://media-asset.winwemedia.com/Ftvknu0qGnfzDRjh4Jn-tYc3nAaV',  //图片路径
                 // 'src': '../../assets_vscene_3.0.0/images/vscene_3.0.0/scene_elem_img_default.png',  //图片路径
                 'width': 30,    //宽度
                 'left': 50,  //横向坐标
@@ -104,7 +104,7 @@
         video: {
             type: 'video',
             props: {
-                'src': 'http://vcl-pictures.qiniucdn.com/Fu8TQ4BQv3rtoFZ8lOtIGp8s-EyE',
+                'src': 'http://media-asset.winwemedia.com/Fu8TQ4BQv3rtoFZ8lOtIGp8s-EyE',
                 'width': 30,
                 'left': 50,  //横向坐标
                 'top': 40,  //纵向坐标

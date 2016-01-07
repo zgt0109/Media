@@ -2,7 +2,7 @@ window.vcardTplCollection = [
     {
         'tplId': 'tpl01',
         'tplName': '模板一',
-        'cardBg': 'http://vcl-pictures.qiniucdn.com/Flku4iCXcXKeO7GynEga3oXRxS1o',
+        'cardBg': 'http://media-asset.winwemedia.com/Flku4iCXcXKeO7GynEga3oXRxS1o',
         'cardLevel': {
             'fontSize': 26,
             'left': 398,
@@ -16,7 +16,7 @@ window.vcardTplCollection = [
             'color': '#eb5c87'
         },
         'cardLogo': {
-            'src': 'http://vcl-pictures.qiniucdn.com/FoVDc2ZFnTvUyHcWGWrPv-7TmYAp',
+            'src': 'http://media-asset.winwemedia.com/FoVDc2ZFnTvUyHcWGWrPv-7TmYAp',
             'left': 225,
             'top': 113
         }
@@ -24,7 +24,7 @@ window.vcardTplCollection = [
     {
         'tplId': 'tpl02',
         'tplName': '模板二',
-        'cardBg': 'http://vcl-pictures.qiniucdn.com/FojmpIvtIiCLmrq6SbhvS_Ppv9LT',
+        'cardBg': 'http://media-asset.winwemedia.com/FojmpIvtIiCLmrq6SbhvS_Ppv9LT',
         'cardLevel': {
             'fontSize': 22,
             'left': 244,
@@ -38,7 +38,7 @@ window.vcardTplCollection = [
             'color': '#c6a064'
         },
         'cardLogo': {
-            'src': 'http://vcl-pictures.qiniucdn.com/FgmxAVlwK6TjIuesxKk2kQ8rtzwq',
+            'src': 'http://media-asset.winwemedia.com/FgmxAVlwK6TjIuesxKk2kQ8rtzwq',
             'left': 199,
             'top': 56
         }
@@ -46,7 +46,7 @@ window.vcardTplCollection = [
     {
         'tplId': 'tpl02',
         'tplName': '模板三',
-        'cardBg': 'http://vcl-pictures.qiniucdn.com/FgszfS6KkSNPebOHTgDT3-vejLEQ',
+        'cardBg': 'http://media-asset.winwemedia.com/FgszfS6KkSNPebOHTgDT3-vejLEQ',
         'cardLevel': {
             'fontSize': 20,
             'left': 255,
@@ -60,7 +60,7 @@ window.vcardTplCollection = [
             'color': '#8d3e7f'
         },
         'cardLogo': {
-            'src': 'http://vcl-pictures.qiniucdn.com/FgQPfTdI5MLz7bro6XXWqOB0T0XH',
+            'src': 'http://media-asset.winwemedia.com/FgQPfTdI5MLz7bro6XXWqOB0T0XH',
             'left': 203,
             'top': 97
         }
@@ -68,7 +68,7 @@ window.vcardTplCollection = [
     {
         'tplId': 'tpl02',
         'tplName': '模板四',
-        'cardBg': 'http://vcl-pictures.qiniucdn.com/Fp3On2CVsdQiNuJON6usT56SeudE',
+        'cardBg': 'http://media-asset.winwemedia.com/Fp3On2CVsdQiNuJON6usT56SeudE',
         'cardLevel': {
             'fontSize': 30,
             'left': 228,
@@ -82,7 +82,7 @@ window.vcardTplCollection = [
             'color': '#e3ca67'
         },
         'cardLogo': {
-            'src': 'http://vcl-pictures.qiniucdn.com/FnnO5xjARHmKIhUtqUr8GluyxKca',
+            'src': 'http://media-asset.winwemedia.com/FnnO5xjARHmKIhUtqUr8GluyxKca',
             'left': 196,
             'top': 24
         }
@@ -90,7 +90,7 @@ window.vcardTplCollection = [
     {
         'tplId': 'tpl02',
         'tplName': '模板五',
-        'cardBg': 'http://vcl-pictures.qiniucdn.com/FvvOycYhqfJ0GdDeXYW730H2ogYA',
+        'cardBg': 'http://media-asset.winwemedia.com/FvvOycYhqfJ0GdDeXYW730H2ogYA',
         'cardLevel': {
             'fontSize': 28,
             'left': 23,
@@ -104,7 +104,7 @@ window.vcardTplCollection = [
             'color': '#fff'
         },
         'cardLogo': {
-            'src': 'http://vcl-pictures.qiniucdn.com/Fif2eW4973SRKb_bGPGFY2yvzyUH',
+            'src': 'http://media-asset.winwemedia.com/Fif2eW4973SRKb_bGPGFY2yvzyUH',
             'left': 9,
             'top': 4
         }
@@ -112,7 +112,7 @@ window.vcardTplCollection = [
     {
         'tplId': 'tpl02',
         'tplName': '模板六',
-        'cardBg': 'http://vcl-pictures.qiniucdn.com/FiQemPYveZBw03824hnewDXJfOdj',
+        'cardBg': 'http://media-asset.winwemedia.com/FiQemPYveZBw03824hnewDXJfOdj',
         'cardLevel': {
             'fontSize': 12,
             'left': 320,
@@ -126,7 +126,7 @@ window.vcardTplCollection = [
             'color': '#fff'
         },
         'cardLogo': {
-            'src': 'http://vcl-pictures.qiniucdn.com/FhLscZX58OWDhYPJxUQkaO1LpNyR',
+            'src': 'http://media-asset.winwemedia.com/FhLscZX58OWDhYPJxUQkaO1LpNyR',
             'left': 195,
             'top': 115
         }

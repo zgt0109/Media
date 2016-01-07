@@ -927,7 +927,7 @@ function addImg(ueditor){
         xhr.onreadystatechange = function(response) {
             if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
                 var blkRet = JSON.parse(xhr.responseText);
-                var imgUrl='http://'+bucket+'.qiniucdn.com/'+blkRet.key;
+                var imgUrl='http://'+bucket+'.winwemedia.com/'+blkRet.key;
                 ueditor.execCommand('insertHtml', '<img src="'+imgUrl+'" />')
             }
         };
