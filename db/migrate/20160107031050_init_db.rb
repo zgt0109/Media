@@ -1,7 +1,6 @@
 # encoding: UTF-8
 
-ActiveRecord::Schema.define(:version => 20160106075014) do
-
+class InitDb < ActiveRecord::Migration
   create_table "account_logs", :force => true do |t|
     t.integer  "user_id"
     t.string   "user_type"
@@ -8718,5 +8717,4 @@ ActiveRecord::Schema.define(:version => 20160106075014) do
   end
 
   add_index "wx_walls", ["supplier_id"], :name => "index_wx_walls_on_supplier_id"
-  
 end
