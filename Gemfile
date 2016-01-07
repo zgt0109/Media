@@ -143,3 +143,5 @@ gem "acts_as_tree", "~> 1.5.0"
 
 gem 'rubyntlm', '~> 0.3.2'
 # gem "mq_publisher"#, git: "ssh://git@admin.winwemedia.com:40022/dyne/repos/ec/mq_publisher.git", branch: 'master'
+
+gem 'test-unit'
