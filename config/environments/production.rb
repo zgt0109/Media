@@ -80,7 +80,7 @@ Wp::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
   Wp::Application.config.middleware.use ExceptionNotification::Rack, email: {
     :email_prefix => "[winwemedia Production Error] ",
-    :sender_address => %{zhao.xl@winwemedia.com},
-    :exception_recipients => %w{zhang.kun@winwemedia.com zhao.xl@winwemedia.com liang.wk@winwemedia.com ma.lc@winwemedia.com li.fz@winwemedia.com li.hui@winwemedia.com}
+    :sender_address => %{liang.wk@winwemedia.com},
+    :exception_recipients => %w{liang.wk@winwemedia.com}
   }
 end

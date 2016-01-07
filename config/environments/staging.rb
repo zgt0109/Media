@@ -2,7 +2,7 @@ Wp::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
-  config.cache_classes = false
+  config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
@@ -51,7 +51,7 @@ Wp::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
-  config.action_mailer.default_url_options = { :host => 'staging.winwemedia.com' }
+  config.action_mailer.default_url_options = { :host => 'www.winwemedia.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
@@ -59,7 +59,7 @@ Wp::Application.configure do
   config.action_mailer.smtp_settings = {
     address:              'smtp.exmail.qq.com',
     port:                 25,
-    domain:               'winwemedia',
+    domain:               'exmail.qq.com',
     user_name:            'forget_password@winwemedia.com',
     password:             'vcl2wsx',
     authentication:       :login,
@@ -78,10 +78,9 @@ Wp::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-  Wp::Application.config.middleware.use ExceptionNotification::Rack,
-   email: {
-    :email_prefix => "[winwemedia STAGING ERROR] ",
-    :sender_address => %{zhao.xl@winwemedia.com},
-    :exception_recipients => %w{zhang.kun@winwemedia.com zhao.xl@winwemedia.com ma.lc@winwemedia.com li.fz@winwemedia.com li.hui@winwemedia.com}
+  Wp::Application.config.middleware.use ExceptionNotification::Rack, email: {
+    :email_prefix => "[winwemedia Production Error] ",
+    :sender_address => %{liang.wk@winwemedia.com},
+    :exception_recipients => %w{liang.wk@winwemedia.com}
   }
 end
