@@ -12,7 +12,7 @@ class Supplier < ActiveRecord::Base
 
   validates :status, presence: true
   validates :nickname, presence: true, uniqueness: { case_sensitive: false }, on: :create
-  validates_length_of :invitation_code, :minimum => 0, :maximum => 15, :allow_blank => true
+  # validates_length_of :invitation_code, :minimum => 0, :maximum => 15, :allow_blank => true
 
   validates :company_name, presence: true, on: :create, if: :is_reg_web?
   validates :email, email: true, presence: true, uniqueness: {case_sensitive: false}, on: :create, if: :is_reg_web?
@@ -675,7 +675,7 @@ START
       supplier_apply.tel = tel
       supplier_apply.contact = contact
       supplier_apply.email = email
-      supplier_apply.invitation_code = invitation_code
+      # supplier_apply.invitation_code = invitation_code
       # supplier_apply.website = self.website
       supplier_apply.apply_source = apply_source
       supplier_apply.qq = qq
