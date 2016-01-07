@@ -1,6 +1,6 @@
 class Kf::Staff < ActiveRecord::Base
-  self.table_name = 'kf_staffs'
-  establish_connection "kefu_app_#{Rails.env}"
+  # self.table_name = 'kf_staffs'
+  # establish_connection "kefu_app_#{Rails.env}"
 
   has_secure_password
 
