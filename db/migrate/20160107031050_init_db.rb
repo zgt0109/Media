@@ -4069,7 +4069,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "template_id",                        :default => 1
     t.integer  "activity_id",                                           :null => false
     t.string   "name"
-    t.string   "supplier_name"
+    t.string   "merchant_name"
     t.string   "mobile"
     t.string   "tel"
     t.string   "name_bg_color"
@@ -5660,6 +5660,7 @@ class InitDb < ActiveRecord::Migration
   create_table "wx_users", :force => true do |t|
     t.integer  "site_id"
     t.integer  "wx_mp_user_id"
+    t.integer  "user_id"
     t.integer  "status",                  :limit => 1, :default => 1,     :null => false
     t.string   "openid",                                                     :null => false
     t.string   "location_x"
@@ -5689,6 +5690,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_users", ["site_id"], :name => "index_wx_users_on_site_id"
   add_index "wx_users", ["openid"], :name => "index_wx_users_on_openid"
   add_index "wx_users", ["wx_mp_user_id"], :name => "index_wx_users_on_wx_mp_user_id"
+  add_index "wx_users", ["user_id"], :name => "index_wx_users_on_user_id"
 
   create_table "wx_wall_messages", :force => true do |t|
     t.integer  "wx_wall_id"
