@@ -167,7 +167,7 @@ module MobileHelper
         elsif activity.enroll?
           url = new_app_activity_enroll_url(aid: activity.id, openid: openid, wxmuid: activity.wx_mp_user_id)
         elsif activity.wshop? || activity.ec?
-          url = wshop_root_url(wx_user_open_id: @wx_user.try(:uid), wx_mp_user_open_id: activity.wx_mp_user.try(:uid))
+          url = wshop_root_url(wx_user_open_id: @wx_user.try(:openid), wx_mp_user_open_id: activity.wx_mp_user.try(:openid))
         elsif activity.website?
           url = mobile_root_url(supplier_id: activity.supplier_id, openid: openid)
         elsif activity.vip?
@@ -243,7 +243,7 @@ module MobileHelper
         elsif activity.hotel?
           url = "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?supplier_id=#{activity.supplier_id}&openid=#{openid}"
         elsif activity.oa?
-          url = "#{OA_HOST}/woa-all/wx/#{activity.supplier_id}/index?openid=#{@wx_user.uid}"
+          url = "#{OA_HOST}/woa-all/wx/#{activity.supplier_id}/index?openid=#{@wx_user.openid}"
         elsif activity.life?
           url = app_lives_url(id: activity.activityable_id, aid: activity.id, openid: openid, wxmuid: activity.wx_mp_user_id)
         elsif activity.circle?
@@ -251,9 +251,9 @@ module MobileHelper
         elsif activity.donation?
           url = mobile_donations_url(supplier_id: activity.supplier_id, openid: openid, aid: activity.id)
         elsif activity.wmall?
-          url = wmall_root_url(wx_user_open_id: openid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid), supplier_id: activity.supplier.id)
+          url = wmall_root_url(wx_user_open_id: openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid), supplier_id: activity.supplier.id)
         elsif activity.wmall_coupon?
-          url = wmall_coupon_url(wx_user_open_id: openid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid), supplier_id: activity.supplier.id)
+          url = wmall_coupon_url(wx_user_open_id: openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid), supplier_id: activity.supplier.id)
         elsif activity.business_shop?
           url = mobile_business_shop_url(activity.supplier, activity.activityable, openid: openid)
         elsif activity.trip?
@@ -337,30 +337,30 @@ module MobileHelper
         #业务对接
         if website_menu.menuable_type == 'EcCart'
           #url = mobile_ec_carts_path(supplier_id: website_menu.menuable_id, openid: openid)
-          #return url = wshop_cart_url(wx_user_open_id: wx_user.try(:uid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:uid))
+          #return url = wshop_cart_url(wx_user_open_id: wx_user.try(:openid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:openid))
         elsif website_menu.menuable_type == 'Vip'
           #url = member_mobile_ec_shops_path(supplier_id: website_menu.menuable_id, openid: openid)
-          #return url = wshop_wx_user_url(wx_user_open_id: wx_user.try(:uid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:uid))
+          #return url = wshop_wx_user_url(wx_user_open_id: wx_user.try(:openid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:openid))
         elsif website_menu.menuable_type == 'HotelOrder'
-          return "#{website_menu.url}#{@wx_user.try(:uid)}"
+          return "#{website_menu.url}#{@wx_user.try(:openid)}"
         else
           if website_menu.menuable_type.to_s == 'Activity'
             activity = website_menu.menuable
             return '' unless activity
-            return url = wshop_root_url(wx_user_open_id: @wx_user.try(:uid), wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:uid))
+            return url = wshop_root_url(wx_user_open_id: @wx_user.try(:openid), wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:openid))
           elsif website_menu.menuable_type.to_s == 'EcSellerCat'
-            return url = wshop_category_url(category_id: website_menu.menuable_id, wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:uid), wx_user_open_id: @wx_user.try(:uid))
+            return url = wshop_category_url(category_id: website_menu.menuable_id, wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:openid), wx_user_open_id: @wx_user.try(:openid))
           elsif website_menu.menuable_type.to_s == 'EcItem'
             #url = mobile_ec_item_path(supplier_id: activity.supplier_id, id: website_menu.menuable_id, openid: openid)
-            #return url = wshop_product_url(wx_user_open_id: wx_user.try(:uid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:uid))
+            #return url = wshop_product_url(wx_user_open_id: wx_user.try(:openid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:openid))
           end
         end
 
-        return url = wshop_root_url(wx_user_open_id: @wx_user.try(:uid), wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:uid))
+        return url = wshop_root_url(wx_user_open_id: @wx_user.try(:openid), wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:openid))
       when 21 then
         if website_menu.is_a?(WebsiteMenu)
           @wx_user = WxUser.where(uid: session[:openid]).first
-          openid = @wx_user.uid if @wx_user
+          openid = @wx_user.openid if @wx_user
           url = list_mobile_album_url(supplier_id: website.supplier_id, aid: website_menu.menuable.try(:activity_id), openid: openid, id: website_menu.menuable_id)
         else
           "javascript:;"

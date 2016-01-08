@@ -152,7 +152,7 @@ class Payment < ActiveRecord::Base
   def get_pay_url(options={}, *args)
     case
     when self.weixinpay?
-      "#{PaymentSetting::WEIXIN_PAY_URL}?out_trade_no=#{self.out_trade_no}&supplier_id=#{self.supplier_id}&openid=#{self.open_id.presence || customer.try(:uid)}&showwxpaytitle=1"
+      "#{PaymentSetting::WEIXIN_PAY_URL}?out_trade_no=#{self.out_trade_no}&supplier_id=#{self.supplier_id}&openid=#{self.open_id.presence || customer.try(:openid)}&showwxpaytitle=1"
     when self.wxpay?
       "#{PaymentSetting::WXPAYURL}?out_trade_no=#{self.out_trade_no}&supplier_id=#{self.supplier_id}&showwxpaytitle=1"
     when self.tenpay?

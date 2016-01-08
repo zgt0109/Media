@@ -54,7 +54,7 @@ class PaymentsController < ApplicationController
           redirect_to mobile_group_orders_url(paymentable.supplier_id)
         end
       elsif paymentable.is_a?(VipRechargeOrder)
-        openid = paymentable.vip_user.wx_user.uid rescue nil
+        openid = paymentable.vip_user.wx_user.openid rescue nil
         redirect_to recharge_back_app_vips_path(openid: openid, wxmuid: paymentable.wx_mp_user_id, order_id: paymentable.id)
       elsif paymentable.is_a?(ShopOrder)
         if params['status'].present? && params['status'] == "1"

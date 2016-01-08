@@ -6,7 +6,7 @@ module App
     before_filter :require_wx_user
 
     def index
-      return redirect_to book_table_mobile_shops_url(supplier_id: @wx_mp_user.supplier.id, id: params[:id], aid: params[:aid], openid: @wx_user.uid, wxmuid: @wx_mp_user.id)  
+      return redirect_to book_table_mobile_shops_url(supplier_id: @wx_mp_user.supplier.id, id: params[:id], aid: params[:aid], openid: @wx_user.openid, wxmuid: @wx_mp_user.id)  
 
 
       # if session[:wx_mp_user_id]
@@ -28,7 +28,7 @@ module App
     end
 
     def book_dinner
-      return redirect_to book_dinner_mobile_shops_url(supplier_id: @wx_mp_user.supplier.id, id: params[:id], aid: params[:aid], openid: @wx_user.uid, wxmuid: @wx_mp_user.id)  
+      return redirect_to book_dinner_mobile_shops_url(supplier_id: @wx_mp_user.supplier.id, id: params[:id], aid: params[:aid], openid: @wx_user.openid, wxmuid: @wx_mp_user.id)  
       # wx_mp_user = WxMpUser.find(session[:wx_mp_user_id])
       # shop = wx_mp_user.shop
       # @search = shop.shop_branches.used.search(params[:search])
@@ -43,7 +43,7 @@ module App
     end
 
     def take_out
-      return redirect_to take_out_mobile_shops_url(supplier_id: @wx_mp_user.supplier.id, id: params[:id], aid: params[:aid], openid: @wx_user.uid, wxmuid: @wx_mp_user.id)  
+      return redirect_to take_out_mobile_shops_url(supplier_id: @wx_mp_user.supplier.id, id: params[:id], aid: params[:aid], openid: @wx_user.openid, wxmuid: @wx_mp_user.id)  
       # wx_mp_user = WxMpUser.find(session[:wx_mp_user_id])
       # shop = wx_mp_user.shop
       # @search = shop.shop_branches.used.search(params[:search])

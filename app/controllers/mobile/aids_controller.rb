@@ -204,11 +204,11 @@ class Mobile::AidsController < Mobile::BaseController
   end
 
   def self?
-    if params[:owner_openid].present? && params[:owner_openid] != @wx_user.uid
+    if params[:owner_openid].present? && params[:owner_openid] != @wx_user.openid
       return false 
     end
 
-    if !params[:owner_openid].present? && params[:origin_openid].present? && params[:origin_openid] != @wx_user.uid
+    if !params[:owner_openid].present? && params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
       return false
     end
 

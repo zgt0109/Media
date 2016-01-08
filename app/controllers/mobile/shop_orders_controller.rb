@@ -192,7 +192,7 @@ class Mobile::ShopOrdersController < Mobile::BaseController
   end
 
   def toggle_is_show_product_pic
-    @wx_user = WxUser.where(:uid => session[:openid]).first
+    @wx_user = WxUser.where(:openid => session[:openid]).first
     @wx_user.toggle(:is_show_product_pic)
     @wx_user.save!
 

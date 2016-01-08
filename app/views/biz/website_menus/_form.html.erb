@@ -65,7 +65,7 @@
     <label class="control-label">栏目类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">根据你的需求，选择站点栏目的类型，文章等大部分栏目类型可以直接在当前页面创建</small><span class="icon-question-sign " data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="<%= render 'info' %>" ></span></label>
     <div class="clearfix">
       <labet class="line-height-32 url-info">
-        <span class="icon-question-sign" data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="使用链接方式添加活动项目，易造成用户身份获取问题（如看到他人信息，或者已他人身份参与活动），建议直接调用活动，如需使用链接，请注意不要添加带有openid或者uid等参数的链接" data-original-title="" title=""></span>
+        <span class="icon-question-sign" data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="使用链接方式添加活动项目，易造成用户身份获取问题（如看到他人信息，或者已他人身份参与活动），建议直接调用活动，如需使用链接，请注意不要添加带有openid等参数的链接" data-original-title="" title=""></span>
       </labet>
       <%
          reject_types = current_user.bqq_account? ? [3,4,5,8,10,18,19] : [8,10,19]

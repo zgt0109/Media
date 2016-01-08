@@ -3,7 +3,7 @@ module SendRedPacket
 
   def follow_red_packet red_packet, wx_user
     logger.info "-----------------send redpacket with follow wx_user--------------------"
-    options = {wx_user_id: wx_user.id, uid: wx_user.uid}
+    options = {wx_user_id: wx_user.id, uid: wx_user.openid}
     record = create_red_packet_send_record red_packet, options
     return nil unless record
     record.pay
@@ -14,8 +14,8 @@ module SendRedPacket
     return nil unless wx_mp_user
     logger.info "-----------------send redpacket with all fans--------------------"
     wx_mp_user.wx_users.subscribe.find_each do |wx_user|
-      next unless subscribe? wx_mp_user, wx_user.uid
-      options = {wx_user_id: wx_user.id, uid: wx_user.uid}
+      next unless subscribe? wx_mp_user, wx_user.openid
+      options = {wx_user_id: wx_user.id, uid: wx_user.openid}
       record = create_red_packet_send_record red_packet, options
       next unless record
       break unless pay record
@@ -51,7 +51,7 @@ module SendRedPacket
     else
       options = {
                       wx_user_id: wx_user.id,
-                      uid: wx_user.uid,
+                      uid: wx_user.openid,
                       supplier_id: red_packet.supplier_id,
                       total_num: 1,
                       total_amount: red_packet.total_amount,

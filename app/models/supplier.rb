@@ -386,7 +386,7 @@ class Supplier < ActiveRecord::Base
   end
 
   def uid
-    @uid ||= self.wx_mp_user.try(:uid)
+    @uid ||= self.wx_mp_user.try(:openid)
   end
 
   def wx_logs_by_date(date)
@@ -816,7 +816,7 @@ START
     return '' unless mp_user
     mp_user.auth! if mp_user.auth_expired?
 
-    json = "{\"touser\":\"#{wx_user.uid}\",\"msgtype\":\"text\",\"text\": { \"content\":\"#{content}\" }}"
+    json = "{\"touser\":\"#{wx_user.openid}\",\"msgtype\":\"text\",\"text\": { \"content\":\"#{content}\" }}"
     result = RestClient.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{mp_user.access_token}", json, :content_type => :json, :accept => :json)
     logger.info "===============================#{result}================="
     #result =~ /"errcode":40001/# ? raise : JSON(result)

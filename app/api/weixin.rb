@@ -30,7 +30,7 @@ class Weixin
     end
 
     def respond_news(from_user_name, to_user_name, items)
-      wx_mp_user = WxMpUser.where(uid: to_user_name).first
+      wx_mp_user = WxMpUser.where(openid: to_user_name).first
       if wx_mp_user.try(:is_oauth?)
         items.each do |item|
           item[:url] = item[:url].to_s.gsub('openid', 'origin_openid') unless item[:url].to_s =~ /wehotel|woa/

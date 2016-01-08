@@ -169,7 +169,7 @@ class WxWall < ActiveRecord::Base
     def draw_prize_for_user(user_id, prize_id)
       user  = WxWallUser.find  user_id
       prize = WxWallPrize.find prize_id
-      wx_wall_prizes_wx_wall_users.create! wx_wall_prize: prize, wx_wall_user: user, prize_grade: prize.grade, prize_name: prize.name, prize_pic: prize.pic, nickname: user.nickname, avatar: user.avatar
+      wx_wall_prizes_wx_wall_users.create! wx_wall_prize: prize, wx_wall_user: user, prize_grade: prize.grade, prize_name: prize.name, prize_pic: prize.pic_key, nickname: user.nickname, avatar: user.avatar
     end
 
 end

@@ -7,8 +7,8 @@ class RedPacket::SendRecord < ActiveRecord::Base
   belongs_to :activity_consume, class_name: "::ActivityConsume" 
 
   validates :wx_user, :red_packet, presence: true
-  validates :uid, presence: true
-  validates_uniqueness_of :uid, scope: [:supplier_id, :red_packet_id], if: :not_activity_redpacket?
+  validates :openid, presence: true
+  validates_uniqueness_of :openid, scope: [:supplier_id, :red_packet_id], if: :not_activity_redpacket?
 
   scope :need_query, -> { where("status not in (?)", [FAILED, RECEIVED, REFUND]) }
 

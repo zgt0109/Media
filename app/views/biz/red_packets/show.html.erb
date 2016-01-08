@@ -51,7 +51,7 @@
                   <tr>
                     <!--<td><%#= @red_packet.id %></td>-->
                     <td><%= record.wx_user.try(:nickname) %></td>
-                    <td><%= record.wx_user.uid %></td>
+                    <td><%= record.wx_user.openid %></td>
                     <td><%= record.total_amount %></td>
                     <td><%= record.status_name %></td>
                     <td><%= record.received_at %></td>

@@ -76,7 +76,7 @@ class ActivityNotice < ActiveRecord::Base
     end
 
     def vip_notice(activity, openid)
-      vip_user = activity.supplier.vip_users.where('vip_users.status <> ?', VipUser::DELETED).joins(:wx_user).where('wx_users.uid = ?', openid).first
+      vip_user = activity.supplier.vip_users.where('vip_users.status <> ?', VipUser::DELETED).joins(:wx_user).where('wx_users.openid = ?', openid).first
       return activity.activity_notices.ready.first unless vip_user
 
       activity_notice = activity.activity_notices.active.first
@@ -96,7 +96,7 @@ class ActivityNotice < ActiveRecord::Base
     end
 
     def respond_old_coupon(wx_user, wx_mp_user, activity)
-      return Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '活动还未开始') unless activity.setted?
+      return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '活动还未开始') unless activity.setted?
 
       options = {}
       if activity.activity_status == Activity::WARM_UP
@@ -123,16 +123,16 @@ class ActivityNotice < ActiveRecord::Base
                 options[:code] = activity_consume.code.to_s
               end
             else
-              return Weixin.respond_text(wx_user.uid, wx_mp_user.uid, activity.activity_property.repeat_draw_msg)
+              return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, activity.activity_property.repeat_draw_msg)
             end
           else
-            return Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '今日的优惠券已发完啦')
+            return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '今日的优惠券已发完啦')
           end
         else #已发放完毕
           activity_notice = activity.activity_notices.stopped.first
         end
       else
-        return Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '活动已结束')
+        return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '活动已结束')
       end
       [activity_notice, options]
     end

@@ -26,7 +26,7 @@
         <br/>
     <div class="WCPay">
         <% @wx_user = WxUser.where(id: session[:wx_user_id]).first%>
-        <h2><%= link_to "去支付", payment_wxpay_pay_url(supplier_id: params[:supplier_id], out_trade_no: @payment.out_trade_no, openid: @wx_user.try(:uid) || params[:openid]) %>
+        <h2><%= link_to "去支付", payment_wxpay_pay_url(supplier_id: params[:supplier_id], out_trade_no: @payment.out_trade_no, openid: @wx_user.try(:openid) || params[:openid]) %>
         </h2>
     </div>
 

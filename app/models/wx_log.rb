@@ -209,7 +209,7 @@ class WxLog
   end
 
   def supplier_name
-    self["ToUserName"].present? && WxMpUser.where(:uid => self.ToUserName).first.try(:name) || "未知商户"
+    self["ToUserName"].present? && WxMpUser.where(:openid => self.ToUserName).first.try(:name) || "未知商户"
   end
 
 end

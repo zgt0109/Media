@@ -49,7 +49,7 @@ class Mobile::DonationOrdersController < Mobile::BaseController
       content = @donation_order.donation.feedback
       unless content.blank?
         mp_user.auth!
-        json = "{\"touser\":\"#{wx_user.uid}\",\"msgtype\":\"text\",\"text\": { \"content\":\"#{content}\" }}"
+        json = "{\"touser\":\"#{wx_user.openid}\",\"msgtype\":\"text\",\"text\": { \"content\":\"#{content}\" }}"
         result = RestClient.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{mp_user.access_token}", json, :content_type => :json, :accept => :json)
         logger.info "===============================#{result}================="
         if result =~ /"errcode":40001/

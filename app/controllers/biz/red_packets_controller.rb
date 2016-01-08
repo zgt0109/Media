@@ -152,14 +152,14 @@ class Biz::RedPacketsController < ApplicationController
     if params[:format] == "xls"
       options = {
           header_columns: %w(用户昵称 Openid),
-          only: [:nickname, :uid]
+          only: [:nickname, :openid]
       }
       respond_to do |format|
         #send_data(@search.page(params[:page_exl]).per(EXPORTING_COUNT).to_xls(options))
         format.xls { send_data(@users.to_a.to_xls(options), :filename => Time.now.to_s(:db).to_s.gsub(/[\s|\t|\:]/, '_') + rand(99999).to_s + ".xls") }
       end
     else
-      open_ids = @users.map { |user| user.uid }
+      open_ids = @users.map { |user| user.openid }
       open_ids.insert(0,@current_user.wx_mp_user.app_id)
       send_data(open_ids.join("\r\n"), type: "text", :filename => Time.now.to_s(:db).to_s.gsub(/[\s|\t|\:]/, '_') + rand(99999).to_s + ".txt")
     end

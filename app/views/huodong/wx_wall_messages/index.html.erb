@@ -75,7 +75,7 @@
                               <td><%= wx_wall_message.wx_wall_user.try(:nickname) %></td>
                               <td>
                                 <% if wx_wall_message.image? %>
-                                  <%= image_tag wx_wall_message.pic, size: '100x100' %>
+                                  <%= image_tag wx_wall_message.pic_key, size: '100x100' %>
                                 <% else %>
                                   <%= wx_wall_message.message %>
                                 <% end %>

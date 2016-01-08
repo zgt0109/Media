@@ -86,7 +86,7 @@ class VipUserPayment < ActiveRecord::Base
       trade_data = HashWithIndifferentAccess.new({
         vip_user_id: vip_user.id,
         wx_user_id: vip_user.wx_user_id,
-        open_id: vip_user.wx_user.uid,
+        open_id: vip_user.wx_user.openid,
         wx_mp_user_id: vip_user.wx_mp_user_id,
         raw_data: params.to_json,
         status: 0

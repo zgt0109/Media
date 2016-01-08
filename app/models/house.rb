@@ -50,7 +50,7 @@ class House < ActiveRecord::Base
 
   def respond_create_live_photo(wx_user, xml)
     live_photos.create(wx_user_id: wx_user.id, pic_url: xml[:PicUrl], wx_media_id: xml[:MediaId])
-    Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '实景拍摄照片上传成功。')
+    Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '实景拍摄照片上传成功。')
   end
 
   def respond_live_photo_location(wx_user, xml)
@@ -63,7 +63,7 @@ class House < ActiveRecord::Base
               else
                 '后台未开启审核：稍后您就可以在“实景拍摄”栏目中看到您的精彩图片了'
               end
-    Weixin.respond_text(wx_user.uid, wx_mp_user.uid, comment)
+    Weixin.respond_text(wx_user.openid, wx_mp_user.openid, comment)
   end
 
 end

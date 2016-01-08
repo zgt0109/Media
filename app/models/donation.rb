@@ -12,12 +12,11 @@ class Donation < ActiveRecord::Base
   validates :detail, presence: true
   validates :group_name, presence: true
   validates :order, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  # mount_uploader :pic, PhotoUploader
-  
+
   belongs_to :activity
   has_many :donation_orders
 
   def pic_url
-    pic.present? ? qiniu_image_url(pic) : "http://www.winwemedia.com/assets/bg_fm.jpg"
+    pic_key.present? ? qiniu_image_url(pic_key) : "http://www.winwemedia.com/assets/bg_fm.jpg"
   end
 end

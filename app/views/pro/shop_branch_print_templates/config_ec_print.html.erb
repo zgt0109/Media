@@ -23,7 +23,7 @@
       <%= form_for @template do |f| %>
      
       <div class="form-group">
-         <%= f.hidden_field :open_id, value: current_user.wx_mp_user.uid %>
+         <%= f.hidden_field :open_id, value: current_user.wx_mp_user.openid %>
          <%= f.hidden_field :template_type, value: 4 %>
       </div>
       <div class="form-group">

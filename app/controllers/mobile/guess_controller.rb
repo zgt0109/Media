@@ -60,7 +60,7 @@ class Mobile::GuessController < Mobile::BaseController
       @subscribed = false
       @auth_service = false
       if @wx_mp_user.try(:auth_service?) && @wx_mp_user.is_oauth? && @wx_user.present?
-        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.uid)
+        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
         return if attrs.blank?
         @auth_service = true
         if attrs['nickname'].present?

@@ -9,7 +9,7 @@ class Mobile::RecommendsController < Mobile::BaseController
       prize.recommends_count - @invites.count <= 0
     end
 
-    if params[:origin_openid].present? && params[:origin_openid] != @wx_user.uid
+    if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
       from_wx_user = WxUser.where(uid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first
       if from_wx_user.present?
         from_wx_user_participate =  WxParticipate.normal.where(wx_user_id: from_wx_user.id, activity_id: @activity.id).first
@@ -32,11 +32,11 @@ class Mobile::RecommendsController < Mobile::BaseController
   end
 
   def prize
-    return redirect_to mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
+    return redirect_to mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
   end
 
   def user
-    return redirect_to mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
+    return redirect_to mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
   end
 
   def update_info
@@ -61,7 +61,7 @@ class Mobile::RecommendsController < Mobile::BaseController
       @subscribed = false
       @auth_service = false
       if @wx_mp_user.try(:authorized_auth_subscribe?) && @wx_user.present?
-        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.uid)
+        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
         if attrs.present?
           @auth_service = true
           if attrs['nickname'].present?

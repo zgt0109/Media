@@ -4,7 +4,7 @@ class WxWallMessage < ActiveRecord::Base
 
   scope :recent, -> { order('id DESC') }
 
-  acts_as_wx_media :pic
+  acts_as_wx_media :pic_key
 
   enum_attr :status, :in => [
     ['normal',    1, '正常'],

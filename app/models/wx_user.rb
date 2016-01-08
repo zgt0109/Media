@@ -1,6 +1,6 @@
 # coding: utf-8
 class WxUser < ActiveRecord::Base
-  validates :uid, presence: true
+  validates :openid, presence: true
 
   belongs_to :supplier
   belongs_to :wx_mp_user
@@ -79,8 +79,8 @@ class WxUser < ActiveRecord::Base
     return unless wx_mp_user
 
     options = HashWithIndifferentAccess.new(options)
-    wx_mp_user.update_uid_to(options[:wx_mp_user_openid])
-    wx_user = wx_mp_user.wx_users.where(uid: options[:wx_user_openid]).first_or_create
+    wx_mp_user.update_openid_to(options[:wx_mp_user_openid])
+    wx_user = wx_mp_user.wx_users.where(openid: options[:wx_user_openid]).first_or_create
 
     attrs = { wx_mp_user_id: wx_mp_user.id, supplier_id: wx_mp_user.supplier_id }
     attrs.merge!(userable_type: 'QqUser') if options[:client_type].to_i == 1
@@ -94,7 +94,7 @@ class WxUser < ActiveRecord::Base
   end
 
   def to_s
-    nickname || uid || id.to_s
+    nickname || openid || id.to_s
   end
 
   def check_recommend
@@ -102,7 +102,7 @@ class WxUser < ActiveRecord::Base
     return unless recommend
 
     if wx_mp_user && wx_mp_user.auth_service? && wx_mp_user.is_oauth?
-      attrs = Weixin.get_wx_user_info(wx_mp_user, uid).to_h
+      attrs = Weixin.get_wx_user_info(wx_mp_user, openid).to_h
       attrs['nickname'] = attrs['nickname'].to_s.chars.select { |c| c.ord <= 65535 }.join if attrs['nickname'].present?
       if attrs.present?
         self.attributes = attrs

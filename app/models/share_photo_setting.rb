@@ -13,13 +13,13 @@ class SharePhotoSetting < ActiveRecord::Base
     if wx_user.matched_in_minutes?(request_expired_at)
       share_photos.create(supplier_id: supplier_id, wx_mp_user_id: wx_mp_user_id, wx_user_id: wx_user.id, pic_url: pic_url)
       wx_user.share_photos!
-      Weixin.respond_text(wx_user.uid, wx_mp_user.uid, upload_description)
+      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, upload_description)
     else #超时
       wx_user.normal!
-      Weixin.respond_text(wx_user.uid, wx_mp_user.uid, "您进入晒图模式已超过#{request_expired_at}分钟，系统自动退出晒图模式，输入关键词重新进入")
+      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, "您进入晒图模式已超过#{request_expired_at}分钟，系统自动退出晒图模式，输入关键词重新进入")
     end
   rescue e
-    Weixin.respond_text(wx_user.uid, wx_mp_user.uid, "error001:#{e}")
+    Weixin.respond_text(wx_user.openid, wx_mp_user.openid, "error001:#{e}")
   end
 
 end

@@ -50,10 +50,10 @@ class Pro::ShopBranchPrintTemplatesController < Pro::ShopBaseController
   end
 
   def config_ec_print  
-    @template = ShopBranchPrintTemplate.where(template_type: 4).where(open_id: current_user.wx_mp_user.uid).first
+    @template = ShopBranchPrintTemplate.where(template_type: 4).where(open_id: current_user.wx_mp_user.openid).first
     if @template
     else
-      @template = ShopBranchPrintTemplate.new(template_type: 4, open_id: current_user.wx_mp_user.uid)
+      @template = ShopBranchPrintTemplate.new(template_type: 4, open_id: current_user.wx_mp_user.openid)
     end
     if @template.thermal_printers.count == 0
       1.times do 

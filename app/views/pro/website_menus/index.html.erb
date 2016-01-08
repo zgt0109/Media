@@ -8,7 +8,7 @@
 
 <div class="box-des">
   <div class="des-l">
-    <iframe id="preview" height="460" width="320" frameborder="0" src="<%= app_lives_url(id: @website.id, aid: @website.activity_id, openid: WxUser.first.uid, wxmuid: @website.wx_mp_user_id) %>" name="preview"></iframe>
+    <iframe id="preview" height="460" width="320" frameborder="0" src="<%= app_lives_url(id: @website.id, aid: @website.activity_id, openid: WxUser.first.openid, wxmuid: @website.wx_mp_user_id) %>" name="preview"></iframe>
     <div>按 Alt + 方向键左(←) 可返回上一层</div>
   </div>
   <div class="des-r menu-list">

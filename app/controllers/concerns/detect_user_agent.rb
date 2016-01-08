@@ -17,14 +17,14 @@ module DetectUserAgent
     if session[:openid].present?
       @wx_user = @wx_mp_user.wx_users.where(uid: session[:openid]).first
       if @wx_user.nil? && @supplier.try(:bqq_account?)
-        @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: session[:openid].to_s, wx_mp_user_openid: @wx_mp_user.uid, client_type: session[:client_type])
+        @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: session[:openid].to_s, wx_mp_user_openid: @wx_mp_user.openid, client_type: session[:client_type])
       end
     elsif session[:wx_user_id].present?
       @wx_user = @wx_mp_user.wx_users.where(id: session[:wx_user_id]).first
     end
 
     session[:wx_user_id] = @wx_user.try(:id)
-    session[:openid] = @wx_user.try(:uid)
+    session[:openid] = @wx_user.try(:openid)
   end
 
   def block_non_wx_browser
@@ -99,7 +99,7 @@ module DetectUserAgent
       Rails.logger.info "==== @wx_user.blank? = #{@wx_user.blank?}"
       Rails.logger.info "==== is_oauth? = #{@wx_mp_user.try(:is_oauth?)}"
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
-      # Rails.logger.info "==== openid = #{@wx_user.try(:uid)}"
+      # Rails.logger.info "==== openid = #{@wx_user.try(:openid)}"
       Rails.logger.info "==== session[:openid] = #{session[:openid]}"
       Rails.logger.info "==== session[:wx_user_id] = #{session[:wx_user_id]}"
 
@@ -111,16 +111,16 @@ module DetectUserAgent
             url = "https://api.b.qq.com/crm/wx/oauth2?access_token=#{api_app.access_token}&appId=#{app_id}&code=#{params[:code]}"
             result = RestClient.get(url)
             access_token_data = JSON result.gsub(/\\/, '')[1..-2]
-            @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.uid, client_type: session[:client_type])
+            @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid, client_type: session[:client_type])
           else
             url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=#{app_id}&secret=#{app_secret}&code=#{params[:code]}&grant_type=authorization_code"
             result = RestClient.get(url)
             access_token_data = JSON(result)# rescue {}
-            @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.uid)
+            @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid)
           end
 
           session[:wx_user_id] = @wx_user.id
-          session[:openid] = @wx_user.uid
+          session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
         end
@@ -160,7 +160,7 @@ module DetectUserAgent
           access_token_data = JSON(result) 
           access_token, expires_in, refresh_token, openid = access_token_data.values_at('access_token', 'expires_in', 'refresh_token', 'openid')
 
-          @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @supplier.wx_mp_user.uid)
+          @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @supplier.wx_mp_user.openid)
           if @wx_mp_user.present? and !@wx_user.has_info?
             attrs = Weixin.get_wx_user_info(nil, openid, access_token)
 
@@ -171,7 +171,7 @@ module DetectUserAgent
           end
 
           session[:wx_user_id] = @wx_user.id
-          session[:openid] = @wx_user.uid
+          session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
         end 
@@ -206,10 +206,10 @@ module DetectUserAgent
 
           access_token_data = JSON(result)
           access_token, expires_in, refresh_token, openid = access_token_data.values_at('access_token', 'expires_in', 'refresh_token', 'openid')
-          @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @supplier.wx_mp_user.uid)
+          @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @supplier.wx_mp_user.openid)
 
           session[:wx_user_id] = @wx_user.id
-          session[:openid] = @wx_user.uid
+          session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
         end
@@ -247,7 +247,7 @@ module DetectUserAgent
           access_token_data = JSON(result)# rescue {}
           access_token, expires_in, refresh_token, openid = access_token_data.values_at('access_token', 'expires_in', 'refresh_token', 'openid')
 
-          @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @supplier.wx_mp_user.uid)
+          @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @supplier.wx_mp_user.openid)
           if @wx_mp_user.present? and !@wx_user.has_info?
             attrs = Weixin.get_wx_user_info(nil, openid, access_token)
             if attrs.present?
@@ -257,7 +257,7 @@ module DetectUserAgent
           end
 
           session[:wx_user_id] = @wx_user.id
-          session[:openid] = @wx_user.uid
+          session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
         end

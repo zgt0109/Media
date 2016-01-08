@@ -2,7 +2,7 @@
 class SupplierPrint < ActiveRecord::Base
   validates :supplier_id, :token, :url, presence: true
   validates :token, uniqueness: { case_sensitive: false, scope: :machine_type }
-  validates :pic, presence: true, on: :create, unless: :welomo?
+  validates :pic_key, presence: true, on: :create, unless: :welomo?
   validates :public_name, presence: true, unless: :welomo?
 
   belongs_to :supplier
@@ -24,7 +24,7 @@ class SupplierPrint < ActiveRecord::Base
 
   scope :small, ->  { where('machine_type = ?', SMALL_MACHINE) }
   scope :big, ->    { where('machine_type = ?', BIG_MACHINE) }
-                   
+
   def pic_url
     pic.present? ? qiniu_image_url(pic) : '/assets/bg_fm.jpg'
   end
@@ -36,7 +36,7 @@ class SupplierPrint < ActiveRecord::Base
   def self.postcard?(wx_user)
     wx_user.postcard? && print_url(wx_user.supplier_id)
   end
-  
+
   def connect_create_webservice
     if self.machine_type == 1
       weixincodeimg = "#{self.pic_url}-.jpg"
@@ -87,11 +87,11 @@ class SupplierPrint < ActiveRecord::Base
   def self.respond_text(wx_user, wx_mp_user, word, raw_post)
     if word == '微打印'
       wx_user.postcard!
-      Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '您已经进入打印模式，请发送图片给我。退出打印模式请回复：退出')
+      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '您已经进入打印模式，请发送图片给我。退出打印模式请回复：退出')
     elsif wx_user.enter_postcard?
       if word == '退出'
         wx_user.normal!
-        Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '您已经退出打印模式')
+        Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '您已经退出打印模式')
       else
         print_url = print_url(wx_user.supplier_id)
         return unless print_url
@@ -110,7 +110,7 @@ class SupplierPrint < ActiveRecord::Base
       nil
     else #没有打印设备
       wx_user.normal!
-      Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '该公众帐号没有打印设备')
+      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '该公众帐号没有打印设备')
     end
   end
 
@@ -120,7 +120,7 @@ class SupplierPrint < ActiveRecord::Base
         result
       else
         WinwemediaLog::Base.logger('wxapi', "image_request response: #{result}")
-        Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '打印失败，请重新上传图片')
+        Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '打印失败，请重新上传图片')
       end
     end
 end

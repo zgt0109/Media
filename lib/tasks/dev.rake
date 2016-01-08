@@ -87,7 +87,7 @@ namespace :dev do
       client = VipCardApi.new(vip_card_api_options[vip_user.supplier_id])
       puts "client: #{client}"
 
-      response = client.new_vip_card(vip_user.wx_user.uid, vip_user.name, vip_user.gender_name, vip_user.mobile)
+      response = client.new_vip_card(vip_user.wx_user.openid, vip_user.name, vip_user.gender_name, vip_user.mobile)
 
       data = response[:data].split(',')
 

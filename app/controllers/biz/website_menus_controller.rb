@@ -13,16 +13,16 @@ class Biz::WebsiteMenusController < ApplicationController
   def new
     @website_menu = @website.website_menus.new(menu_type: WebsiteMenu::ACTIVITY, parent_id: params[:parent_id].to_i)
     @menu_categories_selects = @website_menu.multilevel_menu params
-    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
     @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
   end
 
   def edit
     @menu_categories_selects = @website_menu.multilevel_menu params
     if @website_menu.menuable_type == 'EcSellerCat'
-      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
+      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
     else
-      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
     end
     @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
   end
@@ -39,9 +39,9 @@ class Biz::WebsiteMenusController < ApplicationController
     else
       @menu_categories_selects = @website_menu.multilevel_menu params
       if @website_menu.menuable_type == 'EcSellerCat'
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
       else
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
       end
       @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
       flash[:alert] = "添加失败"
@@ -55,9 +55,9 @@ class Biz::WebsiteMenusController < ApplicationController
     else
       @menu_categories_selects = @website_menu.multilevel_menu params
       if @website_menu.menuable_type == 'EcSellerCat'
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
       else
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
       end
       @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
       flash[:alert] = "保存失败"
@@ -123,7 +123,7 @@ class Biz::WebsiteMenusController < ApplicationController
 
 
   def select_ec_category
-    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: params[:category_id])
+    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: params[:category_id])
     render partial: 'ec_selects'
   end
 

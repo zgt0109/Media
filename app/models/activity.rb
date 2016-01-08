@@ -150,7 +150,7 @@ class Activity < ActiveRecord::Base
   before_create :add_default_properties!, :set_default_pic
   before_save :set_time_fields, :save_extend_serialized_content
   after_create :create_default_properties!, :create_default_custom_field
-  after_save :set_update_status_plan, :send_reply_to_bqq, :set_update_status
+  after_save :set_update_status_plan, :set_update_status
   after_destroy :delete_ranking_list
 
   accepts_nested_attributes_for :activity_prizes, limit: 6
@@ -996,7 +996,7 @@ class Activity < ActiveRecord::Base
       when album?              then mobile_albums_url(supplier_id: supplier_id, aid: id)
       when educations?         then app_educations_url(cid: activityable_id, wxmuid: wx_mp_user_id)
       when life?               then app_lives_url(id: activityable_id, aid: id, wxmuid: wx_mp_user_id)
-      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: wx_mp_user.try(:uid), wx_user_id: options[:openid])
+      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: wx_mp_user.try(:openid), wx_user_id: options[:openid])
       when circle?             then app_business_circles_url(id: activityable_id, aid: id, wxmuid: wx_mp_user_id)
       when message?            then app_leaving_messages_url(aid: id, wxmuid: wx_mp_user_id)
       when hit_egg?            then app_hit_egg_url(activity_notice.try(:activity), wxmuid: activity_notice.try(:wx_mp_user_id))
@@ -1060,125 +1060,6 @@ class Activity < ActiveRecord::Base
   def notice_title
     activity_notice = self.activity_notices.first
     activity_notice.try(:title).to_s
-  end
-
-  def send_reply_to_bqq
-    return unless supplier.try(:bqq_account?)
-
-    return if [30,40].include?(activity_type_id)
-
-    api_user = supplier.api_user
-
-    api_app = ApiApp.bqq
-    api_app.fetch_bqq_token if api_app.try(:token_expired?)
-    api_app.reload
-
-    host = WEBSITE_DOMAIN
-    is_text = false
-
-    title = name
-    description = summary
-    url = respond_mobile_url
-
-    picurl = if qiniu_pic_key.present?
-      qiniu_image_url(qiniu_pic_key)
-    elsif pic.try(:large).present?
-      "#{host}#{pic.try(:large)}"
-    else
-      default_pic_url
-    end
-
-    content = ''
-
-    if (6..11).include?(activity_type_id)
-      return unless setted?
-
-      activity_notice = activity_notices.active.first
-      if activity_notice
-        title = activity_notice.title
-        description = activity_notice.summary
-        picurl = activity_notice.qiniu_pic_key.present? ? qiniu_image_url(activity_notice.qiniu_pic_key) : "#{host}#{activity_notice.pic.try(:large)}"
-      end
-    elsif website?
-      return unless setted?
-
-      activity_notice = activity_notices.active.first
-      if activity_notice
-        activity_notice.summary.to_s.gsub!('{name}', website.try(:name).to_s)
-
-        title = activity_notice.title
-        description = activity_notice.summary
-        picurl = activity_notice.qiniu_pic_key.present? ? qiniu_image_url(activity_notice.qiniu_pic_key) : "#{host}#{activity_notice.pic.try(:large)}"
-      end
-    elsif vip?
-      return unless setted?
-
-      activity_notice = activity_notices.active.first
-      if activity_notice
-        title = activity_notice.title
-        description = activity_notice.summary
-      end
-    elsif consume? || gua? || wheel? || hit_egg? || slot?
-      return unless setted?
-
-      if finished?
-        is_text = true
-        content = '活动已结束'
-      else
-        activity_notice = activity_notices.active.first
-        if activity_notice
-          title = activity_notice.title
-          description = activity_notice.summary
-          picurl = activity_notice.qiniu_pic_key.present? ? qiniu_image_url(activity_notice.qiniu_pic_key) : "#{host}#{activity_notice.pic.try(:large)}"
-        end
-      end
-    end
-
-    reply = if is_text
-      {
-        fromuser: api_user.uid,
-        touser:   '',
-        keywords: keyword,
-        msgtype:  'text',
-        text: {content: content.to_s.gsub(/\r\n/, '')}
-      }.to_json
-    else
-      {
-        fromuser: api_user.uid,
-        touser:   '',
-        keywords: keyword,
-        msgtype:  'news',
-        news:{
-          articles: [
-             {
-               title:       title,
-               description: description.to_s.gsub(/\r\n/, ''),
-               url:         url,
-               picurl:      picurl
-             }
-           ]
-        }
-      }.to_json
-    end
-
-    url = URI::encode("https://api.b.qq.com/crm/partner/autoreply?access_token=#{api_app.access_token}")
-    result = RestClient.post(url, reply)
-    data = JSON(result) rescue {}
-    if [40001, 40014, 41001, 42001].include?(data['errcode'])
-      if api_app.fetch_bqq_token
-        api_app.reload
-        url = URI::encode("https://api.b.qq.com/crm/partner/autoreply?access_token=#{api_app.access_token}")
-        result = RestClient.post(url, reply)
-      end
-    end
-
-    WinwemediaLog::BqqApi.add("send_reply_to_bqq result: #{result}, data: #{reply}")
-
-    { errcode: 0 }
-  rescue => error
-    WinwemediaLog::BqqApi.add("send_reply_to_bqq for activity #{id} error: #{error.message} -> #{error.backtrace}")
-
-    { errcode: 40001, errmsg: "error for activity #{id}: #{error.message}" }
   end
 
   def default_qiniu_pic_key

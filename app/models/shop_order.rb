@@ -331,7 +331,7 @@ class ShopOrder < ActiveRecord::Base
       subject:  "订单 #{order_no}",
       source: 'winwemedia_shop_order',
       wx_mp_user_id:  wx_mp_user_id,
-      open_id: wx_user.try(:uid)
+      open_id: wx_user.try(:openid)
     }
     params.reverse_merge(_order_params)
   end

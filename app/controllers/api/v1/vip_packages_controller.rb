@@ -35,7 +35,7 @@ class Api::V1::VipPackagesController < ActionController::Base
 	  packages = vip_packages.map do |package|
 			hash = package.attributes.slice('id', 'price', 'expiry_num', 'supplier_id')
 			hash[:items_name] = package.vip_package_items.pluck(:name).join("+")
-			hash.merge!(old_price: package.old_price, open_id: package.wx_mp_user.uid, package_name: package.name)
+			hash.merge!(old_price: package.old_price, open_id: package.wx_mp_user.openid, package_name: package.name)
 		end
     render json: { error_code: 0, vip_packages: packages }.to_json
   end

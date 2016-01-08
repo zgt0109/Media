@@ -30,7 +30,7 @@ class Mobile::GroupOrdersController < Mobile::BaseController
                 notify_url: notify_payments_url,
                 merchant_url: group_orders_url({supplier_id: session[:supplier_id], wxmuid: session[:wx_mp_user_id]}),
                 wx_mp_user_id: session[:wx_mp_user_id],
-                open_id: @wx_user.uid
+                open_id: @wx_user.openid
               }
     @payment_request_params = @order.payment_request_params(options)
 

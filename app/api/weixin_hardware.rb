@@ -6,7 +6,7 @@ class WeixinHardware
 
   class << self
     def respond_hanming_wifi(wx_user, mp_user, message)
-      Weixin.respond_text(wx_user.uid, mp_user.uid, 'hanming wifi')
+      Weixin.respond_text(wx_user.openid, mp_user.openid, 'hanming wifi')
     end
     
     # resultCode
@@ -23,7 +23,7 @@ class WeixinHardware
         respond_exit(wx_user, mp_user, '您离开微信wifi状态超过5分钟，现自动退出wifi状态')
       end
 
-      hash          = { mobileNo: '18060086001', guid: mp_user.uid, openid: wx_user.uid, wifiVerifyCode: message }
+      hash          = { mobileNo: '18060086001', guid: mp_user.openid, openid: wx_user.openid, wifiVerifyCode: message }
       rest_params   = WifiLib::WifiBridge.encoding_message hash.to_json
       ret      = RestClient.post(
           'http://api.chaowifi.com/login/get_wifi_verify.do',
@@ -41,7 +41,7 @@ class WeixinHardware
       else
         '验证码不正确'
       end
-      Weixin.respond_text(wx_user.uid, mp_user.uid, content)
+      Weixin.respond_text(wx_user.openid, mp_user.openid, content)
     end
 
     #印立得
@@ -49,8 +49,8 @@ class WeixinHardware
       return respond_exit(wx_user, mp_user) if wx_user.match_at <= 5.minutes.ago # 大于5分钟直接退出
 
       print_url      = mp_user.supplier.supplier_prints.small.first.url
-      from_user_name = wx_user.uid
-      to_user_name   = mp_user.uid
+      from_user_name = wx_user.openid
+      to_user_name   = mp_user.openid
       if activity && activity.supplier_print?
         result  = RestClient.post(print_url, raw_post, content_type: :xml, accept: :xml)
         if result.start_with?('<xml>')
@@ -73,7 +73,7 @@ class WeixinHardware
       # WinwemediaLog::Base.logger('wxprint', "welomo print raw_post: #{raw_post}, params: #{options}")
       return if mp_user.supplier.supplier_prints.welomo.normal.count == 0
 
-      from_user_name, to_user_name = wx_user.uid, mp_user.uid
+      from_user_name, to_user_name = wx_user.openid, mp_user.openid
 
       if activity 
         #进入或退出微打印模式
@@ -91,7 +91,7 @@ class WeixinHardware
     end
 
     def post_to_welomo(wx_user, mp_user, raw_post, options={})
-      from_user_name, to_user_name = wx_user.uid, mp_user.uid
+      from_user_name, to_user_name = wx_user.openid, mp_user.openid
 
       if wx_user.try(:welomo_print?)
         if wx_user.match_at <= 5.minutes.ago
@@ -126,7 +126,7 @@ class WeixinHardware
     def respond_exit(wx_user, mp_user, message = '您开启打印图片模式超过5分钟未做任何操作，已自动退出打印图片模式。')
       wx_user.normal!
 
-      Weixin.respond_text(wx_user.uid, mp_user.uid, message)
+      Weixin.respond_text(wx_user.openid, mp_user.openid, message)
     end    
   end
 

@@ -24,7 +24,7 @@
                       if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                           window.location.href="<%= payment_wxpay_success_url(payment_id: @payment.id)%>";
                       }else{
-                          window.location.href="<%= payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.uid)%>";
+                          window.location.href="<%= payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.openid)%>";
                       }
                   });
               }

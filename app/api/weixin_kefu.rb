@@ -5,7 +5,7 @@ class WeixinKefu
     host = WEBSITE_DOMAIN
 
     xml = params[:xml]
-    wx_user = mp_user.wx_users.where(uid: xml[:FromUserName]).first
+    wx_user = mp_user.wx_users.where(openid: xml[:FromUserName]).first
     word = xml[:Content]
     response_content = ''
 

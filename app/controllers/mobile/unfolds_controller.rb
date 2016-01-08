@@ -4,7 +4,7 @@ class Mobile::UnfoldsController < Mobile::BaseController
   before_filter :check_subscribe, :find_activity,  :find_participate,  :find_invites,  :find_prize
 
   def index
-    if params[:origin_openid].present? && params[:origin_openid] != @wx_user.uid
+    if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
       from_wx_user = WxUser.where(uid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first
       @friend = true
       if from_wx_user.present?
@@ -26,12 +26,12 @@ class Mobile::UnfoldsController < Mobile::BaseController
   end
 
   def prize
-    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) unless @prize.present?
-    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) if @prize.abort?
+    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) unless @prize.present?
+    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if @prize.abort?
   end
 
   def user
-    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.uid, origin_openid: params[:origin_openid]) unless @prize.present?
+    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) unless @prize.present?
   end
 
   def update_info
@@ -98,7 +98,7 @@ class Mobile::UnfoldsController < Mobile::BaseController
       @subscribed = false
       @auth_service = false
       if @wx_mp_user.try(:auth_service?) && @wx_mp_user.is_oauth? && @wx_user.present?
-        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.uid)
+        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
         return unless attrs
         @auth_service = true
         @wx_user.update_attributes(attrs)

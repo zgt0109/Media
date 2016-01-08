@@ -28,7 +28,7 @@
           </div>
           <div class=" col-sm-12">
             <div class="showOnline">
-              <iframe src="<%= mobile_root_url(supplier_id: @website.supplier_id, openid: @website.supplier.wx_users.first.try(:uid)) %>" width="320" height="460"></iframe>
+              <iframe src="<%= mobile_root_url(supplier_id: @website.supplier_id, openid: @website.supplier.wx_users.first.try(:openid)) %>" width="320" height="460"></iframe>
             </div>
             <div class="col-xs-12 col-sm-offset-1 col-sm-6">
               <div id="tree1">

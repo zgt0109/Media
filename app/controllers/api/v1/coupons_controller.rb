@@ -81,7 +81,7 @@ class Api::V1::CouponsController < Api::BaseController
     coupons = Coupon.mobile.can_apply.where(wx_mp_user_id: wx_mp_user_ids).order("created_at DESC").page(page).per(per)
     coupons = coupons.to_a.as_json.each do |coupon|
       object = Coupon.find_by_id(coupon['id'])
-      wx_mp_user_open_id = object.wx_mp_user.try(:uid)
+      wx_mp_user_open_id = object.wx_mp_user.try(:openid)
       coupon['wx_mp_user_open_id'] = wx_mp_user_open_id
       coupon['left_count'] = object.limit_count_avaliable - object.consumes.count
       coupon['left_days'] = (Date.today .. object.use_end.to_date).count
@@ -103,7 +103,7 @@ class Api::V1::CouponsController < Api::BaseController
     end
     coupons = coupons.order("value DESC").as_json.each do |coupon|
       object = Coupon.find_by_id(coupon['id'])
-      wx_mp_user_open_id = object.wx_mp_user.try(:uid)
+      wx_mp_user_open_id = object.wx_mp_user.try(:openid)
       coupon['wx_mp_user_open_id'] = wx_mp_user_open_id
       coupon['left_count'] = object.limit_count_avaliable - object.consumes.count
       coupon['left_days'] = (Date.today .. object.use_end.to_date).count

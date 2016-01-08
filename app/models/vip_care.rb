@@ -126,7 +126,7 @@ class VipCare < ActiveRecord::Base
       begin
         content = get_message_body(vip_user.name)
         given_coupon.consumes.create!(wx_mp_user_id: vip_card.wx_mp_user_id, wx_user_id: vip_user.wx_user_id, consumable_id: given_coupon_id, consumable_type: 'Coupon')
-        content.gsub!('{优惠券}', %Q[<a href="#{M_HOST}/#{vip_card.supplier_id}/coupons/my?openid=#{vip_user.wx_user.uid}">我的优惠券</a>])
+        content.gsub!('{优惠券}', %Q[<a href="#{M_HOST}/#{vip_card.supplier_id}/coupons/my?openid=#{vip_user.wx_user.openid}">我的优惠券</a>])
         vip_user.vip_givens.create(vip_care_id: id, category: category, givable_id: given_coupon_id, givable_type: 'Coupon')
         supplier.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
       rescue => e

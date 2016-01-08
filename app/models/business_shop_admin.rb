@@ -13,7 +13,7 @@ class BusinessShopAdmin < ActiveRecord::Base
 
   def name=(name)
     if business_shop.try(:website).try(:supplier).try(:bqq_account?)
-      name_suffix = business_shop.try(:website).try(:supplier).try(:api_user).try(:uid)
+      name_suffix = business_shop.try(:website).try(:supplier).try(:api_user).try(:openid)
     else
       name_suffix = business_shop.try(:website).try(:id)
     end

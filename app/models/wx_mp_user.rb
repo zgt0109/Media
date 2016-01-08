@@ -32,7 +32,7 @@ class WxMpUser < ActiveRecord::Base
 
   validates :supplier_id, :status, :name, presence: true
   # validates :name, presence: true, uniqueness: { case_sensitive: false }
-  # validates :uid, presence: true, on: :create
+  # validates :openid, presence: true, on: :create
   serialize :func_info, JSON
 
   SHARE_PHOTO = [
@@ -772,7 +772,7 @@ class WxMpUser < ActiveRecord::Base
   end
 
   def generate_code
-    self.key = WxMpUser.generate_key
+    self.encoding_aes_key = WxMpUser.generate_key
     self.code = (Time.now.to_f * 1000_000).to_i.to_s
   end
 

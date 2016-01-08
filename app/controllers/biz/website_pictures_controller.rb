@@ -16,16 +16,16 @@ class Biz::WebsitePicturesController < ApplicationController
       return
     end
     @picture =  @website.website_pictures.new
-    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
     @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
     #render layout: 'application_pop'
   end
 
   def edit
     if @picture.menuable_type == 'EcSellerCat'
-      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: @picture.menuable_id).to_a.slice(0, 2)
+      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @picture.menuable_id).to_a.slice(0, 2)
     else
-      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
     end
     @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
     #render layout: 'application_pop'
@@ -38,9 +38,9 @@ class Biz::WebsitePicturesController < ApplicationController
     else
       flash[:alert] = "添加失败"
       if @picture.menuable_type == 'EcSellerCat'
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: @picture.menuable_id).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @picture.menuable_id).to_a.slice(0, 2)
       else
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
       end
       @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
       render action: 'new'
@@ -53,9 +53,9 @@ class Biz::WebsitePicturesController < ApplicationController
     else
       flash[:alert] = "更新失败"
       if @picture.menuable_type == 'EcSellerCat'
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid), category_id: @picture.menuable_id).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @picture.menuable_id).to_a.slice(0, 2)
       else
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:uid)).to_a.slice(0, 2)
+        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @picture.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
       end
       @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
       render action: 'edit'#, layout: 'application_pop'

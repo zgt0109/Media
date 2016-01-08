@@ -64,7 +64,7 @@
           </div>
         <% else #aided? %>
           <div class="main-action">
-            <%= link_to "助好友一臂之力", friend_aid_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id, owner_openid: @owner_user.uid), method: "post", remote: true, class: "btn main-btn main-left main-btn-help main-btn-help" %>
+            <%= link_to "助好友一臂之力", friend_aid_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id, owner_openid: @owner_user.openid), method: "post", remote: true, class: "btn main-btn main-left main-btn-help main-btn-help" %>
             <%= link_to "邀请好友为他助力", "javascript:;", class: "btn main-btn main-left main-btn-share main-btn-hidden" %>
 
             <% if self_joined? %>

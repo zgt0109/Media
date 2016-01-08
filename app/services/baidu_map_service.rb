@@ -1,7 +1,7 @@
 class BaiduMapService
   class << self
     def respond_location(from_user_name, mp_user, keyword)
-      to_user_name = mp_user.uid
+      to_user_name = mp_user.openid
       wx_user = mp_user.wx_users.where(uid: from_user_name).first
 
       location_missed_or_expired = wx_user.location_updated_at.blank? || (Time.now - wx_user.location_updated_at >= 300)

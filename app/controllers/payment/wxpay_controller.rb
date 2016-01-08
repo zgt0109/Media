@@ -75,7 +75,7 @@ class Payment::WxpayController < ApplicationController
 
     if params[:openid].present?
       @wx_user = @supplier.try(:wx_mp_user).try(:wx_users).where(uid: params[:openid]).first
-      @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: params[:openid], wx_mp_user_openid: @supplier.wx_mp_user.try(:uid)) unless @wx_user
+      @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: params[:openid], wx_mp_user_openid: @supplier.wx_mp_user.try(:openid)) unless @wx_user
     else
       return render json: {errcode: 006, errmsg: "weixin user not found"}
     end
@@ -163,7 +163,7 @@ class Payment::WxpayController < ApplicationController
       spbill_create_ip: request.remote_ip, 
       notify_url: PaymentSetting::WEIXIN_NOTICE_URL, 
       trade_type: "JSAPI", 
-      openid: @wx_user.uid
+      openid: @wx_user.openid
     }
     sign_params = set_sign_params request_options
     xml = create_xml request_options, get_sign(sign_params, @wxpay.partner_key)
@@ -181,11 +181,11 @@ class Payment::WxpayController < ApplicationController
         set_pay_sign_params
       else
         write_weixinv2_log "weixin v2 pay error payment out_trade_no : #{@payment.out_trade_no}, error: #{result}"
-        return redirect_to payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.uid), notice: "您的订单存在异常,无法发起支付. 错误信息：#{result[:return_msg]}"
+        return redirect_to payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.openid), notice: "您的订单存在异常,无法发起支付. 错误信息：#{result[:return_msg]}"
       end  
     elsif return_code == "FAIL"
       write_weixinv2_log "weixin v2 pay error payment out_trade_no : #{@payment.out_trade_no}, error: #{result}"
-      return redirect_to payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.uid), notice: "数据异常,请尝试重试支付. 错误信息：#{result[:return_msg]}"
+      return redirect_to payment_wxpay_fail_url(payment_id: @payment.id, openid: @wx_user.openid), notice: "数据异常,请尝试重试支付. 错误信息：#{result[:return_msg]}"
     else 
       write_weixinv2_log "weixin v2 pay error payment out_trade_no : #{@payment.out_trade_no}, error: #{result}"
       return render text: "data exception. 错误信息：#{result[:return_msg]}"

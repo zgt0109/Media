@@ -69,7 +69,7 @@ class AuthAgentController < ApplicationController
     access_token_data = HashWithIndifferentAccess.new JSON.parse(raw_data)
 
     if access_token_data['openid'].present?
-      @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.uid)
+      @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid)
       session[:wx_user_id] = @wx_user.id
     else
       return render json: {error_code: '-1', remark: "fetch openid failure, raw data is #{raw_data}"}
@@ -77,7 +77,7 @@ class AuthAgentController < ApplicationController
 
     if should_return_to?
       return_to_uri = decode_return_to_uri
-      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(wx_user_open_id: @wx_user.uid).to_param
+      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(wx_user_open_id: @wx_user.openid).to_param
 
       WinwemediaLog::Base.logger('wxoauth', "****** return_to_uri: #{return_to_uri.to_s}")
 
@@ -114,7 +114,7 @@ class AuthAgentController < ApplicationController
     access_token_data = HashWithIndifferentAccess.new JSON.parse(raw_data.gsub(/\\/, '')[1..-2])
 
     if access_token_data['openid'].present?
-      @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.uid)
+      @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid)
       session[:wx_user_id] = @wx_user.id
     else
       return render json: {error_code: '-1', remark: "fetch openid failure, raw data is #{raw_data}"}
@@ -122,7 +122,7 @@ class AuthAgentController < ApplicationController
 
     if should_return_to?
       return_to_uri = decode_return_to_uri
-      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(wx_user_open_id: @wx_user.uid).to_param
+      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(wx_user_open_id: @wx_user.openid).to_param
 
       redirect_to return_to_uri.to_s
     else

@@ -10,25 +10,25 @@ class UserVoice < ActiveRecord::Base
 
   def self.respond_greet_voice(wx_user, wx_mp_user, keyword)
     user_voice = wx_user.user_voices.last
-    return Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '请先发送语音') unless user_voice
+    return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '请先发送语音') unless user_voice
 
     user_voice.update_attributes(name: keyword)
     greet_activity = wx_mp_user.supplier.greets.first.activity
-    url = "#{MOBILE_DOMAIN}/#{wx_mp_user.supplier_id}/greet_cards?activity_id=#{greet_activity.id}&openid=#{wx_user.uid}"
+    url = "#{MOBILE_DOMAIN}/#{wx_mp_user.supplier_id}/greet_cards?activity_id=#{greet_activity.id}&openid=#{wx_user.openid}"
     pic_url = qiniu_image_url(greet_activity.qiniu_pic_key) || "#{MOBILE_DOMAIN}#{greet_activity.try(:pic).try(:large)}"
 
     items = [{title: greet_activity.name, description: greet_activity.summary, pic_url: pic_url, url: url}]
-    Weixin.respond_news(wx_user.uid, wx_mp_user.uid, items)
+    Weixin.respond_news(wx_user.openid, wx_mp_user.openid, items)
   end
 
   def self.respond_voice(wx_user, wx_mp_user, xml)
-    return Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '授权失败，请确保应用ID和应用匹配') unless wx_mp_user.auth! # 确保access_token要最新,不然调用不到下载
+    return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '授权失败，请确保应用ID和应用匹配') unless wx_mp_user.auth! # 确保access_token要最新,不然调用不到下载
 
     user_voice  = wx_user.user_voices.new
     if user_voice.save_from_xml(wx_mp_user, xml)
-      Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '输入汉字"语音"+语音名称,如:语音新年快乐')
+      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '输入汉字"语音"+语音名称,如:语音新年快乐')
     else
-      Weixin.respond_text(wx_user.uid, wx_mp_user.uid, '上传语音失败，请重新录制')
+      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '上传语音失败，请重新录制')
     end
   end
 

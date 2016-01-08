@@ -66,7 +66,7 @@ class VipUser < ActiveRecord::Base
   delegate :vip_card, to: :wx_mp_user, allow_nil: true
   delegate :open_card_sms_notify?, to: :vip_card, allow_nil: true
   delegate :recharge_consume_sms_notify?, to: :vip_card, allow_nil: true
-  delegate :uid, to: :wx_user, prefix: true, allow_nil: true
+  delegate :openid, to: :wx_user, prefix: true, allow_nil: true
 
   belongs_to :wx_user
   belongs_to :vip_group, counter_cache: true
@@ -135,7 +135,7 @@ class VipUser < ActiveRecord::Base
     vip_user = wx_mp_user.vip_users.visible.where(wx_user_id: wx_user.id).first
 
     unless vip_user
-      vip_user = wx_user.create_vip_user(supplier_id: wx_user.supplier_id, wx_mp_user_id: wx_user.wx_mp_user_id, name: wx_user.uid, mobile: wx_user.uid)
+      vip_user = wx_user.create_vip_user(supplier_id: wx_user.supplier_id, wx_mp_user_id: wx_user.wx_mp_user_id, name: wx_user.openid, mobile: wx_user.openid)
       vip_user.status = INACTIVE
     end
 

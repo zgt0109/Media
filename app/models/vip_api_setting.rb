@@ -23,7 +23,7 @@ class VipApiSetting < ActiveRecord::Base
   def open_card( vip_user )
     api = VipExternalHttpApi.where(vip_card_id: vip_card_id).open_card.first
     return unless api
-    query = vip_user.custom_field_with_value_names.merge!( name: vip_user.name, mobile: vip_user.mobile, uid: vip_user.wx_user.uid )
+    query = vip_user.custom_field_with_value_names.merge!( name: vip_user.name, mobile: vip_user.mobile, uid: vip_user.wx_user.openid )
 
     http_method, url, options = httparty_args( api, query )
     logger.info "*************************************************#{__method__} options=#{options}"

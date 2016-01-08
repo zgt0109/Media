@@ -115,7 +115,7 @@
                   var html = '<div class="shop_name  bordb2">\
                                 <div class="">\
                                   <div class="h6 ">\
-                                    <a href="<%= WMALL_HOST%>/wx/wxshop/toShopDetail?shopId=<%= @groupable.id %>&supplier_id=<%= session[:supplier_id] %>&wx_user_open_id=<%= session[:openid]%>&wx_mp_user_open_id=<%=@supplier.try(:wx_mp_user).try(:uid)%>">\
+                                    <a href="<%= WMALL_HOST%>/wx/wxshop/toShopDetail?shopId=<%= @groupable.id %>&supplier_id=<%= session[:supplier_id] %>&wx_user_open_id=<%= session[:openid]%>&wx_mp_user_open_id=<%=@supplier.try(:wx_mp_user).try(:openid)%>">\
                                       <i class="com_icon icon2 left mart7"></i>\
                                       <div class="auto overhidden ">'+data['name']+'</div>\
                                     </a>\

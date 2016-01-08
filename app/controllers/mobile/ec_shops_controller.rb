@@ -7,19 +7,19 @@ class Mobile::EcShopsController < Mobile::BaseController
   def index
     @page_class = 'index'
     @ec_ads = @shop.ads if @shop
-    redirect_to wshop_root_url(wx_mp_user_open_id: @wx_mp_user.try(:uid),wx_user_open_id: @wx_user.try(:uid))
+    redirect_to wshop_root_url(wx_mp_user_open_id: @wx_mp_user.try(:openid),wx_user_open_id: @wx_user.try(:openid))
   end
 
   def show
     @page_class = "detail"
     @item = EcItem.find(params[:id])
     @item_pictures = [@item]
-    redirect_to wshop_root_url(wx_mp_user_open_id: @wx_mp_user.try(:uid),wx_user_open_id: @wx_user.try(:uid))
+    redirect_to wshop_root_url(wx_mp_user_open_id: @wx_mp_user.try(:openid),wx_user_open_id: @wx_user.try(:openid))
   end
 
   def member
     @page_class = 'member'
-    redirect_to wshop_root_url(wx_mp_user_open_id: @wx_mp_user.try(:uid),wx_user_open_id: @wx_user.try(:uid))
+    redirect_to wshop_root_url(wx_mp_user_open_id: @wx_mp_user.try(:openid),wx_user_open_id: @wx_user.try(:openid))
   end
 
   private

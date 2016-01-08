@@ -100,7 +100,7 @@ unless @mobile_footer_rendered
       @share_image = @supplier.try(:website).try(:logo).to_s if @share_image.blank?
       @share_image = qiniu_image_url(@supplier.try(:website).try(:logo_key).to_s) if @share_image.blank?
       @share_image = "/assets/logo_vcoolline.jpg" if @share_image.blank?
-      wx_share_options = generate_wx_share_options(request.base_url, request.path, request.query_parameters, @share_image.try(:to_s), @wx_user.try(:uid))
+      wx_share_options = generate_wx_share_options(request.base_url, request.path, request.query_parameters, @share_image.try(:to_s), @wx_user.try(:openid))
       %>
 
       wx.ready(function () {

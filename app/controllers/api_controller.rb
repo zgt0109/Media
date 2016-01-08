@@ -299,7 +299,7 @@ class ApiController < ApplicationController
   end
 
   def around_shop_branches(shop_branches)
-    first_url = mobile_micro_stores_url(supplier_id: @mp_user.supplier_id, openid: @wx_user.uid, wxmuid: @mp_user.id, msg_type: "location")
+    first_url = mobile_micro_stores_url(supplier_id: @mp_user.supplier_id, openid: @wx_user.openid, wxmuid: @mp_user.id, msg_type: "location")
     first_pic = "#{host}/location_img/#{@wx_user.id}/img.png?#{Time.now.to_f}"
 
     items = [ {title: "点击查看周边#{shop_branches.count}家门店", pic_url: first_pic, url: first_url} ]
@@ -307,7 +307,7 @@ class ApiController < ApplicationController
       {
         title: "【#{branch.name}】#{branch.human_distance_to(@wx_user)}",
         pic_url: branch.thumbnail_url || "#{host}/assets/micro_stores/small_default.png",
-        url: mobile_micro_store_url(supplier_id: @mp_user.supplier_id, id: branch.id, openid: @wx_user.uid, wxmuid: @mp_user.id)
+        url: mobile_micro_store_url(supplier_id: @mp_user.supplier_id, id: branch.id, openid: @wx_user.openid, wxmuid: @mp_user.id)
       }
     end
     Weixin.respond_news(@from_user_name, @to_user_name, items)
@@ -390,14 +390,14 @@ class ApiController < ApplicationController
     return Weixin.respond_text(from_user_name, to_user_name, '活动结束或不存在') unless activity_notice
     activity = activity_notice.activity
     url = case
-            when activity.vip?         then pic_url = activity.pic_url; app_vips_url(anid: activity_notice.id, openid: @wx_user.uid, aid: activity_notice.activity_id, wxmuid: activity_notice.wx_mp_user_id)
-            when activity.consume?     then app_consume_url(activity_id: activity_notice.activity_id, id: activity_notice.id, code: option[:code], openid: @wx_user.uid, wxmuid: activity_notice.wx_mp_user_id)
-            when activity.gua?         then app_gua_url(  activity_notice.activity_id, anid: activity_notice.id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.uid, source: :notice)
-            when activity.wheel?       then app_wheel_url(activity_notice.activity_id, anid: activity_notice.id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.uid, source: :notice)
-            when activity.fight?       then app_fight_index_url(anid: activity_notice.id, aid: activity_notice.activity_id, openid: @wx_user.uid, wxmuid: activity_notice.wx_mp_user_id, m: 'index')
-            when activity.hit_egg?     then app_hit_egg_url(activity_notice.activity, openid: @wx_user.uid, wxmuid: activity_notice.wx_mp_user_id)
-            when activity.slot?        then app_slots_url(aid: activity_notice.activity_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.uid)
-            when activity.micro_aid?   then mobile_aids_url(activity_id: activity_notice.activity.id, supplier_id: activity.supplier_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.uid)
+            when activity.vip?         then pic_url = activity.pic_url; app_vips_url(anid: activity_notice.id, openid: @wx_user.openid, aid: activity_notice.activity_id, wxmuid: activity_notice.wx_mp_user_id)
+            when activity.consume?     then app_consume_url(activity_id: activity_notice.activity_id, id: activity_notice.id, code: option[:code], openid: @wx_user.openid, wxmuid: activity_notice.wx_mp_user_id)
+            when activity.gua?         then app_gua_url(  activity_notice.activity_id, anid: activity_notice.id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.openid, source: :notice)
+            when activity.wheel?       then app_wheel_url(activity_notice.activity_id, anid: activity_notice.id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.openid, source: :notice)
+            when activity.fight?       then app_fight_index_url(anid: activity_notice.id, aid: activity_notice.activity_id, openid: @wx_user.openid, wxmuid: activity_notice.wx_mp_user_id, m: 'index')
+            when activity.hit_egg?     then app_hit_egg_url(activity_notice.activity, openid: @wx_user.openid, wxmuid: activity_notice.wx_mp_user_id)
+            when activity.slot?        then app_slots_url(aid: activity_notice.activity_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.openid)
+            when activity.micro_aid?   then mobile_aids_url(activity_id: activity_notice.activity.id, supplier_id: activity.supplier_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.openid)
           end
 
     url << '#mp.weixin.qq.com'
@@ -413,36 +413,36 @@ class ApiController < ApplicationController
   def respond_activity_directly(activity)
     logger.info "---------------------#{activity.activity_type_id}-------------------goto response_activity_directly "
     url = case
-            when activity.website?               then mobile_root_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.enroll?                then new_app_activity_enroll_url(aid: activity.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.uid)
-            when activity.book_dinner?           then book_dinner_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.book_table?            then book_table_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.take_out?              then take_out_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.micro_store?           then mobile_micro_stores_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.vote?                  then mobile_vote_login_url(supplier_id: activity.supplier_id, vote_id: activity.id, openid: @wx_user.uid)
-            when activity.house?                 then app_house_layouts_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.groups?                then app_activity_group_url(activity, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
+            when activity.website?               then mobile_root_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.enroll?                then new_app_activity_enroll_url(aid: activity.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.openid)
+            when activity.book_dinner?           then book_dinner_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.book_table?            then book_table_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.take_out?              then take_out_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.micro_store?           then mobile_micro_stores_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.vote?                  then mobile_vote_login_url(supplier_id: activity.supplier_id, vote_id: activity.id, openid: @wx_user.openid)
+            when activity.house?                 then app_house_layouts_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.groups?                then app_activity_group_url(activity, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
             when activity.surveys?               then respond_survey_activity_link(activity)
             when activity.car?                   then car_activity_url(activity)
-            when activity.weddings?              then mobile_weddings_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, wid: activity.activityable_id)
-            when activity.hotel?                 then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?supplier_id=#{activity.supplier_id}&openid=#{@wx_user.uid}"
-            when activity.album?                 then mobile_albums_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.educations?            then app_educations_url(cid: activity.activityable_id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.life?                  then app_lives_url(id: activity.activityable_id, aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.wshop? || activity.ec? then wshop_root_url(wx_user_open_id: @wx_user.uid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid))
-            when activity.circle?                then app_business_circles_url(id: activity.activityable_id, aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.message?               then app_leaving_messages_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_bespeak?         then new_app_house_market_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_seller?          then app_house_sellers_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
+            when activity.weddings?              then mobile_weddings_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, wid: activity.activityable_id)
+            when activity.hotel?                 then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?supplier_id=#{activity.supplier_id}&openid=#{@wx_user.openid}"
+            when activity.album?                 then mobile_albums_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.educations?            then app_educations_url(cid: activity.activityable_id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.life?                  then app_lives_url(id: activity.activityable_id, aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.wshop? || activity.ec? then wshop_root_url(wx_user_open_id: @wx_user.openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid))
+            when activity.circle?                then app_business_circles_url(id: activity.activityable_id, aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.message?               then app_leaving_messages_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_bespeak?         then new_app_house_market_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_seller?          then app_house_sellers_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
             when activity.booking?               then mobile_supplier_booking_url(activity)
-            when activity.group?                 then mobile_groups_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.hospital?              then mobile_hospital_doctors_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
+            when activity.group?                 then mobile_groups_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.hospital?              then mobile_hospital_doctors_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
             when activity.wifi?                  then "http://m.chaowifi.com/auth/wechat.do?guid=#{@to_user_name}"
             when activity.hanming_wifi?          then "#{activity.hanming_callback_url}?func=weixin&custom_wx_id=#{@from_user_name}&wx_id=#{@to_user_name}&ssid=winwemedia-#{activity.supplier_id}&resulturl=#{activity.hanming_callback_url}&resultAnchor=0"
             when activity.greet?
               @wx_user.greet! #进入语音贺卡模式
               return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
-            when activity.trip?                  then mobile_trips_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
+            when activity.trip?                  then mobile_trips_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
             when activity.share_photo? # 图片分享模式
               @wx_user.share_photos!
               return Weixin.respond_text(@from_user_name, @to_user_name, activity.summary)
@@ -456,43 +456,43 @@ class ApiController < ApplicationController
             when activity.greet?
               @wx_user.greet! #进入语音贺卡模式
               return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
-            when activity.business_shop?         then mobile_business_shop_url(activity.supplier, activity.activityable, openid: @wx_user.uid)
-            when activity.house_impression?      then app_house_impressions_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_live_photo?      then app_house_live_photos_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_intro?           then app_house_intros_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.ktv_order?             then app_ktv_orders_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.wbbs_community?        then mobile_wbbs_topics_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.wmall?                 then wmall_root_url(wx_user_open_id: @wx_user.uid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid), supplier_id: activity.supplier_id)
-            when activity.donation?              then mobile_donations_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, wid: activity.activityable_id, aid: activity.id)
-            when activity.wmall_shop?            then wmall_shop_url(shop_id: activity.activityable_id, wx_user_open_id: @wx_user.uid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid), supplier_id: activity.supplier_id)
+            when activity.business_shop?         then mobile_business_shop_url(activity.supplier, activity.activityable, openid: @wx_user.openid)
+            when activity.house_impression?      then app_house_impressions_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_live_photo?      then app_house_live_photos_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_intro?           then app_house_intros_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.ktv_order?             then app_ktv_orders_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.wbbs_community?        then mobile_wbbs_topics_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.wmall?                 then wmall_root_url(wx_user_open_id: @wx_user.openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid), supplier_id: activity.supplier_id)
+            when activity.donation?              then mobile_donations_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, wid: activity.activityable_id, aid: activity.id)
+            when activity.wmall_shop?            then wmall_shop_url(shop_id: activity.activityable_id, wx_user_open_id: @wx_user.openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid), supplier_id: activity.supplier_id)
             when activity.shake?
-              url = "#{mobile_wx_shakes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)}#mp.weixin.qq.com"
+              url = "#{mobile_wx_shakes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
               pic_url = activity.pic_url(:large, host: host)
               items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: pic_url, url: url}]
               return Weixin.respond_news(@from_user_name, @to_user_name, items)
-            when activity.plot_bulletin?         then bulletins_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.plot_repair?           then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid, type: 'repair')
-            when activity.plot_complain?         then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid, type: 'complain')
-            when activity.plot_telephone?        then telephones_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.plot_owner?            then owners_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.plot_life?             then lives_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.coupon?                then mobile_coupons_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.reservation?           then mobile_reservations_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.wave?                  then mobile_waves_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
+            when activity.plot_bulletin?         then bulletins_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.plot_repair?           then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid, type: 'repair')
+            when activity.plot_complain?         then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid, type: 'complain')
+            when activity.plot_telephone?        then telephones_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.plot_owner?            then owners_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.plot_life?             then lives_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.coupon?                then mobile_coupons_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.reservation?           then mobile_reservations_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.wave?                  then mobile_waves_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
             when activity.broche?                then mobile_broche_photos_url(supplier_id: activity.supplier_id, aid: activity.id)
-            when activity.oa?                    then "#{OA_HOST}/woa-all/wx/#{activity.supplier_id}/index?openid=#{@wx_user.uid}"
-            when activity.fans_game?             then mobile_fans_games_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.govmail?               then mobile_govmails_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.govchat?               then mobile_govchats_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
+            when activity.oa?                    then "#{OA_HOST}/woa-all/wx/#{activity.supplier_id}/index?openid=#{@wx_user.openid}"
+            when activity.fans_game?             then mobile_fans_games_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.govmail?               then mobile_govmails_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.govchat?               then mobile_govchats_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
             when activity.recommend?             then recommend_mobile_location(activity.id)
-            when activity.unfold?                then mobile_unfolds_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.wmall_coupon?          then wmall_coupon_url(wx_user_open_id: @wx_user.uid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid), supplier_id: activity.supplier_id)
-            when activity.scene?                 then mobile_scenes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
+            when activity.unfold?                then mobile_unfolds_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.wmall_coupon?          then wmall_coupon_url(wx_user_open_id: @wx_user.openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid), supplier_id: activity.supplier_id)
+            when activity.scene?                 then mobile_scenes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
             when activity.panoramagram?          then mobile_supplier_panoramagram_url(activity)
-            when activity.guess?                 then mobile_guess_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.wx_card?               then mobile_wx_cards_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id, wechat_card_js: 1)
-            when activity.brokerage?             then mobile_brokerages_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.red_packet?            then mobile_red_packets_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
+            when activity.guess?                 then mobile_guess_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.wx_card?               then mobile_wx_cards_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id, wechat_card_js: 1)
+            when activity.brokerage?             then mobile_brokerages_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.red_packet?            then mobile_red_packets_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
           end
     logger.info "------#{activity.hanming_wifi?}----#{url} ====="
     url << '#mp.weixin.qq.com' unless activity.hanming_wifi?
@@ -529,72 +529,72 @@ class ApiController < ApplicationController
     activity_notice = activity.activity_notices.active.first
 
     url = case
-            when activity.website?               then mobile_root_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.vip?                   then app_vips_url(wxmuid: activity.wx_mp_user_id, openid: @wx_user.uid)
+            when activity.website?               then mobile_root_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.vip?                   then app_vips_url(wxmuid: activity.wx_mp_user_id, openid: @wx_user.openid)
             when activity.consume?
               activity_notice = activity.activity_notices.first
               activity_consume = activity.activity_consumes.where(supplier_id: activity.supplier_id, wx_mp_user_id: activity.wx_mp_user_id, wx_user_id: @wx_user.id).first
-              app_consume_url(activity_id: activity_notice.activity_id, id: activity_notice.id, code: activity_consume.try(:code), openid: @wx_user.uid)
+              app_consume_url(activity_id: activity_notice.activity_id, id: activity_notice.id, code: activity_consume.try(:code), openid: @wx_user.openid)
             when activity.gua? && activity.setted?
               activity_notice = ActivityNotice.ready_or_active_notice(activity, [Activity::WARM_UP, Activity::HAS_ENDED])
-              app_gua_url(activity, anid: activity_notice.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.uid, source: :notice)
+              app_gua_url(activity, anid: activity_notice.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.openid, source: :notice)
             when activity.wheel? && activity.setted?
               activity_notice = ActivityNotice.ready_or_active_notice(activity)
-              app_wheel_url(activity, anid: activity_notice.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.uid, source: :notice)
-            when activity.book_dinner?           then book_dinner_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id,  openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.book_table?            then book_table_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id,  openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.fight?                 then app_fight_index_url(anid: activity_notice.id, aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id, m: 'index')
-            when activity.take_out?              then take_out_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id,  openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.enroll?                then new_app_activity_enroll_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.micro_store?           then mobile_micro_stores_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.vote?                  then mobile_vote_login_url(supplier_id: activity.supplier_id, vote_id: activity.id, openid: @wx_user.uid)
-            when activity.house?                 then app_house_layouts_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.groups?                then app_activity_group_url(activity, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
+              app_wheel_url(activity, anid: activity_notice.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.openid, source: :notice)
+            when activity.book_dinner?           then book_dinner_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id,  openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.book_table?            then book_table_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id,  openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.fight?                 then app_fight_index_url(anid: activity_notice.id, aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id, m: 'index')
+            when activity.take_out?              then take_out_mobile_shops_url(supplier_id: activity.supplier_id, aid: activity.id,  openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.enroll?                then new_app_activity_enroll_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.micro_store?           then mobile_micro_stores_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.vote?                  then mobile_vote_login_url(supplier_id: activity.supplier_id, vote_id: activity.id, openid: @wx_user.openid)
+            when activity.house?                 then app_house_layouts_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.groups?                then app_activity_group_url(activity, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
             when activity.surveys?               then respond_survey_activity_link(activity)
             when activity.car?                   then car_activity_url(activity)
-            when activity.weddings?              then mobile_weddings_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, wid: activity.activityable_id)
-            when activity.hotel?                 then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?supplier_id=#{activity.supplier_id}&openid=#{@wx_user.uid}"
-            when activity.album?                 then mobile_albums_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.educations?            then app_educations_url(cid: activity.activityable_id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.life?                  then app_lives_url(id: activity.activityable_id, aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.wshop? || activity.ec? then wshop_root_url(wx_user_open_id: @wx_user.uid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid))
+            when activity.weddings?              then mobile_weddings_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, wid: activity.activityable_id)
+            when activity.hotel?                 then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?supplier_id=#{activity.supplier_id}&openid=#{@wx_user.openid}"
+            when activity.album?                 then mobile_albums_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.educations?            then app_educations_url(cid: activity.activityable_id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.life?                  then app_lives_url(id: activity.activityable_id, aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.wshop? || activity.ec? then wshop_root_url(wx_user_open_id: @wx_user.openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid))
             when activity.circle?                then app_business_circles_url(id: activity.activityable_id, aid: activity.id, wxmuid: activity.wx_mp_user_id)
             when activity.message?               then app_leaving_messages_url(aid: activity.id, wxmuid: activity.wx_mp_user_id)
-            when activity.hit_egg?               then app_hit_egg_url(activity_notice.activity, openid: @wx_user.uid, wxmuid: activity_notice.wx_mp_user_id)
-            when activity.house_bespeak?         then new_app_house_market_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_seller?          then app_house_sellers_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.slot?                  then app_slots_url(aid: activity_notice.activity_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.uid)
-            when activity.micro_aid?             then mobile_aids_url(activity_id: activity_notice.activity.id, supplier_id: activity.supplier_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.uid)
+            when activity.hit_egg?               then app_hit_egg_url(activity_notice.activity, openid: @wx_user.openid, wxmuid: activity_notice.wx_mp_user_id)
+            when activity.house_bespeak?         then new_app_house_market_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_seller?          then app_house_sellers_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.slot?                  then app_slots_url(aid: activity_notice.activity_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.openid)
+            when activity.micro_aid?             then mobile_aids_url(activity_id: activity_notice.activity.id, supplier_id: activity.supplier_id, wxmuid: activity_notice.wx_mp_user_id, openid: @wx_user.openid)
             when activity.booking?               then mobile_supplier_booking_url(activity)
-            when activity.group?                 then mobile_groups_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.trip?                  then mobile_trips_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.house_impression?      then app_house_impressions_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_live_photo?      then app_house_live_photos_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.house_intro?           then app_house_intros_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.ktv_order?             then app_ktv_orders_url(aid: activity.id, openid: @wx_user.uid, wxmuid: activity.wx_mp_user_id)
-            when activity.wbbs_community?        then mobile_wbbs_topics_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.wmall?                 then wmall_root_url(wx_user_open_id: @wx_user.uid, wx_mp_user_open_id: activity.wx_mp_user.try(:uid), supplier_id: activity.supplier_id)
-            when activity.donation?              then mobile_donations_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, wid: activity.activityable_id, aid: activity.id)
-            when activity.plot_bulletin?         then bulletins_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.plot_repair?           then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid, type: 'repair')
-            when activity.plot_complain?         then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid, type: 'complain')
-            when activity.plot_telephone?        then telephones_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.plot_owner?            then owners_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.plot_life?             then lives_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.coupon?                then mobile_coupons_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.reservation?           then mobile_reservations_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.wave?                  then mobile_waves_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.oa?                    then "#{OA_HOST}/woa-all/wx/#{activity.supplier_id}/index?openid=#{@wx_user.uid}"
-            when activity.fans_game?             then mobile_fans_games_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.govmail?               then mobile_govmails_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
-            when activity.govchat?               then mobile_govchats_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
+            when activity.group?                 then mobile_groups_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.trip?                  then mobile_trips_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.house_impression?      then app_house_impressions_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_live_photo?      then app_house_live_photos_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.house_intro?           then app_house_intros_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.ktv_order?             then app_ktv_orders_url(aid: activity.id, openid: @wx_user.openid, wxmuid: activity.wx_mp_user_id)
+            when activity.wbbs_community?        then mobile_wbbs_topics_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.wmall?                 then wmall_root_url(wx_user_open_id: @wx_user.openid, wx_mp_user_open_id: activity.wx_mp_user.try(:openid), supplier_id: activity.supplier_id)
+            when activity.donation?              then mobile_donations_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, wid: activity.activityable_id, aid: activity.id)
+            when activity.plot_bulletin?         then bulletins_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.plot_repair?           then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid, type: 'repair')
+            when activity.plot_complain?         then repair_complains_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid, type: 'complain')
+            when activity.plot_telephone?        then telephones_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.plot_owner?            then owners_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.plot_life?             then lives_mobile_wx_plots_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.coupon?                then mobile_coupons_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.reservation?           then mobile_reservations_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.wave?                  then mobile_waves_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.oa?                    then "#{OA_HOST}/woa-all/wx/#{activity.supplier_id}/index?openid=#{@wx_user.openid}"
+            when activity.fans_game?             then mobile_fans_games_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.govmail?               then mobile_govmails_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
+            when activity.govchat?               then mobile_govchats_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
             when activity.recommend?             then recommend_mobile_location(activity.id)
-            when activity.unfold?                then mobile_unfolds_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.scene?                 then mobile_scenes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.uid)
+            when activity.unfold?                then mobile_unfolds_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.scene?                 then mobile_scenes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)
             when activity.panoramagram?          then mobile_supplier_panoramagram_url(activity)
-            when activity.guess?                 then mobile_guess_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
-            when activity.brokerage?             then mobile_brokerages_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
-            when activity.red_packet?            then mobile_red_packets_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
+            when activity.guess?                 then mobile_guess_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
+            when activity.brokerage?             then mobile_brokerages_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
+            when activity.red_packet?            then mobile_red_packets_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
             else ''
           end
     [url, '#mp.weixin.qq.com'].join
@@ -603,16 +603,16 @@ class ApiController < ApplicationController
   def respond_survey_activity_link(activity)
     return '' unless activity
     activity_user = ActivityUser.where(wx_user_id: @wx_user.id, activity_id: activity.id).first
-    return mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: @wx_user.uid) if activity_user.nil? || !activity.setted?
-    return success_mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: @wx_user.uid) if activity_user.survey_finish?
+    return mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: @wx_user.openid) if activity_user.nil? || !activity.setted?
+    return success_mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: @wx_user.openid) if activity_user.survey_finish?
 
     question = activity.activity_survey_questions.first
-    question ? questions_mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, qid: question.id, openid: @wx_user.uid) : ''
+    question ? questions_mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, qid: question.id, openid: @wx_user.openid) : ''
   end
 
   def car_activity_url(activity)
     return Weixin.respond_text(@from_user_name, @to_user_name, '活动不存在') unless activity.activityable
-    activity.car_url << "&openid=#{@wx_user.uid}"
+    activity.car_url << "&openid=#{@wx_user.openid}"
   end
 
   def recommend_mobile_location(activity_id)
@@ -627,15 +627,15 @@ class ApiController < ApplicationController
     if BookingOrder.flow_suppliers.include?(activity.supplier_id)
       new_mobile_booking_order_url(supplier_id: activity.supplier_id)
     else
-      mobile_bookings_url(supplier_id: activity.supplier_id, openid: @wx_user.uid)
+      mobile_bookings_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
     end
   end
 
   def mobile_supplier_panoramagram_url(activity)
     if activity.activityable_type == 'Panoramagram'
-      panorama_mobile_panoramagram_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, id: activity.activityable_id)
+      panorama_mobile_panoramagram_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, id: activity.activityable_id)
     else
-      mobile_panoramagrams_url(supplier_id: activity.supplier_id, openid: @wx_user.uid, aid: activity.id)
+      mobile_panoramagrams_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
     end
   end
   

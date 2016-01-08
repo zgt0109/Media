@@ -101,7 +101,7 @@ class Mobile::SurveysController < Mobile::BaseController
    def check_subscribe
     if @wx_user.present? #分为已关注(不作处理)和授权获得两种
       if @wx_mp_user.try(:auth_service?) && @wx_mp_user.is_oauth?
-        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.uid)
+        attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
         @wx_user.update_attributes(attrs) if attrs.present?
         if @wx_user.unsubscribe? && !@activity.require_wx_user?
           return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)

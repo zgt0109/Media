@@ -57,7 +57,7 @@ class Assistant < ActiveRecord::Base
                else
                  wx_mp_user.supplier.assistants.where(name: keyword[2..-1]).first.try(:weixin_link_tag) || '游戏不存在或商户未开启此游戏'
                end
-    Weixin.respond_text(wx_user.uid, wx_mp_user.uid, content)
+    Weixin.respond_text(wx_user.openid, wx_mp_user.openid, content)
   end
 
   def title
@@ -81,7 +81,7 @@ class Assistant < ActiveRecord::Base
   end
 
   def handle_keyword(mp_user, from_user_name, keyword)
-    to_user_name = mp_user.uid
+    to_user_name = mp_user.openid
     if close_status(mp_user.supplier_id)
       Weixin.respond_text(from_user_name, to_user_name, '商户已关闭此服务')
     elsif keyword.start_with?('附近')

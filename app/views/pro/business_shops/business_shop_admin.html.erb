@@ -7,8 +7,8 @@
 	<div class="box-form">
     <div class="p">
       <span>商铺账号：</span>
-      <%= f.text_field :name, class: 'input-text', size: 12 %>@<%= current_user.bqq_account? ? current_user.api_user.try(:uid) : @website.id %>
-      <span class="fgray">（如果输入的是abc，那么你完整的登录账号是abc@<%= current_user.bqq_account? ? current_user.api_user.try(:uid) : @website.id %>）</span>
+      <%= f.text_field :name, class: 'input-text', size: 12 %>@<%= @website.id %>
+      <span class="fgray">（如果输入的是abc，那么你完整的登录账号是abc@<%= @website.id %>）</span>
     </div>
     <div class="p">
       <span>商铺密码：</span>

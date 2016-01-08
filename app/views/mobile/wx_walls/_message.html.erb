@@ -10,6 +10,6 @@
   </div>
   <div class="user-msg">
     <h1><%= message.wx_wall_user.nickname %></h1>
-    <p><%= message.text? ? message.message : "<img src='#{message.pic}'/>".html_safe %></p>
+    <p><%= message.text? ? message.message : "<img src='#{message.pic_key}'/>".html_safe %></p>
   </div>
 </li>

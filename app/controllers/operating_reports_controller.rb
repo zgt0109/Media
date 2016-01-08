@@ -365,7 +365,7 @@ class OperatingReportsController < ApplicationController
 
   def set_data
     #今日
-    #@today_wx_logs = WxLog.by_uid(@supplier.wx_mp_user.uid).by_date(Date.today)
+    #@today_wx_logs = WxLog.by_uid(@supplier.wx_mp_user.openid).by_date(Date.today)
     #全部
     @all_wx_requests = WxRequest.where(supplier_id: @supplier.id)
     #月
@@ -378,10 +378,10 @@ class OperatingReportsController < ApplicationController
     if params[:type] == 'today'
       @wx_logs = @today_wx_logs
     elsif params[:type] == 'yesterday'
-      @wx_logs = WxLog.by_uid(@supplier.wx_mp_user.uid).by_date(Date.yesterday)
+      @wx_logs = WxLog.by_uid(@supplier.wx_mp_user.openid).by_date(Date.yesterday)
       @day_request = @yesterday_wx_request
     elsif @dates.count == 1
-      @wx_logs = WxLog.by_uid(@supplier.wx_mp_user.uid).by_date(@st)
+      @wx_logs = WxLog.by_uid(@supplier.wx_mp_user.openid).by_date(@st)
       @day_request =  @all_wx_requests.where(date: @st..@ed).first
     end
 

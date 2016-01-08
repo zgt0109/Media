@@ -76,21 +76,13 @@
               </div>
               <div class="form-group">
                 <label>项目图片<span class="required-star">*</span><small class="text-warning">图片建议尺寸：640像素*450像素</small></label>
-                <!-- <div class="clearfix">
-                  <div class="cieldon-file" data-type="0" data-height="225" data-width="320" data-name="website_setting[bg_pic_key]" data-img="" data-key=""></div>
-                </div> -->
-          <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="320" data-height="225" data-name="donation[pic]" data-img="<%= @donation.pic_url %>" data-key="<%= @donation.pic || "" %>"></div>
+          <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="320" data-height="225" data-name="donation[pic_key]" data-img="<%= @donation.pic_url %>" data-key="<%= @donation.pic_key || "" %>"></div>
 
 
               </div>
-           
               <div class="form-group">
                 <label>项目详细</label>
-               
-
-<%= render "shared/form_rich_text", field_name: "detail", obj: @donation, f: f, wrapper_html_options: {class: "clearfix"} %>
-
-              
+                <%= render "shared/form_rich_text", field_name: "detail", obj: @donation, f: f, wrapper_html_options: {class: "clearfix"} %>
               </div>
               <div class="form-group">
                 <label>公益组织<span class="required-star">*</span></label>

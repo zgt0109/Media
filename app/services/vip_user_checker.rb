@@ -21,7 +21,7 @@ VipUserChecker = Struct.new(:vip_user, :openid, :trade_token) do
 
   private
     def valid_openid?
-      openid.blank? || vip_user.wx_user.uid == openid
+      openid.blank? || vip_user.wx_user.openid == openid
     end
 
     def valid_trade_token?
