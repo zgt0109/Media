@@ -2123,7 +2123,8 @@ class InitDb < ActiveRecord::Migration
   add_index "hotel_comments", ["hotel_branch_id"], :name => "index_hotel_comments_on_hotel_branch_id"
   add_index "hotel_comments", ["hotel_id"], :name => "index_hotel_comments_on_hotel_id"
   add_index "hotel_comments", ["hotel_order_id"], :name => "index_hotel_comments_on_hotel_order_id"
-  add_index "hotel_comments", ["site_id"], :name => "index_hotel_comments_on_site_id"  add_index "hotel_comments", ["user_id"], :name => "index_hotel_comments_on_user_id"
+  add_index "hotel_comments", ["site_id"], :name => "index_hotel_comments_on_site_id"
+  add_index "hotel_comments", ["user_id"], :name => "index_hotel_comments_on_user_id"
 
   create_table "hotel_order_items", :force => true do |t|
     t.integer  "site_id",                       :null => false
@@ -2557,6 +2558,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "leaving_messages", :force => true do |t|
     t.integer  "site_id",                              :null => false
+    t.integer  "replier_id"
     t.string   "replier_type"
     t.string   "contact"
     t.string   "nickname"
@@ -4066,10 +4068,10 @@ class InitDb < ActiveRecord::Migration
     t.integer  "site_id",                                           :null => false
     t.integer  "template_id",                        :default => 1
     t.integer  "activity_id",                                           :null => false
-    t.string   "name",
+    t.string   "name"
     t.string   "supplier_name"
     t.string   "mobile"
-    t.string   "tel"                                             :null => false
+    t.string   "tel"
     t.string   "name_bg_color"
     t.string   "card_bg_color"
     t.string   "background_pic"

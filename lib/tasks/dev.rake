@@ -10,7 +10,7 @@ namespace :dev do
   desc 'created suppliers'
   task :create_suppliers => :environment do
     puts 'Starting create suppliers ******'
-    supplier = Supplier.where(nickname: 'wemedia').first_or_create(name: '微枚迪', password: 111111, password_confirmation: 111111, is_gift: true)
+    supplier = Account.where(nickname: 'wemedia').first_or_create(name: '微枚迪', password: 111111, password_confirmation: 111111, is_gift: true)
     puts "created supplier: #{supplier.name}"
   end
 
