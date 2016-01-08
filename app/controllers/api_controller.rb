@@ -19,7 +19,7 @@ class ApiController < ApplicationController
     @is_success = @checked ? 1 : 0
     $encrypt_type  = params[:encrypt_type].to_s
     $app_id = params[:app_id].to_s
-    
+
     return @echostr if so_resecse_test
 
     return @echostr = serve_get_wx_api if request.get?
@@ -38,7 +38,7 @@ class ApiController < ApplicationController
   ensure
     attrs = @xml.is_a?(Hash) ? params.merge(xml: @xml) : params
     attrs = attrs.merge(ReplyMsg: @echostr, IsSuccess: @is_success, ConnectTime: Time.now - @start_time)
-    WinwemediaLog::WeixinLog.add(attrs.to_json)
+    WinwemediaLog::Base.logger('weixin_logs', attrs.to_json)
     render text: @echostr
 
     send_kf_text_message

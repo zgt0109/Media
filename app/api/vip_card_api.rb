@@ -42,7 +42,7 @@ class VipCardApi
     data = [wx_name, user_name, sex, number].join(',')
 
     puts "data ************* #{data}"
-    WinwemediaLog::VipCardApi.add("vip card data: #{data}")
+    WinwemediaLog::Base.logger('user_api', "vip card data: #{data}")
 
     response = @client.call(:of_interface , message: { v_type: "New", v_indata: data, v_outdata: "微信号,会员卡号,积分余额,备注文字" })
     puts "response: #{response}"

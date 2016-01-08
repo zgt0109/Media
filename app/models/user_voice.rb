@@ -42,7 +42,7 @@ class UserVoice < ActiveRecord::Base
     self.remote_sound_url = media_url
     save!
   rescue => e
-    WinwemediaLog::WeixinApi.add("voice receive fail: #{e.message} -> #{e.backtrace}")
+    WinwemediaLog::Base.logger('wx_api', "Voice receive fail: #{e.message} -> #{e.backtrace}")
     false
   end
 end

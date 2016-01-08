@@ -11,7 +11,7 @@ set :user, 'deployer'
 # set :admin_runner, 'root'
 set :use_sudo, false
 # set :group_writable, false
-set :port, 22 
+set :port, 22
 
 # deployt_via: remote_cache, chechout, export or copy
 set :deploy_via, :remote_cache
@@ -87,7 +87,7 @@ task :precompile do
     assets_suffix = application
     tmp_assets_dir = "__assets_#{assets_suffix}"
     shared_assets_dir = "/opt/apps/shared/winwemedia/assets/#{assets_suffix}/"
-    
+
     run_locally "mkdir -p public/#{tmp_assets_dir}; mv public/#{tmp_assets_dir} public/assets;"
     run_locally 'bundle exec rake assets:clean_expired; RAILS_ENV=production bundle exec rake assets:precompile;'
 
