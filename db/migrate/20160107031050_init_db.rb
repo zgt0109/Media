@@ -2,7 +2,7 @@
 
 class InitDb < ActiveRecord::Migration
 
-  create_table "merchants", :force => true do |t|
+  create_table "accounts", :force => true do |t|
     t.string   "nickname"
     t.string   "company_name"
     t.string   "contact"
@@ -33,11 +33,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                             :null => false
   end
 
-  add_index "merchants", ["nickname"], :name => "index_merchants_on_nickname", :unique => true
+  add_index "accounts", ["nickname"], :name => "index_accounts_on_nickname", :unique => true
 
-
-  create_table "merchant_footers", :force => true do |t|
-    t.integer  "merchant_id",                       :null => false
+  create_table "account_footers", :force => true do |t|
+    t.integer  "account_id",                       :null => false
     t.boolean  "is_default",     :default => false, :null => false
     t.boolean  "is_show_link",   :default => false, :null => false
     t.string   "footer_content",                    :null => false
@@ -46,8 +45,8 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                        :null => false
   end
 
-  create_table "merchant_passwords", :force => true do |t|
-    t.integer  "merchant_id",                                        :null => false
+  create_table "account_passwords", :force => true do |t|
+    t.integer  "account_id",                                        :null => false
     t.string   "email"
     t.integer  "password_type",                     :default => 1,   :null => false
     t.string   "password_digest",                   :default => "1", :null => false
@@ -58,104 +57,9 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                         :null => false
   end
 
-  add_index "merchant_passwords", ["email"], :name => "index_merchant_passwords_on_email"
-  add_index "merchant_passwords", ["password_question_id"], :name => "index_merchant_passwords_on_password_question_id"
-  add_index "merchant_passwords", ["merchant_id"], :name => "index_merchant_passwords_on_merchant_id"
-
-  create_table "merchant_pay_accounts", :force => true do |t|
-    t.integer  "merchant_id",                                                                            :null => false
-    t.decimal  "withdrawed_amount",                     :precision => 12, :scale => 2, :default => 0.0,  :null => false
-    t.decimal  "balance",                               :precision => 12, :scale => 2, :default => 0.0,  :null => false
-    t.decimal  "froze_amount",                          :precision => 12, :scale => 2, :default => 0.0,  :null => false
-    t.string   "company_name"
-    t.string   "bank_name"
-    t.string   "bank_branch"
-    t.string   "bank_account"
-    t.string   "username"
-    t.string   "contact"
-    t.string   "tel"
-    t.integer  "province_id"
-    t.integer  "city_id"
-    t.integer  "status",                   :limit => 1,                                :default => 0,    :null => false
-    t.text     "deny_remark"
-    t.text     "description"
-    t.string   "business_lisence"
-    t.string   "business_address"
-    t.datetime "business_affilicated_to"
-    t.text     "business_scope"
-    t.string   "organization_code"
-    t.string   "business_lisence_pic_key"
-    t.string   "identity_type"
-    t.string   "identity_number"
-    t.string   "email"
-    t.datetime "identity_avaliable_to"
-    t.string   "identity_pic_key"
-    t.decimal  "settle_fee_rate",                       :precision => 6,  :scale => 4, :default => 0.02, :null => false
-    t.datetime "created_at",                                                                             :null => false
-    t.datetime "updated_at",                                                                             :null => false
-  end
-
-  create_table "merchant_transactions", :force => true do |t|
-    t.integer  "merchant_id",                                                                       :null => false
-    t.integer  "merchant_pay_account_id",                                                           :null => false
-    t.integer  "transactionable_id"
-    t.string   "transactionable_type"
-    t.string   "running_number"
-    t.decimal  "froze_amount",                      :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "amount",                            :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "balance",                           :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "withdrawed_amount",                 :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.integer  "direction",            :limit => 1,                                :default => 1,   :null => false
-    t.integer  "direction_type",       :limit => 1,                                :default => 11,  :null => false
-    t.integer  "status",               :limit => 1,                                :default => 0,   :null => false
-    t.text     "description"
-    t.datetime "created_at",                                                                        :null => false
-    t.datetime "updated_at",                                                                        :null => false
-  end
-
-  add_index "merchant_transactions", ["direction"], :name => "index_merchant_transactions_on_direction"
-  add_index "merchant_transactions", ["direction_type"], :name => "index_merchant_transactions_on_direction_type"
-  add_index "merchant_transactions", ["status"], :name => "index_merchant_transactions_on_status"
-  add_index "merchant_transactions", ["merchant_pay_account_id"], :name => "index_merchant_transactions_on_merchant_pay_account_id"
-  add_index "merchant_transactions", ["merchant_id"], :name => "index_merchant_transactions_on_merchant_id"
-  add_index "merchant_transactions", ["transactionable_id", "transactionable_type"], :name => "index_pay_transactionable"
-
-  create_table "merchant_withdraws", :force => true do |t|
-    t.integer  "merchant_id",                                                                      :null => false
-    t.integer  "merchant_pay_account_id"
-    t.decimal  "amount",                           :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "fee",                              :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.decimal  "receive_amount",                   :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.datetime "pay_at"
-    t.string   "bank_name"
-    t.string   "bank_branch"
-    t.string   "bank_account"
-    t.integer  "admin_user_id"
-    t.integer  "status",              :limit => 1,                                :default => 0,   :null => false
-    t.text     "description"
-    t.datetime "created_at",                                                                       :null => false
-    t.datetime "updated_at",                                                                       :null => false
-    t.string   "running_number"
-  end
-
-  add_index "merchant_withdraws", ["admin_user_id"], :name => "index_merchant_withdraws_on_admin_user_id"
-  add_index "merchant_withdraws", ["running_number"], :name => "index_merchant_withdraws_on_running_number"
-  add_index "merchant_withdraws", ["status"], :name => "index_merchant_withdraws_on_status"
-  add_index "merchant_withdraws", ["merchant_pay_account_id"], :name => "index_merchant_withdraws_on_merchant_pay_account_id"
-  add_index "merchant_withdraws", ["merchant_id"], :name => "index_merchant_withdraws_on_merchant_id"
-
-  create_table "accounts", :force => true do |t|
-    t.integer  "merchant_id"
-    t.string   "name"
-    t.integer  "status",                              :default => 0,     :null => false
-    t.text     "privileges"
-    t.integer  "piwik_site_id"
-    t.integer  "piwik_domain_status",    :limit => 1, :default => 0,     :null => false
-    t.text     "metadata"
-    t.text     "description"
-    t.datetime "created_at",                                             :null => false
-    t.datetime "updated_at",                                             :null => false
-  end
+  add_index "account_passwords", ["email"], :name => "index_account_passwords_on_email"
+  add_index "account_passwords", ["password_question_id"], :name => "index_account_passwords_on_password_question_id"
+  add_index "account_passwords", ["account_id"], :name => "index_account_passwords_on_account_id"
 
   create_table "account_logs", :force => true do |t|
     t.integer  "user_id"
@@ -168,8 +72,21 @@ class InitDb < ActiveRecord::Migration
 
   add_index "account_logs", ["user_id", "user_type"], :name => "index_account_logs_on_user_id_and_user_type"
 
+  create_table "sites", :force => true do |t|
+    t.integer  "account_id"
+    t.string   "name"
+    t.integer  "status",                              :default => 0,     :null => false
+    t.text     "privileges"
+    t.integer  "piwik_site_id"
+    t.integer  "piwik_domain_status",    :limit => 1, :default => 0,     :null => false
+    t.text     "metadata"
+    t.text     "description"
+    t.datetime "created_at",                                             :null => false
+    t.datetime "updated_at",                                             :null => false
+  end
+
   create_table "activities", :force => true do |t|
-    t.integer  "account_id",                                          :null => false
+    t.integer  "site_id",                                          :null => false
     t.integer  "activity_type_id",                                     :null => false
     t.string   "page_title"
     t.string   "name",                                                 :null => false
@@ -195,7 +112,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                           :null => false
   end
 
-  add_index "activities", ["account_id"], :name => "index_activities_on_account_id"
+  add_index "activities", ["site_id"], :name => "index_activities_on_site_id"
   add_index "activities", ["activity_type_id"], :name => "index_activities_on_activity_type_id"
   add_index "activities", ["activityable_id", "activityable_type"], :name => "index_activities_on_activityable_id_and_activityable_type"
   add_index "activities", ["keyword"], :name => "index_activities_on_keyword"
@@ -221,7 +138,7 @@ class InitDb < ActiveRecord::Migration
   add_index "activities_fans_games", ["fans_game_id"], :name => "index_activities_fans_games_on_fans_game_id"
 
   create_table "activity_consumes", :force => true do |t|
-    t.integer  "account_id",                      :null => false
+    t.integer  "site_id",                      :null => false
     t.integer  "activity_id",                      :null => false
     t.integer  "user_id",                       :null => false
     t.integer  "vip_privilege_id"
@@ -247,7 +164,7 @@ class InitDb < ActiveRecord::Migration
   add_index "activity_consumes", ["applicable_id"], :name => "index_activity_consumes_on_applicable_id"
   add_index "activity_consumes", ["shop_branch_id"], :name => "index_activity_consumes_on_shop_branch_id"
   add_index "activity_consumes", ["status"], :name => "index_activity_consumes_on_status"
-  add_index "activity_consumes", ["account_id"], :name => "index_activity_consumes_on_account_id"
+  add_index "activity_consumes", ["site_id"], :name => "index_activity_consumes_on_site_id"
   add_index "activity_consumes", ["vip_privilege_id"], :name => "index_activity_consumes_on_vip_privilege_id"
   add_index "activity_consumes", ["user_id"], :name => "index_activity_consumes_on_user_id"
 
@@ -296,19 +213,19 @@ class InitDb < ActiveRecord::Migration
   add_index "activity_feedbacks", ["user_id"], :name => "index_activity_feedbacks_on_user_id"
 
   create_table "activity_form_fields", :force => true do |t|
-    t.integer  "account_id",                                :null => false
+    t.integer  "site_id",                                :null => false
     t.string   "name",                                      :null => false
     t.string   "value",                                     :null => false
     t.integer  "sort",                       :default => 1, :null => false
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
-    t.integer  "account_id",                :default => 0, :null => false
+    t.integer  "site_id",                :default => 0, :null => false
     t.integer  "field_type",    :limit => 1, :default => 1, :null => false
     t.string   "regular"
     t.string   "regular_alert"
   end
 
-  add_index "activity_form_fields", ["name", "account_id"], :name => "index_activity_form_fields_on_name", :unique => true
+  add_index "activity_form_fields", ["name", "site_id"], :name => "index_activity_form_fields_on_name", :unique => true
 
   create_table "activity_forms", :force => true do |t|
     t.integer  "activity_id",                               :null => false
@@ -340,7 +257,7 @@ class InitDb < ActiveRecord::Migration
   add_index "activity_groups", ["item_qty"], :name => "index_activity_groups_on_item_qty"
 
   create_table "activity_hits", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "ahable_id"
     t.string   "ahable_type"
     t.string   "content"
@@ -431,7 +348,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "activity_questions", :force => true do |t|
     t.integer  "activity_type_id",              :default => 8
-    t.integer  "account_id",                                  :null => false
+    t.integer  "site_id",                                  :null => false
     t.string   "title",                                        :null => false
     t.string   "qiniu_pic_key"
     t.string   "answer_a",                                     :null => false
@@ -446,7 +363,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "activity_questions", ["status"], :name => "index_fight_questions_on_status"
-  add_index "activity_questions", ["account_id"], :name => "index_fight_questions_on_account_id"
+  add_index "activity_questions", ["site_id"], :name => "index_fight_questions_on_site_id"
 
   create_table "activity_settings", :force => true do |t|
     t.integer  "activity_id"
@@ -604,7 +521,7 @@ class InitDb < ActiveRecord::Migration
   add_index "album_photos", ["album_id"], :name => "index_album_photos_on_album_id"
 
   create_table "albums", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "activity_id"
     t.string   "name"
     t.integer  "photos_count",               :default => 0
@@ -619,10 +536,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "albums", ["activity_id"], :name => "index_albums_on_activity_id"
-  add_index "albums", ["account_id"], :name => "index_albums_on_account_id"
+  add_index "albums", ["site_id"], :name => "index_albums_on_site_id"
 
   create_table "answers", :force => true do |t|
-    t.integer  "account_id",                                :null => false
+    t.integer  "site_id",                                :null => false
     t.integer  "question_id",                                :null => false
     t.integer  "answer_type",    :limit => 1, :default => 1, :null => false
     t.integer  "replyable_id"
@@ -635,7 +552,7 @@ class InitDb < ActiveRecord::Migration
   add_index "answers", ["answer_type"], :name => "index_answers_on_answer_type"
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
   add_index "answers", ["replyable_id", "replyable_type"], :name => "answers_replyable_index"
-  add_index "answers", ["account_id"], :name => "index_answers_on_account_id"
+  add_index "answers", ["site_id"], :name => "index_answers_on_site_id"
 
   create_table "assistants", :force => true do |t|
     t.string   "name",                                       :null => false
@@ -655,14 +572,14 @@ class InitDb < ActiveRecord::Migration
 
   add_index "assistants", ["name"], :name => "index_assistants_on_name"
 
-  create_table "assistants_accounts", :force => true do |t|
+  create_table "assistants_sites", :force => true do |t|
     t.integer  "assistant_id"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.datetime "created_at",       :null => false
   end
 
-  add_index "assistants_accounts", ["assistant_id"], :name => "index_assistants_accounts_on_assistant_id"
-  add_index "assistants_accounts", ["account_id"], :name => "index_assistants_accounts_on_account_id"
+  add_index "assistants_sites", ["assistant_id"], :name => "index_assistants_sites_on_assistant_id"
+  add_index "assistants_sites", ["site_id"], :name => "index_assistants_sites_on_site_id"
 
   create_table "book_rules", :force => true do |t|
     t.integer  "shop_branch_id"
@@ -707,7 +624,7 @@ class InitDb < ActiveRecord::Migration
   add_index "book_time_ranges", ["book_rule_id"], :name => "index_book_time_ranges_on_book_rule_id"
 
   create_table "booking_ads", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "title"
     t.string   "qiniu_pic_key"
     t.string   "url"
@@ -718,10 +635,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "booking_ads", ["sort"], :name => "index_booking_ads_on_sort"
-  add_index "booking_ads", ["account_id"], :name => "index_booking_ads_on_account_id"
+  add_index "booking_ads", ["site_id"], :name => "index_booking_ads_on_site_id"
 
   create_table "booking_categories", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "parent_id"
     t.string   "name",                                      :null => false
     t.integer  "sort",                       :default => 1, :null => false
@@ -734,7 +651,7 @@ class InitDb < ActiveRecord::Migration
   add_index "booking_categories", ["name"], :name => "index_booking_categories_on_name"
   add_index "booking_categories", ["parent_id"], :name => "index_booking_categories_on_parent_id"
   add_index "booking_categories", ["sort"], :name => "index_booking_categories_on_sort"
-  add_index "booking_categories", ["account_id"], :name => "index_booking_categories_on_account_id"
+  add_index "booking_categories", ["site_id"], :name => "index_booking_categories_on_site_id"
 
   create_table "booking_comments", :force => true do |t|
     t.integer  "booking_item_id"
@@ -760,7 +677,7 @@ class InitDb < ActiveRecord::Migration
   add_index "booking_item_pictures", ["sort"], :name => "index_booking_item_pictures_on_sort"
 
   create_table "booking_items", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "booking_category_id"
     t.string   "name"
     t.decimal  "price",                            :precision => 12, :scale => 2, :default => 0.0, :null => false
@@ -779,10 +696,10 @@ class InitDb < ActiveRecord::Migration
   add_index "booking_items", ["booking_category_id"], :name => "index_booking_items_on_booking_category_id"
   add_index "booking_items", ["name"], :name => "index_booking_items_on_name"
   add_index "booking_items", ["qty"], :name => "index_booking_items_on_qty"
-  add_index "booking_items", ["account_id"], :name => "index_booking_items_on_account_id"
+  add_index "booking_items", ["site_id"], :name => "index_booking_items_on_site_id"
 
   create_table "booking_orders", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "user_id"
     t.integer  "booking_item_id"
     t.string   "order_no"
@@ -803,11 +720,11 @@ class InitDb < ActiveRecord::Migration
 
   add_index "booking_orders", ["booking_item_id"], :name => "index_booking_orders_on_booking_item_id"
   add_index "booking_orders", ["order_no"], :name => "index_booking_orders_on_order_no"
-  add_index "booking_orders", ["account_id"], :name => "index_booking_orders_on_account_id"
+  add_index "booking_orders", ["site_id"], :name => "index_booking_orders_on_site_id"
   add_index "booking_orders", ["user_id"], :name => "index_booking_orders_on_user_id"
 
   create_table "bookings", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.string   "name"
     t.string   "tel"
     t.integer  "status",        :limit => 1, :default => 1, :null => false
@@ -817,10 +734,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "bookings", ["name"], :name => "index_bookings_on_name"
-  add_index "bookings", ["account_id"], :name => "index_bookings_on_account_id"
+  add_index "bookings", ["site_id"], :name => "index_bookings_on_site_id"
 
   create_table "broche_photos", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.integer  "broche_id",                    :null => false
     t.string   "title"
     t.string   "pic_key"
@@ -832,10 +749,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "broche_photos", ["broche_id"], :name => "index_broche_photos_on_broche_id"
-  add_index "broche_photos", ["account_id"], :name => "index_broche_photos_on_account_id"
+  add_index "broche_photos", ["site_id"], :name => "index_broche_photos_on_site_id"
 
   create_table "broches", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "name"
     t.string   "description"
     t.integer  "status",        :default => 0, :null => false
@@ -843,10 +760,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                   :null => false
   end
 
-  add_index "broches", ["account_id"], :name => "index_broches_on_account_id"
+  add_index "broches", ["site_id"], :name => "index_broches_on_site_id"
 
   create_table "brokerage_brokers", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "user_id"
     t.string   "name"
     t.string   "mobile"
@@ -864,7 +781,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                                        :null => false
   end
 
-  add_index "brokerage_brokers", ["account_id"], :name => "index_brokerage_brokers_on_account_id"
+  add_index "brokerage_brokers", ["site_id"], :name => "index_brokerage_brokers_on_site_id"
   add_index "brokerage_brokers", ["user_id"], :name => "index_brokerage_brokers_on_user_id"
 
   create_table "brokerage_client_changes", :force => true do |t|
@@ -1178,7 +1095,7 @@ class InitDb < ActiveRecord::Migration
   add_index "car_sellers", ["seller_type"], :name => "index_car_sellers_on_seller_type"
 
   create_table "car_shops", :force => true do |t|
-    t.integer  "account_id",                    :null => false
+    t.integer  "site_id",                    :null => false
     t.string   "name",                           :null => false
     t.string   "tel"
     t.string   "tel_extension"
@@ -1194,7 +1111,7 @@ class InitDb < ActiveRecord::Migration
   add_index "car_shops", ["city_id"], :name => "index_car_shops_on_city_id"
   add_index "car_shops", ["district_id"], :name => "index_car_shops_on_district_id"
   add_index "car_shops", ["province_id"], :name => "index_car_shops_on_province_id"
-  add_index "car_shops", ["account_id"], :name => "index_car_shops_on_account_id"
+  add_index "car_shops", ["site_id"], :name => "index_car_shops_on_site_id"
 
   create_table "car_types", :force => true do |t|
     t.integer  "car_shop_id"
@@ -1231,7 +1148,7 @@ class InitDb < ActiveRecord::Migration
   add_index "car_types", ["level"], :name => "index_car_types_on_level"
 
   create_table "channel_qrcodes", :force => true do |t|
-    t.integer  "account_id",                                   :null => false
+    t.integer  "site_id",                                   :null => false
     t.integer  "channel_type_id",                               :null => false
     t.integer  "qrcode_id",                                     :null => false
     t.string   "name",                                          :null => false
@@ -1251,10 +1168,10 @@ class InitDb < ActiveRecord::Migration
   add_index "channel_qrcodes", ["channel_type_id"], :name => "index_channel_qrcodes_on_channel_type_id"
   add_index "channel_qrcodes", ["qrcode_id"], :name => "index_channel_qrcodes_on_qrcode_id"
   add_index "channel_qrcodes", ["scene_id"], :name => "index_channel_qrcodes_on_scene_id"
-  add_index "channel_qrcodes", ["account_id"], :name => "index_channel_qrcodes_on_account_id"
+  add_index "channel_qrcodes", ["site_id"], :name => "index_channel_qrcodes_on_site_id"
 
   create_table "channel_types", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.string   "name",                         :null => false
     t.string   "description"
     t.integer  "status",        :default => 1, :null => false
@@ -1262,7 +1179,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                   :null => false
   end
 
-  add_index "channel_types", ["account_id"], :name => "index_channel_types_on_account_id"
+  add_index "channel_types", ["site_id"], :name => "index_channel_types_on_site_id"
 
   create_table "cities", :force => true do |t|
     t.string   "name",                       :null => false
@@ -1301,7 +1218,7 @@ class InitDb < ActiveRecord::Migration
   add_index "college_attachments", ["micro_college_id"], :name => "index_college_attachments_on_micro_college_id"
 
   create_table "college_branches", :force => true do |t|
-    t.integer  "account_id",                                 :null => false
+    t.integer  "site_id",                                 :null => false
     t.integer  "college_id",                                  :null => false
     t.string   "name",                                        :null => false
     t.string   "tel",                                         :null => false
@@ -1319,10 +1236,10 @@ class InitDb < ActiveRecord::Migration
   add_index "college_branches", ["college_id"], :name => "index_college_branches_on_college_id"
   add_index "college_branches", ["district_id"], :name => "index_college_branches_on_district_id"
   add_index "college_branches", ["province_id"], :name => "index_college_branches_on_province_id"
-  add_index "college_branches", ["account_id"], :name => "index_college_branches_on_account_id"
+  add_index "college_branches", ["site_id"], :name => "index_college_branches_on_site_id"
 
   create_table "college_enrolls", :force => true do |t|
-    t.integer  "account_id",                                  :null => false
+    t.integer  "site_id",                                  :null => false
     t.integer  "college_id",                                   :null => false
     t.integer  "college_major_id",                             :null => false
     t.integer  "user_id",                                   :null => false
@@ -1336,7 +1253,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "college_enrolls", ["college_id"], :name => "index_college_enrolls_on_college_id"
   add_index "college_enrolls", ["college_major_id"], :name => "index_college_enrolls_on_college_major_id"
-  add_index "college_enrolls", ["account_id"], :name => "index_college_enrolls_on_account_id"
+  add_index "college_enrolls", ["site_id"], :name => "index_college_enrolls_on_site_id"
   add_index "college_enrolls", ["user_id"], :name => "index_college_enrolls_on_user_id"
 
   create_table "college_majors", :force => true do |t|
@@ -1376,7 +1293,7 @@ class InitDb < ActiveRecord::Migration
   add_index "college_teachers", ["college_id"], :name => "index_college_teachers_on_college_id"
 
   create_table "colleges", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.string   "name",                                      :null => false
     t.string   "tel"
     t.text     "intro"
@@ -1390,10 +1307,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                :null => false
   end
 
-  add_index "colleges", ["account_id"], :name => "index_colleges_on_account_id"
+  add_index "colleges", ["site_id"], :name => "index_colleges_on_site_id"
 
   create_table "comments", :force => true do |t|
-    t.integer  "account_id",                                    :null => false
+    t.integer  "site_id",                                    :null => false
     t.string   "title",            :limit => 50, :default => ""
     t.text     "comment"
     t.integer  "commentable_id"
@@ -1410,10 +1327,10 @@ class InitDb < ActiveRecord::Migration
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["commenter_id"], :name => "index_comments_on_commenter_id"
   add_index "comments", ["commenter_type"], :name => "index_comments_on_commenter_type"
-  add_index "comments", ["account_id"], :name => "index_comments_on_account_id"
+  add_index "comments", ["site_id"], :name => "index_comments_on_site_id"
 
   create_table "consumes", :force => true do |t|
-    t.integer  "account_id",                                 :null => false
+    t.integer  "site_id",                                 :null => false
     t.integer  "user_id",                                    :null => false
     t.integer  "activity_prize_id"
     t.integer  "consumable_id"
@@ -1434,12 +1351,12 @@ class InitDb < ActiveRecord::Migration
   add_index "consumes", ["applicable_id"], :name => "index_consumes_on_applicable_id"
   add_index "consumes", ["code"], :name => "index_consumes_on_code", :unique => true
   add_index "consumes", ["consumable_id"], :name => "index_consumes_on_consumable_id"
-  add_index "consumes", ["account_id"], :name => "index_consumes_on_account_id"
+  add_index "consumes", ["site_id"], :name => "index_consumes_on_site_id"
   add_index "consumes", ["user_id"], :name => "index_consumes_on_user_id"
 
   create_table "coupons", :force => true do |t|
     t.integer  "activity_id",                                                                        :null => false
-    t.integer  "account_id",                                                                        :null => false
+    t.integer  "site_id",                                                                        :null => false
     t.string   "coupon_type",                                        :default => "deduction_coupon"
     t.string   "name"
     t.string   "qiniu_logo_key"
@@ -1570,7 +1487,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "hospital_department_id"
     t.integer  "hospital_doctor_id"
     t.integer  "hospital_id"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "is_success",             :default => 1
     t.integer  "status",                 :default => 1
     t.datetime "created_at",                            :null => false
@@ -1580,7 +1497,7 @@ class InitDb < ActiveRecord::Migration
   add_index "doctor_arranges", ["hospital_department_id"], :name => "index_doctor_arranges_on_hospital_department_id"
   add_index "doctor_arranges", ["hospital_doctor_id"], :name => "index_doctor_arranges_on_hospital_doctor_id"
   add_index "doctor_arranges", ["shop_branch_id"], :name => "index_doctor_arranges_on_shop_branch_id"
-  add_index "doctor_arranges", ["account_id"], :name => "index_doctor_arranges_on_account_id"
+  add_index "doctor_arranges", ["site_id"], :name => "index_doctor_arranges_on_site_id"
 
   create_table "doctor_watches", :force => true do |t|
     t.integer  "doctor_arrange_id"
@@ -1596,7 +1513,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "donation_orders", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "user_id"
     t.string   "subject"
     t.string   "body"
@@ -1631,7 +1548,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "video_url"
     t.text     "feedback"
     t.integer  "status"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.datetime "created_at",                                                    :null => false
     t.datetime "updated_at",                                                    :null => false
     t.decimal  "init_fee",      :precision => 12, :scale => 2, :default => 0.0, :null => false
@@ -1648,7 +1565,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "feedbacks", :force => true do |t|
-    t.integer  "account_id",                       :null => false
+    t.integer  "site_id",                       :null => false
     t.integer  "sub_account_id"
     t.string   "user_id"
     t.string   "user_type"
@@ -1668,11 +1585,11 @@ class InitDb < ActiveRecord::Migration
 
   add_index "feedbacks", ["admin_user_id"], :name => "index_feedbacks_on_admin_user_id"
   add_index "feedbacks", ["sub_account_id"], :name => "index_feedbacks_on_sub_account_id"
-  add_index "feedbacks", ["account_id"], :name => "index_feedbacks_on_account_id"
+  add_index "feedbacks", ["site_id"], :name => "index_feedbacks_on_site_id"
   add_index "feedbacks", ["user_id", "user_type"], :name => "index_feedbacks_on_user_id_and_user_type"
 
   create_table "fight_answers", :force => true do |t|
-    t.integer  "account_id",                                        :null => false
+    t.integer  "site_id",                                        :null => false
     t.integer  "user_id",                                           :null => false
     t.integer  "activity_id",                                          :null => false
     t.integer  "fight_paper_question_id",                              :null => false
@@ -1689,7 +1606,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "fight_answers", ["activity_id"], :name => "index_fight_answers_on_activity_id"
   add_index "fight_answers", ["fight_paper_question_id"], :name => "index_fight_answers_on_fight_paper_question_id"
-  add_index "fight_answers", ["account_id"], :name => "index_fight_answers_on_account_id"
+  add_index "fight_answers", ["site_id"], :name => "index_fight_answers_on_site_id"
   add_index "fight_answers", ["user_id"], :name => "index_fight_answers_on_user_id"
 
   create_table "fight_paper_questions", :force => true do |t|
@@ -1702,7 +1619,7 @@ class InitDb < ActiveRecord::Migration
   add_index "fight_paper_questions", ["fight_question_id"], :name => "index_fight_paper_questions_on_fight_question_id"
 
   create_table "fight_papers", :force => true do |t|
-    t.integer  "account_id",   :null => false
+    t.integer  "site_id",   :null => false
     t.integer  "activity_id",   :null => false
     t.integer  "the_day",       :null => false
     t.date     "active_date",   :null => false
@@ -1714,10 +1631,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "fight_papers", ["activity_id"], :name => "index_fight_papers_on_activity_id"
-  add_index "fight_papers", ["account_id"], :name => "index_fight_papers_on_account_id"
+  add_index "fight_papers", ["site_id"], :name => "index_fight_papers_on_site_id"
 
   create_table "fight_report_cards", :force => true do |t|
-    t.integer  "account_id",                                     :null => false
+    t.integer  "site_id",                                     :null => false
     t.integer  "user_id",                                      :null => false
     t.integer  "activity_id",                                     :null => false
     t.integer  "activity_user_id",                                :null => false
@@ -1736,7 +1653,7 @@ class InitDb < ActiveRecord::Migration
   add_index "fight_report_cards", ["activity_id"], :name => "index_fight_report_cards_on_activity_id"
   add_index "fight_report_cards", ["activity_prize_id"], :name => "index_fight_report_cards_on_activity_prize_id"
   add_index "fight_report_cards", ["activity_user_id"], :name => "index_fight_report_cards_on_activity_user_id"
-  add_index "fight_report_cards", ["account_id"], :name => "index_fight_report_cards_on_account_id"
+  add_index "fight_report_cards", ["site_id"], :name => "index_fight_report_cards_on_site_id"
   add_index "fight_report_cards", ["user_id"], :name => "index_fight_report_cards_on_user_id"
 
   create_table "govchats", :force => true do |t|
@@ -1799,7 +1716,7 @@ class InitDb < ActiveRecord::Migration
   add_index "greet_cards", ["material_id"], :name => "index_greet_cards_on_material_id"
 
   create_table "greets", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "activity_id"
     t.string   "name"
     t.string   "greet_cover"
@@ -1809,7 +1726,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "greets", ["activity_id"], :name => "index_greets_on_activity_id"
-  add_index "greets", ["account_id"], :name => "index_greets_on_account_id"
+  add_index "greets", ["site_id"], :name => "index_greets_on_site_id"
 
 
   create_table "greet_card_logs", :force => true do |t|
@@ -1839,7 +1756,7 @@ class InitDb < ActiveRecord::Migration
   add_index "greet_card_voices", ["user_id"], :name => "index_greet_card_voices_on_user_id"
 
   create_table "group_categories", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "group_id"
     t.integer  "parent_id"
     t.string   "name",                                      :null => false
@@ -1854,7 +1771,7 @@ class InitDb < ActiveRecord::Migration
   add_index "group_categories", ["name"], :name => "index_group_categories_on_name"
   add_index "group_categories", ["parent_id"], :name => "index_group_categories_on_parent_id"
   add_index "group_categories", ["sort"], :name => "index_group_categories_on_sort"
-  add_index "group_categories", ["account_id"], :name => "index_group_categories_on_account_id"
+  add_index "group_categories", ["site_id"], :name => "index_group_categories_on_site_id"
 
   create_table "group_comments", :force => true do |t|
     t.integer  "group_item_id"
@@ -1883,7 +1800,7 @@ class InitDb < ActiveRecord::Migration
   add_index "group_item_pictures", ["sort"], :name => "index_group_item_pictures_on_sort"
 
   create_table "group_items", :force => true do |t|
-    t.integer  "account_id",                                                                      :null => false
+    t.integer  "site_id",                                                                      :null => false
     t.integer  "group_id"
     t.integer  "group_category_id",                                                                :null => false
     t.integer  "group_type"
@@ -1917,10 +1834,10 @@ class InitDb < ActiveRecord::Migration
   add_index "group_items", ["limit_coupon_count"], :name => "index_group_items_on_limit_coupon_count"
   add_index "group_items", ["name"], :name => "index_group_items_on_name"
   add_index "group_items", ["start_at"], :name => "index_group_items_on_start_at"
-  add_index "group_items", ["account_id"], :name => "index_group_items_on_account_id"
+  add_index "group_items", ["site_id"], :name => "index_group_items_on_site_id"
 
   create_table "group_orders", :force => true do |t|
-    t.integer  "account_id",                                                                  :null => false
+    t.integer  "site_id",                                                                  :null => false
     t.integer  "user_id",                                                                   :null => false
     t.integer  "payment_type_id"
     t.integer  "group_id"
@@ -1946,11 +1863,11 @@ class InitDb < ActiveRecord::Migration
   add_index "group_orders", ["mobile"], :name => "index_group_orders_on_mobile"
   add_index "group_orders", ["order_no"], :name => "index_group_orders_on_order_no"
   add_index "group_orders", ["payment_type_id"], :name => "index_group_orders_on_payment_type_id"
-  add_index "group_orders", ["account_id"], :name => "index_group_orders_on_account_id"
+  add_index "group_orders", ["site_id"], :name => "index_group_orders_on_site_id"
   add_index "group_orders", ["user_id"], :name => "index_group_orders_on_user_id"
 
   create_table "groups", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.string   "name",                                      :null => false
     t.string   "tel"
     t.integer  "status",        :limit => 1, :default => 1, :null => false
@@ -1960,7 +1877,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "groups", ["name"], :name => "index_groups_on_name"
-  add_index "groups", ["account_id"], :name => "index_groups_on_account_id"
+  add_index "groups", ["site_id"], :name => "index_groups_on_site_id"
 
   create_table "guess_activity_questions", :force => true do |t|
     t.integer  "activity_id"
@@ -2033,7 +1950,7 @@ class InitDb < ActiveRecord::Migration
   add_index "help_posts", ["help_menu_id"], :name => "index_help_posts_on_help_menu_id"
 
   create_table "hospital_comments", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "hospital_id"
     t.integer  "hospital_doctor_id"
     t.integer  "user_id"
@@ -2045,11 +1962,11 @@ class InitDb < ActiveRecord::Migration
 
   add_index "hospital_comments", ["hospital_doctor_id"], :name => "index_hospital_comments_on_hospital_doctor_id"
   add_index "hospital_comments", ["hospital_id"], :name => "index_hospital_comments_on_hospital_id"
-  add_index "hospital_comments", ["account_id"], :name => "index_hospital_comments_on_account_id"
+  add_index "hospital_comments", ["site_id"], :name => "index_hospital_comments_on_site_id"
   add_index "hospital_comments", ["user_id"], :name => "index_hospital_comments_on_user_id"
 
   create_table "hospital_departments", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.integer  "hospital_id",                  :null => false
     t.string   "name",                         :null => false
     t.integer  "parent_id",     :default => 0, :null => false
@@ -2064,7 +1981,7 @@ class InitDb < ActiveRecord::Migration
   add_index "hospital_departments", ["hospital_id"], :name => "index_hospital_departments_on_hospital_id"
   add_index "hospital_departments", ["parent_id"], :name => "index_hospital_departments_on_parent_id"
   add_index "hospital_departments", ["sort"], :name => "index_hospital_departments_on_sort"
-  add_index "hospital_departments", ["account_id"], :name => "index_hospital_departments_on_account_id"
+  add_index "hospital_departments", ["site_id"], :name => "index_hospital_departments_on_site_id"
 
   create_table "hospital_doctor_departments", :force => true do |t|
     t.integer  "hospital_doctor_id",     :null => false
@@ -2087,7 +2004,7 @@ class InitDb < ActiveRecord::Migration
   add_index "hospital_doctor_job_titles", ["hospital_job_title_id"], :name => "index_hospital_doctor_job_titles_on_hospital_job_title_id"
 
   create_table "hospital_doctors", :force => true do |t|
-    t.integer  "account_id",                             :null => false
+    t.integer  "site_id",                             :null => false
     t.integer  "hospital_id",                             :null => false
     t.string   "name",                                    :null => false
     t.integer  "gender",               :default => 1,     :null => false
@@ -2105,10 +2022,10 @@ class InitDb < ActiveRecord::Migration
 
   add_index "hospital_doctors", ["hospital_id"], :name => "index_hospital_doctors_on_hospital_id"
   add_index "hospital_doctors", ["name"], :name => "index_hospital_doctors_on_name"
-  add_index "hospital_doctors", ["account_id"], :name => "index_hospital_doctors_on_account_id"
+  add_index "hospital_doctors", ["site_id"], :name => "index_hospital_doctors_on_site_id"
 
   create_table "hospital_job_titles", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.integer  "hospital_id",                  :null => false
     t.string   "name",                         :null => false
     t.integer  "sort",          :default => 1, :null => false
@@ -2119,10 +2036,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "hospital_job_titles", ["hospital_id"], :name => "index_hospital_job_titles_on_hospital_id"
-  add_index "hospital_job_titles", ["account_id"], :name => "index_hospital_job_titles_on_account_id"
+  add_index "hospital_job_titles", ["site_id"], :name => "index_hospital_job_titles_on_site_id"
 
   create_table "hospital_orders", :force => true do |t|
-    t.integer  "account_id",                                                            :null => false
+    t.integer  "site_id",                                                            :null => false
     t.integer  "user_id",                                                             :null => false
     t.integer  "hospital_id"
     t.integer  "hospital_department_id",                                                 :null => false
@@ -2145,11 +2062,11 @@ class InitDb < ActiveRecord::Migration
   add_index "hospital_orders", ["hospital_doctor_id"], :name => "index_hospital_orders_on_hospital_doctor_id"
   add_index "hospital_orders", ["hospital_id"], :name => "index_hospital_orders_on_hospital_id"
   add_index "hospital_orders", ["order_no"], :name => "index_hospital_orders_on_order_no"
-  add_index "hospital_orders", ["account_id"], :name => "index_hospital_orders_on_account_id"
+  add_index "hospital_orders", ["site_id"], :name => "index_hospital_orders_on_site_id"
   add_index "hospital_orders", ["user_id"], :name => "index_hospital_orders_on_user_id"
 
   create_table "hospitals", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.string   "name",                         :null => false
     t.string   "logo"
     t.string   "tel"
@@ -2160,10 +2077,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                   :null => false
   end
 
-  add_index "hospitals", ["account_id"], :name => "index_hospitals_on_account_id"
+  add_index "hospitals", ["site_id"], :name => "index_hospitals_on_site_id"
 
   create_table "hotel_branches", :force => true do |t|
-    t.integer  "account_id",                          :null => false
+    t.integer  "site_id",                          :null => false
     t.integer  "hotel_id",                             :null => false
     t.string   "name",                                 :null => false
     t.string   "tel",                                  :null => false
@@ -2186,12 +2103,12 @@ class InitDb < ActiveRecord::Migration
   add_index "hotel_branches", ["hotel_id"], :name => "index_hotel_branches_on_hotel_id"
   add_index "hotel_branches", ["name"], :name => "index_hotel_branches_on_name"
   add_index "hotel_branches", ["province_id"], :name => "index_hotel_branches_on_province_id"
-  add_index "hotel_branches", ["account_id"], :name => "index_hotel_branches_on_account_id"
+  add_index "hotel_branches", ["site_id"], :name => "index_hotel_branches_on_site_id"
 
   create_table "hotel_comments", :force => true do |t|
     t.integer  "hotel_id",                       :null => false
     t.integer  "hotel_branch_id",                :null => false
-    t.integer  "account_id",                    :null => false
+    t.integer  "site_id",                    :null => false
     t.integer  "user_id",                     :null => false
     t.integer  "hotel_order_id"
     t.string   "name",                           :null => false
@@ -2206,10 +2123,10 @@ class InitDb < ActiveRecord::Migration
   add_index "hotel_comments", ["hotel_branch_id"], :name => "index_hotel_comments_on_hotel_branch_id"
   add_index "hotel_comments", ["hotel_id"], :name => "index_hotel_comments_on_hotel_id"
   add_index "hotel_comments", ["hotel_order_id"], :name => "index_hotel_comments_on_hotel_order_id"
-  add_index "hotel_comments", ["account_id"], :name => "index_hotel_comments_on_account_id"  add_index "hotel_comments", ["user_id"], :name => "index_hotel_comments_on_user_id"
+  add_index "hotel_comments", ["site_id"], :name => "index_hotel_comments_on_site_id"  add_index "hotel_comments", ["user_id"], :name => "index_hotel_comments_on_user_id"
 
   create_table "hotel_order_items", :force => true do |t|
-    t.integer  "account_id",                       :null => false
+    t.integer  "site_id",                       :null => false
     t.integer  "user_id",                        :null => false
     t.integer  "hotel_id",                          :null => false
     t.integer  "hotel_branch_id",                   :null => false
@@ -2226,11 +2143,11 @@ class InitDb < ActiveRecord::Migration
   add_index "hotel_order_items", ["hotel_id"], :name => "index_hotel_order_items_on_hotel_id"
   add_index "hotel_order_items", ["hotel_order_id"], :name => "index_hotel_order_items_on_hotel_order_id"
   add_index "hotel_order_items", ["hotel_room_type_id"], :name => "index_hotel_order_items_on_hotel_room_type_id"
-  add_index "hotel_order_items", ["account_id"], :name => "index_hotel_order_items_on_account_id"
+  add_index "hotel_order_items", ["site_id"], :name => "index_hotel_order_items_on_site_id"
   add_index "hotel_order_items", ["user_id"], :name => "index_hotel_order_items_on_user_id"
 
   create_table "hotel_orders", :force => true do |t|
-    t.integer  "account_id",                                                        :null => false
+    t.integer  "site_id",                                                        :null => false
     t.integer  "user_id",                                                         :null => false
     t.integer  "hotel_id",                                                           :null => false
     t.integer  "hotel_branch_id",                                                    :null => false
@@ -2259,7 +2176,7 @@ class InitDb < ActiveRecord::Migration
   add_index "hotel_orders", ["mobile"], :name => "index_hotel_orders_on_mobile"
   add_index "hotel_orders", ["name"], :name => "index_hotel_orders_on_name"
   add_index "hotel_orders", ["order_no"], :name => "index_hotel_orders_on_order_no"
-  add_index "hotel_orders", ["account_id"], :name => "index_hotel_orders_on_account_id"
+  add_index "hotel_orders", ["site_id"], :name => "index_hotel_orders_on_site_id"
   add_index "hotel_orders", ["user_id"], :name => "index_hotel_orders_on_user_id"
 
   create_table "hotel_pictures", :force => true do |t|
@@ -2328,7 +2245,7 @@ class InitDb < ActiveRecord::Migration
   add_index "hotel_room_types", ["name"], :name => "index_hotel_room_types_on_name"
 
   create_table "hotels", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.string   "name",                         :null => false
     t.integer  "status",        :default => 1, :null => false
     t.string   "obligate_time",                :null => false
@@ -2338,7 +2255,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                   :null => false
   end
 
-  add_index "hotels", ["account_id"], :name => "index_hotels_on_account_id"
+  add_index "hotels", ["site_id"], :name => "index_hotels_on_site_id"
 
   create_table "house_bespeaks", :force => true do |t|
     t.integer  "house_id",                                  :null => false
@@ -2358,7 +2275,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "house_comments", :force => true do |t|
     t.integer  "house_id",                                  :null => false
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "user_id",                                :null => false
     t.string   "name",                                      :null => false
     t.string   "mobile",                                    :null => false
@@ -2370,7 +2287,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "house_comments", ["house_id"], :name => "index_house_comments_on_house_id"
-  add_index "house_comments", ["account_id"], :name => "index_house_comments_on_account_id"
+  add_index "house_comments", ["site_id"], :name => "index_house_comments_on_site_id"
   add_index "house_comments", ["user_id"], :name => "index_house_comments_on_user_id"
 
   create_table "house_expert_comments", :force => true do |t|
@@ -2387,7 +2304,7 @@ class InitDb < ActiveRecord::Migration
   add_index "house_expert_comments", ["house_id"], :name => "index_house_expert_comments_on_house_id"
 
   create_table "house_experts", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "house_id",                                  :null => false
     t.string   "name",                                      :null => false
     t.string   "intro",                                     :null => false
@@ -2399,7 +2316,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "house_experts", ["house_id"], :name => "index_house_experts_on_house_id"
-  add_index "house_experts", ["account_id"], :name => "index_house_experts_on_account_id"
+  add_index "house_experts", ["site_id"], :name => "index_house_experts_on_site_id"
 
   create_table "house_impressions", :force => true do |t|
     t.integer  "house_id"
@@ -2558,7 +2475,7 @@ class InitDb < ActiveRecord::Migration
   add_index "house_sellers", ["house_id"], :name => "index_house_sellers_on_house_id"
 
   create_table "houses", :force => true do |t|
-    t.integer  "account_id",                                                                :null => false
+    t.integer  "site_id",                                                                :null => false
     t.string   "name",                                                                       :null => false
     t.integer  "house_type",    :limit => 1,                                :default => 0,   :null => false
     t.decimal  "price",                      :precision => 10, :scale => 0, :default => 0
@@ -2577,7 +2494,7 @@ class InitDb < ActiveRecord::Migration
   add_index "houses", ["district_id"], :name => "index_houses_on_district_id"
   add_index "houses", ["house_type"], :name => "index_houses_on_house_type"
   add_index "houses", ["province_id"], :name => "index_houses_on_province_id"
-  add_index "houses", ["account_id"], :name => "index_houses_on_account_id"
+  add_index "houses", ["site_id"], :name => "index_houses_on_site_id"
 
   create_table "igetui_messages", :force => true do |t|
     t.integer  "userable_id"
@@ -2628,7 +2545,7 @@ class InitDb < ActiveRecord::Migration
   add_index "interlocutions", ["interlocution_two_level_id"], :name => "index_interlocutions_on_interlocution_two_level_id"
 
   create_table "leaving_message_templates", :force => true do |t|
-    t.integer  "account_id",                             :null => false
+    t.integer  "site_id",                             :null => false
     t.string   "header_bg"
     t.string   "pic_key"
     t.integer  "template_id", :limit => 1, :default => 1, :null => false
@@ -2636,10 +2553,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                              :null => false
   end
 
-  add_index "leaving_message_templates", ["account_id"], :name => "account_id", :unique => true
+  add_index "leaving_message_templates", ["site_id"], :name => "site_id", :unique => true
 
   create_table "leaving_messages", :force => true do |t|
-    t.integer  "account_id",                              :null => false
+    t.integer  "site_id",                              :null => false
     t.string   "replier_type"
     t.string   "contact"
     t.string   "nickname"
@@ -2654,10 +2571,10 @@ class InitDb < ActiveRecord::Migration
   add_index "leaving_messages", ["parent_id"], :name => "index_micro_leaving_messages_on_parent_id"
   add_index "leaving_messages", ["replier_id", "replier_type"], :name => "index_message_replier"
   add_index "leaving_messages", ["status"], :name => "index_micro_leaving_messages_on_status"
-  add_index "leaving_messages", ["account_id"], :name => "index_leaving_messages_on_account_id"
+  add_index "leaving_messages", ["site_id"], :name => "index_leaving_messages_on_site_id"
 
   create_table "likes", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "user_id",                                :null => false
     t.integer  "likeable_id"
     t.string   "likeable_type"
@@ -2666,7 +2583,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                :null => false
   end
 
-  add_index "likes", ["account_id"], :name => "index_likes_on_account_id"
+  add_index "likes", ["site_id"], :name => "index_likes_on_site_id"
   add_index "likes", ["user_id"], :name => "index_likes_on_user_id"
 
   create_table "logged_exceptions", :force => true do |t|
@@ -2681,7 +2598,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "lottery_draws", :force => true do |t|
-    t.integer  "account_id",                                   :null => false
+    t.integer  "site_id",                                   :null => false
     t.integer  "user_id",                                    :null => false
     t.integer  "activity_id",                                   :null => false
     t.integer  "activity_prize_id"
@@ -2692,7 +2609,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "lottery_draws", ["activity_id"], :name => "index_lottery_draws_on_activity_id"
   add_index "lottery_draws", ["activity_prize_id"], :name => "index_lottery_draws_on_activity_prize_id"
-  add_index "lottery_draws", ["account_id"], :name => "index_lottery_draws_on_account_id"
+  add_index "lottery_draws", ["site_id"], :name => "index_lottery_draws_on_site_id"
   add_index "lottery_draws", ["user_id"], :name => "index_lottery_draws_on_user_id"
 
   create_table "material_contents", :force => true do |t|
@@ -2704,7 +2621,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "materials", :force => true do |t|
     t.integer  "parent_id",         :default => 0,    :null => false
-    t.integer  "account_id",                         :null => false
+    t.integer  "site_id",                         :null => false
     t.integer  "material_type",     :default => 1,    :null => false
     t.string   "title"
     t.string   "pic_key"
@@ -2727,10 +2644,10 @@ class InitDb < ActiveRecord::Migration
 
   add_index "materials", ["materialable_id", "materialable_type"], :name => "index_materials_materialable"
   add_index "materials", ["parent_id"], :name => "index_materials_on_parent_id"
-  add_index "materials", ["account_id"], :name => "index_materials_on_account_id"
+  add_index "materials", ["site_id"], :name => "index_materials_on_site_id"
 
   create_table "message_hits", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "msg_type"
     t.string   "content"
     t.date     "date"
@@ -2779,7 +2696,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "panoramagram_items", :force => true do |t|
-    t.integer  "account_id",                    :null => false
+    t.integer  "site_id",                    :null => false
     t.integer  "panoramagram_id",                :null => false
     t.integer  "sort",            :default => 1, :null => false
     t.string   "qiniu_pic_key"
@@ -2788,10 +2705,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "panoramagram_items", ["panoramagram_id"], :name => "index_panoramagram_items_on_panoramagram_id"
-  add_index "panoramagram_items", ["account_id"], :name => "index_panoramagram_items_on_account_id"
+  add_index "panoramagram_items", ["site_id"], :name => "index_panoramagram_items_on_site_id"
 
   create_table "panoramagrams", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.string   "name"
     t.string   "qiniu_pic_key"
     t.integer  "sort",                       :default => 1, :null => false
@@ -2800,10 +2717,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                :null => false
   end
 
-  add_index "panoramagrams", ["account_id"], :name => "index_panoramagrams_on_account_id"
+  add_index "panoramagrams", ["site_id"], :name => "index_panoramagrams_on_site_id"
 
   create_table "panoramas", :force => true do |t|
-    t.integer  "account_id",                             :null => false
+    t.integer  "site_id",                             :null => false
     t.string   "name"
     t.string   "file"
     t.integer  "status",      :limit => 1, :default => 1, :null => false
@@ -2812,10 +2729,92 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                              :null => false
   end
 
-  add_index "panoramas", ["account_id"], :name => "index_panoramas_on_account_id"
+  add_index "panoramas", ["site_id"], :name => "index_panoramas_on_site_id"
+
+  create_table "pay_accounts", :force => true do |t|
+    t.integer  "account_id",                                                                            :null => false
+    t.decimal  "withdrawed_amount",                     :precision => 12, :scale => 2, :default => 0.0,  :null => false
+    t.decimal  "balance",                               :precision => 12, :scale => 2, :default => 0.0,  :null => false
+    t.decimal  "froze_amount",                          :precision => 12, :scale => 2, :default => 0.0,  :null => false
+    t.string   "company_name"
+    t.string   "bank_name"
+    t.string   "bank_branch"
+    t.string   "bank_account"
+    t.string   "username"
+    t.string   "contact"
+    t.string   "tel"
+    t.integer  "province_id"
+    t.integer  "city_id"
+    t.integer  "status",                   :limit => 1,                                :default => 0,    :null => false
+    t.text     "deny_remark"
+    t.text     "description"
+    t.string   "business_lisence"
+    t.string   "business_address"
+    t.datetime "business_affilicated_to"
+    t.text     "business_scope"
+    t.string   "organization_code"
+    t.string   "business_lisence_pic_key"
+    t.string   "identity_type"
+    t.string   "identity_number"
+    t.string   "email"
+    t.datetime "identity_avaliable_to"
+    t.string   "identity_pic_key"
+    t.decimal  "settle_fee_rate",                       :precision => 6,  :scale => 4, :default => 0.02, :null => false
+    t.datetime "created_at",                                                                             :null => false
+    t.datetime "updated_at",                                                                             :null => false
+  end
+
+  create_table "pay_transactions", :force => true do |t|
+    t.integer  "account_id",                                                                       :null => false
+    t.integer  "pay_account_id",                                                           :null => false
+    t.integer  "transactionable_id"
+    t.string   "transactionable_type"
+    t.string   "running_number"
+    t.decimal  "froze_amount",                      :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "amount",                            :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "balance",                           :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "withdrawed_amount",                 :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.integer  "direction",            :limit => 1,                                :default => 1,   :null => false
+    t.integer  "direction_type",       :limit => 1,                                :default => 11,  :null => false
+    t.integer  "status",               :limit => 1,                                :default => 0,   :null => false
+    t.text     "description"
+    t.datetime "created_at",                                                                        :null => false
+    t.datetime "updated_at",                                                                        :null => false
+  end
+
+  add_index "pay_transactions", ["direction"], :name => "index_pay_transactions_on_direction"
+  add_index "pay_transactions", ["direction_type"], :name => "index_pay_transactions_on_direction_type"
+  add_index "pay_transactions", ["status"], :name => "index_pay_transactions_on_status"
+  add_index "pay_transactions", ["pay_account_id"], :name => "index_pay_transactions_on_pay_account_id"
+  add_index "pay_transactions", ["account_id"], :name => "index_pay_transactions_on_account_id"
+  add_index "pay_transactions", ["transactionable_id", "transactionable_type"], :name => "index_pay_transactionable"
+
+  create_table "pay_withdraws", :force => true do |t|
+    t.integer  "account_id",                                                                      :null => false
+    t.integer  "pay_account_id"
+    t.decimal  "amount",                           :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "fee",                              :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "receive_amount",                   :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.datetime "pay_at"
+    t.string   "bank_name"
+    t.string   "bank_branch"
+    t.string   "bank_account"
+    t.integer  "admin_user_id"
+    t.integer  "status",              :limit => 1,                                :default => 0,   :null => false
+    t.text     "description"
+    t.datetime "created_at",                                                                       :null => false
+    t.datetime "updated_at",                                                                       :null => false
+    t.string   "running_number"
+  end
+
+  add_index "pay_withdraws", ["admin_user_id"], :name => "index_pay_withdraws_on_admin_user_id"
+  add_index "pay_withdraws", ["running_number"], :name => "index_pay_withdraws_on_running_number"
+  add_index "pay_withdraws", ["status"], :name => "index_pay_withdraws_on_status"
+  add_index "pay_withdraws", ["pay_account_id"], :name => "index_pay_withdraws_on_pay_account_id"
+  add_index "pay_withdraws", ["account_id"], :name => "index_pay_withdraws_on_account_id"
 
   create_table "payment_settings", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "type"
     t.integer  "payment_type_id"
     t.string   "partner_id"
@@ -2836,7 +2835,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "payment_settings", ["payment_type_id"], :name => "index_payment_settings_on_payment_type_id"
-  add_index "payment_settings", ["account_id"], :name => "index_payment_settings_on_account_id"
+  add_index "payment_settings", ["site_id"], :name => "index_payment_settings_on_site_id"
 
   create_table "payment_syncs", :force => true do |t|
     t.string   "status"
@@ -2858,7 +2857,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "payments", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "customer_id"
     t.string   "customer_type"
     t.integer  "paymentable_id"
@@ -2893,7 +2892,7 @@ class InitDb < ActiveRecord::Migration
     t.boolean  "is_delivery",                                                     :default => false,               :null => false
     t.string   "callback_url"
     t.string   "notify_url"
-    t.string   "merchant_url"
+    t.string   "account_url"
     t.text     "order_msg"
     t.text     "pay_params"
     t.integer  "status",                                                          :default => 0,                   :null => false
@@ -2903,7 +2902,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "state"
     t.string   "open_id"
     t.string   "source"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.boolean  "is_trade_synced"
     t.datetime "created_at",                                                                                       :null => false
     t.datetime "updated_at",                                                                                       :null => false
@@ -2918,7 +2917,7 @@ class InitDb < ActiveRecord::Migration
   add_index "payments", ["trade_no"], :name => "index_payments_on_trade_no"
 
   create_table "piwik_sites", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.date     "date"
     t.integer  "nb_uniq_visitors",     :default => 0, :null => false
     t.integer  "nb_visits",            :default => 0, :null => false
@@ -2933,13 +2932,13 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at"
   end
 
-  add_index "piwik_sites", ["date", "account_id"], :name => "uni_date_and_account_id", :unique => true
+  add_index "piwik_sites", ["date", "site_id"], :name => "uni_date_and_site_id", :unique => true
   add_index "piwik_sites", ["nb_actions"], :name => "index_piwik_sites_on_nb_actions"
   add_index "piwik_sites", ["nb_uniq_visitors"], :name => "index_piwik_sites_on_nb_uniq_visitors"
   add_index "piwik_sites", ["nb_visits"], :name => "index_piwik_sites_on_nb_visits"
 
   create_table "point_gift_exchanges", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_user_id",                               :null => false
     t.integer  "point_gift_id",                             :null => false
     t.integer  "total_points",               :default => 0, :null => false
@@ -2951,11 +2950,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "point_gift_exchanges", ["point_gift_id"], :name => "index_point_gift_exchanges_on_point_gift_id"
-  add_index "point_gift_exchanges", ["account_id"], :name => "index_point_gift_exchanges_on_account_id"
+  add_index "point_gift_exchanges", ["site_id"], :name => "index_point_gift_exchanges_on_site_id"
   add_index "point_gift_exchanges", ["vip_user_id"], :name => "index_point_gift_exchanges_on_vip_user_id"
 
   create_table "point_gifts", :force => true do |t|
-    t.integer  "account_id",                                                                           :null => false
+    t.integer  "site_id",                                                                           :null => false
     t.string   "gift_no"
     t.string   "name",                                                                                  :null => false
     t.text     "description"
@@ -2979,7 +2978,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "point_gifts", ["points"], :name => "index_point_gifts_on_points"
-  add_index "point_gifts", ["account_id"], :name => "index_point_gifts_on_account_id"
+  add_index "point_gifts", ["site_id"], :name => "index_point_gifts_on_site_id"
 
   create_table "point_gifts_shop_branches", :force => true do |t|
     t.integer "point_gift_id",  :null => false
@@ -3000,7 +2999,7 @@ class InitDb < ActiveRecord::Migration
   add_index "point_gifts_vip_grades", ["vip_grade_id"], :name => "index_point_gifts_vip_grades_on_vip_grade_id"
 
   create_table "point_transactions", :force => true do |t|
-    t.integer  "account_id",                                :null => false
+    t.integer  "site_id",                                :null => false
     t.integer  "vip_user_id",                                :null => false
     t.integer  "shop_branch_id"
     t.integer  "point_type_id"
@@ -3019,11 +3018,11 @@ class InitDb < ActiveRecord::Migration
   add_index "point_transactions", ["point_type_id", "pointable_type"], :name => "pointable_index"
   add_index "point_transactions", ["point_type_id"], :name => "index_point_transactions_on_point_type_id"
   add_index "point_transactions", ["shop_branch_id"], :name => "index_point_transactions_on_shop_branch_id"
-  add_index "point_transactions", ["account_id"], :name => "index_point_transactions_on_account_id"
+  add_index "point_transactions", ["site_id"], :name => "index_point_transactions_on_site_id"
   add_index "point_transactions", ["vip_user_id"], :name => "index_point_transactions_on_vip_user_id"
 
   create_table "point_types", :force => true do |t|
-    t.integer  "account_id",                                          :null => false
+    t.integer  "site_id",                                          :null => false
     t.integer  "category",             :limit => 1, :default => 3,     :null => false
     t.float    "amount",                            :default => 0.0,   :null => false
     t.integer  "points",                            :default => 0,     :null => false
@@ -3040,12 +3039,12 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                           :null => false
   end
 
-  add_index "point_types", ["account_id"], :name => "index_point_types_on_account_id"
+  add_index "point_types", ["site_id"], :name => "index_point_types_on_site_id"
 
   create_table "print_orders", :force => true do |t|
     t.integer  "status"
     t.integer  "shop_order_id"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "shop_branch_id"
     t.string   "address"
     t.integer  "shop_branch_print_template_id"
@@ -3056,7 +3055,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "print_orders", ["shop_branch_id"], :name => "index_print_orders_on_shop_branch_id"
   add_index "print_orders", ["shop_order_id"], :name => "index_print_orders_on_shop_order_id"
-  add_index "print_orders", ["account_id"], :name => "index_print_orders_on_account_id"
+  add_index "print_orders", ["site_id"], :name => "index_print_orders_on_site_id"
 
   create_table "provinces", :force => true do |t|
     t.string   "name",                      :null => false
@@ -3080,7 +3079,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "qrcode_logs", :force => true do |t|
-    t.integer  "account_id",                    :null => false
+    t.integer  "site_id",                    :null => false
     t.integer  "user_id",                     :null => false
     t.integer  "qrcode_id",                      :null => false
     t.integer  "qrcodeable_id"
@@ -3094,11 +3093,11 @@ class InitDb < ActiveRecord::Migration
 
   add_index "qrcode_logs", ["qrcode_id"], :name => "index_qrcode_logs_on_qrcode_id"
   add_index "qrcode_logs", ["qrcodeable_id", "qrcodeable_type"], :name => "qrcodeable_index"
-  add_index "qrcode_logs", ["account_id"], :name => "index_qrcode_logs_on_account_id"
+  add_index "qrcode_logs", ["site_id"], :name => "index_qrcode_logs_on_site_id"
   add_index "qrcode_logs", ["user_id"], :name => "index_qrcode_logs_on_user_id"
 
   create_table "qrcode_users", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "user_id"
     t.integer  "qrcode_id"
     t.decimal  "vip_amount",        :precision => 12, :scale => 2, :default => 0.0
@@ -3114,11 +3113,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "qrcode_users", ["qrcode_id"], :name => "index_qrcode_users_on_qrcode_id"
-  add_index "qrcode_users", ["account_id"], :name => "index_qrcode_users_on_account_id"
+  add_index "qrcode_users", ["site_id"], :name => "index_qrcode_users_on_site_id"
   add_index "qrcode_users", ["user_id"], :name => "index_qrcode_users_on_user_id"
 
   create_table "qrcodes", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "name"
     t.integer  "expire_seconds"
     t.integer  "action_name"
@@ -3132,14 +3131,14 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "questions", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "match_type",    :limit => 1, :default => 1, :null => false
     t.string   "ask"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
 
-  add_index "questions", ["account_id"], :name => "index_questions_on_account_id"
+  add_index "questions", ["site_id"], :name => "index_questions_on_site_id"
 
   create_table "red_packet_releases", :force => true do |t|
     t.integer  "activity_id"
@@ -3156,7 +3155,7 @@ class InitDb < ActiveRecord::Migration
   add_index "red_packet_releases", ["user_id"], :name => "index_red_packet_releases_on_user_id"
 
   create_table "red_packet_send_records", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "activity_id"
     t.integer  "activity_user_id"
     t.integer  "user_id"
@@ -3183,7 +3182,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "red_packet_send_records", ["red_packet_id"], :name => "index_red_packet_send_record_on_red_packet"
-  add_index "red_packet_send_records", ["account_id", "openid"], :name => "index_red_packet_send_records_on_account_id_and_openid"
+  add_index "red_packet_send_records", ["site_id", "openid"], :name => "index_red_packet_send_records_on_site_id_and_openid"
 
   create_table "red_packet_settings", :force => true do |t|
     t.integer  "packet_num"
@@ -3202,7 +3201,7 @@ class InitDb < ActiveRecord::Migration
   create_table "red_packets", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "activity_prize_id"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "payment_type_id"
     t.integer  "status",                                           :default => 1,     :null => false
     t.integer  "records_count",                                    :default => 0,     :null => false
@@ -3231,7 +3230,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "reservation_orders", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.integer  "activity_id",                  :null => false
     t.integer  "user_id",                   :null => false
     t.integer  "status",        :default => 0
@@ -3289,17 +3288,17 @@ class InitDb < ActiveRecord::Migration
   add_index "scenes", ["activity_id"], :name => "index_scenes_on_activity_id"
 
   create_table "session_users", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "openid"
     t.integer  "status",        :limit => 1, :default => 1
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
 
-  add_index "session_users", ["account_id", "openid"], :name => "index_session_users_on_account_id_and_openid"
+  add_index "session_users", ["site_id", "openid"], :name => "index_session_users_on_site_id_and_openid"
 
   create_table "share_photo_comments", :force => true do |t|
-    t.integer  "account_id",                   :null => false
+    t.integer  "site_id",                   :null => false
     t.integer  "share_photo_id",                :null => false
     t.integer  "user_id"
     t.string   "nickname"
@@ -3310,11 +3309,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "share_photo_comments", ["share_photo_id"], :name => "index_share_photo_comments_on_share_photo_id"
-  add_index "share_photo_comments", ["account_id"], :name => "index_share_photo_comments_on_account_id"
+  add_index "share_photo_comments", ["site_id"], :name => "index_share_photo_comments_on_site_id"
   add_index "share_photo_comments", ["user_id"], :name => "index_share_photo_comments_on_user_id"
 
   create_table "share_photo_likes", :force => true do |t|
-    t.integer  "account_id",                   :null => false
+    t.integer  "site_id",                   :null => false
     t.integer  "share_photo_id",                :null => false
     t.integer  "user_id"
     t.integer  "status",         :default => 1, :null => false
@@ -3323,11 +3322,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "share_photo_likes", ["share_photo_id"], :name => "index_share_photo_likes_on_share_photo_id"
-  add_index "share_photo_likes", ["account_id"], :name => "index_share_photo_likes_on_account_id"
+  add_index "share_photo_likes", ["site_id"], :name => "index_share_photo_likes_on_site_id"
   add_index "share_photo_likes", ["user_id"], :name => "index_share_photo_likes_on_user_id"
 
   create_table "share_photo_settings", :force => true do |t|
-    t.integer  "account_id",                        :null => false
+    t.integer  "site_id",                        :null => false
     t.string   "name"
     t.text     "upload_description"
     t.text     "add_tag_description"
@@ -3338,7 +3337,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                         :null => false
   end
 
-  add_index "share_photo_settings", ["account_id"], :name => "index_share_photo_settings_on_account_id"
+  add_index "share_photo_settings", ["site_id"], :name => "index_share_photo_settings_on_site_id"
 
   create_table "share_photo_subjects", :force => true do |t|
     t.integer  "share_photo_setting_id",                :null => false
@@ -3354,7 +3353,7 @@ class InitDb < ActiveRecord::Migration
   add_index "share_photo_subjects", ["share_photo_setting_id"], :name => "index_share_photo_subjects_on_share_photo_setting_id"
 
   create_table "share_photos", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "user_id",                                :null => false
     t.integer  "share_photo_setting_id",                    :null => false
     t.integer  "share_photo_subject_id"
@@ -3371,7 +3370,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "share_photos", ["share_photo_setting_id"], :name => "index_share_photos_on_share_photo_setting_id"
-  add_index "share_photos", ["account_id"], :name => "index_share_photos_on_account_id"
+  add_index "share_photos", ["site_id"], :name => "index_share_photos_on_site_id"
   add_index "share_photos", ["user_id"], :name => "index_share_photos_on_user_id"
 
   create_table "share_settings", :force => true do |t|
@@ -3402,7 +3401,7 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_branch_print_templates", ["shop_branch_id"], :name => "index_shop_branch_print_templates_on_shop_branch_id"
 
   create_table "shop_branches", :force => true do |t|
-    t.integer  "account_id",                         :null => false
+    t.integer  "site_id",                         :null => false
     t.integer  "shop_id",                             :null => false
     t.string   "name",                                :null => false
     t.string   "tel",                                 :null => false
@@ -3441,7 +3440,7 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_branches", ["district_id"], :name => "index_shop_branches_on_district_id"
   add_index "shop_branches", ["name"], :name => "index_shop_branches_on_name"
   add_index "shop_branches", ["shop_id"], :name => "index_shop_branches_on_shop_id"
-  add_index "shop_branches", ["account_id"], :name => "index_shop_branches_on_account_id"
+  add_index "shop_branches", ["site_id"], :name => "index_shop_branches_on_site_id"
   add_index "shop_branches", ["tel"], :name => "index_shop_branches_on_tel"
 
   create_table "shop_branches_thermal_printers", :force => true do |t|
@@ -3463,7 +3462,7 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_branches_vip_packages", ["vip_package_id"], :name => "index_shop_branches_vip_packages_on_vip_package_id"
 
   create_table "shop_categories", :force => true do |t|
-    t.integer  "account_id",                   :null => false
+    t.integer  "site_id",                   :null => false
     t.integer  "shop_id",                       :null => false
     t.integer  "shop_menu_id"
     t.integer  "shop_branch_id"
@@ -3478,7 +3477,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "shop_categories", ["shop_branch_id"], :name => "index_shop_categories_on_shop_branch_id"
   add_index "shop_categories", ["shop_id"], :name => "index_shop_categories_on_shop_id"
-  add_index "shop_categories", ["account_id"], :name => "index_shop_categories_on_account_id"
+  add_index "shop_categories", ["site_id"], :name => "index_shop_categories_on_site_id"
 
   create_table "shop_menus", :force => true do |t|
     t.integer  "shop_id"
@@ -3490,7 +3489,7 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_menus", ["shop_id"], :name => "index_shop_menus_on_shop_id"
 
   create_table "shop_order_items", :force => true do |t|
-    t.integer  "account_id",                                                     :null => false
+    t.integer  "site_id",                                                     :null => false
     t.integer  "shop_id",                                                         :null => false
     t.integer  "shop_branch_id",                                                  :null => false
     t.integer  "shop_order_id",                                                   :null => false
@@ -3511,10 +3510,10 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_order_items", ["shop_id"], :name => "index_shop_order_items_on_shop_id"
   add_index "shop_order_items", ["shop_order_id"], :name => "index_shop_order_items_on_shop_order_id"
   add_index "shop_order_items", ["shop_product_id"], :name => "index_shop_order_items_on_shop_product_id"
-  add_index "shop_order_items", ["account_id"], :name => "index_shop_order_items_on_account_id"
+  add_index "shop_order_items", ["site_id"], :name => "index_shop_order_items_on_site_id"
 
   create_table "shop_order_reports", :force => true do |t|
-    t.integer  "account_id",                                                    :null => false
+    t.integer  "site_id",                                                    :null => false
     t.integer  "shop_id",                                                        :null => false
     t.integer  "shop_branch_id",                                                 :null => false
     t.date     "date",                                                           :null => false
@@ -3529,10 +3528,10 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_order_reports", ["date"], :name => "index_shop_order_reports_on_date"
   add_index "shop_order_reports", ["shop_branch_id"], :name => "index_shop_order_reports_on_shop_branch_id"
   add_index "shop_order_reports", ["shop_id"], :name => "index_shop_order_reports_on_shop_id"
-  add_index "shop_order_reports", ["account_id"], :name => "index_shop_order_reports_on_account_id"
+  add_index "shop_order_reports", ["site_id"], :name => "index_shop_order_reports_on_site_id"
 
   create_table "shop_orders", :force => true do |t|
-    t.integer  "account_id",                                                      :null => false
+    t.integer  "site_id",                                                      :null => false
     t.integer  "user_id"
     t.integer  "shop_id",                                                          :null => false
     t.integer  "shop_branch_id",                                                   :null => false
@@ -3565,7 +3564,7 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_orders", ["order_no"], :name => "index_shop_orders_on_order_no"
   add_index "shop_orders", ["shop_branch_id"], :name => "index_shop_orders_on_shop_branch_id"
   add_index "shop_orders", ["shop_id"], :name => "index_shop_orders_on_shop_id"
-  add_index "shop_orders", ["account_id"], :name => "index_shop_orders_on_account_id"
+  add_index "shop_orders", ["site_id"], :name => "index_shop_orders_on_site_id"
 
   create_table "shop_product_comments", :force => true do |t|
     t.integer  "shop_product_id",                             :null => false
@@ -3580,7 +3579,7 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_product_comments", ["user_id"], :name => "index_shop_product_comments_on_user_id"
 
   create_table "shop_products", :force => true do |t|
-    t.integer  "account_id",                                                          :null => false
+    t.integer  "site_id",                                                          :null => false
     t.integer  "shop_id",                                                              :null => false
     t.integer  "shop_branch_id"
     t.integer  "shop_category_id"
@@ -3609,10 +3608,10 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_products", ["shop_branch_id"], :name => "index_shop_products_on_shop_branch_id"
   add_index "shop_products", ["shop_category_id"], :name => "index_shop_products_on_shop_category_id"
   add_index "shop_products", ["shop_id"], :name => "index_shop_products_on_shop_id"
-  add_index "shop_products", ["account_id"], :name => "index_shop_products_on_account_id"
+  add_index "shop_products", ["site_id"], :name => "index_shop_products_on_site_id"
 
   create_table "shop_table_orders", :force => true do |t|
-    t.integer  "account_id",                       :null => false
+    t.integer  "site_id",                       :null => false
     t.integer  "user_id",                        :null => false
     t.integer  "shop_id",                           :null => false
     t.integer  "shop_branch_id",                    :null => false
@@ -3636,11 +3635,11 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_table_orders", ["order_no"], :name => "index_shop_table_orders_on_order_no"
   add_index "shop_table_orders", ["shop_branch_id"], :name => "index_shop_table_orders_on_shop_branch_id"
   add_index "shop_table_orders", ["shop_id"], :name => "index_shop_table_orders_on_shop_id"
-  add_index "shop_table_orders", ["account_id"], :name => "index_shop_table_orders_on_account_id"
+  add_index "shop_table_orders", ["site_id"], :name => "index_shop_table_orders_on_site_id"
   add_index "shop_table_orders", ["user_id"], :name => "index_shop_table_orders_on_user_id"
 
   create_table "shop_table_settings", :force => true do |t|
-    t.integer  "account_id",                                 :null => false
+    t.integer  "site_id",                                 :null => false
     t.integer  "shop_id",                                     :null => false
     t.integer  "shop_branch_id",                              :null => false
     t.date     "date",                                        :null => false
@@ -3655,10 +3654,10 @@ class InitDb < ActiveRecord::Migration
   add_index "shop_table_settings", ["date"], :name => "index_shop_table_settings_on_date"
   add_index "shop_table_settings", ["shop_branch_id"], :name => "index_shop_table_settings_on_shop_branch_id"
   add_index "shop_table_settings", ["shop_id"], :name => "index_shop_table_settings_on_shop_id"
-  add_index "shop_table_settings", ["account_id"], :name => "index_shop_table_settings_on_account_id"
+  add_index "shop_table_settings", ["site_id"], :name => "index_shop_table_settings_on_site_id"
 
   create_table "shops", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.integer  "shop_type",     :default => 1, :null => false
     t.string   "name",                         :null => false
     t.string   "logo"
@@ -3670,7 +3669,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "shops", ["name"], :name => "index_shops_on_name"
-  add_index "shops", ["account_id"], :name => "index_shops_on_account_id"
+  add_index "shops", ["site_id"], :name => "index_shops_on_site_id"
 
   create_table "sms_codes", :force => true do |t|
     t.integer  "user_id",                :null => false
@@ -3683,7 +3682,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "sms_expenses", :force => true do |t|
     t.date     "date"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "phone"
     t.string   "content",      :limit => 512, :default => "1"
     t.integer  "operation_id", :limit => 1
@@ -3692,7 +3691,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "sms_expenses", ["date"], :name => "date"
-  add_index "sms_expenses", ["account_id"], :name => "account_id"
+  add_index "sms_expenses", ["site_id"], :name => "site_id"
 
   create_table "sms_logs", :force => true do |t|
     t.date     "date"
@@ -3710,7 +3709,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "sms_orders", :force => true do |t|
     t.date     "date"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "plan_name",                               :null => false
     t.integer  "plan_type",   :limit => 1, :default => 1, :null => false
     t.integer  "plan_sms",                 :default => 0, :null => false
@@ -3723,10 +3722,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "sms_orders", ["date"], :name => "date"
-  add_index "sms_orders", ["account_id"], :name => "account_id"
+  add_index "sms_orders", ["site_id"], :name => "site_id"
 
   create_table "sn_code_scan_logs", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "user_id"
     t.string   "code"
     t.integer  "status",        :default => 1, :null => false
@@ -3735,7 +3734,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "sn_codes", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "code"
     t.datetime "expired_at"
     t.integer  "status",        :default => 1, :null => false
@@ -3787,7 +3786,7 @@ class InitDb < ActiveRecord::Migration
 
 
   create_table "print_settings", :force => true do |t|
-    t.integer  "merchant_id"
+    t.integer  "account_id"
     t.string   "name"
     t.text     "description"
     t.integer  "request_expired"
@@ -3797,7 +3796,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "prints", :force => true do |t|
-    t.integer  "merchant_id"
+    t.integer  "account_id"
     t.string   "public_name"
     t.string   "token"
     t.string   "url"
@@ -3840,7 +3839,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "system_message_settings", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.datetime "updated_at",                                  :null => false
     t.string   "voice"
     t.boolean  "is_open_voice",            :default => false
@@ -3849,11 +3848,11 @@ class InitDb < ActiveRecord::Migration
     t.integer  "system_message_module_id"
   end
 
-  add_index "system_message_settings", ["account_id"], :name => "index_system_message_settings_on_account_id"
+  add_index "system_message_settings", ["site_id"], :name => "index_system_message_settings_on_site_id"
   add_index "system_message_settings", ["system_message_module_id"], :name => "index_system_message_settings_on_system_message_module_id"
 
   create_table "system_messages", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "content"
     t.string   "meta"
     t.boolean  "is_read",                   :default => false
@@ -3863,7 +3862,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "system_message_module_id"
   end
 
-  add_index "system_messages", ["account_id"], :name => "index_system_messages_on_account_id"
+  add_index "system_messages", ["site_id"], :name => "index_system_messages_on_site_id"
   add_index "system_messages", ["system_message_module_id"], :name => "index_system_messages_on_system_message_module_id"
   add_index "system_messages", ["system_message_setting_id"], :name => "index_system_messages_on_system_message_setting_id"
 
@@ -3909,7 +3908,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "trip_ads", :force => true do |t|
-    t.integer  "account_id",                               :null => false
+    t.integer  "site_id",                               :null => false
     t.integer  "trip_id"
     t.string   "title"
     t.string   "url"
@@ -3922,11 +3921,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "trip_ads", ["sort"], :name => "index_trip_ads_on_sort"
-  add_index "trip_ads", ["account_id"], :name => "index_trip_ads_on_account_id"
+  add_index "trip_ads", ["site_id"], :name => "index_trip_ads_on_site_id"
   add_index "trip_ads", ["trip_id"], :name => "index_trip_ads_on_trip_id"
 
   create_table "trip_orders", :force => true do |t|
-    t.integer  "account_id",                                                                 :null => false
+    t.integer  "site_id",                                                                 :null => false
     t.integer  "user_id",                                                                  :null => false
     t.integer  "trip_id"
     t.integer  "trip_ticket_id"
@@ -3947,13 +3946,13 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "trip_orders", ["order_no"], :name => "index_trip_orders_on_order_no"
-  add_index "trip_orders", ["account_id"], :name => "index_trip_orders_on_account_id"
+  add_index "trip_orders", ["site_id"], :name => "index_trip_orders_on_site_id"
   add_index "trip_orders", ["trip_id"], :name => "index_trip_orders_on_trip_id"
   add_index "trip_orders", ["trip_ticket_id"], :name => "index_trip_orders_on_trip_ticket_id"
   add_index "trip_orders", ["user_id"], :name => "index_trip_orders_on_user_id"
 
   create_table "trip_ticket_categories", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "name"
     t.integer  "children_count", :default => 0
     t.integer  "parent_id"
@@ -3962,10 +3961,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                    :null => false
   end
 
-  add_index "trip_ticket_categories", ["account_id"], :name => "index_trip_ticket_categories_on_account_id"
+  add_index "trip_ticket_categories", ["site_id"], :name => "index_trip_ticket_categories_on_site_id"
 
   create_table "trip_tickets", :force => true do |t|
-    t.integer  "account_id",                                                                          :null => false
+    t.integer  "site_id",                                                                          :null => false
     t.integer  "trip_id"
     t.string   "name",                                                                                 :null => false
     t.decimal  "price",                                :precision => 12, :scale => 2, :default => 0.0, :null => false
@@ -3985,10 +3984,10 @@ class InitDb < ActiveRecord::Migration
   add_index "trip_tickets", ["name"], :name => "index_trip_tickets_on_name"
   add_index "trip_tickets", ["trip_id"], :name => "index_trip_tickets_on_trip_id"
   add_index "trip_tickets", ["trip_ticket_category_id"], :name => "index_trip_tickets_on_trip_ticket_category_id"
-  add_index "trip_tickets", ["account_id"], :name => "index_trip_tickets_on_account_id"
+  add_index "trip_tickets", ["site_id"], :name => "index_trip_tickets_on_site_id"
 
   create_table "trips", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.string   "name",                         :null => false
     t.string   "logo"
     t.string   "tel"
@@ -3999,7 +3998,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                   :null => false
   end
 
-  add_index "trips", ["account_id"], :name => "index_trips_on_account_id"
+  add_index "trips", ["site_id"], :name => "index_trips_on_site_id"
 
   create_table "user_logs", :id => false, :force => true do |t|
     t.string   "user_type"
@@ -4015,7 +4014,7 @@ class InitDb < ActiveRecord::Migration
   add_index "user_logs", ["user_type", "user_id"], :name => "index_user_logs_on_user_type_and_user_id"
 
   create_table "users", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "name"
     t.string   "mobile"
     t.integer  "gender",                     :default => 1, :null => false
@@ -4024,10 +4023,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                :null => false
   end
 
-  add_index "users", ["account_id"], :name => "index_users_on_account_id"
+  add_index "users", ["site_id"], :name => "index_users_on_site_id"
 
   create_table "vip_api_settings", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_card_id"
     t.string   "callback_domain"
     t.string   "auth_type"
@@ -4041,7 +4040,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "vip_api_settings", ["vip_card_id"], :name => "index_vip_api_settings_on_vip_card_id"
-  add_index "vip_api_settings", ["account_id"], :name => "index_vip_api_settings_on_account_id"
+  add_index "vip_api_settings", ["site_id"], :name => "index_vip_api_settings_on_site_id"
 
   create_table "vip_card_branches", :force => true do |t|
     t.integer  "vip_card_id",                         :null => false
@@ -4064,7 +4063,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_card_branches", ["vip_card_id"], :name => "index_vip_card_branches_on_vip_card_id"
 
   create_table "vip_cards", :force => true do |t|
-    t.integer  "account_id",                                           :null => false
+    t.integer  "site_id",                                           :null => false
     t.integer  "template_id",                        :default => 1
     t.integer  "activity_id",                                           :null => false
     t.string   "name",
@@ -4098,7 +4097,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_cards", ["city_id"], :name => "index_vip_cards_on_city_id"
   add_index "vip_cards", ["district_id"], :name => "index_vip_cards_on_district_id"
   add_index "vip_cards", ["province_id"], :name => "index_vip_cards_on_province_id"
-  add_index "vip_cards", ["account_id"], :name => "index_vip_cards_on_account_id"
+  add_index "vip_cards", ["site_id"], :name => "index_vip_cards_on_site_id"
 
   create_table "vip_cares", :force => true do |t|
     t.integer  "vip_card_id",                                              :null => false
@@ -4123,7 +4122,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_cares", ["vip_card_id"], :name => "index_vip_cares_on_vip_card_id"
 
   create_table "vip_external_http_apis", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_card_id"
     t.integer  "api_type",      :limit => 2
     t.string   "name"
@@ -4136,7 +4135,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                 :null => false
   end
 
-  add_index "vip_external_http_apis", ["account_id"], :name => "index_vip_external_http_apis_on_account_id"
+  add_index "vip_external_http_apis", ["site_id"], :name => "index_vip_external_http_apis_on_site_id"
   add_index "vip_external_http_apis", ["vip_card_id"], :name => "index_vip_external_http_apis_on_vip_card_id"
 
   create_table "vip_givens", :force => true do |t|
@@ -4159,7 +4158,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_givens", ["vip_user_id"], :name => "index_vip_givens_on_vip_user_id"
 
   create_table "vip_grade_logs", :force => true do |t|
-    t.integer  "account_id",        :null => false
+    t.integer  "site_id",        :null => false
     t.integer  "vip_user_id",        :null => false
     t.integer  "old_vip_grade_id"
     t.string   "old_vip_grade_name"
@@ -4175,7 +4174,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "vip_grade_logs", ["operater_id"], :name => "index_vip_grade_logs_on_operater_id"
   add_index "vip_grade_logs", ["shop_branch_id"], :name => "index_vip_grade_logs_on_shop_branch_id"
-  add_index "vip_grade_logs", ["account_id"], :name => "index_vip_grade_logs_on_account_id"
+  add_index "vip_grade_logs", ["site_id"], :name => "index_vip_grade_logs_on_site_id"
   add_index "vip_grade_logs", ["vip_user_id"], :name => "index_vip_grade_logs_on_vip_user_id"
 
   create_table "vip_grades", :force => true do |t|
@@ -4211,10 +4210,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                     :null => false
   end
 
-  add_index "vip_groups", ["vip_card_id"], :name => "index_vip_user_groups_on_account_id"
+  add_index "vip_groups", ["vip_card_id"], :name => "index_vip_user_groups_on_site_id"
 
   create_table "vip_importing_logs", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "error_type"
     t.text     "error_msg"
     t.text     "line"
@@ -4222,10 +4221,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "created_at"
   end
 
-  add_index "vip_importing_logs", ["account_id"], :name => "index_vip_importing_logs_on_account_id"
+  add_index "vip_importing_logs", ["site_id"], :name => "index_vip_importing_logs_on_site_id"
 
   create_table "vip_importings", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_user_id"
     t.integer  "vip_grade_id"
     t.string   "vip_grade_name"
@@ -4245,8 +4244,8 @@ class InitDb < ActiveRecord::Migration
     t.datetime "created_at"
   end
 
-  add_index "vip_importings", ["account_id", "mobile"], :name => "index_vip_importings_on_account_id_and_mobile", :unique => true
-  add_index "vip_importings", ["account_id", "user_no"], :name => "index_vip_importings_on_account_id_and_user_no", :unique => true
+  add_index "vip_importings", ["site_id", "mobile"], :name => "index_vip_importings_on_site_id_and_mobile", :unique => true
+  add_index "vip_importings", ["site_id", "user_no"], :name => "index_vip_importings_on_site_id_and_user_no", :unique => true
   add_index "vip_importings", ["vip_user_id"], :name => "index_vip_importings_on_vip_user_id"
 
   create_table "vip_message_plans", :force => true do |t|
@@ -4264,10 +4263,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "vip_message_plans", ["given_group_id"], :name => "index_vip_message_plans_on_vip_user_group_id"
-  add_index "vip_message_plans", ["vip_card_id"], :name => "index_vip_message_plans_on_account_id"
+  add_index "vip_message_plans", ["vip_card_id"], :name => "index_vip_message_plans_on_site_id"
 
   create_table "vip_package_item_consumes", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_user_id"
     t.integer  "shop_branch_id"
     t.integer  "vip_package_id"
@@ -4283,14 +4282,14 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "vip_package_item_consumes", ["shop_branch_id"], :name => "index_vip_package_item_consumes_on_shop_branch_id"
-  add_index "vip_package_item_consumes", ["account_id"], :name => "index_vip_package_item_consumes_on_account_id"
+  add_index "vip_package_item_consumes", ["site_id"], :name => "index_vip_package_item_consumes_on_site_id"
   add_index "vip_package_item_consumes", ["vip_package_id"], :name => "index_vip_package_item_consumes_on_vip_package_id"
   add_index "vip_package_item_consumes", ["vip_package_item_id"], :name => "index_vip_package_item_consumes_on_vip_package_item_id"
   add_index "vip_package_item_consumes", ["vip_packages_vip_user_id"], :name => "index_vip_package_item_consumes_on_vip_packages_vip_user_id"
   add_index "vip_package_item_consumes", ["vip_user_id"], :name => "index_vip_package_item_consumes_on_vip_user_id"
 
   create_table "vip_package_items", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_card_id"
     t.string   "name"
     t.decimal  "price",         :precision => 12, :scale => 2
@@ -4300,7 +4299,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                  :null => false
   end
 
-  add_index "vip_package_items", ["account_id"], :name => "index_vip_package_items_on_account_id"
+  add_index "vip_package_items", ["site_id"], :name => "index_vip_package_items_on_site_id"
   add_index "vip_package_items", ["vip_card_id"], :name => "index_vip_package_items_on_vip_card_id"
 
   create_table "vip_package_items_vip_packages", :force => true do |t|
@@ -4313,7 +4312,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_package_items_vip_packages", ["vip_package_item_id"], :name => "index_vip_package_items_vip_packages_on_vip_package_item_id"
 
   create_table "vip_packages", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_card_id"
     t.string   "name"
     t.decimal  "price",               :precision => 12, :scale => 2
@@ -4326,11 +4325,11 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                            :null => false
   end
 
-  add_index "vip_packages", ["account_id"], :name => "index_vip_packages_on_account_id"
+  add_index "vip_packages", ["site_id"], :name => "index_vip_packages_on_site_id"
   add_index "vip_packages", ["vip_card_id"], :name => "index_vip_packages_on_vip_card_id"
 
   create_table "vip_packages_vip_users", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_user_id"
     t.integer  "vip_package_id"
     t.integer  "shop_branch_id"
@@ -4344,7 +4343,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                    :null => false
   end
 
-  add_index "vip_packages_vip_users", ["account_id"], :name => "index_vip_packages_vip_users_on_account_id"
+  add_index "vip_packages_vip_users", ["site_id"], :name => "index_vip_packages_vip_users_on_site_id"
   add_index "vip_packages_vip_users", ["vip_package_id"], :name => "index_vip_packages_vip_users_on_vip_package_id"
   add_index "vip_packages_vip_users", ["vip_user_id"], :name => "index_vip_packages_vip_users_on_vip_user_id"
 
@@ -4380,7 +4379,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_privileges", ["vip_card_id"], :name => "index_vip_privileges_on_vip_card_id"
 
   create_table "vip_recharge_orders", :force => true do |t|
-    t.integer  "account_id",                                                 :null => false
+    t.integer  "site_id",                                                 :null => false
     t.integer  "vip_user_id",                                                   :null => false
     t.string   "order_no",                                                      :null => false
     t.string   "vip_user_name"
@@ -4396,10 +4395,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "vip_recharge_orders", ["vip_user_id"], :name => "index_vip_recharge_orders_on_vip_user_id"
-  add_index "vip_recharge_orders", ["account_id"], :name => "index_vip_recharge_orders_on_account_id"
+  add_index "vip_recharge_orders", ["site_id"], :name => "index_vip_recharge_orders_on_site_id"
 
   create_table "vip_user_messages", :force => true do |t|
-    t.integer  "account_id",                                 :null => false
+    t.integer  "site_id",                                 :null => false
     t.integer  "vip_user_id",                                 :null => false
     t.boolean  "is_read",                  :default => false, :null => false
     t.integer  "msg_type",    :limit => 1, :default => 1,     :null => false
@@ -4411,11 +4410,11 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                  :null => false
   end
 
-  add_index "vip_user_messages", ["account_id"], :name => "index_vip_user_messages_on_account_id"
+  add_index "vip_user_messages", ["site_id"], :name => "index_vip_user_messages_on_site_id"
   add_index "vip_user_messages", ["vip_user_id"], :name => "index_vip_user_messages_on_vip_user_id"
 
   create_table "vip_user_payments", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "vip_user_id"
     t.integer  "user_id"
     t.string   "open_id"
@@ -4429,28 +4428,28 @@ class InitDb < ActiveRecord::Migration
     t.string   "out_trade_no"
     t.string   "callback_url"
     t.string   "notify_url"
-    t.string   "merchant_url"
+    t.string   "account_url"
     t.datetime "created_at",                                   :null => false
     t.datetime "updated_at",                                   :null => false
   end
 
-  add_index "vip_user_payments", ["account_id"], :name => "index_vip_user_payments_on_account_id"
+  add_index "vip_user_payments", ["site_id"], :name => "index_vip_user_payments_on_site_id"
   add_index "vip_user_payments", ["vip_user_id"], :name => "index_vip_user_payments_on_vip_user_id"
   add_index "vip_user_payments", ["user_id"], :name => "index_vip_user_payments_on_user_id"
 
   create_table "vip_user_signs", :force => true do |t|
-    t.integer  "account_id",                :null => false
+    t.integer  "site_id",                :null => false
     t.integer  "vip_user_id",                :null => false
     t.date     "date",                       :null => false
     t.integer  "points",      :default => 0, :null => false
     t.datetime "created_at",                 :null => false
   end
 
-  add_index "vip_user_signs", ["account_id"], :name => "index_vip_user_signs_on_account_id"
+  add_index "vip_user_signs", ["site_id"], :name => "index_vip_user_signs_on_site_id"
   add_index "vip_user_signs", ["vip_user_id"], :name => "index_vip_user_signs_on_vip_user_id"
 
   create_table "vip_user_transactions", :force => true do |t|
-    t.integer  "account_id",                                                                     :null => false
+    t.integer  "site_id",                                                                     :null => false
     t.integer  "vip_user_id",                                                                     :null => false
     t.integer  "shop_branch_id"
     t.integer  "amount_source"
@@ -4471,11 +4470,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "vip_user_transactions", ["shop_branch_id"], :name => "index_vip_user_transactions_on_shop_branch_id"
-  add_index "vip_user_transactions", ["account_id"], :name => "index_vip_user_transactions_on_account_id"
+  add_index "vip_user_transactions", ["site_id"], :name => "index_vip_user_transactions_on_site_id"
   add_index "vip_user_transactions", ["vip_user_id"], :name => "index_vip_user_transactions_on_vip_user_id"
 
   create_table "vip_users", :force => true do |t|
-    t.integer  "account_id",                                                                       :null => false
+    t.integer  "site_id",                                                                       :null => false
     t.integer  "user_id",                                                                        :null => false
     t.integer  "vip_group_id"
     t.integer  "vip_grade_id",                                                   :default => 0
@@ -4515,7 +4514,7 @@ class InitDb < ActiveRecord::Migration
   add_index "vip_users", ["password_email"], :name => "index_vip_users_on_password_email"
   add_index "vip_users", ["province_id"], :name => "index_vip_users_on_province_id"
   add_index "vip_users", ["status"], :name => "index_vip_users_on_status"
-  add_index "vip_users", ["account_id"], :name => "index_vip_users_on_account_id"
+  add_index "vip_users", ["site_id"], :name => "index_vip_users_on_site_id"
   add_index "vip_users", ["trade_token"], :name => "index_vip_users_on_trade_token"
   add_index "vip_users", ["user_no"], :name => "index_vip_users_on_user_no"
   add_index "vip_users", ["vip_grade_id"], :name => "index_vip_users_on_vip_grade_id"
@@ -4533,7 +4532,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "wbbs_communities", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "name"
     t.string   "logo"
     t.boolean  "need_check",    :default => false
@@ -4544,7 +4543,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                       :null => false
   end
 
-  add_index "wbbs_communities", ["account_id"], :name => "index_wbbs_communities_on_account_id"
+  add_index "wbbs_communities", ["site_id"], :name => "index_wbbs_communities_on_site_id"
 
   create_table "wbbs_notifications", :force => true do |t|
     t.string   "notifiable_type"
@@ -4585,7 +4584,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wbbs_replies", ["wbbs_topic_id"], :name => "index_wbbs_replies_on_wbbs_topic_id"
 
   create_table "wbbs_topics", :force => true do |t|
-    t.integer  "account_id",                                        :null => false
+    t.integer  "site_id",                                        :null => false
     t.integer  "wbbs_community_id",                                  :null => false
     t.string   "poster_type"
     t.string   "receiver_type"
@@ -4606,7 +4605,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "wbbs_topics", ["poster_id"], :name => "index_wbbs_topics_on_poster_id"
-  add_index "wbbs_topics", ["account_id"], :name => "index_wbbs_topics_on_account_id"
+  add_index "wbbs_topics", ["site_id"], :name => "index_wbbs_topics_on_site_id"
   add_index "wbbs_topics", ["wbbs_community_id"], :name => "index_wbbs_topics_on_wbbs_community_id"
 
   create_table "wbbs_votables", :force => true do |t|
@@ -4650,7 +4649,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "website_articles", :force => true do |t|
     t.integer  "article_type",                              :default => 1
-    t.integer  "account_id",                                                  :null => false
+    t.integer  "site_id",                                                  :null => false
     t.integer  "website_id",                                                   :null => false
     t.integer  "website_menu_id"
     t.integer  "website_article_category_id"
@@ -4673,7 +4672,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "website_articles", ["sort"], :name => "index_website_articles_on_sort"
-  add_index "website_articles", ["account_id"], :name => "index_website_articles_on_account_id"
+  add_index "website_articles", ["site_id"], :name => "index_website_articles_on_site_id"
   add_index "website_articles", ["website_id"], :name => "index_website_articles_on_website_id"
   add_index "website_articles", ["website_menu_id"], :name => "index_website_articles_on_website_menu_id"
 
@@ -4849,7 +4848,6 @@ class InitDb < ActiveRecord::Migration
     t.integer  "icon_shape",                    :default => 0
     t.integer  "scroll_way",                    :default => 0
     t.boolean  "is_boutique",                   :default => false
-    t.string   "permit_accounts"
     t.integer  "series",                        :default => 0
     t.datetime "created_at",                                       :null => false
     t.datetime "updated_at",                                       :null => false
@@ -4859,7 +4857,7 @@ class InitDb < ActiveRecord::Migration
   add_index "website_templates", ["website_tag_id"], :name => "index_website_templates_on_website_tag_id"
 
   create_table "websites", :force => true do |t|
-    t.integer  "account_id",                                                   :null => false
+    t.integer  "site_id",                                                   :null => false
     t.integer  "activity_id"
     t.string   "name",                                                          :null => false
     t.string   "tel"
@@ -4892,7 +4890,7 @@ class InitDb < ActiveRecord::Migration
   add_index "websites", ["district_id"], :name => "index_websites_on_district_id"
   add_index "websites", ["domain"], :name => "index_websites_on_domain"
   add_index "websites", ["province_id"], :name => "index_websites_on_province_id"
-  add_index "websites", ["account_id"], :name => "index_websites_on_account_id"
+  add_index "websites", ["site_id"], :name => "index_websites_on_site_id"
 
   create_table "wedding_guests", :force => true do |t|
     t.integer  "wedding_id",                  :null => false
@@ -4953,7 +4951,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wedding_wishes", ["wedding_id"], :name => "index_wedding_wishes_on_wedding_id"
 
   create_table "weddings", :force => true do |t|
-    t.integer  "account_id",                                :null => false
+    t.integer  "site_id",                                :null => false
     t.integer  "template_id",                  :default => 1,  :null => false
     t.string   "groom",                                        :null => false
     t.string   "bride",                                        :null => false
@@ -4982,12 +4980,12 @@ class InitDb < ActiveRecord::Migration
   add_index "weddings", ["district_id"], :name => "index_weddings_on_district_id"
   add_index "weddings", ["groom"], :name => "index_weddings_on_groom"
   add_index "weddings", ["province_id"], :name => "index_weddings_on_province_id"
-  add_index "weddings", ["account_id"], :name => "index_weddings_on_account_id"
+  add_index "weddings", ["site_id"], :name => "index_weddings_on_site_id"
   add_index "weddings", ["template_id"], :name => "index_weddings_on_template_id"
   add_index "weddings", ["wedding_at"], :name => "index_weddings_on_wedding_at"
 
   create_table "wifi_clients", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.boolean  "is_login_join"
     t.string   "ip_address"
     t.string   "mobile"
@@ -4995,7 +4993,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",    :null => false
   end
 
-  add_index "wifi_clients", ["account_id"], :name => "index_wifi_clients_on_account_id"
+  add_index "wifi_clients", ["site_id"], :name => "index_wifi_clients_on_site_id"
 
   create_table "wifi_messages", :force => true do |t|
     t.integer  "msg_id"
@@ -5077,7 +5075,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wmall_coupons", ["status"], :name => "index_wmall_coupons_on_status"
 
   create_table "wmall_malls", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "wx_mp_user_open_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
@@ -5180,7 +5178,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "name"
     t.string   "pre_pic_url"
     t.string   "pic_key"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "mall_id"
     t.string   "phone"
     t.string   "card_pic_key"
@@ -5208,7 +5206,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "wx_cards", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "card_id"
     t.string   "card_type"
     t.string   "logo_url"
@@ -5268,10 +5266,10 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "wx_cards", ["card_id"], :name => "index_wx_cards_on_card_id"
-  add_index "wx_cards", ["account_id"], :name => "index_wx_cards_on_account_id"
+  add_index "wx_cards", ["site_id"], :name => "index_wx_cards_on_site_id"
 
   create_table "wx_feedbacks", :force => true do |t|
-    t.integer  "account_id",                  :null => false
+    t.integer  "site_id",                  :null => false
     t.integer  "user_id",                   :null => false
     t.string   "feed_back_id",                 :null => false
     t.string   "trans_id",                     :null => false
@@ -5287,7 +5285,7 @@ class InitDb < ActiveRecord::Migration
 
   add_index "wx_feedbacks", ["feed_back_id"], :name => "index_wx_feedbacks_on_feed_back_id"
   add_index "wx_feedbacks", ["trans_id"], :name => "index_wx_feedbacks_on_trans_id"
-  add_index "wx_feedbacks", ["account_id"], :name => "index_wx_feedbacks_on_account_id"
+  add_index "wx_feedbacks", ["site_id"], :name => "index_wx_feedbacks_on_site_id"
   add_index "wx_feedbacks", ["user_id"], :name => "index_wx_feedbacks_on_user_id"
 
   create_table "wx_invites", :force => true do |t|
@@ -5305,7 +5303,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_invites", ["from_user_id", "to_user_id", "wx_invitable_id", "wx_invitable_type"], :name => "index_uniq_for_wx_invites", :unique => true
 
   create_table "wx_menus", :force => true do |t|
-    t.integer  "account_id",                      :null => false
+    t.integer  "site_id",                      :null => false
     t.integer  "parent_id",     :default => 0,       :null => false
     t.integer  "sort",          :default => 0,       :null => false
     t.string   "name"
@@ -5324,11 +5322,11 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_menus", ["menuable_id", "menuable_type"], :name => "menuable_index"
   add_index "wx_menus", ["parent_id"], :name => "index_wx_menus_on_parent_id"
   add_index "wx_menus", ["sort"], :name => "index_wx_menus_on_sort"
-  add_index "wx_menus", ["account_id"], :name => "index_wx_menus_on_account_id"
+  add_index "wx_menus", ["site_id"], :name => "index_wx_menus_on_site_id"
 
   create_table "wx_mp_users", :force => true do |t|
-    t.integer  "merchant_id"
-    t.integer  "account_id",                                                           :null => false
+    t.integer  "account_id"
+    t.integer  "site_id",                                                           :null => false
     t.integer  "status",                :limit => 1,   :default => 0,                   :null => false
     t.string   "name",                                                                  :null => false
     t.string   "openid"
@@ -5363,8 +5361,8 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                            :null => false
   end
 
-  add_index "wx_mp_users", ["merchant_id"], :name => "index_wx_mp_users_on_merchant_id"
   add_index "wx_mp_users", ["account_id"], :name => "index_wx_mp_users_on_account_id"
+  add_index "wx_mp_users", ["site_id"], :name => "index_wx_mp_users_on_site_id"
   add_index "wx_mp_users", ["code"], :name => "index_wx_mp_users_on_code"
   add_index "wx_mp_users", ["name"], :name => "index_wx_mp_users_on_name"
   add_index "wx_mp_users", ["openid"], :name => "index_wx_mp_users_on_openid"
@@ -5496,7 +5494,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_plot_telephones", ["wx_plot_id"], :name => "index_wx_plot_telephones_on_wx_plot_id"
 
   create_table "wx_plots", :force => true do |t|
-    t.integer  "account_id",                              :null => false
+    t.integer  "site_id",                              :null => false
     t.string   "name",                                     :null => false
     t.string   "bulletin",             :default => "小区公告"
     t.string   "repair",               :default => "报修管理"
@@ -5513,7 +5511,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                               :null => false
   end
 
-  add_index "wx_plots", ["account_id"], :name => "index_wx_plots_on_account_id"
+  add_index "wx_plots", ["site_id"], :name => "index_wx_plots_on_site_id"
 
   create_table "wx_prizes", :force => true do |t|
     t.integer  "user_id"
@@ -5530,7 +5528,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "wx_replies", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.string   "event_type",     :default => "text", :null => false
     t.integer  "reply_type",     :default => 1,      :null => false
     t.integer  "replyable_id"
@@ -5540,11 +5538,11 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                         :null => false
   end
 
-  add_index "wx_replies", ["account_id"], :name => "index_wx_replies_on_account_id"
+  add_index "wx_replies", ["site_id"], :name => "index_wx_replies_on_site_id"
 
   create_table "wx_requests", :force => true do |t|
     t.date     "date"
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "text",                                            :default => 0,   :null => false
     t.integer  "text_hit",                                        :default => 0,   :null => false
     t.integer  "event",                                           :default => 0,   :null => false
@@ -5565,12 +5563,12 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at"
   end
 
-  add_index "wx_requests", ["date", "account_id"], :name => "uni_date_account_id", :unique => true
-  add_index "wx_requests", ["account_id"], :name => "index_wx_requests_on_account_id"
+  add_index "wx_requests", ["date", "site_id"], :name => "uni_date_site_id", :unique => true
+  add_index "wx_requests", ["site_id"], :name => "index_wx_requests_on_site_id"
   add_index "wx_requests", ["total"], :name => "index_wx_requests_on_total"
 
   create_table "wx_shake_prizes", :force => true do |t|
-    t.integer  "account_id",                                   :null => false
+    t.integer  "site_id",                                   :null => false
     t.integer  "user_id",                                    :null => false
     t.integer  "wx_shake_id",                                   :null => false
     t.integer  "wx_shake_user_id",                              :null => false
@@ -5582,13 +5580,13 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                    :null => false
   end
 
-  add_index "wx_shake_prizes", ["account_id"], :name => "index_wx_shake_prizes_on_account_id"
+  add_index "wx_shake_prizes", ["site_id"], :name => "index_wx_shake_prizes_on_site_id"
   add_index "wx_shake_prizes", ["wx_shake_id"], :name => "index_wx_shake_prizes_on_wx_shake_id"
   add_index "wx_shake_prizes", ["wx_shake_user_id", "wx_shake_round_id"], :name => "index_wx_shake_prizes_on_wx_shake_user_id_and_wx_shake_round_id", :unique => true
   add_index "wx_shake_prizes", ["user_id"], :name => "index_wx_shake_prizes_on_user_id"
 
   create_table "wx_shake_rounds", :force => true do |t|
-    t.integer  "account_id",                                :null => false
+    t.integer  "site_id",                                :null => false
     t.integer  "activity_id",                                :null => false
     t.integer  "wx_shake_id",                                :null => false
     t.integer  "shake_round"
@@ -5599,11 +5597,11 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "wx_shake_rounds", ["activity_id"], :name => "index_wx_shake_rounds_on_activity_id"
-  add_index "wx_shake_rounds", ["account_id"], :name => "index_wx_shake_rounds_on_account_id"
+  add_index "wx_shake_rounds", ["site_id"], :name => "index_wx_shake_rounds_on_site_id"
   add_index "wx_shake_rounds", ["wx_shake_id"], :name => "index_wx_shake_rounds_on_wx_shake_id"
 
   create_table "wx_shake_users", :force => true do |t|
-    t.integer  "account_id",                             :null => false
+    t.integer  "site_id",                             :null => false
     t.integer  "user_id",                              :null => false
     t.integer  "wx_shake_id",                             :null => false
     t.string   "nickname"
@@ -5615,12 +5613,12 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                              :null => false
   end
 
-  add_index "wx_shake_users", ["account_id"], :name => "index_wx_shake_users_on_account_id"
+  add_index "wx_shake_users", ["site_id"], :name => "index_wx_shake_users_on_site_id"
   add_index "wx_shake_users", ["wx_shake_id"], :name => "index_wx_shake_users_on_wx_shake_id"
   add_index "wx_shake_users", ["user_id"], :name => "index_wx_shake_users_on_user_id"
 
   create_table "wx_shakes", :force => true do |t|
-    t.integer  "account_id",                                   :null => false
+    t.integer  "site_id",                                   :null => false
     t.integer  "material_id"
     t.integer  "mode",                        :default => 1
     t.integer  "mode_value"
@@ -5634,7 +5632,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                    :null => false
   end
 
-  add_index "wx_shakes", ["account_id"], :name => "index_wx_shakes_on_account_id"
+  add_index "wx_shakes", ["site_id"], :name => "index_wx_shakes_on_site_id"
 
   create_table "wx_user_addresses", :force => true do |t|
     t.integer  "user_id",                                  :null => false
@@ -5658,7 +5656,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_user_addresses", ["user_id"], :name => "index_wx_user_addresses_on_user_id"
 
   create_table "wx_users", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "site_id"
     t.integer  "wx_mp_user_id"
     t.integer  "status",                  :limit => 1, :default => 1,     :null => false
     t.string   "openid",                                                     :null => false
@@ -5686,7 +5684,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "wx_users", ["nickname"], :name => "index_wx_users_on_nickname"
-  add_index "wx_users", ["account_id"], :name => "index_wx_users_on_account_id"
+  add_index "wx_users", ["site_id"], :name => "index_wx_users_on_site_id"
   add_index "wx_users", ["openid"], :name => "index_wx_users_on_openid"
   add_index "wx_users", ["wx_mp_user_id"], :name => "index_wx_users_on_wx_mp_user_id"
 
@@ -5767,7 +5765,7 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_wall_winning_users", ["wx_wall_id"], :name => "index_wx_wall_winning_users_on_wx_wall_id"
 
   create_table "wx_walls", :force => true do |t|
-    t.integer  "account_id",                        :null => false
+    t.integer  "site_id",                        :null => false
     t.string   "sponsor"
     t.string   "logo"
     t.string   "qrcode"
@@ -5787,5 +5785,5 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                         :null => false
   end
 
-  add_index "wx_walls", ["account_id"], :name => "index_wx_walls_on_account_id"
+  add_index "wx_walls", ["site_id"], :name => "index_wx_walls_on_site_id"
 end
