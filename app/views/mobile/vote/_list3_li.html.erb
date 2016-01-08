@@ -4,7 +4,7 @@
     <div class="check-box"><%#= (activity_vote_items.current_page - 1) * activity_vote_items.limit_value + index + 1 %><%= item.item_no %>号<i class="<%= 'ra' unless select_count > 1 %>"></i></div>
   </li>
 <% end %>
-<% if activity_vote_items.size == 0 %>
+<% if activity_vote_items.count == 0 %>
   <p class="no-data">没有找到相关内容</p>
 <% end %>
 

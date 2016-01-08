@@ -185,7 +185,7 @@ class WebsiteMenu < ActiveRecord::Base
   end
 
   def has_games?
-    games? && game_assistants.size > 0
+    games? && game_assistants.count > 0
   end
 
   def game_assistants
@@ -193,7 +193,7 @@ class WebsiteMenu < ActiveRecord::Base
   end
 
   def has_children?
-    children.size > 0
+    children.count > 0
   end
 
   def parent?

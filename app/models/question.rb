@@ -32,8 +32,8 @@ class Question < ActiveRecord::Base
 
     # 先进行模糊匹配，再进行反向模糊匹配
     questions = fuzzy_match.where('lower(questions.ask) like ?', "%#{keyword}%").to_a
-    questions = fuzzy_match.where("? like CONCAT('%', questions.ask, '%')", keyword).to_a if questions.size == 0
-    questions_count = questions.size
+    questions = fuzzy_match.where("? like CONCAT('%', questions.ask, '%')", keyword).to_a if questions.count == 0
+    questions_count = questions.count
 
     return questions[rand(questions_count)] if questions_count > 0
   end

@@ -3,7 +3,7 @@
     <div class="luck-draw">
       <ul class="J-list">
         <% 12.times do |i| %>
-          <% prize = @wx_wall_prizes[ i % @wx_wall_prizes.size ] %>
+          <% prize = @wx_wall_prizes[ i % @wx_wall_prizes.count ] %>
           <li class="li-<%= i + 1 %> prize_<%= prize.id %>">
             <%= image_tag prize.try(:pic_url) || '/assets/bg_fm.jpg' %>
           </li>

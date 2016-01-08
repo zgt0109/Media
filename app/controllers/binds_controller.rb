@@ -343,7 +343,7 @@ class BindsController < ApplicationController
 
       c_s = cookie.split('=')
       k = c_s[0]
-      if c_s.size > 2
+      if c_s.count > 2
         c_s.delete_at(0)
         v = c_s.join('=')
       else

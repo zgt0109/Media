@@ -94,7 +94,7 @@
       <ul>
         <% @website.website_menus.root.order(:sort).each_with_index do |menu,index| %>
           <li>
-            <%= link_to app_business_circle_path(menu, anchor: "mp.weixin.qq.com"), class: "#{ 'more' if menu.name.to_s.size > 2 }" do %>
+            <%= link_to app_business_circle_path(menu, anchor: "mp.weixin.qq.com"), class: "#{ 'more' if menu.name.to_s.count > 2 }" do %>
               <span>
                 <% if menu.name.to_s.length > 2 %>
                   <b><%= menu.name.to_s[0] %></b><%= menu.name.to_s[1..-1] %>

@@ -73,7 +73,7 @@
                           <label class="block">
                               <input type="checkbox" name="vip_care[given_coupon_ids][]" value="<%= coupon.id %>" class="ace">
                               <span class="lbl"><%= coupon.name %>
-                                (<span class="coupon_num"><%= coupon.activity_property.coupon_count - coupon.activity_consumes.size %></span>)
+                                (<span class="coupon_num"><%= coupon.activity_property.coupon_count - coupon.activity_consumes.count %></span>)
                               </span>
                           </label>
                       </div>

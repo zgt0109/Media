@@ -171,11 +171,11 @@
   }
 
   function validateTitle(){
-    return $("#title_lable a.selected_tag").size() > 0;
+    return $("#title_lable a.selected_tag").count() > 0;
   }
 
   function validateDepartment(){
-    return $("#department_lable a").size() > 0;
+    return $("#department_lable a").count() > 0;
   }
 
   function showErrorMessage(field, x, y){

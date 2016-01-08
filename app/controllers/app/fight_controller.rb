@@ -172,7 +172,7 @@ class App::FightController < App::BaseController
     answered_question_ids = []
     @fight_paper.fight_answers.where(wx_user_id: session[:wx_user_id]).select(:fight_paper_question_id).each {|fa| answered_question_ids.push(fa.fight_paper_question_id)}
 
-    @answered_questions_count = answered_question_ids.size+1
+    @answered_questions_count = answered_question_ids.count+1
     fight_paper_questions_count = @fight_paper.fight_paper_questions.count
 
     @no_question = false

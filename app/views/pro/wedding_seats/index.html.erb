@@ -28,7 +28,7 @@
     <% if @seats.each do |seat| %>
       <tr id="seat-row-<%= seat.id %>">
         <td><%= seat.name %></td>
-        <td><%= "#{seat.guest_names.size}/#{seat.seats_count}" %></td>
+        <td><%= "#{seat.guest_names.count}/#{seat.seats_count}" %></td>
         <td>
           <a class="btn-pop seat-edit-btn" data-table="0" data-id="<%= seat.id %>" data-path="<%= wedding_seat_path(@wedding, seat) %>" style="cursor: pointer;">
             编辑

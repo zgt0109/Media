@@ -1,4 +1,4 @@
-<% unless @website_pictures.size.zero? %>
+<% unless @website_pictures.count.zero? %>
     <div class="banner" id="banner">
       <ul class='clearfix'>
         <% @website_pictures.each do |picture| %>
@@ -12,7 +12,7 @@
     </div>
 <% end %>
 
-<% unless @website_menus.size.zero? %>
+<% unless @website_menus.count.zero? %>
     <div class="list1 clearfix">
       <% @website_menus.in_groups_of(8, false) do |menus| %>
           <% menus.each_with_index do |menu, i| %>

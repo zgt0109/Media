@@ -81,7 +81,7 @@ class Mobile::VoteController < Mobile::BaseController
     status_name  = @activity.vote_status_attrs[0]
     user_type    = @activity.activity_setting.try(:user_type).to_i
     select_count = @activity.activity_property.try(:get_limit_count).to_i
-    check_count  = params[:ids].to_s.split(',').size
+    check_count  = params[:ids].to_s.split(',').count
     errors << "活动#{status_name}" unless status_name.eql?(Activity::UNDER_WAY_NAME)
     errors << "仅关注用户可参加投票" if errors.blank? && user_type == ActivitySetting::WX_USER && !@wx_user.subscribe?
     errors << "仅会员可参加投票" if errors.blank? && user_type == ActivitySetting::VIP_USER && !@wx_user.vip_user

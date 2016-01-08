@@ -29,6 +29,6 @@ class VipMessagePlanWorker
         supplier.vip_user_messages.create(vip_user_id: receiver.id, title: plan.title, content: plan.content)
       end
     end
-    plan.update_attributes vip_users_count: receivers.size, send_at: Time.now, skip_validate_send_at: true
+    plan.update_attributes vip_users_count: receivers.count, send_at: Time.now, skip_validate_send_at: true
   end
 end

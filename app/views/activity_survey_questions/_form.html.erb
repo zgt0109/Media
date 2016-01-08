@@ -37,7 +37,7 @@
 
           <%
             survey_question_choices = f.object.survey_question_choices.order(:position)
-            size = survey_question_choices.size
+            size = survey_question_choices.count
             1.upto(2){|m| survey_question_choices << f.object.survey_question_choices.new } if size.zero?
           %>
 
@@ -51,7 +51,7 @@
             <label class="control-label">答案个数</label>
             <div class="clearfix">
               <% size = 2 if size.zero? %>
-              <%= f.select :limit_select, (1..size).to_a.map{|f| ["#{f}个", f]}, {}, class: 'J-answer' %>
+              <%= f.select :limit_select, (1..count).to_a.map{|f| ["#{f}个", f]}, {}, class: 'J-answer' %>
             </div>
           </div>
 

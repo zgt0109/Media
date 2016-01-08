@@ -39,7 +39,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
   
   def pictures
     @pictures_arr = @business_shop.business_shop_pictures.recent
-    slice_length = @pictures_arr.size / 2 + @pictures_arr.size.modulo(2)
+    slice_length = @pictures_arr.count / 2 + @pictures_arr.count.modulo(2)
     @pictures_arr = @pictures_arr.each_slice(slice_length).to_a if slice_length > 0
   rescue
     return render text: '请求页面不存在'

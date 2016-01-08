@@ -91,7 +91,7 @@ class VipCare < ActiveRecord::Base
   def send_old_coupon_care!
     given_coupon_ids.each do |id|
       activity        = Activity.find(id)
-      limit_count = activity.activity_property.coupon_count - activity.activity_consumes.size
+      limit_count = activity.activity_property.coupon_count - activity.activity_consumes.count
       next if limit_count <= 0
 
       random_receivers.take(limit_count).each do |vip_user|

@@ -121,7 +121,7 @@
         </div>
         <div class="content-ft clearfix">
           <div class="pagination pull-left line-height-32">
-            <span class="text-muted">总共<%= @search.relation.size %>条 当前为第<span><%= [params[:page].to_i,1].max %></span>页</span>
+            <span class="text-muted">总共<%= @search.relation.count %>条 当前为第<span><%= [params[:page].to_i,1].max %></span>页</span>
             <span>每页显示</span>
             <%= select_tag "per_page_total", options_for_select([['10条', 10], ['20条', 20], ['30条', 30]], selected: @per_page)  %>
           </div>

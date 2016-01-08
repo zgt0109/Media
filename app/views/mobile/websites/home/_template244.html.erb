@@ -1,4 +1,4 @@
-<% unless @website_menus.size.zero? %>
+<% unless @website_menus.count.zero? %>
     <div class="list9 clearfix">
       <% @website_menus.in_groups_of(4, false).each do |menus| %>
           <% menus.each do |menu| %>

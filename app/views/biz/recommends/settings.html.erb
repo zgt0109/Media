@@ -50,7 +50,7 @@
             <select class="col-xs-12 coupon_id" name="coupon_id" id="coupon_id" style= 'display:none'>
               <%- if @coupons.present? %>
                    <%- @coupons.each do |coupon| %>
-                    <option value="<%= coupon.id %>" data-start="<%= coupon.use_start.try(:to_s)  %>" data-end="<%= coupon.use_end.try(:to_s)  %>" data-count="<%= coupon.limit_count_avaliable - coupon.consumes.size %>"><%= coupon.name %>(<span class="coupon_num"><%= coupon.limit_count_avaliable - coupon.consumes.size %>)</span>
+                    <option value="<%= coupon.id %>" data-start="<%= coupon.use_start.try(:to_s)  %>" data-end="<%= coupon.use_end.try(:to_s)  %>" data-count="<%= coupon.limit_count_avaliable - coupon.consumes.count %>"><%= coupon.name %>(<span class="coupon_num"><%= coupon.limit_count_avaliable - coupon.consumes.count %>)</span>
                     </option>
                   <%- end %>
              <%- else %>

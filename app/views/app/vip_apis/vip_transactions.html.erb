@@ -23,7 +23,7 @@
             </tr>
             <% end %>
           <% else %>
-            <tr><td colspan="<%= @transactions.first.keys.size rescue 1 %>">暂无记录</td></tr>
+            <tr><td colspan="<%= @transactions.first.keys.count rescue 1 %>">暂无记录</td></tr>
           <% end %>
         </table>
       </div>

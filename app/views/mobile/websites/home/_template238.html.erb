@@ -1,4 +1,4 @@
-<% unless @website_menus.size.zero? %>
+<% unless @website_menus.count.zero? %>
     <div class="list3 clearfix">
       <% @website_menus.each do |menu| %>
           <%= link_to menu_url(menu), class: 'box' do %>

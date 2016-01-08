@@ -13,7 +13,7 @@ class Biz::VipImportingsController < ApplicationController
 
     tempfile = uploaded_file.tempfile
     return redirect_to :back, alert: "请导入格式为.CSV的文件。" if uploaded_file.original_filename !~ /\.csv\z/i
-    return redirect_to :back, alert: "上传文件不能大于2M，请重新上传。" if tempfile.size > 1024 ** 2
+    return redirect_to :back, alert: "上传文件不能大于2M，请重新上传。" if tempfile.count > 1024 ** 2
 
     file_name = copy_tempfile(tempfile)
     result = VipImporting.validate_and_import(current_user, file_name, sync: params[:sync].present?)

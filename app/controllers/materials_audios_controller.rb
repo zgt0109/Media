@@ -35,7 +35,7 @@ class MaterialsAudiosController < ApplicationController
     put_policy = Qiniu::Auth::PutPolicy.new(BUCKET_MEDIA)
     code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, tempfile.path)
     if code == 200
-      params[:material].merge!(fsize: tempfile.size, qiniu_audio_url: qiniu_image_url(result["key"], bucket: BUCKET_MEDIA), original_filename: upload_file.original_filename, audio: nil) 
+      params[:material].merge!(fsize: tempfile.count, qiniu_audio_url: qiniu_image_url(result["key"], bucket: BUCKET_MEDIA), original_filename: upload_file.original_filename, audio: nil) 
       stat_result = Qiniu.stat(BUCKET_MEDIA, result['key'])
       Qiniu.chgm(BUCKET_MEDIA, result['key'], upload_file.content_type) if stat_result['mimeType'].eql?('text/plain')
     end

@@ -50,7 +50,7 @@
         <div id="pagenavi" class="fr slider-page">
           <%= link_to 1, '#', class: 'active' if website_menus.to_a[0..9].present? %>
           <%= link_to 2, '#', class: '' if website_menus.to_a[10..13].present? %>
-          <%= link_to 3, '#', class: '' if website_menus.size > 10 %>
+          <%= link_to 3, '#', class: '' if website_menus.count > 10 %>
         </div>
       </div>
     </div>

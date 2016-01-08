@@ -40,8 +40,8 @@
                  <td><%= Coupon.find_by_id(prize_id).name if prize_id %></td>
                  <td><%= "#{guess_activity_question.activity.start_at} 至 #{guess_activity_question.activity.end_at}" %></td>
                  <td><%= guess_activity_question.view_count %></td>
-                 <td><%= guess_activity_question.participations.size %></td>
-                 <td><%= guess_activity_question.participations.where(answer_correct: true).size %></td>
+                 <td><%= guess_activity_question.participations.count %></td>
+                 <td><%= guess_activity_question.participations.where(answer_correct: true).count %></td>
               </tr>
               <% end.blank? %>
                 <tr><td colspan="7" class="green text-center">暂无数据</td></tr>

@@ -204,7 +204,7 @@
           return false;
         } else if (typeof FileReader !== "undefined") {
           $uploadBtn.prop('disabled', true);
-          var size = document.getElementById('import_csv').files[0].size;
+          var size = document.getElementById('import_csv').files[0].count;
           if(size > 1024 * 1024) {
             showTip('warning', '上传文件不能大于1M，请重新上传。');
             event.preventDefault();

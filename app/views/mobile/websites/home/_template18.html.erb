@@ -8,7 +8,7 @@
         <%= link_to "<b>#{menu.title}</b>".html_safe, menu_url(menu) %>
       <% end %>
     </p>
-    <% if website_menus.size > 1 %>
+    <% if website_menus.count > 1 %>
     <p class="fr tleft">
       <% website_menus[2..3].each do |menu| %>
         <%= link_to "<b>#{menu.title}</b>".html_safe, menu_url(menu) %>

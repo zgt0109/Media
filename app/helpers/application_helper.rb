@@ -394,7 +394,7 @@ module ApplicationHelper
   end
 
   def gua_status_name(activity)
-    if activity.activity_consumes.size < activity.activity_property.coupon_count
+    if activity.activity_consumes.count < activity.activity_property.coupon_count
       '进行中'
     else
       '券已领完'

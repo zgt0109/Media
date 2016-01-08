@@ -226,7 +226,7 @@
 
       event.preventDefault();
 
-      if ( $('.leftbar .subview').size() >=7 ) {
+      if ( $('.leftbar .subview').count() >=7 ) {
         showTip('warning',"最多只能加入8条图文信息");
         return;
       }

@@ -121,7 +121,7 @@ module App
         prize = @activity.get_prize
         if prize #如果中奖
           #如果奖池中还有奖品 出奖次数未超过设置值
-          if prize.activity_consumes.size < prize.prize_count && (prize.limit_count == -1 || prize.activity_consumes.size < prize.limit_count)
+          if prize.activity_consumes.count < prize.prize_count && (prize.limit_count == -1 || prize.activity_consumes.count < prize.limit_count)
             #...
             activity_consume = prize.activity_consumes.create(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, activity_id: @activity.id, wx_user_id: session[:wx_user_id])
             @prize_title = prize.title

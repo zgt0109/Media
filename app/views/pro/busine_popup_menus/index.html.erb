@@ -17,7 +17,7 @@
   <p>
     <span class="p-plugin fl">开启此功能：</span>
     <%= link_to '', toggle_popup_busines_path(id: @website.id), method: :post, remote: true, class: "btn-pluin fl pluin-#{@website.is_open_life_popup? ? 'open' : 'close'}" %>
-    <a class="btn btn-small btn-orange new-pop-menu <%= 'hide' if @menus.size >= 4 %>" onclick="popUrl(this)" data-name="name" data-w="600" data-h="500" data-title="新增菜单" data-url="<%= new_busine_popup_menu_path %>">新增</a>
+    <a class="btn btn-small btn-orange new-pop-menu <%= 'hide' if @menus.count >= 4 %>" onclick="popUrl(this)" data-name="name" data-w="600" data-h="500" data-title="新增菜单" data-url="<%= new_busine_popup_menu_path %>">新增</a>
   </p>
   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin-show">
     <thead>

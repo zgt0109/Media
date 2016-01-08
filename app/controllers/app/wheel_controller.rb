@@ -120,7 +120,7 @@ module App
                 error_msg = '您今天的抽奖次数已用完'
               end #每人每天参与次数
 
-          end #end lottery_draws and lottery_draws.size > 0
+          end #end lottery_draws and lottery_draws.count > 0
 
           else
             logger.info "========预热/停止/结束"

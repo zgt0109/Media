@@ -110,21 +110,21 @@
     <dl>
         <dt>
             <a class="fa fa-chevron-right box-icon" href="<%= pictures_mobile_business_shop_path(@supplier.id, @business_shop) %>">
-                <i class="fa fa-picture-o"></i><b>环境照片（<%= @business_shop.business_shop_pictures.recent.size %>张）</b>
+                <i class="fa fa-picture-o"></i><b>环境照片（<%= @business_shop.business_shop_pictures.recent.count %>张）</b>
             </a>
         </dt>
     </dl>
     <dl>
         <dt>
             <a class="fa fa-chevron-right box-icon" href="<%= items_mobile_business_shop_path(@supplier.id, @business_shop) %>">
-                <i class="fa fa-bookmark"></i><b>推荐商品（<%= @business_shop.business_items.size %>个）</b>
+                <i class="fa fa-bookmark"></i><b>推荐商品（<%= @business_shop.business_items.count %>个）</b>
             </a>
         </dt>
     </dl>
     <dl>
         <dt>
             <a class="fa fa-chevron-right box-icon" href="<%= comments_mobile_business_shop_path(@supplier.id, @business_shop) %>">
-                <i class="fa fa-comment"></i><b>店铺点评（<%= @business_shop.comments.latest.size %>条）</b>
+                <i class="fa fa-comment"></i><b>店铺点评（<%= @business_shop.comments.latest.count %>条）</b>
             </a>
         </dt>
     </dl>

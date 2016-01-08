@@ -1,4 +1,4 @@
-<% unless @website_menus.size.zero? %>
+<% unless @website_menus.count.zero? %>
     <div class="list8 clearfix">
 
       <% @website_menus[0..2].each do |menu| %>
@@ -13,7 +13,7 @@
       <% end %>
 
       <% @website_menus[3..-1].to_a.in_groups_of(3, false).each do |menus| %>
-          <% menus.unshift(nil) if menus.size == 1 %>
+          <% menus.unshift(nil) if menus.count == 1 %>
           <% menus.each do |menu| %>
               <% if menu %>
                   <%= link_to menu_url(menu), class: 'box' do %>
