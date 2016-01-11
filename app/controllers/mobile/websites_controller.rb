@@ -2,8 +2,8 @@ class Mobile::WebsitesController < ActionController::Base
   include ErrorHandler, DetectUserAgent
 
   helper_method :judge_andriod_version, :wx_browser?
-  
-  before_filter :redirect_to_non_openid_url, :find_website, :load_user_data, except: [:audio, :unknown_identity]
+
+  before_filter :redirect_to_non_openid_url, :load_site, :find_website, :load_user_data, except: [:audio, :unknown_identity]
 
   before_filter :auth, if: -> { @wx_mp_user.try(:manual?) }
   before_filter :authorize, if: -> { @wx_mp_user.try(:plugin?) }
@@ -27,7 +27,7 @@ class Mobile::WebsitesController < ActionController::Base
       wx_mp_user = WxMpUser.where(site_id: @site.id).first
       @current_user_is_fans = wx_mp_user && wx_mp_user.has_fans?(session[:user_id])
     end
-    
+
     @home_template = @website_setting.home_template
 
     render layout: "mobile/weisiteV0#{@home_template.series.to_i + 1}"
@@ -132,7 +132,7 @@ class Mobile::WebsitesController < ActionController::Base
 
     @wx_mp_user = @site.try(:wx_mp_user)
 
-    @account_footer = @site.try(:app_footer) || AccountFooter.default_footer
+    @account_footer = AccountFooter.default_footer
 
     @shortcut_menus =  @website.shortcut_menus.order(:sort)
     @website_menus = @website.website_menus.root.limit_columns.order(:sort)

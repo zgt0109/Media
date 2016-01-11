@@ -205,10 +205,6 @@ class Site < ActiveRecord::Base
     WxLog.by_date(date).by_uid(self.uid)
   end
 
-  def app_footer
-    AccountFooter.find_by_id(self.account_footer_id) || AccountFooter.default_footer
-  end
-
   def expired?
     expired_at.nil? || expired_at < Time.now
   end

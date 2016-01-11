@@ -3,7 +3,7 @@ class Mobile::BaseController < ActionController::Base
 
   helper_method :judge_andriod_version, :wx_browser?
 
-  before_filter :redirect_to_non_openid_url, :load_data, :load_user_data, except: [:notice]
+  before_filter :redirect_to_non_openid_url, :load_site, :load_data, :load_user_data, except: [:notice]
 
   before_filter :auth, if: -> { @wx_mp_user.try(:manual?) }
   before_filter :authorize, if: -> { @wx_mp_user.try(:plugin?) }

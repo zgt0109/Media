@@ -1,29 +1,7 @@
-# == Schema Information
-#
-# Table name: website_menus
-#
-#  id            :integer          not null, primary key
-#  website_id    :integer          not null
-#  material_id   :integer
-#  parent_id     :integer          default(0), not null
-#  sort          :integer          default(0), not null
-#  name          :string(255)      not null
-#  menu_type     :integer          default(1), not null
-#  menuable_id   :integer
-#  menuable_type :string(255)
-#  icon          :string(255)
-#  url           :string(255)
-#  tel           :string(255)
-#  pic           :string(255)
-#  cover_pic     :string(255)
-#  content       :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
 class WebsiteMenu < ActiveRecord::Base
 
   NEED_WX_USER_MENUS = ["微会员卡", "营销互动", "行业解决方案"]
-  LIMIT_COLUMNS = %W(id website_id material_id parent_id children_count sort sort_type name summary summary_type menu_type menuable_id menuable_type icon icon_key font_icon url tel address location_x location_y pic pic_key created_at updated_at qq)
+  LIMIT_COLUMNS = %W(id website_id parent_id children_count sort sort_type name summary summary_type menu_type menuable_id menuable_type icon_key font_icon url tel address location_x location_y pic_key created_at updated_at qq)
 
   validates :name, presence: true, length: { maximum: 64, message: '不能超过64个字' }
   validates :tel, presence: true, if: :phone?
@@ -464,20 +442,15 @@ class WebsiteMenu < ActiveRecord::Base
     options[:title_type] ||= "small"
     options[:not_show_li_if_blank] ||= false
     options[:show_picture_material] ||= :yes
-    if self.pic? && self.font_icon.blank?
-      options[:has_title] = false if options[:hide_title_if_pic]
-      str_pic = "<img alt='#{self.title}' src='#{self.pic.try(options[:pic_type])}' class='#{options[:class]}'/>"
-      str_pic = "<i>#{str_pic}</i>" if options[:pic_wrap_tag_i] == :yes
-      result << str_pic
+
+    if self.font_icon.blank? && options[:not_show_li_if_blank]
+      result << ""
+    elsif options[:show_picture_material].eql?(:yes)
+      result << "<i class=\"#{self.font_icon}\"></i>"
     else
-      if self.font_icon.blank? && options[:not_show_li_if_blank]
-        result << ""
-      elsif options[:show_picture_material].eql?(:yes)
-        result << "<i class=\"#{self.font_icon}\"></i>"
-      else
-        result << ""
-      end
+      result << ""
     end
+
     if options[:has_title]
       if options[:title_type] == "small"
         result << "<small>#{self.title}</small>"

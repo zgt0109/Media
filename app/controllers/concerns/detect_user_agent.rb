@@ -1,6 +1,17 @@
 module DetectUserAgent
   OPENID_REG = /(\?|&)openid=/
 
+  def load_site
+    site_id = request.subdomains.first.to_i
+    logger.info "******* request.subdomain :#{request.subdomains}"
+    @site = Site.where(id: site_id).first
+    # @site ||= Site.first
+    if @site_id
+      session[:site_id] = site_id
+      @wx_mp_user = @site.wx_mp_user
+    end
+  end
+
   def load_user_data
     return unless @wx_mp_user
 

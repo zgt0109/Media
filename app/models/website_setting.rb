@@ -46,7 +46,6 @@ class WebsiteSetting < ActiveRecord::Base
     self.home_template_id.to_i > 0 && WebsiteTemplate.where(:style_index => self.home_template_id).first || nil
   end
 
-
   def analytic_script(url = '')
     str = <<START
     <script>
@@ -79,12 +78,16 @@ START
   end
 
   def cleanup
-    self.remove_bg_pic! if self.bg_pic_template_id.present? && self.bg_pic?
+    # self.remove_bg_pic! if self.bg_pic_template_id.present? && self.bg_pic?
+  end
+
+  def bg_pic_ul
+    qiniu_image_url(bg_pic_key)
   end
 
   def bg_image
-    @bg_image ||= if self.bg_pic?
-      self.bg_pic.large
+    @bg_image ||= if self.bg_pic_key.present?
+      bg_pic_ul
     else
       template_id = self.bg_pic_template_id.to_i
       if template_id == 0
@@ -120,10 +123,6 @@ START
     when 5
       self.update_attribute(:menu_template_id, template_id)
     end
-  end
-
-  def bg_pic_ul
-    qiniu_image_url(bg_pic_key)
   end
 
   def wp_bottom_color
