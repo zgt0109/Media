@@ -5210,20 +5210,6 @@ class InitDb < ActiveRecord::Migration
   add_index "wx_cards", ["card_id"], :name => "index_wx_cards_on_card_id"
   add_index "wx_cards", ["wx_mp_user_id"], :name => "index_wx_cards_on_wx_mp_user_id"
 
-  create_table "wx_answers" do |t|
-    t.integer  "keyword_id",                             :null => false
-    t.integer  "answer_type",    :limit => 1, :default => 1, :null => false
-    t.integer  "replyable_id"
-    t.string   "replyable_type"
-    t.text     "content"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
-  end
-
-  add_index "answers", ["answer_type"], :name => "index_answers_on_answer_type"
-  add_index "answers", ["keyword_id"], :name => "index_answers_on_keyword_id"
-  add_index "answers", ["replyable_id", "replyable_type"], :name => "answers_replyable_index"
-
   create_table "wx_feedbacks" do |t|
     t.integer  "wx_mp_user_id",               :null => false
     t.integer  "wx_user_id",                  :null => false
