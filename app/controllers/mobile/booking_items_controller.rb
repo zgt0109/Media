@@ -2,9 +2,9 @@ class Mobile::BookingItemsController < Mobile::BaseController
   layout "mobile/booking"
 
   def show
-    @booking = @supplier.booking
-    @booking_item = @supplier.booking_items.find(params[:id])
-    @booking_categories = @supplier.booking_categories.root.order(:sort)
+    @booking = @site.booking
+    @booking_item = @site.booking_items.find(params[:id])
+    @booking_categories = @site.booking_categories.root.order(:sort)
   end
 
 end

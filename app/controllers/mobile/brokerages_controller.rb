@@ -6,19 +6,19 @@ class Mobile::BrokeragesController < Mobile::BaseController
   def index;end
 
   def broker
-  	redirect_to new_mobile_brokerage_path(@supplier), notice: "请先注册！" unless @broker 
+  	redirect_to new_mobile_brokerage_path(@site), notice: "请先注册！" unless @broker 
   end
 
   def new
-  	@broker = @supplier.brokerage_brokers.new
+  	@broker = @site.brokerage_brokers.new
   end
 
   def edit;end
 
   def create
-    return render js: 'alert("该手机号已被使用!");$("#broker").prop("disabled", false);' if @supplier.brokerage_brokers.where(mobile: params[:brokerage_broker][:mobile]).exists?
+    return render js: 'alert("该手机号已被使用!");$("#broker").prop("disabled", false);' if @site.brokerage_brokers.where(mobile: params[:brokerage_broker][:mobile]).exists?
     return render js: 'alert("验证码不正确！");$("#broker").prop("disabled", false);' if params[:captcha].blank? || params[:captcha].to_i != session[:captcha].to_i
-    @broker = @supplier.brokerage_brokers.new(params[:brokerage_broker])
+    @broker = @site.brokerage_brokers.new(params[:brokerage_broker])
     if @broker.save
       render js: "alert('注册成功');location.href='#{broker_mobile_brokerages_path}';"
     else
@@ -35,7 +35,7 @@ class Mobile::BrokeragesController < Mobile::BaseController
   end
 
   def send_sms
-    return render js: 'alert("该手机号已被使用!");' if @supplier.brokerage_brokers.where(mobile: params[:mobile]).exists?
+    return render js: 'alert("该手机号已被使用!");' if @site.brokerage_brokers.where(mobile: params[:mobile]).exists?
     session[:captcha], session[:mobile] = rand(100000..999999).to_s, params[:mobile].to_s
     SmsService.new.singleSend(session[:mobile], "验证码：#{session[:captcha]}")
     render js: 'void(0);'
@@ -60,7 +60,7 @@ class Mobile::BrokeragesController < Mobile::BaseController
 
   #结算明细
   def commission_list
-    @setting = @supplier.brokerage_setting
+    @setting = @site.brokerage_setting
     @commission_list = @broker.commission_transactions.order("id DESC").page(params[:page])
   end
 
@@ -72,19 +72,19 @@ class Mobile::BrokeragesController < Mobile::BaseController
 
   private
   	def require_brokerage_setting
-  		@brokerage = @supplier.brokerage_setting
+  		@brokerage = @site.brokerage_setting
   		return render_404 unless @brokerage
   	end
 
     def get_share_image
-      @activity = @supplier.brokerage_activity
+      @activity = @site.brokerage_activity
       @share_image = @activity.qiniu_pic_url || @activity.default_pic_url
     rescue => e
       @share_image = qiniu_image_url(Concerns::ActivityQiniuPicKeys::KEY_MAPS[77])
     end
 
     def require_broker
-      @broker = @wx_user.try(:broker)
+      @broker = @user.try(:broker)
       return render_404 unless @broker
     end
 end

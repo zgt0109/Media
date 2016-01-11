@@ -10,7 +10,7 @@ class Reply < ActiveRecord::Base
 
   belongs_to :site
   # belongs_to :keyword
-  belongs_to :replyer, polymorphic: true
+  belongs_to :replier, polymorphic: true
   belongs_to :replyable, polymorphic: true
 
   enum_attr :event_type, :in => [

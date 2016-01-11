@@ -5,9 +5,8 @@ class Mobile::Wmall::BaseController < Mobile::BaseController
 
   def auth_params
     {
-      wxmuid: session[:wx_mp_user_id],
-      supplier_id: session[:supplier_id],
-      wxuid: session[:wx_user_id]
+      site_id: session[:site_id],
+      user_id: session[:user_id]
     }.keep_if{|_,v| v.present?}
   end
 
@@ -16,7 +15,7 @@ class Mobile::Wmall::BaseController < Mobile::BaseController
   end
 
   def current_mall
-    @current_mall = @supplier.mall || @supplier.create_mall
+    @current_mall = @site.mall || @site.create_mall
   end
 
   def cors_set_access_control_headers

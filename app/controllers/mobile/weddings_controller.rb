@@ -31,13 +31,13 @@ class Mobile::WeddingsController < Mobile::BaseController
 
   def set_wedding
     session[:wedding_id] = params[:wid] if params[:wid]
-    #@wedding = @supplier.weddings.where(id: session[:wedding_id]).first
+    #@wedding = @site.weddings.where(id: session[:wedding_id]).first
     @wedding = Wedding.find_by_id session[:wedding_id]
     if @wedding
       @activity = @wedding.activity
       session[:activity_id] = @activity.try(:id)
 
-      @wedding_guest = @wedding.guests.build(wx_user_id: session[:wx_user_id])
+      @wedding_guest = @wedding.guests.build(user_id: session[:user_id])
       @wedding_wish = @wedding.wishes.build()
       @share_title = "#{@wedding.groom}和#{@wedding.bride}的婚礼请帖"
       @share_desc = "婚礼地点：" + @wedding.address.to_s.first(90)

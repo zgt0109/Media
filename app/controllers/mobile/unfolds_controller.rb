@@ -5,13 +5,13 @@ class Mobile::UnfoldsController < Mobile::BaseController
 
   def index
     if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
-      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first
+      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first
       @friend = true
       if from_wx_user.present?
-        @from_wx_user_prize =  WxPrize.where(wx_user_id: from_wx_user.id, activity_id: @activity.id).first
-        @from_wx_user_invites =  WxInvite.where(from_wx_user_id: from_wx_user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity')
+        @from_wx_user_prize =  WxPrize.where(user_id: from_wx_user.id, activity_id: @activity.id).first
+        @from_wx_user_invites =  WxInvite.where(from_user_id: from_wx_user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity')
         @from_wx_user_participate = from_wx_user.wx_participates.where(activity_id: @activity.id).first
-        invite = @from_wx_user_invites.where(to_wx_user_id: @wx_user.id).first
+        invite = @from_wx_user_invites.where(to_user_id: @user.id).first
         if invite.present?
           @invited = true
         else
@@ -54,10 +54,10 @@ class Mobile::UnfoldsController < Mobile::BaseController
        @participate.first_or_create
         if @prize.blank?
           if @activity.extend.prize_type == 'custom'
-            @prize = WxPrize.create(wx_user_id: @wx_user.id, activity_id: @activity.id, prize_type: @activity.extend.prize_type , prize_name: @activity.extend.prize_or_gift_name)
+            @prize = WxPrize.create(user_id: @user.id, activity_id: @activity.id, prize_type: @activity.extend.prize_type , prize_name: @activity.extend.prize_or_gift_name)
           elsif @activity.extend.prize_type == 'coupon'
             coupon = Coupon.find_by_id(@activity.extend.prize_id)
-            @prize = WxPrize.create(wx_user_id: @wx_user.id, activity_id: @activity.id, prize_id: coupon.try(:id) , prize_type: @activity.extend.prize_type , prize_name: coupon.try(:name))
+            @prize = WxPrize.create(user_id: @user.id, activity_id: @activity.id, prize_id: coupon.try(:id) , prize_type: @activity.extend.prize_type , prize_name: coupon.try(:name))
           end
         end
      end
@@ -66,16 +66,16 @@ class Mobile::UnfoldsController < Mobile::BaseController
 
   def help_friend
     if params[:origin_openid].present?
-      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first
+      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first
       if from_wx_user.present? && from_wx_user.wx_participates.where(activity_id: @activity.id).exists?
         begin
-          WxInvite.where(from_wx_user_id: from_wx_user.id, to_wx_user_id: @wx_user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity').first_or_create
+          WxInvite.where(from_user_id: from_wx_user.id, to_user_id: @user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity').first_or_create
         rescue => e
           Rails.logger.warn "failed to fetch wx_invite : #{e}"
         end
         left_count = @activity.extend.invites_count.to_i  - from_wx_user.wx_invites.where(wx_invitable_id: @activity.id, wx_invitable_type: 'Activity').count
         if left_count <= 0
-          prize = WxPrize.where(wx_user_id: from_wx_user.id, activity_id: @activity.id).first
+          prize = WxPrize.where(user_id: from_wx_user.id, activity_id: @activity.id).first
           if prize.present? && @activity.extend.base_info_required == 'off'
             left_consumes_count =  @activity.extend.prize_count.to_i - @activity.consumes.count
             if left_consumes_count <= 0
@@ -108,22 +108,22 @@ class Mobile::UnfoldsController < Mobile::BaseController
     end
 
     def find_participate
-      @participate = WxParticipate.where(wx_user_id: @wx_user.id, activity_id: @activity.id)
+      @participate = WxParticipate.where(user_id: @user.id, activity_id: @activity.id)
     end
 
     def find_invites
-      @invites = WxInvite.where(from_wx_user_id: @wx_user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity')
+      @invites = WxInvite.where(from_user_id: @user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity')
     end
 
     def find_prize
-      @prize = WxPrize.where(wx_user_id: @wx_user.id, activity_id: @activity.id).first
+      @prize = WxPrize.where(user_id: @user.id, activity_id: @activity.id).first
     end
 
     def find_activity
       @activity = Activity.unfold.setted.find_by_id(params[:activity_id]) || Activity.unfold.setted.find_by_id(session[:activity_id])
       return render_404 unless @activity
       session[:activity_id] ||= params[:activity_id]
-      prize = WxPrize.where(wx_user_id: @wx_user.id, activity_id: session[:activity_id]).first
+      prize = WxPrize.where(user_id: @user.id, activity_id: session[:activity_id]).first
       if prize.present? && prize.reached?
         @share_title = "我刚才在“#{ @activity.name}”里得到了一个大礼包，你也赶紧来拆一个吧！"
         @share_desc = "我刚才在“#{ @activity.name}”里得到了一个大礼包，你也赶紧来拆一个吧！"

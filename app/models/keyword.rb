@@ -3,7 +3,7 @@ class Keyword < ActiveRecord::Base
   validates :name, uniqueness: { scope: :site_id, case_sensitive: false }
 
   belongs_to :site
-  has_one :reply, as: :replyer, dependent: :destroy
+  has_one :reply, as: :replier, dependent: :destroy
   accepts_nested_attributes_for :reply
 
   acts_as_enum :match_type, :in => [

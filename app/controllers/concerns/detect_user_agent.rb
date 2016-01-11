@@ -6,11 +6,11 @@ module DetectUserAgent
 
     if session[:openid].present?
       @wx_user = @wx_mp_user.wx_users.where(openid: session[:openid]).first
-    elsif session[:wx_user_id].present?
-      @wx_user = @wx_mp_user.wx_users.where(id: session[:wx_user_id]).first
+    elsif session[:user_id].present?
+      @wx_user = @wx_mp_user.wx_users.where(user_id: session[:user_id]).first
     end
 
-    session[:wx_user_id] = @wx_user.try(:id)
+    session[:user_id] = @wx_user.try(:user_id)
     session[:openid] = @wx_user.try(:openid)
   end
 
@@ -44,14 +44,14 @@ module DetectUserAgent
 
     def require_wx_user
       unless session[:openid]
-        if @wx_mp_user
-          @activity = @wx_mp_user.activities.where(id: session[:activity_id]).first
+        if @site
+          @activity = @site.activities.where(id: session[:activity_id]).first
         else
           @activity = Activity.where(id: session[:activity_id]).first
         end
 
         if @activity
-          return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
+          return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
         else
           return redirect_to mobile_notice_url(msg: '没有获取到微信用户身份')
         end
@@ -82,7 +82,7 @@ module DetectUserAgent
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
       # Rails.logger.info "==== openid = #{@wx_user.try(:openid)}"
       Rails.logger.info "==== session[:openid] = #{session[:openid]}"
-      Rails.logger.info "==== session[:wx_user_id] = #{session[:wx_user_id]}"
+      Rails.logger.info "==== session[:user_id] = #{session[:user_id]}"
 
       if @wx_user.blank? && @wx_mp_user.try(:is_oauth?) && app_id.present?# && app_secret.present?
         if params[:code].present?
@@ -91,7 +91,7 @@ module DetectUserAgent
           access_token_data = JSON(result)# rescue {}
           @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid)
 
-          session[:wx_user_id] = @wx_user.id
+          session[:user_id] = @user.user_id
           session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
@@ -142,7 +142,7 @@ module DetectUserAgent
             end
           end
 
-          session[:wx_user_id] = @wx_user.id
+          session[:user_id] = @wx_user.user_id
           session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
@@ -180,7 +180,7 @@ module DetectUserAgent
           access_token, expires_in, refresh_token, openid = access_token_data.values_at('access_token', 'expires_in', 'refresh_token', 'openid')
           @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @wx_mp_user.openid)
 
-          session[:wx_user_id] = @wx_user.id
+          session[:user_id] = @wx_user.user_id
           session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
@@ -228,7 +228,7 @@ module DetectUserAgent
             end
           end
 
-          session[:wx_user_id] = @wx_user.id
+          session[:user_id] = @wx_user.user_id
           session[:openid] = @wx_user.openid
 
           return redirect_to auth_back
@@ -259,7 +259,7 @@ module DetectUserAgent
         WxUserInfoUpdateWorker.fetch_and_save_user_info!(@wx_user, @wx_mp_user)
       end
     end
-    
+
     def fetch_wx_user_info_unconditional!
       if @wx_mp_user && @wx_user
         WxUserInfoUpdateWorker.fetch_and_save_user_info_unconditional!(@wx_user, @wx_mp_user)

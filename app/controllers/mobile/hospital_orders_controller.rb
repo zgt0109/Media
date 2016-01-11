@@ -11,7 +11,7 @@ class Mobile::HospitalOrdersController < Mobile::BaseController
   def new
     @page_class = "order"
     @hospital_doctor = @hospital.hospital_doctors.find(params[:id])
-    @hospital_order = @hospital_doctor.hospital_orders.new(wx_user_id: @wx_user.id)
+    @hospital_order = @hospital_doctor.hospital_orders.new(user_id: @user.id)
     @hospital_orders = @wx_user.hospital_orders.order('id desc')
   end
 
@@ -22,7 +22,7 @@ class Mobile::HospitalOrdersController < Mobile::BaseController
 
     if @hospital_doctor.hospital_orders.where(booking_at: (@hospital_order.booking_at.to_date)..(@hospital_order.booking_at.to_date+1.day)).count >= @hospital_doctor.limit_register_count and @hospital_doctor.limit_register_count != -1
       redirect_to mobile_hospital_doctors_path, notice: "对不起，预约人数已满！"
-    elsif @hospital_doctor.hospital_orders.where(booking_at: (@hospital_order.booking_at.to_date)..(@hospital_order.booking_at.to_date+1.day), wx_user_id: @wx_user.id).first
+    elsif @hospital_doctor.hospital_orders.where(booking_at: (@hospital_order.booking_at.to_date)..(@hospital_order.booking_at.to_date+1.day), user_id: @user.id).first
       redirect_to mobile_hospital_doctors_path, notice: "对不起，您已经预约！"
     elsif @hospital_order.save
       redirect_to mobile_hospital_orders_path, notice: "预约成功"
@@ -34,7 +34,7 @@ class Mobile::HospitalOrdersController < Mobile::BaseController
   private
 
   def find_hospital
-    @hospital = @supplier.hospital
+    @hospital = @site.hospital
   end
 
 end

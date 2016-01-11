@@ -5,7 +5,7 @@ class Mobile::ShopOrdersController < Mobile::BaseController
   before_filter :require_wx_user
 
   def index
-    @shop_orders = ShopOrder.formal.where(wx_mp_user_id: session[:wx_mp_user_id],  wx_user_id: session[:wx_user_id]).where(order_type: params[:order_type]).order('created_at desc').page(params[:page]).per(100)
+    @shop_orders = ShopOrder.formal.where(user_id: session[:user_id]).where(order_type: params[:order_type]).order('created_at desc').page(params[:page]).per(100)
     if params[:order_type] == '1'
       respond_to do |format|
         format.html{ render 'book_dinner_index' }
@@ -59,9 +59,9 @@ class Mobile::ShopOrdersController < Mobile::BaseController
 
       begin # 发送消息
         if @shop_order.take_out?
-          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'supplier', role_id: @shop_order.supplier_id, token: @shop_order.supplier.try(:auth_token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'winwemedia_shop_order', message: '您有一笔新的微外卖订单, 请尽快处理'})
+          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.try(:auth_token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'winwemedia_shop_order', message: '您有一笔新的微外卖订单, 请尽快处理'})
         else
-          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'supplier', role_id: @shop_order.supplier_id, token: @shop_order.supplier.try(:auth_token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'winwemedia_shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
+          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.try(:auth_token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'winwemedia_shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
         end
       rescue => e
         Rails.logger.info "#{e}"
@@ -73,7 +73,7 @@ class Mobile::ShopOrdersController < Mobile::BaseController
       options = {
         callback_url: callback_payments_url,
         notify_url: notify_payments_url,
-        merchant_url: app_vips_url({supplier_id: session[:supplier_id], wxmuid: session[:wx_mp_user_id]})
+        merchant_url: app_vips_url({site_id: session[:site_id]})
       }
       @payment_request_params = @shop_order.payment_request_params(options)
       if params[:is_back] && params[:is_back] == true
@@ -139,9 +139,9 @@ class Mobile::ShopOrdersController < Mobile::BaseController
     @shop_order = ShopOrder.find(params[:id])
     if @shop_order.can_cancel?
        @shop_order.cancel!
-      redirect_to mobile_shop_orders_url(supplier_id: session[:supplier_id], order_type: @shop_order.order_type, anchor: "mp.weixin.qq.com"), alert: '订单取消成功'
+      redirect_to mobile_shop_orders_url(site_id: session[:site_id], order_type: @shop_order.order_type, anchor: "mp.weixin.qq.com"), alert: '订单取消成功'
     else
-      redirect_to mobile_shop_orders_url(supplier_id: session[:supplier_id], order_type: @shop_order.order_type, anchor: "mp.weixin.qq.com"), alert: "不可取消，如需取消请拨打电话 #{@shop_order.book_rule.book_phone}"
+      redirect_to mobile_shop_orders_url(site_id: session[:site_id], order_type: @shop_order.order_type, anchor: "mp.weixin.qq.com"), alert: "不可取消，如需取消请拨打电话 #{@shop_order.book_rule.book_phone}"
     end
   end
 
@@ -217,6 +217,6 @@ class Mobile::ShopOrdersController < Mobile::BaseController
   def clone
     @shop_order = ShopOrder.find(params[:id])
     clone_order = @shop_order.clone_order
-    redirect_to menu_mobile_shop_order_url(supplier_id: session[:supplier_id], id: clone_order.id)
+    redirect_to menu_mobile_shop_order_url(site_id: session[:site_id], id: clone_order.id)
   end
 end

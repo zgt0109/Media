@@ -3,8 +3,8 @@ class Mobile::WxWallsController < Mobile::BaseController
   before_filter :block_non_wx_browser
 
   def show
-  	@supplier = Account.find params[:supplier_id]
-  	@wx_wall = @supplier.wx_walls.find params[:id]
+  	@site = Account.find params[:site_id]
+  	@wx_wall = @site.wx_walls.find params[:id]
     @is_image = params[:msg_type] == 'image'
     @pictures = @wx_wall.qiniu_pictures
     @messages = @wx_wall.wx_wall_messages.normal.recent.limit(20).includes(:wx_wall_user)

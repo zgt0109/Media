@@ -23,9 +23,9 @@ class Mobile::WebsitesController < ActionController::Base
       @nav_template_id = 14 if @template_id == 36
       @menu_template_id = 0
     end
-    if @supplier && session[:wx_user_id].to_i > 0
-      wx_mp_user = WxMpUser.where(supplier_id: @supplier.id).first
-      @current_user_is_fans = wx_mp_user && wx_mp_user.has_fans?(session[:wx_user_id])
+    if @site && session[:user_id].to_i > 0
+      wx_mp_user = WxMpUser.where(site_id: @site.id).first
+      @current_user_is_fans = wx_mp_user && wx_mp_user.has_fans?(session[:user_id])
     end
     
     @home_template = @website_setting.home_template
@@ -105,7 +105,7 @@ class Mobile::WebsitesController < ActionController::Base
   end
 
   def unknown_identity
-    @wx_mp_user = WxMpUser.where(supplier_id: params[:supplier_id].to_i).first
+    @wx_mp_user = WxMpUser.where(site_id: params[:site_id].to_i).first
     @activity = Activity.where(id: params[:activity_id].to_i).first
     render layout: false
   end
@@ -113,27 +113,26 @@ class Mobile::WebsitesController < ActionController::Base
   private
 
   def find_website
-    session[:supplier_id] = [params[:supplier_id], params[:ext_name]].compact.join(".") if params[:supplier_id]
+    session[:site_id] = [params[:site_id], params[:ext_name]].compact.join(".") if params[:site_id]
 
     # 微官网旧地址访问判断
-    if session[:supplier_id] == 'app' and params[:id]
+    if session[:site_id] == 'app' and params[:id]
       @website = Website.micro_site.where(id: params[:id].to_i).first
-    elsif session[:supplier_id].to_s =~ /^\d+$/
-      @website = Website.micro_site.where(supplier_id: session[:supplier_id]).first
+    elsif session[:site_id].to_s =~ /^\d+$/
+      @website = Website.micro_site.where(site_id: session[:site_id]).first
     else
-      @website = Website.micro_site.where(domain: session[:supplier_id]).first
+      @website = Website.micro_site.where(domain: session[:site_id]).first
     end
 
     return render text: '微官网不存在' unless @website
     return render text: '商家正在升级网站内容，暂停访问' unless @website.active?
 
-    @supplier = @website.supplier
-    return render text: '该公众号服务已到期，暂不提供服务！' if @supplier.froze?
+    @site = @website.site
+    return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
-    @wx_mp_user = @supplier.try(:wx_mp_user)
-    session[:wx_mp_user_id] = @wx_mp_user.try(:id)
+    @wx_mp_user = @site.try(:wx_mp_user)
 
-    @account_footer = @supplier.try(:app_footer) || AccountFooter.default_footer
+    @account_footer = @site.try(:app_footer) || AccountFooter.default_footer
 
     @shortcut_menus =  @website.shortcut_menus.order(:sort)
     @website_menus = @website.website_menus.root.limit_columns.order(:sort)

@@ -7,8 +7,11 @@ class User < ActiveRecord::Base
     ['female', 2, '女'],
   ]
 
+  belongs_to :site
+
   has_one :wx_user
   has_one :vip_user
+
   has_one :broker, class_name: '::Brokerage::Broker'
   has_many :wx_wall_users
   has_many :shake_users

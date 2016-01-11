@@ -12,7 +12,7 @@ class Mobile::VoteController < Mobile::BaseController
     search_params = ["name = :q OR item_no = :q", {q: "#{params[:q]}"}]
     activity_votes = @activity.activity_vote_items
     @search = params[:q].blank? ? activity_votes : activity_votes.where(search_params)
-    @activity_user = @wx_user.activity_users.new(activity_id: params[:vote_id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @supplier.id) unless @activity_user
+    @activity_user = @wx_user.activity_users.new(activity_id: params[:vote_id], site_id: @site.id) unless @activity_user
     if @activity.vote_status_attrs[0].eql?(Activity::HAS_ENDED_NAME) || @activity_user.persisted?
       order_sql = @activity.activity_setting.try(:sort_desc?) ? 'item_select_count desc' : ''
       @results = @search.select("item_no, name, pic, pic_key, link, activity_user_vote_items_count + adjust_votes as item_select_count, COALESCE(ROUND((activity_user_vote_items_count + adjust_votes) / #{@activity.vote_items_count} * 100, 2), 0.00) as item_per").order(order_sql).page(params[:page]).per(30)
@@ -27,13 +27,13 @@ class Mobile::VoteController < Mobile::BaseController
 
   def success
     # return redirect_to :back, alert: "验证码不正确" if session[:image_code] != params[:verify_code]
-    return redirect_to mobile_vote_result_path(supplier_id: @activity.supplier_id, vote_id: @activity.id, wxmuid: @wx_mp_user.id), alert: "您已经投票过！" if @activity_user
+    return redirect_to mobile_vote_result_path(site_id: @activity.site_id, vote_id: @activity.id, wxmuid: @wx_mp_user.id), alert: "您已经投票过！" if @activity_user
 
-    @activity_user = @wx_user.activity_users.create(params[:activity_user].merge(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, activity_id: @activity.id))
+    @activity_user = @wx_user.activity_users.create(params[:activity_user].merge(site_id: @activity.site_id, activity_id: @activity.id))
     @activity.activity_vote_items.where(id: params[:ids].to_s.split(',').map!(&:to_i)).pluck(:id).each do |id|
-      @activity.activity_user_vote_items.create(activity_user_id: @activity_user.id, name: params[:activity_user][:name], mobile: params[:activity_user][:mobile], activity_vote_item_id: id, wx_user_id: @wx_user.id)
+      @activity.activity_user_vote_items.create(activity_user_id: @activity_user.id, name: params[:activity_user][:name], mobile: params[:activity_user][:mobile], activity_vote_item_id: id, user_id: @user.id)
     end
-    redirect_to mobile_vote_result_path(supplier_id: @activity.supplier_id, vote_id: @activity.id, wxmuid: @wx_mp_user.id), notice: "投票成功！"
+    redirect_to mobile_vote_result_path(site_id: @activity.site_id, vote_id: @activity.id, wxmuid: @wx_mp_user.id), notice: "投票成功！"
   end
 
   def detail
@@ -50,27 +50,27 @@ class Mobile::VoteController < Mobile::BaseController
         attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
         @wx_user.update_attributes(attrs) if attrs.present?
         if @wx_user.unsubscribe?# && !@activity.require_wx_user?
-          #return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
+          #return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
         end
       end
     else #非认证授权服务号的情况
       if @activity.activity_setting.try(:user_type).to_i == ActivitySetting::WX_USER #需要关注的情况
-        return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
+        return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
       else #创建虚拟wx_user
         #use session.id in Rails 4.
-        @wx_user = SessionUser.where(wx_mp_user_id: @wx_mp_user.id, openid: request.session_options[:id], supplier_id: @supplier.id).first_or_create
+        @wx_user = SessionUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
       end
     end
   end
 
   def find_activity
-    @activity = @supplier.activities.find(params[:vote_id])
+    @activity = @site.activities.find(params[:vote_id])
     return render_404 if @activity.nil? || @activity.deleted?
     @share_image = @activity.qiniu_pic_url.present? ? @activity.qiniu_pic_url : @activity.default_pic_url
   end
 
   def find_activity_user
-    conditions = {activity_id: @activity.id, wx_mp_user_id: @activity.wx_mp_user_id, supplier_id: @activity.supplier_id}
+    conditions = {activity_id: @activity.id, site_id: @activity.site_id}
     users = @wx_user.activity_users.where(conditions)
     users = users.where('created_at >= ?', Time.now.midnight) if @activity.allow_repeat_apply?
     @activity_user = users.first

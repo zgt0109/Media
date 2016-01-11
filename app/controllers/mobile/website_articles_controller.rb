@@ -16,7 +16,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
   def show
     @articles = @search.relation
     @article = @articles.where(id: params[:id]).first
-    return redirect_to mobile_website_articles_url(supplier_id: @supplier.id, article_type: params[:article_type]) unless @article
+    return redirect_to mobile_website_articles_url(site_id: @site.id, article_type: params[:article_type]) unless @article
     index = @articles.to_a.index(@article)
     @prev_article = @articles[index - 1] if index - 1 >= 0
     @next_article = @articles[index + 1] if @articles[index + 1]
@@ -32,19 +32,19 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
   private
 
   def find_website
-    session[:supplier_id] = [params[:supplier_id], params[:ext_name]].compact.join(".") if params[:supplier_id]
+    session[:site_id] = [params[:site_id], params[:ext_name]].compact.join(".") if params[:site_id]
 
     # 微官网旧地址访问判断
-    if session[:supplier_id] == 'app' and params[:id]
+    if session[:site_id] == 'app' and params[:id]
       @website = Website.micro_site.where(id: params[:id]).first
-    elsif session[:supplier_id].to_s =~ /^\d+$/
-      @website = Website.micro_site.where(:supplier_id => session[:supplier_id]).first
+    elsif session[:site_id].to_s =~ /^\d+$/
+      @website = Website.micro_site.where(:site_id => session[:site_id]).first
     else
-      @website = Website.micro_site.where(:domain => session[:supplier_id]).first
+      @website = Website.micro_site.where(:domain => session[:site_id]).first
     end
     
     @website_setting = @website.website_setting ||= @website.create_default_setting
-    @supplier = @website.supplier
+    @site = @website.site
     return render text: '微官网不存在' unless @website
 
   rescue => error

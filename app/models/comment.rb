@@ -11,8 +11,8 @@
 
 	before_save :save_business_shop_id_to_business_shop_impression
 
-  def self.already_today? wx_user_id, business_shop_id
-    where("commenter_id = ? and commentable_type =? and commenter_type = ? and commentable_id = ? and created_at >= ?", wx_user_id, "BusinessShop", "WxUser", business_shop_id, Time.now.midnight).length > 0
+  def self.already_today? user_id, business_shop_id
+    where("commenter_id = ? and commentable_type =? and commenter_type = ? and commentable_id = ? and created_at >= ?", user_id, "BusinessShop", "User", business_shop_id, Time.now.midnight).length > 0
   end
 
   private

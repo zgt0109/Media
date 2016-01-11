@@ -16,7 +16,7 @@ class Mobile::GovmailsController < Mobile::BaseController
 
   def create
     @box  = @activity.govmailboxes.find(params[:box])
-    @mail = @box.govmails.create(wx_user_id: session[:wx_user_id], body: params[:body])
+    @mail = @box.govmails.create(user_id: session[:user_id], body: params[:body])
     if @mail.persisted?
       params[:custom_field].to_a.each do |key, value|
         field = CustomField.find(key)
@@ -31,7 +31,7 @@ class Mobile::GovmailsController < Mobile::BaseController
   private
 
   def set_activity
-    @activity    = @wx_mp_user.activities.govmail.show.first || @wx_mp_user.create_activity_for_govmail
+    @activity    = @site.activities.govmail.show.first || @site.create_activity_for_govmail
     @share_title = @activity.name
     @share_desc  = @activity.summary
     @share_image = @activity.pic_url

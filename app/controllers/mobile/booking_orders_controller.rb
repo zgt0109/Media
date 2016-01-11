@@ -1,28 +1,20 @@
 class Mobile::BookingOrdersController < Mobile::BaseController
   layout "mobile/booking"
 
-  before_filter :set_wx_user
   before_filter :set_booking_order, only: [:show, :destroy, :cancel]
   before_filter :set_booking_item, only: [:new, :create]
 
   def index
-    @booking_orders = @wx_user.booking_orders.where(supplier_id: @supplier.id).order("created_at desc")
-  end
-
-  def show
-  end
-
-  def destroy
+    @booking_orders = @user.booking_orders.where(site_id: @site.id).order("created_at desc")
   end
 
   def cancel
     if @booking_order.update_attributes(status: BookingOrder::CANCELED, canceled_at: Time.now())
-      redirect_to mobile_booking_order_path(@booking_order, supplier_id: @supplier.id), :notice => "订单取消成功"
+      redirect_to mobile_booking_order_path(@booking_order, site_id: @site.id), :notice => "订单取消成功"
     else
-      redirect_to mobile_booking_order_path(@booking_order, supplier_id: @supplier.id), :notice => "订单取消失败"
+      redirect_to mobile_booking_order_path(@booking_order, site_id: @site.id), :notice => "订单取消失败"
     end
   end
-
 
   def new
     attrs = {
@@ -30,36 +22,34 @@ class Mobile::BookingOrdersController < Mobile::BaseController
         username: @wx_user.try(:nickname),
         tel: @wx_user.try(:mobile),
         qty: 1,
-        supplier_id: @supplier.id,
-        wx_mp_user_id: @wx_mp_user.id
+        site_id: @site.id
     }
-    @booking_order ||= @wx_user.booking_orders.new(attrs)
+    @booking_order ||= @user.booking_orders.new(attrs)
   end
-
 
   def create
     @booking_order = BookingOrder.new(params[:booking_order])
-    if BookingOrder.flow_suppliers.include?(@supplier.id)
+    if BookingOrder.flow_sites.include?(@site.id)
       if @booking_order.save
-        redirect_to mobile_booking_orders_path(supplier_id: @supplier.id), :notice => "恭喜您订单提交成功！\\n订单编号:#{@booking_order.order_no}"
+        redirect_to mobile_booking_orders_path(site_id: @site.id), :notice => "恭喜您订单提交成功！\\n订单编号:#{@booking_order.order_no}"
       else
-        redirect_to mobile_booking_item_path(@booking_item, supplier_id: @supplier.id), :notice => "预定失败"
+        redirect_to mobile_booking_item_path(@booking_item, site_id: @site.id), :notice => "预定失败"
       end
     else
       if @booking_item.no_limit? && @booking_order.qty.to_i > @booking_item.surplus_qty
-        redirect_to new_mobile_booking_order_path(booking_item_id: params[:booking_order][:booking_item_id], supplier_id: @supplier.id),
+        redirect_to new_mobile_booking_order_path(booking_item_id: params[:booking_order][:booking_item_id], site_id: @site.id),
                     :notice => @booking_item.surplus_qty == 0 ? "商品已经预定完了" : "预定数量不能大于商品剩余数量"
       elsif @booking_item.time_limit? && !@booking_item.little_time
-        redirect_to new_mobile_booking_order_path(booking_item_id: params[:booking_order][:booking_item_id], supplier_id: @supplier.id),
+        redirect_to new_mobile_booking_order_path(booking_item_id: params[:booking_order][:booking_item_id], site_id: @site.id),
                     :notice => "商品预定期限已过，不能在预定了"
       elsif @booking_item.day_qty_limit? && @booking_order.qty.to_i > @booking_item.surplus_qty
-        redirect_to new_mobile_booking_order_path(booking_item_id: params[:booking_order][:booking_item_id], supplier_id: @supplier.id),
+        redirect_to new_mobile_booking_order_path(booking_item_id: params[:booking_order][:booking_item_id], site_id: @site.id),
                     :notice =>  @booking_item.surplus_qty == 0 ? "今天商品预定量已经达到饱和，不能再预定了" : "预定数量不能大于每日商品预定总数"
       else
         if @booking_order.save
-          redirect_to mobile_booking_orders_path(supplier_id: @supplier.id), :notice => "恭喜您订单提交成功！\\n订单编号:#{@booking_order.order_no}"
+          redirect_to mobile_booking_orders_path(site_id: @site.id), :notice => "恭喜您订单提交成功！\\n订单编号:#{@booking_order.order_no}"
         else
-          redirect_to mobile_booking_item_path(@booking_item, supplier_id: @supplier.id), :notice => "预定失败"
+          redirect_to mobile_booking_item_path(@booking_item, site_id: @site.id), :notice => "预定失败"
         end
       end
     end
@@ -68,26 +58,21 @@ class Mobile::BookingOrdersController < Mobile::BaseController
   private
 
   def set_booking_order
-    @booking_order = @wx_user.booking_orders.find(params[:id])
-    if BookingOrder.flow_suppliers.include?(@supplier.id)
+    @booking_order = @user.booking_orders.find(params[:id])
+    if BookingOrder.flow_sites.include?(@site.id)
     else
       @booking_item  = @booking_order.booking_item
     end
-
   end
 
   def set_booking_item
-    if BookingOrder.flow_suppliers.include?(@supplier.id)
+    if BookingOrder.flow_sites.include?(@site.id)
 
     else
-      @booking_item = @supplier.booking_items.find(params[:booking_item_id] || params[:booking_order][:booking_item_id])
+      @booking_item = @site.booking_items.find(params[:booking_item_id] || params[:booking_order][:booking_item_id])
     end
   rescue
     render :text => "商品不存在"
-  end
-
-  def set_wx_user
-    @wx_user = WxUser.find(session[:wx_user_id])
   end
 
 end

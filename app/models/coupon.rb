@@ -126,9 +126,9 @@ class Coupon < ActiveRecord::Base
     state_name == '已结束'
   end
 
-  def can_apply_for_wxuser?(wx_user_id=nil)
-    return false unless WxUser.where(id: wx_user_id).exists?
-    appliable? && people_limit_count_not_reach?(wx_user_id) && day_limit_count_not_reach?
+  def can_apply_for_user?(user_id=nil)
+    return false unless User.where(id: user_id).exists?
+    appliable? && people_limit_count_not_reach?(user_id) && day_limit_count_not_reach?
   end
 
   def can_apply_by_date?
@@ -143,9 +143,9 @@ class Coupon < ActiveRecord::Base
    (use_start <= Time.now) && (Time.now <= use_end)
   end
 
-  def people_limit_count_not_reach?(wx_user_id=nil)
+  def people_limit_count_not_reach?(user_id=nil)
     return true if people_limit_count == -1
-    consumes.where(wx_user_id: wx_user_id).count < people_limit_count
+    consumes.where(user_id: user_id).count < people_limit_count
   end
 
   def day_limit_count_not_reach?

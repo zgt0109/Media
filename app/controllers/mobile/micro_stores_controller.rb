@@ -4,10 +4,10 @@ class Mobile::MicroStoresController < Mobile::BaseController
   layout "mobile/micro_stores"
 
   def index
-    return render_404 unless @supplier
-    @search = @supplier.shop_branches.used.search(params[:search])
-    @shop_branches = Kaminari.paginate_array(ShopBranch.some_shop_branches(@supplier,@wx_user)).page(params[:page]) if params[:msg_type] == "location"
-    @shop_branches ||= if (session[:wx_user_id].present? && @wx_user.location_updated_at.present? && @wx_user.location_updated_at + 10.minutes > Time.now)
+    return render_404 unless @site
+    @search = @site.shop_branches.used.search(params[:search])
+    @shop_branches = Kaminari.paginate_array(ShopBranch.some_shop_branches(@site,@wx_user)).page(params[:page]) if params[:msg_type] == "location"
+    @shop_branches ||= if (session[:user_id].present? && @wx_user.location_updated_at.present? && @wx_user.location_updated_at + 10.minutes > Time.now)
       Kaminari.paginate_array(ShopBranch.search_some_shop_branches(@search,@wx_user)).page(params[:page])
     else
       @search.order(:id).page(params[:page])
@@ -30,15 +30,15 @@ class Mobile::MicroStoresController < Mobile::BaseController
   end
 
   def map
-    return render text: '参数不正确' unless @supplier && @wx_user
-    @shop_branches = ShopBranch.some_shop_branches(@supplier,@wx_user)
+    return render text: '参数不正确' unless @site && @wx_user
+    @shop_branches = ShopBranch.some_shop_branches(@site,@wx_user)
     return render_404 if @shop_branches.blank?
     render 'index_map'
   end
 
   def list
-    return render text: '参数不正确' unless session[:wx_mp_user_id]    
-    @search = ShopBranch.used.where(wx_mp_user_id: session[:wx_mp_user_id]).search(params[:search])
+    return render text: '参数不正确' unless session[:site_id]    
+    @search = ShopBranch.used.where(site_id: session[:site_id]).search(params[:search])
     @shop_branches = @search.order(:id)
     render 'index'
   end
@@ -57,7 +57,6 @@ class Mobile::MicroStoresController < Mobile::BaseController
     end
 
     def update_wx_user_location
-      @wx_user = WxUser.where(id: session[:wx_user_id]).first
       # if @wx_user.try(:location_x).blank?
       #   result = RestClient.get("http://api.map.baidu.com/location/ip?ip=#{request.ip}&ak=9c72e3ee80443243eb9d61bebeed1735&coor=bd09ll")
       #   info = JSON(result)

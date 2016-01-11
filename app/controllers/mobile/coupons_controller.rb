@@ -13,7 +13,7 @@ class Mobile::CouponsController < Mobile::BaseController
   end
 
   def my
-    @consumes = @wx_user.consumes.coupon rescue []
+    @consumes = @user.consumes.coupon rescue []
     @consumes = @consumes.sort{|x, y| y.created_at <=> x.created_at}
   end
 
@@ -27,7 +27,7 @@ class Mobile::CouponsController < Mobile::BaseController
     if params[:consume_type] == 'Consume'
       @shop_branches = @coupon.usable_shop_branches
     else
-      @shop_branches = @supplier.shop_branches.used
+      @shop_branches = @site.shop_branches.used
     end
   end
 
@@ -35,17 +35,16 @@ class Mobile::CouponsController < Mobile::BaseController
   end
 
   def apply
-    return render_404 if @wx_user.nil?
-    vip_card = @wx_mp_user.vip_card
-    if @coupon.can_apply_for_wxuser?(session[:wx_user_id])
+    return render_404 if @user.nil?
+    vip_card = @site.vip_card
+    if @coupon.can_apply_for_user?(session[:user_id])
       if @coupon.vip_only? && vip_card
-        vip = @wx_mp_user.vip_users.visible.where(wx_mp_user_id: session[:wx_mp_user_id], wx_user_id: session[:wx_user_id]).first
-        unless @wx_user.applicable_for_coupon_by_vip?(@coupon, vip)
-          return redirect_to app_vips_path(wxmuid: session[:wx_mp_user_id], openid: session[:openid]), alert: "该优惠券仅限#{@coupon.usable_vip_grades.map(&:name).join(",")}领取，成为该等级会员领取优惠券"
+        vip = @site.vip_users.visible.where(user_id: session[:user_id]).first
+        unless @user.applicable_for_coupon_by_vip?(@coupon, vip)
+          return redirect_to app_vips_path(openid: session[:openid]), alert: "该优惠券仅限#{@coupon.usable_vip_grades.map(&:name).join(",")}领取，成为该等级会员领取优惠券"
         end
       end
-      consume = @wx_user.consumes.create(
-        wx_mp_user_id: @coupon.wx_mp_user_id,
+      consume = @user.consumes.create(
         consumable:    @coupon,
         expired_at:    @coupon.use_end
       )
@@ -54,7 +53,7 @@ class Mobile::CouponsController < Mobile::BaseController
       @message = "领取失败"
       if @coupon.state_name == "已结束"
         @message = "亲，优惠券已经过期，下次早点来哦~"
-      elsif !@coupon.people_limit_count_not_reach?(session[:wx_user_id])
+      elsif !@coupon.people_limit_count_not_reach?(session[:user_id])
         @message = "亲，每个人只能领#{@coupon.people_limit_count}张哦~"
       elsif !@coupon.day_limit_count_not_reach?
         @message = "亲，今天的优惠券已经被领完了，明天早点来哦~"
@@ -68,10 +67,10 @@ class Mobile::CouponsController < Mobile::BaseController
   private
 
   def set_activity
-    if @supplier.activities.coupon.exists?
-      @activity = @wx_mp_user.activities.coupon.show.first
+    if @site.activities.coupon.exists?
+      @activity = @site.activities.coupon.show.first
     else
-      @activity = @wx_mp_user.create_activity_for_coupon
+      @activity = @site.create_activity_for_coupon
     end
     @share_image = @activity.pic_url
   end

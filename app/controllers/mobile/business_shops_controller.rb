@@ -7,7 +7,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     @vip_card_branch = @business_shop.vip_card_branch
     @vip_card = @vip_card_branch.vip_card
     return redirect_to mobile_notice_url(msg: '会员卡不存在') unless @vip_card
-    @vip_user = @supplier.vip_users.where(wx_user_id: session[:wx_user_id]).first
+    @vip_user = @site.vip_users.where(user_id: session[:user_id]).first
     @privileges = @business_shop.business_privileges
     @vip_card_pic = @vip_card_branch.try(:pic).try(:large).presence || @vip_card.cover_pic.presence || 'http://media-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
     render "template_#{@template_id}"
@@ -68,11 +68,11 @@ class Mobile::BusinessShopsController < Mobile::BaseController
   end
 
   def create_comment
-    @comment = @business_shop.comments.new(params[:comment].merge(commenter_id: session[:wx_user_id], commenter_type: 'WxUser', supplier_id: @supplier.id))
-    if Comment.already_today?(session[:wx_user_id], @business_shop.id)
+    @comment = @business_shop.comments.new(params[:comment].merge(commenter_id: session[:user_id], commenter_type: 'WxUser', site_id: @site.id))
+    if Comment.already_today?(session[:user_id], @business_shop.id)
       redirect_to :back, alert: "您今天已经发表过评论了！"
     elsif @comment.save
-      redirect_to comments_mobile_business_shop_path(@supplier,@business_shop), notice: "评价成功！"
+      redirect_to comments_mobile_business_shop_path(@site,@business_shop), notice: "评价成功！"
     else
       redirect_to :back, alert: "评价失败，#{@comment.errors.full_messages.first}"
     end
@@ -80,7 +80,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
 
   private
     def find_website
-      @website = @supplier.circle
+      @website = @site.circle
     end
 
     def find_business_shop
@@ -89,6 +89,6 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     end
 
     def find_vip_user
-      @vip_user = VipUser.where(wx_user_id: session[:wx_user_id], wx_mp_user_id: session[:wx_mp_user_id]).first
+      @vip_user = VipUser.where(user_id: session[:user_id]).first
     end
 end

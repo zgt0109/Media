@@ -32,7 +32,7 @@ class WxMpUser < ActiveRecord::Base
 
   belongs_to :site, inverse_of: :wx_mp_user
 
-  has_many :replies, as: :replyer, dependent: :destroy
+  has_many :replies, as: :replier, dependent: :destroy
 
   has_many :wx_users, inverse_of: :wx_mp_user
   has_many :wx_menus

@@ -25,7 +25,7 @@ class Mobile::GuessController < Mobile::BaseController
     if @wx_user.vip_user && @activity.guess_setting.use_points && @activity.guess_setting.answer_points
       @vip_user = @wx_user.vip_user
       @vip_user.decrease_points!(@activity.guess_setting.answer_points)
-      @vip_user.point_transactions.create direction_type: PointTransaction::ACTIVITY_OUT, points: @activity.guess_setting.answer_points, supplier_id: @wx_mp_user.supplier_id, description: '猜图活动'
+      @vip_user.point_transactions.create direction_type: PointTransaction::ACTIVITY_OUT, points: @activity.guess_setting.answer_points, site_id: @site.id, description: '猜图活动'
     end
 
     if @error.present?
@@ -73,7 +73,7 @@ class Mobile::GuessController < Mobile::BaseController
         if @wx_user.present?
           @subscribed = true
         else
-          @wx_user = WxUser.where(openid: request.session_options[:id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
+          @wx_user = WxUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
         end
       end
     end
@@ -121,7 +121,7 @@ class Mobile::GuessController < Mobile::BaseController
 
       prize_not_enough = (@activity.guess_setting.question_answer_limit <= @guess_activity_question.participations.today.answer_correct.count)
       return @error = "亲，奖品已领完。" if prize_not_enough
-      has_won = @guess_activity_question.participations.answer_correct.where(wx_user_id: @wx_user.id).exists?
+      has_won = @guess_activity_question.participations.answer_correct.where(user_id: @user.id).exists?
       return @error = "亲，该题目您已经答对过。" if has_won
     end
 
@@ -136,7 +136,7 @@ class Mobile::GuessController < Mobile::BaseController
     end
 
     def find_activity_user
-      @activity_user_attrs = {supplier_id: @wx_mp_user.supplier_id, wx_mp_user_id: @wx_mp_user.id, activity_id: @activity.id}
+      @activity_user_attrs = {site_id: @site.id, activity_id: @activity.id}
       @activity_user = @wx_user.activity_users.where(@activity_user_attrs).first_or_initialize
     end
 end

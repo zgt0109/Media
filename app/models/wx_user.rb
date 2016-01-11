@@ -32,8 +32,9 @@ class WxUser < ActiveRecord::Base
 
   validates :openid, presence: true
 
+  belongs_to :user
   belongs_to :wx_mp_user
-  has_one :vip_user
+
   has_one :broker, class_name: '::Brokerage::Broker'
   has_many :wx_wall_users
   has_many :shake_users
@@ -74,6 +75,8 @@ class WxUser < ActiveRecord::Base
 
   scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
   scope :message_normal, ->{ where(leave_message_forbidden: 0)}
+
+  after_create :init_user
 
   # Options: wx_user_openid, wx_mp_user_openid
   def self.follow(wx_mp_user, options = {})
@@ -245,5 +248,16 @@ class WxUser < ActiveRecord::Base
     matched = match_at && match_at > minutes.minutes.ago
     normal! unless matched
     matched
+  end
+
+  def setup
+    user || init_user
+  end
+
+  private
+
+  def init_user
+    user = User.create(site_id: self.site_id)
+    update_attributes(user_id: user.try(:id))
   end
 end

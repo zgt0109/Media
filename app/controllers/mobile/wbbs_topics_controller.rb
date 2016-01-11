@@ -1,6 +1,6 @@
 class Mobile::WbbsTopicsController < Mobile::BaseController
   layout 'app'
-  before_filter :block_non_wx_browser, :set_class_name, :find_wbbs_community, :get_wx_mp_user
+  before_filter :block_non_wx_browser, :set_class_name, :find_wbbs_community
   before_filter :find_wbbs_topic, only: [ :show, :vote_up, :create_reply, :report, :load_replies, :display_photo ]
 
   def index
@@ -60,12 +60,12 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
       end
       if params[:wbbs_topic][:receiver_id].present?
         if params[:wbbs_topic][:status] == '3'
-          render inline: "<script>alert('私信成功'); location.href = '#{mobile_wbbs_topics_path(@supplier, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
+          render inline: "<script>alert('私信成功'); location.href = '#{mobile_wbbs_topics_path(@site, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
         else
-          render inline: "<script>alert('留言成功'); location.href = '#{mobile_wbbs_topics_path(@supplier, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
+          render inline: "<script>alert('留言成功'); location.href = '#{mobile_wbbs_topics_path(@site, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
         end
       else
-        render inline: "<script>alert('发帖成功'); location.href = '#{mobile_wbbs_topics_path(@supplier)}';</script>"
+        render inline: "<script>alert('发帖成功'); location.href = '#{mobile_wbbs_topics_path(@site)}';</script>"
       end
     else
       render inline: "<script>alert('发送失败，#{@wbbs_topic.errors.full_messages.first}');</script>"
@@ -120,18 +120,15 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
   end
 
   private
-    def get_wx_mp_user
-      @wx_mp_user =  WxMpUser.find_by_id(session[:wx_mp_user_id])
-    end
 
     def find_wbbs_community
       @activity =  Activity.wbbs_community.find_by_id(params[:activity_id]) || Activity.wbbs_community.find_by_id(session[:activity_id])
       @wbbs_community = @activity.try(:activityable)
       return render_404 unless @wbbs_community
       if params[:noshare] == 'noshare'
-         session[:noshare_supplier_id] = session[:supplier_id]
+         session[:noshare_site_id] = session[:site_id]
       end
-      @noshare = (session[:supplier_id] == session[:noshare_supplier_id])
+      @noshare = (session[:site_id] == session[:noshare_site_id])
     end
 
     def set_class_name

@@ -6,11 +6,11 @@ class Mobile::PanoramagramsController < Mobile::BaseController
   layout 'mobile/panoramagrams'
 
   def index
-    @panoramagrams = @supplier.panoramagrams.normal.order(:sort).page(params[:page])
+    @panoramagrams = @site.panoramagrams.normal.order(:sort).page(params[:page])
   end
 
   def panorama
-    @panoramagram = @supplier.panoramagrams.where(id: params[:id]).first
+    @panoramagram = @site.panoramagrams.where(id: params[:id]).first
     @items = @panoramagram.items.order(:sort)
 
     respond_to do |format|
@@ -20,8 +20,8 @@ class Mobile::PanoramagramsController < Mobile::BaseController
   end
 
   def load_more_items
-    @items = @supplier.panoramagrams.normal.order(:sort).page(params[:page]).collect do |i| 
-      { link_to: panorama_mobile_panoramagram_path(i, supplier_id: i.supplier_id), img_url: i.pic_url, txt: i.name }
+    @items = @site.panoramagrams.normal.order(:sort).page(params[:page]).collect do |i| 
+      { link_to: panorama_mobile_panoramagram_path(i, site_id: i.site_id), img_url: i.pic_url, txt: i.name }
     end
     render json: {items: @items}
   end

@@ -3,7 +3,7 @@ class Mobile::FansGamesController < Mobile::BaseController
   before_filter :block_non_wx_browser, :require_wx_mp_user
 
 	def index
-		@activity = @supplier.activities.where(activity_type_id: 67).first
+		@activity = @site.activities.where(activity_type_id: 67).first
 		@activities_fans_games = @activity.activities_fans_games.turn_up.latest
 		@share_image = "#{MOBILE_DOMAIN}/assets/activity_pics/67.jpg"
 	end

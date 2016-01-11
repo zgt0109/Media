@@ -2,15 +2,15 @@ class Mobile::GroupsController < Mobile::BaseController
   layout 'mobile/group'
 
   def index
-    session[:wx_user_id] = params[:wx_user_id] if params[:wx_user_id].present?
-    @group = @supplier.group
+    session[:user_id] = params[:user_id] if params[:user_id].present?
+    @group = @site.group
     @category = @group.group_categories.where(id: params[:category_id]).first
     conn = @group.get_category params
     @group_items = @group.group_items.seller_items.selling.where(conn)
     @body_class = "index"
     @categories = @group.group_categories.root.order(:sort)
     if params[:category_name].present?
-      result = RestClient.get("#{WMALL_HOST}/api/shops/category.json?category=#{URI.encode params[:category_name]}&supplier_id=#{@supplier.id}")
+      result = RestClient.get("#{WMALL_HOST}/api/shops/category.json?category=#{URI.encode params[:category_name]}&site_id=#{@site.id}")
       if result.present?
         shops = JSON.parse result
         shop_ids = shops['shops'].map{|s| s['id']}

@@ -1,11 +1,11 @@
 class Mobile::SmsOrdersController < Mobile::BaseController
   def alipayapi
 
-    unless @supplier
+    unless @site
       return redirect_to :back, alert: '您没有权限访问'
     end
 
-    @sms_order = @supplier.sms_orders.find params[:id]
+    @sms_order = @site.sms_orders.find params[:id]
 
     @payment = Payment.find(params[:payment_id])
 
@@ -57,8 +57,8 @@ class Mobile::SmsOrdersController < Mobile::BaseController
   end
 
   def payment_request
-    @supplier = Account.where(id: params[:supplier_id]).first
-    return render json: {errcode: 001, errmsg: "supplier not found"} unless @supplier
+    @site = Account.where(id: params[:site_id]).first
+    return render json: {errcode: 001, errmsg: "site not found"} unless @site
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     if @payment
@@ -66,7 +66,7 @@ class Mobile::SmsOrdersController < Mobile::BaseController
       return render json: {errcode: 0, pay_url: @payment.get_pay_url}
     end
     @payment = Payment.setup({
-                                supplier_id: @supplier.id,
+                                account_id: @site.account_id,
                                 payment_type_id: params[:payment_type_id],
                                 customer_id: params[:customer_id],
                                 customer_type: params[:customer_type],
@@ -81,7 +81,6 @@ class Mobile::SmsOrdersController < Mobile::BaseController
                                 merchant_url: params[:merchant_url],
                                 state: params[:state],
                                 source: params[:source],
-                                wx_mp_user_id: params[:wx_mp_user_id],
                                 open_id: params[:open_id],
                                 pay_params: params.to_json
                              })

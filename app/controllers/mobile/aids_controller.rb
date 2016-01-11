@@ -22,9 +22,9 @@ class Mobile::AidsController < Mobile::BaseController
     when Activity::UNDER_WAY
     when Activity::HAS_ENDED
 =begin
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
       if self? && activity_consume.present? && activity_consume.unused?
-        redirect_to award_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id, consume_id: activity_consume.id)
+        redirect_to award_mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id, consume_id: activity_consume.id)
       end
 =end
     end
@@ -37,15 +37,14 @@ class Mobile::AidsController < Mobile::BaseController
     logger.info "Micro Aid ========== invite friends"
 
     @activity_user ||= @activity.activity_users.create(
-      supplier_id:   @activity.supplier.id,
-      wx_mp_user_id: @activity.wx_mp_user.id,
-      wx_user_id:    @wx_user.id,
+      site_id:   @activity.site.id,
+      user_id:    @wx_user.user_id,
       name:          @wx_user.nickname,
       mobile:        @wx_user.mobile,
       address:       @wx_user.address
     )
 
-    @results = @activity_user.aid_results.includes(:wx_user) if @activity_user.present?
+    @results = @activity_user.aid_results.includes(:user) if @activity_user.present?
     
     render json: {errcode: 0, nickname: @activity_user.wx_user.nickname, headimgurl: @activity_user.wx_user.headimgurl, rank_reached: rank_reached?, errmsg: "参与活动成功"}
     
@@ -61,7 +60,7 @@ class Mobile::AidsController < Mobile::BaseController
 
     points = calc_points
     @activity_user.aid_results.create(
-      wx_user_id:  @wx_user.id,
+      user_id:  @user.id,
       points: points 
     )
     add_points points, @activity_user 
@@ -86,7 +85,7 @@ class Mobile::AidsController < Mobile::BaseController
     return render json: {errcode: 20003, errmsg: "他人不能领奖"}, status: :bad_request  unless self?
 
     if received?
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
 
       if activity_consume.activity_prize.point_prize? && activity_consume.unused? # 积分奖
         activity_consume.auto_use_point_prize_consume!
@@ -106,11 +105,10 @@ class Mobile::AidsController < Mobile::BaseController
     return render json: {errcode: 20006, errmsg: "没有中奖"}, status: :bad_request unless prize.present?
 
     activity_consume = @activity.activity_consumes.create(
-          supplier_id:        @activity.supplier_id,
-          wx_mp_user_id:      @activity.wx_mp_user.id,
+          site_id:        @activity.site_id,
           activity_id:        @activity.id,
           activity_prize_id:  prize.id, 
-          wx_user_id:         @activity_user.wx_user_id,
+          user_id:         @activity_user.user_id,
           name:               params[:name],
           mobile:             params[:mobile] 
         )
@@ -123,37 +121,37 @@ class Mobile::AidsController < Mobile::BaseController
   end
 
   def award
-    @activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+    @activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
    
-    @shop_branches = @supplier.shop_branches.select do |shop|
+    @shop_branches = @site.shop_branches.select do |shop|
       shop.sub_account.can? 'manage_marketing_sncode'
     end 
  
-    @shop_branches = @supplier.shop_branches
+    @shop_branches = @site.shop_branches
   end
   
   def verification
-    return render json: {errcode: 40001, errmsg: "supplier不存在"} unless @supplier.present?
+    return render json: {errcode: 40001, errmsg: "site不存在"} unless @site.present?
 
     code = Random.rand(100000..999999)
     mobile = params[:mobile]
 
     return render json: {errcode: 40002, errmsg: "电话号码不存在"} unless mobile.present?
 
-    @supplier.send_message(mobile, code, "Micro-aid", true)
+    @site.send_message(mobile, code, "Micro-aid", true)
 
     render json: {errcode: 0, code: code, errmsg: "短信验证码发送成功"}
   end
 
   # acceptance prize page
   def acceptance
-    supplier = Account.find params[:supplier_id]
-    activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+    site = Account.find params[:site_id]
+    activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
     return render json: {errcode: 20001, errmsg: "他人不能兑奖"} unless self? 
     return render json: {errcode: 20002, errmsg: "没有奖项"} unless activity_consume.present?
 
     #if @activity.micro_aid_rule.password != params[:password]
-    if supplier.try(:supplier_password).try(:password_digest) != params[:password]
+    if site.try(:site_password).try(:password_digest) != params[:password]
       return render json: {errcode: 20003, errmsg: "兑奖密码不对"}
     end
 
@@ -198,8 +196,8 @@ class Mobile::AidsController < Mobile::BaseController
   end
 
   # helpers
-  def aided?(wx_user_id)
-    result = @activity_user.aid_results.where(wx_user_id: wx_user_id).first if @activity_user.present? || nil
+  def aided?(user_id)
+    result = @activity_user.aid_results.where(user_id: user_id).first if @activity_user.present? || nil
     result.present?
   end
 
@@ -212,7 +210,7 @@ class Mobile::AidsController < Mobile::BaseController
       return false
     end
 
-    if @activity_user.present? && @activity_user.wx_user_id != @wx_user.id
+    if @activity_user.present? && @activity_user.user_id != @wx_user.id
       return  false
     end
      
@@ -225,9 +223,9 @@ class Mobile::AidsController < Mobile::BaseController
 
   def received?
     if self?
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
     else
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @activity_user.wx_user_id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @activity_user.user_id).first
     end
 
     activity_consume.present?
@@ -235,9 +233,9 @@ class Mobile::AidsController < Mobile::BaseController
 
   def auto_retry_received?
     if self?
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
     else
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @activity_user.wx_user_id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @activity_user.user_id).first
     end
 
      activity_consume.present? && activity_consume.try(:activity_prize).try(:point_prize?) && !(activity_consume.used? || activity_consume.auto_used?)
@@ -245,16 +243,16 @@ class Mobile::AidsController < Mobile::BaseController
 
   def accepted?
     if self?
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
     else
-      activity_consume = @activity.activity_consumes.where(wx_user_id: @activity_user.wx_user_id).first
+      activity_consume = @activity.activity_consumes.where(user_id: @activity_user.user_id).first
     end
 
     activity_consume.used? || activity_consume.auto_used?
   end
 
   def self_joined?
-     activity_user =  @activity.activity_users.where(wx_user_id: @wx_user.id).first
+     activity_user =  @activity.activity_users.where(user_id: @user.id).first
      activity_user.present?
   end
 
@@ -295,19 +293,19 @@ class Mobile::AidsController < Mobile::BaseController
     @origin_user = @wx_mp_user.wx_users.where(openid: params[:origin_openid]).first if params[:origin_openid].present?
     
     if @owner_user.present?
-      @activity_user ||= @activity.activity_users.where(wx_user_id: @owner_user.id).first
+      @activity_user ||= @activity.activity_users.where(user_id: @owner_user.id).first
 
-      return redirect_to mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) unless @activity_user.present?
+      return redirect_to mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) unless @activity_user.present?
     end
 
-    @activity_user ||= @activity.activity_users.where(wx_user_id: @wx_user.id).first
+    @activity_user ||= @activity.activity_users.where(user_id: @user.id).first
     @results = @activity_user.aid_results.includes(:wx_user) if @activity_user.present?
 
     @rule ||= @activity.extend.rule.presence
 
     @prizes = @activity.activity_prizes
     @prize_counts = @prizes.sum(:prize_count)
-    @activity_consumes = @activity.activity_consumes.where(wx_user_id: @wx_user.id).order('id desc') rescue []
+    @activity_consumes = @activity.activity_consumes.where(user_id: @user.id).order('id desc') rescue []
     
     @ranking_list = get_ranking_list Aid::Rule::RANKING_LIST_LIMIT
 
@@ -318,7 +316,7 @@ class Mobile::AidsController < Mobile::BaseController
 
   def require_owner_user_none_self
     unless self?
-      redirect_to mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) unless @owner_user.present?
+      redirect_to mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) unless @owner_user.present?
     end
   end
 
@@ -354,11 +352,10 @@ class Mobile::AidsController < Mobile::BaseController
 
         activity_user = rank[:activity_user]
         @activity.activity_consumes.create(
-          supplier_id:        @activity.supplier_id,
-          wx_mp_user_id:      @activity.wx_mp_uset.id,
+          site_id:        @activity.site_id,
           activity_id:        @activity.id,
           activity_prize_id:  prize.id, 
-          wx_user_id:         activity_user.wx_user_id,
+          user_id:         activity_user.user_id,
           mobile:             activity_user.mobile
         )
       end
@@ -376,7 +373,7 @@ class Mobile::AidsController < Mobile::BaseController
     return unless rank.present? && rank <= prize_counts
 
     # prize
-    activity_consume = @activity.activity_consumes.where(wx_user_id: @activity_user.wx_user_id).first || nil
+    activity_consume = @activity.activity_consumes.where(user_id: @activity_user.user_id).first || nil
    
     return activity_consume.activity_prize if activity_consume.present? 
     

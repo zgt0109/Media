@@ -2,7 +2,7 @@ class Mobile::BaseController < ActionController::Base
   include ErrorHandler, DetectUserAgent
 
   helper_method :judge_andriod_version, :wx_browser?
-  
+
   before_filter :redirect_to_non_openid_url, :load_data, :load_user_data, except: [:notice]
 
   before_filter :auth, if: -> { @wx_mp_user.try(:manual?) }
@@ -14,11 +14,7 @@ class Mobile::BaseController < ActionController::Base
   end
 
   def load_data
-    # if params[:supplier_id].present? && params[:supplier_id] != session[:supplier_id]
-    #   session.clear
-    #   session[:supplier_id] = params[:supplier_id]
-    # end
-    session[:supplier_id] = params[:supplier_id] if params[:supplier_id].present?
+    session[:site_id] = params[:site_id] if params[:site_id].present?
 
     # TODO 只投票有用，需要去掉
     session[:activity_id] = params[:vote_id] if params[:vote_id].present?
@@ -26,15 +22,14 @@ class Mobile::BaseController < ActionController::Base
     session[:activity_id] = params[:activity_id] if params[:activity_id].present?
     session[:activity_notice_id] = params[:anid] if params[:anid].present?
 
-    @supplier = Account.find(session[:supplier_id].to_i)
+    @site = Account.find(session[:site_id].to_i)
 
-    return render text: '该公众号服务已到期，暂不提供服务！' if @supplier.froze?
+    return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
-    @wx_mp_user = @supplier.wx_mp_user
+    @wx_mp_user = @site.wx_mp_user
     require_wx_mp_user
-    session[:wx_mp_user_id] = @wx_mp_user.id
 
-    @account_footer = AccountFooter.find_by_id(@supplier.account_footer_id) || AccountFooter.default_footer
+    @account_footer = AccountFooter.default_footer
   rescue => error
     logger.info "*********** mobile load_data error: #{error.message} > #{error.backtrace}"
     # render :text => "请求页面参数不正确"
@@ -45,7 +40,7 @@ class Mobile::BaseController < ActionController::Base
   end
 
   def load_vip_user
-    @vip_user = @supplier.vip_users.visible.where(wx_user_id: session[:wx_user_id]).first
+    @vip_user = @site.vip_users.visible.where(user_id: session[:user_id]).first
   end
 
 end

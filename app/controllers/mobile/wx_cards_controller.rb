@@ -6,7 +6,7 @@ class Mobile::WxCardsController < Mobile::BaseController
   layout 'mobile/wx_cards'
 
   def index
-    @wx_cards = @supplier.cards.card_pass_check.unexpired.latest.page(params[:page])
+    @wx_cards = @site.cards.card_pass_check.unexpired.latest.page(params[:page])
     respond_to do |format|
       format.html
       format.json { render json: {wx_cards: show_card(@wx_cards) } }

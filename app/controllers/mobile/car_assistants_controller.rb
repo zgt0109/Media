@@ -4,19 +4,19 @@ class Mobile::CarAssistantsController < Mobile::BaseController
 
   def index
     @assistants = Assistant.enabled.cars.order('sort ASC')
-    @assistant_ids = @supplier.assistants_accounts.collect(&:assistant_id)
+    @assistant_ids = @site.assistants_accounts.collect(&:assistant_id)
   end
 
   private
 
   def get_shop
-    @car_shop = @supplier.car_shop
+    @car_shop = @site.car_shop
     @car_brand = @car_shop.car_brand
     @activity = @car_shop.car_activity_notices.assistant.first.activity
-    if @supplier.website.try(:website_menus).to_a.select{|f| f.activity?}.flatten.select{|f| f.menuable_id == @activity.id}
-      @url = mobile_root_url(supplier_id: @supplier.id)
+    if @site.website.try(:website_menus).to_a.select{|f| f.activity?}.flatten.select{|f| f.menuable_id == @activity.id}
+      @url = mobile_root_url(site_id: @site.id)
     else
-      @url = mobile_car_assistants_url(supplier_id: @supplier.id, aid: @activity.id)
+      @url = mobile_car_assistants_url(site_id: @site.id, aid: @activity.id)
     end
   end
 

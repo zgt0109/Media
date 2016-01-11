@@ -3,7 +3,7 @@ class Mobile::EcCategoriesController < Mobile::BaseController
 
   def show
     @page_class = "list"
-    @category = @supplier.ec_shop.categories.find(params[:id])
+    @category = @site.ec_shop.categories.find(params[:id])
     @items = Kaminari.paginate_array(@category.products).page(params[:page]).per(10)
     #@categories = EcSellerCat.root
     respond_to do |format|

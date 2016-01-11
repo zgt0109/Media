@@ -9,17 +9,17 @@ class Mobile::GroupCommentsController < Mobile::BaseController
 
   def new
     @body_class = "comment"
-    @comment = GroupComment.new(wx_user_id: session[:wx_user_id], group_order_id: params[:group_order_id])
+    @comment = GroupComment.new(user_id: session[:user_id], group_order_id: params[:group_order_id])
   end
 
   def create
     @item = GroupItem.find(params[:id])
     @comment = @item.group_comments.new(params[:group_comment])
     if @comment.save
-      redirect_to mobile_group_item_path(supplier_id: @supplier.id, id: @item.id, group_order_id: params[:group_comment][:group_order_id]), notice: '评论成功'
-      #redirect_to new_mobile_group_comment_path(supplier_id: @supplier.id,:id => @item.id), :notice =>  "评论成功"
+      redirect_to mobile_group_item_path(site_id: @site.id, id: @item.id, group_order_id: params[:group_comment][:group_order_id]), notice: '评论成功'
+      #redirect_to new_mobile_group_comment_path(site_id: @site.id,:id => @item.id), :notice =>  "评论成功"
     else
-      redirect_to mobile_group_item_path(supplier_id: @supplier.id, id: @item.id, group_order_id: params[:group_comment][:group_order_id]), alert: '评论失败'
+      redirect_to mobile_group_item_path(site_id: @site.id, id: @item.id, group_order_id: params[:group_comment][:group_order_id]), alert: '评论失败'
       #render :action => :new, :notice => "评论失败"
     end
   end

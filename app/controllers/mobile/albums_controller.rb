@@ -36,20 +36,20 @@ class Mobile::AlbumsController < Mobile::BaseController
   end
 
   def create_comment
-    @comment = @photo.comments.new(params[:comment].merge(commenter_id: session[:wx_user_id], commenter_type: 'WxUser', supplier_id: @supplier.id))
-    #flag = Comment.where("commenter_id = ? and commentable_type =? and commenter_type = ? and commentable_id = ? and created_at >= ?", session[:wx_user_id], "AlbumPhoto", "WxUser", @photo.id, Time.now.midnight).length > 0
+    @comment = @photo.comments.new(params[:comment].merge(commenter_id: session[:user_id], commenter_type: 'WxUser', site_id: @site.id))
+    #flag = Comment.where("commenter_id = ? and commentable_type =? and commenter_type = ? and commentable_id = ? and created_at >= ?", session[:user_id], "AlbumPhoto", "WxUser", @photo.id, Time.now.midnight).length > 0
     #if flag
     #  redirect_to :back, alert: "您今天已经发表过评论了！"
     if @comment.save
-      redirect_to comments_mobile_album_path(@supplier, @photo.id), notice: "评价成功！"
-      # redirect_to comments_mobile_album_path(@supplier, @photo), notice: "评价成功！"
+      redirect_to comments_mobile_album_path(@site, @photo.id), notice: "评价成功！"
+      # redirect_to comments_mobile_album_path(@site, @photo), notice: "评价成功！"
     else
       redirect_to :back, alert: "评价失败，#{@comment.errors.full_messages.first}"
     end
   end
 
   def load_more_photos
-    @photos = @album.photos.page(params[:page]).collect{|p| {link_to: mobile_album_path(p, supplier_id: p.album.supplier_id), img_url: p.img_url} }
+    @photos = @album.photos.page(params[:page]).collect{|p| {link_to: mobile_album_path(p, site_id: p.album.site_id), img_url: p.img_url} }
     render json: {photos: @photos}
   end
 

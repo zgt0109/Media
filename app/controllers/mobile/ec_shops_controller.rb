@@ -25,7 +25,7 @@ class Mobile::EcShopsController < Mobile::BaseController
   private
 
   def set_branch
-    @shop = @supplier.ec_shop
+    @shop = @site.ec_shop
     return render text: '页面不存在' unless @shop
 
     @categories = @shop.categories.root.normal.order(:sort_order)

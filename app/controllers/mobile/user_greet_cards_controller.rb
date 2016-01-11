@@ -17,8 +17,8 @@ class Mobile::GreetCardItemsController < Mobile::BaseController
   def create
     @user_greet_card = GreetCardItem.new(params[:user_greet_card])
     @user_greet_card.save!
-    redirect_to mobile_greet_card_user_greet_card_url(supplier_id: @user_greet_card.greet_card.greet.supplier_id, greet_card_id: @user_greet_card.greet_card_id, id: @user_greet_card.id)
-    #/:supplier_id/greet_cards/:greet_card_id/user_greet_cards/:id(.:format)
+    redirect_to mobile_greet_card_user_greet_card_url(site_id: @user_greet_card.greet_card.greet.site_id, greet_card_id: @user_greet_card.greet_card_id, id: @user_greet_card.id)
+    #/:site_id/greet_cards/:greet_card_id/user_greet_cards/:id(.:format)
   end
 
 end

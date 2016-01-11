@@ -3,7 +3,7 @@ class Mobile::TripOrdersController < Mobile::BaseController
   before_filter :body_class, :require_wx_user
 
   def index
-    @orders = @wx_user.trip_orders.where(supplier_id: @supplier.id).order('created_at desc')
+    @orders = @wx_user.trip_orders.where(site_id: @site.id).order('created_at desc')
   end
 
   def new

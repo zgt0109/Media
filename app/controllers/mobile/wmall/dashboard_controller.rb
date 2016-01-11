@@ -6,8 +6,8 @@ class Mobile::Wmall::DashboardController < Mobile::Wmall::BaseController
   def wx_user
     @current_wmall_titles << "个人中心"
 
-    @assistants = @supplier.assistants.enabled.entries
-    @vip_user = @supplier.vip_users.where(wx_user_id: session[:wx_user_id]).first
+    @assistants = @site.assistants.enabled.entries
+    @vip_user = @site.vip_users.where(user_id: session[:user_id]).first
   end
 
   def following_shops

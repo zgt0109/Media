@@ -25,7 +25,7 @@ class Mobile::HospitalDoctorsController < Mobile::BaseController
   private
 
   def set_branch
-    @hospital = @supplier.hospital
+    @hospital = @site.hospital
   end
 
 end
