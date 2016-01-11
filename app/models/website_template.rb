@@ -4,8 +4,8 @@ class WebsiteTemplate < ActiveRecord::Base
   belongs_to :website_tag
   has_many :websites
 
-  scope :permits, -> { where('website_templates.permit_suppliers is null') }
-  scope :supplier_templates, -> (supplier) { where("website_templates.permit_suppliers is null or website_templates.permit_suppliers like '%#{supplier.id}%'") }
+  scope :permits, -> { where('website_templates.permit_accounts is null') }
+  scope :account_templates, -> (account) { where("website_templates.permit_accounts is null or website_templates.permit_accounts like '%#{account.id}%'") }
 
   enum_attr :template_type, :in => [
     ['home_template', 1, '首页模板'],
@@ -71,8 +71,8 @@ class WebsiteTemplate < ActiveRecord::Base
     arr.join(' ').html_safe
   end
 
-  def is_permit_current_supplier(supplier)
-    permit_suppliers.blank? || permit_suppliers.split(',').include?(supplier.id.to_s)
+  def is_permit_current_account(account)
+    permit_accounts.blank? || permit_accounts.split(',').include?(account.id.to_s)
   end
 
   def pic_url
