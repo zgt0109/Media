@@ -5303,7 +5303,6 @@ class InitDb < ActiveRecord::Migration
 
   add_index "wx_mp_users", ["account_id"], :name => "index_wx_mp_users_on_account_id"
   add_index "wx_mp_users", ["code"], :name => "index_wx_mp_users_on_code"
-  add_index "wx_mp_users", ["name"], :name => "index_wx_mp_users_on_name"
   add_index "wx_mp_users", ["openid"], :name => "index_wx_mp_users_on_openid"
   add_index "wx_mp_users", ["site_id"], :name => "index_wx_mp_users_on_site_id"
 
