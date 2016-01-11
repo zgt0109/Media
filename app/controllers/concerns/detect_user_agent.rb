@@ -6,7 +6,7 @@ module DetectUserAgent
     logger.info "******* request.subdomains :#{request.subdomains}"
     @site = Site.where(id: site_id).first
 
-    # @site = Site.first unless @site
+    @site = Site.first unless @site
 
     session[:site_id] = site_id
     @wx_mp_user = @site.try(:wx_mp_user)
@@ -31,6 +31,8 @@ module DetectUserAgent
   end
 
   def block_non_wx_browser
+    return unless Rails.env.production?
+
     if !wx_browser? && request.fullpath !~ /debug/
       render file: "#{Rails.root}/public/templates/wx/open_with_wx.html", layout: false
       false

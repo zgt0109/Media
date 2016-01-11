@@ -7,7 +7,7 @@
 <input type="hidden" id="id_show_user_tel" value="<%= @activity.allow_show_user_tel? %>" >
 <input type="hidden" id="user_type" value="<%= @activity.activity_setting.try(:user_type).to_i  %>">
 <input type="hidden" id="wx_user_subscribe" value="<%= @wx_user.subscribe? %>">
-<input type="hidden" id="vip_user" value="<%= !!@wx_user.vip_user  %>">
+<input type="hidden" id="vip_user" value="<%= !!@user.vip_user  %>">
 
 <div class="popup">
   <div class="pop-body">

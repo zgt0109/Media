@@ -17,8 +17,8 @@
   <div class="alert-m">
     <div class="alert-img"></div>
     <div class="alert-c text-center">
-      <%-if defined?(@wx_user) && @wx_user.present?%>
-        <%- vip_user = @wx_user.vip_user %>
+      <%-if defined?(@user) && @user.present?%>
+        <%- vip_user = @user.vip_user %>
         <%- if vip_user.present?%>
           <%- if vip_user.pending? %>
               <h1>您的会员卡还没通过审核 </h1>
@@ -40,7 +40,7 @@
       <div class="alert-cell cell-4">
         <a href="javascript:;" class="alert-f-btn btn-gray J-close">我知道了</a>
       </div>
-      <%- if defined?(@wx_user) && @wx_user.present? && @wx_user.vip_user.blank? %>
+      <%- if defined?(@user) && @user.vip_user.blank? %>
         <div class="alert-cell">
           <a href="<%= app_vips_path(wxmuid: session[:wx_mp_user_id]) %>" class="alert-f-btn J-close">领取会员卡</a>
         </div>
