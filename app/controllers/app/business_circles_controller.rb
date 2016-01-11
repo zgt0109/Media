@@ -42,7 +42,7 @@ module App
       @website_popup_menus =  @website.website_popup_menus.order(:sort)
       @website_pictures = @website.website_pictures
       @comments = @article.website_comments.order('created_at desc').page(params[:page])
-      @share_image = @article.pic.present? ? @article.pic.to_s : Nokogiri::HTML(@article.content.to_s).at_css("img").to_h["src"]
+      @share_image = @article.pic_key.present? ? @article.pic_key.to_s : Nokogiri::HTML(@article.content.to_s).at_css("img").to_h["src"]
       @share_desc = Nokogiri::HTML(@article.content.to_s).content.gsub(/[\p{Punctuation}\p{Symbol}]|\r\n|\ +/, "").first(100)
       respond_to do |format|
         format.html

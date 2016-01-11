@@ -7,7 +7,7 @@ class Mobile::GroupItemsController < Mobile::BaseController
     @body_class = "detail"
     @group_item_pictures = @group_item.group_item_pictures
     @comment = GroupComment.new(user_id: session[:user_id], group_order_id: params[:group_order_id])
-    #@group_item_pictures << @group_item if @group_item.pic.present?
+    #@group_item_pictures << @group_item if @group_item.pic_key.present?
   end
 
   def order

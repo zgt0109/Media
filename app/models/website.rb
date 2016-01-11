@@ -316,7 +316,7 @@ class Website < ActiveRecord::Base
 
     website.website_pictures.each do |picture|
       website_picture = WebsitePicture.new(picture.attributes)
-      website_picture.update_attributes({website_id: id, pic: File.open(picture.pic.current_path)})
+      website_picture.update_attributes({website_id: id, pic_key: picture.pic_key})
     end
   end
 

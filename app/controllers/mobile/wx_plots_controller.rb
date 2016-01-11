@@ -9,14 +9,14 @@ class Mobile::WxPlotsController < Mobile::BaseController
   before_filter :set_site_website, only: [:bulletins, :bulletin]
 
   def bulletins
-    @share_image = @wx_plot.cover_pic.present? ? @wx_plot.cover_pic : @site.activity_wx_plot_bulletin.try(:qiniu_pic_url)
+    @share_image = @wx_plot.cover_pic_key.present? ? @wx_plot.cover_pic_url : @site.activity_wx_plot_bulletin.try(:qiniu_pic_url)
     @bulletins = @wx_plot.wx_plot_bulletins.order('wx_plot_bulletins.done_date_at DESC').done
     render layout: 'mobile/wx_plot_website'
   end
 
   def bulletin
     @bulletin = @wx_plot.wx_plot_bulletins.done.where(id: params[:id]).first
-    @share_image = @bulletin.pic.present? ? @bulletin.pic : @site.activity_wx_plot_bulletin.try(:qiniu_pic_url)
+    @share_image = @bulletin.pic_key.present? ? @bulletin.pic_url : @site.activity_wx_plot_bulletin.try(:qiniu_pic_url)
     render layout: 'mobile/wx_plot_website'
     return redirect_to bulletins_mobile_wx_plots_path(anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot.bulletin}记录不存在" unless @bulletin
   end
