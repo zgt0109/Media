@@ -1,4 +1,4 @@
-<% if @wx_plot.cover_pic? %>
+<% if @wx_plot.cover_pic_key.present? %>
     <div class="mod-slider slider-hor" id="index">
       <ul class="slider-list">
         <li><a><%= image_tag @wx_plot.cover_pic %></a></li>

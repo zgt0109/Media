@@ -4,9 +4,9 @@
 
 <script type="text/javascript" src="/javascripts/app/website/swipe.js"></script>
 <body class="index">
-<% if @website.home_cover_pic.present? && @website.is_open_cover_pic %>
+<% if @website.home_cover_pic_key.present? && @website.is_open_cover_pic %>
     <div class="pageShow" id="pageShow">
-      <%= image_tag @website.home_cover_pic.large %>
+      <%= image_tag @website.home_cover_pic_url %>
     </div>
 <% end %>
 <div class="html">

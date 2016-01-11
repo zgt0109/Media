@@ -1,6 +1,6 @@
 <body class="index">
 <div class="pageShow" id="pageShow">
-  <%= image_tag @shop.cover_pic.large if @shop.cover_pic.present? && @shop.is_open_cover_pic && params[:show].to_i == 1%>
+  <%= image_tag @shop.cover_pic_url if @shop.cover_pic_key.present? && @shop.is_open_cover_pic && params[:show].to_i == 1%>
 </div>
 <div class="html">
   <div class="main">
@@ -13,7 +13,7 @@
           <div class="box-img" id="slider">
             <ul class="box-img-list">
               <% @ec_ads.each do |w| %>
-                  <li><%= image_tag w.try(:pic).try(:large) %></li>
+                  <li><%= image_tag w.try(:pic_url) %></li>
               <% end %>
             </ul>
             <div class="box-text">

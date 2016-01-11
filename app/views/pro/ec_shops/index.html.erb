@@ -28,7 +28,7 @@
         </p>
 
         <div class="upload-img upload-preview-img">
-          <span><%= f.object.cover_pic? ? image_tag(f.object.cover_pic.large, id: 'ec_shop_cover_pic', class: 'view') : "<img src='/assets/bg_fm.jpg' alt='首页封面图片' id='ec_shop_cover_pic' class='view'/>".html_safe %></span>
+          <span><%= f.object.cover_pic_key.present? ? image_tag(f.object.cover_pic_url, id: 'ec_shop_cover_pic', class: 'view') : "<img src='/assets/bg_fm.jpg' alt='首页封面图片' id='ec_shop_cover_pic' class='view'/>".html_safe %></span>
           <!-- <i>点击查看示意图</i> -->
         </div>
         <div class="upload-btn">

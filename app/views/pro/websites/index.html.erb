@@ -67,7 +67,7 @@
           </div>
           <div class="upload-img">
             <span style="line-height: 87px;">
-              <%= image_tag((f.object.home_cover_pic.presence || '/assets/bg_fm.jpg'), id: "preview_shop_logo", class: 'view', size: '160x89') %>
+              <%= image_tag((f.object.home_cover_pic_url || '/assets/bg_fm.jpg'), id: "preview_shop_logo", class: 'view', size: '160x89') %>
             </span>
           </div>
           <div class="upload-btn">

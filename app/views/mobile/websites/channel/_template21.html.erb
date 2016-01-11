@@ -1,7 +1,7 @@
-<% if website_menu.cover_pic? %>
+<% if website_menu.cover_pic_key.present? %>
     <div class="mod-slider slider-hor" id="index">
       <ul class="slider-list">
-        <li><a><%= image_tag website_menu.cover_pic.custom %></a></li>
+        <li><a><%= image_tag website_menu.cover_pic_url %></a></li>
       </ul>
       <div class="slider-text">
         <span class="fl slider-span" id="slider-span"><%= website_menu.name %></span>
