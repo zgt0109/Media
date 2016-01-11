@@ -4,7 +4,7 @@
 #
 #  id                     :integer          not null, primary key
 #  activity_id            :integer          not null
-#  activity_form_field_id :integer          not null
+#  form_field_id :integer          not null
 #  field_name             :string(255)
 #  field_value            :string(255)
 #  sort                   :integer          default(1), not null
@@ -14,10 +14,10 @@
 #
 
 class ActivityForm < ActiveRecord::Base
-  #attr_accessible :activity_form_field_id, :activity_id, :field_name, :field_value, :sort, :status
-  validates :activity_form_field_id, :activity_id, :sort, presence: true
+  #attr_accessible :form_field_id, :activity_id, :field_name, :field_value, :sort, :status
+  validates :form_field_id, :activity_id, :sort, presence: true
 
-  belongs_to :activity_form_field
+  belongs_to :form_field
   belongs_to :activity
 
   before_create :add_default_attrs
@@ -30,19 +30,19 @@ class ActivityForm < ActiveRecord::Base
       options ||= {}
       options[:sort] ||= 1
       options[:required] ||= false
-      form_field = ActivityFormField.where(id: form_field_id).first
+      form_field = FormField.where(id: form_field_id).first
       if form_field
-        self.create(activity_id: activity_id, activity_form_field_id: form_field.id, field_name: form_field.name, field_value: form_field.value, sort: options[:sort], required: options[:required])
+        self.create(activity_id: activity_id, form_field_id: form_field.id, field_name: form_field.name, field_value: form_field.value, sort: options[:sort], required: options[:required])
       end
     end
 
   end
   
   def add_default_attrs
-    return unless self.activity_form_field
+    return unless self.form_field
 
-    self.field_name = self.activity_form_field.name
-    self.field_value = self.activity_form_field.value
+    self.field_name = self.form_field.name
+    self.field_value = self.form_field.value
   end
 
 end

@@ -7,7 +7,7 @@ class Pro::WxPlotsController < Pro::WxPlotBaseController
   end
 
   def show
-    @activity = current_user.activities.where(activity_type_id: params[:activity_type_id]).first
+    @activity = current_site.activities.where(activity_type_id: params[:activity_type_id]).first
     @activity = Activity.new(supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.try(:id), activity_type_id: params[:activity_type_id], status: Activity::SETTED) if @activity.nil?
   end
 

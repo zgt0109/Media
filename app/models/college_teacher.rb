@@ -14,9 +14,7 @@
 #
 
 class CollegeTeacher < ActiveRecord::Base
-	mount_uploader :avatar, CollegeTeacherLogoUploader
   store :meta, accessors: [ :qiniu_avatar_key ]
-  img_is_exist({avatar: :qiniu_avatar_key}) 
 
   # attr_accessible :title, :body
   belongs_to :college

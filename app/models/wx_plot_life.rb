@@ -7,7 +7,6 @@ class WxPlotLife < ActiveRecord::Base
 
   before_create :add_default_attrs
 
-
   private
 
     def add_default_attrs

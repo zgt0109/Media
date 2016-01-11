@@ -4,7 +4,7 @@ class Api::V1::VipPackagesController < ActionController::Base
   # 成功返回的参数: {id:套餐id,package_name:套餐名称,items_name:服务名称,price:价格,old_price:原价,expiry_num:几个月过期}
   # demo: http://localhost:3000/v1/vip_packages/get_vip_packages_api?mp_user_open_id=gh_db4ac511bbf0
 	def get_vip_packages_api
-		wx_mp_user = WxMpUser.where(uid: params[:mp_user_open_id]).last
+		wx_mp_user = WxMpUser.where(openid: params[:mp_user_open_id]).last
 		return render json: { error_code: 1, errmsg: "参数不正确，找不到公众账号" } unless wx_mp_user
 		vip_packages = wx_mp_user.supplier.vip_packages.active.latest
 		packages = vip_packages.map do |package|
@@ -30,7 +30,7 @@ class Api::V1::VipPackagesController < ActionController::Base
 	  else
 	  	industry_wx_mp_user_open_ids = ActiveRecord::Base.connection.execute("select open_id from recommend_wx_mp_users where id in (#{recommended_ids}) AND has_package = 1  AND enabled =1 ").to_a.flatten
 	  end
-	  wx_mp_user_ids = WxMpUser.where(uid: industry_wx_mp_user_open_ids).pluck(:id)
+	  wx_mp_user_ids = WxMpUser.where(openid: industry_wx_mp_user_open_ids).pluck(:id)
 	  vip_packages = VipPackage.where(wx_mp_user_id: wx_mp_user_ids).active.latest.page(page).per(per)
 	  packages = vip_packages.map do |package|
 			hash = package.attributes.slice('id', 'price', 'expiry_num', 'supplier_id')

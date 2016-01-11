@@ -1,6 +1,5 @@
 class HomePicture < ActiveRecord::Base
- 
-  mount_uploader :pic, HomePicUploader
+
   belongs_to :admin_user
 
   enum_attr :pic_type, :in=>[

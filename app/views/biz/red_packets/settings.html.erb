@@ -28,13 +28,13 @@
               <div class="form-group clearfix">
                 <h3 class="text-info fl">关注红包</h3>
                 <label class="fl mt20 ml20">
-                  <%= check_box_tag "status", '1', RedPacket::FollowRedPacket.follow.normal.where(supplier_id: @current_user.id).first.present?, class: 'ace ace-switch ace-switch-7' %>
+                  <%= check_box_tag "status", '1', RedPacket::FollowRedPacket.follow.normal.where(site_id: current_site.id).first.present?, class: 'ace ace-switch ace-switch-7' %>
                   <span class="lbl"></span>
                 </label>
               </div>
               <div class="form-group">
                 <p>
-                  <strong class="pointer btn btn-primary btn-sm btn-filter" data-toggle="<%= @current_user.red_packets.follow.normal.present? ? 'modals' : '' %>" data-target="weisiteModal" data-title="金额设置" data-width="600" data-height="440" data-iframe="<%= set_value_red_packets_path %>">金额设置</strong>
+                  <strong class="pointer btn btn-primary btn-sm btn-filter" data-toggle="<%= current_site.red_packets.follow.normal.present? ? 'modals' : '' %>" data-target="weisiteModal" data-title="金额设置" data-width="600" data-height="440" data-iframe="<%= set_value_red_packets_path %>">金额设置</strong>
                   <span class="ml20">开启后默认关注用户赠送固定1元红包,红包预算总额默认为100元。</span>
                   <!--<span class="ml20">当前设置为3元随机红包。</span>-->
                 </p>
@@ -52,7 +52,7 @@
                 <p>
                   <span>所有粉丝openid导出</span>
 
-                  <%- wx_users_count = @current_user.wx_users.subscribe.count %>
+                  <%- wx_users_count = current_site.wx_users.subscribed.count %>
                   <% if wx_users_count <= EXPORTING_COUNT %>
                       <%= link_to 'EXCEL', export_red_packets_path(format: :xls, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
                       <%= link_to 'TXT', export_red_packets_path(formt: :txt, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
@@ -70,7 +70,7 @@
 
                 <p>
                   <span>所有会员openid导出</span>
-                  <%- vip_users_count = @current_user.vip_users.normal.count %>
+                  <%- vip_users_count = current_site.vip_users.normal.count %>
                   <% if vip_users_count <= EXPORTING_COUNT %>
                       <%= link_to 'EXCEL', export_red_packets_path(format: :xls, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_VIPS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
                       <%= link_to 'TXT', export_red_packets_path(formt: :txt, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_VIPS), class: 'btn btn-primary btn-sm btn-filter ml20' %>

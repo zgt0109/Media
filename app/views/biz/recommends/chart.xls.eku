@@ -1,7 +1,7 @@
 __filename = "chart.xls"
 sheet1 = xls.create_worksheet
 sheet1.row(0).concat(%w(活动名称 微信号 手机 参与时间 推荐人数 关注人数 兑奖状态))
-@activity = current_user.activities.recommend.find_by_id(params[:search][:activity_id_eq])
+@activity = current_site.activities.recommend.find_by_id(params[:search][:activity_id_eq])
 
 participates = @search.includes(:wx_user).page(params[:page_exl]).per(EXPORTING_COUNT)
 participate_ids = participates.map(&:id)

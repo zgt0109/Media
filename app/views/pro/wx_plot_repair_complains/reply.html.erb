@@ -7,7 +7,7 @@
               <dd class="text-center time"><span class="grey"><%= f.created_at %></span></dd>
               <% if f.is_a?(WxPlotRepairComplainMessage) %>
                   <dt>
-                    <%= f.messageable_type.to_s == 'Supplier' ?  '物业客服：' : '小区住户：'%>
+                    <%= f.messageable_type.to_s == 'Account' ?  '物业客服：' : '小区住户：'%>
                   </dt>
                   <dd>
                     <%= f.content %>

@@ -1,8 +1,7 @@
 class ChannelQrcodesController < ApplicationController
-  before_filter :require_wx_mp_user#, :mp_user_is_sync
 
   def index
-    @search = current_user.channel_qrcodes.normal.latest.search(params[:search])
+    @search = current_site.channel_qrcodes.normal.latest.search(params[:search])
     @channel_qrcodes = @search.page(params[:page])
     if params[:search]
       @type_id = params[:search][:channel_type_id_eq]
@@ -11,7 +10,7 @@ class ChannelQrcodesController < ApplicationController
   end
 
   def index_json
-    # data = current_user.channel_qrcodes.normal.map do |qrcode|
+    # data = current_site.channel_qrcodes.normal.map do |qrcode|
     #   [qrcode.name, qrcode.channel_type.try(:name), qrcode.channel_way_name, qrcode.id]
     # end
     data = [ ["二维码1", "分类1", "线上", 1], 
@@ -20,18 +19,18 @@ class ChannelQrcodesController < ApplicationController
   end
 
   def new
-    @channel_qrcode = current_user.channel_qrcodes.new
+    @channel_qrcode = current_site.channel_qrcodes.new
     render :form, layout: 'application_pop'
   end
 
   def edit
-    @channel_qrcode = current_user.channel_qrcodes.find(params[:id])
+    @channel_qrcode = current_site.channel_qrcodes.find(params[:id])
     render :form, layout: 'application_pop'
   end
 
   def create
-    scene_id = current_user.channel_qrcodes.maximum(:scene_id).to_i + 1
-    @channel_qrcode = current_user.channel_qrcodes.new(params[:channel_qrcode].merge!(scene_id: scene_id))
+    scene_id = current_site.channel_qrcodes.maximum(:scene_id).to_i + 1
+    @channel_qrcode = current_site.channel_qrcodes.new(params[:channel_qrcode].merge!(scene_id: scene_id))
     if @channel_qrcode.save
       flash[:notice] = "添加成功"
       render inline: "<script>window.parent.document.getElementById('weisiteModal').style.display='none';window.parent.location.reload();</script>"
@@ -45,7 +44,7 @@ class ChannelQrcodesController < ApplicationController
   end
 
   def update
-    @channel_qrcode = current_user.channel_qrcodes.find(params[:id])
+    @channel_qrcode = current_site.channel_qrcodes.find(params[:id])
     logo = params[:channel_qrcode][:logo] || "unchange"
     if @channel_qrcode.update_attributes(params[:channel_qrcode].merge!(logo: logo))
       flash[:notice] = "编辑成功"
@@ -57,7 +56,7 @@ class ChannelQrcodesController < ApplicationController
   end
 
   def destroy
-    @channel_qrcode = current_user.channel_qrcodes.find(params[:id])
+    @channel_qrcode = current_site.channel_qrcodes.find(params[:id])
     if @channel_qrcode.deleted!
       redirect_to :back, notice: '删除成功'
     else
@@ -66,12 +65,12 @@ class ChannelQrcodesController < ApplicationController
   end
 
   def qrcode_download
-    @channel_qrcode = current_user.channel_qrcodes.find(params[:id])
+    @channel_qrcode = current_site.channel_qrcodes.find(params[:id])
     render layout: 'application_pop'
   end
 
   def download
-    @channel_qrcode = current_user.channel_qrcodes.find(params[:id])
+    @channel_qrcode = current_site.channel_qrcodes.find(params[:id])
     send_data @channel_qrcode.download(params[:type]), :disposition => 'attachment', :filename=>"winwemedia_#{@channel_qrcode.id}_#{params[:type]}.jpg"
   end
 
@@ -88,6 +87,6 @@ class ChannelQrcodesController < ApplicationController
   private
 
   def mp_user_is_sync
-    return redirect_to account_url, alert: '服务号才有此功能' unless current_user.wx_mp_user.is_sync?
+    return redirect_to profile_path, alert: '服务号才有此功能' unless current_site.wx_mp_user.is_sync?
   end
 end

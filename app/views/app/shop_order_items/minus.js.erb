@@ -1,5 +1,0 @@
-$("#total_number").html('<%= @shop_order.reload.total_qty %>份');
-$("#total_origin_price").html('<%= format("%.2f", @shop_order.reload.total_amount) %>');
-$("#total_price").html('<%= format("%.2f", @shop_order.reload.total_amount) %>');
-$("#current_product_sum_<%= @shop_order_item.shop_product.id %>").html("<%= @shop_order_item.destroyed? ? '0' : @shop_order_item.qty %>");
-$("#current_product_sum_<%= @shop_order_item.shop_product.id %>").val("<%= @shop_order_item.destroyed? ? '0' : @shop_order_item.qty %>");

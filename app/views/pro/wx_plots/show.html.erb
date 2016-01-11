@@ -15,8 +15,6 @@
             <%= render "weixin_preview", wx_title: @activity.try(:name), wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
 
             <%= form_for @activity, validate: true, html: {role: 'form', class: 'form col-sm-7' } do |activity| %>
-              <%= activity.hidden_field :supplier_id %>
-              <%= activity.hidden_field :wx_mp_user_id %>
               <%= activity.hidden_field :activity_type_id %>
               <%= activity.hidden_field :status %>
 
@@ -40,7 +38,7 @@
               <% end %>
 
 
-              <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url , pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+              <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url , pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key %>
 
               <div class="form-group ">
                 <%= activity.submit '保存', class: 'btn btn-sm btn-primary' %>
@@ -58,7 +56,7 @@
     <script type="text/javascript">
       $(function(){
           $('form input[type=submit]').click(function(){
-              if($('input[name="activity[name]"]').val() && !$('input[name="activity[qiniu_pic_key]"]').val()){
+              if($('input[name="activity[name]"]').val() && !$('input[name="activity[pic_key]"]').val()){
                   showTip('warning',"请上传微信消息图");
                   return false;
               }

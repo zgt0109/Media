@@ -1,93 +1,90 @@
 <div class="navbar navbar-default navbar-fixed-top" id="navbar">
-    <div class="navbar-container" id="navbar-container">
-        <div class="navbar-header pull-left">
-            <a href="<%= console_url %>" class="navbar-brand">
-              <small>
-                微枚迪管理系统
-              </small>
-            </a>
-        </div>
+  <div class="navbar-container" id="navbar-container">
+    <div class="navbar-header pull-left">
+      <a href="<%= console_url %>" class="navbar-brand">
+        <small>
+          微枚迪管理系统
+        </small>
+      </a>
+    </div>
 
-        <div <%= hide_for_temp_user %> class="navbar-header pull-left " role="navigation">
-            <ul class="nav ace-nav pull-left font-size16">
-                <li>
-                    <a href="<%= console_url %>" class="<%= (@partialLeftNav.blank? || @partialLeftNav == "/layouts/partialLeftNav") && controller_name != 'platforms' ? 'active' : '' %>">
-                        <span>管理中心</span>
-                    </a>
-                </li>
+      <div <%= hide_for_temp_user %> class="navbar-header pull-left " role="navigation">
+          <ul class="nav ace-nav pull-left font-size16">
+              <li>
+                  <a href="<%= console_url %>" class="<%= (@partialLeftNav.blank? || @partialLeftNav == "/layouts/partialLeftNav") && controller_name != 'platforms' ? 'active' : '' %>">
+                      <span>管理中心</span>
+                  </a>
+              </li>
 
-                <% unless current_user.try(:free_account?) || current_user.try(:industry_ec?) %>
-                <li>
-                    <a href="/datacube_vips" class="<%= @partialLeftNav == "/layouts/partialLeftDC" ? 'active' : '' %>">
-                        <span>数据魔方</span>
-                    </a>
-                </li>
-                <% end %>
+              <li>
+                  <a href="<%= subscribe_data_wx_requests_path %>" class="<%= @partialLeftNav == "/layouts/partialLeftDC" ? 'active' : '' %>">
+                      <span>数据魔方</span>
+                  </a>
+              </li>
 
-                <li>
-                    <a href="<%= account_url %>" class="<%= @partialLeftNav == "/layouts/partialLeftSys" ? 'active' : '' %>">
-                        <span class="margin-top-20">系统设置</span>
-                    </a>
-                </li>
+              <li>
+                  <a href="<%= profile_path %>" class="<%= @partialLeftNav == "/layouts/partialLeftSys" ? 'active' : '' %>">
+                      <span class="margin-top-20">系统设置</span>
+                  </a>
+              </li>
 
-                <li>
-                    <a href="<%= platforms_url %>" class="<%= (@partialLeftNav.blank? || @partialLeftNav == "/layouts/partialLeftNav") && controller_name == 'platforms' ? 'active' : '' %>">
-                        <span class="margin-top-20">公众平台绑定</span>
-                    </a>
-                </li>
+              <li>
+                  <a href="<%= platforms_url %>" class="<%= (@partialLeftNav.blank? || @partialLeftNav == "/layouts/partialLeftNav") && controller_name == 'platforms' ? 'active' : '' %>">
+                      <span class="margin-top-20">公众平台绑定</span>
+                  </a>
+              </li>
 
 <!--                 <li>
-                    <a href="<%= spec_vip_api_settings_path %>" class="<%= 'active' if controller_name =~ /vip_api_settings|vip_external_http_apis/ %>"><span class="margin-top-20">开放接口</span></a>
-                </li> -->
-            </ul>
-        </div>
+                  <a href="<%= spec_vip_api_settings_path %>" class="<%= 'active' if controller_name =~ /vip_api_settings|vip_external_http_apis/ %>"><span class="margin-top-20">开放接口</span></a>
+              </li> -->
+          </ul>
+      </div>
 
-        <div <%= hide_for_temp_user %> class="navbar-header pull-right" role="navigation">
-            <ul class="nav ace-nav font-size16 system_message_ul">
-                <li>
-                    <a class="dropdown-toggle" href="<%= site_dev_logs_url %>" title="后台公告" target='_blank'>
-                    <i class="icon-info-sign icon-animated-vertical"></i>
-                    </a>
-                </li>
+      <div <%= hide_for_temp_user %> class="navbar-header pull-right" role="navigation">
+          <ul class="nav ace-nav font-size16 system_message_ul">
+<!--               <li>
+                  <a class="dropdown-toggle" href="<%= site_dev_logs_url %>" title="后台公告" target='_blank'>
+                  <i class="icon-info-sign icon-animated-vertical"></i>
+                  </a>
+              </li> -->
 
-                <li>
-                    <a class="dropdown-toggle" href="/feedbacks" title="意见反馈">
-                        <i class="icon-comments icon-animated-vertical"></i>
-                    </a>
-                </li>
-                <li class="split-left">
-                    <a class="dropdown-toggle" href="<%= help_menus_path %>" title="操作帮助">
-                        <i class="icon-question-sign icon-animated-vertical"></i>
-                    </a>
-                </li>
+              <li>
+                  <a class="dropdown-toggle" href="/feedbacks" title="意见反馈">
+                      <i class="icon-comments icon-animated-vertical"></i>
+                  </a>
+              </li>
+              <li class="split-left">
+                  <a class="dropdown-toggle" href="<%= help_menus_path %>" title="操作帮助">
+                      <i class="icon-question-sign icon-animated-vertical"></i>
+                  </a>
+              </li>
 
-                <li class="split-right">
-                    <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-                      <span><%= current_user.try(:nickname) %></span><i class="icon-caret-down"></i>
-                    </a>
-                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                       <!-- <li>
-                            <a href="javascript:;">
-                                <i class="icon-cog"></i>
-                                Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <i class="icon-user"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li class="divider"></li>-->
-                        <li>
-                          <%= link_to sign_out_url do %><i class="icon-off"></i>退出<% end %>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            
-        </div>
-        
-    </div>
-    
+              <li class="split-right">
+                  <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+                    <span><%= current_user.try(:nickname) %></span><i class="icon-caret-down"></i>
+                  </a>
+                  <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                     <!-- <li>
+                          <a href="javascript:;">
+                              <i class="icon-cog"></i>
+                              Settings
+                          </a>
+                      </li>
+                      <li>
+                          <a href="javascript:;">
+                              <i class="icon-user"></i>
+                              Profile
+                          </a>
+                      </li>
+                      <li class="divider"></li>-->
+                      <li>
+                        <%= link_to sign_out_url do %><i class="icon-off"></i>退出<% end %>
+                      </li>
+                  </ul>
+              </li>
+          </ul>
+
+      </div>
+
+  </div>
 </div>

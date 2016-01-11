@@ -4,7 +4,7 @@ class Mobile::CarAssistantsController < Mobile::BaseController
 
   def index
     @assistants = Assistant.enabled.cars.order('sort ASC')
-    @assistant_ids = @supplier.assistants_suppliers.collect(&:assistant_id)
+    @assistant_ids = @supplier.assistants_accounts.collect(&:assistant_id)
   end
 
   private

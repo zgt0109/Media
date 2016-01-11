@@ -57,7 +57,7 @@ class Pro::CarTypesController < ApplicationController
 
 	private
 	def check_car_shop
-    @car_shop = current_user.car_shop
+    @car_shop = current_site.car_shop
     return redirect_to car_shops_path, notice: '请先设置我的4S店' unless @car_shop
 	end
 

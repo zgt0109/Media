@@ -4,7 +4,7 @@ class Huodong::Brokerage::ClientsController < Huodong::Brokerage::BaseController
 	before_filter :find_commission_types_enable
 
 	def index
-		@total_brokerage_clients = current_user.brokerage_clients
+		@total_brokerage_clients = current_site.brokerage_clients
 		@search = @total_brokerage_clients.search(params[:search])
 		@brokerage_clients = @search.order('id DESC').page(params[:page])
 	end
@@ -28,15 +28,15 @@ class Huodong::Brokerage::ClientsController < Huodong::Brokerage::BaseController
 
 	private
 		def find_brokerage_client
-			@brokerage_client = current_user.brokerage_clients.find(params[:id])
+			@brokerage_client = current_site.brokerage_clients.find(params[:id])
 		end
 
 		def find_commission_types
-			@commission_types = current_user.brokerage_commission_types.map(&:mission_type_name_with_id)
+			@commission_types = current_site.brokerage_commission_types.map(&:mission_type_name_with_id)
 		end
 
 		def find_commission_types_enable
-			@commission_types_enable = current_user.brokerage_commission_types.enabled.map(&:mission_type_name_with_id)
+			@commission_types_enable = current_site.brokerage_commission_types.enabled.map(&:mission_type_name_with_id)
 		end
 
 end

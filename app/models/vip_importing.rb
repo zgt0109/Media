@@ -1,7 +1,7 @@
-# Example: VipImporting.import(Supplier.first, '/Users/fool/a.csv')
+# Example: VipImporting.import(Account.first, '/Users/fool/a.csv')
 
 class VipImporting < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :vip_user
 
   attr_accessor :vip_grade_names
@@ -106,8 +106,8 @@ class VipImporting < ActiveRecord::Base
     VipImportingLog.create(error_type: -1, error_msg: "成功同步#{sync_count}条数据")  if sync_count > 0
   end
 
-  def activate_by(wx_user)
-    return if wx_user.blank? || supplier.vip_users.visible.where(mobile: mobile).exists?
+  def activate_by(user)
+    return if user.blank? || supplier.vip_users.visible.where(mobile: mobile).exists?
     fields = %w(user_no name mobile vip_grade_id usable_amount total_recharge_amount total_consume_amount total_points usable_points)
     value_hash = fields.inject({}) do |h, field|
       if field == 'user_no'
@@ -116,7 +116,7 @@ class VipImporting < ActiveRecord::Base
         h.merge! field => attributes[field] || 0
       end
     end
-    attrs = { wx_user_id: wx_user.id, wx_mp_user_id: supplier.wx_mp_user.id, is_sync: true, created_at: open_card_time }.merge!(value_hash)
+    attrs = { user_id: user.id, is_sync: true, created_at: open_card_time }.merge!(value_hash)
     supplier.vip_users.create(attrs)
   end
 

@@ -4,7 +4,7 @@ class MaterialsController < ApplicationController
   before_filter :find_material, only: [:show, :edit, :update, :destroy]
 
   def index
-    @materials = current_user.materials.single_graphic.graphic_select.page(params[:page]).order("id desc")
+    @materials = current_site.materials.single_graphic.graphic_select.page(params[:page]).order("id desc")
   end
 
   def show
@@ -19,7 +19,7 @@ class MaterialsController < ApplicationController
   end
 
   def create
-    @material = current_user.materials.new(params[:material])
+    @material = current_site.materials.new(params[:material])
 
     respond_to do |format|
       if @material.save
@@ -62,7 +62,7 @@ class MaterialsController < ApplicationController
 
   private
     def find_material
-      @material = current_user.materials.find(params[:id])
+      @material = current_site.materials.find(params[:id])
     rescue
       render text: '素材不存在'
     end

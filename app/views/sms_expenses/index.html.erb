@@ -36,7 +36,7 @@
                 <input type="submit" class="btn btn-primary btn-sm" value="查询">
               </div>
               <div class="col-sm-6 pull-right">
-                <p class="line-height-30 text-right">赠送剩余：<%= current_user.free_sms %>条； 购买剩余<%= current_user.pay_sms %>条；
+                <p class="line-height-30 text-right">赠送剩余：<%= current_user.free_sms_count %>条； 购买剩余<%= current_user.pay_sms_count %>条；
                   总共使用：<%= current_user.sms_expenses.succeed.count %>条</p>
               </div>
           <% end %>

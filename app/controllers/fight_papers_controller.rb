@@ -3,7 +3,7 @@ class FightPapersController < ApplicationController
 
   def index
     if params[:activity_id]
-      @fight_papers = current_user.fight_papers.where(activity_id: params[:activity_id])
+      @fight_papers = current_site.fight_papers.where(activity_id: params[:activity_id])
     else
       redirect_to activities_path
     end
@@ -29,7 +29,7 @@ class FightPapersController < ApplicationController
 
 
   def create
-    @fight_papers = current_user.fight_papers.where(activity_id: params[:activity_id])
+    @fight_papers = current_site.fight_papers.where(activity_id: params[:activity_id])
     #logger.info params[:read_time] if params.present?
     if FightPaper.batch_update!(@fight_papers,params)
       redirect_to :back, notice: '保存成功'
@@ -41,8 +41,8 @@ class FightPapersController < ApplicationController
   # PUT /fight_papers/1
   # PUT /fight_papers/1.json
   def update
-    @activity     = current_user.activities.find params[:activity_id]
-    @fight_papers = current_user.fight_papers.where(activity_id: params[:activity_id])
+    @activity     = current_site.activities.find params[:activity_id]
+    @fight_papers = current_site.fight_papers.where(activity_id: params[:activity_id])
     @fight_paper  = @fight_papers.find params[:id]
     if @fight_paper.update_attributes(params[:fight_paper])
       if @activity.setting? && @fight_paper == @activity.fight_papers.last
@@ -68,7 +68,7 @@ class FightPapersController < ApplicationController
   end
 
   def user_data
-    @total_fight_report_cards = current_user.fight_report_cards.registered.where("fight_report_cards.activity_id = ? AND fight_report_cards.activity_user_id is not null", params[:aid]).includes(:activity_consume).includes(:activity_user).order("fight_report_cards.score DESC, fight_report_cards.speed ASC")
+    @total_fight_report_cards = current_site.fight_report_cards.registered.where("fight_report_cards.activity_id = ? AND fight_report_cards.activity_user_id is not null", params[:aid]).includes(:activity_consume).includes(:activity_user).order("fight_report_cards.score DESC, fight_report_cards.speed ASC")
     @search = @total_fight_report_cards.search(params[:search])
     @fight_report_cards = @search.page(params[:page])
 
@@ -83,7 +83,7 @@ class FightPapersController < ApplicationController
   end
 
   def use_code
-    @activity_consume = current_user.activity_consumes.find(params[:id])
+    @activity_consume = current_site.activity_consumes.find(params[:id])
     
     if @activity_consume.vip_privilege && @activity_consume.wx_user
 
@@ -101,6 +101,6 @@ class FightPapersController < ApplicationController
 
   private
     def find_fight_paper
-      @fight_paper = current_user.fight_papers.find params[:id]
+      @fight_paper = current_site.fight_papers.find params[:id]
     end
 end

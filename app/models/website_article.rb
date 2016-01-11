@@ -16,8 +16,6 @@
 #
 
 class WebsiteArticle < ActiveRecord::Base
-  mount_uploader :pic, MaterialUploader
-  img_is_exist({pic: :pic_key})
 
   acts_as_list column: 'sort', scope: [:website_id, :website_menu_id, :website_article_category_id]
 
@@ -42,7 +40,7 @@ class WebsiteArticle < ActiveRecord::Base
   validates :content, :title, presence: true
   validates :sort, presence: true, numericality: { only_integer: true }
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :website
   belongs_to :website_menu
@@ -72,7 +70,7 @@ class WebsiteArticle < ActiveRecord::Base
     end
     wac.content = text
   end
-  
+
   def self.categorized(category = nil)
     if category
       joins(:website_article_category).where("website_article_categories.id" => category.self_and_descendants.to_a.map(&:id)).uniq
@@ -95,5 +93,5 @@ class WebsiteArticle < ActiveRecord::Base
         nil
     end
   end
-  
+
 end

@@ -1,0 +1,128 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微调研', surveys_activities_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+    <div class="page-content">
+      <div class="tabbable">
+        <ul class="nav nav-tabs padding-24 tab-size-bigger">
+          <%= link_to_li '微调研管理', '/activities/surveys' %>
+          <%= link_to_li '用户数据', '/survey_questions/user_data' %>
+        </ul>
+        <div class="tab-content no-border padding-24">
+          <div id="tab-2" class="tab-pane fade active in">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <%= form_for @search, url: user_data_survey_questions_path, html: {method: :get } do |f| %>
+                  <div class="col-md-3">
+                    <div class="input-group input-group-text col-xs-12 row">
+                      <% options = current_site.activities.show.where(:activity_type_id => 15).pluck(:name, :id) %>
+                      <%= f.select :activity_id_eq, options, {include_blank: '全部调研活动'}, class: 'col-xs-12 row' %>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3 text-right">
+                    <input type="submit" class="btn btn-primary btn-sm btn-filter" value="查询" />
+                    <% if params[:search].to_h["activity_id_eq"].present? %>
+                      <%# if @total_count <= EXPORTING_COUNT %>
+                        <%#= link_to '导出EXCEL', user_data_survey_questions_path(format: :xls, search: params[:search], page_exl: 1), class: 'btn btn-sm btn-primary export', style: "display:#{params[:search].to_h["activity_id_eq"].present? ? '' : 'none'};" %>
+                      <%# else %>
+                        <%= link_to '导出EXCEL', user_data_survey_questions_path(format: :xls, search: params[:search]), class: 'btn btn-sm btn-primary hide', id: "a_exl" %>
+                        <a class="btn btn-primary btn-sm btn-filter export" data-title="用户数据导出" data-toggle="modals" data-target="delModal" data-text='<%= data_text(@total_count,(@total_count/EXPORTING_COUNT.to_f).ceil) %>' style="display:<%= params[:search].to_h["activity_id_eq"].present? ? '' : 'none' %>;">导出EXCEL</a>
+                      <%# end %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+
+                <div class="col-md-12 margin-top-20">
+                  <table id="peopleDataTable" class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>序号</th>
+                        <th>用户名</th>
+                        <th>手机</th>
+                        <th>调研结果</th>
+                        <th>建议</th>
+                        <th>调研时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if @activity_users.each_with_index do |user, index| %>
+                        <tr>
+                          <td><%= @activity_users.default_per_page * (@activity_users.current_page - 1) + index + 1 %></td>
+                          <td><%= user.name.present? ? user.name : '匿名用户' %></td>
+                          <td><%= user.mobile.present? ? user.mobile : '匿名用户'  %> </td>
+                          <td><%= user.survey_options %></td>
+                          <td><%= user.activity_feedback.try(:content) %></td>
+                          <td><%= user.created_at %></td>
+                        </tr>
+                      <% end.blank? %>
+                        <tr>
+                          <td colspan="6" class="green text-center">暂无数据</td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                  <%= paginate @activity_users %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% content_for :custom_js do %>
+    <script>
+      $(function(){
+          $('#breadcrumbs>ul').append("<li><%= j link_to '用户数据', user_data_survey_questions_path %></li>");
+          $('#search_activity_id_eq').change(function(){
+              if(!$(this).val()){
+                  $('.export').hide();
+              }else{
+                  $('.export').show();
+              }
+          });
+          $('.export').click(function(){
+              <% unless params[:search].to_h["activity_id_eq"].present? %>
+                showTip('warning', '请点击查询按钮查询某个具体活动');
+                return false;
+              <% end %>
+          });
+          $(".btn-filter").on("click", function(){
+            setTimeout(function(){
+            $("button[data-fn=submit]").attr("type","button");
+            },200)
+          });
+          $('body').on('click','button[data-fn="submit"]',function(){
+            var $this = $(this),
+                $time = 10;
+            if(!$this.attr("disabled")){
+                $this.attr("disabled",true).text("倒计时(10)");
+                showTime();
+                var url = "<%= user_data_survey_questions_path(format: :xls, search: params[:search]) %>"+"<%= params[:search].present? ? '&page_exl=' : '?page_exl=' %>"+$("[name=page_exl]:checked").val();
+                $("#a_exl").attr("href",url);
+                $("#a_exl")[0].click();
+            }
+            function showTime(){
+                if($time ==0){
+                    $this.attr("disabled",false).text("确定");
+                }else{
+                    $this.text("倒计时("+$time+")");
+                    setTimeout(showTime,1000);
+                    $time--;
+                }
+            }
+          });
+      });
+    </script>
+  <% end %>

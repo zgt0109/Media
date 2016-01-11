@@ -3,8 +3,8 @@ class Biz::VipCardsController < Biz::VipController
   skip_before_filter :require_vip_card, only: [:settings, :index]
 
   def index
-    @activity_notice = @activity.active_activity_notice || @activity.activity_notices.create({wx_mp_user_id: @activity.wx_mp_user_id, description: "会员卡", activity_status: 1}.merge(@activity.supplier.bqq_account? ? {title: "我的会员卡", summary: "点击进入会员卡个人中心"} : {title: "尊敬的会员{name}", summary: "尊敬的会员{name},您的会员卡号为{card_id},快来点击查看优惠信息吧!!"}))
-    @activity.ready_activity_notice || @activity.activity_notices.create({wx_mp_user_id: @activity.wx_mp_user_id, title: "申请微信会员卡", summary: "您尚未申请会员特权,快来点击申领吧!!", description: "申请微信会员卡", activity_status: 0})
+    @activity_notice = @activity.active_activity_notice || @activity.activity_notices.create({description: "会员卡", activity_status: 1}.merge({title: "尊敬的会员{name}", summary: "尊敬的会员{name},您的会员卡号为{card_id},快来点击查看优惠信息吧!!"}))
+    @activity.ready_activity_notice || @activity.activity_notices.create({title: "申请微信会员卡", summary: "您尚未申请会员特权,快来点击申领吧!!", description: "申请微信会员卡", activity_status: 0})
   end
 
   def settings

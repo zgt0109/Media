@@ -25,8 +25,6 @@
 #
 
 class ActivityProperty < ActiveRecord::Base
-  mount_uploader :prize_pic, MaterialUploader
-  img_is_exist({prize_pic: :qiniu_pic_key})
 
   include Concerns::ActsAsCoupon
 

@@ -24,13 +24,13 @@
 
 class Wedding < ActiveRecord::Base
   WEEK = [[1,"一"],[2,"二"],[3,"三"],[4,"四"],[5,"五"],[6,"六"],[0,"日"]]
+
   attr_accessor :uploaded_video
+
   VIDEO_DIR = "#{Rails.root}/public/uploads/videos/wedding/video_url"
   FileUtils.mkdir_p VIDEO_DIR unless File.exists?(VIDEO_DIR)
 
-
-
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :province
   belongs_to :city
@@ -42,7 +42,7 @@ class Wedding < ActiveRecord::Base
   has_many :seats,    class_name: 'WeddingSeat',    dependent: :destroy
   has_many :guests,   class_name: 'WeddingGuest',   dependent: :destroy
   has_many :qr_codes, class_name: "WeddingQrCode",  dependent: :destroy
-  
+
   validates :groom, :bride, :address, :phone, :wedding_at, :province, :city, presence: true
   validates :phone, :numericality => true
 
@@ -57,8 +57,8 @@ class Wedding < ActiveRecord::Base
   ]
 
   enum_attr :template_id, :in => [
-      ['template1', 1, '甜心粉'],
-      ['template2', 2, '淡雅绿'],
+    ['template1', 1, '甜心粉'],
+    ['template2', 2, '淡雅绿'],
   ]
 
   def self.get_conditions params

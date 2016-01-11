@@ -67,7 +67,7 @@
                               <% delete_lable = message.parent ? "回复" : "留言" %>
                               <%= link_to "删除", leaving_message_path(message, page: params[:page]), method: "delete", confirm: "确定要删除该#{delete_lable}吗？"  %>
 
-                              <% if message.replier_type != "Supplier" && message.replier %>
+                              <% if message.replier_type != "Account" && message.replier %>
                                 <% if message.replier.leave_message_forbidden %>
                                   <%= link_to "取消拉黑", cancel_forbid_replier_leaving_message_path(message, page: params[:page]), method: "post", confirm: "确定要取消拉入黑名单吗？" %>
                                 <% else %>

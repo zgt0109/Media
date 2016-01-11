@@ -49,16 +49,15 @@ class Pro::ShopBranchPrintTemplatesController < Pro::ShopBaseController
     end
   end
 
-  def config_ec_print  
-    @template = ShopBranchPrintTemplate.where(template_type: 4).where(open_id: current_user.wx_mp_user.openid).first
-    if @template
-    else
-      @template = ShopBranchPrintTemplate.new(template_type: 4, open_id: current_user.wx_mp_user.openid)
+  def config_ec_print
+    @template = ShopBranchPrintTemplate.where(template_type: 4).where(open_id: current_site.wx_mp_user.openid).first
+    unless @template
+      @template = ShopBranchPrintTemplate.new(template_type: 4, open_id: current_site.wx_mp_user.openid)
     end
     if @template.thermal_printers.count == 0
-      1.times do 
+      1.times do
         @template.thermal_printers.new
-      end 
+      end
     end
   end
 
@@ -93,9 +92,9 @@ class Pro::ShopBranchPrintTemplatesController < Pro::ShopBaseController
     end
 
     if (params[:printer] == "ok" && params[:paper] == "ok") #设备和纸张都 ok
-      print_no = params[:supplier_id]
+      print_no = params[:no]
       @print_order = PrintOrder.where(address: print_no).where(status: -1).first
-      if @print_order           
+      if @print_order
         if params[:lastprint] == "null" #&& print_order.stauts == -1 #开始打印
           if @print_order.content.blank?
             str = get_print_text @print_order

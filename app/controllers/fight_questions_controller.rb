@@ -1,7 +1,5 @@
 class FightQuestionsController < ApplicationController
 
-  before_filter :restrict_trial_supplier
-
   def index
     @search = scoped_questions.used.search(params[:search])
     @fight_questions = @search.page(params[:page]).per(18).order('created_at desc')
@@ -62,7 +60,7 @@ class FightQuestionsController < ApplicationController
     end
 
     def scoped_questions
-      current_user.fight_questions
+      current_site.fight_questions
     end
 
     def model_name

@@ -12,7 +12,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= content_for?(:title) ? yield(:title) : current_user.bqq_account? ? '移动版网站' : "微枚迪 客户ID: #{current_user.try(:id)}" %></title>
+  <title><%= content_for?(:title) ? yield(:title) : "微枚迪 客户ID: #{current_user.try(:id)}" %></title>
   <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.css"/>
   <%= stylesheet_link_tag "application_gm", media: "all" %>
   <%= javascript_include_tag "application" %>
@@ -32,7 +32,7 @@
 <div class="html">
   <div class="main">
 
-    <%#= render current_user.bqq_account? ? 'header_bqq' : 'header_gm' %>
+    <%#= render 'header_gm' %>
 
     <div class="body">
 <!--    
@@ -78,16 +78,16 @@
 <%= render 'notice' %>
 
 <% if current_user.test_account? or current_user.trial_account? %>
-  <%= render 'custom_service' %>
+  <%#= render 'custom_service' %>
 <% elsif current_user.normal_account? %>
-  <%= render 'custom_service_qq_only' %>
+  <%#= render 'custom_service_qq_only' %>
 <% end %>
 
 <script type="text/javascript">
   $(function(){
-  <% if !current_user.bqq_account? && current_user.show_introduce == 0 %>
-    introductory(); // 引导页
-  <% end %>
+  <%# if current_user.show_introduce == 0 %>
+    //introductory(); // 引导页
+  <%# end %>
   })
 </script>
 </body>

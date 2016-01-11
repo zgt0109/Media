@@ -1,5 +1,5 @@
 class LeavingMessage < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :replier,  polymorphic: true
   belongs_to :parent,   class_name:  'LeavingMessage'
   has_many   :children, class_name:  'LeavingMessage', foreign_key: 'parent_id'

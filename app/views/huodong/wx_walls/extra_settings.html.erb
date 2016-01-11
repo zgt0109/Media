@@ -140,7 +140,7 @@
                             </div>
                           </td>
                           <td>
-                            <%= render "upload_image_div", name: "wx_wall[wx_wall_prizes_attributes][#{@random_mode_index - 1}][pic]", key: prize.object.try(:pic), img: (prize.object.try(:pic_url) || '/assets/bg_fm.jpg'), width: 150 %>
+                            <%= render "upload_image_div", name: "wx_wall[wx_wall_prizes_attributes][#{@random_mode_index - 1}][pic_key]", key: prize.object.try(:pic_key), img: (prize.object.try(:pic_url) || '/assets/bg_fm.jpg'), width: 150 %>
                           </td>
                           <td>
                             <div class="form-input col-12">

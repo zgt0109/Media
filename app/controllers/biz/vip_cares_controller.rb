@@ -15,8 +15,8 @@ class Biz::VipCaresController < Biz::VipController
   end
 
   def new
-    @point_gifts = current_user.point_gifts.exchangeable
-    @coupons = current_user.activities.old_coupon.active.includes(:activity_property).select do |coupon|
+    @point_gifts = current_site.point_gifts.exchangeable
+    @coupons = current_site.activities.old_coupon.active.includes(:activity_property).select do |coupon|
       (coupon.activity_status ==  Activity::UNDER_WAY) && (coupon.activity_property.try(:coupon_count).to_i > coupon.activity_consumes.count)
     end
     @vip_care = @vip_card.vip_cares.new(care_month: nil)
@@ -24,8 +24,8 @@ class Biz::VipCaresController < Biz::VipController
   end
 
   def show
-    @point_gifts = current_user.point_gifts.exchangeable
-    @coupons = current_user.activities.old_coupon.active.select do |coupon|
+    @point_gifts = current_site.point_gifts.exchangeable
+    @coupons = current_site.activities.old_coupon.active.select do |coupon|
       (coupon.activity_status ==  Activity::UNDER_WAY) && (coupon.activity_property.coupon_count - coupon.activity_consumes.count)
     end
     @vip_care = @vip_card.vip_cares.find(params[:id])
@@ -33,8 +33,8 @@ class Biz::VipCaresController < Biz::VipController
   end
 
   def edit
-    @point_gifts = current_user.point_gifts.exchangeable
-    @coupons = current_user.activities.old_coupon.active.select do |coupon|
+    @point_gifts = current_site.point_gifts.exchangeable
+    @coupons = current_site.activities.old_coupon.active.select do |coupon|
       (coupon.activity_status ==  Activity::UNDER_WAY) && (coupon.activity_property.coupon_count - coupon.activity_consumes.count)
     end
     @vip_care = @vip_card.vip_cares.find(params[:id])

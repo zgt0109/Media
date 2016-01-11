@@ -120,7 +120,7 @@ module ActivitiesHelper
 
   def business_management?
     return false if controller_name =~ /^vip_group/
-    controller_name =~ /micro_shops|micro_shop_branches|donations|donation_orders|activity_forms|activity_enrolls|greet_cards|albums|group|kf_settings|staffs|wx_walls|supplier_prints|supplier_print_clients|supplier_print_pictures|wbbs/i ||
+    controller_name =~ /micro_shops|micro_shop_branches|donations|donation_orders|activity_forms|activity_enrolls|greet_cards|albums|group|kf_settings|staffs|wx_walls|prints|supplier_print_clients|supplier_print_pictures|wbbs/i ||
     ['votes', 'groups', 'user_data', 'diagram', 'surveys'].include?(action_name) ||
     BIZ_ACTIVITY_IDS.include?(params[:activity_type]) ||
     BIZ_ACTIVITY_IDS.include?(@activity.try(:activity_type_id)) ||
@@ -218,31 +218,31 @@ module ActivitiesHelper
   end
 
   def winwemedia_payments_path?
-     supplier_accounts_path? || supplier_withdraws_path?  || supplier_transactions_path? || balance_supplier_transactions_path?
+     pay_accounts_path? || pay_withdraws_path?  || pay_transactions_path? || balance_pay_transactions_path?
   end
 
-  def apply_supplier_withdraws_path?
-    supplier_withdraws_path? && action_name == 'apply'
+  def apply_pay_withdraws_path?
+    pay_withdraws_path? && action_name == 'apply'
   end
 
-  def index_supplier_withdraws_path?
-    supplier_withdraws_path? && action_name == 'index'
+  def index_pay_withdraws_path?
+    pay_withdraws_path? && action_name == 'index'
   end
 
-  def supplier_accounts_path?
-    return true if controller_name =~ /supplier_accounts/
+  def pay_accounts_path?
+    return true if controller_name =~ /pay_accounts/
   end
 
-  def supplier_withdraws_path?
-    return true if controller_name =~ /supplier_withdraws/
+  def pay_withdraws_path?
+    return true if controller_name =~ /pay_withdraws/
   end
 
-  def supplier_transactions_path?
-    return true if request.path == supplier_transactions_path
+  def pay_transactions_path?
+    return true if request.path == pay_transactions_path
   end
 
-  def balance_supplier_transactions_path?
-    request.path == balance_supplier_transactions_path
+  def balance_pay_transactions_path?
+    request.path == balance_pay_transactions_path
   end
 
   def activity_type_name( activity_type_id )

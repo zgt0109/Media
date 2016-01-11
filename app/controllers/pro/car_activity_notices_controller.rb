@@ -14,7 +14,7 @@ class Pro::CarActivityNoticesController < ApplicationController
   end
 
   def update
-    @car_activity_notice = current_user.car_activity_notices.find(params[:id])
+    @car_activity_notice = current_site.car_activity_notices.find(params[:id])
     if @car_activity_notice.update_attributes(params[:car_activity_notice])
       redirect_to :back, notice: '保存成功'
     else
@@ -26,7 +26,7 @@ class Pro::CarActivityNoticesController < ApplicationController
 
   private
   def check_car_shop
-    @car_shop = current_user.car_shop
+    @car_shop = current_site.car_shop
     return redirect_to car_shops_path, notice: '请先设置微汽车基本信息' unless @car_shop
   end
 

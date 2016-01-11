@@ -1,9 +1,5 @@
 class Biz::ScenesController < ApplicationController
-  before_filter :require_wx_mp_user
   before_filter :find_activity, except: [:index, :new, :create]
-
-  def index
-  end
 
   def qrcode
     render layout: "application_pop"
@@ -14,12 +10,12 @@ class Biz::ScenesController < ApplicationController
   end
 
   def new
-    @activity = current_user.wx_mp_user.new_activity_for_scene
+    @activity = current_site.new_activity_for_scene
     @activity.share_setting ||= ShareSetting.new
   end
 
   def create
-    @activity = current_user.activities.scene.new(params[:activity])
+    @activity = current_site.activities.scene.new(params[:activity])
     if @activity.save
       redirect_to scene_pages_path(activity_id: @activity.id), notice: '保存成功'
     else
@@ -53,6 +49,6 @@ class Biz::ScenesController < ApplicationController
 
   private
     def find_activity
-      @activity = current_user.activities.scene.find(params[:id])
+      @activity = current_site.activities.scene.find(params[:id])
     end
 end

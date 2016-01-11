@@ -28,11 +28,7 @@
   </div>
   <%= render 'application/app_footer' %>
 
-  <% if @vip_user_payment.try(:vip_user).try(:supplier).try(:bqq_account?) %>
-    <footer>Powered By Tencent</footer>
-	<% else %>
-    <footer>@winwemedia</footer>
-  <%- end %>
+  <footer>@winwemedia</footer>
 
   <%= javascript_include_tag "mobile/wcard.js" %>
   <%= yield(:insert_to_body) if content_for?(:insert_to_body) %>

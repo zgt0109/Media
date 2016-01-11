@@ -13,7 +13,6 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<%= form_for @fight_question, validate: true do |f| %>
-					<%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
 					<div class="form-group">
 						<label class="control-label">题目名称:<span class="required-star">*</span></label>
 						<div class="clearfix">
@@ -23,7 +22,7 @@
 					<div class="form-group">
             <label class="control-label">题目图片:<span class="required-star">*</span></label>
             <div class="clearfix">
-              <%= render "upload_image_div", name: "guess_question[qiniu_pic_key]", key: f.object.qiniu_pic_key, img: (f.object.pic_url || '/assets/bg_fm.jpg'), width: 160, height: 240 %>
+              <%= render "upload_image_div", name: "guess_question[pic_key]", key: f.object.pic_key, img: (f.object.pic_url || '/assets/bg_fm.jpg'), width: 160, height: 240 %>
             </div>
           </div>
 					<div class="form-group">
@@ -78,8 +77,8 @@
 <script type="text/javascript">
 	window.onload = initSelectOption();
     $('#add-guess-question').on('click', function(){
-      var qiniu_pic_key = $('input[name="guess_question[qiniu_pic_key]"]').val();
-      if(!qiniu_pic_key){
+      var pic_key = $('input[name="guess_question[pic_key]"]').val();
+      if(!pic_key){
         showTip('warnning', '请上传图片')
         return false;
       }

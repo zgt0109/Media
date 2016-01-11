@@ -15,7 +15,7 @@ class Biz::GroupsController < Biz::GroupBaseController
   end
 
   def orders
-    @group_orders_search = current_user.group_orders.latest.search(params[:search])
+    @group_orders_search = current_site.group_orders.latest.search(params[:search])
     @group_orders = @group_orders_search.includes(:group_item).where("group_items.group_type is null or group_items.group_type = 1").page(params[:order_page])
 
     respond_to do |format|
@@ -50,7 +50,7 @@ class Biz::GroupsController < Biz::GroupBaseController
 
   def alipay
     if request.put?
-      current_user.update_attributes(params[:supplier])
+      current_site.update_attributes(params[:supplier])
       redirect_to :back, notice: '更新成功'
     end
   end
@@ -58,8 +58,8 @@ class Biz::GroupsController < Biz::GroupBaseController
   private
 
   def set_group
-    @group = current_user.group
-    @group = current_user.wx_mp_user.create_group unless @group
+    @group = current_site.group
+    @group = current_site.create_group unless @group
     @activity =  @group.activity
   end
 end

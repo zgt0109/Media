@@ -2,12 +2,12 @@ class UserCloner
   attr_accessor :from_user, :user, :wx_mp_user, :cloned
 
   def initialize(from_nickname = 'winwemedia')
-    self.from_user = Supplier.where(nickname: from_nickname).first || Supplier.first
+    self.from_user = Account.where(nickname: from_nickname).first || Account.first
     self.cloned    = Hash.new { |h, key| h[key] = {} if key.present? }
   end
 
   def run!
-    create_assistants_suppliers
+    create_assistants_accounts
     clone_materials
 
     clone_marketing_activities
@@ -20,7 +20,7 @@ class UserCloner
     clone_groups
     clone_albums
 
-    clone_wx_replies
+    clone_replies
 
     clone_college
     clone_car_shop
@@ -49,7 +49,7 @@ class UserCloner
   end
 
   def clone_to(nickname: 'foogee')
-    self.user = Supplier.where(nickname: nickname).first
+    self.user = Account.where(nickname: nickname).first
     return puts "user not exists" unless user
     return puts "wx_mp_user not exists" unless user.wx_mp_user
 
@@ -58,12 +58,12 @@ class UserCloner
     run!
   end
 
-  def create_assistants_suppliers
-    return puts "assistant_suppliers existed" if AssistantsSupplier.where(supplier_id: user.id).exists?
+  def create_assistants_accounts
+    return puts "assistant_suppliers existed" if AssistantsSite.where(supplier_id: user.id).exists?
     Assistant.pluck(:id).each do |assistant_id|
-      next if cloned["AssistantsSupplier"][assistant_id]
-      new_record = AssistantsSupplier.create! assistant_id: assistant_id, supplier_id: user.id
-      cloned["AssistantsSupplier"][assistant_id] = new_record.id
+      next if cloned["AssistantsSite"][assistant_id]
+      new_record = AssistantsSite.create! assistant_id: assistant_id, supplier_id: user.id
+      cloned["AssistantsSite"][assistant_id] = new_record.id
     end
   end
 
@@ -76,9 +76,9 @@ class UserCloner
     }
   end
 
-  def clone_wx_replies
-    wx_mp_user.wx_replies.map &:destroy
-    from_user.wx_mp_user.wx_replies.each do |reply|
+  def clone_replies
+    wx_mp_user.replies.map &:destroy
+    from_user.wx_mp_user.replies.each do |reply|
       options = { wx_mp_user_id: wx_mp_user.id }
       if reply.replyable.is_a?(Activity)
         new_activity = clone_activity(reply.replyable)
@@ -93,19 +93,19 @@ class UserCloner
   end
 
   def set_or_create_first_follow_reply
-    wx_reply = wx_mp_user.first_follow_reply || wx_mp_user.wx_replies.new(event_type: WxReply::CLICK_EVENT)
-    wx_reply.reply_type = WxReply::ACTIVITY
-    wx_reply.save!
-    wx_reply.update_column :replyable_id, user.website.activity_id
+    reply = wx_mp_user.first_follow_reply || wx_mp_user.replies.new(event_type: Reply::CLICK_EVENT)
+    reply.reply_type = Reply::ACTIVITY
+    reply.save!
+    reply.update_column :replyable_id, user.website.activity_id
   end
 
   def set_or_create_text_reply
     # 设置智能客服
-    wx_reply = wx_mp_user.text_reply || wx_mp_user.wx_replies.new(event_type: WxReply::TEXT_EVENT)
+    reply = wx_mp_user.text_reply || wx_mp_user.replies.new(event_type: Reply::TEXT_EVENT)
     content = "尊敬的客户，感谢您的互动，我们会尽快回复您的留言！
 查找导航栏请回复“微会员卡”或“微官网”"
-    wx_reply.attributes = { replyable_id: nil, replyable_type: nil, reply_type: WxReply::TEXT, content: content }
-    wx_reply.save!
+    reply.attributes = { replyable_id: nil, replyable_type: nil, reply_type: Reply::TEXT, content: content }
+    reply.save!
   end
 
   def clone_marketing_activities
@@ -322,9 +322,9 @@ class UserCloner
     return puts "surveys existed" if user.activities.show.where(activity_type_id: 15).exists?
     from_user.activities.show.where(activity_type_id: 15).each { |activity|
       new_activity = clone_record(activity) || Activity.find(cloned_id(activity))
-      activity.activity_survey_questions.each do |question|
+      activity.survey_questions.each do |question|
         new_question = clone_record(question, activity_id: new_activity.id)
-        clone_associations(question, :activity_survey_answers, activity_id: new_activity.id, activity_survey_question_id: new_question.id)
+        clone_associations(question, :survey_answers, activity_id: new_activity.id, survey_question_id: new_question.id)
       end
     }
   end
@@ -471,15 +471,15 @@ class UserCloner
 
 
   def user
-    @user && Supplier.find(@user.id)
+    @user && Account.find(@user.id)
   end
 
   def wx_mp_user
     @wx_mp_user && WxMpUser.find(@wx_mp_user.id)
   end
 
-  %w(init_activity_by_coupon init_activity_by_fans_game create_assistants_suppliers clone_materials clone_marketing_activities clone_website clone_vip_card clone_shops clone_activity_forms clone_votes
-    clone_surveys clone_groups clone_albums clone_wx_replies clone_weddings clone_college clone_car_shop clone_hotel clone_house).each do |method_name|
+  %w(init_activity_by_coupon init_activity_by_fans_game create_assistants_accounts clone_materials clone_marketing_activities clone_website clone_vip_card clone_shops clone_activity_forms clone_votes
+    clone_surveys clone_groups clone_albums clone_replies clone_weddings clone_college clone_car_shop clone_hotel clone_house).each do |method_name|
     define_method "#{method_name}_with_puts" do
       puts "*********************************doing #{method_name}"
       __send__ "#{method_name}_without_puts"

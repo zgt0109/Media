@@ -14,7 +14,7 @@ class WxredpacketpaySetting < PaymentSetting
         'mch_id'  => self.partner_id,
         'nonce_str' => generate_nonce_str,
         'mch_billno'    => red_packet_rec.out_trade_no,
-        're_openid'     => red_packet_rec.uid,
+        're_openid'     => red_packet_rec.openid,
         'total_amount'  => (red_packet_rec.total_amount * 100).to_i,
         'total_num'     => red_packet_rec.total_num,
         'nick_name'     => red_packet.nick_name[0,5],

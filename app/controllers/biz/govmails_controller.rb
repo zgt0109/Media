@@ -38,10 +38,10 @@ class Biz::GovmailsController < ApplicationController
 
 	private
 	def set_activity
-		if current_user.activities.govmail.exists?
-			@activity = current_user.wx_mp_user.activities.govmail.show.first
+		if current_site.activities.govmail.exists?
+			@activity = current_site.activities.govmail.show.first
 		else
-			@activity = current_user.wx_mp_user.create_activity_for_govmail
+			@activity = current_site.create_activity_for_govmail
 		end
 	end
 

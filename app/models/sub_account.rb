@@ -27,10 +27,6 @@ class SubAccount < ActiveRecord::Base
     enabled? ? '停用' : '启用'
   end
 
-  def bqq_account?
-    false
-  end
-
   def method_missing(m, *args, &block)
     if user.is_a?(ShopBranch)
       supplier = user.supplier

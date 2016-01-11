@@ -3,7 +3,7 @@ class Mobile::WxWallsController < Mobile::BaseController
   before_filter :block_non_wx_browser
 
   def show
-  	@supplier = Supplier.find params[:supplier_id]
+  	@supplier = Account.find params[:supplier_id]
   	@wx_wall = @supplier.wx_walls.find params[:id]
     @is_image = params[:msg_type] == 'image'
     @pictures = @wx_wall.qiniu_pictures

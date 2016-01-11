@@ -18,15 +18,11 @@
 #
 
 class College < ActiveRecord::Base
-  store :meta, accessors: [ :qiniu_logo_key, :qiniu_add_pic_key ]
+  store :meta, accessors: [ :logo_key, :qiniu_add_pic_key ]
 
-  mount_uploader :logo, CollegeLogoUploader
-  mount_uploader :ad_pic, CollegeLogoUploader
-  img_is_exist({logo: :qiniu_logo_key, ad_pic: :qiniu_add_pic_key}) 
-  # attr_accessible :title, :body
   validates :name, :tel, presence: true
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   has_one  :activity, as: :activityable, dependent: :destroy
 
@@ -41,7 +37,7 @@ class College < ActiveRecord::Base
 
 
   def logo_url
-    qiniu_image_url(qiniu_logo_key).presence || logo
+    qiniu_image_url(logo_key).presence || logo
   end
 
   def add_pic_url

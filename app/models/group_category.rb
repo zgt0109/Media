@@ -1,6 +1,5 @@
 class GroupCategory < ActiveRecord::Base
-  belongs_to :supplier
-  belongs_to :wx_mp_user
+  belongs_to :site
 
   belongs_to :parent, class_name: 'GroupCategory', foreign_key: :parent_id
   has_many :children, class_name: 'GroupCategory', foreign_key: :parent_id, :order => 'sort ASC'
@@ -86,7 +85,6 @@ class GroupCategory < ActiveRecord::Base
 
   def add_default_attrs
     return unless self.group
-    self.supplier_id = self.group.supplier_id
-    self.wx_mp_user_id = self.group.wx_mp_user_id
+    self.site_id = self.group.site_id
   end
 end

@@ -6,7 +6,7 @@
             <% next if nav.style_index == 0 %>
             <li class="<%= @website_setting[@nav_type_columns[params[:nav_type].to_i]] == nav.style_index ? 'active' : ''%> <%= @bqq_website && @bqq_style_index.include?(nav.style_index) ? '' : 'product_template' %>" rel="<%= nav.style_index%>">
               <a href="javascript:;" class="">
-                <%= image_tag nav.pic.large, class: 'pic', style: "height: 320px;width: 320px;" %>
+                <%= image_tag nav.pic_url, class: 'pic', style: "height: 320px;width: 320px;" %>
                 <span><%= nav.style_index %>.<%= nav.name %></span>
                 <input type="hidden" value="<%= nav.style_index %>" class="style_index">
                 <input type="hidden" value="<%= nav.name %>" class="name">
@@ -38,13 +38,6 @@
                     $('.modal-iframe', window.parent.document).remove();
                     $('.modal-backdrop', window.parent.document).remove();
                 }else{
-                    <% if current_user.bqq_account? %>
-                    if (li.hasClass('product_template') ) {
-                        showTip('success','您的套餐类型无法使用模板，请联系经销商升级高版本套餐')
-                        $('.modal-iframe', window.parent.document).remove();
-                        return false;
-                    }
-                    <% end %>
                     var nav_type = $('#nav_type').val(),
                         nav_template_id = li.attr('rel');
                     $.post('/website_settings/update_update_nav_template', {nav_type: nav_type, nav_template_id: nav_template_id}, function(result) {

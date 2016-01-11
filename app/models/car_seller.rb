@@ -19,8 +19,6 @@
 #
 
 class CarSeller < ActiveRecord::Base
-  mount_uploader :pic, CarSellerUploader
-  img_is_exist({pic: :qiniu_pic_key}) 
 
 	validates :name, :phone, :position, :skilled_language, presence: true
 	# validates :pic, presence: true, on: :create
@@ -40,7 +38,7 @@ class CarSeller < ActiveRecord::Base
 	end
 
   def pic_url(type = :large)
-    qiniu_image_url(qiniu_pic_key) || pic.try(type)
+    qiniu_image_url(pic_key)
   end
 
 end

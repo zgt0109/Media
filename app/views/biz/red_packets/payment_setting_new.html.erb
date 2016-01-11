@@ -1,5 +1,5 @@
   <%= form_for @wxredpacketpay, url: payment_setting_red_packets_path, method: 'POST', html: { class: 'form'} do |f| %>
-  <%= f.hidden_field :supplier_id %>
+  <%= f.hidden_field :site_id %>
   <%= f.hidden_field :payment_type_id %>
   <div class="modal-body">
     <div class="form-group">

@@ -1,7 +1,7 @@
 class SmsOrdersController < ApplicationController
   skip_before_filter *ADMIN_FILTERS, only: [:notify, :notify_verify, :error_notify]
   before_filter :set_sms_order, only: [:show, :edit, :update, :destroy, :cancel]
-  
+
   before_filter do
     @partialLeftNav = "/layouts/partialLeftSys"
   end
@@ -21,12 +21,10 @@ class SmsOrdersController < ApplicationController
   end
 
   def create
-    @sms_order = SmsOrder.new(params[:sms_order])
+    @sms_order = current_user.sms_orders.new(params[:sms_order])
     if @sms_order.save
       @payment = @sms_order.payment!
 
-      # redirect_to alipayapi_sms_order_path(@sms_order, payment_id: @payment.id)
-      # render inline: "<script>window.parent.location.href = '#{alipayapi_sms_order_path(@sms_order, payment_id: @payment.id)}';</script>"
       render inline: "<script>window.parent.location.href = '#{sms_orders_path}';</script>"
       return
     else

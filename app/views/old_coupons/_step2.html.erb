@@ -4,7 +4,6 @@
         <%= hidden_field_tag :step, params[:step] %>
 
         <%= f.fields_for :active_activity_notice, validate: true do |ran| %>
-            <%= ran.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
             <%= render 'old_coupons/activity_notice_form', ran: ran %>
         <% end %>
 

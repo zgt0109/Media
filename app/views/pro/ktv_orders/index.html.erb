@@ -37,7 +37,7 @@
           <%= render "weixin_preview", wx_title: @activity.name, wx_summary: @activity.summary,  wx_pic: @activity.pic_url %>
           <%= form_for @activity, validate: true  do |activity| %>
               <div class="col-sm-7">
-                <%= render "weixin_setting", activity: activity, data_img: @activity.try(:pic_url), pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.try(:qiniu_pic_key) %>
+                <%= render "weixin_setting", activity: activity, data_img: @activity.try(:pic_url), pic_data_name: "activity[pic_key]", pic_data_key: @activity.try(:pic_key) %>
                 <div class="form-group">
                   <label class="control-label">预约电话</label>
 

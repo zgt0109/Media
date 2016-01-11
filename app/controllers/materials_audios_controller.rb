@@ -4,11 +4,11 @@ class MaterialsAudiosController < ApplicationController
 
   def index
     @material  = Material.new(material_type: Material::AUDIOS)
-    @materials = current_user.materials.audio_select.page(params[:page]).order("id desc")
+    @materials = current_site.materials.audio_select.page(params[:page]).order("id desc")
   end
 
   def create
-    @material = current_user.materials.build(params[:material])
+    @material = current_site.materials.build(params[:material])
     if @material.save(validate: false)
       redirect_to materials_audios_path, notice: '语音素材上传成功'
     else
@@ -19,7 +19,7 @@ class MaterialsAudiosController < ApplicationController
   end
 
   def destroy
-    @material = current_user.materials.where(id: params[:id]).first
+    @material = current_site.materials.where(id: params[:id]).first
     if @material.try(:destroy)
       redirect_to materials_audios_path, notice: '语音素材删除成功'
     else

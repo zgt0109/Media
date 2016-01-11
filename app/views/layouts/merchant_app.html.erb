@@ -24,17 +24,15 @@
 
 <%= yield :mod_pop %>
 
-<% if @login_user.class.eql?(Supplier) %>
-  <% @supplier_footer = @login_user.supplier_footer %>
-  <% if @login_user.try(:bqq_account?) %>
-    <footer>Powered By Tencent</footer>
-  <% elsif @login_user && @supplier_footer && @login_user.try(:is_show_mark?) %>
+<% if @login_user.class.eql?(Account) %>
+  <% @account_footer = @login_user.account_footer %>
+  <% #if @login_user && @account_footer && @login_user.try(:is_show_mark?) %>
     <%- unless @not_show_mark %>
       <footer>
-        <%= @supplier_footer.footer_link.present? ? link_to(@supplier_footer.footer_content, @supplier_footer.footer_link) : @supplier_footer.footer_content %>
+        <%= @account_footer.footer_link.present? ? link_to(@account_footer.footer_content, @account_footer.footer_link) : @account_footer.footer_content %>
       </footer>
     <% end %>
-  <%- end %>
+  <%#- end %>
 
 <% end %>
 

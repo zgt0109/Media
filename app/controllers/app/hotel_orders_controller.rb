@@ -55,7 +55,7 @@ module App
       end
       if hotel_order
         # 微酒店订房成功
-        supplier = Supplier.where(id: @hotel_order.supplier_id).first
+        supplier = Account.where(id: @hotel_order.supplier_id).first
         if @hotel_order.try(:hotel_branch).try(:mobile).present? && supplier
           begin
             sms_content = "微酒店订房通知：用户“#{@hotel_order.name}”电话：#{@hotel_order.mobile} 于 #{@hotel_order.created_at} 预定了《#{@hotel_order.hotel_room_type.try(:name)}》房间，所属分店：#{@hotel_order.hotel_branch.try(:name)}"

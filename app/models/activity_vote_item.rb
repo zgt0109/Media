@@ -11,9 +11,6 @@
 
 class ActivityVoteItem < ActiveRecord::Base
 
-  mount_uploader :pic, ActivityVoteItemUpload
-  img_is_exist({pic: :pic_key}) 
-
   belongs_to :activity
   has_many :activity_user_vote_items, dependent: :destroy
   #validates :name, uniqueness: { scope: :activity_id }, allow_blank: true
@@ -38,8 +35,8 @@ class ActivityVoteItem < ActiveRecord::Base
     activity_user_vote_items_count + adjust_votes
   end
 
-  def pic_url(type = :large)
-    qiniu_image_view_url || pic.try(type)
+  def pic_url
+    qiniu_image_view_url
   end
 
   def qiniu_image_view_url

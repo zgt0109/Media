@@ -2,7 +2,7 @@ class ActivityPrizeElementsController < ApplicationController
   before_filter :find_element, except: [:create]
 
   def create
-    @element = ActivityPrizeElement.new(activity_id: params[:activity_id], name: '新元素', qiniu_pic_key: ActivityPrizeElement.default_qiniu_pic_key)
+    @element = ActivityPrizeElement.new(activity_id: params[:activity_id], name: '新元素', pic_key: ActivityPrizeElement.default_pic_key)
     if @element.save
       respond_to do |format|
         format.html {redirect_to :back}

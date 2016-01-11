@@ -17,15 +17,9 @@ class News < ActiveRecord::Base
   belongs_to :admin_user_id
 
   enum_attr :content_type, :in=>[
-    ['company', 2, '公司动态'],
-    ['broadcast', 6, '微哥播报'],
-    ['industry_news', 7, '行业资讯'],
-    ['info', 1, '微营销资讯'],
-    ['qa', 3, '微信常见问题'],
-    ['clazz', 4, '微信公开课'],
-    ['comment', 5, '微商评论'],
+    ['upgrade_log', 1, '系统产品升级公告'],
   ]
-  
+
   def title
     super.presence || '公告标题'
   end

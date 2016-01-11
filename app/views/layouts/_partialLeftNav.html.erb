@@ -15,7 +15,7 @@
       <%= link_to_left_nav( '模板样式', website_settings_path, current_page?(website_settings_path) ) %>
       <%= link_to_left_nav( '站点内容', website_menus_path, controller_name == 'website_menus' ) %>
       <%= link_to_left_nav( '文章中心', website_articles_path(article_type: "as_article"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_article' || params[:category_type] == 'as_article') ) %>
-      <%= link_to_left_nav( '展示中心', website_articles_path(article_type: "as_product"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_product' || params[:category_type] == 'as_product') ) %>
+      <%#= link_to_left_nav( '展示中心', website_articles_path(article_type: "as_product"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_product' || params[:category_type] == 'as_product') ) %>
       <%= link_to_left_nav( '首页幻灯片', website_pictures_path, controller_name == 'website_pictures' ) %>
       <%= link_to_left_nav( '首页背景图', bg_pic_website_settings_path, controller_name == 'website_settings' && action_name == 'bg_pic' ) %>
       <%= link_to_left_nav( '导航菜单', website_popup_menus_path, controller_name == 'website_popup_menus' && @nav_type.is_a?(Array) ) %>
@@ -49,15 +49,15 @@
   <% end %>
 
   <% if current_user.has_privilege_for?(1010) %>
-    <li class=" <%= ( %w[wx_menus questions answers].include?(controller_name) || ['welcome', 'reply', 'oauth'].include?(action_name)) ? parent_class : '' %>">
+    <li class=" <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies'].include?(controller_path) ? parent_class : '' %>">
       <%= left_nav_dropdown 'icon-wrench', '微信基础设置' %>
 
-      <ul class="submenu" style="display: <%= ( %w[wx_menus questions answers].include?(controller_name) || ['welcome', 'reply', 'oauth'].include?(action_name)) ? 'block;' : 'none;'%>">
+      <ul class="submenu" style="display: <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies'].include?(controller_path) ? 'block;' : 'none;'%>">
 
-        <%= link_to_left_nav( '首次关注', welcome_wx_mp_users_url, current_page?(welcome_wx_mp_users_path) ) %>
-        <%= link_to_left_nav( '自动回复', reply_wx_mp_users_url, current_page?(reply_wx_mp_users_path) ) %>
-        <%= link_to_left_nav( '关键字回复', questions_url, controller_name == 'questions' && action_name != 'reply' ) %>
-        <%= link_to_left_nav( '自定义菜单', wx_menus_url, controller_name == 'wx_menus' ) %>
+        <%= link_to_left_nav( '首次关注', replies_path, current_page?(replies_path) ) %>
+        <%= link_to_left_nav( '自动回复', autoreply_replies_path, current_page?(autoreply_replies_path) ) %>
+        <%= link_to_left_nav( '关键字回复', keywords_url, controller_path == 'keywords' ) %>
+        <%= link_to_left_nav( '自定义菜单', wx_menus_url, controller_path == 'wx/menus' ) %>
         <%#= link_to_left_nav( '网页授权', oauth_wx_mp_users_url, current_page?(oauth_wx_mp_users_url) ) %>
       </ul>
     </li>
@@ -72,15 +72,6 @@
 
         <% if current_user.has_privilege_for?(62) %>
           <%= link_to_left_nav( '优惠券', coupons_path, coupons_path? ) %>
-        <% end %>
-
-        <% if current_user.activities.consume.setted.count > 0 %>
-          <%= link_to_left_nav( '旧版优惠券', old_coupons_activities_path, old_coupons_path? ) %>
-        <% end %>
-
-        <% if current_user.product1? && [10631,13157,13536,14309,18476,14447,19168,25918,18955,18951,18948,18945,18352,17737,14578,11156,20598].include?(current_user.id) %>
-          <%= link_to_left_nav( '刮刮卡', guas_activities_path, guas_path? ) if current_user.has_privilege_for?(4) %>
-          <%= link_to_left_nav( '大转盘', wheels_activities_path, wheels_path? ) if current_user.has_privilege_for?(5) %>
         <% end %>
 
         <%= link_to_left_nav( '刮刮卡', guas_activities_path, guas_path? ) if current_user.has_privilege_for?(4) %>
@@ -109,7 +100,7 @@
 
       <ul class="submenu" style="<%= 'display: block' if marketing_sites? %>">
         <%= link_to_left_nav( "微信墙", '/wx_walls', wx_walls_path? ) if current_user.has_privilege_for?(38) %>
-        <%= link_to_left_nav( '摇一摇', wx_shakes_path, controller_name == 'wx_shakes' ) if current_user.has_privilege_for?(55) %>
+        <%= link_to_left_nav( '摇一摇', shakes_path, controller_name == 'shakes' ) if current_user.has_privilege_for?(55) %>
       </ul>
     </li>
   <% end %>
@@ -161,12 +152,12 @@
       </ul>
     <% end %>
   <% end %>
-
+<!-- 
   <% if current_user.has_privilege_for?(53) %>
     <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
       <%= left_nav_dropdown 'icon-camera', '微捐款' %>
       <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
-        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(supplier_prints_path) || current_page?(supplier_print_clients_path)) ) %>
+        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
         <%= link_to_left_nav( '项目管理', donations_path, current_page?(donations_path) ) %>
         <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
           <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
@@ -174,25 +165,25 @@
       </ul>
     </li>
   <% end %>
-
+ -->
   <% if current_user.has_privilege_for?(1020) %>
-    <li class="<%= parent_class if (controller_name =~ /supplier_print|wifi/i) %>">
+    <li class="<%= parent_class if (controller_name =~ /print|wifi/i) %>">
       <%= left_nav_dropdown 'icon-camera', '微硬件' %>
-      <ul class="submenu" style="display: <%= (controller_name =~ /supplier_print|wifi/i || action_name == 'pos' || action_name == "shop_branch_print_template") ? 'block;' : 'none;' %>">
+      <ul class="submenu" style="display: <%= (controller_name =~ /print|wifi/i || action_name == 'pos' || action_name == "shop_branch_print_template") ? 'block;' : 'none;' %>">
         <%#= link_to_left_nav( '微WiFi', wifi_clients_path, current_page?(wifi_clients_path) ) %>
-        <%= link_to_left_nav( '微打印机', activities_supplier_prints_path, current_page?(activities_supplier_prints_path) || current_page?(supplier_prints_path) || current_page?(supplier_print_clients_path) ) %>
+        <%= link_to_left_nav( '微打印机', prints_path, current_page?(activities_prints_path) || current_page?(prints_path) ) %>
         <%= link_to_left_nav( '微小票机', pos_shops_path, current_page?(pos_shops_path || action_name == "shop_branch_print_template") ) %>
       </ul>
     </li>
   <% end %>
 
   <% if current_user.has_privilege_for?(1030) %>
-    <li class="<%= parent_class if ['helpers', 'games'].include?(action_name) %>">
+    <li class="<%= parent_class if ['helpers', 'games'].include?(params[:type]) %>">
       <%= left_nav_dropdown 'icon-legal', '微插件' %>
 
-      <ul class="submenu" style="display: <%= ['helpers', 'games'].include?(action_name) ? 'block;' : 'none;' %>">
-        <%= link_to_left_nav( '生活助手', helpers_path, current_page?(helpers_path) ) %>
-        <%= link_to_left_nav( '休闲游戏', games_path, current_page?(games_path) ) %>
+      <ul class="submenu" style="display: <%= ['helpers', 'games'].include?(params[:type]) ? 'block;' : 'none;' %>">
+        <%= link_to_left_nav( '生活助手', assistants_path(type: 'helpers'), current_page?(assistants_path(type: 'helpers')) ) %>
+        <%= link_to_left_nav( '休闲游戏', assistants_path(type: 'games'), current_page?(assistants_path(type: 'games')) ) %>
       </ul>
     </li>
   <% end %>
@@ -347,10 +338,10 @@
       <%= left_nav_dropdown 'icon-plus', '微教育' %>
       <ul class="submenu" style="<%= 'display: block' if controller_name =~ /college/ %>">
         <%= link_to_left_nav( '基本信息', colleges_path, controller_name =~ /colleges|college_enrolls/ && action_name != 'intro' ) %>
-        <%= link_to_left_nav( '专业介绍', college_majors_path(current_user.college || 0), controller_name == 'college_majors' ) %>
-        <%= link_to_left_nav( '专业名师', college_teachers_path(current_user.college || 0), controller_name == 'college_teachers' ) %>
-        <%= link_to_left_nav( '学院环境', college_photos_path(current_user.college || 0), controller_name == 'college_photos' ) %>
-        <%= link_to_left_nav( '学院简介', intro_college_path(current_user.college || 0), controller_name == 'college_branches' || action_name == 'intro' ) %>
+        <%= link_to_left_nav( '专业介绍', college_majors_path(current_site.college || 0), controller_name == 'college_majors' ) %>
+        <%= link_to_left_nav( '专业名师', college_teachers_path(current_site.college || 0), controller_name == 'college_teachers' ) %>
+        <%= link_to_left_nav( '学院环境', college_photos_path(current_site.college || 0), controller_name == 'college_photos' ) %>
+        <%= link_to_left_nav( '学院简介', intro_college_path(current_site.college || 0), controller_name == 'college_branches' || action_name == 'intro' ) %>
       </ul>
     </li>
   <% end %>

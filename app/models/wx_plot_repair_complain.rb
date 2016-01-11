@@ -11,26 +11,25 @@ class WxPlotRepairComplain < ActiveRecord::Base
   accepts_nested_attributes_for :messages
 
   before_save :create_statuses
-  after_create :send_sms, :igetui 
+  after_create :send_sms, :igetui
 
   enum_attr :gender, :in => [
-      ['sir', 1, '先生'],
-      ['madam', 2, '女士']
+    ['sir', 1, '先生'],
+    ['madam', 2, '女士']
   ]
 
   enum_attr :category, :in => [
-      ['repair', 1, '报修'],
-      ['complain', 2, '投诉'],
-      ['advice', 3, '建议']
+    ['repair', 1, '报修'],
+    ['complain', 2, '投诉'],
+    ['advice', 3, '建议']
   ]
 
   enum_attr :status, :in => [
-      ['submit', 0, '已提交'],
-      ['accept', 1, '已受理'],
-      ['done', 2, '已完成'],
-      ['cancel', 3, '已撤消']
+    ['submit', 0, '已提交'],
+    ['accept', 1, '已受理'],
+    ['done', 2, '已完成'],
+    ['cancel', 3, '已撤消']
   ]
-
 
   def allow_change?
     submit? || accept?

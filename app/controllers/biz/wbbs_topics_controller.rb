@@ -61,7 +61,7 @@ class Biz::WbbsTopicsController < ApplicationController
 
   private
     def fetch_wbbs_community
-      @wbbs_community = current_user.wbbs_communities.find_by_id(params[:community_id])
+      @wbbs_community = current_site.wbbs_communities.find_by_id(params[:community_id])
     end
 
 end

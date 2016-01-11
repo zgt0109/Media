@@ -1,0 +1,70 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to "微硬件", activities_prints_path %></li>
+      <li><%= link_to "微打印机", activities_prints_path %></li>
+      <li><%= link_to "帐号管理", '#' %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="tabbable">
+      <ul class="nav nav-tabs padding-24 tab-size-bigger">
+        <li class="active">
+          <%= link_to "帐号管理", prints_path %>
+        </li>
+        <li>
+          <%= link_to "基础设置", activities_prints_path %>  
+        </li>
+      </ul>
+
+      <div class="tab-content no-border padding-24">
+        <div id="tab-2" class="tab-pane active in">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="alert alert-block alert-info"> 
+                <strong class="pull-left">提示：</strong>
+                <ul class="vwebsiteHeadAlert">
+                  <li>登录第三方打印机设备后台系统（例如：印美图或印立得），输入打印机器设备对应的微信接入URL和Token。</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <%= form_for @print, validate: true,:html => {:class => "print"} do |f| -%>
+                <%= f.hidden_field :account_id, value: @current_user.id %>
+                <h4 class="text-info">第三方接口信息</h4>
+
+                <div class="form-group">
+                  <label class="control-label">URL <span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :url, class: "col-md-8", placeholder: 'http://api.winwemedia.com/wx/r/?token_id=xxx' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Token <span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :token, class: "col-md-8", placeholder: 'WmVQU2lOaFRWdktvdxxx' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-sm">绑定</button>
+                </div>
+
+                <div class="clearfix"></div>
+                <div><hr class="hr-10"></div>
+              <% end %>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

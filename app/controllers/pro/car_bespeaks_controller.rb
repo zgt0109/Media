@@ -15,8 +15,8 @@ class Pro::CarBespeaksController < ApplicationController
       @link = activity_notice_car_bespeaks_path(bespeak_type: 1)
     end
 
-    # @total_car_bespeaks = current_user.car_bespeaks.includes(:car_brand).includes(:car_catena).where("car_brands.status = ? and car_catenas.status = ? and car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", CarBrand::NORMAL, CarCatena::NORMAL, bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
-    @total_car_bespeaks = current_user.car_bespeaks.includes(:car_brand).includes(:car_catena).where("car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
+    # @total_car_bespeaks = current_site.car_bespeaks.includes(:car_brand).includes(:car_catena).where("car_brands.status = ? and car_catenas.status = ? and car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", CarBrand::NORMAL, CarCatena::NORMAL, bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
+    @total_car_bespeaks = current_site.car_bespeaks.includes(:car_brand).includes(:car_catena).where("car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
     if params[:query_type_value].present?
       case @query_type_key when 1
     		@total_car_bespeaks = @total_car_bespeaks.where("car_brands.name like ? ", "%#{params[:query_type_value]}%")
@@ -46,18 +46,18 @@ class Pro::CarBespeaksController < ApplicationController
       @page = "保养预约"
       @link = activity_notice_car_bespeaks_path(bespeak_type: 1)
     end
-		@car_activity_notice = current_user.car_activity_notices.where(notice_type: notice_type).first || current_user.car_activity_notices.new(supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.id, notice_type: notice_type)
-		@car_activity_notice.activity = Activity.new(supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
+		@car_activity_notice = current_site.car_activity_notices.where(notice_type: notice_type).first || current_site.car_activity_notices.new(site_id: current_site.id, wx_mp_user_id: current_site.wx_mp_user.id, notice_type: notice_type)
+		@car_activity_notice.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
 	end
 
   def show
-    @car_bespeak = current_user.car_bespeaks.find(params[:id])
+    @car_bespeak = current_site.car_bespeaks.find(params[:id])
     params[:bespeak_type] = @car_bespeak.bespeak_type
     render layout: "application_pop"
   end
 
   def destroy
-    @car_bespeak = current_user.car_bespeaks.find(params[:id])
+    @car_bespeak = current_site.car_bespeaks.find(params[:id])
     respond_to do |format|
   		if @car_bespeak.delete!
 				format.html { redirect_to :back, notice: "删除成功" }
@@ -68,7 +68,7 @@ class Pro::CarBespeaksController < ApplicationController
   end
 
   def visit
-  	@car_bespeak = current_user.car_bespeaks.find(params[:id])
+  	@car_bespeak = current_site.car_bespeaks.find(params[:id])
   	respond_to do |format|
   		if @car_bespeak.visit!
 				format.html { redirect_to :back, notice: "操作成功" }
@@ -80,7 +80,7 @@ class Pro::CarBespeaksController < ApplicationController
 
 	private
 	def check_car_shop
-    @car_shop = current_user.car_shop
+    @car_shop = current_site.car_shop
     return redirect_to car_shops_path, notice: '请先设置微汽车基本信息' unless @car_shop
 	end
 

@@ -1,32 +1,3 @@
-# == Schema Information
-#
-# Table name: vip_cards
-#
-#  id                    :integer          not null, primary key
-#  supplier_id           :integer          not null
-#  wx_mp_user_id         :integer          not null
-#  activity_id           :integer          not null
-#  name                  :string(255)      not null
-#  background_pic        :string(255)
-#  logo                  :string(255)
-#  cover_pic             :string(255)      not null
-#  limit_privilege_count :integer          default(0), not null
-#  status                :integer          default(1), not null
-#  supplier_name         :string(255)
-#  supplier_category_id  :integer
-#  mobile                :string(255)
-#  tel                   :string(255)
-#  is_open_points        :boolean          default(TRUE), not null
-#  province_id           :integer          default(9), not null
-#  city_id               :integer          default(73), not null
-#  district_id           :integer          default(702), not null
-#  address               :string(255)
-#  description           :text
-#  points_description    :text
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#
-
 class VipCard < ActiveRecord::Base
   LABELED_CUSTOM_FIELD_NAMES = %w[婚姻状况 血型 星座 性别 生肖 学历]
   DATES = { 'one_weeks' => '最近7天', 'one_months' => '最近一月', 'six_months' => '最近半年', 'twelve_months' => '最近一年' }
@@ -61,10 +32,6 @@ class VipCard < ActiveRecord::Base
    'heisekuxuan'  => { color_code: '333',    bg_image_name: '黑色酷炫',   qiniu_key: 'Foa_ji6C9IG2MySrwjDYgAV25gEJ'}
   }
 
-  mount_uploader :cover_pic, MaterialUploader
-  mount_uploader :logo, CardLogoUploader
-  mount_uploader :background_pic, CardUploader
-  img_is_exist({logo: :logo_key, cover_pic: :cover_pic_key})
   MAX_LABELED_CUSTOM_FIELD_COUNT = 2
   store :metadata, accessors: [:show_introduce, :init_grade_name, :sms_check, :vip_importing_enabled, 
     :open_card_sms_notify, :recharge_consume_sms_notify, :labeled_custom_field_ids, :use_vip_avatar,
@@ -76,13 +43,13 @@ class VipCard < ActiveRecord::Base
     ['stopped', -1, '已停用']
   ]
 
-  validates :name, :supplier_name, presence: true, length: { maximum: 20 }, on: :update
+  validates :name, :merchant_name, presence: true, length: { maximum: 20 }, on: :update
 
   belongs_to :city
   belongs_to :district
-  belongs_to :supplier
+  belongs_to :site
   delegate :vip_users, to: :supplier
-  belongs_to :supplier_category
+  belongs_to :site_category
   belongs_to :wx_mp_user
   belongs_to :activity
 
@@ -118,6 +85,10 @@ class VipCard < ActiveRecord::Base
 
   def cover_pic_url
     qiniu_image_url(template_key)
+  end
+
+  def logo_url
+    qiniu_image_url(logo_key)
   end
 
   def location_address
@@ -188,7 +159,7 @@ class VipCard < ActiveRecord::Base
   end
 
   def parent_supplier_categories
-    supplier_category.parent.children rescue SupplierCategory.root.first.children
+    supplier_category.parent.children rescue AccountCategory.root.first.children
   end
 
   def self.export_excel(vip_users)

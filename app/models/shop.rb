@@ -15,15 +15,12 @@
 #
 
 class Shop < ActiveRecord::Base
-  mount_uploader :logo, ShopUploader
-  # attr_accessible :description, :name, :status
 
   enum_attr :shop_type, :in => [['micro_store', 1, '微门店'],['book_dinner', 2, '订餐订座'],['take_out', 3, '外卖']]
 
   validates :name, presence: true
 
-  belongs_to :supplier
-  belongs_to :wx_mp_user
+  belongs_to :site
   has_many :shop_branches, dependent: :destroy
   has_many :shop_categories, dependent: :destroy
   has_many :shop_products, dependent: :destroy
@@ -53,27 +50,25 @@ class Shop < ActiveRecord::Base
     if book_dinner?
       new_activities = [
         {
-          supplier_id: supplier_id,
-          wx_mp_user_id: wx_mp_user_id,
+          site_id: site_id,
           activity_type_id: 6,
           activityable: self,
           status: 1,
           name: "微订餐",
           keyword: "微订餐",
-          qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+          pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
           ready_at: now+1.seconds,
           start_at: now+1.seconds,
           end_at: now+100.years
         },
         {
-          supplier_id: supplier_id,
-          wx_mp_user_id: wx_mp_user_id,
+          site_id: site_id,
           activity_type_id: 7,
           activityable: self,
           status: 1,
           name: "微订座",
           keyword: "微订座",
-          qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+          pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
           ready_at: now+2.seconds,
           start_at: now+2.seconds,
           end_at: now+100.years
@@ -84,14 +79,13 @@ class Shop < ActiveRecord::Base
     elsif take_out?
       new_activities = [
         {
-          supplier_id: supplier_id,
-          wx_mp_user_id: wx_mp_user_id,
+          site_id: site_id,
           activity_type_id: 9,
           activityable: self,
           status: 1,
           name: "微外卖",
           keyword: "微外卖",
-          qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+          pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
           ready_at: now+1.seconds,
           start_at: now+1.seconds,
           end_at: now+100.years
@@ -102,21 +96,20 @@ class Shop < ActiveRecord::Base
     end
 
     new_activities << {
-      supplier_id: supplier_id,
-      wx_mp_user_id: wx_mp_user_id,
+      site_id: site_id,
       activity_type_id: 11,
       activityable: self,
       status: 1,
       name: "微门店",
       keyword: "微门店",
-      qiniu_pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+      pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
       ready_at: now,
       start_at: now,
       end_at: now+100.years
     }
 
     new_activities.each do |attrs|
-      Activity.where(supplier_id: attrs[:supplier_id], wx_mp_user_id: attrs[:wx_mp_user_id], activity_type_id: attrs[:activity_type_id]).first_or_create(attrs)
+      Activity.where(site_id: attrs[:site_id], activity_type_id: attrs[:activity_type_id]).first_or_create(attrs)
     end
   end
 end

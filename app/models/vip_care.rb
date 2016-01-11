@@ -7,7 +7,7 @@ class VipCare < ActiveRecord::Base
   serialize :given_coupon_ids, Array
   serialize :given_gift_ids, Array
 
-  delegate :wx_mp_user, :wx_mp_user_id, :supplier, :supplier_name, to: :vip_card, allow_nil: true
+  delegate :wx_mp_user, :wx_mp_user_id, :supplier, :merchant_name, to: :vip_card, allow_nil: true
 
   validates :care_day, presence: true, if: :festival?
   validates :name, :message_body, presence: true
@@ -152,7 +152,7 @@ class VipCare < ActiveRecord::Base
 
   def get_message_body(receiver_name)
     content = reload.message_body
-    content.gsub!('{商户名称}', supplier_name)
+    content.gsub!('{商户名称}', merchant_name)
     content.gsub!('{会员姓名}', receiver_name)
     content
   end

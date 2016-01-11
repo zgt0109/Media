@@ -2,19 +2,18 @@ class Biz::AidsController < ApplicationController
   before_filter :find_activity, except: [:index, :new, :create]
 
   def new 
-    @activity = current_user.activities.new activity_type_id: ActivityType::MICRO_AID, ready_at: 10.minutes.since
+    @activity = current_site.activities.new activity_type_id: ActivityType::MICRO_AID, ready_at: 10.minutes.since
     @activity.active_activity_notice ||= ActivityNotice.new(
       title: '',
       activity_status: ActivityNotice::ACTIVE,
-      qiniu_pic_key: @activity.default_qiniu_pic_key,
+      pic_key: @activity.default_pic_key,
       summary: '请点击进去微助力页面',
-      description: '微助力活动说明',
-      wx_mp_user_id: current_user.wx_mp_user.id
+      description: '微助力活动说明'
     )
   end 
 
   def create
-    @activity = current_user.activities.new activity_type_id: ActivityType::MICRO_AID
+    @activity = current_site.activities.new activity_type_id: ActivityType::MICRO_AID
     rule_params = params[:activity].delete(:rule)
 
     # copy name from title
@@ -95,7 +94,7 @@ class Biz::AidsController < ApplicationController
   private
 
   def find_activity
-    @activity = current_user.activities.micro_aid.find params[:id] 
+    @activity = current_site.activities.micro_aid.find params[:id] 
   end
 
   def activity_time_valid?

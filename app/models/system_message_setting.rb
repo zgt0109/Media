@@ -1,8 +1,6 @@
 class SystemMessageSetting < ActiveRecord::Base
 
-  mount_uploader :voice, AudioUploader
-
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :system_message_module
   has_many :system_messages
 

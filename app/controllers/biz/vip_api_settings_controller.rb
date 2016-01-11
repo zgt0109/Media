@@ -5,7 +5,7 @@ class Biz::VipApiSettingsController < ApplicationController
   end
 
   def index
-    @vip_card = current_user.vip_card
+    @vip_card = current_site.vip_card
     @vip_api_setting ||= @vip_card.create_vip_api_setting(auth_username: SecureRandom.hex[0, 12], auth_password: SecureRandom.hex)
   end
 
@@ -25,8 +25,8 @@ class Biz::VipApiSettingsController < ApplicationController
 
   private
     def find_vip_api_setting
-      return redirect_to vip_cards_url unless current_user.vip_card
+      return redirect_to vip_cards_url unless current_site.vip_card
       
-      @vip_api_setting = current_user.vip_card.vip_api_setting
+      @vip_api_setting = current_site.vip_card.vip_api_setting
     end
 end

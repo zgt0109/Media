@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class PrintOrder < ActiveRecord::Base
   belongs_to :shop_order
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :shop_branch
   belongs_to :shop_branch_print_template
   attr_accessible :status, :address, :shop_order_id, :supplier_id, :shop_branch_id, :shop_branch_print_template_id

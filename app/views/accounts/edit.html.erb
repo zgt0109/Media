@@ -1,0 +1,71 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '系统设置', profile_path %></li>
+        <li><%= link_to '我的账号', 'javascript:;' %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="tabbable">
+
+          <%= render 'tab' %>
+
+          <div class="tab-content no-border padding-24  ">
+            <div id="tab-1" class="tab-pane active">
+              <div class="row">
+                <div class="col-sm-12">
+                <% if params[:tab] == "edit_tel" %>
+                  <%= form_for current_user, :validate => true, :method => 'post', url: {:controller => "accounts", :action => "update_mobile"}, html: { class: 'form width-800' } do |f| -%>
+                      <div class="form-group">
+                        <label class="control-label">新手机号码：</label>
+                        <div class="clearfix">
+                          <%= f.text_field :mobile, :validate => true, class: 'col-sm-4' %>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label">验证码：</label>
+                        <div class="clearfix">
+                          <input type="text" name="captcha" class="col-sm-2" >
+                          <a class="input-check btn btn-sm btn-primary col-sm-2">获取验证码</a>
+                        </div>
+                      </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-primary btn-sm" id="save_account" value="保存">
+                    </div>
+                  <% end %>
+                <% end %>
+
+                <% if params[:tab] == "edit_email" %>
+                  <%= form_for @current_user, html: { class: 'form width-800' } do |f| -%>
+                    <div class="form-group">
+                      <label class="control-label">电子邮箱：</label>
+                      <div class="clearfix">
+                        <%= f.text_field :email, class: 'col-sm-4' %>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-primary btn-sm" id="save_account" value="保存">
+                    </div>
+                  <% end %>
+                <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+    </div>
+  </div>
+<% end %>
+
+<% content_for :custom_js do %>
+  <script type="text/javascript">
+    <%= render "accounts/send_sms.js.erb" %>
+  </script>
+<% end %>

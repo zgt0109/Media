@@ -31,7 +31,7 @@ class CarBespeak < ActiveRecord::Base
   belongs_to :car_catena
   belongs_to :car_type
   belongs_to :wx_mp_user
-  belongs_to :supplier
+  belongs_to :site
 
   has_many :car_bespeak_options, through: :car_bespeak_option_relationships
   has_many :car_bespeak_option_relationships

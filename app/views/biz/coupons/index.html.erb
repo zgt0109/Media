@@ -112,22 +112,3 @@
 
 </div>
 <% end %>
-
-<% content_for :custom_js do %>
-  <script type="text/javascript">
-    $(function(){
-      <% if current_user.can_show_introduce? %>
-        <% if current_user.try(:task2?) %>
-          $(".shadow").show();    // 添加蒙板
-          $(".tab-content").css({"z-index":"auto"})
-          $(".mission_addbtn").addClass("highcolor step_tip2");  //新增高亮  按钮样式 需在页面中添加.mission_addbtn               
-        <% elsif params[:task].present? && current_user.try(:task3?) %>
-          //显示任务完成  0 是第一个任务 1 2 3，
-          $(".shadow").show();   // 添加蒙板   
-          $(".mission_cont").show();
-          $(".mission_box2").eq(2).show().find(".mission_box_div").eq(1).show();               
-        <% end %>            
-      <% end %>
-    });
-  </script>
-<% end %>

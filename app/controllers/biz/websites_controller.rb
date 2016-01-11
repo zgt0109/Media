@@ -1,11 +1,10 @@
 class Biz::WebsitesController < ApplicationController
-  before_filter :require_wx_mp_user
   before_filter :find_website, except: [:create_initial_data]
 
   def index
     #pp request.domain
     #pp request.host_with_port
-    @website = current_user.wx_mp_user.create_activity_for_website.website unless @website
+    @website = current_site.create_activity_for_website.website unless @website
     @activity = @website.activity
   end
 
@@ -112,7 +111,7 @@ class Biz::WebsitesController < ApplicationController
   end
 
   def create_initial_data
-    activity = current_user.wx_mp_user.create_activity_for_website
+    activity = current_site.create_activity_for_website
     activity.website.create_default_data if params[:is_initialize] == '1'
     return render text: '1'
   rescue
@@ -127,7 +126,7 @@ class Biz::WebsitesController < ApplicationController
   private
 
   def find_website
-    @website = current_user.website
+    @website = current_site.website
     return redirect_to websites_path, alert: '请先设置微官网' unless params[:action] == 'index' || @website
   end
 

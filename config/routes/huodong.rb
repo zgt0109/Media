@@ -33,7 +33,7 @@ Wp::Application.routes.draw do
     end
 
 
-    resources :wx_shakes, except: [:show, :destroy] do
+    resources :shakes, except: [:show, :destroy] do
       get :shake_round, on: :collection
       member do
         post :set_status, :set_prize_status
@@ -41,7 +41,7 @@ Wp::Application.routes.draw do
       end
     end
 
-    resources :wx_shake_sites, only: :index do
+    resources :shake_sites, only: :index do
       get :update_mobile, on: :collection
       get :update_user, :get_user_count, :shake_start, :shake_end, :start_next, :save_prize, on: :member
     end

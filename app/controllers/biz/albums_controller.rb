@@ -3,14 +3,13 @@ class Biz::AlbumsController < ApplicationController
   before_filter :find_album_activity
   before_filter :set_activity_url, only: [:activity, :create_activity, :update_activity, :destroy_comment]
   before_filter :check_activity, except: [:activity, :create_activity, :destroy_comment]
-  before_filter :restrict_trial_supplier, except: [:index, :activity, :destroy_comment]
-  before_filter :require_wx_mp_user, only: [:activity, :index, :destroy_comment]
+  # before_filter :require_wx_mp_user, only: [:activity, :index, :destroy_comment]
   before_filter :set_album, only: [:edit, :update, :destroy, :sort, :visible, :delete_photo]
   def activity
   end
 
   def create_activity
-    @activity = current_user.wx_mp_user.build_album_activity params[:activity]
+    @activity = current_site.build_album_activity params[:activity]
     if @activity.save
       redirect_to activity_albums_path, notice: '保存成功'
     else
@@ -31,9 +30,9 @@ class Biz::AlbumsController < ApplicationController
   end
 
   def update_activity
-    @activity = current_user.album_activity
+    @activity = current_site.album_activity
     extend_format
-    @activities = current_user.activities.show.where(keyword: params[:activity][:keyword])
+    @activities = current_site.activities.show.where(keyword: params[:activity][:keyword])
     if @activity.update_attributes params[:activity]
       redirect_to activity_albums_path, notice: '保存成功'
     else
@@ -43,7 +42,7 @@ class Biz::AlbumsController < ApplicationController
   end
 
   def index
-    @search = current_user.albums.order('albums.sort, albums.updated_at DESC').search(params[:search])
+    @search = current_site.albums.order('albums.sort, albums.updated_at DESC').search(params[:search])
     @album_first_id = @search.first.try(:id)
     @album_last_id = @search.last.try(:id)
     @albums = @search.page(params[:page])
@@ -61,7 +60,7 @@ class Biz::AlbumsController < ApplicationController
   end
 
   def create
-    @album  = current_user.albums.build(params[:album].merge wx_mp_user: current_user.wx_mp_user, activity: @activity)
+    @album  = current_site.albums.build(params[:album].merge activity: @activity)
     if @album.save
       # params[:redirect_to_on_pop_close] = "/albums" # 这样关闭pop弹窗以后会自动刷新相册列表
       flash[:notice] = '保存成功'
@@ -94,7 +93,7 @@ class Biz::AlbumsController < ApplicationController
   end
 
   def sort
-    albums = current_user.albums.order('albums.sort, albums.updated_at DESC')
+    albums = current_site.albums.order('albums.sort, albums.updated_at DESC')
     albums.each_with_index{|album, index| album.sort = index + 1}
     from_album = albums.select{|f| f.id == params[:from_id].to_i}.first
     index = albums.index(@album)
@@ -122,18 +121,18 @@ class Biz::AlbumsController < ApplicationController
 
 
   def comments
-    album = current_user.albums.where(id: params[:id]).first if params[:id].present?
+    album = current_site.albums.where(id: params[:id]).first if params[:id].present?
     ids = album.photos.collect(&:id) if album
     if ids.present?
-      @search   = Comment.where(commentable_type: 'AlbumPhoto', supplier_id: current_user.id, commentable_id: ids).order('created_at DESC').search(params[:search])
+      @search   = Comment.where(commentable_type: 'AlbumPhoto', site_id: current_site.id, commentable_id: ids).order('created_at DESC').search(params[:search])
     else
-      @search   = Comment.where(commentable_type: 'AlbumPhoto', supplier_id: current_user.id).order('created_at DESC').search(params[:search])
+      @search   = Comment.where(commentable_type: 'AlbumPhoto', site_id: current_site.id).order('created_at DESC').search(params[:search])
     end
     @comments = @search.page(params[:page])
   end
 
   def destroy_comment
-    comment = Comment.where(commentable_type: 'AlbumPhoto', supplier_id: current_user.id).find params[:comment_id]
+    comment = Comment.where(commentable_type: 'AlbumPhoto', site_id: current_site.id).find params[:comment_id]
     id = comment.commentable.try(:album).try(:id)
     if comment.destroy
       redirect_to :back, notice: '删除成功'
@@ -151,7 +150,7 @@ class Biz::AlbumsController < ApplicationController
 
   private
   def find_album_activity
-    @activity = current_user.album_activity || current_user.wx_mp_user.build_album_activity
+    @activity = current_site.album_activity || current_site.build_album_activity
   end
 
   def set_activity_url
@@ -159,11 +158,11 @@ class Biz::AlbumsController < ApplicationController
   end
 
   def check_activity
-    return redirect_to activity_albums_path, notice: '请先填写活动信息' unless current_user.album_activity
+    return redirect_to activity_albums_path, notice: '请先填写活动信息' unless current_site.album_activity
   end
 
   def set_album
-    @album = current_user.albums.where(id: params[:id]).first
+    @album = current_site.albums.where(id: params[:id]).first
     return redirect_to albums_path, alert: '相册不存在或已删除' unless @album
   end
 

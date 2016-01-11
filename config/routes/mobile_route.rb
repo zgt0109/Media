@@ -7,13 +7,13 @@ Wp::Application.routes.draw do
 
   constraints subdomain: /m+/  do
     defaults subdomain: APP_SUB_DOMAIN do
-      #scope path: ":supplier_id(.:ext_name)", module: "mobile", as: "mobile" do
-      scope path: ":supplier_id", module: "mobile", constraints: {supplier_id: /[^\/]+/ }, as: "mobile" do
+      #scope path: ":site_id(.:ext_name)", module: "mobile", as: "mobile" do
+      scope path: ":site_id", module: "mobile", constraints: {site_id: /[^\/]+/ }, as: "mobile" do
         #微官网
         # 首页：
-        # http://m.winwemedia.com/:supplier_id
+        # http://m.winwemedia.com/:site_id
         # 菜单页面（列表或详情页面）：
-        # http://m.winwemedia.com/:supplier_id/channel/:website_menu_id
+        # http://m.winwemedia.com/:site_id/channel/:website_menu_id
         root to: 'websites#index'
         match '/channel/:website_menu_id' => 'websites#channel', as: :channel
         match '/detail/:website_menu_id' => 'websites#detail', as: :detail
@@ -22,12 +22,12 @@ Wp::Application.routes.draw do
         match '/unknown_identity' => 'websites#unknown_identity'
         match '/audio/:id' => 'websites#audio', as: :audio
 
-        #微门店 http://m.winwemedia.com/supplier_id/shop_branches(/:id)
+        #微门店 http://m.winwemedia.com/site_id/shop_branches(/:id)
         resources :micro_stores, only: [:index, :show] do
           get :map, :list, on: :collection
         end
 
-        #微相册 http://m.winwemedia.com/supplier_id/albums(/:id)
+        #微相册 http://m.winwemedia.com/site_id/albums(/:id)
         resources :albums, only: [:index, :show] do
           get :list, :comments, :load_more_photos, :load_more_comments, on: :member
           post :create_comment, on: :member
@@ -64,13 +64,13 @@ Wp::Application.routes.draw do
           match :callback, :print, :notify, :success, on: :collection
         end
 
-        #微投票 http://m.winwemedia.com/supplier_id/votes(/:id)
+        #微投票 http://m.winwemedia.com/site_id/votes(/:id)
         resources :vote, only: [] do
           get  :login, :result
           post :detail, :success
         end
 
-        #微调研 http://m.winwemedia.com/supplier_id/surveys(/:id)
+        #微调研 http://m.winwemedia.com/site_id/surveys(/:id)
         resources :surveys, only: [:new, :show] do
           match :questions, on: :member
           member do
@@ -110,7 +110,7 @@ Wp::Application.routes.draw do
           post :create_participation, on: :collection
         end
 
-        #微社区 http://m.winwemedia.com/:supplier_id/wbbs_topics(/:id)
+        #微社区 http://m.winwemedia.com/:site_id/wbbs_topics(/:id)
         resources :wbbs_topics, only: [:index, :new, :create, :show] do
           collection do
             get  :vote_up, :wbbs_notifications, :read_notification
@@ -122,7 +122,7 @@ Wp::Application.routes.draw do
           end
         end
 
-        #优惠券 http://m.winwemedia.com/:supplier_id/coupons
+        #优惠券 http://m.winwemedia.com/:site_id/coupons
         resources :coupons, only: :index do
           collection do
             get :my, :detail, :user_detail, :shops
@@ -149,9 +149,9 @@ Wp::Application.routes.draw do
     end
   end
 
-  scope path: ':supplier_id', module: :mobile, constraints: {supplier_id: /\d+/ },  as: :mobile do
+  scope path: ':site_id', module: :mobile, constraints: {site_id: /\d+/ },  as: :mobile do
     resources :wx_walls, only: :show
-    resources :wx_shakes, only: [:index, :show]
+    resources :shakes, only: [:index, :show]
     resources :trips, only: :index
     resources :trip_orders, only: [:index, :new, :create]
 

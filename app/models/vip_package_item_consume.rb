@@ -1,7 +1,7 @@
 class VipPackageItemConsume < ActiveRecord::Base
 include HasBarcode
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :vip_user
   belongs_to :shop_branch

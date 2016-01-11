@@ -47,20 +47,8 @@ module ApplicationHelper
     number_with_precision( double.to_f, { :precision => 2 }.merge(options) )
   end
 
-  def agent_name
-    name = session[:agent_name] || "winwemedia"
-    if name == "winwemedia"
-      name = ""
-    elsif name == "dxcm"
-      name = "顶享微客" #后期从数据库查询
-    else
-      name = ""
-    end
-    name
-  end
-
   def hide_for_temp_user
-    session[:pc_supplier_id] == TEST_USER_ID ? "style='display:none'".html_safe : ""
+    session[:account_id] == TEST_USER_ID ? "style='display:none'".html_safe : ""
   end
 
 
@@ -269,7 +257,7 @@ module ApplicationHelper
   def supplier_categories_for_js
     supplier_categories = ''
 
-    SupplierCategory.root.includes(:children).each do |category|
+    AccountCategory.root.includes(:children).each do |category|
       children = category.children.collect {|child| "['#{child.name}', #{child.id.to_i}]"}
       supplier_categories << "#{category.id.to_i}: [#{children.join(', ')}],"
     end
@@ -292,7 +280,7 @@ module ApplicationHelper
 
 
   def leaving_message_admin_path
-    if current_user.activities.setted.message.exists?
+    if current_site.activities.setted.message.exists?
       leaving_messages_url
     else
       edit_activity_leaving_messages_url
@@ -627,11 +615,11 @@ module ApplicationHelper
   def quick_link_options
     {
       '请选择'     => '',
-      "积分换礼品"   => "http://#{Settings.mhostname}/app/vips/gifts?wxmuid=#{current_user.wx_mp_user.try(:id)}",
-      "会员签到"    => "http://#{Settings.mhostname}/app/vips/signin?wxmuid=#{current_user.wx_mp_user.try(:id)}",
-      "会员卡套餐"   => "http://#{Settings.mhostname}/app/vips/vip_packages?wxmuid=#{current_user.wx_mp_user.try(:id)}",
-      "会员消费记录"  => "http://#{Settings.mhostname}/app/vips/consumes?wxmuid=#{current_user.wx_mp_user.try(:id)}",
-      "会员积分记录"  => "http://#{Settings.mhostname}/app/vips/points?type=out&wxmuid=#{current_user.wx_mp_user.try(:id)}",
+      "积分换礼品"   => "http://#{Settings.mhostname}/app/vips/gifts?wxmuid=#{current_site.wx_mp_user.try(:id)}",
+      "会员签到"    => "http://#{Settings.mhostname}/app/vips/signin?wxmuid=#{current_site.wx_mp_user.try(:id)}",
+      "会员卡套餐"   => "http://#{Settings.mhostname}/app/vips/vip_packages?wxmuid=#{current_site.wx_mp_user.try(:id)}",
+      "会员消费记录"  => "http://#{Settings.mhostname}/app/vips/consumes?wxmuid=#{current_site.wx_mp_user.try(:id)}",
+      "会员积分记录"  => "http://#{Settings.mhostname}/app/vips/points?type=out&wxmuid=#{current_site.wx_mp_user.try(:id)}",
       "微酒店订单管理" => "#{HOTEL_HOST}/wehotel-all/#{current_user.id}/getOrderList"
     }
   end
@@ -673,12 +661,12 @@ module ApplicationHelper
     text
   end
 
-  def tr_activity_survey_question(question)
+  def tr_survey_question(question)
     html = ""
     if question
       html << "<tr><td>#{question.name}</td><td>#{question.limit_select}</td><td>"
-      html << "<a class='fgreen' href='javascript:;' data-toggle='modals' data-target='addQuestion' data-height='600' data-title='编辑题目' data-iframe='#{edit_activity_survey_question_path(question, activity_id: params[:activity_id])}'>编辑</a> "
-      html << "<a href='#{activity_survey_question_path(question)}' class='fgreen' data-confirm='是否确定要删除这道题目？' data-method='delete' rel='nofollow'>删除</a>"
+      html << "<a class='fgreen' href='javascript:;' data-toggle='modals' data-target='addQuestion' data-height='600' data-title='编辑题目' data-iframe='#{edit_survey_question_path(question, activity_id: params[:activity_id])}'>编辑</a> "
+      html << "<a href='#{survey_question_path(question)}' class='fgreen' data-confirm='是否确定要删除这道题目？' data-method='delete' rel='nofollow'>删除</a>"
       html << "</td></tr>"
     end
     return html.html_safe

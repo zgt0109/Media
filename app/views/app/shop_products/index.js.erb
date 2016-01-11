@@ -1,3 +1,0 @@
-$("#menu_list_section").empty();
-$("#menu_list_section").html("<%= j (render :partial => 'app/shop_products/shop_product', :collection => @shop_products, :as => :product, :locals => {:shop_order => @shop_order}) %>");
-$(".pop-nav.pop").css("display","none");

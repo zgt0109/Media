@@ -42,7 +42,7 @@ class ShopBranch < ActiveRecord::Base
   validates :name, uniqueness: {:scope => [:shop_id, :status], message: '不能重复', case_sensitive: false }, presence: true, :if => :valStatus?
   validates :tel, presence: true, format: { with: /^[0-9_\-]*$/, message: '电话号码只能包含数字,-和_' }
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :shop
   belongs_to :province
@@ -262,8 +262,7 @@ class ShopBranch < ActiveRecord::Base
   def add_default_attrs
     return unless self.shop
 
-    self.supplier_id = self.shop.supplier_id
-    self.wx_mp_user_id = self.shop.wx_mp_user_id
+    self.site_id = self.shop.site_id
     self.start_time = '00:00:00' unless self.start_time
     self.end_time = '23:59:00' unless self.end_time
   end
@@ -288,7 +287,7 @@ class ShopBranch < ActiveRecord::Base
   end
 
   def associate_point_gifts
-    self.point_gift_ids = supplier.point_gifts.shop_branch_unlimited.pluck(:id)
+    self.point_gift_ids = site.point_gifts.shop_branch_unlimited.pluck(:id)
   end
 
   def save_sub_account

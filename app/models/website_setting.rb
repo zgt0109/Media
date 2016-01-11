@@ -1,7 +1,5 @@
 class WebsiteSetting < ActiveRecord::Base
   mount_uploader :bg_music, AudioUploader
-  mount_uploader :bg_pic, WebsiteUploader
-  img_is_exist({bg_pic: :bg_pic_key})
 
   # 无法自定义内容的导航编号数组
   UNABLE_CUSTOM_NAV_TEMPLATE_IDS = [1, 8, 14, 17, 18, 21, 23, 24]
@@ -11,7 +9,7 @@ class WebsiteSetting < ActiveRecord::Base
   belongs_to :inside_nav_template, class_name: 'WebsiteTemplate', foreign_key: :nav_template_id, primary_key: :style_index, conditions: { template_type: WebsiteTemplate::NAVIGATION }
 
   validates :wp_bottom_opacity, :wp_font_opacity, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100}, presence: true
-  
+
   enum_attr :begin_animation_type, :in => [
     ['begin_animation1', 1, '淡出'],
     ['begin_animation2', 2, '变小淡出'],
@@ -39,10 +37,10 @@ class WebsiteSetting < ActiveRecord::Base
     ['bg_animation13', 13, "蓝色霓虹点"],
     ['bg_animation14', 14, '紫色霓虹点'],
   ]
-  
+
   before_save :cleanup
   after_commit :upload_bg_music_to_qiniu#, :upload_bg_music_to_qiniu_worker
-  after_save :generate_preview_pic
+  # after_save :generate_preview_pic
 
   def home_template
     self.home_template_id.to_i > 0 && WebsiteTemplate.where(:style_index => self.home_template_id).first || nil
@@ -124,8 +122,8 @@ START
     end
   end
 
-  def bg_pic_ul(type = :large)
-    qiniu_image_url(bg_pic_key) || bg_pic.try(type)
+  def bg_pic_ul
+    qiniu_image_url(bg_pic_key)
   end
 
   def wp_bottom_color
@@ -160,15 +158,12 @@ START
       self.bg_music.remove!
     end
   end
-  
+
   def bg_music_absolute_path
     bg_music_qiniu_url.present? ? bg_music_qiniu_url : bg_music.to_s
   end
 
   def generate_preview_pic
-    # return unless website.try(:supplier).try(:bqq_account?)
-    return unless website.try(:supplier).try(:api_user).try(:bqqv3?)
-    
     if !is_change_template? && (home_template_id_changed? or list_template_id_changed?)
       update_attributes(is_change_template: true)
 

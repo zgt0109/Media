@@ -15,8 +15,6 @@
 #
 
 class ActivityNotice < ActiveRecord::Base
-  mount_uploader :pic, MaterialUploader
-  img_is_exist({pic: :qiniu_pic_key}) 
 
   enum_attr :activity_status, :in => [
     ['stopped', -1, '已结束'],
@@ -44,19 +42,19 @@ class ActivityNotice < ActiveRecord::Base
     end
 
     def coupon_ready_notice
-      new(title: '活动即将开始', qiniu_pic_key: 'FoIsarMzfL1wgy7nTeUDmmYqNXgo', summary: '您参与的优惠券活动将在{day}天{hour}小时{minute}分钟后开始！更多活动细节请点击页面查看详情~', description: "活动预热说明", activity_status: 0)
+      new(title: '活动即将开始', pic_key: 'FoIsarMzfL1wgy7nTeUDmmYqNXgo', summary: '您参与的优惠券活动将在{day}天{hour}小时{minute}分钟后开始！更多活动细节请点击页面查看详情~', description: "活动预热说明", activity_status: 0)
     end
 
     def gua_ready_notice
-      new(title: '活动即将开始', qiniu_pic_key: 'Fkgsh_bQL0bVzzB--_vlgXh_XEg-', summary: '请点击进入刮刮卡活动预热页面', description: "活动预热说明", activity_status: 0)
+      new(title: '活动即将开始', pic_key: 'Fkgsh_bQL0bVzzB--_vlgXh_XEg-', summary: '请点击进入刮刮卡活动预热页面', description: "活动预热说明", activity_status: 0)
     end
 
     def wheel_ready_notice
-      new(title: '活动即将开始', qiniu_pic_key: 'Fl-25j4H93sfZ-B0ouwCusJfXK7D', summary: '请点击进入幸运大转盘活动预热页面', description: "活动预热说明", activity_status: 0)
+      new(title: '活动即将开始', pic_key: 'Fl-25j4H93sfZ-B0ouwCusJfXK7D', summary: '请点击进入幸运大转盘活动预热页面', description: "活动预热说明", activity_status: 0)
     end
 
     def hit_egg_ready_notice
-      new(title: '活动即将开始', qiniu_pic_key: 'FtGXJcP77amXP66bzhbZxirbO2pu', summary: '请点击进入砸金蛋活动预热页面', description: "活动预热说明", activity_status: 0)
+      new(title: '活动即将开始', pic_key: 'FtGXJcP77amXP66bzhbZxirbO2pu', summary: '请点击进入砸金蛋活动预热页面', description: "活动预热说明", activity_status: 0)
     end
 
     def ready_or_active_notice(activity, ready_statuses = [Activity::WARM_UP])
@@ -143,14 +141,14 @@ class ActivityNotice < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_url(qiniu_pic_key) || pic
+    qiniu_image_url(pic_key)
   end
 
 
   private
     def set_default_pic
       if pic_url.blank?
-        self.qiniu_pic_key = Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
+        self.pic_key = Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
       end
     end
 

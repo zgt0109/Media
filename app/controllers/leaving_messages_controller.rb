@@ -8,8 +8,8 @@ class LeavingMessagesController < ApplicationController
   end
 
   def create
-    @message = current_user.leaving_messages.create(params[:leaving_message])
-    parent = current_user.leaving_messages.find_by_id(params[:leaving_message][:parent_id])
+    @message = current_site.leaving_messages.create(params[:leaving_message])
+    parent = current_site.leaving_messages.find_by_id(params[:leaving_message][:parent_id])
     @children = parent.children.order('created_at DESC')
   end
 
@@ -29,7 +29,7 @@ class LeavingMessagesController < ApplicationController
   end
 
   def set_template
-    @template = LeavingMessageTemplate.where(:supplier_id => current_user.id).first_or_create
+    @template = LeavingMessageTemplate.where(:site_id => current_site.id).first_or_create
   end
 
   def set_template_save
@@ -54,7 +54,7 @@ class LeavingMessagesController < ApplicationController
   end
 
   def update_activity
-    @activities = current_user.activities.show.where(keyword: params[:activity][:keyword])
+    @activities = current_site.activities.show.where(keyword: params[:activity][:keyword])
     if @activity.update_attributes(params[:activity])
       flash[:notice] = '保存成功'
     else
@@ -97,10 +97,10 @@ class LeavingMessagesController < ApplicationController
 
   private
     def set_message
-      @messages = current_user.leaving_messages.order("created_at DESC") || []
+      @messages = current_site.leaving_messages.order("created_at DESC") || []
     end
     def set_activity
-      @activity = current_user.activities.setted.message.first_or_initialize(qiniu_pic_key: 'FvKEd9bIay1xGjCw4mEUSkrOZWmy')
+      @activity = current_site.activities.setted.message.first_or_initialize(pic_key: 'FvKEd9bIay1xGjCw4mEUSkrOZWmy')
     end
 
 end

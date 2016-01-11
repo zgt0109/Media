@@ -4,13 +4,13 @@ module AdminHelper
   end
 
   def show_introduce_class(current_show_introduce)
-  	current_show_introduce = current_show_introduce.to_i
-    if current_user.show_introduce >= current_show_introduce
-    	'miss_finish'
-    elsif current_user.show_introduce == current_show_introduce - 1
-    	'miss_active'
-    else
-    	''
-    end
+  	# current_show_introduce = current_show_introduce.to_i
+   #  if current_user.show_introduce >= current_show_introduce
+   #  	'miss_finish'
+   #  elsif current_user.show_introduce == current_show_introduce - 1
+   #  	'miss_active'
+   #  else
+   #  	''
+   #  end
   end
 end

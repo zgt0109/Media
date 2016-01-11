@@ -33,7 +33,7 @@
                   <label class="control-label">栏目类型 <small class="help-inline text-warning line-height-32">根据你的需求，选择站点栏目的类型，文章等大部分栏目类型可以直接在当前页面创建</small><span class="icon-question-sign " data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="<%= render 'info' %>" ></span></label>
                   <div class="clearfix">
                     <%
-                       reject_types = current_user.bqq_account? ? [1,5,3,4,8,10,18,19,20] : [1,5,8,10,19,18,20]
+                       reject_types = [1,5,8,10,19,18,20]
                        menu_type_options = WebsitePicture.menu_type_options.reject{|m| reject_types.include?(m.last) || m.last == WebsitePicture::ACTIVITY}
                     %>
                     <%= f.select :menu_type, [[]] + menu_type_options, {}, class: 'col-xs-6' %>
@@ -95,7 +95,7 @@
                 <div class="form-group">
                   <label class="control-label">图文资源<span class="required-star">*</span></label>
                   <div class="clearfix">
-                    <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6' %>
+                    <%= f.select :single_material_id, current_site.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6' %>
                     &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
                   </div>
                 </div>
@@ -130,7 +130,7 @@
                 <div class="form-group">
                   <label class="control-label">图文资源<span class="required-star">*</span></label>
                   <div class="clearfix">
-                    <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6'  %>
+                    <%= f.select :multiple_material_id, current_site.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6'  %>
                     &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
                   </div>
                 </div>
@@ -182,7 +182,7 @@
                 <!--营销互动活动-->
                 <div class="form-group">
                   <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
-                  <% types = current_user.bqq_account? ? ActivityType.bqq_markets : ActivityType.markets %>
+                  <% types = ActivityType.markets %>
                   <% activity = (types.select{|m| m.last.to_s.split(', ').to_a.include?(@picture.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
                   <div class="clearfix">
                     <%= select_tag "activity_market", options_for_select(types, selected: activity.last), class: 'col-xs-6 gl' %>
@@ -238,7 +238,7 @@
                   <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
                   <div class="clearfix">
                     <%= f.select :docking_type, options_for_select(WebsitePicture.docking_type_options), {}, class: "col-xs-6" %>
-                    <%= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+                    <%#= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
                   </div>
                 </div>
 
@@ -270,10 +270,6 @@
               </div>
               </div>
               </div>
-
-
-
-
 
               <div class="form-group ">
                 <%= f.submit '确定', class: 'btn btn-sm btn-primary' %>

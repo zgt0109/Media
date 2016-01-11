@@ -6,7 +6,7 @@ class Biz::VipExternalHttpApisController < ApplicationController
   end
 
   def index
-    @vip_external_http_apis = current_user.vip_external_http_apis.page( params[:page] )
+    @vip_external_http_apis = current_site.vip_external_http_apis.page( params[:page] )
     render layout: 'application'
   end
 
@@ -16,7 +16,7 @@ class Biz::VipExternalHttpApisController < ApplicationController
   end
 
   def create
-    @vip_external_http_api = current_user.vip_external_http_apis.new( params[:vip_external_http_api].merge(vip_card_id: current_user.vip_card.id, wx_mp_user_id: current_user.wx_mp_user.id) )
+    @vip_external_http_api = current_site.vip_external_http_apis.new( params[:vip_external_http_api].merge(vip_card_id: current_site.vip_card.id, site_id: current_site.id) )
     if @vip_external_http_api.save
       flash[:notice] = "保存成功"
       render inline: "<script>parent.location.reload();</script>"
@@ -45,6 +45,6 @@ class Biz::VipExternalHttpApisController < ApplicationController
 
   private
     def find_api
-      @vip_external_http_api = current_user.vip_external_http_apis.find params[:id]  
+      @vip_external_http_api = current_site.vip_external_http_apis.find params[:id]  
     end
 end

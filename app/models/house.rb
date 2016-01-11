@@ -26,7 +26,7 @@ class House < ActiveRecord::Base
 
   enum_attr :house_type, :in => [['complete_apartment', 0, '现房'],['forward_housing', 1, '期房']]
 
-  belongs_to :supplier, inverse_of: :house
+  belongs_to :site, inverse_of: :house
   belongs_to :wx_mp_user, inverse_of: :house
   belongs_to :province
   belongs_to :district
@@ -59,7 +59,7 @@ class House < ActiveRecord::Base
     live_photos.where(wx_user_id: wx_user.id).order('id DESC').first.update_attributes(live_photo_attrs)
     live_photo_activity = wx_mp_user.activities.house_live_photo.first
     comment = if live_photo_activity && live_photo_activity.extend.force
-                "后台开启审核：#{wx_mp_user.name}正在审核您的图片，通过后会显示在“实景拍摄”栏目里"
+                "后台开启审核：#{wx_mp_user.nickname}正在审核您的图片，通过后会显示在“实景拍摄”栏目里"
               else
                 '后台未开启审核：稍后您就可以在“实景拍摄”栏目中看到您的精彩图片了'
               end

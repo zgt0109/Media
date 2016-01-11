@@ -3,9 +3,8 @@
   <div class="body">
     <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/><%= @car_owner.new_record? ? "添加" : "修改" %>爱车信息</div>
     <%= form_for @car_owner, url: @form_url[0], method: @form_url[1] do |f| %>
-      <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
-      <%= f.hidden_field :supplier_id, value: @supplier.id %>
-      <%= f.hidden_field :wx_mp_user_id, value: @supplier.wx_mp_user.id %>
+      <%= f.hidden_field :user_id, value: session[:user_id] %>
+      <%= f.hidden_field :site_id, value: @site.id %>
       <%= f.hidden_field :car_shop_id, value: @car_shop.id %>
       <div class="mod-box">
         <dl>

@@ -28,7 +28,7 @@
                   <%= form_for @search, url: votes_user_data_activities_path, html: {method: :get } do |f| %>
                     <div class="col-md-3">
                       <div class="input-group input-group-text col-xs-12 row">
-                        <% options = current_user.activities.show.where(:activity_type_id => 12).pluck(:name, :id) %>
+                        <% options = current_site.activities.show.where(:activity_type_id => 12).pluck(:name, :id) %>
                         <%= f.select :activity_id_eq, options, {include_blank: '全部活动'}, class: 'col-xs-12' %>
                       </div>
                     </div>

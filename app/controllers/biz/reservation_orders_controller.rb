@@ -17,6 +17,6 @@ class Biz::ReservationOrdersController < ApplicationController
 
   private
     def get_order
-      @order = current_user.reservation_orders.find_by_id(params[:id])
+      @order = current_site.reservation_orders.find_by_id(params[:id])
     end
 end

@@ -12,12 +12,7 @@ class BusinessShopAdmin < ActiveRecord::Base
   end
 
   def name=(name)
-    if business_shop.try(:website).try(:supplier).try(:bqq_account?)
-      name_suffix = business_shop.try(:website).try(:supplier).try(:api_user).try(:openid)
-    else
-      name_suffix = business_shop.try(:website).try(:id)
-    end
-    
+    name_suffix = business_shop.try(:website).try(:id)
     self.username = "#{name}@#{name_suffix}"
   end
 

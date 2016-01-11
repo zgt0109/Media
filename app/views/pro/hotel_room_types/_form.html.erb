@@ -52,7 +52,7 @@
                 <div class="form-group">
                   <label>封面图片<span class="required-star">*</span>&nbsp;<small class="text-warning">图片建议尺寸：360像素*280像素</small></label>
                   <div class="clearfix">
-                    <div class="cieldon-file width-100px " data-type="0" data-height="180" data-width="140" data-img="<%= f.object.pic_url %>" data-name="hotel_room_type[qiniu_pic_key]" data-key="<%= f.object.qiniu_pic_key%>" data-callback="img_callback"></div>
+                    <div class="cieldon-file width-100px " data-type="0" data-height="180" data-width="140" data-img="<%= f.object.pic_url %>" data-name="hotel_room_type[pic_key]" data-key="<%= f.object.pic_key%>" data-callback="img_callback"></div>
                   </div>
                   <%= hidden_field_tag :pic_is_exist, f.object.pic_url.present? ? true : false %>
                 </div>
@@ -142,7 +142,7 @@
     <script type="text/javascript">
         $(function() {
             $('input[type=submit]').click(function(){
-                if($('#pic_is_exist').val() == 'false' && !$('input[name="hotel_room_type[qiniu_pic_key]"]').val()){
+                if($('#pic_is_exist').val() == 'false' && !$('input[name="hotel_room_type[pic_key]"]').val()){
                     addErrorMessage($('.text-warning').eq(0), '封面图片不能为空');
                     return false;
                 }

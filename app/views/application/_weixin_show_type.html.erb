@@ -27,7 +27,7 @@
       <div class="form-group">
         <label class="control-label">选择活动<span class="required-star">*</span></label>
         <div class="clearfix">
-          <%= f.select :activity_id, current_user.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: f.object.try(:materialable_id) }, validate: true, class: 'col-xs-6' %>
+          <%= f.select :activity_id, current_site.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: f.object.try(:materialable_id) }, validate: true, class: 'col-xs-6' %>
         </div>
       </div>
     </div>

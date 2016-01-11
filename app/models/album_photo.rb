@@ -12,8 +12,7 @@
 #
 
 class AlbumPhoto < ActiveRecord::Base
-	mount_uploader :pic, PictureUploader
-  img_is_exist({pic: :qiniu_pic_key})
+
   has_many   :comments, as: :commentable, dependent: :destroy
   belongs_to :album, counter_cache: :photos_count
 
@@ -24,7 +23,7 @@ class AlbumPhoto < ActiveRecord::Base
   end
 
   def filename
-    pic.file && pic.file.filename || qiniu_pic_key
+    pic.file && pic.file.filename || pic_key
   end
   
   def img_url
@@ -44,7 +43,7 @@ class AlbumPhoto < ActiveRecord::Base
   end
 
   def qiniu_pic_url
-    qiniu_image_url(qiniu_pic_key)
+    qiniu_image_url(pic_key)
   end
 
 end

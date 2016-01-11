@@ -4,11 +4,10 @@
 </header>
 <div class="contxt cont-artical">
 	<%= form_for @hotel_comment, url: app_hotel_comments_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], comment_time: Time.now.to_i, source: 'new'), validate: true do |f| %>
-	<%= f.hidden_field :supplier_id %>
+	<%= f.hidden_field :site_id %>
 	<%= f.hidden_field :hotel_branch_id %>
 	<%= f.hidden_field :hotel_id %>
-	<%= f.hidden_field :wx_mp_user_id %>
-	<%= f.hidden_field :wx_user_id %>
+	<%= f.hidden_field :user_id %>
   <%= f.hidden_field :hotel_order_id %>
 	<div class="box-cont box-form box-form-comment">
 		<p><label>姓名：</label><%= f.text_field :name, placeholder: "请输入您的姓名" %></p>

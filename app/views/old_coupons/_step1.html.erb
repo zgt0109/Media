@@ -3,7 +3,7 @@
     <%= form_for @activity, validate: true, url: form_action, html: { class: 'form col-sm-7', role: :form } do |f| %>
         <%= hidden_field_tag :step, params[:step] %>
         <%= f.hidden_field :activity_type_id %>
-        <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+        <%= f.hidden_field :site_id, value: current_site.id %>
         <div class="form-group">
             <label class="control-label">活动名称<span class="required-star">*</span></label>
             <div class="clearfix">
@@ -17,9 +17,8 @@
             </div>
         </div>
         <%= f.fields_for :ready_activity_notice, validate: true do |ran| %>
-            <%= ran.hidden_field :pic %>
-            <%= ran.hidden_field :pic_cache %>
-            <%= ran.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+            <%= ran.hidden_field :pic_key %>
+            <%#= ran.hidden_field :pic_cache %>
             <%= render 'old_coupons/activity_notice_form', ran: ran %>
         <% end %>
         <div class="form-group">

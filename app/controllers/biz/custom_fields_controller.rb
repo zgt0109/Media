@@ -5,9 +5,9 @@ class Biz::CustomFieldsController < ApplicationController
 
   def new
     if params[:customized_type] == 'Activity'
-      @object = current_user.activities.find_by_id(params[:customized_id])
+      @object = current_site.activities.find_by_id(params[:customized_id])
     else
-      @object = current_user.vip_card
+      @object = current_site.vip_card
     end
     @new_field = CustomField.find_by_id(params[:field_id]) if params[:field_id]
   end

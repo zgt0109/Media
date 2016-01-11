@@ -1,12 +1,12 @@
 <% 
 	if value == "微投票"
-		options = current_user.activities.show.vote.order('id DESC').pluck(:name, :id)
+		options = current_site.activities.show.vote.order('id DESC').pluck(:name, :id)
 		name = "vote_id"
 	elsif value == "摇一摇"
-		options = current_user.activities.show.shake.order('id DESC').pluck(:name, :id)
+		options = current_site.activities.show.shake.order('id DESC').pluck(:name, :id)
 		name = "shake_id"
 	elsif value == "微报名"
-		options = current_user.activities.show.enroll.order('id desc').pluck(:name, :id)
+		options = current_site.activities.show.enroll.order('id desc').pluck(:name, :id)
 		name = "enroll_id"
 	end
 %>

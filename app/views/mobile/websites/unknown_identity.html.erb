@@ -27,7 +27,7 @@
 </div>
 <div class="null-text">
     <h1>请以微信用户身份进入哦！</h1>
-    <p>请在微信公众号中查找添加：【<%= @wx_mp_user.try(:name) %>】 <br /> 并在聊天窗口中发送关键词【<%= @activity.try(:keyword) || "微官网" %>】进入吧!</p>
+    <p>请在微信公众号中查找添加：【<%= @wx_mp_user.try(:nickname) %>】 <br /> 并在聊天窗口中发送关键词【<%= @activity.try(:keyword) || "微官网" %>】进入吧!</p>
 </div>
 </body>
 </html>

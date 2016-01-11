@@ -31,7 +31,7 @@
           <select id='add_to_group'>
             <option value="-1">全部用户</option>
             <option value="-2">未分组</option>
-            <%= options_for_select(current_user.vip_card.vip_groups.pluck(:name, :id)) %>
+            <%= options_for_select(current_site.vip_card.vip_groups.pluck(:name, :id)) %>
           </select>
           <div class="vipcard-search">
             <input type="text" class="vipcard-search-input" id="vipcard-search-input" placeholder="请输入用户姓名" />
@@ -44,7 +44,7 @@
             <%- @vip_grades.each do |grade| %>
               <a data-grade="<%= grade.id %>" class="vip-grade"><%= grade.name %></a>
             <%- end %>
-            <% current_user.vip_card.labeled_custom_fields.each do |custom_field| %>
+            <% current_site.vip_card.labeled_custom_fields.each do |custom_field| %>
                 <select id="custom_field_<%= custom_field.id %>" data-id="<%= custom_field.id %>">
                   <option value=""><%= custom_field.name %>选择</option>
                   <%= options_for_select(CustomField.system_options[custom_field.name]['values']) %>

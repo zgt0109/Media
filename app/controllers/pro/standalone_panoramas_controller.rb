@@ -1,7 +1,7 @@
 class Pro::StandalonePanoramasController < Pro::HousesBaseController
   before_filter :find_house, except: [:info]
   after_filter :notify_standalone_panorama, only: [:create, :update]
-  skip_before_filter *ADMIN_FILTERS, :set_current_user, :promotion_code_tracking, :bqq_auth,:require_wx_mp_user, :require_industry, :require_house, only: [:info]
+  skip_before_filter *ADMIN_FILTERS, :set_current_user,:require_wx_mp_user, :require_industry, :require_house, only: [:info]
 
   def new
     @house_layout = HouseLayout.find params[:house_layout_id]

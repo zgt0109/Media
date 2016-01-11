@@ -1,6 +1,4 @@
 class TripTicket < ActiveRecord::Base
-  mount_uploader :pic, TripTicketUploader
-  img_is_exist({pic: :pic_key})
 
   validates :name, :price, presence: true
 

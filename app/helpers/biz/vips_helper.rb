@@ -18,7 +18,7 @@ module Biz::VipsHelper
   end
 
   def vip_user_count_by_group(group)
-    vip_users = current_user.vip_users.visible
+    vip_users = current_site.vip_users.visible
     case group
     when -1 then vip_users.count
     when -2 then vip_users.where(vip_group_id: nil).count
@@ -43,9 +43,8 @@ module Biz::VipsHelper
   end
 
   def has_privilege_for?( privilege_code )
-    return false unless current_user
-    return true  unless current_user.bqq_account?
-    current_user.has_privilege_for?( privilege_code )
+    return false unless current_site
+    current_site.has_privilege_for?( privilege_code )
   end
 
   def vip_admin_path?
@@ -96,11 +95,11 @@ module Biz::VipsHelper
   end
 
   def all_vip_users_count
-    @all_vip_users_count ||= current_user.vip_users.visible.count
+    @all_vip_users_count ||= current_site.vip_users.visible.count
   end
 
   def no_group_vip_users_count
-    @no_group_vip_users_count ||= current_user.vip_users.visible.where(vip_group_id: nil).count
+    @no_group_vip_users_count ||= current_site.vip_users.visible.where(vip_group_id: nil).count
   end
 
   def vip_card_settings_data(vip_card, vip_user = nil)

@@ -4,7 +4,7 @@ class Donation < ActiveRecord::Base
     ['normal', 1, '进行中'],
     ['soldout', -1, '已停止'],
   ]
-  belongs_to :supplier
+  belongs_to :site
   validates :name, presence: true
   validates :target_money, presence: true
   validates :summary, presence: true

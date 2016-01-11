@@ -23,17 +23,14 @@
 #
 
 class ShopProduct < ActiveRecord::Base
-  # attr_accessible :code, :description,  :is_hot, :is_new, :name, :pic_url, :price, :status
-  mount_uploader :pic_url, ShopImageUploader
 
-  # validates :shop_branch_id, :shop_category_id, presence: true
   validates :shop_menu_id, presence:true
   validates :name, presence: true, length: { maximum: 15 }
 
   validates :sort, numericality: { greater_than_or_equal_to: 1, only_integer: true }
 
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :qiniu_pic_key, presence: true, on: :create
+  validates :pic_key, presence: true, on: :create
 
   # validates :quantity, numericality: { greater_than_or_equal_to: 0, only_integer: true }, allow_blank: true
   
@@ -44,7 +41,7 @@ class ShopProduct < ActiveRecord::Base
     ['shelve',     1, '已上架'] 
   ]
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :shop
   # belongs_to :shop_branch
@@ -107,7 +104,7 @@ class ShopProduct < ActiveRecord::Base
   end
 
   def pic_url_url
-    qiniu_image_url(qiniu_pic_key) || pic_url
+    qiniu_image_url(pic_key)
   end
 
   def thumb_qiniu_pic_url
@@ -137,7 +134,7 @@ class ShopProduct < ActiveRecord::Base
     self.supplier_id = self.shop.supplier_id
     self.wx_mp_user_id = self.shop.wx_mp_user_id
     self.code = "#{self.category_parent_id}_#{self.shop.shop_products.count+1}"
-    self.pic_url = self.qiniu_pic_key if self.qiniu_pic_key
+    self.pic_url = self.pic_key if self.pic_key
   end
   
 

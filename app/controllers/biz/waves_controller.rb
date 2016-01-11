@@ -4,7 +4,7 @@ class Biz::WavesController < ApplicationController
   end
 
   def create
-    @activity = current_user.activities.new(activity_type_id: 64)
+    @activity = current_site.activities.new(activity_type_id: 64)
     @activity.attributes = params[:activity]
     if activity_time_invalid?
       render_with_alert :new, '活动时间填写不正确'
@@ -48,7 +48,7 @@ class Biz::WavesController < ApplicationController
 
   private
     def find_activity
-      @activity = current_user.activities.wave.find_by_id(params[:id]) || current_user.activities.new(activity_type_id: 64, name: '摇一摇抽奖', summary: '请点击进入摇一摇抽奖页面', description: '摇一摇抽奖说明')
+      @activity = current_site.activities.wave.find_by_id(params[:id]) || current_site.activities.new(activity_type_id: 64, name: '摇一摇抽奖', summary: '请点击进入摇一摇抽奖页面', description: '摇一摇抽奖说明')
     end
 
     def activity_time_valid?

@@ -68,7 +68,7 @@
         <span class="icon-question-sign" data-rel="popovers" data-trigger="hover" data-placement="right" data-contents="使用链接方式添加活动项目，易造成用户身份获取问题（如看到他人信息，或者已他人身份参与活动），建议直接调用活动，如需使用链接，请注意不要添加带有openid等参数的链接" data-original-title="" title=""></span>
       </labet>
       <%
-         reject_types = current_user.bqq_account? ? [3,4,5,8,10,18,19] : [8,10,19]
+         reject_types = [8,10,19]
          menu_type_options = WebsiteMenu.menu_type_options.reject{|m| reject_types.include?(m.last) || m.last == WebsiteMenu::ACTIVITY}
       %>
       <%= f.select :menu_type, menu_type_options, {}, class: 'col-xs-6' %>
@@ -121,7 +121,7 @@
         <div class="form-group">
           <label class="control-label">选择语音<span class="required-star">*</span></label>
           <div class="clearfix">
-            <%= f.select :audio_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
+            <%= f.select :audio_id, current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@
         <div class="form-group">
           <label class="control-label">选择相册<span class="required-star">*</span></label>
           <div class="clearfix">
-            <%= f.select :album_id, current_user.albums.show.order('albums.sort, albums.updated_at DESC').map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
+            <%= f.select :album_id, current_site.albums.show.order('albums.sort, albums.updated_at DESC').map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@
         <div class="form-group">
           <label class="control-label">选择360全景<span class="required-star">*</span></label>
           <div class="clearfix">
-            <%= f.select :panoramagram_id, current_user.activities.panoramagram.active.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
+            <%= f.select :panoramagram_id, current_site.activities.panoramagram.active.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, validate: true, class: 'col-xs-6' %>
           </div>
         </div>
       </div>
@@ -176,7 +176,7 @@
         <div class="form-group">
           <label class="control-label">图文资源<span class="required-star">*</span></label>
           <div class="clearfix">
-            <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6' %>
+            <%= f.select :single_material_id, current_site.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6' %>
             &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
           </div>
         </div>
@@ -210,7 +210,7 @@
         <div class="form-group">
           <label class="control-label">图文资源<span class="required-star">*</span></label>
           <div class="clearfix">
-            <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6'  %>
+            <%= f.select :multiple_material_id, current_site.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'col-xs-6'  %>
             &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
           </div>
         </div>
@@ -244,11 +244,7 @@
         <div class="form-group">
           <label class="control-label">QQ号码<span class="required-star">*</span></label>
           <div class="clearfix">
-            <% if current_user.bqq_account? %>
-              <%= f.text_field :qq, value: current_user.api_user.uid, class: "col-xs-6", readonly: true %>
-            <% else %>
-              <%= f.text_field :qq, class: "col-xs-6", validate: true %>
-            <% end %>
+            <%= f.text_field :qq, class: "col-xs-6", validate: true %>
           </div>
         </div>
       </div>
@@ -272,7 +268,7 @@
         <!--营销互动活动-->
         <div class="form-group">
           <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
-          <% types = current_user.bqq_account? ? ActivityType.bqq_markets : ActivityType.markets %>
+          <% types = ActivityType.markets %>
           <% activity = (types.select{|m| m.last.to_s.split(', ').to_a.include?(@website_menu.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
           <div class="clearfix">
             <%= select_tag "activity_market", options_for_select(types, selected: activity.last), class: 'col-xs-6 gl' %>
@@ -326,7 +322,7 @@
           <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
           <div class="clearfix">
             <%= f.select :docking_type, options_for_select(WebsiteMenu.docking_type_options, selected: f.object.get_docking_type), {}, class: "col-xs-6" %>
-            <%= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+            <%#= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
           </div>
         </div>
 

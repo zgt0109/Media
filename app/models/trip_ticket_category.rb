@@ -1,5 +1,5 @@
 class TripTicketCategory < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   has_many :trip_tickets, dependent: :nullify
   belongs_to :parent, class_name: 'TripTicketCategory', counter_cache: 'children_count'
   has_many :children, class_name: 'TripTicketCategory', foreign_key: 'parent_id'

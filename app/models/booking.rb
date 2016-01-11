@@ -1,7 +1,6 @@
 class Booking < ActiveRecord::Base
-  #mount_uploader :logo, WebsiteUploader
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
 
   has_one :activity, as: :activityable, dependent: :destroy

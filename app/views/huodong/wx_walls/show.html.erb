@@ -21,7 +21,7 @@
           <div class="h-list" id="h-title">
             <ul>
               <li>
-                <p>搜索 <span class="text"><%= @wx_wall.supplier.wx_mp_user.name %></span> 或扫描二维码关注</p>
+                <p>搜索 <span class="text"><%= @wx_wall.site.wx_mp_user.nickname %></span> 或扫描二维码关注</p>
                 <p>并发送“<%= @wx_wall.activity.keyword %>”即可体验</p>
               </li>
               <li>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="code inline-block">
-          <img src="<%= @wx_wall.supplier.wx_mp_user.qrcode_url || '/assets/wx_wall/user-code.jpg' %>">
+          <img src="<%= @wx_wall.site.wx_mp_user.qrcode_url || '/assets/wx_wall/user-code.jpg' %>">
         </div>
       </div>
     </div>
@@ -87,7 +87,7 @@
             <div class="vote-t">
               <h1><%= @wx_wall.vote.name %></h1>
               <p>请发送<span class="keyword"><%= @wx_wall.vote.keyword %></span>参与投票</p>
-              <div class="num">共<b><%= @wx_wall.vote.activity_user_vote_items.count('distinct(wx_user_id)') %></b>人参与</div>
+              <div class="num">共<b><%= @wx_wall.vote.activity_user_vote_items.count('distinct(user_id)') %></b>人参与</div>
             </div>
             <div id="container"></div>
           </div>
@@ -170,7 +170,7 @@
           </a>
         <% end %>
         <% if @wx_wall.shake_check == 'true' && @wx_wall.shake %>
-          <a href="<%= wx_shake_sites_path(id: @wx_wall.shake.activityable_id, supplier_id: Des.encrypt(current_user.id.to_s)) %>" target="_blank">
+          <a href="<%= shake_sites_path(id: @wx_wall.shake.activityable_id, account_id: Des.encrypt(current_user.id.to_s)) %>" target="_blank">
             <i class="icon icon-13"></i>
             <span class="f-tip">
               微信“摇一摇”
@@ -225,7 +225,7 @@
   <div class="qcode">
     <div class="qcode-bg"></div>
     <div class="qcode-main">
-      <img src="<%= @wx_wall.supplier.wx_mp_user.qrcode_url || '/assets/wx_wall/user-code.jpg' %>" width="320" height="320">
+      <img src="<%= @wx_wall.site.wx_mp_user.qrcode_url || '/assets/wx_wall/user-code.jpg' %>" width="320" height="320">
       <p>微信扫一扫，发送”<span class=text-yellow><%= @wx_wall.activity.keyword %></span>”即可参与</p>
     </div>
   </div>

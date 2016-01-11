@@ -22,7 +22,7 @@
           <%= form_for @activity, url: (@wedding.new_record? ? weddings_path : wedding_path(@wedding.id)), validate: true, html: {role: "form", class: "form col-xs-12"} do |activity| %>
             <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述', wx_pic: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url)  %>
             <div class="col-xs-12 col-md-6 col-lg-7">
-              <%= render "weixin_setting", activity: activity, data_img: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url), pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+              <%= render "weixin_setting", activity: activity, data_img: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url), pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key %>
 
               <%= fields_for :wedding, @wedding, validate: true do |f| %>
               <div class="form-group">

@@ -57,7 +57,7 @@
                 <div class="col-md-3 row">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">门店：</span>
-                    <% branchs = current_user.shop_branches.used.pluck(:name, :id) %>
+                    <% branchs = current_site.shop_branches.used.pluck(:name, :id) %>
                     <%= f.select :shop_branch_id_eq, options_for_select(branchs.insert(0,['请选择门店','']), (params[:search][:shop_branch_id_eq] if params[:search])), {}, class: "col-xs-12" %>
                   </div>
                 </div>

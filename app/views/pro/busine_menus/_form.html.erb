@@ -96,12 +96,12 @@
 
         <div class="p">
           <span>选择活动<em>*</em></span>
-          <%= f.select :activity_id, current_user.activities.active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) } %>
+          <%= f.select :activity_id, current_site.activities.active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) } %>
         </div>
 
   <div class="p">
     <span>选择商铺<em>*</em></span>
-    <%= f.select :activity_id, current_user.activities.active.business_shop.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, id:"website_menu_shop_activity_id" %>
+    <%= f.select :activity_id, current_site.activities.active.business_shop.map{|m| [truncate_u(m.name), m.id] }, { selected: @website_menu.try(:menuable_id) }, id:"website_menu_shop_activity_id" %>
   </div>
 
 

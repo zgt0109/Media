@@ -67,7 +67,7 @@ class ActivityEnroll < ActiveRecord::Base
     if self.activity.id == 10201
       # 微枚迪免费试用申请, 欢迎开通!
       # 姓名,手机,邮箱,qq,公司名称, username, mobile, email, qq, company_name
-      supplier_apply = SupplierApply.new(apply_type: SupplierApply::APPLY_FROM_winwemedia)
+      supplier_apply = AccountApply.new(apply_type: AccountApply::APPLY_FROM_winwemedia)
       supplier_apply.business_type = 1
       supplier_apply.contact = self.username
       supplier_apply.email = self.email
@@ -79,7 +79,7 @@ class ActivityEnroll < ActiveRecord::Base
     elsif self.activity.id == 10202
       # 微动中国—微营销商学院课程
       # 姓名,手机,qq,所在城市,公司名称
-      supplier_apply = SupplierApply.new(apply_type: SupplierApply::APPLY_FROM_winwemedia)
+      supplier_apply = AccountApply.new(apply_type: AccountApply::APPLY_FROM_winwemedia)
       supplier_apply.business_type = 1
       supplier_apply.contact = self.username
       supplier_apply.tel = self.mobile

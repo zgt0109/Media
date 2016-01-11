@@ -6,11 +6,11 @@ class Huodong::WxWallsController < ApplicationController
   before_filter :find_wx_wall, except: [ :index, :new, :create, :help, :save_qiniu_keys, :destroy_qiniu_keys, :preview_template ]
 
   def index
-    wx_walls = current_user.wx_walls.show.order('id DESC')
+    wx_walls = current_site.wx_walls.show.order('id DESC')
     if params[:search].present? && params[:search][:activity_status_eq].present?
       @activity_status = params[:search][:activity_status_eq]
       params[:search].delete(:activity_status_eq)
-      wall_ids = current_user.activities.wx_wall.select do |act|
+      wall_ids = current_site.activities.wx_wall.select do |act|
         act.activity_status == @activity_status.to_i
       end.map(&:activityable_id)
       @search = wx_walls.where(id: wall_ids).search(params[:search])
@@ -22,7 +22,7 @@ class Huodong::WxWallsController < ApplicationController
   end
 
   def new
-    @wx_wall = current_user.wx_walls.new(activity: Activity.new, template_id: 1, system_template: true)
+    @wx_wall = current_site.wx_walls.new(activity: Activity.new, template_id: 1, system_template: true)
     render :form
   end
 
@@ -35,7 +35,7 @@ class Huodong::WxWallsController < ApplicationController
   end
 
   def create
-    @wx_wall = current_user.wx_walls.new(params[:wx_wall])
+    @wx_wall = current_site.wx_walls.new(params[:wx_wall])
     if @wx_wall.save
       redirect_to extra_settings_wx_wall_path(@wx_wall, notice: "保存成功")
     else
@@ -68,7 +68,7 @@ class Huodong::WxWallsController < ApplicationController
         @wx_wall.wx_wall_winning_users.delete_all
         wx_wall_winning_users_attributes.each  do |key, params|
           if params[:vip_user_id].present?
-            vip_user = current_user.wx_mp_user.vip_users.visible.where(user_no: params[:vip_user_id]).first
+            vip_user = current_site.wx_mp_user.vip_users.visible.where(user_no: params[:vip_user_id]).first
             return render js: 'showTip("warning", "保存失败,会员不存在");' unless vip_user
             @wx_wall.wx_wall_winning_users.create(params.merge!(vip_user_id: vip_user.id, wx_user_id: vip_user.wx_user_id))
           end
@@ -124,7 +124,7 @@ class Huodong::WxWallsController < ApplicationController
     # "name"=>"QQ图片20140314185318.jpg"
     wx_wall_id = params[:wx_wall_id].to_i
     if wx_wall_id > 0
-      pic = QiniuPicture.create(target_id: wx_wall_id, target_type: 'WxWall', sn: params[:qiniu_pic_key])
+      pic = QiniuPicture.create(target_id: wx_wall_id, target_type: 'WxWall', sn: params[:pic_key])
     end
     render partial: "photo_li", locals: {photo: (pic || QiniuPicture.new)}
   end
@@ -205,7 +205,7 @@ class Huodong::WxWallsController < ApplicationController
 
   private
     def find_wx_wall
-      @wx_wall = current_user.wx_walls.find(params[:id])
+      @wx_wall = current_site.wx_walls.find(params[:id])
     end
 
     def message_html(messages)

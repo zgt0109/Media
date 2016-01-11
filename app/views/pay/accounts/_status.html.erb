@@ -1,0 +1,24 @@
+<div class="col-sm-12 margin-b-10">
+  <strong class="font-size20">微枚迪支付申请流程</strong>
+  <ul class="wizard-steps margin-left-10p-back">
+    <li class="active">
+      <span class="step">1</span>
+      <span class="title">申请</span>
+    </li>
+    <li class="<%= 'active' if @pay_account && !@pay_account.progressing? %>">
+      <span class="step">2</span>
+      <span class="title">审核</span>
+    </li>
+    <%- if @pay_account  && (@pay_account.normal? ||  @pay_account.denied? ||  @pay_account.denied?) %>
+      <li class="active">
+        <span class="step">3</span>
+        <span class="title"><%= @pay_account.status_name %></span>
+      </li>
+    <%- else %>
+      <li>
+        <span class="step">3</span>
+        <span class="title">开通</span>
+      </li>
+    <%- end %>
+  </ul>
+</div>

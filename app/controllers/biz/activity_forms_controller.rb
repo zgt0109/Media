@@ -1,14 +1,11 @@
 # -*- encoding : utf-8 -*-
 class Biz::ActivityFormsController < ActivitiesController
-  before_filter :restrict_trial_supplier, except: :index
 
   def index
     @activity_type_id = 10
-    #@search = current_user.activities.show.where(:activity_type_id => @activity_type_id).order('created_at desc').search(params[:search])
-    #@activities = @search.page(params[:page])
     @activity_id = params[:search][:id_eq] if params[:search].present?
 
-    @total_activities = current_user.activities.show.where("activities.activity_type_id = 10").order('activities.id DESC')
+    @total_activities = current_site.activities.show.where("activities.activity_type_id = 10").order('activities.id DESC')
     case params[:status]
       when '-1'
         @activities = @total_activities.where("((activities.status = 0 or activities.status = 1) and activities.end_at is not null and activities.end_at < '#{Time.now}') or activities.status = -1")
@@ -24,16 +21,16 @@ class Biz::ActivityFormsController < ActivitiesController
   end
 
   def new
-    @activity = current_user.activities.new(activity_type_id: 10, wx_mp_user_id: current_user.wx_mp_user.try(:id))
+    @activity = current_site.activities.new(activity_type_id: 10)
     render "show"
   end
 
   def show
-    @activity = current_user.activities.find(params[:id])
+    @activity = current_site.activities.find(params[:id])
   end
 
   def create
-    @activity = current_user.activities.new(params[:activity])
+    @activity = current_site.activities.new(params[:activity])
     self.extend_format
     @activity.name ||= @activity.activity_notices.first.try :title
     if activity_time_invalid?
@@ -58,7 +55,7 @@ class Biz::ActivityFormsController < ActivitiesController
   end
 
   def update
-    @activity = current_user.activities.find(params[:id])
+    @activity = current_site.activities.find(params[:id])
     self.extend_format
     #@activity.extend.closing_note = params[:extend_closing_note] if params[:extend_closing_note]
     #@activity.extend.allow_repeat_apply = params[:allow_repeat_apply].to_i
@@ -74,7 +71,7 @@ class Biz::ActivityFormsController < ActivitiesController
   end
 
   def edit_audited
-    @activity = current_user.activities.find(params[:id])
+    @activity = current_site.activities.find(params[:id])
     @activity.update_attributes!({audited: @activity.audited? ? false : true})
     render js: "showTip('success', '操作成功');"
   end
@@ -96,8 +93,8 @@ class Biz::ActivityFormsController < ActivitiesController
       end
     end
     @activity = Activity.where(id: params[:id]).first
-    @supplier_id = current_user.id
-    @fields = ActivityFormField.where(supplier_id: [0, @supplier_id])
+    @account_id = current_user.id
+    @fields = FormField.where(account_id: [0, @account_id])
     @checked_fields = ActivityForm.where(activity_id: @activity.id)
     # 如果没有选择过字段，自动加入姓名字段
     @checked_fields = [ActivityForm.add_new(1, @activity.id, sort: 1, required: true), ActivityForm.add_new(2, @activity.id, sort: 2, required: true)] if @checked_fields.blank?
@@ -107,30 +104,30 @@ class Biz::ActivityFormsController < ActivitiesController
   end
 
   def checked_field
-    form_field = params[:form_field_id].to_i > 0 && ActivityFormField.where(id: params[:form_field_id]).first
+    form_field = params[:form_field_id].to_i > 0 && FormField.where(id: params[:form_field_id]).first
     if form_field
       sort_id =  params[:sort_id]
       activity_form = ActivityForm.new(field_name: form_field.name, field_value: form_field.value, sort: sort_id)
       render :partial => "checked_field", :locals => {f: activity_form, required: false}
     else
-      render :text => "查询不到任何记录： ActivityFormField.where(id: #{params[:form_field_id]}).first"
+      render :text => "查询不到任何记录： FormField.where(id: #{params[:form_field_id]}).first"
     end
   end
 
   def edit_fields_save
     @errors = []
     @activity_id, @new_field = params[:id].to_i, params[:new_field].to_s.strip
-    @supplier_id = current_user.id
-    @errors << "无法获取当前用户 id" unless @supplier_id > 0
+    @account_id = current_user.id
+    @errors << "无法获取当前用户 id" unless @account_id > 0
     @errors << "无法获取活动 id" unless @activity_id > 0
     @errors << "字段名称不能为空！" if @new_field.empty?
     if @errors.blank?
-      max_id = ActivityFormField.select("max(id) as max_id").first.try(:max_id)
-      same_name_field = ActivityFormField.where(value: @new_field, supplier_id: [0, @supplier_id]).first
+      max_id = FormField.select("max(id) as max_id").first.try(:max_id)
+      same_name_field = FormField.where(value: @new_field, account_id: [0, @account_id]).first
       if same_name_field
         @errors << "名称为【#{@new_field}】的字段已经存在，不能重复添加！"
       else
-        create_field = ActivityFormField.create(value: @new_field, supplier_id: @supplier_id, name: "f_#{max_id + 1}")
+        create_field = FormField.create(value: @new_field, account_id: @account_id, name: "f_#{max_id + 1}")
         if create_field.persisted?
           @new_li = "<label> <input class=\"ace\" form_field_id=\"#{create_field.id}\" id=\"#{create_field.name}\" name=\"#{create_field.name}\" type=\"checkbox\" value=\"#{create_field.value}\"> <span class=\"lbl\">#{create_field.value}</span></label>"
         else
@@ -144,8 +141,8 @@ class Biz::ActivityFormsController < ActivitiesController
   def checked_fields_save
     @errors = []
     @activity_id = params[:id].to_i
-    @supplier_id = current_user.id
-    @errors << "无法获取当前用户 id" unless @supplier_id > 0
+    @account_id = current_user.id
+    @errors << "无法获取当前用户 id" unless @account_id > 0
     @errors << "无法获取活动 id" unless @activity_id > 0
     @add_count = @update_count = @del_count = 0
     if @errors.blank?
@@ -172,7 +169,7 @@ class Biz::ActivityFormsController < ActivitiesController
         end
       end
       @field_names.each do |field_name|
-        aff = ActivityFormField.where(name: field_name, supplier_id: [0, @supplier_id]).first
+        aff = FormField.where(name: field_name, account_id: [0, @account_id]).first
         if aff
           # 增加字段
           if @required_field_names.include?(field_name)

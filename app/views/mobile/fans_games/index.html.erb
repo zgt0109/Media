@@ -18,7 +18,7 @@
       <p>请先关注公众帐号</p>
       <p><span class="alert-num">1</span>点击右上角<span class="alert-text">分享按钮</span>查看公众号</p>
       <p><span class="alert-num">2</span>在【添加朋友】—【查找公众号】中搜索</p>
-      <p><span class="alert-btn"><%= @wx_mp_user.try(:name) %></span>（长按可复制）</p>
+      <p><span class="alert-btn"><%= @wx_mp_user.try(:nickname) %></span>（长按可复制）</p>
       <p>如果已关注，请打开该公众帐号回复<span class="alert-text"><%= @activity.try(:keyword) %></span>，参与此活动</p>
     </div>
     <div class="alert-f">

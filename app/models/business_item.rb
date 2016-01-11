@@ -1,6 +1,4 @@
 class BusinessItem < ActiveRecord::Base
-  mount_uploader :pic, WebsiteLogoUploader
-  img_is_exist({pic: :pic_key})
   belongs_to :business_shop
 
   scope :sorted, -> { order('sort ASC') }

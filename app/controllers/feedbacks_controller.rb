@@ -15,7 +15,7 @@ class FeedbacksController < ApplicationController
       redirect_to feedbacks_url, alert: '提交失败'
     end
   end
-  
+
   def show
     @feedback = current_user.feedbacks.find(params[:id])
   end

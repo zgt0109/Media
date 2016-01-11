@@ -12,11 +12,11 @@ class WebsiteInitWorker
       from_supplier_id = 35067
     end
 
-    Supplier.transaction do
-      from_user = Supplier.where(id: from_supplier_id).first || Supplier.first
+    Account.transaction do
+      from_user = Account.where(id: from_supplier_id).first || Account.first
       return puts "from user not exists" unless from_user
       
-      to_user = Supplier.where(id: to_supplier_id).first
+      to_user = Account.where(id: to_supplier_id).first
       return puts "to user not exists" unless to_user
 
       return puts "to user have website and website_menus" if to_user.try(:website).try(:website_menus).to_a.count > 0

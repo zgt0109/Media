@@ -2,11 +2,11 @@ class ChannelTypesController < ApplicationController
   before_filter :require_wx_mp_user#, :mp_user_is_sync
 
   def index
-    @channel_types = current_user.channel_types.normal.latest.page(params[:page])
+    @channel_types = current_site.channel_types.normal.latest.page(params[:page])
   end
 
   def index_json
-    # data = current_user.channel_types.normal.map do |type|
+    # data = current_site.channel_types.normal.map do |type|
     #   [type.name, type.description, qrcode.id]
     # end
     data = [ ["分类1", "渠道的分类1", 1], 
@@ -15,17 +15,17 @@ class ChannelTypesController < ApplicationController
   end
 
   def new
-    @channel_type = current_user.channel_types.new
+    @channel_type = current_site.channel_types.new
     render :form, layout: 'application_pop'
   end
 
   def edit
-    @channel_type = current_user.channel_types.find(params[:id])
+    @channel_type = current_site.channel_types.find(params[:id])
     render :form, layout: 'application_pop'
   end
 
   def create
-    @channel_type = current_user.channel_types.new(params[:channel_type])
+    @channel_type = current_site.channel_types.new(params[:channel_type])
 
     if @channel_type.save
       flash[:notice] = "添加成功"
@@ -37,7 +37,7 @@ class ChannelTypesController < ApplicationController
   end
 
   def update
-    @channel_type = current_user.channel_types.find(params[:id])
+    @channel_type = current_site.channel_types.find(params[:id])
 
     if @channel_type.update_attributes(params[:channel_type])
       flash[:notice] = "编辑成功"
@@ -49,7 +49,7 @@ class ChannelTypesController < ApplicationController
   end
 
   def destroy
-    @channel_type = current_user.channel_types.find(params[:id])
+    @channel_type = current_site.channel_types.find(params[:id])
     if @channel_type.channel_qrcodes.normal.count > 0
       redirect_to :back, alert: '有渠道在当前分类，不可删除'
     else
@@ -64,6 +64,6 @@ class ChannelTypesController < ApplicationController
   private
 
   def mp_user_is_sync
-    return redirect_to account_url, alert: '服务号才有此功能' unless current_user.wx_mp_user.is_sync?
+    return redirect_to profile_path, alert: '服务号才有此功能' unless current_site.wx_mp_user.is_sync?
   end
 end

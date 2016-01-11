@@ -10,7 +10,7 @@
 			<dl class="xz_list">
 				<dt>
 					<p><%= @question.fight_question.title %></p>
-					<% if @question.fight_question.qiniu_pic_key.present? %>
+					<% if @question.fight_question.pic_key.present? %>
 						<p><img src="<%= @question.fight_question.pic_url %>"></p>
 					<% end %>
 				</dt>

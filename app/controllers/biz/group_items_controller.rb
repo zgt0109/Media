@@ -4,7 +4,7 @@ class Biz::GroupItemsController < Biz::GroupBaseController
 
   def new
     @current_titles << '商品管理'
-    @group_item = @group.group_items.new(wx_mp_user_id: @group.wx_mp_user_id, group_type: 1)
+    @group_item = @group.group_items.new(group_type: 1)
   end
 
 
@@ -52,8 +52,8 @@ class Biz::GroupItemsController < Biz::GroupBaseController
   private
 
   def set_group
-    @group = current_user.group
-    @group_categories = current_user.group_categories
+    @group = current_site.group
+    @group_categories = current_site.group_categories
     @activity =  @group.activity
   end
 

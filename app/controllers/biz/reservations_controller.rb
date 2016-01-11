@@ -1,7 +1,7 @@
 class Biz::ReservationsController < ApplicationController
   before_filter :get_activity, only: [:new, :edit, :create, :update, :intro, :start, :stop, :orders, :fields, :remove_logo]
   def index
-    all_activities = current_user.activities.reservations.show
+    all_activities = current_site.activities.reservations.show
     if params[:name].present?
       activities = all_activities.select do |activity|
         service = activity.extend.service.presence
@@ -46,7 +46,7 @@ class Biz::ReservationsController < ApplicationController
   end
 
   def remove_logo
-    @activity.update_attributes(qiniu_logo_key: nil)
+    @activity.update_attributes(logo_key: nil)
     redirect_to :back, notice: '操作成功'
   end
 
@@ -76,7 +76,7 @@ class Biz::ReservationsController < ApplicationController
 
   private
     def get_activity
-      @activity = current_user.activities.reservations.find_by_id(params[:id]) || current_user.activities.reservations.new
+      @activity = current_site.activities.reservations.find_by_id(params[:id]) || current_site.activities.reservations.new
     end
 
     def notice_for( success )

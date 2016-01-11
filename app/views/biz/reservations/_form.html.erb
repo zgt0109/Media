@@ -3,8 +3,6 @@
   <div class="row">
     <div class="col-xs-12">
       <%= render "weixin_preview", wx_title: @activity.try(:name) || '这里显示<微信消息标题>', wx_summary: @activity.try(:summary) || '这里显示 <微信消息摘要>' %>
-      <%= activity.hidden_field :supplier_id, value: current_user.id %>
-      <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
       <%= activity.hidden_field :activity_type_id, value: 63 %>
       <%= activity.hidden_field :status, value: 1 %>
       <div class="form col-xs-7">
@@ -20,7 +18,7 @@
               <%= text_field_tag "mobile", @activity.extend.mobile,  class: 'col-xs-6' %>
             </div>
           </div>
-        <%= render "weixin_setting", activity: activity, data_img: activity.object.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: activity.object.qiniu_pic_key %>
+        <%= render "weixin_setting", activity: activity, data_img: activity.object.pic_url, pic_data_name: "activity[pic_key]", pic_data_key: activity.object.pic_key %>
           <div class="form-group">
             <label class="control-label"><%= activity.check_box :require_wx_user, class: "ace" %><span class="lbl">未关注可参与</span></label>
           </div>

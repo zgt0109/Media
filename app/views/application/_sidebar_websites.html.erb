@@ -1,85 +1,4 @@
 <% current_class = (controller.send(:_layout) == "application_gm") ? 'pagecurrent current' : 'pagecurrent current' %>
-
-<% if current_user.bqq_account? %>
-  <ul class="box-nav box important">
-    <li class="<%= current_page?(websites_path) ? current_class : '' %>">
-      <% if current_user.has_privilege_for?(2001) %>
-        <%= link_to(websites_path) do %><span>微官网设置</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>微官网设置</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= current_page?(website_settings_path) ? current_class : '' %>">
-      <% if current_user.has_privilege_for?(2002) %>
-        <%= link_to(website_settings_path) do %><span>模板样式</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>模板样式</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= controller_name == 'website_menus' ? current_class : '' %>">
-        <% if current_user.has_privilege_for?(2003) %>
-          <%= link_to(website_menus_path) do %><span>站点内容</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>站点内容</span><% end %>
-        <% end %>
-    </li>
-
-    <li class="<%= controller_name == 'website_pictures' ? current_class : '' %>">
-        <% if current_user.has_privilege_for?(2004) %>
-          <%= link_to(website_pictures_path) do %><span>首页幻灯片</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>首页幻灯片</span><% end %>
-        <% end %>
-    </li>
-
-    <li class="<%= controller_name == 'website_settings' && action_name == 'bg_pic' ? current_class : '' %>">
-        <% if current_user.has_privilege_for?(2005) %>
-          <%= link_to(bg_pic_website_settings_path) do %><span>首页背景图</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>首页背景图</span><% end %>
-        <% end %>
-    </li>
-
-    <li class="<%= controller_name == 'website_popup_menus' ? current_class : '' %>">
-        <% if current_user.has_privilege_for?(2006) %>
-          <%= link_to(website_popup_menus_path) do %><span>快键菜单</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>快键菜单</span><% end %>
-        <% end %>
-    </li>
-
-    <li class="<%= action_name == 'qrcode' ? current_class : '' %>">
-        <% if current_user.has_privilege_for?(2007) %>
-          <%= link_to(qrcode_websites_path) do %><span>二维码</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>二维码</span><% end %>
-        <% end %>
-    </li>
-<!--
-    <li class="<%= action_name == 'domain' ? current_class : '' %>">
-        <% if current_user.has_privilege_for?(2008) %>
-          <%= link_to(domain_websites_path) do %><span>个性化域名</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>个性化域名</span><% end %>
-        <% end %>
-    </li>
--->
-    <li class="<%= controller_name == "flow_reports" ? "pagecurrent current" : '' %>">
-        <% if current_user.has_privilege_for?(2009) %>
-          <%= link_to(flow_reports_path) do %><span>流量统计</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>流量统计</span><% end %>
-        <% end %>
-    </li>
-    
-    
-    <li class="<%= current_page?(payment_settings_path) ? "pagecurrent current" : '' %>">
-      <%= link_to payment_settings_path do %><span>支付设置</span><% end %>
-    </li>
-  </ul>
-<% else %>
 <ul class="box-nav box important">
   <li class="<%= current_page?(websites_path) ? current_class : '' %>">
     <%= link_to websites_path do %><span>微官网设置</span><% end %>
@@ -124,7 +43,6 @@
   <!--</div>-->
 
 </ul>
-<% end %>
 
 <script>
 $(function(){

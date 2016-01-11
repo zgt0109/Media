@@ -1,26 +1,3 @@
-# == Schema Information
-#
-# Table name: activity_consumes
-#
-#  id                :integer          not null, primary key
-#  supplier_id       :integer          not null
-#  wx_mp_user_id     :integer          not null
-#  activity_id       :integer          not null
-#  wx_user_id        :integer          not null
-#  vip_privilege_id  :integer
-#  activity_prize_id :integer
-#  shop_branch_id    :integer
-#  activity_group_id :integer
-#  code              :string(255)      not null
-#  mobile            :string(255)
-#  status            :integer          default(1), not null
-#  use_at            :datetime
-#  expire_at         :datetime
-#  description       :text
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#
-
 class ActivityConsume < ActiveRecord::Base
   # validates :code, presence: true#, uniqueness: { case_sensitive: false }
   # validates :wx_user_id, presence: true
@@ -28,7 +5,7 @@ class ActivityConsume < ActiveRecord::Base
 
   belongs_to :wx_mp_user
   belongs_to :wx_user
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :activity
   belongs_to :vip_privilege
   belongs_to :activity_prize

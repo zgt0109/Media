@@ -127,7 +127,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
     else
       @shop = @shop_product.shop
       @shop_categories = @shop.shop_categories
-      if @shop_product.qiniu_pic_key.blank?
+      if @shop_product.pic_key.blank?
         flash[:alert] = "请上传图片"
       else
         flash[:alert] = "保存失败"
@@ -160,7 +160,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
       @shop_product.update_sort(@shop_product.sort)
       return redirect_to shop_products_url, notice: "更新成功"
     else
-      if @shop_product.qiniu_pic_key.blank? && @shop_product.pic_url.blank?
+      if @shop_product.pic_key.blank? && @shop_product.pic_url.blank?
        flash[:alert] = "请上传图片"
       else
        flash[:alert] = "保存失败"

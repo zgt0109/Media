@@ -18,6 +18,6 @@ class Pro::KtvOrdersController < ApplicationController
 
   private
     def check_supplier
-      return redirect_to account_path unless current_user.id == 10540
+      return redirect_to profile_path unless current_user.id == 10540
     end
 end

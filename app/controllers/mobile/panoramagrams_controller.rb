@@ -31,7 +31,7 @@ class Mobile::PanoramagramsController < Mobile::BaseController
       @activity = Activity.find(params[:aid])
       @share_image = @activity.qiniu_pic_url.present? ? @activity.qiniu_pic_url :  @activity.default_pic_url
     rescue => e
-      @share_image = qiniu_image_url(Concerns::ActivityQiniuPicKeys::KEY_MAPS[74], bucket: BUCKET_WX_PICTURES)
+      @share_image = qiniu_image_url(Concerns::ActivityQiniuPicKeys::KEY_MAPS[74], bucket: BUCKET_PICTURES)
     end
 
 end

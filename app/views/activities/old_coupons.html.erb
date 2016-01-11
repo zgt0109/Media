@@ -30,9 +30,9 @@
                     <%- elsif aids_path? %>
                         <%= link_to '新增', new_aid_path, class: "btn btn-sm btn-primary pull-right" %>
                     <%- elsif unfolds_path? %>
-                        <%= link_to '新增', new_unfold_path, class: "btn btn-sm btn-primary pull-right" if current_user.wx_mp_user.auth_service? %>
+                        <%= link_to '新增', new_unfold_path, class: "btn btn-sm btn-primary pull-right" if current_site.wx_mp_user.auth_service? %>
                     <%- elsif recommends_path? %>
-                        <%= link_to '新增', new_recommend_path, class: "btn btn-sm btn-primary pull-right" if current_user.wx_mp_user.auth_service? %>
+                        <%= link_to '新增', new_recommend_path, class: "btn btn-sm btn-primary pull-right" if current_site.wx_mp_user.auth_service? %>
                     <%- elsif guesses_path? %>
                         <%= link_to '新增', new_guess_path, class: "btn btn-sm btn-primary pull-right" %>
                     <%- elsif waves_path? %>

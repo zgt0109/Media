@@ -11,7 +11,7 @@ class Mobile::SurveysController < Mobile::BaseController
     return unless @activity_user
     return if @activity.survey_status_attrs[0] != '进行中'
     return redirect_to success_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id) if @activity_user.survey_finish?
-    if session[:last_question_id] && @activity.activity_survey_questions.where(id: session[:last_question_id]).exists?
+    if session[:last_question_id] && @activity.survey_questions.where(id: session[:last_question_id]).exists?
       first_qid = session[:last_question_id]
     else
       first_qid = @first_qid
@@ -34,47 +34,47 @@ class Mobile::SurveysController < Mobile::BaseController
 
   def questions
     return redirect_to mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id) unless @activity_user
-    @activity_survey_question = @activity.activity_survey_questions.find(params[:qid])
-    activity_survey_answers = @activity_survey_question.activity_survey_answers.where(activity_user_id: @activity_user.id)
-    @activity_survey_answers_ids = activity_survey_answers.pluck(:survey_question_choice_id).uniq.compact
-    if @activity_survey_question.answer_other?
-      @activity_survey_summary = activity_survey_answers.where("summary is not null").last.try(:summary)
+    @survey_question = @activity.survey_questions.find(params[:qid])
+    survey_answers = @survey_question.survey_answers.where(activity_user_id: @activity_user.id)
+    @survey_answers_ids = survey_answers.pluck(:survey_question_choice_id).uniq.compact
+    if @survey_question.answer_other?
+      @survey_summary = survey_answers.where("summary is not null").last.try(:summary)
     end
   end
 
   #用户答题提交
   def create_answer
 
-    @activity_survey_question = @activity.activity_survey_questions.find(params[:qid])
+    @survey_question = @activity.survey_questions.find(params[:qid])
 
     if !@activity_user.survey_finish?
-      answer_attrs = {activity_id: @activity.id, wx_user_id: @wx_user.id, activity_survey_question_id:  @activity_survey_question.id }
+      answer_attrs = {activity_id: @activity.id, wx_user_id: @wx_user.id, survey_question_id:  @survey_question.id }
 
-      session[:last_question_id] = @activity_survey_question.next_question_id
+      session[:last_question_id] = @survey_question.next_question_id
 
       @activity_user.survey_pending! if @activity_user.normal?
 
-      activity_survey_answers = @activity_survey_question.activity_survey_answers.where(activity_user_id: @activity_user.id)
-      activity_survey_answers.delete_all
+      survey_answers = @survey_question.survey_answers.where(activity_user_id: @activity_user.id)
+      survey_answers.delete_all
 
       if params[:answers_ids].present?
         answers = params[:answers_ids].split(',').in_groups_of(2)
         answers.each do |answer|
           answer_id, index  = answer.first, answer.last
-          activity_survey_answers.where(answer_attrs.merge(survey_question_choice_id: answer_id, answer: index)).create
+          survey_answers.where(answer_attrs.merge(survey_question_choice_id: answer_id, answer: index)).create
         end
       end
 
       if params[:summary].present?
-        activity_survey_answers.where(answer_attrs.merge(answer: '其他', summary: params[:summary])).create
+        survey_answers.where(answer_attrs.merge(answer: '其他', summary: params[:summary])).create
       end
     end
 
-    if @activity_survey_question.last?
+    if @survey_question.last?
       @activity_user.survey_finish! if @activity_user.survey_pending?
       redirect_to feedback_mobile_survey_url(supplier_id: @activity.supplier_id, id: params[:id])
     else #继续答题
-      redirect_to questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: @activity_survey_question.next_question_id)
+      redirect_to questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: @survey_question.next_question_id)
     end
   end
 
@@ -113,7 +113,7 @@ class Mobile::SurveysController < Mobile::BaseController
       else #创建虚拟wx_user
         #use session.id in Rails 4.
         session[:request_session_id] ||= request.session_options[:id]
-        @wx_user =  WxUser.where(uid: session[:request_session_id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
+        @wx_user =  WxUser.where(openid: session[:request_session_id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
       end
     end
   end
@@ -127,8 +127,8 @@ class Mobile::SurveysController < Mobile::BaseController
     session[:aid] = params[:survey_id] if params[:survey_id].present?
     @activity = @wx_mp_user.activities.surveys.find session[:aid]
     return render_404 if @activity.deleted?
-    @activity_survey_questions = @activity.activity_survey_questions.order(:position)
-    @first_qid = @activity_survey_questions.first.try(:id)
+    @survey_questions = @activity.survey_questions.order(:position)
+    @first_qid = @survey_questions.first.try(:id)
     @share_image = @activity.qiniu_pic_url || @activity.default_pic_url
   end
 

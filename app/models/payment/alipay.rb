@@ -5,7 +5,7 @@ class Payment::Alipay < Payment::Base
   validates :subject, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :customer, polymorphic: true
   belongs_to :paymentable, polymorphic: true
 

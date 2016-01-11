@@ -13,36 +13,36 @@ class Biz::WebsiteMenusController < ApplicationController
   def new
     @website_menu = @website.website_menus.new(menu_type: WebsiteMenu::ACTIVITY, parent_id: params[:parent_id].to_i)
     @menu_categories_selects = @website_menu.multilevel_menu params
-    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
+    # @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
     @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
   end
 
   def edit
     @menu_categories_selects = @website_menu.multilevel_menu params
-    if @website_menu.menuable_type == 'EcSellerCat'
-      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
-    else
-      @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
-    end
+    # if @website_menu.menuable_type == 'EcSellerCat'
+    #   @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
+    # else
+    #   @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
+    # end
     @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
   end
 
   def create
     @website_menu = WebsiteMenu.new(params[:website_menu])
     if @website_menu.save
-      if current_user.can_show_introduce? && current_user.task1?
-        current_user.update_attributes(show_introduce: 2)
-        redirect_to website_menus_path(task: Time.now.to_i, task_menu_id: @website_menu.id), notice: '添加成功'
-      else
+      # if current_site.can_show_introduce? && current_site.task1?
+      #   current_site.update_attributes(show_introduce: 2)
+      #   redirect_to website_menus_path(task: Time.now.to_i, task_menu_id: @website_menu.id), notice: '添加成功'
+      # else
         redirect_to website_menus_path, notice: "添加成功"
-      end
+      # end
     else
       @menu_categories_selects = @website_menu.multilevel_menu params
-      if @website_menu.menuable_type == 'EcSellerCat'
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
-      else
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
-      end
+      # if @website_menu.menuable_type == 'EcSellerCat'
+      #   @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
+      # else
+      #   @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
+      # end
       @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
       flash[:alert] = "添加失败"
       render action: 'new'
@@ -54,11 +54,11 @@ class Biz::WebsiteMenusController < ApplicationController
       redirect_to website_menus_path, notice: "保存成功"
     else
       @menu_categories_selects = @website_menu.multilevel_menu params
-      if @website_menu.menuable_type == 'EcSellerCat'
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
-      else
-        @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
-      end
+      # if @website_menu.menuable_type == 'EcSellerCat'
+      #   @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: @website_menu.menuable_id).to_a.slice(0, 2)
+      # else
+      #   @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website_menu.website.try(:supplier).try(:wx_mp_user).try(:openid)).to_a.slice(0, 2)
+      # end
       @ec_seller_cat_selects = [[1, []]] unless @ec_seller_cat_selects.present?
       flash[:alert] = "保存失败"
       render action: 'edit'
@@ -116,25 +116,24 @@ class Biz::WebsiteMenusController < ApplicationController
     #微服务中添加ktv预定
     #ids = [29, 48] if ids == [29]
 
-    @activities = current_user.activities.valid.unexpired.where(activity_type_id: ids)
+    @activities = current_site.activities.valid.unexpired.where(activity_type_id: ids)
     ids.each{|f| @is_exist_activity_time = ActivityType.exist_activity_time.include?(f) }
     render :partial=> "activities"
   end
 
-
   def select_ec_category
-    @ec_seller_cat_selects = wshop_api_categories(wx_mp_user_open_id: @website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: params[:category_id])
+    @ec_seller_cat_selects = []#wshop_api_categories(wx_mp_user_open_id: @website.try(:supplier).try(:wx_mp_user).try(:openid), category_id: params[:category_id])
     render partial: 'ec_selects'
   end
 
   def find_good
-    render text: @website.try(:supplier).try(:ec_shop).try(:ec_items).to_a.select{|m| m.id == params[:id].to_i}.flatten.count
+    render text: @website.try(:site).try(:ec_shop).try(:ec_items).to_a.select{|m| m.id == params[:id].to_i}.flatten.count
   end
 
   private
 
   def set_website
-    @website = current_user.website
+    @website = current_site.website
     return redirect_to websites_path, alert: '请先设置微官网' unless @website
   end
 

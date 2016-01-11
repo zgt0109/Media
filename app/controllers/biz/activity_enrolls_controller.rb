@@ -3,20 +3,20 @@ class Biz::ActivityEnrollsController < ApplicationController
   # skip_filter :login_required
 
   def index
-    @search = current_user.activities.show.where(activity_type_id: 10).order('id desc').search(params[:search])
+    @search = current_site.activities.show.where(activity_type_id: 10).order('id desc').search(params[:search])
     if params[:id].present?
-      @activity             = current_user.activities.find(params[:id])
+      @activity             = current_site.activities.find(params[:id])
       @activity_id          = @activity.id
       @activity_enrolls     = @activity.activity_enrolls.order('id desc').page(params[:page])
       @activity_enrolls_all = @activity.activity_enrolls.order('id desc')
     elsif params[:search].present?
-      @activity_id = current_user.activities.where(id: params[:search][:id_eq]).first.try :id
-      activity_ids = @activity_id.presence || current_user.activities.where(activity_type_id: 10).show.pluck(:id)
+      @activity_id = current_site.activities.where(id: params[:search][:id_eq]).first.try :id
+      activity_ids = @activity_id.presence || current_site.activities.where(activity_type_id: 10).show.pluck(:id)
       @activity_enrolls = ActivityEnroll.where(activity_id: activity_ids).where(["status > -2"]).order('id desc').page(params[:page])
       @activity_enrolls_all = ActivityEnroll.where(activity_id: activity_ids).where(["status > -2"]).order('id desc')
     else
       @activity_id = ""
-      activity_ids = current_user.activities.where(activity_type_id: 10).show.pluck(:id)
+      activity_ids = current_site.activities.where(activity_type_id: 10).show.pluck(:id)
       @activity_enrolls = ActivityEnroll.where(activity_id: activity_ids).where(["status > -2"]).order('id desc').page(params[:page])
       @activity_enrolls_all = ActivityEnroll.where(activity_id: activity_ids).where(["status > -2"]).order('id desc')
     end
@@ -28,7 +28,7 @@ class Biz::ActivityEnrollsController < ApplicationController
   end
 
   def show
-    activity = current_user.activities.where(id: params[:activity_id]).first
+    activity = current_site.activities.where(id: params[:activity_id]).first
     @activity_enroll = activity.activity_enrolls.find(params[:id])
     @activity_forms = ActivityForm.where(activity_id: @activity_enroll.activity_id).order(:sort)
     render layout: 'application_pop'
@@ -44,9 +44,9 @@ class Biz::ActivityEnrollsController < ApplicationController
     sheet1.row(0).default_format = nil
 
     @activity = if params[:id].present?
-      current_user.activities.find(params[:id])
+      current_site.activities.find(params[:id])
     elsif params[:search][:id_eq].present?
-      current_user.activities.find(params[:search][:id_eq])
+      current_site.activities.find(params[:search][:id_eq])
     else
       objs.first.try(:activity)
     end

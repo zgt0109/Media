@@ -12,8 +12,7 @@
           <div class="col-sm-12">
             <div class="width-1000">
               <%= form_for @coupon, validate: true do |f| %>
-                <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
-                <%= f.hidden_field :supplier_id, value: current_user.id %>
+                <%= f.hidden_field :site_id, value: current_site.id %>
                 <div class="form-group offline_coupon">
                   <label>优惠券名称<span class="required-star">*</span>
                     <small class="text-warning">不超过64个字</small>
@@ -51,7 +50,7 @@
                   </label>
 
                   <div class="clearfix">
-                    <div class="cieldon-file width-100px " data-type="0" data-height="90" data-width="90" data-img="<%= @coupon.logo_url || current_user.try(:website).try(:logo_url) %>" data-name="coupon[qiniu_logo_key]" data-key="<%= @coupon.qiniu_logo_key %>">
+                    <div class="cieldon-file width-100px " data-type="0" data-height="90" data-width="90" data-img="<%= @coupon.logo_url || current_site.try(:website).try(:logo_url) %>" data-name="coupon[logo_key]" data-key="<%= @coupon.logo_key %>">
                       <div class="file-img"></div>
                     </div>
                     <small class="text-warning pull-left display-block margin-top-20 line-height-32">图片建议尺寸：90像素*90像素</small>
@@ -92,7 +91,7 @@
                     </div>
                   </div>
                 </div>
-                <%- if current_user.vip_card.present? %>
+                <%- if current_site.vip_card.present? %>
                   <div class="form-group">
                     <div>
                       <label class="margin-b-10 margin-top-10">
@@ -104,7 +103,7 @@
                       </label>
                     </div>
                     <div class="checkbox-inline no-padding" id="vips">
-                      <% current_user.vip_grades.visible.sorted.each do |vip_grade| %>
+                      <% current_site.vip_grades.visible.sorted.each do |vip_grade| %>
                         <label>
                           <!-- <input name="form-field-checkbox" type="checkbox" class="ace"> -->
                           <%= f.check_box :vip_grade_ids, {name: 'coupon[vip_grade_ids][]', class: :ace}, vip_grade.id, false %>
@@ -116,7 +115,7 @@
                   </div>
                 <%- end %>
 
-                <% if current_user.shop_branches.used.present? %>
+                <% if current_site.shop_branches.used.present? %>
                   <div class="form-group shop_branch_list offline_coupon">
                     <label class="control-label"><%= f.check_box :shop_branch_limited, class: 'ace' %><span class="lbl">使用门店限制<small class="help-inle test text-warning">若不选则默认为所有门店通用</small></span></label>
                     <div class="margin-0 clearfix gateSelect">

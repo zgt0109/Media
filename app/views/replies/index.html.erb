@@ -1,0 +1,30 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微信基础设置', replies_path %></li>
+        <li><%= link_to '自动回复', autoreply_replies_path %></li>
+      </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-block alert-info">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>当用户首次关注您的微信公众账号时，会自动推送以下您设置的回复内容。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class=" col-sm-12 ">
+          <%= render 'form' %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<% end %>

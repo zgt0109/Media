@@ -16,7 +16,7 @@ namespace :import_ec_items do
     require 'rubygems'
     require 'roo'
 
-    supplier = Supplier.where(nickname: '关爱宝').first
+    supplier = Account.where(nickname: '关爱宝').first
     return unless supplier
 
     ec_shop = supplier.ec_shop

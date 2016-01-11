@@ -37,7 +37,7 @@
 <% index = 0 %>
 <%= f.fields_for :children do |child| %>
   <%= child.hidden_field :material_type %>
-  <%= child.hidden_field :supplier_id %>
+  <%= child.hidden_field :site_id %>
   
   <% if child.object.new_record? %>
     <% default_child_pic_url = qiniu_image_url('FiF0tSo5WZzH_i0_CDUgemvPd8Et'); default_child_pic_key = 'FiF0tSo5WZzH_i0_CDUgemvPd8Et' %>

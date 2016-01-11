@@ -1,11 +1,12 @@
 # -*- encoding : utf-8 -*-
 class OperatingReportsController < ApplicationController
+  before_filter :require_wx_mp_user
+
   before_filter do
     @partialLeftNav = "/layouts/partialLeftDC"
   end
   # skip_filter :login_required
 
-  before_filter :set_supplier
   before_filter :set_dates, only: [:index, :subscribes, :keyword]
   before_filter :set_data, only: [:index, :subscribes, :keyword]
 
@@ -21,11 +22,6 @@ class OperatingReportsController < ApplicationController
 
     #全部
     total_wx_requests = @all_wx_requests.sum(:total)# + @data['today']['全部请求']
-    if Rails.env.production?
-      total_wx_requests_2014 = ActiveRecord::Base.connection.execute("select sum(total) from wx_requests_2014 where supplier_id=#{@supplier.id}").first[0] || 0
-      total_wx_requests_2015 = ActiveRecord::Base.connection.execute("select sum(total) from wx_requests_2015 where supplier_id=#{@supplier.id}").first[0] || 0
-      total_wx_requests = total_wx_requests + total_wx_requests_2014 + total_wx_requests_2015
-    end
     @data['all']['全部请求'] = total_wx_requests
 
     #月请求
@@ -84,8 +80,6 @@ class OperatingReportsController < ApplicationController
       @high_chart['全部请求'][@ed.to_s] = @wx_logs.count
     end
 
-
-
     @date_arrays = Kaminari.paginate_array(@dates.to_a.sort{|x, y| y<=>x}).page(params[:page])
 
     respond_to do |format|
@@ -110,11 +104,6 @@ class OperatingReportsController < ApplicationController
 
     #全部
     total_subscribes = @all_wx_requests.sum(:increase)# + @data['today']['净增长数']
-    if Rails.env.production?
-      total_subscribes_2014 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2014 where supplier_id=#{@supplier.id}").first[0] || 0
-      total_subscribes_2015 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2015 where supplier_id=#{@supplier.id}").first[0] || 0
-      total_subscribes = total_subscribes + total_subscribes_2014 + total_subscribes_2015
-    end
     @data['all']['累积关注'] = total_subscribes
 
     #月关注
@@ -283,9 +272,8 @@ class OperatingReportsController < ApplicationController
       @high_chart['关键词触发数'][@ed.to_s] = 0
       @high_chart['关键词命中率'][@ed.to_s] = 0
     end
-    @ahs = ActivityHit.where(date: 1.month.ago.to_date..Date.yesterday, supplier_id: @supplier.id).select("content, id").group("content").order("date desc").limit(10)
-    @mhs = MessageHit.where(date: 1.month.ago.to_date..Date.yesterday, supplier_id: @supplier.id).select("content, id").group("content").order("date desc").limit(10)
-
+    @ahs = WxRequestHit.where(is_hit: 1, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).select("content, id").group("content").order("date desc").limit(10)
+    @mhs = WxRequestHit.where(is_hit: 0, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).select("content, id").group("content").order("date desc").limit(10)
 
     @date_arrays = Kaminari.paginate_array(@dates.to_a.sort{|x, y| y<=>x}).page(params[:page])
 
@@ -297,14 +285,13 @@ class OperatingReportsController < ApplicationController
                   :filename => "#{params[:VCFields] == 'message' ? '消息数' : '关键词触发'}_#{Time.now.strftime("%Y%m%d")}.xls")
       }
     end
-
   end
 
   def activity_hit
-    @ahs = ActivityHit.where(date: 1.month.ago.to_date..Date.yesterday, supplier_id: @supplier.id).where('content not in (?)', params[:content].split(',')).select("content, id").group("content").order("date desc").limit(10)
+    @ahs = WxRequestHit.where(is_hit: 1, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).where('content not in (?)', params[:content].split(',')).select("content, id").group("content").order("date desc").limit(10)
     str = ''
     @ahs.each do |ah|
-      str = str + '<tr><td>' + ah.content + '</td><td>' + ActivityHit.where(date: 1.month.ago.to_date..Date.yesterday, supplier_id: @supplier.id, content: ah.content).sum(:hit).to_s + '</td></tr>'
+      str = str + '<tr><td>' + ah.content + '</td><td>' + WxRequestHit.where(is_hit: 1, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id, content: ah.content).sum(:hit_count).to_s + '</td></tr>'
     end
     if str.blank?
       render js: "$('#ah_a').hide();"
@@ -314,10 +301,10 @@ class OperatingReportsController < ApplicationController
   end
 
   def message_hit
-    @mhs = MessageHit.where(date: 1.month.ago.to_date..Date.yesterday, supplier_id: @supplier.id).where('content not in (?)', params[:content].split(',')).select("content, id").group("content").order("date desc").limit(10)
+    @mhs = WxRequestHit.where(is_hit: 0, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).where('content not in (?)', params[:content].split(',')).select("content, id").group("content").order("date desc").limit(10)
     str = ''
     @mhs.each do |ah|
-      str = str + '<tr><td>' + ah.content + '</td><td>' + MessageHit.where(date: 1.month.ago.to_date..Date.yesterday, supplier_id: @supplier.id, content: ah.content).collect(&:hit).sum.to_s + '</td></tr>'
+      str = str + '<tr><td>' + ah.content + '</td><td>' + WxRequestHit.where(is_hit: 0, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id, content: ah.content).sum(:hit_count).sum.to_s + '</td></tr>'
     end
     if str.blank?
       render js: "$('#mh_a').hide();"
@@ -362,12 +349,11 @@ class OperatingReportsController < ApplicationController
     @dates = (@st..@ed)
   end
 
-
   def set_data
     #今日
-    #@today_wx_logs = WxLog.by_uid(@supplier.wx_mp_user.openid).by_date(Date.today)
+    #@today_wx_logs = WxLog.by_uid(@wx_mp_user.wx_mp_user.openid).by_date(Date.today)
     #全部
-    @all_wx_requests = WxRequest.where(supplier_id: @supplier.id)
+    @all_wx_requests = WxRequest.where(wx_mp_user_id: @wx_mp_user.id)
     #月
     @month_wx_requests = @all_wx_requests.where(date: 1.month.ago.to_date..Date.yesterday)
     #周
@@ -378,20 +364,15 @@ class OperatingReportsController < ApplicationController
     if params[:type] == 'today'
       @wx_logs = @today_wx_logs
     elsif params[:type] == 'yesterday'
-      @wx_logs = WxLog.by_uid(@supplier.wx_mp_user.openid).by_date(Date.yesterday)
+      @wx_logs = WxLog.by_uid(@wx_mp_user.wx_mp_user.openid).by_date(Date.yesterday)
       @day_request = @yesterday_wx_request
     elsif @dates.count == 1
-      @wx_logs = WxLog.by_uid(@supplier.wx_mp_user.openid).by_date(@st)
+      @wx_logs = WxLog.by_uid(@wx_mp_user.wx_mp_user.openid).by_date(@st)
       @day_request =  @all_wx_requests.where(date: @st..@ed).first
     end
 
     params[:VCFields] ||= 'message'
   end
-
-  def set_supplier
-    @supplier = current_user
-  end
-
 
   def xls_content_for(dates, data, h)
 
@@ -417,8 +398,6 @@ class OperatingReportsController < ApplicationController
       sheet1.row(0).concat ['时间'] + h.keys
     end
 
-
-
     count_row = 1
 
     dates.each do |date|
@@ -433,7 +412,6 @@ class OperatingReportsController < ApplicationController
 
     book.write activity_enrolls__report
     activity_enrolls__report.string
-
   end
 
 end

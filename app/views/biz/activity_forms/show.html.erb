@@ -53,7 +53,7 @@
                 <label class="control-label">微信消息图片<span class="icon-question-sign " data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片" ></span></label>
 
                 <div class="clearfix">
-                  <div class="cieldon-file width-100px " data-name="activity[qiniu_pic_key]" data-img="<%= @activity.try(:pic_url) %>" data-key="<%= @activity.try(:qiniu_pic_key) %>" data-type="1" data-div="#img-1" data-height="200"></div>
+                  <div class="cieldon-file width-100px " data-name="activity[pic_key]" data-img="<%= @activity.try(:pic_url) %>" data-key="<%= @activity.try(:pic_key) %>" data-type="1" data-div="#img-1" data-height="200"></div>
                 </div>
               </div>
 
@@ -130,7 +130,7 @@
                       <div class="col-xs-6  no-padding">
                         <div class="form-group">
                           <label class="control-label">选择相册</label>
-                          <%= select_tag :related_album_id, options_for_select(current_user.albums.show.order('albums.sort, albums.updated_at DESC').map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_album_id), class: 'col-xs-6' %>
+                          <%= select_tag :related_album_id, options_for_select(current_site.albums.show.order('albums.sort, albums.updated_at DESC').map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_album_id), class: 'col-xs-6' %>
                         </div>
                       </div>
                     </div>
@@ -139,7 +139,7 @@
                       <div class="col-xs-6  no-padding">
                         <div class="form-group">
                           <label class="control-label">选择微官网</label>
-                          <%= select_tag :related_website_id, options_for_select(current_user.activities.website.show.map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_website_id), class: 'col-xs-6' %>
+                          <%= select_tag :related_website_id, options_for_select(current_site.activities.website.show.map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_website_id), class: 'col-xs-6' %>
                         </div>
                       </div>
                     </div>
@@ -148,7 +148,7 @@
                       <div class="col-xs-6  no-padding">
                         <div class="form-group">
                           <label class="control-label">选择微场景</label>
-                          <%= select_tag :related_scene_id, options_for_select(current_user.activities.scene.show.map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_scene_id), class: 'col-xs-6' %>
+                          <%= select_tag :related_scene_id, options_for_select(current_site.activities.scene.show.map{|m| [truncate_u(m.name), m.id] }, selected: @activity.extend.related_scene_id), class: 'col-xs-6' %>
                         </div>
                       </div>
                     </div>
@@ -173,7 +173,6 @@
               <%= f.hidden_field :activity_type_id %>
 
               <% if @activity.new_record? %>
-                <%= f.hidden_field :wx_mp_user_id %>
                 <%= f.hidden_field :status, value: Activity::SETTED %>
                 <%#= f.hidden_field :ready_at, value: Time.now %>
                 <%= f.hidden_field :audited, value: false %>
@@ -219,14 +218,14 @@
           $('#activity_description').html(content);
 
           if ($('#related_link_type').val() == 'album'){
-            <%- if current_user.albums.show.blank? %>
+            <%- if current_site.albums.show.blank? %>
               showTip('warning', '请先创建相册')
               return false;
             <%- end %>
           }
 
            if ($('#related_link_type').val() == 'scene'){
-              <%- if current_user.activities.scene.show.blank? %>
+              <%- if current_site.activities.scene.show.blank? %>
               showTip('warning', '请先创建微场景')
               return false;
             <%- end %>

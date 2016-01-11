@@ -97,7 +97,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-7">&times;</button>
         <h4 class="modal-title">活动核销</h4>
       </div>
-      <%= form_tag shops_use_consume_path(supplier_id: current_shop_supplier.id), id: "form-6", class: "form", data:{action: 'use_consume'}, role: "form" do %>
+      <%= form_tag shops_use_consume_path(supplier_id: current_shop_account.id), id: "form-6", class: "form", data:{action: 'use_consume'}, role: "form" do %>
         <%= hidden_field_tag :code, nil %>
         <%= hidden_field_tag :consume_class, nil %>
         <%= hidden_field_tag :consume_id, nil %>
@@ -168,7 +168,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-1">&times;</button>
         <h4 class="modal-title">会员消费</h4>
       </div>
-      <%= form_tag shops_save_money_path(supplier_id: current_shop_supplier.id), id: "form-1", class: "privelege_form form", data:{action: 'save_money'}, role: "form" do %>
+      <%= form_tag shops_save_money_path(supplier_id: current_shop_account.id), id: "form-1", class: "privelege_form form", data:{action: 'save_money'}, role: "form" do %>
         <%= hidden_field_tag :direction, 4 %>
         <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
         <%= hidden_field_tag :vip_user_id, nil %>
@@ -247,7 +247,7 @@
         <h4 class="modal-title">会员充值</h4>
       </div>
 
-      <%= form_tag shops_save_money_path(supplier_id: current_shop_supplier.id), id: "form-2", class: "privelege_form form", data:{action: 'save_money'}, role: "form" do %>
+      <%= form_tag shops_save_money_path(supplier_id: current_shop_account.id), id: "form-2", class: "privelege_form form", data:{action: 'save_money'}, role: "form" do %>
         <%= hidden_field_tag :direction, 3 %>
         <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
         <%= hidden_field_tag :vip_user_id, nil %>
@@ -320,7 +320,7 @@
         <h4 class="modal-title">会员积分调节</h4>
       </div>
 
-      <%= form_tag shops_save_point_path(supplier_id: current_shop_supplier.id), id: "form-3", class: "form", data:{action: 'save_point'}, role: "form" do %>
+      <%= form_tag shops_save_point_path(supplier_id: current_shop_account.id), id: "form-3", class: "form", data:{action: 'save_point'}, role: "form" do %>
         <%= hidden_field_tag :direction_type, nil %>
         <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
         <%= hidden_field_tag :vip_user_id, nil %>
@@ -395,7 +395,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-4">&times;</button>
         <h4 class="modal-title">会员金额调节</h4>
       </div>
-      <%= form_tag shops_save_money_path(supplier_id: current_shop_supplier.id), id: "form-4", class: "form", data:{action: 'save_money'}, role: "form" do %>
+      <%= form_tag shops_save_money_path(supplier_id: current_shop_account.id), id: "form-4", class: "form", data:{action: 'save_money'}, role: "form" do %>
         <%= hidden_field_tag :direction, nil %>
         <%= hidden_field_tag :direction_type, nil %>
         <%= hidden_field_tag :current_shop_branch_id, current_shop_branch.id %>
@@ -460,7 +460,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-5">&times;</button>
         <h4 class="modal-title">会员套餐发放</h4>
       </div>
-      <%= form_tag shops_save_release_path(supplier_id: current_shop_supplier.id), id: "form-5", class: "form", data:{action: 'save_release'}, role: "form" do %>
+      <%= form_tag shops_save_release_path(supplier_id: current_shop_account.id), id: "form-5", class: "form", data:{action: 'save_release'}, role: "form" do %>
         <%= hidden_field_tag :vip_user_id, nil %>
         <%= hidden_field_tag :select_type, "user_no", class: "select_type" %>
         <div class="modal-body">
@@ -535,7 +535,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-6">&times;</button>
         <h4 class="modal-title">会员套餐核销</h4>
       </div>
-      <%= form_tag shops_update_consumes_path(supplier_id: current_shop_supplier.id), id: "form-6", class: "form", data:{action: 'update_consumes'}, role: "form" do %>
+      <%= form_tag shops_update_consumes_path(supplier_id: current_shop_account.id), id: "form-6", class: "form", data:{action: 'update_consumes'}, role: "form" do %>
         <%= hidden_field_tag :sn_code, nil %>
         <div class="modal-body">
           <div class="form-group">
@@ -598,7 +598,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-target="#form-8">&times;</button>
         <h4 class="modal-title">礼品核销</h4>
       </div>
-      <%= form_tag shops_use_exchange_path(supplier_id: current_shop_supplier.id), id: "form-8", class: "form", data:{action: 'use_exchange'}, role: "form" do %>
+      <%= form_tag shops_use_exchange_path(supplier_id: current_shop_account.id), id: "form-8", class: "form", data:{action: 'use_exchange'}, role: "form" do %>
         <%= hidden_field_tag :gift_code, nil %>
         <div class="modal-body">
           <div class="form-group">
@@ -671,7 +671,7 @@ $(document).on("click", '#submit_sncode', function(){
   }
 
   var action = form.data('action');
-  var get_url = "<%= shops_find_consume_path(supplier_id: current_shop_supplier.id) %>" + "?code="+code+"&activity_type="+activity_type;
+  var get_url = "<%= shops_find_consume_path(supplier_id: current_shop_account.id) %>" + "?code="+code+"&activity_type="+activity_type;
   $.get(get_url, function(data) {
     if(data.find_status > 0){
       form.find('#code').val(data.code);
@@ -687,7 +687,7 @@ $(document).on("click", '#submit_sncode', function(){
       form.find('.markets_mobile').html(data.mobile);
       form.find('.markets_apply_at').html(data.created);
       form.find('.markets_status').html(data.status);
-      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+ action);
+      form.attr("action","/shops/"+"<%= current_shop_account.id %>"+"/"+ action);
       form.find('.markets_info').show();
       form.find('.modal-footer').show();
     }else{
@@ -765,7 +765,7 @@ function showTip(type, str) {
 }
 
 //套餐发放
-var package_price = <%= raw Hash[current_shop_supplier.vip_packages.active.latest.pluck(:id, :price)].to_json %>
+var package_price = <%= raw Hash[current_shop_account.vip_packages.active.latest.pluck(:id, :price)].to_json %>
 $('#release').on("click", '.save_release', function(e){
   var select_id = $("#vip_package_id").val();
   if($('#vip_package_id').val() == ""){
@@ -787,7 +787,7 @@ $('#release').on("click", '.save_release', function(e){
 
 //发放套餐默认余额支付
 $('#release').on("change", '#vip_package_id', function(){
-  var get_url = "<%= shops_use_usable_amount_path(supplier_id: current_shop_supplier.id) %>" + "?vip_user_id=" + $("#release #vip_user_id").val() + "&vip_package_id=" + $("#vip_package_id").val();
+  var get_url = "<%= shops_use_usable_amount_path(supplier_id: current_shop_account.id) %>" + "?vip_user_id=" + $("#release #vip_user_id").val() + "&vip_package_id=" + $("#vip_package_id").val();
   $.getJSON(get_url, function(data) {
     $("#release #payment_type").val(data.status ? "<%= VipPackagesVipUser::BY_BALANCE %>" : "<%= VipPackagesVipUser::BY_CASH %>");
   });
@@ -864,7 +864,7 @@ $(document).on(".privelege_form input", '#amount', function(){
   if (vip_user_id && direction_type){
     if(amount > 0){
       // var url = "/vip_users/"+vip_user_id+"/transaction_check?source=branch" + "&amount=" + amount + '&direction_type=' + direction_type
-      var url = "/shops/"+"<%= current_shop_supplier.id %>"+"/transaction_check?source=branch&id=" + vip_user_id + "&amount=" + amount + '&direction_type=' + direction_type
+      var url = "/shops/"+"<%= current_shop_account.id %>"+"/transaction_check?source=branch&id=" + vip_user_id + "&amount=" + amount + '&direction_type=' + direction_type
       $.getScript(url);
     }else{
       form.find('.privilege_item').each(function(){
@@ -895,7 +895,7 @@ $(document).on("change", 'input[name="option_value"]', function(){
   var form = $(this).closest("form");
   var modal = $(this).closest(".modal").attr('id');
   var action = form.data('action');
-  var get_url = "<%= shops_find_vip_user_path(supplier_id: current_shop_supplier.id) %>" + "?select_type=" + form.find('.select_type').val() + "&option_value=" + $(this).val() + "&modal=" + modal;
+  var get_url = "<%= shops_find_vip_user_path(supplier_id: current_shop_account.id) %>" + "?select_type=" + form.find('.select_type').val() + "&option_value=" + $(this).val() + "&modal=" + modal;
   $.get(get_url, function(data) {
     if(data.user_status == "正常"){
       form.find('#vip_user_id').val(data.vip_user_id);
@@ -905,7 +905,7 @@ $(document).on("change", 'input[name="option_value"]', function(){
       form.find('.vip_user_no').html(data.vip_user_no);
       form.find('.vip_user_mobile').html(data.vip_user_mobile);
       // form.attr("action","/vip_users/"+data.vip_user_id+"/"+action);
-      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+action+"?id="+data.vip_user_id);
+      form.attr("action","/shops/"+"<%= current_shop_account.id %>"+"/"+action+"?id="+data.vip_user_id);
       var html = "";
       data.usable_privileges.map(function(entry){
         html+='<label class="privilege"><input disabled name="form-field-checkbox" type="checkbox" id=privilege'+ entry[0] +' class="ace privilege_item"><span class="lbl">'+ entry[1] +'</span></label><br>'
@@ -938,7 +938,7 @@ $(document).on("change", 'input[name="option_value"]', function(){
 $(document).on("change", '#search_sn_code', function(){
   var form = $(this).closest("form");
   var action = form.data('action');
-  var get_url = "<%= shops_find_vip_package_item_path(supplier_id: current_shop_supplier.id) %>" + "?sn_code=" + form.find('#search_sn_code').val();
+  var get_url = "<%= shops_find_vip_package_item_path(supplier_id: current_shop_account.id) %>" + "?sn_code=" + form.find('#search_sn_code').val();
   $.get(get_url, function(data) {
     if(data.find_status == 1){
       form.find('.form-group').removeClass('has-error');
@@ -951,7 +951,7 @@ $(document).on("change", '#search_sn_code', function(){
       form.find('.create_time').html(data.create_time);
       form.find('.out_time').html(data.out_time);
       form.find('.status').html(data.status);
-      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+ action);
+      form.attr("action","/shops/"+"<%= current_shop_account.id %>"+"/"+ action);
       form.find('.user_info').show();
       form.find('button').attr('disabled', false);
       form.find('.modal-footer').show();
@@ -972,7 +972,7 @@ $(document).on("change", '#search_sn_code', function(){
 $(document).on("change", '#search_code', function(){
   var form = $(this).closest("form");
   var action = form.data('action');
-  var get_url = "<%= shops_exchange_info_path(supplier_id: current_shop_supplier.id) %>" + "?code=" + form.find('#search_code').val();
+  var get_url = "<%= shops_exchange_info_path(supplier_id: current_shop_account.id) %>" + "?code=" + form.find('#search_code').val();
   $.get(get_url, function(data) {
     if(data.find_status == 1){
       form.find('.form-group').removeClass('has-error');
@@ -982,7 +982,7 @@ $(document).on("change", '#search_code', function(){
       form.find('.sn').html(data.gift_code);
       form.find('.created_at').html(data.created_at);
       form.find('.expired_at').html(data.expired_at);
-      form.attr("action","/shops/"+"<%= current_shop_supplier.id %>"+"/"+ action);
+      form.attr("action","/shops/"+"<%= current_shop_account.id %>"+"/"+ action);
       form.find('.user_info').show();
       form.find('button').attr('disabled', false);
       form.find('.modal-footer').show();

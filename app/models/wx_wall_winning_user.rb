@@ -1,7 +1,7 @@
 class WxWallWinningUser < ActiveRecord::Base
-	belongs_to :wx_wall
+  belongs_to :wx_wall
   belongs_to :vip_user
-  belongs_to :wx_user
+  belongs_to :user
 
   enum_attr :status, :in => [
     ['normal',   1, '正常'],

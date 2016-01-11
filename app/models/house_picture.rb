@@ -13,9 +13,6 @@
 #
 
 class HousePicture < ActiveRecord::Base
-  mount_uploader :path, HousePictureUploader
-
-  # validates :path, presence: true, on: :create
 
   belongs_to :house_layout
 
@@ -37,8 +34,6 @@ class HousePicture < ActiveRecord::Base
   def pic_url
     if pic_key.present?
       qiniu_image_url(pic_key)
-    elsif path.to_s.present?
-      path.try(:large).to_s
     else
       ""
     end

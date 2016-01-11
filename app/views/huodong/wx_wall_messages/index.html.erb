@@ -23,7 +23,7 @@
                   <div class="col-md-3 row">
                     <div class="input-group input-group-text">
                       <span class="input-group-addon">选择活动：</span>
-                      <% options = current_user.wx_walls.show.map{|a|[a.name,a.id]} %>
+                      <% options = current_site.wx_walls.show.map{|a|[a.name,a.id]} %>
                       <%= f.select :wx_wall_id_eq, options_for_select(options, session[:wx_wall_id]),{},class:"col-xs-12" %>
                     </div>
                   </div>

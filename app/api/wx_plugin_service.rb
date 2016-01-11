@@ -52,8 +52,8 @@ class WxPluginService
     end
 
 
-    def fetch_wx_mp_user_api_auth(auth_code, supplier)
-      return unless supplier
+    def fetch_wx_mp_user_api_auth(auth_code, site)
+      return unless site
 
       url = 'https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=' + WxPluginService.component_access_token
       post_body = { component_appid: Settings.wx_plugin.component_app_id, authorization_code: auth_code }.to_json
@@ -66,7 +66,7 @@ class WxPluginService
       app_id, access_token, expires_in, refresh_token, func_info = auth_info.values_at('authorizer_appid', 'authorizer_access_token', 'expires_in', 'authorizer_refresh_token', 'func_info')
       wx_mp_user = nil
       WxMpUser.transaction do
-        wx_mp_user = supplier.wx_mp_user || WxMpUser.where(supplier_id: supplier.id, app_id: app_id).first_or_create(name: supplier.nickname)
+        wx_mp_user = site.wx_mp_user || WxMpUser.where(site_id: site.id, app_id: app_id).first_or_create(name: site.nickname)
         wx_mp_user.update_attributes(app_id: app_id, access_token: access_token, refresh_token: refresh_token, expires_in: expires_in.to_i.seconds.from_now, func_info: func_info, auth_code: auth_code, bind_type: WxMpUser::PLUGIN, binds_count: wx_mp_user.binds_count.to_i + 1, status: WxMpUser::ACTIVE)
         wx_mp_user.fetch_auth_info
       end

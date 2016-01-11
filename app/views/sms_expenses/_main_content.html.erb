@@ -3,14 +3,14 @@
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
             <%= render 'partials/home' %>
-            <li><%= link_to '系统设置', account_url %></li>
+            <li><%= link_to '系统设置', profile_path %></li>
             <li><%= link_to '短消息管理', sms_expenses_path %></li>
             <% if current_page?(sms_expenses_path) %>
               <li><%= link_to '使用记录', sms_expenses_path %></li>
             <% elsif current_page?(sms_orders_path) %>
               <li><%= link_to '套餐管理', sms_orders_path %></li>
-            <% elsif current_page?(sms_switch_suppliers_path) %>
-              <li><%= link_to '短信发送控制', sms_switch_suppliers_path %></li>
+            <% elsif current_page?(sms_switch_accounts_path) %>
+              <li><%= link_to '短信发送控制', sms_switch_accounts_path %></li>
             <% end %>
         </ul>
         <%= render '/layouts/qrcode' %>
@@ -22,7 +22,7 @@
                     <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
                         <%= link_to_li '使用记录', sms_expenses_path %>
                         <%= link_to_li '套餐管理', sms_orders_path %>
-                        <%= link_to_li '短信发送控制', sms_switch_suppliers_path %>
+                        <%= link_to_li '短信发送控制', sms_switch_accounts_path %>
                     </ul>
                     <div class="tab-content no-border padding-24">
                       <%= yield :tab %>

@@ -4,7 +4,7 @@
       <%= render 'weixin_preview', wx_title: @activity.ready_activity_notice.try(:title), wx_summary: @activity.ready_activity_notice.try(:summary) %>
       <%= form_for @activity, :url => @activity.new_record? ? slots_path : slot_path(@activity), validate: true, html: {class: 'form col-sm-7'} do |activity| %>
         <%= activity.fields_for :ready_activity_notice do |notice| %>
-          <%= render 'ready_notice', notice: notice, activity: activity, pic_data_key: notice.object.qiniu_pic_key, data_img: notice.object.pic_url %>
+          <%= render 'ready_notice', notice: notice, activity: activity, pic_data_key: notice.object.pic_key, data_img: notice.object.pic_url %>
         <% end %>
         <div class="row-fluid">
           <%- if @activity.can_not_edit? %>

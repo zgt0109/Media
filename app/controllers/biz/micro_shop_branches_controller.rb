@@ -60,7 +60,7 @@ class Biz::MicroShopBranchesController < ApplicationController
 
   def create_pic
     return render text: nil if @shop_branch.qiniu_pictures.count >= 10
-    @picture = @shop_branch.qiniu_pictures.create(sn: params[:qiniu_pic_key])
+    @picture = @shop_branch.qiniu_pictures.create(sn: params[:pic_key])
     render :partial => "biz/micro_shop_branches/picture", :locals => {picture: @picture}
   end
 
@@ -82,25 +82,25 @@ class Biz::MicroShopBranchesController < ApplicationController
   end
 
   def permissions
-    @search       = current_user.shop_branch_sub_accounts.set.search(params[:search])
+    @search       = current_site.shop_branch_sub_accounts.set.search(params[:search])
     @sub_accounts = @search.page(params[:page])
   end
 
   def new_permission
     @account_names = [['请选择分店', '']]
-    @account_names << ['全部分店（一次创建所有分店权限）', '0'] if current_user.shop_branch_sub_accounts.unset.exists?
-    @account_names += current_user.shop_branch_sub_accounts.unset.pluck(:username, :id)
+    @account_names << ['全部分店（一次创建所有分店权限）', '0'] if current_site.shop_branch_sub_accounts.unset.exists?
+    @account_names += current_site.shop_branch_sub_accounts.unset.pluck(:username, :id)
     render :permission
   end
 
   def permission
     sub_account_id = params[:sub_account_id]
     if request.get?
-      @sub_account = current_user.shop_branch_sub_accounts.find(sub_account_id)
+      @sub_account = current_site.shop_branch_sub_accounts.find(sub_account_id)
       return @account_names = [[@sub_account.username, @sub_account.id]]
     end
 
-    sub_account_id = current_user.shop_branch_sub_accounts.unset.pluck(:id) if sub_account_id == '0'
+    sub_account_id = current_site.shop_branch_sub_accounts.unset.pluck(:id) if sub_account_id == '0'
     SubAccount.where(id: sub_account_id).update_all(permissions: params[:permissions].to_a.to_json, updated_at: Time.now)
     redirect_to permissions_micro_shop_branches_path, notice: '保存成功'
   end
@@ -114,7 +114,7 @@ class Biz::MicroShopBranchesController < ApplicationController
 
   private
     def find_shop
-      @shop = current_user.shop
+      @shop = current_site.shop
       redirect_to micro_shops_path, alert: "请先填写门店基础设置" unless @shop
     end
 

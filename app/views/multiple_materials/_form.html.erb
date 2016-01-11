@@ -37,7 +37,7 @@
 
         <div class="form-address material_activity_id">
           <span>选择活动<em>*</em></span>
-          <%= f.select :activity_id, current_user.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @material.try(:materialable_id) }, class: "gl" %>
+          <%= f.select :activity_id, current_site.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }, { selected: @material.try(:materialable_id) }, class: "gl" %>
         </div>
 
         <div class="material_source_url p">
@@ -57,7 +57,7 @@
 
     <div class="formitem subview hide" rel="1">
       <div class="box-form form-row fl">
-        <input name="materials[][supplier_id]" value="<%= @material.supplier_id %>" type="hidden" />
+        <input name="materials[][site_id]" value="<%= @material.site_id %>" type="hidden" />
         <input name="materials[][material_type]" value="<%= @material.material_type %>" type="hidden" />
 
         <p class="material_title">
@@ -93,7 +93,7 @@
 
         <p class="form-address material_activity_id">
           <span>选择活动<em>*</em></span>
-          <%= select_tag "materials[][activity_id]", options_for_select(current_user.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }), selected: @material.try(:materialable_id), class: "gl" %>
+          <%= select_tag "materials[][activity_id]", options_for_select(current_site.activities.material_active.unexpired.map{|m| [truncate_u(m.name), m.id] }), selected: @material.try(:materialable_id), class: "gl" %>
         </p>
 
         <p class="material_source_url">

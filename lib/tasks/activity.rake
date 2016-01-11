@@ -28,14 +28,14 @@ namespace :activity_setting do
 
 end
 
-namespace :activity_survey_answer do
+namespace :survey_answer do
 
   desc 'migration answer options data'
   task :migration_answer_options_data => :environment do
 
     puts 'Starting migration answer options data'
-    ActivitySurveyAnswer.where("survey_question_choice_id is null and answer <> '其他'").find_each do |asa|
-      asq = asa.activity_survey_question
+    SurveyAnswer.where("survey_question_choice_id is null and answer <> '其他'").find_each do |asa|
+      asq = asa.survey_question
       next unless asq
       sqc = asq.survey_question_choices.order(:position).limit(asa.answer.to_i).last
       asa.update_column('survey_question_choice_id', sqc.id) if sqc
@@ -46,13 +46,13 @@ namespace :activity_survey_answer do
 
 end
 
-namespace :activity_survey_question do
+namespace :survey_question do
 
   desc 'migration answer options data'
   task :migration_answer_options_data => :environment do
 
     puts 'Starting migration answer options data'
-    ActivitySurveyQuestion.where("answer_a is not null and answer_b is not null").find_each do |asq|
+    SurveyQuestion.where("answer_a is not null and answer_b is not null").find_each do |asq|
       sqc = asq.survey_question_choices.where(position: -2).first
       next if sqc
       asq.survey_question_choices << asq.survey_question_choices.new(name: asq.answer_a, position: -2)
@@ -63,13 +63,13 @@ namespace :activity_survey_question do
   end
 
   desc 'sort activity survey questions data'
-  task :sort_activity_survey_questions_data => :environment do
+  task :sort_survey_questions_data => :environment do
 
     puts 'Starting sort activity survey questions data'
     Activity.surveys.show.find_each do |activity|
-      activity_survey_questions = activity.activity_survey_questions.order('created_at')
-      next unless activity_survey_questions.where(position: 0).first
-      activity_survey_questions.each_with_index do |asq, index|
+      survey_questions = activity.survey_questions.order('created_at')
+      next unless survey_questions.where(position: 0).first
+      survey_questions.each_with_index do |asq, index|
         asq.update_column('position', index + 1)
         puts "activity survey question id: #{asq.id}"
       end
@@ -86,7 +86,7 @@ namespace :survey do
     Activity.surveys.find_each do |survey|
       # 老版本调研，答完所有题目才提交，因此只要用户有答题记录代表用户已提交
       survey.activity_users.normal.find_each do |user|
-        user.survey_finish! if user.activity_survey_answers.present?
+        user.survey_finish! if user.survey_answers.present?
       end
       puts "activity #{survey.id} done!"
     end

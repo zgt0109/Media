@@ -15,8 +15,6 @@
 #
 
 class CarCatena < ActiveRecord::Base
-  mount_uploader :pic, CarPictureUploader
-  img_is_exist({pic: :qiniu_pic_key}) 
   belongs_to :car_brand
   has_many :car_pictures, dependent: :destroy
   has_many :car_types, dependent: :destroy
@@ -28,7 +26,7 @@ class CarCatena < ActiveRecord::Base
   ]
 
   def pic_url(type = :large)
-    qiniu_image_url(qiniu_pic_key) || pic.try(type)
+    qiniu_image_url(pic_key)
   end
 
   def display_name

@@ -9,7 +9,7 @@
         </div>
         <div style="display: none;">
           <span>公共账号<em>*</em>（请选择一个公共账号来发布活动）</span>
-          <%= f.select :wx_mp_user_id, [current_user.wx_mp_user].map{|wx_mp_user|[wx_mp_user.name,wx_mp_user.id]}, {}, style: "width:150px;" %>
+          <%= f.select :wx_mp_user_id, [current_user.wx_mp_user].map{|wx_mp_user|[wx_mp_user.nickname,wx_mp_user.id]}, {}, style: "width:150px;" %>
         </div>
         <% if @activity.groups? %>
         <div style="display: none;">

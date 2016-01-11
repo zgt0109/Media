@@ -30,9 +30,6 @@ class HotelRoomType < ActiveRecord::Base
   #attr_accessible :area, :big_bed_count, :big_bed_spec, :description, :floor, :hotel_branch_id, :hotel_id, :is_big_bed, :is_breakfast, :is_broadband, :is_small_bed, :name, :open_count, :pic, :preferential_price, :price, :small_bed_count, :small_bed_spec, :status
   attr_accessor :has_defaults
 
-  mount_uploader :pic, HotelRoomTypeUploader
-  img_is_exist({pic: :qiniu_pic_key})
-
   validates :hotel_branch_id, :name, presence: true
   #validates :pic, presence: true, on: :create
   validates_numericality_of  :open_qty, greater_than_or_equal_to: 0, presence: true, only_integer: true
@@ -66,7 +63,7 @@ class HotelRoomType < ActiveRecord::Base
 
 
   def pic_url(type = :large)
-    qiniu_image_url(qiniu_pic_key) || pic.try(type)
+    qiniu_image_url(pic_key)
   end
 
 	def delete!

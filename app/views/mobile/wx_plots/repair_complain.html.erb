@@ -61,7 +61,7 @@
       <% @repair_complain.messages.each do |f| %>
           <% next if f.new_record? %>
           <li class="message-time"><%= f.created_at %></li>
-          <li class="<%= f.messageable.try(:is_a?, Supplier) ? 'service' : 'self'%>">
+          <li class="<%= f.messageable.try(:is_a?, Account) ? 'service' : 'self'%>">
             <%= f.content %>
           </li>
       <% end %>

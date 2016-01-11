@@ -10,7 +10,7 @@ class Mobile::RecommendsController < Mobile::BaseController
     end
 
     if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
-      from_wx_user = WxUser.where(uid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first
+      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first
       if from_wx_user.present?
         from_wx_user_participate =  WxParticipate.normal.where(wx_user_id: from_wx_user.id, activity_id: @activity.id).first
         if !@subscribed
@@ -89,7 +89,7 @@ class Mobile::RecommendsController < Mobile::BaseController
       @activity = Activity.recommend.show.find_by_id(params[:activity_id]) || Activity.recommend.show.find_by_id(session[:activity_id])
       return render_404 unless @activity
       session[:activity_id] ||= params[:activity_id]
-      @share_title = "好友向你推荐关注 #{ @wx_mp_user.try(:name) } 公众号！"
+      @share_title = "好友向你推荐关注 #{ @wx_mp_user.try(:nickname) } 公众号！"
       @share_desc = @activity.summary.try(:squish)
       @share_image = "/assets/recommend.jpg"
     end

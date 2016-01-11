@@ -1,6 +1,6 @@
 class Biz::WebsiteArticlesController < ApplicationController
   
-  before_filter :require_wx_mp_user, :set_website
+  before_filter :set_website
   before_filter :find_article, only: [:edit, :update, :destroy, :edit_pic, :update_pic, :delete_pic, :update_sort, :change_is_top]
 
 	def index
@@ -28,7 +28,7 @@ class Biz::WebsiteArticlesController < ApplicationController
 	end
 
 	def create
-    @article = @website.website_articles.new(params[:website_article].merge!(supplier_id: @website.supplier_id, wx_mp_user_id: @website.wx_mp_user_id))
+    @article = @website.website_articles.new(params[:website_article].merge!(site_id: @website.site_id))
     if @article.save
     	save_article_tag_children(@article,params[:tag_children_ids],params[:tag_children_descriptions])
       redirect_to website_articles_path(article_type: @article.as_article? ? 'as_article' : 'as_product'), notice: "保存成功"
@@ -137,7 +137,7 @@ class Biz::WebsiteArticlesController < ApplicationController
 
 
   def set_website
-    @website = current_user.website
+    @website = current_site.website
     return redirect_to websites_path, alert: '请先设置微官网' unless @website
   end
 

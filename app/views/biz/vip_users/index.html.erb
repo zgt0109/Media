@@ -17,7 +17,7 @@
           <table id="vipData" class="table table-striped table-bordered table-hover">
             <thead>
             <tr>
-              <% if current_user.vip_card.use_vip_avatar? %><th width="7%">会员照片</th><% end %>
+              <% if current_site.vip_card.use_vip_avatar? %><th width="7%">会员照片</th><% end %>
               <th width="11%">会员卡号</th>
               <th width="11%">线下会员卡号</th>
               <th width="8%">姓名</th>
@@ -32,7 +32,7 @@
             <tbody>
             <% if @vip_users.each_with_index do |vip_user| %>
                 <tr>
-                  <% if current_user.vip_card.use_vip_avatar? %><td><img src="<%= vip_user.avatar_url(size: '50x36') %>" alt="暂无"/></td><% end %>
+                  <% if current_site.vip_card.use_vip_avatar? %><td><img src="<%= vip_user.avatar_url(size: '50x36') %>" alt="暂无"/></td><% end %>
                   <td>
                     <a class="break" data-toggle="modal" href="<%= vip_user_path(vip_user, type: 'show_user') %>"><%= vip_user.user_no %></a>
                   </td>

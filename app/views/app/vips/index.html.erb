@@ -189,7 +189,7 @@
         <div class="list-box">
           <dl>
             <dt class="border">
-              <a class="icon-right" href="/app/vips/map?address=<%= @vip_card.address%>&city_name=<%= @vip_card.city.try(:name)%>&supplier_name=<%= URI.escape(@vip_card.supplier_name.to_s) %>&location=<%= @vip_card.location_x%>, <%= @vip_card.location_y%>">
+              <a class="icon-right" href="/app/vips/map?address=<%= @vip_card.address%>&city_name=<%= @vip_card.city.try(:name)%>&merchant_name=<%= URI.escape(@vip_card.merchant_name.to_s) %>&location=<%= @vip_card.location_x%>, <%= @vip_card.location_y%>">
                 <i class="icon icon-10"></i>
                 <span>地址：<%= "#{@vip_card.city.try(:province).try(:name)}#{@vip_card.city.try(:name)}#{@vip_card.district.try(:name)}#{@vip_card.address}" %></span>
               </a>

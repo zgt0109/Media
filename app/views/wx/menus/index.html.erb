@@ -1,0 +1,275 @@
+<% content_for :main_content do %>
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微信基础设置', replies_path %></li>
+          <li><%= link_to '自定义菜单', wx_menus_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-sm-12">
+
+            <div class="alert alert-block alert-success">
+              <strong class="pull-left">提示：</strong>
+              <ul class="vwebsiteHeadAlert">
+                <li>1、要使用自定义菜单，需在公众平台申请自定义菜单使用的“AppId”和“AppSecret”，然后前往“<a href="/platforms" target="_blank">开发者信息设置</a>”进行设置；</li>
+                <li>2、微信公众号自定义菜单最多创建<span class="required-star">3</span>个一级菜单，每个一级菜单下最多可以创建<span class="required-star">5</span>个二级菜单；</li>
+                <li>3、一级菜单最多<span class="required-star">4</span>个汉字，二级菜单最多<span class="required-star">7</span>个汉字；</li>
+                <li>4、微信公众平台规定：菜单发布<span class="required-star">24</span>小时后生效。如果为新增粉丝，则可马上看到菜单；</li>
+                <li>5、同步：菜单内容编辑完成后，需要点击按钮“同步”才能将编辑的信息显示到微信手机端。</li>
+              </ul>
+            </div>
+
+            <div class="margin-top-10">
+              <label>
+                <input name="switch-field-1" class="ace ace-switch ace-switch-4" <% if @wx_mp_user.is_sync? %> checked <% end %> type="checkbox">
+                <span class="lbl"></span>
+                <% if @wx_mp_user.is_sync? %>
+                    <a href="<%= disable_wx_mp_user_path(@wx_mp_user) %>" data-method="post" style="display: none;"></a>
+                <% else %>
+                    <a href="<%= enable_wx_mp_user_path(@wx_mp_user) %>" data-method="post" style="display: none;"></a>
+                <% end %>
+              </label>
+              <small class="help-inline text-warning line-height-32">停用后自定义菜单在手机端则不能显示</small>
+            </div>
+
+            <%#= form_for @wx_mp_user, validate: true, :html => { :class => 'form-table margin-top-10 margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
+                <!--div class="row">
+                  <div class="col-md-4">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">AppId：</span>
+                      <%#= f.text_field :app_id, class: "orm-control", placeholder: '' %>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="input-group input-group-text">
+                      <span class="input-group-addon">AppSecret：</span>
+                      <%#= f.text_field :app_secret, class: "form-control", placeholder: '' %>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <input type="submit" class="btn btn-primary btn-sm" value="保存"/>
+                  </div>
+                </div-->
+            <%# end %>
+
+            <div class="clearfix">
+              <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+                <div class="widget-box transparent" id="menu">
+                  <div class="widget-header">
+                    <h4>
+                      <i class="icon icon-cogs"></i>菜单管理
+                    </h4>
+
+                    <div class="widget-toolbar no-border">
+                      <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-title="新增菜单" data-parent-id>
+                        <i class="icon-plus"></i>   新增菜单
+                      </a>
+                      <%= link_to enable_wx_mp_user_path(@wx_mp_user),method: :post, class: 'btn btn-success btn-sm' do %>
+                        <i class="icon-plus"></i> 同步
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="widget-body">
+                    <div id="tree1" class="tree tree-selectable">
+                        <%= render :partial=> "sub_menu", :collection => @wx_menus.root.order(:sort), :as =>:sub_menu %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6 margin-top-10" id="form">
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function () {
+            $(document).on("click",".tree-add, .menu-category",function(){
+                var parent_id = $(this).closest('.current').attr("data-id");
+                var url = "<%= new_wx_menu_path %>" + "?parent_id="
+                if(parent_id){url += parent_id}
+                $.get(url,function(html){
+                    if(html.indexOf("至多") > -1){
+                        showTip('warning', html);
+                    }else{
+                        $('#form').html(html);
+                        $("#wx_menu_name").focus();
+                        select_wx_menu_type();
+                    }
+                });
+            });
+            $(document).on("click",".ico-delete",function(){
+                var self = $(this),
+                    p=self.parent().parent()[0].tagName;
+                if(p=="DT"||p=="dt"){
+                    self.parents("dl").remove();
+                }else{
+                    self.parents(p).remove();
+                }
+            });
+            $(document).on("click",".tree-up",function(){
+                var self=$(this),
+                    p = self.closest('.current');
+                if(p.prev().length > 0){
+                    p.prev().before(p);
+                    var url = "<%= up_menu_wx_menus_path %>" + "?id=" + p.attr("data-id") + "&parent_id=" + p.attr("data-parent-id");
+                    $.get(url);
+                }
+            });
+            $(document).on("click",".tree-down",function(){
+                var self = $(this),
+                    p = self.closest('.current');
+                if(p.next().length > 0){
+                    p.next().after(p);
+                    var url = "<%= down_menu_wx_menus_path %>" + "?id=" + p.attr("data-id") + "&parent_id=" + p.attr("data-parent-id");
+                    $.get(url);
+                }
+            });
+            $(".tree-folder-header, .tree-item", function () {
+                $(this).find(".tree-btn").hide();
+            });
+            $('#tree1').on("mouseenter", ".tree-folder-header, .tree-item", function () {
+                $(this).find(".tree-btn").show();
+            });
+            $('#tree1').on("mouseleave", ".tree-folder-header, .tree-item", function () {
+                $(this).find(".tree-btn").hide();
+            });
+            $('#tree1').on("click", ".fa-plus-square", function () {
+                $(this).closest('.current').find('.tree-folder-content').toggle();
+            });
+
+            $('.tree-tools').on('click', 'a', function(){
+                var content = $(this).closest('.current').find('.tree-folder-content');
+                if(content.is(':hidden')){
+                    content.hide();
+                }else{
+                    content.show();
+                }
+            });
+
+            $('.ace-switch-4').click(function(){
+                $(this).next().next().click();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        function select_wx_menu_type() {
+          $('#wx_menu_content').closest('.tab-pane').removeClass('active');
+          $('#wx_menu_material_id').closest('.tab-pane').removeClass('active');
+          $('#wx_menu_url').closest('.tab-pane').removeClass('active');
+          $('#wx_menu_activity_id').closest('.tab-pane').removeClass('active');
+          $('#wx_menu_audio_id').closest('.tab-pane').removeClass('active');
+          $('#wx_menu_album_id').closest('.tab-pane').removeClass('active');
+          $('#wx_menu_panoramagram_id').closest('.tab-pane').removeClass('active');
+          if ( $('#wx_menu_menu_type').val() == 1 ) {
+            $('#wx_menu_content').closest('.tab-pane').addClass('active');
+          } else if ( $('#wx_menu_menu_type').val() == 2 ) {
+            $('#wx_menu_material_id').closest('.tab-pane').addClass('active');
+            materials($('#wx_menu_material_id'));
+          } else if ( $('#wx_menu_menu_type').val() == 3 ) {
+              $('#wx_menu_activity_id').closest('.tab-pane').addClass('active');
+          } else if ( $('#wx_menu_menu_type').val() == 4 ) {
+              $('#wx_menu_audio_id').closest('.tab-pane').addClass('active');
+          } else if ( $('#wx_menu_menu_type').val() == 6 ) {
+            $('#wx_menu_url').closest('.tab-pane').addClass('active');
+          } else if ( $('#wx_menu_menu_type').val() == 13 ) {
+            $('#wx_menu_album_id').closest('.tab-pane').addClass('active');
+          } else if ( $('#wx_menu_menu_type').val() == 14 ) {
+            $('#wx_menu_panoramagram_id').closest('.tab-pane').addClass('active');
+          }
+        }
+
+        function materials(select){
+            var self = $(select);
+            if(self.val()){
+                $.ajax({
+                    url: '/materials/'+self.val(),
+                    type: "get",
+                    dataType : "json",
+                    success : function (data){
+                        if(data){
+                            self.closest('.tab-pane').find('span.title').html(data['title']);
+                            self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
+                            self.closest('.tab-pane').find('p.grey').html(data['summary']);
+                            self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                        }
+                    }
+                });
+            }
+            else{
+                self.closest('.tab-pane').find('span.title').html('素材标题');
+                self.closest('.tab-pane').find('span.grey').html("<%= Date.today %>");
+                self.closest('.tab-pane').find('p.grey').html('');
+                self.closest('.tab-pane').find('#img-1').attr("background-image", 'url()');
+                self.closest('.tab-pane').find('#img-1').attr('style', '');
+            }
+        }
+
+        $(document).on("click","#wx_menu_form input[type=submit]",function() {
+          var source_url_rep = /^(http|https):\/\/[a-zA-Z0-9].+$/i;
+          var wx_menu_url = $('#wx_menu_url').val()
+          if ( $('#wx_menu_name').val() ) {
+
+            if ( $('#wx_menu_menu_type').val() == 1 && !$('#wx_menu_content').val() ) {
+              showTip('warning','内容不能为空');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 2 && !$('#wx_menu_material_id').val() ) {
+              showTip('warning','请选择一条图文素材');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 3 && !$('#wx_menu_activity_id').val() ) {
+              showTip('warning','请选择活动');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 4 && !$('#wx_menu_audio_id').val() ) {
+              showTip('warning','请选择语音');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 6 && !$('#wx_menu_url').val() ) {
+              showTip('warning','链接不能为空');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 6 && $('#wx_menu_url').val() && !source_url_rep.test(wx_menu_url )) {
+              showTip('warning','地址格式不正确，请重新输入，例如：http://www.baidu.com');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 13 && !$('#wx_menu_album_id').val() ) {
+              showTip('warning','请选择相册');
+              return false;
+            } else if ( $('#wx_menu_menu_type').val() == 14 && !$('#wx_menu_panoramagram_id').val() ) {
+              showTip('warning','请选择360全景');
+              return false;
+            }
+          }
+        });
+
+        $(document).on("change","#wx_menu_material_id",function() {
+          materials($(this));
+        });
+
+        $(document).on("change","#wx_menu_menu_type",function() {
+          select_wx_menu_type();
+        });
+
+        $(document).on("blur","#wx_menu_content",function() {
+          $(this).closest('form').resetClientSideValidations();
+        });
+
+        $(document).find('#img-1').css({'display': 'block', 'background-size': '100%', 'width': '100%', 'height': '200px', 'background-repeat': 'no-repeat no-repeat'});
+
+        $(document).find('#wx_menu_form').enableClientSideValidations();
+
+
+        $(document).on("change","#quick_select_link",function(){
+          $('#wx_menu_url').val($(this).val());
+        });
+    </script>
+<% end %>

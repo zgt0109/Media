@@ -1,21 +1,5 @@
-# == Schema Information
-#
-# Table name: point_types
-#
-#  id             :integer          not null, primary key
-#  supplier_id    :integer          not null
-#  name           :string(255)      not null
-#  points         :integer          default(0), not null
-#  direction_type :integer          default(1), not null
-#  sort           :integer          default(0), not null
-#  status         :integer          default(1), not null
-#  description    :text
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#
-
 class PointType < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   has_many   :point_transactions
 
   scope :greatest, -> { order('amount DESC') }
@@ -40,7 +24,7 @@ class PointType < ActiveRecord::Base
   before_save { self.points ||= 0 }
 
   def amount_exist?
-    point_type = PointType.normal.where(supplier_id: supplier_id, category: category, amount: amount).find do |point_type|
+    point_type = PointType.normal.where(site_id: site_id, category: category, amount: amount).find do |point_type|
       id.presence != point_type.id
     end
     if point_type.present?

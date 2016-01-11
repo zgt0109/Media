@@ -1,9 +1,7 @@
 class Biz::GreetCardsController < ApplicationController
-  
   skip_before_filter :verify_authenticity_token, only: [:upload]
   before_filter :find_greet, except: [:help]
   before_filter :check_activity, except: [:help]
-
 
   def index
     @cards = @greet.greet_cards.order('id ASC').page(params[:page]).per(17)
@@ -62,19 +60,15 @@ class Biz::GreetCardsController < ApplicationController
   end
 
   def edit
-    @card = @greet.greet_cards.find(params[:id])    
+    @card = @greet.greet_cards.find(params[:id])
   end
 
   def find_greet
-    @greet = current_user.greets.first
+    @greet = current_site.greets.first
   end
 
   def check_activity
-    return redirect_to activity_greets_url, notice: '请先填写活动信息' unless current_user.greet_activity
-  end
-
-  def help
-
+    return redirect_to activity_greets_url, notice: '请先填写活动信息' unless current_site.greet_activity
   end
 
 end

@@ -1,10 +1,8 @@
 class GroupItem < ActiveRecord::Base
-  mount_uploader :pic, ItemPictureUploader
-  img_is_exist({pic: :pic_key})
 
   acts_as_taggable_on :recommends
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :group_category
   belongs_to :group
@@ -128,9 +126,7 @@ class GroupItem < ActiveRecord::Base
   private
   def add_default_attrs
     return unless group_category
-    self.supplier_id = group_category.supplier_id
-    self.supplier_id = group_category.supplier_id
-    self.wx_mp_user_id = group_category.wx_mp_user_id
+    self.site_id = group_category.site_id
   end
 
 end

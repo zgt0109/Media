@@ -15,7 +15,7 @@
 #
 
 class ShopOrderReport < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :shop
   belongs_to :shop_branch
 

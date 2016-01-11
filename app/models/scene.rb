@@ -48,7 +48,7 @@ class Scene < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_url(qiniu_pic_key).try(:+, '?imageView/2/w/860/1280')
+    qiniu_image_url(pic_key).try(:+, '?imageView/2/w/860/1280')
   end
 
   def related_link(openid)
@@ -76,7 +76,7 @@ class Scene < ActiveRecord::Base
   end
 
   def button_pic_url
-    qiniu_image_url(qiniu_button_key)
+    qiniu_image_url(button_pic_key)
   end
 
 end

@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                     <div class="clearfix">
-                      <%= content_tag :div, nil, class: "cieldon-file width-100px ", data: {type: "1", div: "#img-1", name: "group[activity_attributes][qiniu_pic_key]", img: "#{@group.activity.try(:qiniu_pic_url)}", key: "#{@group.activity.try(:qiniu_pic_key)}", height: "200"} %>
+                      <%= content_tag :div, nil, class: "cieldon-file width-100px ", data: {type: "1", div: "#img-1", name: "group[activity_attributes][pic_key]", img: "#{@group.activity.try(:qiniu_pic_url)}", key: "#{@group.activity.try(:pic_key)}", height: "200"} %>
                       <small class="text-warning line-height-30">图片建议尺寸：720像素*400像素 </small>
                     </div>
 

@@ -1,0 +1,10 @@
+__filename = "pay_withdraws.xls"
+sheet1 = xls.create_worksheet
+system_header = ['申请流水号', '提现申请时间', '企业名称', '提现银行', '收款银行账号', '提现金额（元）', '手续费（元）',  '到账金额（元）',  '提现状态', '备注']
+sheet1.row(0).concat(system_header)
+@records_all.relation.each_with_index do |record, i|
+  system_values = [record.trade_no, record.created_at.to_s, record.pay_account.company_name,
+  				    record.bank_name + record.bank_branch, record.bank_account, record.amount, record.fee, record.receive_amount,  record.status_name,
+  				    record.description]
+  sheet1.row(i + 1).replace(system_values)
+end

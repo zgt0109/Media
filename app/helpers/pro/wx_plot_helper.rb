@@ -3,7 +3,7 @@ module Pro::WxPlotHelper
   def link_wx_plot_url(model, open = false, options = {})
     options[:class] = 'open active' if open
     options[:navigation] ||= false
-    plot = current_user.wx_plot
+    plot = current_site.wx_plot
     full_attrs = {
       bulletin:  {name: '小区公告', url: wx_plot_bulletins_path},
       repair:    {name: '报修管理', url: wx_plot_repair_complains_path(type: 'repair')},

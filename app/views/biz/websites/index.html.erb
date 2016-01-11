@@ -27,13 +27,8 @@
 
           <%= form_for(@activity, validate: true, html: {class: 'form col-sm-7', id: 'edit_website_activity'}) do |f| %>
             <%= f.hidden_field :status, value: Activity::SETTED %>
-            <%#= f.hidden_field :activity_type_id, value: ActivityType::WEBSITE %>
-            <%#= f.hidden_field :wx_mp_user_id %>
-            <%#= f.hidden_field :name %>
 
             <%= f.fields_for :website, @website do |w| %>
-              <%#= w.hidden_field :wx_mp_user_id %>
-              <%#= w.hidden_field :supplier_id %>
               <div class="form-group">
                 <label class="control-label">微官网名称<span class="required-star">*</span></label>
                 <div class="clearfix">
@@ -58,7 +53,7 @@
               <div class="form-group">
                 <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                 <div class="clearfix">
-                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[qiniu_pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg"%>" data-key="<%= @activity.qiniu_pic_key %>"></div>
+                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg"%>" data-key="<%= @activity.pic_key %>"></div>
                   <small class="text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
                 </div>
               </div>
@@ -134,8 +129,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label>流量智能分流<a id="copy-button-1" data-clipboard-text="<%= ws.object.analytic_script(mobile_root_url(supplier_id: @website.supplier_id)) %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制代码</a></label>
-                  <%= ws.text_area :analytic_script, rows: 6, readonly: true, value: @website.new_record? ? '' : ws.object.analytic_script(mobile_root_url(supplier_id: @website.supplier_id)), class: 'form-control', placeholder: '' %>
+                  <label>流量智能分流<a id="copy-button-1" data-clipboard-text="<%= ws.object.analytic_script(mobile_root_url(site_id: @website.site_id)) %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制代码</a></label>
+                  <%= ws.text_area :analytic_script, rows: 6, readonly: true, value: @website.new_record? ? '' : ws.object.analytic_script(mobile_root_url(site_id: @website.site_id)), class: 'form-control', placeholder: '' %>
                   <span class="fontWarn">只要将此段代码复制到PC网站的&lt;body&gt;和&lt;/body&gt;之间，当用户使用手机访问PC网站时就会自动跳转到微官网。</span>
                 </div>
 

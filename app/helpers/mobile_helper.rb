@@ -89,17 +89,8 @@ module MobileHelper
         activity = website_menu.menuable
         return '' unless activity
 
-        @wx_user ||= WxUser.where(uid: session[:openid]).first if session[:openid].present?
+        @wx_user ||= WxUser.where(openid: session[:openid]).first if session[:openid].present?
         openid = session[:openid]
-
-        # 如果是必须带微信ID的模块
-        if activity.try(:supplier).try(:bqq_account?)
-          return activity.respond_mobile_url(openid: openid) if activity.try(:respond_mobile_url).present?
-
-          openid = nil
-        # elsif website_menu.is_a?(WebsiteMenu) && website_menu.need_wx_user? && wx_user.blank?
-        #   return mobile_unknown_identity_url(activity.supplier_id, activity_id: activity.id)
-        end
 
         activity_notice = activity.activity_notices.active.first
 
@@ -300,7 +291,7 @@ module MobileHelper
         else
           url = ''
         end
-        url = url.to_s + '#mp.weixin.qq.com' unless activity.try(:supplier).try(:bqq_account?)
+        url = url.to_s + '#mp.weixin.qq.com'
         url
 
         # url = callback_api_index_url(url: url, openid: openid)
@@ -332,7 +323,7 @@ module MobileHelper
         #return url = "http://map.baidu.com/mobile/webapp/search/search/qt=s&wd=#{website_menu.address}/vt=map"
         return url = "http://api.map.baidu.com/marker?location=#{website_menu.location_y},#{website_menu.location_x}&title=#{website_menu.address}&name=微枚迪&content=#{website_menu.address}&output=html&src=weiba|weiweb"
       when 17 then
-        @wx_user = WxUser.where(uid: session[:openid]).first
+        @wx_user = WxUser.where(openid: session[:openid]).first
         #return '' unless wx_user
         #业务对接
         if website_menu.menuable_type == 'EcCart'
@@ -359,7 +350,7 @@ module MobileHelper
         return url = wshop_root_url(wx_user_open_id: @wx_user.try(:openid), wx_mp_user_open_id: website.try(:supplier).try(:wx_mp_user).try(:openid))
       when 21 then
         if website_menu.is_a?(WebsiteMenu)
-          @wx_user = WxUser.where(uid: session[:openid]).first
+          @wx_user = WxUser.where(openid: session[:openid]).first
           openid = @wx_user.openid if @wx_user
           url = list_mobile_album_url(supplier_id: website.supplier_id, aid: website_menu.menuable.try(:activity_id), openid: openid, id: website_menu.menuable_id)
         else

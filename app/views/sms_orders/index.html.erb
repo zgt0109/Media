@@ -21,11 +21,7 @@
         </div>
         <div class="col-sm-3">
           <input type="submit" class="btn btn-primary btn-sm" value="查询">
-          <% if current_user.trial_account? || current_user.industry_free? %>
-          <a href="javascript:;" class="btn btn-sm">购买套餐</a>
-          <% else %>
           <a href="javascript:;" class="btn btn-primary btn-sm" data-toggle="modals" data-height="500" data-iframe="<%= new_sms_order_path %>" data-title="购买短信套餐">购买套餐</a>
-          <% end %>
         </div>
         <div class="col-sm-3">
           <p class="line-height-30 text-right">购买总数：<%= current_user.buy_sms_totality %>条； 赠送总数：<%= current_user.giv_sms_totality %>条</p>

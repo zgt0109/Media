@@ -1,5 +1,5 @@
 class Brokerage::Broker < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_user
   has_many :clients
   has_many :commission_transactions

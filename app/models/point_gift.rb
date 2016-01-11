@@ -1,33 +1,14 @@
-# == Schema Information
-#
-# Table name: point_gifts
-#
-#  id          :integer          not null, primary key
-#  supplier_id :integer
-#  gift_no     :string(255)      not null
-#  name        :string(255)      not null
-#  description :text
-#  points      :integer          default(0), not null
-#  price       :decimal(12, 2)
-#  pic         :string(255)
-#  status      :integer          default(1), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#
-
 class PointGift < ActiveRecord::Base
-  mount_uploader :pic, PhotoUploader
-  img_is_exist({pic: :qiniu_pic_key})
   has_time_range start_at: :exchange_start_at, end_at: :exchange_end_at
 
-  belongs_to :supplier
+  belongs_to :site
   has_many   :point_gift_exchanges
   has_many   :point_transactions, as: :pointable
   has_many   :consumes, through: :point_gift_exchanges
   has_and_belongs_to_many :shop_branches, uniq: true
   has_and_belongs_to_many :vip_grades, conditions: "vip_grades.status IN(0,1)", uniq: true
 
-  validates :pic, presence: true, on: :create, if: "qiniu_pic_key.blank?"
+  validates :pic, presence: true, on: :create, if: "pic_key.blank?"
   validates :points, presence: true, numericality: { greater_than: 0, only_integer: true }
   validates :name, :exchange_start_at_exchange_end_at, presence: true
   validates :sku, :people_limit_count, presence: true, numericality: { greater_than_or_equal_to: -1, only_integer: true }
@@ -117,7 +98,7 @@ class PointGift < ActiveRecord::Base
     if shop_branch_limited?
       shop_branch_ids.count
     else
-      supplier.shop_branches.used.count
+      site.shop_branches.used.count
     end
   end
 
@@ -155,12 +136,12 @@ class PointGift < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_url(qiniu_pic_key) || pic
+    qiniu_image_url(pic_key)
   end
 
   private
     def associate_shop_branches
-      self.shop_branch_ids = supplier.shop_branches.used.pluck(:id) unless shop_branch_limited?
+      self.shop_branch_ids = site.shop_branches.used.pluck(:id) unless shop_branch_limited?
     end
 
     def clear_vip_grades

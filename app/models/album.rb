@@ -1,29 +1,10 @@
-# == Schema Information
-#
-# Table name: albums
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer
-#  wx_mp_user_id :integer
-#  name          :string(255)
-#  photos_count  :integer          default(0)
-#  status        :integer          default(1)
-#  description   :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  activity_id   :integer
-#
-
 class Album < ActiveRecord::Base
-  # attr_accessible :description, :name, :photos_count, :status, :supplier, :wx_mp_user, :activity
-  
   BROWSING_WAYS = { 1 => '瀑布流', 2 => '单排', 3 => '双排' }
 
-  belongs_to :supplier
-  belongs_to :wx_mp_user
+  belongs_to :site
   belongs_to :activity
   has_many   :photos, class_name: 'AlbumPhoto', dependent: :destroy
-  validates :name, :supplier, :activity_id, presence: true
+  validates :name, :site, :activity_id, presence: true
   scope :show, -> { where("albums.id in(select album_id from album_photos)") }
   before_create :add_default_attrs
 
@@ -60,8 +41,8 @@ class Album < ActiveRecord::Base
   end
 
   def add_default_attrs
-    return unless supplier
-    self.sort = supplier.albums.order('albums.sort, albums.updated_at DESC').collect(&:sort).min.to_i - 1
+    return unless site
+    self.sort = site.albums.order('albums.sort, albums.updated_at DESC').collect(&:sort).min.to_i - 1
   end
 
 end

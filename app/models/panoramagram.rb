@@ -1,6 +1,6 @@
 class Panoramagram < ActiveRecord::Base
 	validates :name, presence: true, length: { maximum: 64 }
-	validates :qiniu_pic_key, presence: true
+	validates :pic_key, presence: true
 
   has_many :items, dependent: :destroy
   has_one :activity, as: :activityable, dependent: :destroy
@@ -13,6 +13,6 @@ class Panoramagram < ActiveRecord::Base
   ]
 
   def pic_url
-  	qiniu_image_url(qiniu_pic_key)
+  	qiniu_image_url(pic_key)
   end
 end

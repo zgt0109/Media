@@ -17,8 +17,8 @@
             <div class="line-height-36 center f16" > 新增一个微场景</div>
           </a>
         </div>
-        <%- if current_user.activities.scene.setted.present? %>
-          <%- current_user.activities.scene.setted.to_a.each do |scene| %>
+        <%- if current_site.activities.scene.setted.present? %>
+          <%- current_site.activities.scene.setted.to_a.each do |scene| %>
             <%- url = scene.scene_url %>
              <div class="left g_bord1 g_box200  g_mar20 g_vscene_add">
                <a class="a200" title="展示设置" href="<%= pages_config_scene_pages_path(activity_id: scene.id) %>">

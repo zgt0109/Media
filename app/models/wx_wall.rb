@@ -1,5 +1,5 @@
 class WxWall < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :material
   has_one :activity, as: :activityable, conditions: { activity_type_id: ActivityType::WX_WALL }
   has_many :wx_wall_prizes_wx_wall_users, dependent: :destroy
@@ -51,15 +51,15 @@ class WxWall < ActiveRecord::Base
   end
 
   def vote
-    @vote ||= supplier.activities.where(id: vote_id).first if vote_id.present?
+    @vote ||= site.activities.where(id: vote_id).first if vote_id.present?
   end
 
   def shake
-    @shake ||= supplier.activities.where(id: shake_id).first if shake_id.present?
+    @shake ||= site.activities.where(id: shake_id).first if shake_id.present?
   end
 
   def enroll
-    @enroll ||= supplier.activities.where(id: enroll_id).first if enroll_id.present?
+    @enroll ||= site.activities.where(id: enroll_id).first if enroll_id.present?
   end
 
   def activity_status_name

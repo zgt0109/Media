@@ -1,9 +1,7 @@
 class Greet < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :activity
-  # attr_accessible :name
-  mount_uploader :greet_cover, GreetCardUploader
   has_many :greet_cards
 
   before_save :clean_up

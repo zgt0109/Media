@@ -38,7 +38,7 @@
                     <div class="form-group" id="material_form_group">
                       <label class="control-label">贺卡背景音乐<small class="help-inline text-warning line-height-32">仅文字贺卡可选</small></label>
                       <div class="clearfix">
-                        <%= f.select :material_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }.unshift(["不使用背景音乐", 0]), { selected: f.object.try(:material_id) } %>
+                        <%= f.select :material_id, current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }.unshift(["不使用背景音乐", 0]), { selected: f.object.try(:material_id) } %>
                       </div>
                     </div>
                     <div class="form-group">

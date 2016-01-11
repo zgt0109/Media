@@ -1,6 +1,6 @@
 class VipUserTransaction < ActiveRecord::Base
   DATES = {"one_weeks" => "最近7天", "one_months" => "最近一月", "six_months" => "最近半年", "twelve_months" => "最近一年"}
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :vip_user
   belongs_to :shop_branch
   belongs_to :transactionable, polymorphic: true
@@ -86,7 +86,7 @@ class VipUserTransaction < ActiveRecord::Base
   def send_recharge_consume_sms_notification
     if recharge_consume_sms_notify? && !by_cash?
       time = created_at.strftime '%-m月%-d日%R'
-      message = "您卡号为#{vip_user.user_no}的会员卡于#{time}在#{vip_user.supplier_name}"
+      message = "您卡号为#{vip_user.user_no}的会员卡于#{time}在#{vip_user.merchant_name}"
       message << ((pay_up? || pay_down?) ? direction_type_name : "进行金额调整操作，#{in? ? '上' : '下'}调")
       message << "#{sprintf('%.2f', amount.round(2))}元，交易后余额为#{sprintf('%.2f', usable_amount.round(2))}元。"
       supplier.send_message(vip_user.mobile, message, "会员卡")

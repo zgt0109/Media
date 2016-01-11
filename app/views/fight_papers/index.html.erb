@@ -55,10 +55,10 @@
 										</div>
 									</div>
 									<div class="col-md-5">
-										<% if fight_paper.the_day == 1 and current_user.fight_questions.used.count == 0 %>
+										<% if fight_paper.the_day == 1 and current_site.fight_questions.used.count == 0 %>
 											<div class="form-group" onclick="javascript:location.href='<%= new_fight_question_path %>'"><label class="control-label">您的题库是空的，请先设置题目</label></div>
 			              <% else %>
-			                <% questions_options = current_user.fight_questions.used.order("created_at desc").map{|q| [truncate_u(q.title),q.id]} %>
+			                <% questions_options = current_site.fight_questions.used.order("created_at desc").map{|q| [truncate_u(q.title),q.id]} %>
 			                <% fight_paper.fight_questions_with_default.each_with_index do |fight_question, i| %>
 												<div class="form-group">
 													<% if i == 0 %><label class="control-label">题目</label><% end %>

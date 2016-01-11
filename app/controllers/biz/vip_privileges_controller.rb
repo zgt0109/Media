@@ -57,7 +57,7 @@ class Biz::VipPrivilegesController < Biz::VipController
     end
 
     def find_point_types
-      @point_types = current_user.point_types.normal
+      @point_types = current_site.point_types.normal
     end
 
 end

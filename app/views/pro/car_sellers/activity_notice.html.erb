@@ -44,7 +44,7 @@
                   <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
                   <%= activity.hidden_field :activity_type_id, value: 16 %>
                   <div class="col-xs-12 col-md-6 col-lg-7">
-                    <%= render "weixin_setting", activity: activity, data_img: @car_activity_notice.activity.pic_url, pic_data_name: "car_activity_notice[activity_attributes][qiniu_pic_key]", pic_data_key: activity.object.qiniu_pic_key %>
+                    <%= render "weixin_setting", activity: activity, data_img: @car_activity_notice.activity.pic_url, pic_data_name: "car_activity_notice[activity_attributes][pic_key]", pic_data_key: activity.object.pic_key %>
                     <div class="form-group">
                       <input type="submit" class="btn btn-sm btn-primary" value="保存">
                     </div>

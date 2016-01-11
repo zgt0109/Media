@@ -6,7 +6,7 @@
         }
     </script>
 
-    <% supplier_id = current_shop_supplier.id %>
+    <% supplier_id = current_shop_account.id %>
 
     <ul class="nav nav-list">
       <% if current_sub_account.can_manage_any_vip? || current_sub_account.can_manage_marketing_sncode? %>
@@ -40,7 +40,7 @@
         </li>
       <%- end %>
 
-      <% if current_shop_supplier.has_privilege_for?(10001) && current_sub_account.can_manage_catering? %>
+      <% if current_shop_account.has_privilege_for?(10001) && current_sub_account.can_manage_catering? %>
           <li class="<%= 'open active' if session[:current_industry_id] == 10001 %>">
             <%= left_nav_dropdown 'icon-plus', '微餐饮' %>
             <ul class="submenu" style="display: <%= session[:current_industry_id] == 10001 ? 'block;' : 'none;' %>">
@@ -54,7 +54,7 @@
           </li>
       <% end %>
 
-      <% if current_shop_supplier.has_privilege_for?(10002) && current_sub_account.can_manage_takeout? %>
+      <% if current_shop_account.has_privilege_for?(10002) && current_sub_account.can_manage_takeout? %>
           <li class="<%= 'open active' if session[:current_industry_id] == 10002 %>">
             <%= left_nav_dropdown 'icon-plus', '微外卖' %>
             <ul class="submenu" style="display: <%= session[:current_industry_id] == 10002 ? 'block;' : 'none;' %>">

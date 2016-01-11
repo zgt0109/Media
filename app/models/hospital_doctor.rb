@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 class HospitalDoctor < ActiveRecord::Base
-  mount_uploader :avatar, PhotoUploader
-  img_is_exist( { avatar: :avatar_key } )
-
-  #attr_accessible :avatar, :description, :is_online, :limit_register_count, :name, :status, :work_time
-
   validates :name, :description, presence: true
   validates :limit_register_count, numericality: { greater_than_or_equal_to: -1 }
   validates_presence_of :hospital_departments, message: '科室不能为空'
   validates_presence_of :hospital_job_titles, message: '职称不能为空'
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :hospital
   has_many :hospital_orders

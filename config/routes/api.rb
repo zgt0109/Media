@@ -3,9 +3,16 @@ Wp::Application.routes.draw do
   scope module: :api do
     post  'ticket', to: 'wx_plugin#ticket'
     match 'wx_plugin/auth', to: 'wx_plugin#auth'
+
+    match '/server/:code' => 'weixin#service', via: [:post, :get]
+    match '/:app_id/callback' => 'weixin#service', via: [:post, :get]
   end
 
   namespace :api do
+
+    resources :weixin, only: [] do
+      get :msg_test, :map_url, on: :collection
+    end
 
     # wmall
     namespace :wmall do
@@ -30,12 +37,6 @@ Wp::Application.routes.draw do
         get :list, on: :collection
       end
       resources :slide_pictures
-    end
-
-    namespace :fxt do
-      resources :tasks, only: [] do
-        get :rebate, on: :collection
-      end
     end
 
   end

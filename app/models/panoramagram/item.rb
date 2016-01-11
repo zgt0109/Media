@@ -1,13 +1,13 @@
 class Panoramagram::Item < ActiveRecord::Base
   belongs_to :panoramagram
 
-  before_create :set_supplier_id
+  before_create :set_site_id
 
   def pic_url
-    qiniu_image_url(qiniu_pic_key)
+    qiniu_image_url(pic_key)
   end
 
-  def set_supplier_id
-  	self.supplier_id = self.panoramagram.supplier_id
+  def set_site_id
+  	self.site_id = self.panoramagram.site_id
   end
 end

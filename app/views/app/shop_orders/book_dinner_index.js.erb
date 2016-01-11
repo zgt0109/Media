@@ -1,3 +1,0 @@
-var html = '<%= j (render :partial => 'app/shop_orders/book_dinner_order', :collection => @shop_orders, :as => :order) %>';
-$(".box-order-list").append(html);
-$(".jiazai").html('<%= link_to_next_page @shop_orders, "<img src=\"/assets/loda.png\">努力加载中...".html_safe, :remote => true %>');

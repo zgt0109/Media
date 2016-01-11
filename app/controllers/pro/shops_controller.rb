@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 class Pro::ShopsController < Pro::ShopBaseController
-  # before_filter :restrict_trial_supplier, except: :index
   skip_before_filter :require_industry, only: [:pos]
 
   def index
@@ -19,7 +18,7 @@ class Pro::ShopsController < Pro::ShopBaseController
     end
 
     if params[:activity_type_id]
-      @activity = current_user.activities.where(activity_type_id: params[:activity_type_id]).first
+      @activity = current_site.activities.where(activity_type_id: params[:activity_type_id]).first
     end
   end
 
@@ -52,7 +51,7 @@ class Pro::ShopsController < Pro::ShopBaseController
   end
 
   def pos
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
   end
 
 end

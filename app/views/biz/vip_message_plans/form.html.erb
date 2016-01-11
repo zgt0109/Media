@@ -1,5 +1,5 @@
 <%= form_for @plan, validate: true do |f| %>
-  <%= f.hidden_field :vip_card_id, value: current_user.vip_card.id %>
+  <%= f.hidden_field :vip_card_id, value: current_site.vip_card.id %>
   <div class="modal-body">
     <div class="form-group">
       <label>发送对象<span class="required-star">*</span></label>

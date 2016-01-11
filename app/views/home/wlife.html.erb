@@ -57,13 +57,6 @@
 <div class="blank50"></div>
 <div class="link-module">
   <%= form_for @supplier_apply, validate: false, remote: true do |f| %>
-    <%= f.hidden_field :admin_user_id, value: 23 %>
-    <%= f.hidden_field :apply_type, value: 8 %>
-    <%= f.hidden_field :status, value: -1 %>
-    <%= f.hidden_field :business_type, value: 2 %>
-    <%= f.hidden_field :product_agent_type, value: 4 %>
-    <%= f.hidden_field :promotion_code, value: session[:promotion_code] %>
-    <%= f.hidden_field :intro, value: f.object.intro || "公司简介"%>
     <div class="module-left">
       <div class="left-title"><i class="title-logo"></i></div>
       <div class="blank50"></div>

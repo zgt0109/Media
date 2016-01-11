@@ -1,5 +1,5 @@
 class SharePhotoSetting < ActiveRecord::Base
-  belongs_to :supplier, inverse_of: :share_photo_setting
+  belongs_to :site, inverse_of: :share_photo_setting
   belongs_to :wx_mp_user, inverse_of: :share_photo_setting
   has_many :share_photos
   has_many :activities, as: :activityable

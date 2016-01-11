@@ -6,11 +6,10 @@ class Biz::WmallGroupsController < Biz::WmallGroupBaseController
     @activity =  @group.activity
   end
 
-
   private
 
   def set_group
-    @group = current_user.group
-    @group = current_user.wx_mp_user.create_group unless @group
+    @group = current_site.group
+    @group = current_site.create_group unless @group
   end
 end

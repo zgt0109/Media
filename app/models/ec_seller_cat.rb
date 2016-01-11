@@ -25,7 +25,7 @@ class EcSellerCat < ActiveRecord::Base
   validates :sort_order, numericality: { only_integer: true}
   validates :pic_url, format: { with: /^(http|https):\/\/[a-zA-Z0-9].+$/, message: '地址格式不正确，必须以http(s)://开头' }, allow_blank: true
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :ec_shop
   belongs_to :parent, class_name: 'EcSellerCat', foreign_key: :parent_cid, primary_key: :cid
   has_many :children, class_name: 'EcSellerCat', foreign_key: :parent_cid, primary_key: :cid, dependent: :destroy

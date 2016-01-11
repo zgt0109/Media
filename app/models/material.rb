@@ -1,37 +1,8 @@
-# == Schema Information
-#
-# Table name: materials
-#
-#  id                :integer          not null, primary key
-#  parent_id         :integer          default(0), not null
-#  supplier_id       :integer          not null
-#  material_type     :integer          default(1), not null
-#  title             :string(255)
-#  pic               :string(255)
-#  content           :text
-#  source_url        :string(255)
-#  summary           :text
-#  description       :text
-#  sort              :integer          default(0), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  audio             :string(255)
-#  video             :string(255)
-#  reply_type        :integer          default(1), not null
-#  materialable_id   :integer
-#  materialable_type :string(255)
-#
-
 class Material < ActiveRecord::Base
-  mount_uploader :pic, MaterialUploader
-  img_is_exist({pic: :pic_key})
   mount_uploader :audio, AudioUploader
-  mount_uploader :video, VideoUploader
 
   validates :title, presence: true, length: { maximum: 64 }
   validates :summary, length: { maximum: 120 }, if: :single_graphic?
-  # validates :content, presence: true, if: :text?
-  # validates :pic, presence: true, on: :create
   validates :source_url, format: { with: /^(http|https):\/\/[a-zA-Z0-9].+$/, message: '地址格式不正确，必须以http(s)://开头' }, allow_blank: true
   validates :audio, presence: true, if: :audios?
   validates :video, presence: true, if: :videos?
@@ -51,7 +22,7 @@ class Material < ActiveRecord::Base
     ['link',3,'链接'],
   ]
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :materialable, polymorphic: true
   belongs_to :parent,   class_name: 'Material', foreign_key: :parent_id
   has_many   :children, class_name: 'Material', foreign_key: :parent_id, dependent: :destroy
@@ -62,7 +33,7 @@ class Material < ActiveRecord::Base
 
   scope :root, -> { where(parent_id: 0) }
   scope :graphic, -> { where(material_type: [1,2]) }
-  scope :graphic_select, -> { select("id, title, created_at, pic, pic_key") }
+  scope :graphic_select, -> { select("id, title, created_at, pic_key") }
   scope :audio_select, -> { audios.select("id, audio, fsize, qiniu_audio_url") }
 
   before_save :cleanup
@@ -78,13 +49,13 @@ class Material < ActiveRecord::Base
       material_content ? material_content.content = text : create_material_content(content: text)
     end
   end
-  
+
   def pic_url(type = :large)
-    qiniu_image_url(pic_key) || (pic? ? pic.try(type) : nil)
+    qiniu_image_url(pic_key) || nil
   end
-  
+
   def qiniu_pic_url
-    qiniu_image_url(pic_key, bucket: BUCKET_WX_PICTURES)
+    qiniu_image_url(pic_key, bucket: BUCKET_PICTURES)
   end
 
   def graphic?
@@ -128,7 +99,7 @@ class Material < ActiveRecord::Base
       audio.remove!
     end
   end
-  
+
   def audio_absolute_path(host = nil)
     qiniu_audio_url.present? ? qiniu_audio_url : "#{host.to_s}#{audio.to_s}"
   end
@@ -147,7 +118,7 @@ class Material < ActiveRecord::Base
     result = Qiniu.stat(BUCKET_MEDIA, qiniu_audio_url.split('/').last)
     update_column(:fsize, result['fsize'])
   end
-  
+
   def update_audio_qiniu_mime_type(mime_type = 'audio/mp3')
     return unless qiniu_audio_url.present?
     key = qiniu_audio_url.split('/').last

@@ -100,7 +100,7 @@
 
           <div class="p">
             <span>选择活动：<em>*</em></span>
-            <%= f.select :activity_id, current_user.activities.active.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id) } %>
+            <%= f.select :activity_id, current_site.activities.active.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id) } %>
           </div>
 
           <div class="p">

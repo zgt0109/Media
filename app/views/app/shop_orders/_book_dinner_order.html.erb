@@ -1,6 +1,0 @@
-<%= link_to app_shop_order_path(order, anchor: "mp.weixin.qq.com") do %>
-  <p><b>订餐编号：</b><span><%= order.order_no %></span></p>
-  <p><b>门店：</b><span><%= order.shop_branch.name %></span></p>
-  <p><b>订餐时间：</b><span><%= order.created_at %></span></p>
-  <p><b>状态：</b><span><%= order.status_name %></span></p>
-<% end %>

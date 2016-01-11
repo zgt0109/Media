@@ -3,7 +3,7 @@ class Biz::VipImportingsController < ApplicationController
   before_filter :find_vip_importing, only: [:edit, :update]
 
   def index
-    @search = current_user.vip_importings.search(params[:search])
+    @search = current_site.vip_importings.search(params[:search])
     @vip_importings = @search.page(params[:page])
   end
 
@@ -16,7 +16,7 @@ class Biz::VipImportingsController < ApplicationController
     return redirect_to :back, alert: "上传文件不能大于2M，请重新上传。" if tempfile.count > 1024 ** 2
 
     file_name = copy_tempfile(tempfile)
-    result = VipImporting.validate_and_import(current_user, file_name, sync: params[:sync].present?)
+    result = VipImporting.validate_and_import(current_site, file_name, sync: params[:sync].present?)
 
     respond_to do |format|
       if result.is_a?(Hash) # 会员导入失败，数据格式不正确
@@ -43,17 +43,17 @@ class Biz::VipImportingsController < ApplicationController
   end
 
   def destroy
-    current_user.vip_importings.where(id: params[:ids]).delete_all
+    current_site.vip_importings.where(id: params[:ids]).delete_all
     redirect_to :back, notice: "操作成功"
   end
 
   private
     def set_vip_card
-      @vip_card = current_user.vip_card
+      @vip_card = current_site.vip_card
     end
 
     def copy_tempfile(tempfile)
-      dir = "#{Settings.uploads_dir}/tmp/vip_importings/#{current_user.id}"
+      dir = "#{Settings.uploads_dir}/tmp/vip_importings/#{current_site.id}"
       file_name = "#{dir}/#{Time.now.to_s(:number)}.csv"
       FileUtils.mkdir_p dir
       FileUtils.copy tempfile.path, file_name
@@ -61,7 +61,7 @@ class Biz::VipImportingsController < ApplicationController
     end
 
     def find_vip_importing
-      @vip_importing = current_user.vip_importings.find_by_id(params[:id])
+      @vip_importing = current_site.vip_importings.find_by_id(params[:id])
       return redirect_to vip_importings_path, alert: '会员导入记录不存在' unless @vip_importing
     end
 end

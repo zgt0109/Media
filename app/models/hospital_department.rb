@@ -2,7 +2,7 @@ class HospitalDepartment < ActiveRecord::Base
   validates :name, uniqueness: {:scope => [:hospital_id, :status], message: '科室不能重复', case_sensitive: false }, presence: true, :if => :valStatus?
   validates :sort, presence: true
   
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :hospital
   

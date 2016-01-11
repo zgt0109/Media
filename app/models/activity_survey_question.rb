@@ -1,27 +1,10 @@
-# == Schema Information
-#
-# Table name: activity_survey_questions
-#
-#  id           :integer          not null, primary key
-#  activity_id  :integer
-#  name         :string(255)
-#  limit_select :integer          default(1), not null
-#  answer_a     :string(255)
-#  answer_b     :string(255)
-#  answer_c     :string(255)
-#  answer_d     :string(255)
-#  answer_e     :string(255)
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#
+class SurveyQuestion < ActiveRecord::Base
 
-class ActivitySurveyQuestion < ActiveRecord::Base
-  belongs_to :activity
-  # attr_accessible :answer_a, :answer_b, :answer_c, :answer_d, :answer_e, :name
-  # validates :answer_a, :answer_b, presence: true
   validates :name, presence: true
 
-  has_many :activity_survey_answers, dependent: :destroy
+  belongs_to :activity
+
+  has_many :survey_answers, dependent: :destroy
   has_many :survey_question_choices, dependent: :destroy
   accepts_nested_attributes_for :survey_question_choices, allow_destroy: true
 
@@ -37,19 +20,19 @@ class ActivitySurveyQuestion < ActiveRecord::Base
 
   def selected_count answer
     conditions = answer == '其他' ? ['answer = ?', answer] : ['survey_question_choice_id = ?', answer.id]
-    finshed_activity_survey_answers.where(conditions).count
+    finshed_survey_answers.where(conditions).count
   end
 
-  def finshed_activity_survey_answers
-    activity_survey_answers.joins(:activity_user).where("activity_users.status = ? ", ActivityUser::SURVEY_FINISH)
+  def finshed_survey_answers
+    survey_answers.joins(:activity_user).where("activity_users.status = ? ", ActivityUser::SURVEY_FINISH)
   end
 
   def total_user
-    finshed_activity_survey_answers.group(:activity_user_id).count
+    finshed_survey_answers.group(:activity_user_id).count
   end
 
   def per answer
-    finshed_activity_survey_answers.count == 0 ? 0 : Float(selected_count answer) / Float(finshed_activity_survey_answers.count) * 100
+    finshed_survey_answers.count == 0 ? 0 : Float(selected_count answer) / Float(finshed_survey_answers.count) * 100
   end
 
   def activity_index #在活动中的顺序
@@ -89,7 +72,7 @@ class ActivitySurveyQuestion < ActiveRecord::Base
   end
 
   def activity_questions_ids
-    @activity_questions_ids ||= activity.activity_survey_questions.order(:position).pluck(:id)
+    @activity_questions_ids ||= activity.survey_questions.order(:position).pluck(:id)
   end
 
   def choices_ids
@@ -99,7 +82,7 @@ class ActivitySurveyQuestion < ActiveRecord::Base
   private
 
     def set_position
-      self.position = activity.activity_survey_questions.maximum('position').to_i + 1
+      self.position = activity.survey_questions.maximum('position').to_i + 1
     end
 
 end

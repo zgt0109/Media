@@ -10,7 +10,7 @@
       <label class="control-label">礼品图片<span class="required-star">*</span></label>
       <div class="clearfix">
         <div class="col-xs-5">
-          <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="180" data-height="100" data-name="point_gift[qiniu_pic_key]" data-img="<%= @gift.pic_url %>" data-key="<%= @gift.qiniu_pic_key || "" %>"></div>
+          <div class="cieldon-file pull-left" data-type="0" data-div="#img-1" data-width="180" data-height="100" data-name="point_gift[pic_key]" data-img="<%= @gift.pic_url %>" data-key="<%= @gift.pic_key || "" %>"></div>
         </div>
         <small class="help-inle test text-warning line-height-32">建议尺寸：宽720px * 高400px</small>
       </div>
@@ -24,7 +24,7 @@
                     <span class="lbl">所有会员</span>
                 </label>
             </div>
-            <% current_user.vip_grades.visible.sorted.each do |grade| %>
+            <% current_site.vip_grades.visible.sorted.each do |grade| %>
                 <div class="checkbox-inline">
                     <label>
                         <%= check_box_tag 'point_gift[vip_grade_ids][]', grade.id, @gift.all_grades? || @gift.vip_grade_ids.include?(grade.id), class: 'ace grades' %>
@@ -34,7 +34,7 @@
             <% end %>
         </div>
     </div>
-    <% if current_user.shop_branches.used.present? %>
+    <% if current_site.shop_branches.used.present? %>
       <div class="form-group shop_branch_list">
         <label class="control-label"><%= f.check_box :shop_branch_limited, class: 'ace' %><span class="lbl">使用门店限制<small class="help-inle test text-warning">若不选则默认为所有门店通用</small></span></label>
         <div class="margin-0 clearfix gateSelect">

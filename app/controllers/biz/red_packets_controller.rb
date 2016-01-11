@@ -4,26 +4,26 @@ class Biz::RedPacketsController < ApplicationController
   before_filter :find_red_packet, only: [:show, :edit, :update, :destroy]
 
   def index
-    @search = @current_user.red_packets.normal.where("type is not null").search(params[:search])
+    @search = current_site.red_packets.normal.where("type is not null").search(params[:search])
     @red_packets = @search.order("receive_type asc").page(params[:page])
   end
 
   def off_or_on
-    @red_packet = RedPacket::FollowRedPacket.find_by_supplier_id(@current_user.id)
+    @red_packet = RedPacket::FollowRedPacket.find_by_site_id(current_site.id)
     if @red_packet
       if @red_packet.normal?
         @red_packet.deleted!
       else
-        @red_packet.update_attributes({send_at: Time.now, status: RedPacket::RedPacket::NORMAL, nick_name: @current_user.wx_mp_user.try(:name), send_name: @current_user.wx_mp_user.try(:name)})
+        @red_packet.update_attributes({send_at: Time.now, status: RedPacket::RedPacket::NORMAL, nick_name: current_site.wx_mp_user.try(:nickname), send_name: current_site.wx_mp_user.try(:nickname)})
       end
     else
       # @red_packet.normal!
       attr = {
-          supplier_id: @current_user.id,
+          site_id: current_site.id,
           payment_type_id: PaymentType::WX_REDPACKET_PAY,
           act_name: '关注红包',
-          nick_name: @current_user.wx_mp_user.try(:name),
-          send_name: @current_user.wx_mp_user.try(:name),
+          nick_name: current_site.wx_mp_user.try(:nickname),
+          send_name: current_site.wx_mp_user.try(:nickname),
           wishing: '恭喜发财,大吉大利',
           remark: '微枚迪技术支持',
           total_amount: 1,
@@ -41,12 +41,12 @@ class Biz::RedPacketsController < ApplicationController
   end
 
   def set_value
-    @red_packet = RedPacket::FollowRedPacket.normal.where(supplier_id: @current_user.id).first
+    @red_packet = RedPacket::FollowRedPacket.normal.where(site_id: current_site.id).first
     render layout: 'application_pop'
   end
 
   def update_follow_packet
-    @red_packet = RedPacket::FollowRedPacket.normal.find_by_id_and_supplier_id(params[:red_packet_id], @current_user.id)
+    @red_packet = RedPacket::FollowRedPacket.normal.find_by_id_and_site_id(params[:red_packet_id], current_site.id)
     before_budget = @red_packet.total_budget
     attr = {
         min_value: params[:red_packet_follow_red_packet][:min_value],
@@ -70,10 +70,10 @@ class Biz::RedPacketsController < ApplicationController
 
   def create
     attr = {
-        supplier_id: @current_user.id,
+        site_id: current_site.id,
         payment_type_id: PaymentType::WX_REDPACKET_PAY,
-        nick_name: @current_user.wx_mp_user.try(:name),
-        send_name: @current_user.wx_mp_user.try(:name),
+        nick_name: current_site.wx_mp_user.try(:nickname),
+        send_name: current_site.wx_mp_user.try(:nickname),
         wishing: '恭喜发财,大吉大利',
         remark: '微枚迪技术支持',
         budget_balance: params[:red_packet_event_red_packet][:total_budget],
@@ -93,7 +93,7 @@ class Biz::RedPacketsController < ApplicationController
   def update
     return redirect_to red_packets_path, alert: '活动已经开始,不允许修改' unless @red_packet.send_at > Time.now
     before_budget = @red_packet.total_budget
-    attr = {nick_name: @current_user.wx_mp_user.try(:name), send_name: @current_user.wx_mp_user.try(:name)}
+    attr = {nick_name: current_site.wx_mp_user.try(:nickname), send_name: current_site.wx_mp_user.try(:nickname)}
     @red_packet.attributes = params[:red_packet_event_red_packet].merge(attr)
     @red_packet.set_budget_balance(before_budget)
     if @red_packet.save
@@ -129,7 +129,7 @@ class Biz::RedPacketsController < ApplicationController
     attrs[:api_client_cert] = params[:wxredpacketpay_setting][:api_client_cert].try(:read) if params[:wxredpacketpay_setting][:api_client_cert].present?
     attrs[:api_client_key] = params[:wxredpacketpay_setting][:api_client_key].try(:read) if params[:wxredpacketpay_setting][:api_client_key].present?
 
-    @wxredpacketpay = WxredpacketpaySetting.where(supplier_id: @current_user.id, payment_type_id: PaymentType::WX_REDPACKET_PAY).first
+    @wxredpacketpay = WxredpacketpaySetting.where(site_id: current_site.id, payment_type_id: PaymentType::WX_REDPACKET_PAY).first
     if @wxredpacketpay.present? # 红包支付已存在，修改红包
       @wxredpacketpay.update_attributes(attrs)
     else # 新建红包支付
@@ -145,9 +145,9 @@ class Biz::RedPacketsController < ApplicationController
 
   def export
     if params[:receive_type].to_i == RedPacket::RedPacket::ALL_FANS
-      @users = @current_user.wx_users.subscribe.page(params[:page_exl]).per(EXPORTING_COUNT)
+      @users = current_site.wx_users.subscribed.page(params[:page_exl]).per(EXPORTING_COUNT)
     else
-      @users = @current_user.vip_users.normal.page(params[:page_exl]).per(EXPORTING_COUNT).map{|vip_user| vip_user.wx_user if vip_user.wx_user.present?}.compact
+      @users = current_site.vip_users.normal.page(params[:page_exl]).per(EXPORTING_COUNT).map{|vip_user| vip_user.wx_user if vip_user.wx_user.present?}.compact
     end
     if params[:format] == "xls"
       options = {
@@ -160,18 +160,18 @@ class Biz::RedPacketsController < ApplicationController
       end
     else
       open_ids = @users.map { |user| user.openid }
-      open_ids.insert(0,@current_user.wx_mp_user.app_id)
+      open_ids.insert(0,current_site.wx_mp_user.app_id)
       send_data(open_ids.join("\r\n"), type: "text", :filename => Time.now.to_s(:db).to_s.gsub(/[\s|\t|\:]/, '_') + rand(99999).to_s + ".txt")
     end
   end
 
   def test_pay
-    @red_packet = @current_user.red_packets.new
+    @red_packet = current_site.red_packets.new
     attr = {
         payment_type_id: PaymentType::WX_REDPACKET_PAY,
         act_name: '测试红包',
-        nick_name: @current_user.wx_mp_user.try(:name),
-        send_name: @current_user.wx_mp_user.try(:name),
+        nick_name: current_site.wx_mp_user.try(:nickname),
+        send_name: current_site.wx_mp_user.try(:nickname),
         wishing: '恭喜发财,大吉大利',
         remark: '微枚迪技术支持',
         total_amount: 1.00,
@@ -182,13 +182,13 @@ class Biz::RedPacketsController < ApplicationController
         budget_balance: 1,
         send_at: Time.now
     }
-    @red_packet = @current_user.red_packets.create(attr)
+    @red_packet = current_site.red_packets.create(attr)
     if @red_packet.errors.blank?
       re_attr = {
-          supplier_id: @current_user.id,
-          wx_user_id: @current_user.wx_users.where(uid: params[:test_openid]).first.try(:id),
+          site_id: current_site.id,
+          user_id: current_site.wx_users.where(openid: params[:test_openid]).first.try(:user_id),
           red_packet_id: @red_packet.id,
-          uid: params[:test_openid],
+          openid: params[:test_openid],
           total_amount: @red_packet.total_amount,
           total_num: @red_packet.total_num
       }
@@ -208,11 +208,11 @@ class Biz::RedPacketsController < ApplicationController
   private
 
   def find_payment_setting
-    weixinpay = current_user.payment_settings.where(payment_type_id: PaymentType::WEIXINPAY).first
-    #@wxredpacketpay = current_user.payment_settings.where(payment_type_id: PaymentType::WX_REDPACKET_PAY).first ||
-    @wxredpacketpay = WxredpacketpaySetting.where(supplier_id: @current_user.id, payment_type_id: PaymentType::WX_REDPACKET_PAY).first ||
+    weixinpay = current_site.payment_settings.where(payment_type_id: PaymentType::WEIXINPAY).first
+    #@wxredpacketpay = current_site.payment_settings.where(payment_type_id: PaymentType::WX_REDPACKET_PAY).first ||
+    @wxredpacketpay = WxredpacketpaySetting.where(site_id: current_site.id, payment_type_id: PaymentType::WX_REDPACKET_PAY).first ||
         WxredpacketpaySetting.new(
-            supplier_id: current_user.id,
+            site_id: current_site.id,
             payment_type_id: PaymentType::WX_REDPACKET_PAY,
             partner_id: weixinpay.try(:partner_id) || '',
             partner_key: weixinpay.try(:partner_key) || '',
@@ -222,7 +222,7 @@ class Biz::RedPacketsController < ApplicationController
   end
 
   def find_red_packet
-    @red_packet = RedPacket::RedPacket.normal.find_by_id_and_supplier_id(params[:id], @current_user.id)
+    @red_packet = RedPacket::RedPacket.normal.find_by_id_and_site_id(params[:id], current_site.id)
     return redirect_to :back, alert: '数据不存在' unless @red_packet
   end
 

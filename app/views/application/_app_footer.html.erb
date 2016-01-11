@@ -5,7 +5,7 @@
       <p>请先关注公众帐号</p>
       <p><span class="alert-num">1</span>点击右上角<span class="alert-text">分享按钮</span>查看公众号</p>
       <p><span class="alert-num">2</span>在【添加朋友】—【查找公众号】中搜索</p>
-      <p><span class="alert-btn"><%= @wx_mp_user.try(:name) %></span>（长按可复制）</p>
+      <p><span class="alert-btn"><%= @wx_mp_user.try(:nickname) %></span>（长按可复制）</p>
       <p>如果已关注，请打开该公众帐号回复<span class="alert-text"><%= @keyword ||  @activity.try(:keyword) %></span>，参与此活动</p>
     </div>
     <div class="alert-f">
@@ -49,18 +49,16 @@
   </div>
 </div>
 
-<% if @supplier.try(:bqq_account?) && !@not_show_mark %>
-  <footer>Powered By Tencent</footer>
-<% elsif @supplier && @supplier_footer && @supplier.try(:is_show_mark?) %>
+<%# if @supplier && @account_footer && @supplier.try(:is_show_mark?) %>
   <%- unless @not_show_mark %>
     <footer>
-      <%= @supplier_footer.footer_link.present? ? link_to(@supplier_footer.footer_content, @supplier_footer.footer_link) : @supplier_footer.footer_content %>
+      <%= @account_footer.footer_link.present? ? link_to(@account_footer.footer_content, @account_footer.footer_link) : @account_footer.footer_content %>
     </footer>
   <% end %>
-<%- end %>
+<%#- end %>
 
 <%= render "application/mobile_footer" %>
 
-<% if controller_name !~ /\Aguess|waves|unfolds|scenes|surveys|recommends|coupons|vips|slots|gua|hit_eggs|wheel|fight|wx_shakes\z/ %>
+<% if controller_name !~ /\Aguess|waves|unfolds|scenes|surveys|recommends|coupons|vips|slots|gua|hit_eggs|wheel|fight|shakes\z/ %>
   <%= render 'application/image_zoom' %>
 <% end %>

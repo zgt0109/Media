@@ -21,7 +21,7 @@
 class CollegeBranch < ActiveRecord::Base
   # attr_accessible :title, :body
   belongs_to :college
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :province
   belongs_to :city

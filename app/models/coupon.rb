@@ -1,13 +1,12 @@
 class Coupon < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :activity
-  belongs_to :wx_mp_user
 
   has_and_belongs_to_many :vip_grades
   has_and_belongs_to_many :shop_branches
   has_many :consumes, as: :consumable, dependent: :destroy
 
-  acts_as_list scope: [ :supplier_id]
+  acts_as_list scope: [ :site_id]
 
   scope :latest, -> { online.order('created_at DESC') }
   scope :can_apply, -> { online.where(':time BETWEEN apply_start AND apply_end', time: Time.now) }
@@ -41,14 +40,14 @@ class Coupon < ActiveRecord::Base
   validates :limit_count, presence: true, numericality: { greater_than_or_equal_to: 1, only_integer: true }
   validates :value, :value_by, numericality: { greater_than_or_equal_to: 0, only_integer: true }
   validate :datetime_validate
-  validates :name, uniqueness: { scope: :wx_mp_user_id, message: '优惠券名称不能重复' }
+  validates :name, uniqueness: { scope: :site_id, message: '优惠券名称不能重复' }
   validates :limit_count, numericality: {less_than_or_equal_to: 1000}, if: :offline_coupon?
 
   def usable_vip_grades
     if vip_only?
       vip_grades.visible.sorted
     else
-      supplier.vip_card.vip_grades.visible.sorted
+      site.vip_card.vip_grades.visible.sorted
     end
   end
 
@@ -61,7 +60,7 @@ class Coupon < ActiveRecord::Base
     if shop_branch_limited?
       shop_branch_ids.count
     else
-      supplier.shop_branches.used.count
+      site.shop_branches.used.count
     end
   end
 
@@ -78,11 +77,11 @@ class Coupon < ActiveRecord::Base
   end
 
   def logo_url
-    qiniu_image_url(qiniu_logo_key) || supplier.try(:website).try(:logo_url)
+    qiniu_image_url(logo_key) || site.try(:website).try(:logo_url)
   end
 
-  def qiniu_logo_key
-    attributes['qiniu_logo_key'] || supplier.try(:website).try(:logo_key)
+  def logo_key
+    attributes['logo_key'] || site.try(:website).try(:logo_key)
   end
 
   def appliable?
@@ -91,7 +90,7 @@ class Coupon < ActiveRecord::Base
 
   def hold_count
     hold_count = 0
-    supplier.activities.unfold.each do |activity|
+    site.activities.unfold.each do |activity|
       if activity.extend.prize_type == 'coupon' && activity.extend.prize_id.to_i == self.id
         if activity.deleted?
             hold_count = 0
@@ -119,7 +118,7 @@ class Coupon < ActiveRecord::Base
     if shop_branch_limited?
       shop_branches.used
     else
-      supplier.shop_branches.used
+      site.shop_branches.used
     end
   end
 
@@ -213,7 +212,7 @@ class Coupon < ActiveRecord::Base
     end
 
     def associate_shop_branches
-      self.shop_branch_ids = supplier.shop_branches.used.pluck(:id) unless shop_branch_limited?
+      self.shop_branch_ids = site.shop_branches.used.pluck(:id) unless shop_branch_limited?
     end
 
     def clear_data

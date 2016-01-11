@@ -1,33 +1,3 @@
-# == Schema Information
-#
-# Table name: vip_users
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  wx_user_id    :integer          not null
-#  user_no       :string(255)
-#  name          :string(255)      not null
-#  mobile        :string(255)      not null
-#  age           :integer          default(0), not null
-#  gender        :integer          default(0), not null
-#  birthday      :date
-#  total_amount  :decimal(12, 2)   default(0.0), not null
-#  usable_amount :decimal(12, 2)   default(0.0), not null
-#  froze_amount  :decimal(12, 2)   default(0.0), not null
-#  total_points  :integer          default(0), not null
-#  usable_points :integer          default(0), not null
-#  froze_points  :integer          default(0), not null
-#  province_id   :integer          default(9)
-#  city_id       :integer          default(73)
-#  district_id   :integer          default(702)
-#  address       :string(255)
-#  status        :integer          default(1), not null
-#  description   :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class VipUser < ActiveRecord::Base
   include HasBarcode
   has_barcode :barcode, :outputter => :svg, :type => :code_128, :value => Proc.new { |p| p.user_no }
@@ -60,15 +30,14 @@ class VipUser < ActiveRecord::Base
     ['female', 2, '女']
   ]
 
-  belongs_to :supplier
-  belongs_to :wx_mp_user
-  
+  belongs_to :site
+
   delegate :vip_card, to: :wx_mp_user, allow_nil: true
   delegate :open_card_sms_notify?, to: :vip_card, allow_nil: true
   delegate :recharge_consume_sms_notify?, to: :vip_card, allow_nil: true
   delegate :openid, to: :wx_user, prefix: true, allow_nil: true
 
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :vip_group, counter_cache: true
   belongs_to :vip_grade, counter_cache: true
 
@@ -82,7 +51,7 @@ class VipUser < ActiveRecord::Base
   has_many   :custom_values, dependent: :destroy
   has_many   :vip_privilege_transactions, dependent: :destroy
   has_many   :vip_givens, dependent: :destroy
-  has_many   :consumes, through: :wx_user
+  has_many   :consumes, through: :user
   has_many   :vip_grade_logs, dependent: :destroy
   has_many   :vip_packages_vip_users, dependent: :destroy
   has_many   :vip_package_item_consumes, dependent: :destroy
@@ -120,7 +89,7 @@ class VipUser < ActiveRecord::Base
     points = options[:points].to_i
     return {errcode: 40001, errmsg: "积分必须大于0"} if points < 0
 
-    wx_mp_user = WxMpUser.where(uid: options[:mp_user_open_id]).first
+    wx_mp_user = WxMpUser.where(openid: options[:mp_user_open_id]).first
     return {errcode: 40002, errmsg: "公众号不存在"} unless wx_mp_user
 
     out_trade_no = options[:out_trade_no].to_s
@@ -129,13 +98,13 @@ class VipUser < ActiveRecord::Base
     sign = Digest::MD5.hexdigest(out_trade_no + wx_mp_user.app_id.to_s)
     return {errcode: 40003, errmsg: "签名不正确"} unless sign == options[:trade_token]
 
-    wx_user = wx_mp_user.wx_users.where(uid: options[:open_id]).first
+    wx_user = wx_mp_user.wx_users.where(openid: options[:open_id]).first
     return {errcode: 40004, errmsg: "微信用户不存在"} unless wx_user
 
     vip_user = wx_mp_user.vip_users.visible.where(wx_user_id: wx_user.id).first
 
     unless vip_user
-      vip_user = wx_user.create_vip_user(supplier_id: wx_user.supplier_id, wx_mp_user_id: wx_user.wx_mp_user_id, name: wx_user.openid, mobile: wx_user.openid)
+      vip_user = wx_user.create_vip_user(site_id: user.site_id, name: wx_user.openid, mobile: wx_user.openid)
       vip_user.status = INACTIVE
     end
 
@@ -146,7 +115,7 @@ class VipUser < ActiveRecord::Base
     point_transaction = vip_user.point_transactions.new(
       direction_type: PointTransaction::SPM_IN,
       points: points,
-      supplier_id: vip_user.supplier_id,
+      site_id: vip_user.site_id,
       out_trade_no: out_trade_no,
       description: '商品码活动积分奖励',
     )
@@ -155,8 +124,8 @@ class VipUser < ActiveRecord::Base
     { errcode: 0, errmsg: "ok", points: points }
   end
 
-  def supplier_name
-    vip_card.supplier_name.presence || wx_mp_user.name.presence || supplier.nickname
+  def merchant_name
+    vip_card.merchant_name.presence
   end
 
   def user_number
@@ -220,7 +189,7 @@ class VipUser < ActiveRecord::Base
                                     amount:         pay_amount,
                                     total_amount:   total_amount,
                                     usable_amount:  usable_amount,
-                                    supplier_id:    supplier_id,
+                                    site_id:    site_id,
                                     payment_type:   params[:payment_type],
                                     order_no:       params[:order_no],
                                     description:    params[:description],
@@ -254,7 +223,7 @@ class VipUser < ActiveRecord::Base
                                     amount:         amount,
                                     total_amount:   total_amount,
                                     usable_amount:  usable_amount,
-                                    supplier_id:    supplier.id,
+                                    site_id:    site.id,
                                     order_no:       params[:order_no],
                                     description:    params[:description],
                                     extra_remarks:  params[:extra_remarks],
@@ -269,8 +238,8 @@ class VipUser < ActiveRecord::Base
   end
 
   def give_point(amount, type, params)
-    return unless supplier.vip_card.is_open_points?
-    points = supplier.giving_points(amount, type, params, self)
+    return unless site.vip_card.is_open_points?
+    points = site.giving_points(amount, type, params, self)
     change_points_by!(points) if points > 0
   end
 
@@ -283,13 +252,13 @@ class VipUser < ActiveRecord::Base
 
   def create_point_gift_exchanges_by_gift(gift, qty, total_points, vip_given)
     description = "使用会员关怀 #{vip_given.vip_care.name} 赠送积分：#{vip_given.value}积分" if vip_given
-    point_gift_exchanges.create supplier: supplier, point_gift: gift, qty: qty, total_points: total_points, description: description
+    point_gift_exchanges.create site: site, point_gift: gift, qty: qty, total_points: total_points, description: description
   end
 
   def create_point_transactions_by_gift(gift, total_points, vip_given)
     description = '积分兑换礼物'
     description << "，使用会员关怀 #{vip_given.vip_care.name} 赠送积分：#{vip_given.value}积分" if vip_given
-    point_transactions.create  supplier: supplier, pointable: gift, direction_type: PointTransaction::OUT, points: total_points, description: description
+    point_transactions.create  site: site, pointable: gift, direction_type: PointTransaction::OUT, points: total_points, description: description
   end
 
   def exchange_gift(gift, qty, vip_given_id)
@@ -313,7 +282,7 @@ class VipUser < ActiveRecord::Base
   end
 
   def vip_grade_name
-    vip_grade ? vip_grade.name : supplier.vip_card.init_grade_name
+    vip_grade ? vip_grade.name : site.vip_card.init_grade_name
   end
 
   def today_signed?
@@ -373,7 +342,7 @@ class VipUser < ActiveRecord::Base
   end
 
   def recharge_point_type(amount)
-    supplier.point_types.normal.recharge.greatest.find do |point_type|
+    site.point_types.normal.recharge.greatest.find do |point_type|
       amount >= point_type.amount
     end
   end
@@ -407,7 +376,7 @@ class VipUser < ActiveRecord::Base
   end
 
   def consume_point_type(amount)
-    supplier.point_types.normal.consume.greatest.find do |point_type|
+    site.point_types.normal.consume.greatest.find do |point_type|
       amount >= point_type.amount
     end
   end
@@ -430,7 +399,7 @@ class VipUser < ActiveRecord::Base
   end
 
   def signin
-    point_type = supplier.point_types.checkin.first
+    point_type = site.point_types.checkin.first
     return false unless point_type
 
     point1 = point_type.points if point_type.checkin_enabled
@@ -440,8 +409,8 @@ class VipUser < ActiveRecord::Base
     return 0 if point == 0
 
     transaction do
-      vip_user_sign     = vip_user_signs.create!(supplier_id: supplier_id, date: Date.today, points: point )
-      point_transaction = point_transactions.create!(supplier_id: supplier_id, point_type_id: point_type.id, direction_type: PointTransaction::IN, points: point, description: "签到" )
+      vip_user_sign     = vip_user_signs.create!(site_id: site_id, date: Date.today, points: point )
+      point_transaction = point_transactions.create!(site_id: site_id, point_type_id: point_type.id, direction_type: PointTransaction::IN, points: point, description: "签到" )
       increase_points!(point)
     end
     point
@@ -470,7 +439,7 @@ class VipUser < ActiveRecord::Base
                                     amount:          amount,
                                     total_amount:    total_amount,
                                     usable_amount:   usable_amount,
-                                    supplier_id:     supplier.id,
+                                    site_id:     site.id,
                                     order_no:        params[:order_no],
                                     extra_remarks:   params[:extra_remarks],
                                     description:     params[:description],
@@ -484,8 +453,8 @@ class VipUser < ActiveRecord::Base
   end
 
   def upgrade_by_time
-    return unless supplier
-    vip_grades = supplier.vip_grades.by_time.normal.reverse_sorted
+    return unless site
+    vip_grades = site.vip_grades.by_time.normal.reverse_sorted
     next_grade = vip_grades.find { |g| created_at + ( g.value.year / 12 ) <= Time.now }
     upgrade_to! next_grade
   end
@@ -505,11 +474,11 @@ class VipUser < ActiveRecord::Base
   private
     def set_init_data
       self.status = PENDING if vip_card.try(:audited?) #需要审核
-      self.vip_grade = supplier.vip_card.default_grade if vip_grade.blank?
+      self.vip_grade = site.vip_card.default_grade if vip_grade.blank?
       generate_user_no
 
       # if vip_card.is_open_points?
-      #   register_point_type = supplier.point_types.register.normal.first
+      #   register_point_type = site.point_types.register.normal.first
       #   self.usable_points += register_point_type.try(:points).to_i
       #   self.total_points  += register_point_type.try(:points).to_i
       # end
@@ -528,19 +497,19 @@ class VipUser < ActiveRecord::Base
     end
 
     def upgrade_by_points
-      next_grade = supplier.vip_grades.by_points.normal.reverse_sorted.where("value <= ?", total_points).first
+      next_grade = site.vip_grades.by_points.normal.reverse_sorted.where("value <= ?", total_points).first
       upgrade_to! next_grade
     end
 
     def upgrade_by_recharging
       amount     = vip_user_transactions.pay_up.sum(:amount)
-      next_grade = supplier.vip_grades.normal.by_recharging.reverse_sorted.where("value <= ?", (amount + total_recharge_amount.to_f)).first
+      next_grade = site.vip_grades.normal.by_recharging.reverse_sorted.where("value <= ?", (amount + total_recharge_amount.to_f)).first
       upgrade_to! next_grade
     end
 
     def upgrade_by_consuming
       amount     = vip_user_transactions.pay_down.sum(:amount)
-      next_grade = supplier.vip_grades.normal.by_consuming.reverse_sorted.where('value <= ?', (amount + total_consume_amount.to_f)).first
+      next_grade = site.vip_grades.normal.by_consuming.reverse_sorted.where('value <= ?', (amount + total_consume_amount.to_f)).first
       upgrade_to! next_grade
     end
 
@@ -564,21 +533,21 @@ class VipUser < ActiveRecord::Base
     end
 
     def send_sms_notification
-      message = "恭喜您已成功成为#{supplier_name}的会员，卡号为#{user_no}，即日起您即可享受我们的会员专有特权。"
+      message = "恭喜您已成功成为#{merchant_name}的会员，卡号为#{user_no}，即日起您即可享受我们的会员专有特权。"
       SmsService.new.singleSend(mobile, message) if normal? && open_card_sms_notify?
     end
 
     def send_register_points
       transaction do
         if vip_card.is_open_points?
-          register_point_type = supplier.point_types.register.normal.first
+          register_point_type = site.point_types.register.normal.first
           if register_point_type
             register_points = register_point_type.try(:points).to_i
 
             update_attributes(usable_points: register_points, total_points: register_points)
 
             # give_point(register_points, PointType::REGISTER, direction: PointTransaction::REGISTER_CARD_IN, description: '领卡赠送积分')
-            point_transactions.create(direction_type: PointTransaction::REGISTER_CARD_IN, points: register_points, supplier_id: supplier_id, description: '领卡赠送积分')
+            point_transactions.create(direction_type: PointTransaction::REGISTER_CARD_IN, points: register_points, site_id: site_id, description: '领卡赠送积分')
           end
         end
       end

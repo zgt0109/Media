@@ -11,7 +11,7 @@
 #
 
 class VipUserSign < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :vip_user
 
   WDAYS = %W(星期日 星期一 星期二 星期三 星期四 星期五 星期六)

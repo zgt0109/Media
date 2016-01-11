@@ -6,7 +6,7 @@
         <div class="col-md-3 row">
           <div class="input-group input-group-text">
             <span class="input-group-addon">选择活动：</span>
-            <%= f.select :consumable_id_eq, current_user.activities.show.recommend.pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
+            <%= f.select :consumable_id_eq, current_site.activities.show.recommend.pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
           </div>
         </div>
 
@@ -53,7 +53,7 @@
               </td>
             </tr>
           <%- end.blank? %>
-              <tr><td colspan="8" class="text-center green">没有记录</td></tr>
+              <tr><td colspan="9" class="text-center green">没有记录</td></tr>
           <%- end %>
         </tbody>
       </table>

@@ -3,7 +3,7 @@ module SendRedPacket
 
   def follow_red_packet red_packet, wx_user
     logger.info "-----------------send redpacket with follow wx_user--------------------"
-    options = {wx_user_id: wx_user.id, uid: wx_user.openid}
+    options = {user_id: wx_user.user_id, openid: wx_user.openid}
     record = create_red_packet_send_record red_packet, options
     return nil unless record
     record.pay
@@ -13,9 +13,9 @@ module SendRedPacket
     wx_mp_user = red_packet.supplier.try(:wx_mp_user)
     return nil unless wx_mp_user
     logger.info "-----------------send redpacket with all fans--------------------"
-    wx_mp_user.wx_users.subscribe.find_each do |wx_user|
+    wx_mp_user.wx_users.subscribed.find_each do |wx_user|
       next unless subscribe? wx_mp_user, wx_user.openid
-      options = {wx_user_id: wx_user.id, uid: wx_user.openid}
+      options = {user_id: wx_user.user_id, openid: wx_user.openid}
       record = create_red_packet_send_record red_packet, options
       next unless record
       break unless pay record
@@ -27,7 +27,7 @@ module SendRedPacket
     return nil unless supplier
     logger.info "-----------------send redpacket with all vips--------------------"
     supplier.vip_users.normal.find_each do |vip_user|
-      options = {wx_user_id: vip_user.wx_user_id, uid: vip_user.wx_user_uid }
+      options = {user_id: vip_user.user_id, openid: vip_user.wx_user_openid }
       record = create_red_packet_send_record red_packet, options
       next unless record
       break unless pay record
@@ -50,9 +50,9 @@ module SendRedPacket
       record = activity_consume.send_record
     else
       options = {
-                      wx_user_id: wx_user.id,
-                      uid: wx_user.openid,
-                      supplier_id: red_packet.supplier_id,
+                      user_id: wx_user.user_id,
+                      openid: wx_user.openid,
+                      site_id: red_packet.site_id,
                       total_num: 1,
                       total_amount: red_packet.total_amount,
                       status: RedPacket::SendRecord::READY,
@@ -78,7 +78,7 @@ module SendRedPacket
 
   def create_red_packet_send_record red_packet, **options
     # options.merge!(supplier_id: red_packet.supplier_id, total_num: 1, total_amount: red_packet.total_amount, status: RedPacket::SendRecord::READY)
-    red_packet = red_packet.send_records.where(options).first_or_initialize(supplier_id: red_packet.supplier_id, total_num: 1, total_amount: red_packet.total_amount, status: RedPacket::SendRecord::READY)
+    red_packet = red_packet.send_records.where(options).first_or_initialize(site_id: red_packet.site_id, total_num: 1, total_amount: red_packet.total_amount, status: RedPacket::SendRecord::READY)
     red_packet.save
     red_packet
   end

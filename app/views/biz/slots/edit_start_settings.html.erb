@@ -5,7 +5,7 @@
     <%= form_for @activity, :url => slot_path, validate: true, html: {class: 'form col-sm-7'} do |activity| %>
     <%= hidden_field_tag :redirect_to, edit_rule_settings_slot_path(@activity)%>
     <%= activity.fields_for :active_activity_notice do |notice| %>
-    <%= render 'active_notice', notice: notice, activity: activity, pic_data_key: notice.object.qiniu_pic_key, data_img: notice.object.pic_url %>
+    <%= render 'active_notice', notice: notice, activity: activity, pic_data_key: notice.object.pic_key, data_img: notice.object.pic_url %>
     <% end %>
     <div class="row-fluid">
       <a href="<%= edit_slot_path(@activity) %>" class="btn btn-prev btn-sm"><i class="icon-arrow-left"></i>上一步</a>

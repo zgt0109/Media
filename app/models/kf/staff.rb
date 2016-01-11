@@ -4,7 +4,7 @@ class Kf::Staff < ActiveRecord::Base
 
   has_secure_password
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :account, class_name: 'Kf::Account'
 

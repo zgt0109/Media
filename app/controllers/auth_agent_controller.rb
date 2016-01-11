@@ -4,36 +4,22 @@
 
 #     uri = URI(M_winwemedia_BASE_URL)
 #     uri.path = '/auth_agent/wx_oauth'
-#     uri.query= {return_to: return_to, wx_mp_user_id: @current_wx_mp_user.origin.try(:id)}.to_param
+#     uri.query= {return_to: return_to, wx_mp_user_open_id: @current_wx_mp_user.origin.try(:uid)}.to_param
 #     redirect_to uri.to_s
 #   end
 # end 
 
 # 网页授权请求地址：
-# http://m.winwemedia.com/auth_agent/wx_oauth?return_to=base64_redirect_url&wx_mp_user_id=123
+# http://m.winwemedia.com/auth_agent/wx_oauth?return_to=base64_redirect_url&wx_mp_user_open_id=123
 # 获取openid后跳转到：
 # http://redirect_url?wx_user_open_id=123
 
 class AuthAgentController < ApplicationController
   skip_before_filter *ADMIN_FILTERS
-  skip_before_filter :verify_authenticity_token, only: [:wx_oauth, :bqq_oauth, :wx_oauth_callback, :bqq_wx_oauth_callback]
+  skip_before_filter :verify_authenticity_token, only: [:wx_oauth, :wx_oauth_callback]
   before_filter :detected_wx_mp_user
 
   OAUTH_STATE = 'oauth:state'
-
-  def bqq_oauth
-    if @wx_mp_user
-      wx_oauth_uri = generate_oauth_uri(@wx_mp_user, {redirect_uri: auth_agent_bqq_wx_oauth_callback_url})
-
-      if wx_oauth_uri
-        redirect_to wx_oauth_uri.to_s
-      else
-        render json: {error_code: '-1', remark: "params lacked could generate oauth url"}
-      end
-    else
-      render json: {error_code: '-1', remark: "wx_mp_user could not been detected"}
-    end
-  end
 
   def wx_oauth
     if @wx_mp_user
@@ -91,50 +77,8 @@ class AuthAgentController < ApplicationController
     render json: {error_code: '-1', remark: "wx_user oauth failure, #{error.message}"}
   end
 
-  def bqq_wx_oauth_callback
-    code = params[:code]
-    @wx_mp_user = WxMpUser.find_by_id(session[:wx_mp_user_id]) if session[:wx_mp_user_id].present?
-
-    if @wx_mp_user.nil?
-      return render json: {error_code: '0', remark: "wx_mp_user_id are losed"}
-    end
-
-    if code.nil?
-      bqq_wx_oauth_uri = generate_oauth_uri(@wx_mp_user, {redirect_uri: auth_agent_bqq_wx_oauth_callback_url})
-      return redirect_to bqq_wx_oauth_uri.to_s
-    end
-
-    #如果code参数不为空，则认证到第二步
-    api_app = ApiApp.bqq
-    api_app.fetch_bqq_token if api_app.try(:token_expired?)
-
-    url = "https://api.b.qq.com/crm/wx/oauth2?access_token=#{api_app.access_token}&appId=#{@wx_mp_user.app_id}&code=#{code}"
-    # raw_data = URI.parse(url).read
-    raw_data = HTTParty.get(url).body
-    access_token_data = HashWithIndifferentAccess.new JSON.parse(raw_data.gsub(/\\/, '')[1..-2])
-
-    if access_token_data['openid'].present?
-      @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid)
-      session[:wx_user_id] = @wx_user.id
-    else
-      return render json: {error_code: '-1', remark: "fetch openid failure, raw data is #{raw_data}"}
-    end
-
-    if should_return_to?
-      return_to_uri = decode_return_to_uri
-      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(wx_user_open_id: @wx_user.openid).to_param
-
-      redirect_to return_to_uri.to_s
-    else
-      render json: {error_code: '0', remark: "wx_user oauth successfully"}
-    end
-  rescue Exception => error
-    WinwemediaLog::Base.logger('wxoauth', "bqq_wx_oauth_callback error: #{error.message} > #{error.backtrace}")
-    render json: {error_code: '-1', remark: "wx_user oauth failure, #{error.message}"}
-  end
-
   private
-  
+
   def generate_oauth_uri(wx_mp_user, auth_params = {})
     WinwemediaLog::Base.logger('wxoauth', "****** request params: #{params}")
 
@@ -162,8 +106,6 @@ class AuthAgentController < ApplicationController
   end
 
   def detected_wx_mp_user
-    @wx_mp_user = WxMpUser.find_by_supplier_id(params[:supplier_id]) if params.has_key? :supplier_id
-    @wx_mp_user = WxMpUser.find_by_id(params[:wx_mp_user_id]) if params.has_key? :wx_mp_user_id
     @wx_mp_user = WxMpUser.find_by_uid(params[:wx_mp_user_open_id]) if params.has_key? :wx_mp_user_open_id
 
     session[:wx_mp_user_id] = @wx_mp_user.id if @wx_mp_user

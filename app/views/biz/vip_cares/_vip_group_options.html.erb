@@ -4,4 +4,4 @@
 <%= content_tag :option, value: -2, data:{users: no_group_vip_users_count}, selected: ( giver.given_group_id == -2 ) do %>
     未分组(<%= no_group_vip_users_count %>)
 <% end %>
-<%= options_for_select(current_user.vip_card.vip_groups.map{|group|["#{group.name}(#{group.vip_users_count})", group.id, {'data-users' => group.vip_users_count}]}, selected: giver.given_group_id) %>
+<%= options_for_select(current_site.vip_card.vip_groups.map{|group|["#{group.name}(#{group.vip_users_count})", group.id, {'data-users' => group.vip_users_count}]}, selected: giver.given_group_id) %>

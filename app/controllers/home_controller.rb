@@ -2,51 +2,44 @@
 class HomeController < ApplicationController
   include Biz::HighchartHelper
 
-  skip_before_filter *ADMIN_FILTERS, except: [:console, :site_navigation, :helpers, :games, :account, :utility, :industry, :show_introduce]
+  skip_before_filter *ADMIN_FILTERS, except: [:console]
 
-  skip_before_filter :check_account_expire, :check_auth_tel#, only: [:index, :console, :account]
+  skip_before_filter :check_account_expire, :check_auth_mobile#, only: [:index, :console]
 
-  # caches_page :about, :contact, :jobs, :kefu, :huiyuanka, :wlife, :solution, :navigation
+  # caches_page :about
 
   def index
-    if current_user && current_user.is_a?(Supplier)
-      redirect_to console_url
+    if current_user && current_user.is_a?(Account)
+      redirect_to profile_path
     else
-      # @html_class = 'index'
-      # @dev_logs = DevLog.vcl.order('created_at desc').limit(4)
-      # @app_config = YAML.load_file("#{Rails.root}/config/app_config.yml")
-      # @company_news = News.company.order('created_at desc').select("id,title,short_content,pic,created_at").limit(2)
-      # @broadcast_news = News.broadcast.order('created_at desc').select("id,title,short_content,pic,created_at").limit(2)
-      # @industry__news = News.industry_news.order('created_at desc').select("id,title,short_content,pic,created_at").limit(2)
-      # session[:image_code] = nil
       redirect_to sign_in_path
     end
   end
 
   def console
-    return redirect_to platforms_url unless current_user.wx_mp_user
+    # return redirect_to platforms_url unless current_site.try(:wx_mp_user)
 
     respond_to do |format|
       format.html do
-        @activities = current_user.activities.active.unexpired.where(activity_type_id: ActivityType::ACTIVITY_IDS)
+        @activities = current_site.activities.active.unexpired.where(activity_type_id: ActivityType::ACTIVITY_IDS)
         render layout: 'application'
       end
       format.js do
-        @piwik_sites = PiwikSite.where(:supplier_id => current_user.id)
-        @total_vip_users = current_user.vip_users.normal_and_freeze
-        @all_wx_requests = WxRequest.where(supplier_id: current_user.id).select('date, increase, subscribe')
+        @piwik_sites = PiwikSite.where(:site_id => current_site.id)
+        @total_vip_users = current_site.vip_users.normal_and_freeze
+        @all_wx_requests = WxRequest.where(site_id: current_site.id).select('date, increase, subscribe')
 
         total_pv_count = @piwik_sites.sum(:nb_actions)
         total_uv_count = @piwik_sites.sum(:nb_visits)
         if Rails.env.production?
-          total_piwik_sites_2014 = ActiveRecord::Base.connection.execute("select sum(nb_actions), sum(nb_visits) from piwik_sites_2014 where supplier_id=#{current_user.id}").first
-          total_piwik_sites_2015 = ActiveRecord::Base.connection.execute("select sum(nb_actions), sum(nb_visits) from piwik_sites_2015 where supplier_id=#{current_user.id}").first
+          total_piwik_sites_2014 = ActiveRecord::Base.connection.execute("select sum(nb_actions), sum(nb_visits) from piwik_sites_2014 where site_id=#{current_site.id}").first
+          total_piwik_sites_2015 = ActiveRecord::Base.connection.execute("select sum(nb_actions), sum(nb_visits) from piwik_sites_2015 where site_id=#{current_site.id}").first
           total_pv_count = total_pv_count + total_piwik_sites_2014[0].to_i + total_piwik_sites_2015[0].to_i
           total_uv_count = total_uv_count + total_piwik_sites_2014[1].to_i + total_piwik_sites_2015[1].to_i
         end
         @total_pv_count = total_pv_count
         @total_uv_count = total_uv_count
-        
+
         @yesterday_piwik_site = @piwik_sites.where(date: Date.yesterday).first
 
         @today = Date.today
@@ -55,8 +48,8 @@ class HomeController < ApplicationController
 
         total_subscribes = @all_wx_requests.sum(:increase)
         if Rails.env.production?
-          total_subscribes_2014 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2014 where supplier_id=#{current_user.id}").first[0] || 0
-          total_subscribes_2015 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2015 where supplier_id=#{current_user.id}").first[0] || 0
+          total_subscribes_2014 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2014 where site_id=#{current_site.id}").first[0] || 0
+          total_subscribes_2015 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2015 where site_id=#{current_site.id}").first[0] || 0
           total_subscribes = total_subscribes + total_subscribes_2014 + total_subscribes_2015
         end
         @total_subscribe_count = total_subscribes
@@ -64,8 +57,8 @@ class HomeController < ApplicationController
         @yesterday_wx_request  = @all_wx_requests.where(date: Date.yesterday..Date.today).first
         @yesterday_subscribe_count = @yesterday_wx_request.try(:increase).to_i
 
-        @pv_categories, @pv_data = @piwik_sites.get_recent_data(current_user.id, 'nb_actions', 'recent_30')
-        @uv_categories, @uv_data = @piwik_sites.get_recent_data(current_user.id, 'nb_uniq_visitors', 'recent_30')
+        @pv_categories, @pv_data = @piwik_sites.get_recent_data(current_site.id, 'nb_actions', 'recent_30')
+        @uv_categories, @uv_data = @piwik_sites.get_recent_data(current_site.id, 'nb_uniq_visitors', 'recent_30')
 
         @vip_user_categories, @vip_user_data, @start_time, @end_time, min_tick = cube_chart_data_for_datacube_vip_card(@total_vip_users, 'one_months', Date.yesterday)
 
@@ -85,106 +78,16 @@ class HomeController < ApplicationController
     end
   end
 
-  def account
-    return redirect_to root_path unless current_user
-    return redirect_to platforms_url unless current_user.wx_mp_user
-
-    @wx_mp_user = current_user.wx_mp_user
-    @partialLeftNav = "/layouts/partialLeftSys"
-    render layout: 'application'
-  end
-
-  def navigation
-    @html_class = 'platform'
-    @navigations = YAML.load_file("#{Rails.root}/config/navigations.yml")
-  end
-
-  def agents
-    @search = Agent.search(params[:search])
-    if @search.name_eq.present?
-      @agents = @search.order('created_at desc')
-    else
-      @agents = nil
-    end
-  rescue => error
-    @agents = nil
-  end
-
-  def wlife
-    @supplier_apply = SupplierApply.new(apply_type: SupplierApply::AGENCY)
-    @app_config = YAML.load_file("#{Rails.root}/config/app_config.yml")
-  end
-
-  # fxt advertisements on vcoooline.com
-  def fxt
-    @supplier_apply = SupplierApply.new(apply_type: SupplierApply::AGENCY)
-    @app_config = YAML.load_file("#{Rails.root}/config/app_config.yml")
-  end
-
-  def answer
-    @interlocution_one_levels = InterlocutionOneLevel.all
-    @interlocution_two_level = InterlocutionTwoLevel.where(id: params[:tid]).first || InterlocutionTwoLevel.first
-  end
-
-  def solution
-    @html_class = "cases"
-    @name = params[:name] ||= "category1"
-    begin
-      @cases = Case.show.send(@name)
-    rescue
-      @cases = Case.show.category1
-    end
-    respond_to do |format|
-      format.html {}
-      format.js do
-        render json: {}
-      end
-    end
-  end
-
-  def new_index
-    render layout: false
-  end
-
-  def spread
-    @html_class = 'partner'
-    @supplier_apply = SupplierApply.new(apply_type: SupplierApply::AGENCY)
-    @app_config = YAML.load_file("#{Rails.root}/config/app_config.yml")
-  end
-
-  def helpers
-    @assistants = Assistant.enabled.helpers.order('sort ASC')
-    render "home/life_assistant", layout: 'application'
-  end
-
-  def games
-    @assistants = Assistant.enabled.games.order('sort ASC')
-    render "home/life_assistant", layout: 'application'
-  end
-
-  def show_introduce
-    ret = params[:ret].to_i
-    current_user.update_show_introduce ret
-    redirect_to root_url
-  end
-
   def help_menus
     # 假帐号登录
-    session[:pc_supplier_id] = TEST_USER_ID if session[:pc_supplier_id].blank?
+    session[:account_id] = TEST_USER_ID if session[:account_id].blank?
     @help_menus = HelpMenu.winwemedia.order(:sort)
     render layout: 'application'
   end
 
-  def uzhe_help
-    session[:pc_supplier_id] = TEST_USER_ID if session[:pc_supplier_id].blank?
-    @help_menus = HelpMenu.youzhe.order(:sort)
-    # render 'help_menus', layout: 'application'
-    render layout: false
-  end
-
   def help_post
     # 假帐号登录
-    session[:pc_supplier_id] = TEST_USER_ID if session[:pc_supplier_id].blank?
+    session[:account_id] = TEST_USER_ID if session[:account_id].blank?
     @help_menu = HelpMenu.where(id: params[:id].to_i).first
 
     return redirect_to root_url, alert: '页面不存在' unless @help_menu
@@ -196,21 +99,6 @@ class HomeController < ApplicationController
       @uzhe = true
       render 'uzhe_post', layout: false
     end
-  end
-
-  # TODO
-  def dev_logs
-    redirect_to site_dev_logs_url
-  end
-
-  def uzhe_logs
-    redirect_to oa_site_dev_logs_url
-  end
-
-  def show_dev_log
-    return redirect_to root_url, alert: '页面不存在' if params[:id].to_i == 0
-
-    redirect_to site_dev_log_url(id: params[:id].to_i)
   end
 
   def verify_code

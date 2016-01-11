@@ -100,7 +100,7 @@ class PaymentsController < ApplicationController
   end
 
   def payment_request
-    @supplier = Supplier.where(id: params[:supplier_id]).first
+    @supplier = Account.where(id: params[:supplier_id]).first
     return render json: {errcode: 001, errmsg: "supplier not found"} unless @supplier
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first

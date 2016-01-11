@@ -21,7 +21,7 @@ class Biz::AlbumPhotosController < ApplicationController
     @photo = AlbumPhoto.new
     @photo.album_id = @album.id
     @photo.name = params[:name]
-    @photo.qiniu_pic_key = params[:qiniu_pic_key]
+    @photo.pic_key = params[:pic_key]
     @photo.save
     render :partial => "biz/albums/photo", :locals => {photo: @photo, album_id: @album.id}
   end
@@ -63,11 +63,11 @@ class Biz::AlbumPhotosController < ApplicationController
   end
 
   def find_album
-    @album = current_user.albums.find params[:album_id]
+    @album = current_site.albums.find params[:album_id]
   end
 
   def check_activity
-    return redirect_to activity_albums_path, notice: '请先填写活动信息' unless current_user.album_activity
+    return redirect_to activity_albums_path, notice: '请先填写活动信息' unless current_site.album_activity
   end
 
 end

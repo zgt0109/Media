@@ -18,7 +18,7 @@ class Hotel < ActiveRecord::Base
 #  attr_accessible :cancel_time, :description, :name, :obligate_time, :status, :supplier_id, :wx_mp_user_id
   validates :name, :obligate_time, :cancel_time, presence: true
   
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
 
   has_many :hotel_branches, dependent: :destroy

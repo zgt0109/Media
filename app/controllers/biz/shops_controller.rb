@@ -1,7 +1,7 @@
 class Biz::ShopsController < ApplicationController
   include Biz::ShopRelatedPathHelper
   layout 'micro_shop'
-  helper_method :current_shop_branch, :current_shop_supplier, :current_shop_vip_user, :hotel_branch_path
+  helper_method :current_shop_branch, :current_shop_account, :current_shop_vip_user, :hotel_branch_path
 
   skip_before_filter *ADMIN_FILTERS
   before_filter :require_shop_supplier
@@ -10,7 +10,7 @@ class Biz::ShopsController < ApplicationController
   def sign_in
     return render layout: false if request.get?
     return redirect_to :back, alert: '验证码不正确' unless valid_verify_code? params[:verify_code]
-    sub_account = current_shop_supplier.shop_branch_sub_accounts.where(username: params[:name]).first
+    sub_account = current_shop_account.shop_branch_sub_accounts.where(username: params[:name]).first
     return redirect_to :back, alert: '门店名称不正确' unless sub_account
     return redirect_to :back, alert: '密码不正确' if !sub_account.authenticate( params[:password] )
     sign_in!(sub_account.id)
@@ -22,7 +22,7 @@ class Biz::ShopsController < ApplicationController
   end
 
   def consume_reports
-    @activity = current_shop_supplier.activities.coupon.show.first || current_shop_supplier.wx_mp_user.create_activity_for_coupon
+    @activity = current_shop_account.activities.coupon.show.first || current_shop_account.create_activity_for_coupon
 
     @search = current_shop_branch.consumes.joins("join coupons on coupons.id = consumes.consumable_id AND consumes.consumable_type = 'Coupon'").coupon.used.search(coupon_filter_search)
 
@@ -171,7 +171,7 @@ class Biz::ShopsController < ApplicationController
   end
 
   def find_vip_user
-    vip_user = current_shop_supplier.vip_users.visible.visible.where(params[:select_type] => params[:option_value]).first rescue nil
+    vip_user = current_shop_account.vip_users.visible.visible.where(params[:select_type] => params[:option_value]).first rescue nil
     return render json: {status: 0, user_status: '不存在'} if vip_user.nil?
     name = vip_user.name + "(#{vip_user.vip_grade_name})"
     usable_privileges = vip_user.usable_privileges.transaction_names_by_category(params[:modal])
@@ -186,13 +186,13 @@ class Biz::ShopsController < ApplicationController
   def find_consume
     activity_type = params[:activity_type].to_i
     if [2, 4, 5, 8, 25, 28, 64, 82].include?(activity_type)
-      consume = current_shop_supplier.activity_consumes.by_activity_type(activity_type).unused.unexpired.where(code: params[:code]).first
+      consume = current_shop_account.activity_consumes.by_activity_type(activity_type).unused.unexpired.where(code: params[:code]).first
     elsif activity_type == 62
-      consume = current_shop_supplier.wx_mp_user.consumes.unused.unexpired.coupon_use_start.readonly(false).find_by_code(params[:code])
+      consume = current_shop_account.consumes.unused.unexpired.coupon_use_start.readonly(false).find_by_code(params[:code])
     elsif activity_type == 70
-      consume = current_shop_supplier.wx_mp_user.consumes.recommend.unused.unexpired.readonly(false).find_by_code(params[:code])
+      consume = current_shop_account.consumes.recommend.unused.unexpired.readonly(false).find_by_code(params[:code])
     elsif activity_type == 71
-      consume = current_shop_supplier.wx_mp_user.consumes.unfold.unused.unexpired.readonly(false).find_by_code(params[:code])
+      consume = current_shop_account.consumes.unfold.unused.unexpired.readonly(false).find_by_code(params[:code])
     end
 
     if consume
@@ -231,14 +231,14 @@ class Biz::ShopsController < ApplicationController
 
     if params[:direction_type] == '1'
       if current_shop_vip_user.increase_points!(points)
-        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::ADJUST_IN, points: points, supplier_id: current_shop_supplier.id, shop_branch_id: current_shop_branch.id, description: params[:description]
+        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::ADJUST_IN, points: points, supplier_id: current_shop_account.id, shop_branch_id: current_shop_branch.id, description: params[:description]
         flash[:notice] = "增加成功"
       else
         return redirect_to :back, alert: '增加失败,积分最小值为0'
       end
     else
       if current_shop_vip_user.decrease_points!(points)
-        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::OUT, points: points, supplier_id: current_shop_supplier.id, shop_branch_id: current_shop_branch.id, description: params[:description]
+        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::OUT, points: points, supplier_id: current_shop_account.id, shop_branch_id: current_shop_branch.id, description: params[:description]
         flash[:notice] = "减少成功"
       else
         return redirect_to :back, alert: '减少失败，积分最小值为0'
@@ -281,7 +281,7 @@ class Biz::ShopsController < ApplicationController
       recharge_money_privilege = current_shop_vip_user.recharge_money_privilege(amount)
       @selected_privilege_ids = [recharge_discount_privilege.try(:id), recharge_point_privilege.try(:id), recharge_money_privilege.try(:id)].compact
       @pay_amount = current_shop_vip_user.recharge_discounted_amount(amount).to_f.round(2)
-      @given_points = current_shop_supplier.giving_points(amount, PointType::RECHARGE, {}, current_shop_vip_user, pay: false)
+      @given_points = current_shop_account.giving_points(amount, PointType::RECHARGE, {}, current_shop_vip_user, pay: false)
       @given_moneys = current_shop_vip_user.give_money(amount)
       @form = 'charge'
     elsif params[:direction_type] == '2' || params[:direction_type] == '4'
@@ -289,7 +289,7 @@ class Biz::ShopsController < ApplicationController
       consume_discount_privilege = current_shop_vip_user.consume_discount_privilege(amount)
       @selected_privilege_ids = [consume_discount_privilege.try(:id), consume_point_privilege.try(:id)].compact
       @pay_amount = current_shop_vip_user.consumed_amount(amount).to_f.round(2)
-      @given_points = current_shop_supplier.giving_points(amount, PointType::CONSUME, {}, current_shop_vip_user, pay: false)
+      @given_points = current_shop_account.giving_points(amount, PointType::CONSUME, {}, current_shop_vip_user, pay: false)
       @form = "consume"
     end
 
@@ -323,13 +323,12 @@ class Biz::ShopsController < ApplicationController
 
   #套餐发放
   def save_release
-    @vip_package = current_shop_supplier.vip_card.vip_packages.where(id: params[:vip_package_id]).first
-    vip_user = current_shop_supplier.vip_users.visible.where(id: params[:vip_user_id]).first
+    @vip_package = current_shop_account.vip_card.vip_packages.where(id: params[:vip_package_id]).first
+    vip_user = current_shop_account.vip_users.visible.where(id: params[:vip_user_id]).first
     return render_with_alert :release, '该会员不存在', layout: 'application_pop' unless vip_user
     return render_with_alert :release, '发放失败', layout: 'application_pop' unless @vip_package
     VipPackageItemConsume.transaction do
-      vip_packages_vip_users = @vip_package.vip_packages_vip_users.new(supplier_id: @vip_package.supplier_id,
-                                                                        wx_mp_user_id: @vip_package.wx_mp_user_id,
+      vip_packages_vip_users = @vip_package.vip_packages_vip_users.new(site_id: @vip_package.site_id,
                                                                         vip_user_id: vip_user.id,
                                                                         shop_branch_id: current_shop_branch.id,
                                                                         description: params[:description],
@@ -339,8 +338,7 @@ class Biz::ShopsController < ApplicationController
                                                                         payment_type: params[:payment_type])
       if vip_packages_vip_users.update_vip_user_amount(VipUserTransaction::SHOP_PAY_DOWN)
         @vip_package.vip_package_items_vip_packages.each do |vp|
-          vp.items_count.times{vip_user.vip_package_item_consumes.create(supplier_id: @vip_package.supplier_id,
-                                                                    wx_mp_user_id: @vip_package.wx_mp_user_id,
+          vp.items_count.times{vip_user.vip_package_item_consumes.create(site_id: @vip_package.site_id,
                                                                     vip_package_id: vp.vip_package_id,
                                                                     vip_packages_vip_user_id: vip_packages_vip_users.id,
                                                                     vip_package_item_id: vp.vip_package_item_id,
@@ -357,7 +355,7 @@ class Biz::ShopsController < ApplicationController
 
   #套餐核销
   def update_consumes
-    item_consume = current_shop_supplier.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
+    item_consume = current_shop_account.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
     if item_consume.try(:can_use?)
       item_consume.update_attributes(status: VipPackageItemConsume::USED, shop_branch_id: current_shop_branch.id)
       redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
@@ -367,7 +365,7 @@ class Biz::ShopsController < ApplicationController
   end
 
   def find_vip_package_item
-    item_consume = current_shop_supplier.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
+    item_consume = current_shop_account.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
     if (current_shop_branch.available_vip_packages.pluck(:id).include?(item_consume.try(:vip_package_id)) || !item_consume.try(:vip_package).try(:shop_branch_limited?)) && item_consume.try(:can_use?)
       render json: {find_status: 1, sn_code: params[:sn_code], item_name: item_consume.vip_package_item.name,
                     vip_user_name: item_consume.vip_user.name, vip_user_mobile: item_consume.vip_user.mobile,
@@ -380,8 +378,8 @@ class Biz::ShopsController < ApplicationController
 
   #发放套餐默认余额支付
   def use_usable_amount
-    vip_user = current_shop_supplier.vip_users.visible.where(id: params[:vip_user_id]).first
-    vip_package = current_shop_supplier.vip_card.vip_packages.where(id: params[:vip_package_id]).first
+    vip_user = current_shop_account.vip_users.visible.where(id: params[:vip_user_id]).first
+    vip_package = current_shop_account.vip_card.vip_packages.where(id: params[:vip_package_id]).first
     render json: {status: (vip_user && vip_package && vip_user.usable_amount >= vip_package.price ? true : false)}
   end
 
@@ -394,7 +392,7 @@ class Biz::ShopsController < ApplicationController
     end
 
     def require_shop_supplier
-      supplier = Supplier.find(params[:supplier_id])
+      supplier = Account.find(params[:supplier_id])
       session[:shop_supplier_id] = supplier.id
 
       sub_account_id = Des.decrypt(params[:said])
@@ -418,14 +416,14 @@ class Biz::ShopsController < ApplicationController
     end
 
     def current_shop_vip_user
-      @vip_user = current_shop_supplier.vip_users.visible.find(params[:id])
+      @vip_user = current_shop_account.vip_users.visible.find(params[:id])
     end
 
   def search_activities_or_coupons
       return [] if params[:activity_type_id].blank?
 
       activity_type_id = params[:activity_type_id].to_i
-      collection = current_shop_supplier.activities.where(activity_type_id: activity_type_id)
+      collection = current_shop_account.activities.where(activity_type_id: activity_type_id)
       collection = collection.first.coupons.normal rescue Coupon.none if activity_type_id == 62
       collection.pluck([:name, :id]).unshift(['全部', ''])
     end
@@ -439,7 +437,7 @@ class Biz::ShopsController < ApplicationController
     end
 
     def sign_in!(sub_account_id)
-      session[:pc_supplier_id] = nil # 为了共用同一套餐饮和外卖的功能，登录门店子系统需要退出当前商户的登录
+      session[:account_id] = nil # 为了共用同一套餐饮和外卖的功能，登录门店子系统需要退出当前商户的登录
       session[:sub_account_id] = sub_account_id
 
       signed_in_path = after_sign_in_path

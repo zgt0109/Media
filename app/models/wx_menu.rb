@@ -3,7 +3,6 @@
 # Table name: wx_menus
 #
 #  id            :integer          not null, primary key
-#  supplier_id   :integer
 #  wx_mp_user_id :integer          not null
 #  parent_id     :integer          default(0), not null
 #  sort          :integer          default(0), not null
@@ -33,7 +32,6 @@ class WxMenu < ActiveRecord::Base
 
   belongs_to :parent, class_name: 'WxMenu', foreign_key: :parent_id
   has_many :children, class_name: 'WxMenu', foreign_key: :parent_id, dependent: :destroy#, order: :sort
-  belongs_to :supplier
   belongs_to :wx_mp_user
   belongs_to :menuable, polymorphic: true
 

@@ -12,8 +12,8 @@ class WxUserAddress < ActiveRecord::Base
   ]
 
   enum_attr :is_default, :in => [
-      ['default',   true,  '默认'],
-      ['not_default',  false, '未默认']
+    ['default',   true,  '默认'],
+    ['not_default',  false, '未默认']
   ]
 
   def province_city

@@ -99,7 +99,7 @@ class VipUserPayment < ActiveRecord::Base
 
     def detected_vip_user(wx_mp_user_id, open_id)
       supplier = WxMpUser.where(id: wx_mp_user_id).first.try(:supplier)
-      wx_user = supplier.wx_users.where(uid: open_id).first
+      wx_user = supplier.wx_users.where(openid: open_id).first
 
       return if supplier.nil? and wx_user.nil?
 

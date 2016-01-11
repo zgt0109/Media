@@ -147,7 +147,7 @@ class Mobile::AidsController < Mobile::BaseController
 
   # acceptance prize page
   def acceptance
-    supplier = Supplier.find params[:supplier_id]
+    supplier = Account.find params[:supplier_id]
     activity_consume = @activity.activity_consumes.where(wx_user_id: @wx_user.id).first
     return render json: {errcode: 20001, errmsg: "他人不能兑奖"} unless self? 
     return render json: {errcode: 20002, errmsg: "没有奖项"} unless activity_consume.present?
@@ -291,8 +291,8 @@ class Mobile::AidsController < Mobile::BaseController
                 @activity.activity_notices.active.first
               end
 
-    @owner_user =  @wx_mp_user.wx_users.where(uid: params[:owner_openid]).first  if params[:owner_openid].present?
-    @origin_user = @wx_mp_user.wx_users.where(uid: params[:origin_openid]).first if params[:origin_openid].present?
+    @owner_user =  @wx_mp_user.wx_users.where(openid: params[:owner_openid]).first  if params[:owner_openid].present?
+    @origin_user = @wx_mp_user.wx_users.where(openid: params[:origin_openid]).first if params[:origin_openid].present?
     
     if @owner_user.present?
       @activity_user ||= @activity.activity_users.where(wx_user_id: @owner_user.id).first
@@ -445,7 +445,7 @@ class Mobile::AidsController < Mobile::BaseController
   def wx_share_setting
     @share_title = @activity.try(:name) || '微助力活动'
     @share_desc  = @activity.try(:description) || '微助力活动' 
-    @share_image = qiniu_image_url(@activity.try(:qiniu_pic_key))
+    @share_image = qiniu_image_url(@activity.try(:pic_key))
   end
   
   def mobile_params

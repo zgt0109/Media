@@ -1,0 +1,86 @@
+<% content_for :main_content do %>
+  <div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微互动', activity_forms_path %></li>
+        <li><%= link_to '微调研', surveys_activities_path %></li>
+      </ul>
+      <!-- .breadcrumb -->
+      <%= render '/layouts/qrcode' %>
+
+    </div>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12 margin-top-10">
+        <% @survey_questions.each_with_index do |q, index| %>
+
+          <h4 class="text-info">题目<%= (@survey_questions.current_page - 1) * @survey_questions.limit_value + index + 1 %>：<%= q.name %>
+          </h4>
+          <table id="researchChart" class="table table-striped table-bordered table-hover dataTable ">
+            <thead>
+              <tr>
+                <th width="60%">选项</th>
+                <th width="10%">小计</th>
+                <th width="30%">比例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- <tr>
+                <td><%#= q.answer_a %></td>
+                <td><%#= q.selected_count('1') %></td>
+                <td>
+                  <%#= render_progress_bar(f(q.per('1'))) %>
+                </td>
+              </tr>
+              <tr>
+                <td><%#= q.answer_b %></td>
+                <td><%#= q.selected_count('2') %></td>
+                <td>
+                  <%#= render_progress_bar(f(q.per('2'))) %>
+                </td>
+              </tr> -->
+
+              <%- if q.survey_question_choices.present? %>
+                <%#- letters = ('c'..'z').to_a %>
+                <%- q.survey_question_choices.order(:position).each_with_index do |choice, index|%>
+                  <%# if choice.name.present? %>
+                    <%#- label = letters.fetch(index) %>
+                    <tr>
+                      <% if q.text? %>
+                        <td><%= choice.name %></td>                      
+                      <% elsif q.text_picture? %>
+                        <td><%= image_tag choice.pic_url, size: '40x40' if choice.pic_url %>&nbsp;&nbsp;<%= choice.name %></td>                      
+                      <% else %>
+                        <td><%= image_tag choice.pic_url, size: '40x40' if choice.pic_url %></td>
+                      <% end %>
+                      <td><%#= q.selected_count((index+3).to_s) %><%= q.selected_count(choice) %></td>
+                      <td>
+                        <%= render_progress_bar(f(q.per(choice))) %>
+                      </td>
+                    </tr>
+                  <%# end %>
+                <% end %>
+              <% end %>
+              <% if q.answer_other && q.text? %>
+                <tr>
+                  <td>其他</td>
+                  <td><%= q.selected_count('其他') %></td>
+                  <td>
+                    <%= render_progress_bar(f(q.per('其他'))) %>
+                  </td>
+                </tr>
+              <% end %>
+              <tr><td>本题有效填写人次</td><td colspan="2"><%= q.total_user.count %></td></tr>
+            </tbody>
+          </table>
+        <% end %>
+        <%= paginate @survey_questions %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<% end %>

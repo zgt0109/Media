@@ -13,7 +13,6 @@ module App
       return unless session[:wx_user_id]
       activity = Activity.where(id: params[:activity_id]).first
       return unless activity
-      return unless activity.supplier.bqq_account?
         
       if activity.try(:setted?)
         if activity.activity_status == Activity::WARM_UP

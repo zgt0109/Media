@@ -19,7 +19,7 @@
             </a>
           </li>
           <li>
-            <a href="/activity_survey_questions/user_data">
+            <a href="/survey_questions/user_data">
               用户数据
             </a>
           </li>
@@ -90,17 +90,17 @@
                             <%#= activity.activity_type.fight? ? (activity.setted? ? activity.activity_status_name : (activity.setting? ? "未设题" : activity.status_name)) : "" %>
                           </td>
                           <td title="题目数量">
-                            <%= activity.activity_survey_questions.count %>
+                            <%= activity.survey_questions.count %>
                           </td>
                           <td class="tleft">
                             <%= link_to "编辑", "/activities/#{activity.id}/survey", title: "编辑微调研" %> &nbsp;
 
                             <% if activity.allow_set_question? %>
-                              <%= link_to "题目", "/activity_survey_questions?activity_id=#{activity.id}" %> &nbsp;
+                              <%= link_to "题目", "/survey_questions?activity_id=#{activity.id}" %> &nbsp;
                             <% end %>
 
-                            <% if !(attrs[0] == Activity::NOT_START_NAME) && activity.activity_survey_questions.present? %>
-                              <%= link_to "统计图表", diagram_activity_survey_questions_path(activity_id: activity.id) %> &nbsp;
+                            <% if !(attrs[0] == Activity::NOT_START_NAME) && activity.survey_questions.present? %>
+                              <%= link_to "统计图表", diagram_survey_questions_path(activity_id: activity.id) %> &nbsp;
                             <% end %>
 
                             <%= link_to "停止&nbsp;".html_safe, [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => "调研活动正在进行，确认停止吗？") } if attrs[2] %>

@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="">选择活动<span class="required-star">*</span></label>
           <div class="clearfix">
-            <%= f.select :activity_id, current_user.activities.active.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id) }, validate: true, class: 'form-control' if f.object.methods.include? :activity_id %>
+            <%= f.select :activity_id, current_site.activities.active.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id) }, validate: true, class: 'form-control' if f.object.methods.include? :activity_id %>
           </div>
         </div>
     </div>
@@ -33,7 +33,7 @@
       <div class="form-group">
         <label class="control-label">选择语音<span class="required-star">*</span></label>
         <div class="clearfix">
-          <%= f.select :audio_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: f.object.try(:menuable_id) }, validate: true, class: 'form-control' if f.object.methods.include? :audio_id %>
+          <%= f.select :audio_id, current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: f.object.try(:menuable_id) }, validate: true, class: 'form-control' if f.object.methods.include? :audio_id %>
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@
       <div class="form-group">
         <label class="control-label">图文资源<span class="required-star">*</span></label>
         <div class="clearfix">
-          <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'form-control' if f.object.methods.include? :single_material_id %>
+          <%= f.select :single_material_id, current_site.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'form-control' if f.object.methods.include? :single_material_id %>
           &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
         </div>
       </div>
@@ -111,7 +111,7 @@
       <div class="form-group">
         <label class="control-label">图文资源<span class="required-star">*</span></label>
         <div class="clearfix">
-          <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'form-control' if f.object.methods.include? :multiple_material_id %>
+          <%= f.select :multiple_material_id, current_site.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: f.object.try(:menuable_id), include_blank: true }, validate: true, class: 'form-control' if f.object.methods.include? :multiple_material_id %>
           &nbsp;&nbsp;<%= link_to " 管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
         </div>
       </div>
@@ -147,11 +147,7 @@
       <div class="form-group">
         <label class="control-label">QQ号码<span class="required-star">*</span></label>
         <div class="clearfix">
-          <% if current_user.bqq_account? %>
-              <%= f.text_field :qq, value: current_user.api_user.uid, class: "form-control", readonly: true if f.object.methods.include? :qq %>
-          <% else %>
-              <%= f.text_field :qq, class: "form-control", validate: true if f.object.methods.include? :qq %>
-          <% end %>
+          <%= f.text_field :qq, class: "form-control", validate: true if f.object.methods.include? :qq %>
         </div>
       </div>
     </div>
@@ -176,7 +172,7 @@
       <!--营销互动活动-->
       <div class="form-group">
         <label class="control-label">选择活动类型<span class="required-star">*</span><small class="help-inline text-warning line-height-32">活动类型会根据大的业务模块进行分类</small></label>
-        <% types = current_user.bqq_account? ? ActivityType.bqq_markets : ActivityType.markets %>
+        <% types = ActivityType.markets %>
         <% activity = (types.select{|m| m.last.to_s.split(', ').to_a.include?(f.object.try(:menuable).try(:activity_type_id).to_s)}.flatten rescue []) %>
         <div class="clearfix">
           <%= select_tag "activity_market", options_for_select(types, selected: activity.last), class: 'form-control gl' %>
@@ -231,7 +227,7 @@
         <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
         <div class="clearfix">
           <%= f.select :docking_type, options_for_select(WebsiteMenu.docking_type_options), {}, class: "form-control" if f.object.methods.include? :docking_type %>
-          <%= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+          <%#= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
         </div>
       </div>
 

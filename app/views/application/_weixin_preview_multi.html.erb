@@ -38,7 +38,7 @@
   <div id="file-upload-token" data-token='<%= qiniu_pictures_upload_token %>' data-bucket='<%= BUCKET_PICTURES %>'></div>
 
   <div class="form-wrap">
-    <input name="materials[][supplier_id]" value="<%= @material.supplier_id %>" type="hidden" />
+    <input name="materials[][site_id]" value="<%= @material.site_id %>" type="hidden" />
     <input name="materials[][material_type]" value="<%= @material.material_type %>" type="hidden" />
 
     <div class="form-group">
@@ -92,7 +92,7 @@
           <div class="form-group">
             <label class="control-label">选择活动<span class="required-star">*</span></label>
             <div class="clearfix">
-              <%= select_tag 'materials[][activity_id]', options_for_select(current_user.activities.active.unexpired.map{|m| [truncate_u(m.name), m.id] }), { class: 'col-xs-6' } %>
+              <%= select_tag 'materials[][activity_id]', options_for_select(current_site.activities.active.unexpired.map{|m| [truncate_u(m.name), m.id] }), { class: 'col-xs-6' } %>
             </div>
           </div>
         </div>

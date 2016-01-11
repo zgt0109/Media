@@ -1,0 +1,147 @@
+<div class="widget-box transparent">
+  <div class="widget-header widget-header-flat">
+    <h4 class="">编辑菜单</h4>
+  </div>
+  <div class="widget-body">
+    <%= form_for @wx_menu, url: (@wx_menu.new_record? ? wx_menus_path : wx_menu_path(@wx_menu)), html: { method: @wx_menu.new_record? ? "POST" : "PUT" }, validate: true, :html => { :class => 'box-form form-row', id: 'wx_menu_form', role: "form"} do |f| %>
+        <%= f.hidden_field :parent_id %>
+        <%= f.hidden_field :key %>
+        <%= f.hidden_field :event_type %>
+        <%= f.hidden_field :sort %>
+        <div class="form-group margin-top-10">
+          <label class="control-label">菜单名称<span class="required-star">*</span>
+            <small class="text-warning"><%= @wx_menu.parent_id == 0 ? "不多于4个汉字或8个字母" : "不多于8个汉字或16个字母" %></small>
+          </label>
+
+          <div class="clearfix">
+            <%= f.text_field :name, class: 'col-sm-8 required', maxlength: @wx_menu.parent_id == 0 ? 8 : 16, placeholder: '' %>
+          </div>
+          <span class="help-block"></span>
+        </div>
+        <% if @wx_menu.has_children? %>
+
+        <% else %>
+            <div class="form-group">
+              <label class="control-label">类型<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%
+                  reject_types = (@wx_mp_user.auth_subscribe? or @wx_mp_user.auth_service?) ? [14, 9] : [15, 14, 9]
+                  menu_type_options = WxMenu.menu_type_options.reject{|m| reject_types.include?(m.last) }
+                %>
+                <%= f.select :menu_type, menu_type_options, {} ,class: "col-sm-8", data: {toggle: '', href: '', target: '', fn: ''} %>
+              </div>
+            </div>
+
+            <div class="tab-content no-border no-padding" id="tab1">
+
+              <div class="tab-pane active" id="tab-0">
+                <div class="form-group">
+                  <label class="">文本内容<span class="required-star"> * </span></label>
+                  <div class="clearfix">
+                    <%= f.text_area :content, rows: 5, class: 'col-sm-8 required', validate: true %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane" id="tab-1">
+                <div class="form-group">
+                  <label class="">图文资源<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.select :material_id, current_site.materials.graphic.root.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @wx_menu.menuable_id, include_blank: true }, validate: true, class: 'col-sm-8 required' %>
+                    <%= link_to "　管理图文资源", materials_url, class: 'help-inline line-height-32', target: '_blank' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-8 no-padding">
+                    <label class="pull-left">图文预览</label>
+                  </div>
+
+                  <div class="col-sm-8 no-padding">
+                    <div class="warpVMS">
+                      <div class="vMicroShow">
+                        <div class="vMSHead">
+                          <span class="title">
+                            <%= @wx_menu.material? ? @wx_menu.menuable.try(:title) : '素材标题' rescue '' %>
+                          </span>
+                          <br>
+                          <span class="grey">
+                            <%= @reply.single_graphic? ? @wx_menu.menuable.created_at.to_date : Date.today rescue Date.today %>
+                          </span>
+                        </div>
+                        <div class="vMSImg" id="img-1">
+
+                        </div>
+                        <div class="vMSFoot">
+                          <p class="grey">
+                            <%= raw @wx_menu.material? ? @wx_menu.menuable.try(:summary) : '素材描述'  rescue '' %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane" id="tab-9">
+                <div class="form-group">
+                  <label class="">选择活动<span class="required-star"> * </span></label>
+                  <div class="clearfix">
+                    <%= f.select :activity_id, current_site.activities.valid.unexpired.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @wx_menu.menuable_id }, validate: true, class: 'col-sm-8 required' %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane" id="tab-13">
+                <div class="form-group">
+                  <label class="">选择相册<span class="required-star"> * </span></label>
+                  <div class="clearfix">
+                    <%= f.select :album_id, current_site.albums.show.order('albums.sort, albums.updated_at DESC').pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @wx_menu.menuable_id }, validate: true, class: 'col-sm-8 required' %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane" id="tab-14">
+                <div class="form-group">
+                  <label class="">选择360全景<span class="required-star"> * </span></label>
+                  <div class="clearfix">
+                    <%= f.select :panoramagram_id, current_site.activities.panoramagram.active.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @wx_menu.menuable_id }, validate: true, class: 'col-sm-8 required' %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane" id="tab-4">
+                <div class="form-group">
+                  <label class="control-label">快速选择链接</label>
+                  <div class="clearfix">
+                    <%= select_tag :quick_link, options_for_select(quick_link_options, @wx_menu.url), class: "col-sm-8 required", validate: true, id: 'quick_select_link' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="">链接<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :url, class: 'col-sm-8 require', validate: true, placeholder: '' %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane " id="tab-3">
+                <div class="form-group">
+                  <label class="">选择语音<span class="required-star">*</span></label>
+
+                  <div class="clearfix">
+                    <%= f.select :audio_id, current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @wx_menu.menuable_id }, validate: true, class: 'col-md-8 required' %>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        <% end %>
+        <div class="clearfix"></div>
+        <div class="text-left margin-top-10">
+          <input type="submit" class="btn btn-primary btn-sm btn-submit" value="保存">
+          <input type="reset" class="btn btn-default btn-sm" value="取消" onclick="javascript:location.href='<%= wx_menus_path %>'">
+        </div>
+    <% end %>
+  </div>
+</div>

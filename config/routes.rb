@@ -5,44 +5,33 @@ Wp::Application.routes.draw do
 
   # resources :logged_exceptions
 
+  mount RuCaptcha::Engine => "/rucaptcha"
+
   require 'sidekiq/web'
-  # authenticate :supplier do
+  # authenticate :account do
     mount Sidekiq::Web => '/sidekiq'
   # end
 
-  # match 'pages/newbusiness', via: [:get, :post], as: :newbusiness
-
   match "auth_agent/wx_oauth", to: "auth_agent#wx_oauth"
   match "auth_agent/wx_oauth_callback", to: "auth_agent#wx_oauth_callback"
-
-  resources :password_resets do
-    post :resend_email, on: :member
-  end
 
   resources :sessions, only: :create
   match 'sign_in'  => 'sessions#new',     as: :sign_in
   match 'sign_out' => 'sessions#destroy', as: :sign_out
   match 'secret'   => 'sessions#secret'
-  match 'register' => 'suppliers#new', as: :register
+  match 'register' => 'accounts#new', as: :register
+  match 'profile' => 'accounts#index', as: :profile
 
-  # match :oa, :yeahsite, controller: :sites
+  resources :passwords, only: [:new, :create]
+  resources :password_resets do
+    post :resend_email, on: :member
+  end
 
   match :verify_code, :validate_image_code, controller: :home
-  match :helpers, :games, :help_menus, :console, :account, controller: :home
-  # match 'solution' => 'home#solution', as: :solution
-  # match '/home/pay' => 'home#pay'
-  # match 'solution/:name' => 'home#solution'
-  # match 'navigation' => 'home#navigation', as: :navigation
-  # match 'navigation/:name' => 'home#navigation'
-  match 'home/introduce' => 'home#show_introduce'
+  match :helpers, :games, :help_menus, :console, controller: :home
 
-  # match 'zhidahao' => 'static#zhidahao', as: :zhidahao
-  # match '/static/app' => 'static#app'
-  # match '/static/mobile' => 'static#mobile'
-
-  match 'supplier_footer' => 'suppliers#supplier_footer', as: :supplier_footer
-  post  'update_supplier_footer' => 'suppliers#update_supplier_footer', as: :update_supplier_footer
-
+  match 'account_footer' => 'accounts#account_footer', as: :account_footer
+  post  'update_account_footer' => 'accounts#update_account_footer', as: :update_account_footer
 
   match '/recepit/print',  :to => "pro::shop_branch_print_templates#recepit"
   match '/printlog',       :to => "pro::shop_branch_print_templates#printlog"
@@ -51,16 +40,8 @@ Wp::Application.routes.draw do
   match "/404", :to => "home#not_found", as: :four_o_four, constraints: {format: :html}
   match "/500", :to => "home#error", as: :five_o_o, constraints: {format: :html}
 
-  # match "/fxt/ad_owner" => "fxt#ad_owner"
-  # match "/fxt/operators" => "fxt#operators"
-
   resources :home, only: :index do
     get :help_post, on: :member
-  end
-
-  resources :flow_reports, only: :index
-  resources :operating_reports, only: :index do
-    get :subscribes, :keyword, :activity_hit, :message_hit, on: :collection
   end
 
   resources :system_messages, only: [:index, :destroy] do
@@ -104,8 +85,6 @@ Wp::Application.routes.draw do
   match "/wxpay/test", :to => "wxpay#test"
   match "/wxpay/success", :to => "wxpay#success"
   match "/wxpay/fail", :to => "wxpay#fail"
-  match "/wxpay/yaic_pay", :to => "wxpay#yaic_pay"
-  match "/wxpay/yaic_faild", :to => "wxpay#yaic_faild"
   match "/wxpay/hongbao_pay", :to => "wxpay#hongbao_pay"
   match "/wxpay/hongbao_faild", :to => "wxpay#hongbao_faild"
 
@@ -148,12 +127,7 @@ Wp::Application.routes.draw do
   end
   resources :feedbacks, only: [:index, :create, :show]
 
-  resources :binds, only: :index do
-    post :rebind, :index, :step1, on: :collection
-    get :rebind, :bind_process, :binding, :bind_validate, :step1, :step2, :binded, on: :collection
-  end
-
-  resources :assistant_suppliers, only: [] do
+  resources :assistants, only: [:index] do
     post :toggle, on: :collection
   end
 
@@ -173,71 +147,22 @@ Wp::Application.routes.draw do
     post :forbid_replier, :cancel_forbid_replier, :deny, :check, on: :member
   end
 
-  resources :suppliers, only: [:new, :create, :update, :edit] do
-    get :sms_switch, :send_sms,  on: :collection
-    post :open_sms, :close_sms, :send_message, :send_text_message, :update_tel, on: :collection
-  end
-
-  resources :supplier_applies, only: [:new, :create] do
-    get :free, :send_sms, on: :collection
-  end
-
-  resources :supplier_prints do
+  resources :accounts, only: [:new, :create, :update, :edit] do
     collection do
-      get :activities
-    end
-    member do
-      put :update_activities
+      get :sms_switch, :send_sms
+      post :open_sms, :close_sms, :send_message, :send_text_message, :update_mobile
     end
   end
 
-  resources :wifi_clients, only: [:index, :create, :update] do
-    get :mobile, on: :collection
+  resources :prints do
+    get :activities, on: :collection
   end
 
   match "/member/bind", :to => "wifi_clients#bind" #给潮wifi调用的接口
   match "/member/modify_bind", :to => "wifi_clients#modify_bind" #给潮wifi调用的接口
 
-  resources :supplier_print_settings, :supplier_print_pictures
-  resources :supplier_print_clients do
-    resources :supplier_print_pictures
-    member do
-      post :update_pics, :delete_pics, :update_temp
-    end
-  end
-
-  resources :api, only: [] do
-    collection do
-      get :msg_test, :service, :callback, :map_url
-      post :service
-    end
-  end
-  match '/server/:code' => 'api#service', via: [:post, :get]
-  match '/:app_id/callback' => 'api#service', via: [:post, :get]
-
-  # match '/bqq/auth' => 'bqq#auth', via: :post
-  # match '/bqq/login' => 'bqq#login', as: :bqq_login
-  # match '/api/bqq/website_menus' => 'bqq#website_menus'
-  # match '/api/bqq/autoreply' => 'bqq#autoreply'
-
-  resources :passwords, only: [:new, :create]
-
-  resources :questions do
-    post :destroy_multi, on: :collection
-  end
-
   resources :materials, :multiple_materials
   resources :materials_audios, only: [:index, :create, :destroy]
-
-  resources :wx_replies, only: [:new, :create, :update]
-  resources :wx_menus do
-    get :up_menu, :down_menu, :menus, on: :collection
-  end
-
-  resources :wx_mp_users, except: [:edit, :show, :destroy] do
-    post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
-    get :welcome, :reply, :qrcode, :oauth, on: :collection
-  end
 
   resources :activities do
     member do
@@ -277,7 +202,7 @@ Wp::Application.routes.draw do
     get :use_code, on: :member
   end
 
-  resources :activity_survey_questions do
+  resources :survey_questions do
     collection do
       get :diagram, :user_data, :update_sorts
     end
@@ -296,19 +221,55 @@ Wp::Application.routes.draw do
     get :cities, :districts, on: :collection
   end
 
-  resources :datacube_vips, only: :index do
-    get :point, :amount, on: :collection
-  end
-
   resources :platforms, only: :index do
     get :bind, on: :collection
   end
 
+  resources :keywords do
+    post :destroy_multi, on: :collection
+  end
+  resources :replies do
+    get :autoreply, on: :collection
+  end
+
   namespace :site do
     resources :dev_logs do
-      # get :oa, :fxt, on: :collection
     end
   end
-  # match :micro_channel, :h5_marketing, :large_customer, :optimal_code, :store, :electricity, :retail, :agents_inquiry, controller: 'site/pages'
+
+  namespace :pay do
+    resources :accounts do
+      get :identity, :account, :apply, :conditions, on: :collection
+    end
+    resources :withdraws do
+      get :apply, :request_withdraw, :service_recharge, on: :collection
+      post :confirm_withdraw, on: :collection
+    end
+    resources :transactions do
+      get :balance, on: :collection
+    end
+  end
+
+  namespace :wx do
+    resources :menus do
+      get :up_menu, :down_menu, :menus, on: :collection
+    end
+
+    resources :mp_users, except: [:edit, :show, :destroy] do
+      post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
+      get :qrcode, :oauth, on: :collection
+    end
+  end
+
+  namespace :data do
+    resources :sites do
+    end
+    resources :vip_users do
+      get :point, :amount, on: :collection
+    end
+    resources :wx_requests do
+      get :subscribe, :keyword, :hit, :not_hit, on: :collection
+    end
+  end
 
 end

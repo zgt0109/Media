@@ -371,7 +371,7 @@ zh-CN:
         ready_at: '预热时间'
         start_at: '开始时间'
         end_at: '结束时间'
-        qiniu_logo_key: 'Logo'
+        logo_key: 'Logo'
 
       activity_property:
         coupon_count: '优惠券总数'
@@ -416,7 +416,7 @@ zh-CN:
 
       vip_card:
         name: '会员卡名称'
-        supplier_name: '商家名称'
+        merchant_name: '商家名称'
       vip_care:
         care_day: '节日时间'
       wx_wall:
@@ -506,7 +506,7 @@ zh-CN:
         identity_avaliable_to: '证件有效期'
         identity_pic_key: '证件复印件'
       panoramagram:
-        qiniu_pic_key: '列表页缩略图'
+        pic_key: '列表页缩略图'
       wx/card:
         date_info_start_at: '固定时间'
         date_info_end_at: '固定时间'

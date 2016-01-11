@@ -1,6 +1,5 @@
 class BookingCategory < ActiveRecord::Base
-  belongs_to :supplier
-  belongs_to :wx_mp_user
+  belongs_to :site
 
   belongs_to :parent, class_name: 'BookingCategory', foreign_key: :parent_id
   has_many :children, class_name: 'BookingCategory', foreign_key: :parent_id
@@ -12,7 +11,6 @@ class BookingCategory < ActiveRecord::Base
 
   before_create :add_default_attrs
   after_create :update_items_booking_category_id
-
 
   scope :root, -> { where(parent_id: 0) }
 
@@ -120,16 +118,11 @@ class BookingCategory < ActiveRecord::Base
   private
 
   def add_default_attrs
-    return unless supplier
-    self.wx_mp_user_id = supplier.wx_mp_user.try(:id)
     if self.parent
       self.sort = self.parent.children.order(:sort).try(:last).try(:sort).to_i + 1
     else
       self.sort = supplier.booking_categories.root.order(:sort).try(:last).try(:sort).to_i + 1
     end
   end
-
-
-
 
 end

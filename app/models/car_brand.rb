@@ -14,8 +14,6 @@
 #
 
 class CarBrand < ActiveRecord::Base
-	mount_uploader :logo, CarPictureUploader
-	img_is_exist({logo: :qiniu_logo_key}) 
 	validates :name, presence: true
 
 	has_many :car_types
@@ -33,7 +31,7 @@ class CarBrand < ActiveRecord::Base
 	end
 
 	def logo_url(type = :large)
-		qiniu_image_url(qiniu_logo_key) || logo.try(type)
+		qiniu_image_url(logo_key) || logo.try(type)
 	end
 
 end

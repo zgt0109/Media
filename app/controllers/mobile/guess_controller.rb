@@ -73,7 +73,7 @@ class Mobile::GuessController < Mobile::BaseController
         if @wx_user.present?
           @subscribed = true
         else
-          @wx_user = WxUser.where(uid: request.session_options[:id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
+          @wx_user = WxUser.where(openid: request.session_options[:id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
         end
       end
     end

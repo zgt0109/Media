@@ -3,7 +3,7 @@ class Biz::GroupOrdersController < Biz::GroupBaseController
   before_filter :set_group_order, only: [:show, :consume, :destroy]
 
   def index
-    @search    = current_user.group_orders.latest.search(params[:search])
+    @search    = current_site.group_orders.latest.search(params[:search])
     @group_orders = @search.include(:payments).page(params[:page])
   end
 
@@ -29,12 +29,12 @@ class Biz::GroupOrdersController < Biz::GroupBaseController
 
   private
   def set_group_order
-    @group_order = current_user.group_orders.find(params[:id])
+    @group_order = current_site.group_orders.find(params[:id])
     @group_item  = @group_order.group_item
   end
 
   def set_group
-    @group = current_user.group
+    @group = current_site.group
     @activity =  @group.activity
   end
 end

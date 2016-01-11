@@ -1,10 +1,8 @@
 class ChannelQrcode < ActiveRecord::Base
-  # mount_uploader :logo, WebsiteLogoUploader
 
   DATES = {"one_weeks" => "最近7天", "one_months" => "最近一月", "six_months" => "最近半年", "twelve_months" => "最近一年"}
 
-	belongs_to :supplier
-  belongs_to :wx_mp_user
+	belongs_to :site
 	belongs_to :channel_type
   belongs_to :qrcode
 	has_many :qrcode_logs, as: :qrcodeable
@@ -24,13 +22,14 @@ class ChannelQrcode < ActiveRecord::Base
   ]
 
   validates :channel_type_id, presence: true
-  validates :name, presence: true, uniqueness: { scope: [:wx_mp_user_id, :status], message: '二维码名称不能重复', case_sensitive: false }, if: :normal?
+  validates :name, presence: true, uniqueness: { scope: [:site_id, :status], message: '二维码名称不能重复', case_sensitive: false }, if: :normal?
 
   scope :latest, -> { order('created_at DESC') }
 
   def save_logo
     if logo != "unchange"
     	#require 'RMagick'
+      wx_mp_user = site.wx_mp_user
     	wx_mp_user.auth!
     	attrs = {action_name: "QR_LIMIT_SCENE", action_info: {scene: {scene_id: scene_id}}}.to_json
       result = RestClient.post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=#{wx_mp_user.access_token}", attrs)
@@ -50,7 +49,7 @@ class ChannelQrcode < ActiveRecord::Base
           logo_img = Magick::Image.from_blob(open(img_url).read).first
           qrcode_img = qrcode_img.composite(logo_img.resize(260, 260), 510, 510, Magick::OverCompositeOp)#.to_blob
         end
-        self.qiniu_pic_key = ImgUploadQiniu.upload_qiniu(qrcode_img.to_blob)
+        self.pic_key = ImgUploadQiniu.upload_qiniu(qrcode_img.to_blob)
       end
       # system("rm -rf #{Rails.root.to_s}/public/qrcode_logo/*")
     end
@@ -58,7 +57,7 @@ class ChannelQrcode < ActiveRecord::Base
 
   def download(type)
     img = Magick::ImageList.new
-    qrcode = open(qiniu_image_url(qiniu_pic_key))
+    qrcode = open(qiniu_image_url(pic_key))
     return case type
     when "258" then img.from_blob(qrcode.read).resize(258, 258).to_blob
     when "344" then img.from_blob(qrcode.read).resize(344, 344).to_blob
@@ -72,7 +71,7 @@ class ChannelQrcode < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_url(qiniu_pic_key)
+    qiniu_image_url(pic_key)
   end
 
   def self.chart_data(total,date,today,select_time,params,total_qrcode_logs,channel_qrcodes)

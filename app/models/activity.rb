@@ -1,36 +1,9 @@
-# -*- coding: utf-8 -*-
-# == Schema Information
-#
-# Table name: activities
-#
-#  id                :integer          not null, primary key
-#  supplier_id       :integer          not null
-#  wx_mp_user_id     :integer          not null
-#  activity_type_id  :integer          not null
-#  name              :string(255)      not null
-#  keyword           :string(255)      not null
-#  ready_at          :datetime         not null
-#  start_at          :datetime         not null
-#  end_at            :datetime         not null
-#  activityable_id   :integer
-#  activityable_type :string(255)
-#  status            :integer          default(0), not null
-#  deal_status       :integer          default(0)
-#  pic               :string(255)
-#  summary           :string(255)
-#  description       :text
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#
 class Activity < ActiveRecord::Base
   include WxReplyMessage
   include Rails.application.routes.url_helpers
   include Concerns::ActivityRankingList
 
   default_url_options[:host] = Settings.mhostname
-
-  mount_uploader :pic, MaterialUploader
-  img_is_exist({pic: :qiniu_pic_key})
 
   # 业务管理相关活动 type_ids
   OPERATION_TYPE_IDS = []
@@ -66,24 +39,22 @@ class Activity < ActiveRecord::Base
   alias date_range= start_at_end_at=
 
   validates :name, presence: true, length: { maximum: 64 }
-  validates :wx_mp_user_id, presence: true
+  validates :site_id, presence: true
   validates :activity_type, presence: true
   validates :keyword, presence: true, length: { maximum: 20 }
-  validates :name, presence: true
   validates :description, presence: true, if: :can_validate?
   validate :end_at_greater_than_start_at
   validate :ready_at_litter_than_start_at
-  validate :unique_keyword
+  # validate :unique_keyword
 
   validates :summary, :presence => true, :if => :only_share_photo_setting?
-  validates :page_title, :qiniu_logo_key, :presence => true, :if => :wx_card?
+  validates :page_title, :logo_key, :presence => true, :if => :wx_card?
 
-  belongs_to :wx_mp_user
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :activity_type
   belongs_to :activityable, polymorphic: true
   belongs_to :share_photo_setting
-  belongs_to :wx_shake
+  belongs_to :shake
   belongs_to :brokerage, class_name: 'Brokerage::Setting'
 
   #TODO
@@ -117,12 +88,12 @@ class Activity < ActiveRecord::Base
   has_many :activity_users, dependent: :destroy
   has_many :activity_forms
   has_many :lottery_draws, dependent: :destroy
-  has_many :activity_form_fields, through: :activity_forms
+  has_many :form_fields, through: :activity_forms
   has_many :activity_enrolls, dependent: :destroy
   has_many :activity_vote_items, inverse_of: :activity, dependent: :destroy
   has_many :activity_user_vote_items, dependent: :destroy
   has_many :activity_groups, dependent: :destroy
-  has_many :activity_survey_questions, dependent: :destroy
+  has_many :survey_questions, dependent: :destroy
   has_many :activity_feedbacks, dependent: :destroy
   has_many :albums, order: "albums.sort, albums.updated_at DESC"
   has_many :greets, dependent: :destroy
@@ -156,7 +127,7 @@ class Activity < ActiveRecord::Base
   accepts_nested_attributes_for :activity_prizes, limit: 6
   accepts_nested_attributes_for :activity_property, :activity_notices, :activity_forms, :share_setting
   accepts_nested_attributes_for :activity_vote_items, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? && attributes['pic_key'].blank? && attributes['link'].blank? }
-  accepts_nested_attributes_for :website, :vip_card, :wx_mp_user, :supplier, :activities_fans_games
+  accepts_nested_attributes_for :website, :vip_card, :site, :activities_fans_games
   accepts_nested_attributes_for :ready_activity_notice, :active_activity_notice, :stopped_activity_notice
   accepts_nested_attributes_for :guess_setting, :activity_setting
 
@@ -191,23 +162,23 @@ class Activity < ActiveRecord::Base
   class << self
 
     # 根据关键字获取最合适的活动
-    def get_activity_by_keyword(keyword, supplier_id)
-      supplier_id = supplier_id.to_i
+    def get_activity_by_keyword(keyword, site_id)
+      site_id = site_id.to_i
       keyword = keyword.to_s.downcase
-      return nil if supplier_id == 0 || keyword.blank?
+      return nil if site_id == 0 || keyword.blank?
 
 
       # 精确匹配
-      activities = Activity.where("supplier_id = ? and status not in (-2) and lower(activities.keyword) = ? ", supplier_id, keyword).order("status DESC,end_at DESC")
+      activities = Activity.where("site_id = ? and status not in (-2) and lower(activities.keyword) = ? ", site_id, keyword).order("status DESC,end_at DESC")
 
       # 模糊匹配
       if activities.blank?
-        activities = Activity.where("supplier_id = ? and status not in (-2) and lower(activities.keyword) like ? ", supplier_id, "%#{keyword}%").order("status DESC,end_at DESC")
+        activities = Activity.where("site_id = ? and status not in (-2) and lower(activities.keyword) like ? ", site_id, "%#{keyword}%").order("status DESC,end_at DESC")
       end
 
       # 反向模糊匹配
       if activities.blank?
-        activities = Activity.where("supplier_id = ? and status not in (-2) and ? like CONCAT('%', activities.keyword, '%')", supplier_id, keyword).order("status DESC,end_at DESC")
+        activities = Activity.where("site_id = ? and status not in (-2) and ? like CONCAT('%', activities.keyword, '%')", site_id, keyword).order("status DESC,end_at DESC")
       end
 
       activities.each do |activity|
@@ -233,7 +204,7 @@ class Activity < ActiveRecord::Base
           return activity
         elsif (!activity.stopped? && (activity.hotel? or activity.wshop? or activity.wmall? or activity.wmall_shop? or activity.wmall_coupon?))
           return activity
-        elsif activity.supplier_print?
+        elsif activity.wx_print?
           return activity
         elsif activity.micro_aid?
           return activity
@@ -282,13 +253,12 @@ class Activity < ActiveRecord::Base
 
   def unique_keyword
     if active?
-      activity = Activity.valid.where(supplier_id: supplier_id, keyword: keyword).first
+      activity = Activity.valid.where(site_id: site_id, keyword: keyword).first
       if activity && self != activity
         errors.add :keyword, '已经被使用'
       end
     end
   end
-
 
   def micro_aid_rule
     self.extend.rule
@@ -547,49 +517,49 @@ class Activity < ActiveRecord::Base
 
   def create_default_properties!
     if website?
-      Website.where(activity_id: id).first_or_create(supplier_id: supplier_id, wx_mp_user_id: wx_mp_user_id, name: wx_mp_user.try(:name), template_id: 1)
+      Website.where(activity_id: id).first_or_create(site_id: site_id, name: site.wx_mp_user.try(:nickname), template_id: 1)
     elsif vip?
-      supplier_name = supplier.name.presence || supplier.nickname || wx_mp_user.name.presence
-      VipCard.where(activity_id: id).first_or_create(supplier_name: supplier_name, supplier_id: supplier_id, wx_mp_user_id: wx_mp_user_id, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)
+      merchant_name = site.account.nickname || site.wx_mp_user.nickname.presence
+      VipCard.where(activity_id: id).first_or_create(merchant_name: merchant_name, site_id: site_id, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)
     elsif [4,5,25].include?(activity_type_id)
-      ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id, repeat_draw_msg: "亲，抢券活动每人只能抽一次哦。", qiniu_pic_key: ActivityProperty.win_pic_key)
+      ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id, repeat_draw_msg: "亲，抢券活动每人只能抽一次哦。", pic_key: ActivityProperty.win_pic_key)
     elsif activity_type_id == 28
-      ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id, repeat_draw_msg: "老虎机老虎机老虎机", qiniu_pic_key: ActivityProperty.slot_pic_key)
+      ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id, repeat_draw_msg: "老虎机老虎机老虎机", pic_key: ActivityProperty.slot_pic_key)
    elsif wave?
       ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id)
     elsif fight?
       days = [*(start_at.to_date..end_at.to_date)]
       if days.size < 8
         days.each_with_index do |day, i|
-          fight_papers.create(supplier_id: supplier_id, wx_mp_user_id: wx_mp_user_id, activity_id: id, the_day: (i+1), active_date: day.to_date)
+          fight_papers.create(site_id: site_id, activity_id: id, the_day: (i+1), active_date: day.to_date)
         end
       end
     elsif activity_type_id == 37
-      Greet.create(:supplier_id => self.supplier_id, :wx_mp_user_id => self.wx_mp_user_id, :activity_id => self.id )
+      Greet.create(:site_id => self.site_id, :activity_id => self.id )
     end
 
     default_notices = [
-        { activity_type_id: 2, wx_mp_user_id: wx_mp_user_id, title: "申请微信会员卡", summary: "您尚未申请会员特权,快来点击申领吧!!", description: "申请微信会员卡", activity_status: 0 },
-        { activity_type_id: 2, wx_mp_user_id: wx_mp_user_id, description: "会员卡", activity_status: 1 }.merge(supplier.bqq_account? ? {title: "我的会员卡", summary: "点击进入会员卡个人中心"} : {title: "尊敬的会员{name}", summary: "尊敬的会员{name},您的会员卡号为{card_id},快来点击查看优惠信息吧!!"}),
+        { activity_type_id: 2, title: "申请微信会员卡", summary: "您尚未申请会员特权,快来点击申领吧!!", description: "申请微信会员卡", activity_status: 0 },
+        { activity_type_id: 2, description: "会员卡", activity_status: 1 }.merge({title: "尊敬的会员{name}", summary: "尊敬的会员{name},您的会员卡号为{card_id},快来点击查看优惠信息吧!!"}),
 
-        { activity_type_id: 3, wx_mp_user_id: wx_mp_user_id, title: "活动即将开始", qiniu_pic_key: "FoIsarMzfL1wgy7nTeUDmmYqNXgo", summary: "您参与的优惠券活动将在{day}天{hour}小时{minute}分钟后开始！更多活动细节请点击页面查看详情~", description: "活动预热说明", activity_status: 0 },
-        { activity_type_id: 3, wx_mp_user_id: wx_mp_user_id, qiniu_pic_key: "FoIsarMzfL1wgy7nTeUDmmYqNXgo", description: "活动说明", activity_status: 1 }.merge(supplier.bqq_account? ? {title: "领取优惠券", summary: "请点击查看详情~"} : {title: "中奖公告", summary: "你获得的SN码为:{code},了解优惠券特权请点击页面查看详情~"}),
-        { activity_type_id: 3, wx_mp_user_id: wx_mp_user_id, title: "活动已经结束", qiniu_pic_key: "Fl4TLAatoR7vum-Kb6UHURNopxNe", summary: "亲，下次早点哦~请继续关注我们的后续活动", description: "亲，下次早点哦~请继续关注我们的后续活动", activity_status: -1 },
+        { activity_type_id: 3, title: "活动即将开始", pic_key: "FoIsarMzfL1wgy7nTeUDmmYqNXgo", summary: "您参与的优惠券活动将在{day}天{hour}小时{minute}分钟后开始！更多活动细节请点击页面查看详情~", description: "活动预热说明", activity_status: 0 },
+        { activity_type_id: 3, pic_key: "FoIsarMzfL1wgy7nTeUDmmYqNXgo", description: "活动说明", activity_status: 1 }.merge({title: "中奖公告", summary: "你获得的SN码为:{code},了解优惠券特权请点击页面查看详情~"}),
+        { activity_type_id: 3, title: "活动已经结束", pic_key: "Fl4TLAatoR7vum-Kb6UHURNopxNe", summary: "亲，下次早点哦~请继续关注我们的后续活动", description: "亲，下次早点哦~请继续关注我们的后续活动", activity_status: -1 },
 
-        { activity_type_id: 4, wx_mp_user_id: wx_mp_user_id, title: "活动即将开始", qiniu_pic_key: "Fkgsh_bQL0bVzzB--_vlgXh_XEg-", summary: "请点击进入刮刮卡活动预热页面", description: "活动预热说明", activity_status: 0 },
-        { activity_type_id: 4, wx_mp_user_id: wx_mp_user_id, title: "活动开始，请进入页面开始刮奖", qiniu_pic_key: "FjQ-lhEBIZgB7JrVcow4KPdWhWaG", summary: "请点击进入刮刮卡活动页面", description: "活动说明", activity_status: 1 },
+        { activity_type_id: 4, title: "活动即将开始", pic_key: "Fkgsh_bQL0bVzzB--_vlgXh_XEg-", summary: "请点击进入刮刮卡活动预热页面", description: "活动预热说明", activity_status: 0 },
+        { activity_type_id: 4, title: "活动开始，请进入页面开始刮奖", pic_key: "FjQ-lhEBIZgB7JrVcow4KPdWhWaG", summary: "请点击进入刮刮卡活动页面", description: "活动说明", activity_status: 1 },
 
-        { activity_type_id: 5, wx_mp_user_id: wx_mp_user_id, title: "活动即将开始", qiniu_pic_key: "Fl-25j4H93sfZ-B0ouwCusJfXK7D", summary: "请点击进入幸运大转盘活动预热页面", description: "活动预热说明", activity_status: 0 },
-        { activity_type_id: 5, wx_mp_user_id: wx_mp_user_id, title: "活动开始，请进入页面开始抽奖", qiniu_pic_key: "FobJBkcl_w3zH6TyiH9JSTQJkFJR", summary: "请点击进入幸运大转盘活动页面", description: "活动说明", activity_status: 1 },
+        { activity_type_id: 5, title: "活动即将开始", pic_key: "Fl-25j4H93sfZ-B0ouwCusJfXK7D", summary: "请点击进入幸运大转盘活动预热页面", description: "活动预热说明", activity_status: 0 },
+        { activity_type_id: 5, title: "活动开始，请进入页面开始抽奖", pic_key: "FobJBkcl_w3zH6TyiH9JSTQJkFJR", summary: "请点击进入幸运大转盘活动页面", description: "活动说明", activity_status: 1 },
 
-        { activity_type_id: 25, wx_mp_user_id: wx_mp_user_id, title: "活动即将开始", qiniu_pic_key: "FtGXJcP77amXP66bzhbZxirbO2pu", summary: "请点击进入砸金蛋活动预热页面", description: "活动预热说明", activity_status: 0 },
-        { activity_type_id: 25, wx_mp_user_id: wx_mp_user_id, title: "活动开始，请进入活动页面开始砸金蛋", qiniu_pic_key: "Fv97NDoE1hyhhWb8ddi4I6UneYSo", summary: "请点击进入砸金蛋活动页面", description: "活动开始说明", activity_status: 1 }
+        { activity_type_id: 25, title: "活动即将开始", pic_key: "FtGXJcP77amXP66bzhbZxirbO2pu", summary: "请点击进入砸金蛋活动预热页面", description: "活动预热说明", activity_status: 0 },
+        { activity_type_id: 25, title: "活动开始，请进入活动页面开始砸金蛋", pic_key: "Fv97NDoE1hyhhWb8ddi4I6UneYSo", summary: "请点击进入砸金蛋活动页面", description: "活动开始说明", activity_status: 1 }
       ]
 
     default_notices.each do |attrs|
       if attrs[:activity_type_id] == activity_type_id
         attrs.delete(:activity_type_id)
-        ActivityNotice.where(wx_mp_user_id: wx_mp_user_id, activity_id: id, activity_status: attrs[:activity_status]).first_or_create(attrs)
+        ActivityNotice.where(activity_id: id, activity_status: attrs[:activity_status]).first_or_create(attrs)
       end
     end
     
@@ -598,7 +568,7 @@ class Activity < ActiveRecord::Base
     end if gua? || wheel? || hit_egg? || slot? || wave? || recommend?
   
     %w(元素一 元素二 元素三).each do |name|
-      ActivityPrizeElement.where(activity_id: id, name: name).first_or_create(qiniu_pic_key: ActivityPrizeElement.default_qiniu_pic_key)
+      ActivityPrizeElement.where(activity_id: id, name: name).first_or_create(pic_key: ActivityPrizeElement.default_pic_key)
     end if slot?
   end
 
@@ -683,7 +653,7 @@ class Activity < ActiveRecord::Base
 
   def keyword_duplicated?(keyword, user = nil)
     user ||= supplier
-    raise "Supplier can not be nil when validating uniqueness of activity's keyword" unless user
+    raise "Account can not be nil when validating uniqueness of activity's keyword" unless user
     repeats = user.activities.active.where(keyword: keyword).where('id <> ?', id)
     repeats.map(&:stop!)
     repeats.present?
@@ -699,15 +669,15 @@ class Activity < ActiveRecord::Base
 
   def qiniu_pic_url
     bucket = (wmall? || wmall_shop? || wmall_coupon?) ? BUCKET_WMALL : BUCKET_PICTURES
-    qiniu_image_url(qiniu_pic_key, bucket: bucket)
+    qiniu_image_url(pic_key, bucket: bucket)
   end
 
   def qiniu_pic_url_for_wmall
-    qiniu_image_url(qiniu_pic_key, bucket: BUCKET_WMALL)
+    qiniu_image_url(pic_key, bucket: BUCKET_WMALL)
   end
 
   def splash_url
-    qiniu_image_url(extend.splash_key, bucket: BUCKET_WX_PICTURES)
+    qiniu_image_url(extend.splash_key, bucket: BUCKET_PICTURES)
   end
 
   #模板背景图片
@@ -750,7 +720,7 @@ class Activity < ActiveRecord::Base
         result = [-1].include?(self.status)
       end
     elsif (self.start_at.nil? || self.start_at < Time.now)
-      if self.survey? && self.activity_survey_questions.blank?
+      if self.survey? && self.survey_questions.blank?
         # 如果是没有题目的微调研，不允许开启
       elsif self.vote? && self.setting?
         # 如果是未配置的微投票，不允许开启
@@ -770,7 +740,7 @@ class Activity < ActiveRecord::Base
   end
 
   def scene_url
-    "http://#{Settings.mhostname}/#{supplier_id}/scenes?aid=#{id}&version=#{scene_html.try(:version)}"
+    "http://#{Settings.mhostname}/#{site_id}/scenes?aid=#{id}&version=#{scene_html.try(:version)}"
   end
 
   # 微投票状态相关属性 arrts[状态名称，是否允许开启，是否允许停止，是否允许删除]
@@ -901,8 +871,8 @@ class Activity < ActiveRecord::Base
 
   def activity_qrcode_url
     case
-      when vote?  then mobile_vote_login_url(supplier_id: supplier_id, vote_id: id, anchor: "mp.weixin.qq.com")
-      when surveys?  then mobile_survey_url(supplier_id: supplier_id, id: id, anchor: "mp.weixin.qq.com")
+      when vote?  then mobile_vote_login_url(site_id: site_id, vote_id: id, anchor: "mp.weixin.qq.com")
+      when surveys?  then mobile_survey_url(site_id: site_id, id: id, anchor: "mp.weixin.qq.com")
     end
   end
 
@@ -915,14 +885,14 @@ class Activity < ActiveRecord::Base
 
     img = Magick::Image::read_inline(@qrcode.to_data_url).first
 
-    if self.pic?
-      mark = Magick::ImageList.new
-      begin
-        pic = qiniu_pic_key.present? ? mark.from_blob(open(qiniu_image_url(qiniu_pic_key)).read) : mark.read(pic.current_path)
-        img = img.composite(pic.resize(260, 260), 510, 510, Magick::OverCompositeOp)
-      rescue
-      end
-    end
+    # if self.pic?
+    #   mark = Magick::ImageList.new
+    #   begin
+    #     pic = pic_key.present? ? mark.from_blob(open(qiniu_image_url(pic_key)).read) : mark.read(pic.current_path)
+    #     img = img.composite(pic.resize(260, 260), 510, 510, Magick::OverCompositeOp)
+    #   rescue
+    #   end
+    # end
 
     Magick::ImageList.new.from_blob(img.to_blob).resize(type.to_i, type.to_i).to_blob
   end
@@ -964,56 +934,56 @@ class Activity < ActiveRecord::Base
   def respond_mobile_url(options = {})
     activity_notice = activity_notices.active.first
 
-    hotel_url = "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?supplier_id=#{supplier_id}"
+    hotel_url = "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}"
     hotel_url << "&openid=#{options[:openid]}" if options[:openid]
 
     url = case
-      when website?            then mobile_root_url(supplier_id: supplier_id)
-      when vip?                then app_vips_url( wxmuid: wx_mp_user_id )
-      when wave?               then mobile_waves_url(supplier_id: supplier_id, aid: id)
-      when consume? && setted? then app_consume_url(id: activity_notice.id, activity_id: id, wxmuid: wx_mp_user_id)
-      when gua? && setted?     then app_gua_url(id: id, anid: activity_notice.try(:id), wxmuid: wx_mp_user_id, source: 'notice')
-      when wheel? && setted?   then app_wheel_url(id: id, anid: activity_notice.try(:id), wxmuid: wx_mp_user_id, source: 'notice')
-      when book_dinner?        then book_dinner_mobile_shops_url(supplier_id: supplier_id, aid: id, wxmuid: wx_mp_user_id)
-      when book_table?         then book_table_mobile_shops_url(supplier_id: supplier_id, aid: id, wxmuid: wx_mp_user_id)
-      when fight?              then app_fight_index_url(anid: activity_notice.try(:id), aid: id, wxmuid: wx_mp_user_id, m: 'index')
-      when take_out?           then take_out_mobile_shops_url(supplier_id: supplier_id, aid: id, wxmuid: wx_mp_user_id)
-      when enroll?             then new_app_activity_enroll_url(aid: id, wxmuid: wx_mp_user_id)
-      when surveys?            then mobile_survey_url(supplier_id: supplier_id, id: id, wxmuid: wx_mp_user_id)
-      when reservation?        then mobile_reservations_url(supplier_id: supplier_id, aid: id, wxmuid: wx_mp_user_id)
-      when micro_store?        then mobile_micro_stores_url(supplier_id: supplier_id)
+      when website?            then mobile_root_url(site_id: site_id)
+      when vip?                then app_vips_url
+      when wave?               then mobile_waves_url(site_id: site_id, aid: id)
+      when consume? && setted? then app_consume_url(id: activity_notice.id, activity_id: id)
+      when gua? && setted?     then app_gua_url(id: id, anid: activity_notice.try(:id), source: 'notice')
+      when wheel? && setted?   then app_wheel_url(id: id, anid: activity_notice.try(:id), source: 'notice')
+      when book_dinner?        then book_dinner_mobile_shops_url(site_id: site_id, aid: id)
+      when book_table?         then book_table_mobile_shops_url(site_id: site_id, aid: id)
+      when fight?              then app_fight_index_url(anid: activity_notice.try(:id), aid: id, m: 'index')
+      when take_out?           then take_out_mobile_shops_url(site_id: site_id, aid: id)
+      when enroll?             then new_app_activity_enroll_url(aid: id)
+      when surveys?            then mobile_survey_url(site_id: site_id, id: id)
+      when reservation?        then mobile_reservations_url(site_id: site_id, aid: id)
+      when micro_store?        then mobile_micro_stores_url(site_id: site_id)
       when vote?
         if stopped?
-          mobile_vote_result_url(supplier_id: supplier_id, vote_id: id)
+          mobile_vote_result_url(site_id: site_id, vote_id: id)
         else
-          mobile_vote_login_url(supplier_id: supplier_id, vote_id: id)
+          mobile_vote_login_url(site_id: site_id, vote_id: id)
         end
-      when house?              then app_house_layouts_url(aid: id, wxmuid: wx_mp_user_id)
-      when groups?             then app_activity_group_url(self, wxmuid: wx_mp_user_id)
+      when house?              then app_house_layouts_url(aid: id)
+      when groups?             then app_activity_group_url(self)
       when car?                then car_url
-      when weddings?           then mobile_weddings_url(supplier_id: supplier_id, wid: activityable_id)
+      when weddings?           then mobile_weddings_url(site_id: site_id, wid: activityable_id)
       when hotel?              then hotel_url
-      when album?              then mobile_albums_url(supplier_id: supplier_id, aid: id)
-      when educations?         then app_educations_url(cid: activityable_id, wxmuid: wx_mp_user_id)
-      when life?               then app_lives_url(id: activityable_id, aid: id, wxmuid: wx_mp_user_id)
-      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: wx_mp_user.try(:openid), wx_user_id: options[:openid])
-      when circle?             then app_business_circles_url(id: activityable_id, aid: id, wxmuid: wx_mp_user_id)
-      when message?            then app_leaving_messages_url(aid: id, wxmuid: wx_mp_user_id)
-      when hit_egg?            then app_hit_egg_url(activity_notice.try(:activity), wxmuid: activity_notice.try(:wx_mp_user_id))
-      when house_bespeak?      then new_app_house_market_url(aid: id, wxmuid: wx_mp_user_id)
-      when house_seller?       then app_house_sellers_url(aid: id, wxmuid: wx_mp_user_id)
-      when slot?               then app_slots_url(aid: id, wxmuid: wx_mp_user_id)
-      when booking?            then mobile_bookings_url(supplier_id: supplier_id)
-      when group?              then mobile_groups_url(supplier_id: supplier_id)
-      when hospital?           then mobile_hospital_doctors_url(supplier_id: supplier_id, aid: id)
-      when trip?               then mobile_trips_url(supplier_id: supplier_id)
+      when album?              then mobile_albums_url(site_id: site_id, aid: id)
+      when educations?         then app_educations_url(cid: activityable_id)
+      when life?               then app_lives_url(id: activityable_id, aid: id)
+      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_id: options[:openid])
+      when circle?             then app_business_circles_url(id: activityable_id, aid: id)
+      when message?            then app_leaving_messages_url(aid: id)
+      when hit_egg?            then app_hit_egg_url(activity_notice.try(:activity))
+      when house_bespeak?      then new_app_house_market_url(aid: id)
+      when house_seller?       then app_house_sellers_url(aid: id)
+      when slot?               then app_slots_url(aid: id)
+      when booking?            then mobile_bookings_url(site_id: site_id)
+      when group?              then mobile_groups_url(site_id: site_id)
+      when hospital?           then mobile_hospital_doctors_url(site_id: site_id, aid: id)
+      when trip?               then mobile_trips_url(site_id: site_id)
       when business_shop?      then mobile_business_shop_url(supplier, activityable)
-      when house_impression?   then app_house_impressions_url(aid: id, wxmuid: wx_mp_user_id)
-      when house_live_photo?   then app_house_live_photos_url(aid: id, wxmuid: wx_mp_user_id)
-      when house_intro?        then app_house_intros_url(aid: id, wxmuid: wx_mp_user_id)
-      when wbbs_community?     then mobile_wbbs_topics_url(supplier_id: supplier_id, aid: id)
-      when coupon?             then mobile_coupons_url(supplier_id: supplier_id, aid: id)
-      when broche?             then mobile_broche_photos_url(supplier_id: supplier_id, aid: id)
+      when house_impression?   then app_house_impressions_url(aid: id)
+      when house_live_photo?   then app_house_live_photos_url(aid: id)
+      when house_intro?        then app_house_intros_url(aid: id)
+      when wbbs_community?     then mobile_wbbs_topics_url(site_id: site_id, aid: id)
+      when coupon?             then mobile_coupons_url(site_id: site_id, aid: id)
+      when broche?             then mobile_broche_photos_url(site_id: site_id, aid: id)
     end
     url || ''
   end
@@ -1022,12 +992,12 @@ class Activity < ActiveRecord::Base
     car_activity_notice = activityable
     case
       when car_activity_notice.blank?      then ''
-      when car_activity_notice.repair?     then car_bespeak_mobile_car_shops_url(supplier_id: supplier_id, aid: id, bespeak_type: CarBespeak::REPAIR)
-      when car_activity_notice.test_drive? then car_bespeak_mobile_car_shops_url(supplier_id: supplier_id, aid: id, bespeak_type: CarBespeak::TEST_DRIVE)
-      when car_activity_notice.sales_rep?  then car_seller_mobile_car_shops_url(supplier_id: supplier_id, aid: id, seller_type: CarSeller::SALES_REP)
-      when car_activity_notice.shop?       then mobile_car_shops_url(supplier_id: supplier_id, aid: id)
-      when car_activity_notice.owner?      then mobile_car_owners_url(supplier_id: supplier_id, aid: id)
-      when car_activity_notice.assistant?  then mobile_car_assistants_url(supplier_id: supplier_id, aid: id)
+      when car_activity_notice.repair?     then car_bespeak_mobile_car_shops_url(site_id: site_id, aid: id, bespeak_type: CarBespeak::REPAIR)
+      when car_activity_notice.test_drive? then car_bespeak_mobile_car_shops_url(site_id: site_id, aid: id, bespeak_type: CarBespeak::TEST_DRIVE)
+      when car_activity_notice.sales_rep?  then car_seller_mobile_car_shops_url(site_id: site_id, aid: id, seller_type: CarSeller::SALES_REP)
+      when car_activity_notice.shop?       then mobile_car_shops_url(site_id: site_id, aid: id)
+      when car_activity_notice.owner?      then mobile_car_owners_url(site_id: site_id, aid: id)
+      when car_activity_notice.assistant?  then mobile_car_assistants_url(site_id: site_id, aid: id)
     end
   end
 
@@ -1045,8 +1015,8 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def pic_url(type = :large, host: 'http://www.winwemedia.com')
-    qiniu_pic_url || (pic.try(type).try(:presence) && "#{host}#{pic.try(type).try(:presence)}") || default_pic_url
+  def pic_url
+    qiniu_pic_url || default_pic_url
   end
 
   def bg_pic_url
@@ -1054,7 +1024,7 @@ class Activity < ActiveRecord::Base
   end
 
   def logo_url(type = :large)
-    qiniu_image_url(qiniu_logo_key)
+    qiniu_image_url(logo_key)
   end
 
   def notice_title
@@ -1062,14 +1032,14 @@ class Activity < ActiveRecord::Base
     activity_notice.try(:title).to_s
   end
 
-  def default_qiniu_pic_key
+  def default_pic_key
     Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
   end
 
   private
     def set_default_pic
       if pic_url.blank?
-        self.qiniu_pic_key = Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
+        self.pic_key = Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
       end
     end
 end

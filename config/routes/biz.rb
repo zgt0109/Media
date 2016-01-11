@@ -2,17 +2,6 @@ Wp::Application.routes.draw do
 
   scope module: 'biz' do
 
-    resources :supplier_accounts do
-      get :identity, :account, :apply, :conditions, on: :collection
-    end
-    resources :supplier_withdraws do
-      get :apply, :request_withdraw, :service_recharge, on: :collection
-      post :confirm_withdraw, on: :collection
-   end
-    resources :supplier_transactions do
-      get :balance, on: :collection
-    end
-
     resources :unfolds do
       get :consumes, :chart, on: :collection
       get :settings, :find_consume, on: :member

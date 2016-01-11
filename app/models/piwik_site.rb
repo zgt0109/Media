@@ -83,14 +83,14 @@ class PiwikSite < ActiveRecord::Base
     # 同步商户数据到统计网站
     def sync_suppliers_to_piwik
       results = []
-      suppliers = Supplier.where(:piwik_domain_status => 1)
+      suppliers = Account.where(:piwik_domain_status => 1)
       i = 0
       suppliers.each do |supplier|
         supplier.add_domain_to_piwik
         i += 1
       end
       results << "已为 #{i} 个商家补充个性化域名"
-      suppliers = Supplier.where(:piwik_site_id => nil)
+      suppliers = Account.where(:piwik_site_id => nil)
       i = 0
       suppliers.each do |supplier|
         supplier.get_piwik_site_id
@@ -102,7 +102,7 @@ class PiwikSite < ActiveRecord::Base
 
     # 获取Piwik昨天统计数据
     def get_yesterday_piwik_data
-      suppliers = Supplier.where(["piwik_site_id is not null"])
+      suppliers = Account.where(["piwik_site_id is not null"])
       i = 0
       date = Date.yesterday
       suppliers.each do |supplier|

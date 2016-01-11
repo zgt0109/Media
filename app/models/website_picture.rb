@@ -1,21 +1,4 @@
-# == Schema Information
-#
-# Table name: website_pictures
-#
-#  id         :integer          not null, primary key
-#  website_id :integer
-#  pic        :string(255)
-#  title      :string(255)
-#  sort       :integer          default(0), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class WebsitePicture < ActiveRecord::Base
-  mount_uploader :pic, PictureUploader
-  img_is_exist({pic: :pic_key})
-
-  #validates :pic, presence: true, on: :create
   validates :url, format: { with: /^(http|https):\/\/[a-zA-Z0-9].+$/, message: '地址格式不正确，必须以http(s)://开头' }, allow_blank: true
   validates :title, presence: true, if: :can_validate?
 
@@ -99,8 +82,8 @@ class WebsitePicture < ActiveRecord::Base
     return ret
   end
 
-  def pic_url(type = :large)
-    qiniu_image_url(pic_key) || pic.try(type)
+  def pic_url
+    qiniu_image_url(pic_key)
   end
 
   def get_docking_function

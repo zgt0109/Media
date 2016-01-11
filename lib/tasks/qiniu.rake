@@ -48,8 +48,8 @@ namespace :activity_property do
       if FileTest.exist?(property.prize_pic.path.to_s)
         puts "**********id=#{property.id}******"
         puts "**********prize_pic=#{property.prize_pic}******"
-        property.update_column(:qiniu_pic_key, ImgUploadQiniu.prize_pic_to_qiniu(property.prize_pic.path))
-        puts "**********qiniu_pic_key=#{property.qiniu_pic_key}******"
+        property.update_column(:pic_key, ImgUploadQiniu.prize_pic_to_qiniu(property.prize_pic.path))
+        puts "**********pic_key=#{property.pic_key}******"
       end
     end
     puts 'Done!'
@@ -64,8 +64,8 @@ namespace :channel_qrcode do
     puts 'Starting upload qiniu ******'
     ChannelQrcode.find_each do |qrcode|
       puts "**********channel_qrcode_id=#{qrcode.id}******"
-      qrcode.update_column(:qiniu_pic_key, ImgUploadQiniu.upload_qiniu(qrcode.qrcode_img))
-      puts "**********channel_qrcode_id=#{qrcode.qiniu_pic_key}******"
+      qrcode.update_column(:pic_key, ImgUploadQiniu.upload_qiniu(qrcode.qrcode_img))
+      puts "**********channel_qrcode_id=#{qrcode.pic_key}******"
     end
     puts 'Done!'
   end

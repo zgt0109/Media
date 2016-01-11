@@ -4,7 +4,7 @@ class DoctorArrange < ActiveRecord::Base
   belongs_to :hospital_department
   belongs_to :hospital_doctor
   belongs_to :hospital
-  belongs_to :supplier
+  belongs_to :site
   has_many :doctor_watches, :dependent => :destroy
   #after_create :create_doctor_watches
   #attr_accessible :arrange_limit, :end_time, :start_time, :time_limit, :week

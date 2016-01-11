@@ -10,6 +10,6 @@ class Pro::EcBaseController < ApplicationController
   end
 
   def require_commerce_industry
-    redirect_to account_path, alert: '你没有权限,请选择行业版本' unless current_user.industry_commerce?
+    redirect_to profile_path, alert: '你没有权限,请选择行业版本' unless current_user.industry_commerce?
   end
 end

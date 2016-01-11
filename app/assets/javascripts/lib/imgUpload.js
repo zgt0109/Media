@@ -357,21 +357,21 @@
                     // 微相册多图上传
                     var album_id = parseInt(self.album_id);
                     if (!isNaN(album_id)){
-                        $.post("/album_photos/save_qiniu_keys", {name: fname, qiniu_pic_key: key, album_id: album_id}, function(result){
+                        $.post("/album_photos/save_qiniu_keys", {name: fname, pic_key: key, album_id: album_id}, function(result){
                             $(".vwebsitePicture li.active").after(result);
                         });
                     }
                     // 微信墙多图上传
                     var wx_wall_id = parseInt(self.wx_wall_id);
                     if (!isNaN(wx_wall_id)){
-                        $.post("/wx_walls/save_qiniu_keys", {name: fname, qiniu_pic_key: key, wx_wall_id: wx_wall_id}, function(result){
+                        $.post("/wx_walls/save_qiniu_keys", {name: fname, pic_key: key, wx_wall_id: wx_wall_id}, function(result){
                             $(".vwebsitePicture li.active").after(result);
                         });
                     }
                     // 微教育多图上传
                     var college_id = parseInt(self.college_id);
                     if (!isNaN(college_id)){
-                        $.post("/colleges/"+ college_id +"/college_photos", {college_photo: {name: fname, qiniu_pic_key: key}}, function(result){
+                        $.post("/colleges/"+ college_id +"/college_photos", {college_photo: {name: fname, pic_key: key}}, function(result){
                             $(".vwebsitePicture li.active").after(result);
                         });
                     }
@@ -381,7 +381,7 @@
                         showTip('warning', '最多上传10张图片');
                         return false;
                     }else if (!isNaN(shop_branch_id)){
-                        $.post("/micro_shop_branches/"+ shop_branch_id +"/create_pic", {qiniu_pic_key: key}, function(result){
+                        $.post("/micro_shop_branches/"+ shop_branch_id +"/create_pic", {pic_key: key}, function(result){
                             $(".vwebsitePicture li.active").after(result);
                         });
                     }
@@ -433,7 +433,7 @@
                         fileImg.after(html);
                         var uuid = Date.now();
                         fileImg.next().append('<input class="destroy" name="booking_item[booking_item_pictures_attributes]['+uuid+'][_destroy]" type="hidden">')
-                        fileImg.next().append('<input class="qiniu_pic_key" name="booking_item[booking_item_pictures_attributes]['+uuid+'][qiniu_pic_key]" type="hidden" value="'+key+'">')
+                        fileImg.next().append('<input class="pic_key" name="booking_item[booking_item_pictures_attributes]['+uuid+'][pic_key]" type="hidden" value="'+key+'">')
                     }else if(self.imgs_type == "print"){
                         fileImg.after(html);
                         // 微汽车车型图片上传
@@ -457,7 +457,7 @@
                             return false;
                         }else{
                             fileImg.after(html);
-                            var item = '<input name="panoramagram[items_attributes]['+Date.now()+'][_destroy]" type="hidden" value="0"><input name="panoramagram[items_attributes]['+Date.now()+'][qiniu_pic_key]" type="hidden" value="'+key+'"><input name="panoramagram[items_attributes]['+Date.now()+'][sort]" type="hidden" value="'+($(".file-del").length)+'">';
+                            var item = '<input name="panoramagram[items_attributes]['+Date.now()+'][_destroy]" type="hidden" value="0"><input name="panoramagram[items_attributes]['+Date.now()+'][pic_key]" type="hidden" value="'+key+'"><input name="panoramagram[items_attributes]['+Date.now()+'][sort]" type="hidden" value="'+($(".file-del").length)+'">';
                             $('#items').after(item);
                         }
                     }else{
@@ -465,7 +465,7 @@
                         // 微汽车车型图片上传
                         var car_type_id=$(input).parents(".cieldon-file").data('car_type_id'),
                         pic_type=$(input).parents(".cieldon-file").data('pic_type');
-                        $.post("/car_pictures", {car_type_id: car_type_id, qiniu_pic_key: key, pic_type: pic_type}, function(result){ });
+                        $.post("/car_pictures", {car_type_id: car_type_id, pic_key: key, pic_type: pic_type}, function(result){ });
                     }
                 break;
             case '7':

@@ -1,7 +1,7 @@
 <%
   if @activity.present? && @activity.active_activity_notice.present? 
     data_img =  @activity.active_activity_notice.pic_url.present? ? @activity.active_activity_notice.pic_url : "/assets/mobile/aids/global_small_banner.jpg"
-    pic_data_key = @activity.active_activity_notice.qiniu_pic_key.present? ? @activity.active_activity_notice.qiniu_pic_key : "FmkcCvuv-qfnVgT3prcxrkHCFYds"
+    pic_data_key = @activity.active_activity_notice.pic_key.present? ? @activity.active_activity_notice.pic_key : "FmkcCvuv-qfnVgT3prcxrkHCFYds"
   else
     data_img = "/assets/mobile/aids/global_small_banner.jpg"
     pic_data_key = "FmkcCvuv-qfnVgT3prcxrkHCFYds"

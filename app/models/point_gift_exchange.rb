@@ -15,7 +15,7 @@
 #
 
 class PointGiftExchange < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :vip_user
   belongs_to :point_gift
   has_one :consume, as: :consumable

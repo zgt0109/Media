@@ -1,5 +1,4 @@
 class GroupItemPicture < ActiveRecord::Base
-  mount_uploader :pic, ItemPictureUploader
 
   belongs_to :group_item
 

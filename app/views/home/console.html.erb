@@ -10,11 +10,11 @@
 
     <div class="page-content">
       <!--新手任务 代码块-->
-      <% if current_user.can_show_introduce? && !current_user.try(:task4?) %>
-      <div class="mission_tit auto"> <span class="left">新手任务</span></div>
       <!--
         //   miss_wait / miss_active / miss_finish 样式 未完成 进行中 完成
       -->
+      <%# if current_user.can_show_introduce? && !current_user.try(:task4?) %>
+<!--       <div class="mission_tit auto"> <span class="left">新手任务</span></div>
       <ul class="mission_bar auto">
         <li class="miss_wait <%= show_introduce_class(1) %>">
           <h6><span class="miss_in">任务一：</span>手机试玩 <span class="miss_num">1</span></h6>
@@ -29,7 +29,8 @@
           <h6><span class="miss_in">任务四：</span>首次关注 <span class="miss_num">4</span></h6>
         </li>
       </ul>
-      <% end %>
+ -->
+      <% #end %>
 
       <div class="row">
         <div class="col-xs-12">
@@ -43,7 +44,7 @@
             </div>
           <% end %>
 
-          <% unless current_user.try(:wx_mp_user).try(:active?) %>
+          <% unless current_site.try(:wx_mp_user).try(:active?) %>
             <div class="alert alert-block alert-warning margin-top-10">
               <button type="button" class="close margin-left-15" data-dismiss="alert">
                 <i class="icon-remove"></i>
@@ -55,7 +56,7 @@
             </div>
           <% end %>
 
-          <% unless current_user.wx_mp_user.try(:qrcode_url) %>
+          <% unless current_site.wx_mp_user.try(:qrcode_url) %>
             <div class="alert alert-block alert-warning margin-top-10">
               <button type="button" class="close margin-left-15" data-dismiss="alert">
                 <i class="icon-remove"></i>
@@ -124,7 +125,7 @@
           <div class="widget-body index-box-info">
             <div class="widget-main">
               <ul class="feeds">
-                <% DevLog.vcl.order('created_at desc').limit(20).each do |dev_log| %>
+                <% News.upgrade_log.order('created_at desc').limit(20).each do |news| %>
                     <li>
                       <div class="col1">
                         <div class="cont">
@@ -135,13 +136,13 @@
                           </div>
 
                           <div class="cont-col2">
-                            <div class="desc"><%= link_to dev_log.title.to_s, site_dev_log_path(dev_log), target: '_blank' %></div>
+                            <div class="desc"><%= link_to news.title.to_s, site_dev_log_path(news), target: '_blank' %></div>
                           </div>
                         </div>
                       </div>
 
                       <div class="col2">
-                        <div class="date"><%= dev_log.created_at %></div>
+                        <div class="date"><%= news.created_at %></div>
                       </div>
                     </li>
                 <% end %>
@@ -153,7 +154,6 @@
 
     </div>
 
-    <% unless current_user.try(:industry_ec?) %>
     <div class="col-md-12 margin-top-20 ">
       <h3 class="header blue">常用功能</h3>
       <div class="margin-center">
@@ -169,9 +169,8 @@
       </div>
     </div>
 
-    <%#= render 'auth_tel' %>
+    <%#= render 'auth_mobile' %>
 
-    <% end %>
 <!--
     <div class="col-md-12 margin-top-20 no-padding">
       <div id="chart-1" class="col-md-6">

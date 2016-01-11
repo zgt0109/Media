@@ -39,7 +39,7 @@ class ShopTableOrder < ActiveRecord::Base
   scope :active, -> { where(status: [PENDING, COMPLETED]) }
   scope :by_date, proc { |date| where('DATE(shop_table_orders.booking_at) = ?', date) }
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :wx_user
   belongs_to :shop

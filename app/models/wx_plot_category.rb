@@ -1,5 +1,4 @@
 class WxPlotCategory < ActiveRecord::Base
-
   belongs_to :wx_plot
 
   has_many :telephones, class_name: 'WxPlotTelephone', dependent: :destroy
@@ -12,13 +11,12 @@ class WxPlotCategory < ActiveRecord::Base
   before_create :add_default_attrs
 
   enum_attr :category, :in => [
-      ['repair', 1, '报修'],
-      ['complain', 2, '投诉'],
-      ['advice', 3, '建议'],
-      ['telephone', 4, '常用电话'],
-      ['life', 5, '周边生活']
+    ['repair', 1, '报修'],
+    ['complain', 2, '投诉'],
+    ['advice', 3, '建议'],
+    ['telephone', 4, '常用电话'],
+    ['life', 5, '周边生活']
   ]
-
 
   private
 

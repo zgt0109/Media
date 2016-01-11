@@ -1,10 +1,8 @@
 class Biz::VipRecordsController < Biz::VipController
   include Biz::HighchartHelper
-  
-  before_filter :restrict_trial_supplier
 
   def index
-    @total_vip_user_transactions = current_user.vip_user_transactions
+    @total_vip_user_transactions = current_site.vip_user_transactions
     @search = @total_vip_user_transactions.search(params[:search])
     @vip_user_transactions = @search.page(params[:page]).order('created_at DESC')
     @direction = params[:search][:direction_type_eq] if params[:search]
@@ -20,7 +18,7 @@ class Biz::VipRecordsController < Biz::VipController
   end
 
   def point
-    @total_point_transactions = current_user.point_transactions
+    @total_point_transactions = current_site.point_transactions
     @search = @total_point_transactions.search(params[:search])
     @point_transactions = @search.page(params[:page]).order('created_at DESC')
     @direction = params[:search][:direction_eq] if params[:search]
@@ -38,11 +36,11 @@ class Biz::VipRecordsController < Biz::VipController
   def trend
     @date = params[:created_date].present? ? params[:created_date] : "one_weeks"
     @today = Date.today
-    @categories, @data_money, @data_point, @start, @count = chart_transaction_data_for_vip_record(current_user,@date,@today)
+    @categories, @data_money, @data_point, @start, @count = chart_transaction_data_for_vip_record(current_site,@date,@today)
     @chart = chart_transaction_base_line_for_vip_record(@categories, @data_money, @data_point, VipUserTransaction::DATES[@date]) if @categories.present?
-    @today_counts = current_user.vip_user_transactions.by_pay.where("date(created_at) = ?",@today).count
-    @yesterday_counts = current_user.vip_user_transactions.by_pay.where("date(created_at) = ?",@today-1.day).count
-    @total_counts = current_user.vip_user_transactions.by_pay.count
+    @today_counts = current_site.vip_user_transactions.by_pay.where("date(created_at) = ?",@today).count
+    @yesterday_counts = current_site.vip_user_transactions.by_pay.where("date(created_at) = ?",@today-1.day).count
+    @total_counts = current_site.vip_user_transactions.by_pay.count
   end
 
 end

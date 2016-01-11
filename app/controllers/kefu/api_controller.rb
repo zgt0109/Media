@@ -23,11 +23,11 @@ end
 
 module Kefu
   class ApiController < ApplicationController
-    skip_before_filter *ADMIN_FILTERS, :set_current_user, :promotion_code_tracking
+    skip_before_filter *ADMIN_FILTERS, :set_current_user
     def index
       token = params[:kefu_token]
       wx_mp_user = WxMpUser.where(kefu_token: token).first
-      wx_user = WxUser.where(uid: params[:touser]).first
+      wx_user = WxUser.where(openid: params[:touser]).first
       if params[:type] == 'send'
         send_message(wx_mp_user, params[:touser], params[:text][:content])
       end

@@ -54,7 +54,7 @@
               <li>
                <%
                options = {field_name: activity_form.field_value, placeholder: "请输入您的#{activity_form.field_value}", class: "apply_input"}
-               options.merge!(type: "date").merge!(value: Date.today.to_s) if activity_form.activity_form_field.try(:field_type_name) == "日期"
+               options.merge!(type: "date").merge!(value: Date.today.to_s) if activity_form.form_field.try(:field_type_name) == "日期"
                options.merge!(required: "1") if activity_form.required
                %>
                <% if "username" == activity_form.field_name %>

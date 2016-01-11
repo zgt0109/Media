@@ -2,19 +2,18 @@ class Biz::SlotsController < ApplicationController
   before_filter :find_activity, except: [:index, :new, :create]
 
   def new
-    @activity = current_user.activities.new(activity_type_id: 28, ready_at: 10.minutes.since)
+    @activity = current_site.activities.new(activity_type_id: 28, ready_at: 10.minutes.since)
     @activity.ready_activity_notice ||= ActivityNotice.new(
       title: '活动即将开始',
       activity_status: 0,
-      qiniu_pic_key: @activity.default_qiniu_pic_key,
+      pic_key: @activity.default_pic_key,
       summary: "请点击进入老虎机活动预热页面",
-      description: "活动预热说明",
-      wx_mp_user_id: current_user.wx_mp_user.id
+      description: "活动预热说明"
     )
   end
 
   def create
-    @activity = current_user.activities.slot.new(activity_type_id: 28)
+    @activity = current_site.activities.slot.new(activity_type_id: 28)
     @activity.attributes = params[:activity]
     if activity_time_invalid?
       render_with_alert :new, '活动时间填写不正确'
@@ -60,10 +59,9 @@ class Biz::SlotsController < ApplicationController
     @activity.active_activity_notice ||= ActivityNotice.new(
       title: '活动开始，请进入活动页面开始老虎机',
       activity_status: 1,
-      qiniu_pic_key: @activity.default_qiniu_pic_key,
+      pic_key: @activity.default_pic_key,
       summary: "请点击进入老虎机活动页面",
-      description: "活动开始说明",
-      wx_mp_user_id: current_user.wx_mp_user.id
+      description: "活动开始说明"
     )
   end
 
@@ -75,7 +73,7 @@ class Biz::SlotsController < ApplicationController
 
   private
     def find_activity
-      @activity = current_user.activities.slot.find(params[:id])
+      @activity = current_site.activities.slot.find(params[:id])
     end
 
     def activity_time_valid?
@@ -92,6 +90,6 @@ class Biz::SlotsController < ApplicationController
 
     def keyword_count
       keyword = params[:activity].values_at(:keyword)
-      return current_user.activities.show.where(keyword: keyword).count
+      return current_site.activities.show.where(keyword: keyword).count
     end
 end

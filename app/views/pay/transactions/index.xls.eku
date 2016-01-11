@@ -1,0 +1,10 @@
+__filename = "pay_transactions.xls"
+sheet1 = xls.create_worksheet
+system_header = ['流水号', '企业名称', '结算账号', '创建时间', '类型', '金额']
+sheet1.row(0).concat(system_header)
+@records_all.relation.each_with_index do |record, i|
+  system_values = [record.trade_no, record.pay_account.company_name,
+  				    record.pay_account.bank_account, record.created_at.to_s, record.direction_type_name,
+  				    record.amount]
+  sheet1.row(i + 1).replace(system_values)
+end

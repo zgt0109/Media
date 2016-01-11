@@ -4,15 +4,7 @@
 </div>
 
 <div id="tab-3" class="tab-pane">
-  <% if current_user.mall && current_user.id == 79750%>
-      <div class="col-sm-12">
-        <a href="<%= groups_path(:anchor => 'tab-3' ) %>" class="btn btn-primary btn-sm btn-filter">标准</a>
-        <a href="<%= wmall_group_items_path %>" class="btn btn-link btn-sm btn-filter">关联微客生活圈</a>
-      </div>
-  <% else %>
-      <div class="alert alert-block alert-warning">微客生活圈团购已迁移至生活圈平台，请前往“微客生活圈—团购管理”进行操作
-      </div>
-  <% end %>
+  <!-- <div class="alert alert-block alert-warning">微客生活圈团购已迁移至生活圈平台，请前往“微客生活圈—团购管理”进行操作</div> -->
   <div class="col-md-12 margin-top-20">
     <%= form_for @group_items_search, url: items_groups_path, method: :get, class: 'box-form form-row' do |f| %>
       <div class="col-md-3 row">

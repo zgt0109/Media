@@ -99,14 +99,14 @@
           var location_x = <%= params[:location].split(',')[0] %>;
           var location_y = <%= params[:location].split(',')[1] %>;
           point = new BMap.Point(location_x,location_y);
-          markerArr[0].title = "<%= params[:supplier_name] rescue '' %>";
+          markerArr[0].title = "<%= params[:merchant_name] rescue '' %>";
           markerArr[0].content = "<%= params[:address] %>";
           markerArr[0].point = point.lng + "|" + point.lat;
         <%- else %>
           if (!point) {
             point = new BMap.Point(121.50235,31.300511);//定义一个中心点坐标
           }else{
-            markerArr[0].title = "<%= params[:supplier_name] rescue '' %>";
+            markerArr[0].title = "<%= params[:merchant_name] rescue '' %>";
             markerArr[0].content = "<%= params[:address] %>";
             markerArr[0].point = point.lng + "|" + point.lat;
           }

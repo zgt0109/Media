@@ -22,6 +22,6 @@ class Activity::Question < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_url(qiniu_pic_key)
+    qiniu_image_url(pic_key)
   end
 end

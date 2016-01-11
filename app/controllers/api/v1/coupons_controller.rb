@@ -50,7 +50,7 @@ class Api::V1::CouponsController < Api::BaseController
     return render json: { errcode: 1, errmsg: "参数不正确, 找不到公众账号" } unless @wx_mp_user && @wx_mp_user.supplier
 
     if @wx_user.is_a?(WxUser)
-      consumes = @wx_user.consumes.coupon.unused.unexpired.coupon_use_start.joins("join coupons on coupons.id = consumes.consumable_id AND consumes.consumable_type = 'Coupon'").select("consumes.consumable_type, consumes.consumable_id, consumes.code, consumes.expired_at, coupons.use_start as use_start,  coupons.value_by as value_by, coupons.value as value, coupons.qiniu_logo_key as qiniu_logo_key, coupons.name as name")
+      consumes = @wx_user.consumes.coupon.unused.unexpired.coupon_use_start.joins("join coupons on coupons.id = consumes.consumable_id AND consumes.consumable_type = 'Coupon'").select("consumes.consumable_type, consumes.consumable_id, consumes.code, consumes.expired_at, coupons.use_start as use_start,  coupons.value_by as value_by, coupons.value as value, coupons.logo_key as logo_key, coupons.name as name")
       if params[:value_by].present?
         consumes = consumes.where("coupons.value_by <= ? ", params[:value_by].to_f)
       end
@@ -77,7 +77,7 @@ class Api::V1::CouponsController < Api::BaseController
     else
       industry_wx_mp_user_open_ids = ActiveRecord::Base.connection.execute("select open_id from recommend_wx_mp_users where id in (#{recommended_ids}) AND has_activity = 1  AND enabled =1 ").to_a.flatten
     end
-    wx_mp_user_ids = WxMpUser.where(uid: industry_wx_mp_user_open_ids).pluck(:id)
+    wx_mp_user_ids = WxMpUser.where(openid: industry_wx_mp_user_open_ids).pluck(:id)
     coupons = Coupon.mobile.can_apply.where(wx_mp_user_id: wx_mp_user_ids).order("created_at DESC").page(page).per(per)
     coupons = coupons.to_a.as_json.each do |coupon|
       object = Coupon.find_by_id(coupon['id'])
@@ -115,7 +115,7 @@ class Api::V1::CouponsController < Api::BaseController
     def find_objects
       open_id, shop_branch_id, wx_mp_user_open_id, @coupon_token, code = params.values_at(:open_id, :shop_branch_id, :wx_mp_user_open_id, :coupon_token, :code)
 
-      @wx_mp_user = WxMpUser.where(uid: wx_mp_user_open_id).first
+      @wx_mp_user = WxMpUser.where(openid: wx_mp_user_open_id).first
       @wx_user = @wx_mp_user.wx_users.find_by_uid(open_id)
       @shop_branch = ShopBranch.find_by_id(shop_branch_id)
     end

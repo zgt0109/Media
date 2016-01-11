@@ -6,12 +6,11 @@
     <div class="row">
       <%= form_for @wx_wall, validate: true do |wall| %>
         <%= wall.fields_for :activity do |activity| %>
+        <%= activity.hidden_field :site_id, value: current_site.id %>
         <%= activity.hidden_field :ready_at, value: nil %>
-        <%= activity.hidden_field :supplier_id, value: current_user.id %>
         <%- if @wx_wall.new_record? %>
           <%= activity.hidden_field :status, value: 1 %>
         <%- end %>
-        <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
         <div class="col-md-12">
           <div class="form-group">
             <label class="control-label">触发关键字<span class="required-star">*</span></label>
@@ -71,10 +70,10 @@
             <%#= render "upload_image_div", name: "wx_wall[qrcode]", key: @wx_wall.qrcode, img: (wall.object.try(:qrcode_url) || '/assets/bg_fm.jpg'), width: 100, height: 100,  suggest: "建议尺寸：宽400像素 * 高400像素" %>
           </div>
         </div-->
-        <% if current_user.wx_mp_user.qrcode_key.blank? %>
+        <% if current_site.wx_mp_user.qrcode_key.blank? %>
           <div class="form-group">
             <label>公众号二维码<span class="required-star">*</span>
-              <small class="text-warning">(请到<a href="<%= account_url %>">系统设置</a>上传二维码)</small>
+              <small class="text-warning">(请到<a href="<%= profile_path %>">系统设置</a>上传二维码)</small>
             </label>
           </div>
         <% end %>
@@ -128,7 +127,7 @@
         <div class="form-group">
           <label class="control-label">背景音乐</label>
           <div class="clearfix">
-            <%= wall.select :material_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @wx_wall.try(:material_id), include_blank: '请选择' } %>
+            <%= wall.select :material_id, current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: @wx_wall.try(:material_id), include_blank: '请选择' } %>
           </div>
         </div>
         <div class="form-group">
@@ -228,9 +227,9 @@
       return false;
     }
     <% if @wx_wall.new_record? %>
-    var exists_names = <%= raw current_user.activities.wx_wall.show.pluck(:name).to_json %> ; 
+    var exists_names = <%= raw current_site.activities.wx_wall.show.pluck(:name).to_json %> ; 
     <% else %>
-    var exists_names = <%= raw current_user.activities.wx_wall.show.where("id != ?", @wx_wall.activity.try(:id)).pluck(:name).to_json %> ; 
+    var exists_names = <%= raw current_site.activities.wx_wall.show.where("id != ?", @wx_wall.activity.try(:id)).pluck(:name).to_json %> ; 
     <% end %>
     if ($.inArray(name, exists_names) >= 0) {
       showTip('warning', '活动主题重复，请重新填写活动主题');

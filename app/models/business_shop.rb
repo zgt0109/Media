@@ -1,7 +1,4 @@
 class BusinessShop < ActiveRecord::Base
-  mount_uploader :logo, WebsiteLogoUploader
-  mount_uploader :location_pic, BusinessShopLocationPicUploader
-  img_is_exist({logo: :logo_key, location_pic: :location_pic_key})
 
   belongs_to :website
   has_one    :activity,        as: :activityable
@@ -38,10 +35,10 @@ class BusinessShop < ActiveRecord::Base
   ]
 
   def save_vip_card_branch_to_db
-    supplier = website.supplier
-    supplier.wx_mp_user.create_activity_for_vip_card unless supplier.vip_card
+    site = website.site
+    site.wx_mp_user.create_activity_for_vip_card unless site.vip_card
     unless vip_card_branch
-      create_vip_card_branch(name: '店铺', discount_name: '微生活店铺', vip_card: supplier.vip_card(true), pic: supplier.vip_card.cover_pic)
+      create_vip_card_branch(name: '店铺', discount_name: '微生活店铺', vip_card: site.vip_card(true), pic_key: site.vip_card.cover_pic_key)
     end
   end
 

@@ -46,7 +46,7 @@
                   <div class="form-group">
                     <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                     <div class="clearfix">
-                      <div data-name="activity[qiniu_pic_key]" data-img = "<%= f.object.qiniu_pic_url || f.object.default_pic_url %>" data-key="<%= f.object.qiniu_pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[f.object.activity_type_id] : f.object.qiniu_pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+                      <div data-name="activity[pic_key]" data-img = "<%= f.object.qiniu_pic_url || f.object.default_pic_url %>" data-key="<%= f.object.pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[f.object.activity_type_id] : f.object.pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
                       <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
                     </div>
                   </div>

@@ -26,7 +26,7 @@
           <%= form_for @activity, url: @activity_url, validate: true do |activity| %>
               <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述', wx_pic: @activity.pic_url %>
               <div class="col-xs-12 col-md-6 col-lg-7">
-                <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key,
+                <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key,
                            include_activity_date: 1, include_description: 2, include_extend_closing_note: 2 %>
 
 
@@ -43,7 +43,7 @@
                   <%= select_tag :activity_setting_associated_activity, options_for_select([['刮刮卡', 4], ['大转盘', 5], ['砸金蛋', 25], ['摇一摇', 64]], activity_type_id), class: "margin-left-10" %>
 
                  
-                  <%= activity_setting.select :associated_activity_id, current_user.activities.show.unexpired.where(activity_type_id: activity_type_id).map{|f|[f.name, f.id]}, {include_blank: '选择已创建的活动'}, class: 'margin-left-10' %>
+                  <%= activity_setting.select :associated_activity_id, current_site.activities.show.unexpired.where(activity_type_id: activity_type_id).map{|f|[f.name, f.id]}, {include_blank: '选择已创建的活动'}, class: 'margin-left-10' %>
                   
                   <% 
                     url = {
@@ -72,7 +72,6 @@
 
                 <div class="form-group ">
                   <%= activity.hidden_field :activity_type_id  %>
-                  <%= activity.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
                   <%= activity.submit "#{activity.object.new_record? ? '保存&题目设置' : '保存'}", class: 'btn btn-sm btn-primary' %>
                   <input type="button" class="btn btn-sm btn-default" value="取消" onclick="window.location.href='<%= surveys_activities_url %>'" />
                 </div>

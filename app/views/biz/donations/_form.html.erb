@@ -50,7 +50,7 @@
               <div class="form-group">
                 <label>所属类别<span class="required-star">*</span></label>
                 <div class="clearfix">
-                  <%= f.select :activity_id, current_user.activities.where(activity_type_id: 53).pluck(:name, :id), {}, style: "width:150px;" %>
+                  <%= f.select :activity_id, current_site.activities.where(activity_type_id: 53).pluck(:name, :id), {}, style: "width:150px;" %>
                 </div>
               </div>
 

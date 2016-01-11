@@ -1,5 +1,4 @@
 <%= form_for @channel_qrcode, validate: true, html: { role: 'form' } do |f| %>
-  <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
   <div class="modal-body">
     <div class="form-group">
       <label class="control-label">二维码名称<span class="required-star">*</span><small class="text-warning">不要和其它二维码重复</small></label>
@@ -10,7 +9,7 @@
     <div class="form-group">
       <label class="control-label">二维码分类<span class="required-star">*</span></label>
       <div class="clearfix">
-        <% options = current_user.channel_types.normal.pluck(:name, :id) %>
+        <% options = current_site.channel_types.normal.pluck(:name, :id) %>
         <%= f.select :channel_type_id, options_for_select(options.insert(0,["请选择",""]), @channel_qrcode.channel_type_id.presence || 1), {}, :class => "col-xs-6" %>
       </div>
     </div>

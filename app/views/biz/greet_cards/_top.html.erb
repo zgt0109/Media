@@ -49,12 +49,9 @@ $(function(){
 
   });
   $(".select-icon").on("click","img",function(){
-    // $("#dingbu").attr("src",$(this).attr("src"));
     $(".show_pic_advice_text").hide();
     $("#greet_recommand_pic").val($(this).attr("src"));
     $(".edit_greet").submit();
-    // $("#title_label").remove();
-    // $("#greet_card_recommand_title_pic").val($(this).attr("src"));
   });
 
 })
@@ -63,8 +60,7 @@ $(function(){
     if($(e.target).is(".btn.btn-big")){
 
     }else {
-      if($(e.target).is(".select-icon a,.select-icon div,.scrollBox *")){     
-       
+      if($(e.target).is(".select-icon a,.select-icon div,.scrollBox *")){
       }else{
          $(".icon-box.title").hide();
       }

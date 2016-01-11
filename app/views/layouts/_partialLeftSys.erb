@@ -1,31 +1,30 @@
 <% parent_class, sub_class = 'open active', 'open active' %>
 
 <ul class="nav nav-list">
-  <li class="<%= current_page?(account_path) ? "active" : '' %>">
-  	<%= link_to account_path do %><i class="fa fa-user"></i><span class="menu-text">我的账号</span><% end %>
+  <li class="<%= current_page?(profile_path) ? "active" : '' %>">
+  	<%= link_to profile_path do %><i class="fa fa-user"></i><span class="menu-text">我的账号</span><% end %>
   </li>
-  <li class="<%= current_page?(new_password_path)||current_page?(edit_supplier_path(current_user)) ? "active" : '' %>">
-  	<%= link_to new_password_path do %><i class="fa fa-key"></i><span class="menu-text">修改资料</span><% end %>
+  <li class="<%= current_page?(new_password_path) ? "active" : '' %>">
+  	<%= link_to new_password_path do %><i class="fa fa-key"></i><span class="menu-text">修改密码</span><% end %>
   </li>
-  <li class="<%= current_page?(supplier_footer_path) ? "active" : '' %>">
-  	<%= link_to supplier_footer_path do %><i class="fa fa-lock"></i><span class="menu-text">版权设置</span><% end %>
+<!--
+  <li class="<%= current_page?(account_footer_path) ? "active" : '' %>">
+  	<%= link_to account_footer_path do %><i class="fa fa-lock"></i><span class="menu-text">版权设置</span><% end %>
   </li>
-
+ -->
   <li class="<%= current_page?(payment_settings_path) ? "active" : '' %>">
   	<%= link_to payment_settings_path do %><i class="fa fa-rmb"></i><span class="menu-text">支付设置</span><% end %>
   </li>
-  
-  <% if current_user.normal_account? %>
-    <li class="<%= winwemedia_payments_path? ? parent_class : '' %>">
-      <%= left_nav_dropdown 'icon-plus', '微枚迪支付  ' %>
-      <ul class="submenu" style="<%= 'display: block' if winwemedia_payments_path? %>">
-        <%= link_to_left_nav  '账户查询', supplier_transactions_path, supplier_transactions_path?  %>
-        <%= link_to_left_nav  '申请提现', apply_supplier_withdraws_path, apply_supplier_withdraws_path?  %>
-        <%= link_to_left_nav  '提现记录', supplier_withdraws_path, index_supplier_withdraws_path?  %>
-        <%= link_to_left_nav  '结算信息', balance_supplier_transactions_path, balance_supplier_transactions_path?  %>
-      </ul>
-    </li>
-  <% end %>
+
+  <li class="<%= winwemedia_payments_path? ? parent_class : '' %>">
+    <%= left_nav_dropdown 'icon-plus', '微枚迪支付  ' %>
+    <ul class="submenu" style="<%= 'display: block' if winwemedia_payments_path? %>">
+      <%= link_to_left_nav '账户查询', pay_transactions_path, pay_transactions_path? %>
+      <%= link_to_left_nav '申请提现', apply_pay_withdraws_path, apply_pay_withdraws_path? %>
+      <%= link_to_left_nav '提现记录', pay_withdraws_path, index_pay_withdraws_path? %>
+      <%= link_to_left_nav '结算信息', balance_pay_transactions_path, balance_pay_transactions_path? %>
+    </ul>
+  </li>
 
   <li class="<%= controller_name =~ /sms_expenses|sms_orders/i || ['sms_switch'].include?(action_name) ? 'active' : '' %>">
   	<%= link_to sms_expenses_path do %><i class="fa fa-file-text"></i><span class="menu-text">短消息管理</span><% end %>

@@ -13,7 +13,7 @@
             <%= render 'application/weixin_preview', wx_title: @activity.name, wx_summary: @activity.summary, wx_pic: @activity.pic_url %>
             <div class="col-xs-12 col-md-6 col-lg-7">
                 <%= form_for @activity, url: create_activity_colleges_url, validate: true, class: 'form col-xs-12', role: 'form' do |f| %>
-                    <%= render "application/weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+                    <%= render "application/weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key %>
                     <div class="form-group">
                         <input type="submit" class="btn btn-sm btn-primary form-submit" value="保存">
                         <!--input type="reset" class="btn btn-sm btn-default" value="取消"-->

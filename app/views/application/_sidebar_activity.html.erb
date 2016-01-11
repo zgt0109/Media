@@ -3,105 +3,30 @@
     <%= link_to activities_path do %><span>我的营销活动</span><% end %>
   </li>
   
-  <% if current_user.bqq_account? %>
-    <li class="<%= (request.original_url =~ /old_coupons/i || @activity.try(:activity_type_id)==3 || @activity_type_id=='3') ? "current pagecurrent" : '' %>">
-      <% if current_user.has_privilege_for?(5001) %>
-        <%= link_to(old_coupons_activities_path) do %><span>电子优惠券</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>电子优惠券</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /guas/i || @activity.try(:activity_type_id)==4 || @activity_type_id=='4') ? "current pagecurrent" : '' %>">
-      <% if current_user.has_privilege_for?(5002) %>
-        <%= link_to(guas_activities_path) do %><span>刮刮卡抽奖</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>刮刮卡抽奖</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /wheels/i || @activity.try(:activity_type_id)==5 || @activity_type_id=='5') ? "current pagecurrent" : '' %>">
-        <% if current_user.has_privilege_for?(5003) %>
-          <%= link_to(wheels_activities_path) do %><span>幸运大转盘</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>幸运大转盘</span><% end %>
-        <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /fight/i || @activity.try(:activity_type_id)==8 || @activity_type_id=='8') ? "current pagecurrent active" : '' %>">
-        <% if current_user.has_privilege_for?(5004) %>
-          <%= link_to(fights_activities_path) do %><span>一战到底</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>一战到底</span><% end %>
-        <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /hit_eggs/i || @activity.try(:activity_type_id)==25 || @activity_type_id=='25') ? "current pagecurrent" : '' %>">
-        <% if current_user.has_privilege_for?(5005) %>
-          <%= link_to(hit_eggs_activities_path) do %><span>砸金蛋</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>砸金蛋</span><% end %>
-        <% end %>
-    </li>
-
-    <!--
-    <li class="<%= (request.original_url =~ /slot/i || @activity.try(:activity_type_id)==28|| @activity_type_id=='28') ? "current pagecurrent" : '' %>">
-        <% if current_user.has_privilege_for?(5006) %>
-          <%= link_to(slots_activities_path) do %><span>老虎机</span><% end %>
-        <% else %>
-          <%= link_to('javascript:;', class: 'product_item') do %><span>老虎机</span><% end %>
-        <% end %>
-    </li>
-
-    <% if current_user.has_privilege_for?(5007) %>
-    <li class="<%= controller_name =~ /share_photo/i && action_name != "help" ? "pagecurrent current" : '' %>">
-      <%= link_to share_photo_settings_path do %><span>图片分享</span><% end %>
-    </li>
-    <% end %>
-    -->
-  <% elsif current_user.product1? %>
-    <% unless [20598].include?(current_user.id) %>
-      <li class="<%= (request.original_url =~ /old_coupons/i || @activity.try(:activity_type_id)==3 || @activity_type_id=='3') ? "current pagecurrent" : '' %>">
-        <%= link_to old_coupons_activities_path do %><span>电子优惠券</span><% end %>
-      </li>
-    <% end %>
-
-    <% if [10631,13157,13536,14309,18476,14447,19168,25918,18955,18951,18948,18945,18352,17737,14578,11156,20598].include?(current_user.id) %>
-      <li class="<%= (request.original_url =~ /guas/i || @activity.try(:activity_type_id)==4 || @activity_type_id=='4') ? "current pagecurrent" : '' %>">
-        <%= link_to guas_activities_path do %><span>刮刮卡抽奖</span><% end %>
-      </li>
-      <li class="<%= (request.original_url =~ /wheels/i || @activity.try(:activity_type_id)==5 || @activity_type_id=='5') ? "current pagecurrent" : '' %>">
-        <%= link_to wheels_activities_path do %><span>幸运大转盘</span><% end %>
-      </li>
-    <% end %>
-  <% else %>
-    <li class="<%= (request.original_url =~ /old_coupons/i || @activity.try(:activity_type_id)==3 || @activity_type_id=='3') ? "current pagecurrent" : '' %>">
-      <%= link_to old_coupons_activities_path do %><span>电子优惠券</span><% end %>
-    </li>
-    <li class="<%= (request.original_url =~ /guas/i || @activity.try(:activity_type_id)==4 || @activity_type_id=='4') ? "current pagecurrent" : '' %>">
-      <%= link_to guas_activities_path do %><span>刮刮卡抽奖</span><% end %>
-    </li>
-    <li class="<%= (request.original_url =~ /wheels/i || @activity.try(:activity_type_id)==5 || @activity_type_id=='5') ? "current pagecurrent" : '' %>">
-      <%= link_to wheels_activities_path do %><span>幸运大转盘</span><% end %>
-    </li>
-    <li class="<%= (request.original_url =~ /fight/i || @activity.try(:activity_type_id)==8 || @activity_type_id=='8') ? "current pagecurrent active" : '' %>">
-      <%= link_to fights_activities_path do %><span>一战到底</span><% end %>
-    </li>
-    <li class="<%= (request.original_url =~ /hit_eggs/i || @activity.try(:activity_type_id)==25 || @activity_type_id=='25') ? "current pagecurrent" : '' %>">
-      <%= link_to hit_eggs_activities_path do %><span>砸金蛋</span><% end %>
-    </li>
-    <li class="<%= (request.original_url =~ /slot/i || @activity.try(:activity_type_id)==28|| @activity_type_id=='28') ? "current pagecurrent" : '' %>">
-      <%= link_to slots_activities_path do %><span>老虎机</span><% end %>
-    </li>
-    <li class="<%= controller_name =~ /share_photo/i && action_name != "help" ? "pagecurrent current" : '' %>">
-      <%= link_to share_photo_settings_path do %><span>图片分享</span><% end %>
-    </li>
-  <% end %>
+  <li class="<%= (request.original_url =~ /old_coupons/i || @activity.try(:activity_type_id)==3 || @activity_type_id=='3') ? "current pagecurrent" : '' %>">
+    <%= link_to old_coupons_activities_path do %><span>电子优惠券</span><% end %>
+  </li>
+  <li class="<%= (request.original_url =~ /guas/i || @activity.try(:activity_type_id)==4 || @activity_type_id=='4') ? "current pagecurrent" : '' %>">
+    <%= link_to guas_activities_path do %><span>刮刮卡抽奖</span><% end %>
+  </li>
+  <li class="<%= (request.original_url =~ /wheels/i || @activity.try(:activity_type_id)==5 || @activity_type_id=='5') ? "current pagecurrent" : '' %>">
+    <%= link_to wheels_activities_path do %><span>幸运大转盘</span><% end %>
+  </li>
+  <li class="<%= (request.original_url =~ /fight/i || @activity.try(:activity_type_id)==8 || @activity_type_id=='8') ? "current pagecurrent active" : '' %>">
+    <%= link_to fights_activities_path do %><span>一战到底</span><% end %>
+  </li>
+  <li class="<%= (request.original_url =~ /hit_eggs/i || @activity.try(:activity_type_id)==25 || @activity_type_id=='25') ? "current pagecurrent" : '' %>">
+    <%= link_to hit_eggs_activities_path do %><span>砸金蛋</span><% end %>
+  </li>
+  <li class="<%= (request.original_url =~ /slot/i || @activity.try(:activity_type_id)==28|| @activity_type_id=='28') ? "current pagecurrent" : '' %>">
+    <%= link_to slots_activities_path do %><span>老虎机</span><% end %>
+  </li>
+  <li class="<%= controller_name =~ /share_photo/i && action_name != "help" ? "pagecurrent current" : '' %>">
+    <%= link_to share_photo_settings_path do %><span>图片分享</span><% end %>
+  </li>
 </ul>
 
-<% unless current_user.bqq_account? %>
-  <div class="help"><%= link_to "", help_share_photo_settings_url %></div>
-<% end %>
+<div class="help"><%= link_to "", help_share_photo_settings_url %></div>
 
 <script>
 $(function(){

@@ -41,7 +41,7 @@
                 <div class="col-md-3">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">门店：</span>
-                    <%= f.select :shop_branch_id_eq, options_for_select(current_user.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), params[:search].try(:[], :shop_branch_id_eq)), {}, :class=> "col-xs-12" %>
+                    <%= f.select :shop_branch_id_eq, options_for_select(current_site.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), params[:search].try(:[], :shop_branch_id_eq)), {}, :class=> "col-xs-12" %>
                   </div>
                 </div>
               </div>

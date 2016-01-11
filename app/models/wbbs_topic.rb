@@ -1,6 +1,6 @@
 class WbbsTopic < ActiveRecord::Base
   MAX_CONTENT_LENGTH = 140
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :wbbs_community
   belongs_to :poster, polymorphic: true

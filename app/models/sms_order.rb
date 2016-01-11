@@ -1,6 +1,6 @@
 class SmsOrder < ActiveRecord::Base
 
-  belongs_to :supplier
+  belongs_to :account
   has_many   :payments, as: :paymentable
 
   attr_accessor :payment_type
@@ -59,25 +59,25 @@ class SmsOrder < ActiveRecord::Base
       options[:clear_free_sms_orders] ||= false
       if options[:clear_free_sms_orders]
         # 清空历史赠送套餐数据
-        Supplier.update_all "free_sms = 0"
+        Account.update_all "free_sms = 0"
         SmsOrder.delete_all(plan_type: 2)
       end
 
       # 行业解决方案商户 每月赠送500条短信
       plan_id = 5
-      industries_ids = SupplierIndustry.where("name like '%行业解决方案%'").map{|si| si.id}
-      suppliers = Supplier.where(supplier_industry_id: industries_ids).not_gift.normal_account
-      suppliers = suppliers.limit(5) if Rails.env.development?
-      suppliers.each do |supplier|
-        SmsOrder.create(supplier_id: supplier.id, plan_id: plan_id)
+      industries_ids = AccountIndustry.where("name like '%行业解决方案%'").map{|si| si.id}
+      accounts = Account.where(account_industry_id: industries_ids).not_gift.normal_account
+      accounts = accounts.limit(5) if Rails.env.development?
+      accounts.each do |account|
+        SmsOrder.create(account_id: account.id, plan_id: plan_id)
       end
 
       # V-领先专业版商户 每月赠送100条短信
       plan_id = 4
-      suppliers = Supplier.not_gift.normal_account.where(supplier_industry_id: 10000, supplier_product_id: [10003, 10006])
-      suppliers = suppliers.limit(5) if Rails.env.development?
-      suppliers.each do |supplier|
-        SmsOrder.create(supplier_id: supplier.id, plan_id: plan_id)
+      accounts = Account.not_gift.normal_account.where(account_industry_id: 10000, account_product_id: [10003, 10006])
+      accounts = accounts.limit(5) if Rails.env.development?
+      accounts.each do |account|
+        SmsOrder.create(account_id: account.id, plan_id: plan_id)
       end
     end
 
@@ -103,9 +103,9 @@ class SmsOrder < ActiveRecord::Base
       else
         payment = Payment.setup({
             payment_type_id: 10006,
-            supplier_id: supplier_id,
-            customer_id: supplier_id,
-            customer_type: 'Supplier',
+            account_id: account_id,
+            customer_id: account_id,
+            customer_type: 'Account',
             paymentable_id: id,
             paymentable_type: 'SmsOrder',
             out_trade_no: order_no,
@@ -132,7 +132,7 @@ class SmsOrder < ActiveRecord::Base
   end
 
   def options_pay_for(payment)
-    raise '没有指定商家' unless supplier
+    raise '没有指定商家' unless account
     raise '请选择支付单' unless payment
 
     domain_url = self.get_domain_url
@@ -155,7 +155,7 @@ class SmsOrder < ActiveRecord::Base
   end
 
   def default_pay_options
-    raise '没有指定商家' unless supplier
+    raise '没有指定商家' unless account
 
     domain_url = self.get_domain_url
 
@@ -235,7 +235,7 @@ class SmsOrder < ActiveRecord::Base
   end
 
   def generate_md5(str)
-    raise '没有指定商家' unless supplier
+    raise '没有指定商家' unless account
 
     require "digest/md5"
     Digest::MD5.hexdigest(str.to_s + SmsOrder::ALIPAY_KEY)
@@ -343,8 +343,8 @@ class SmsOrder < ActiveRecord::Base
   end
 
   def add_default_attrs
-    supplier = self.supplier
-    raise "supplier_id cannot be nil" unless supplier
+    raise "account_id cannot be nil" unless account
+
     self.date = Date.today
     self.order_no = self.create_order_no
     SmsOrder::PLANS[self.plan_id].each{|key, value| self[key] = value} if self.plan_id
@@ -352,23 +352,23 @@ class SmsOrder < ActiveRecord::Base
 
     else
       self.status = 1 # 赠送的套餐，订单直接设为已支付状态
-      supplier.update_attributes(free_sms: SmsOrder::PLANS[self.plan_id][:plan_sms])
+      account.update_attributes(free_sms: SmsOrder::PLANS[self.plan_id][:plan_sms])
     end
     self.plan_cost = 1 unless Rails.env.production? || Rails.env.staging?
   end
 
   def create_order_no
-    return nil unless self.supplier_id.to_i > 0
-    "#{self.supplier_id}#{Time.now.to_i}"
+    return nil unless self.account_id.to_i > 0
+    "#{self.account_id}#{Time.now.to_i}"
   end
 
   def set_to_succeed(type)
-    return unless self.supplier
+    return unless self.account
     return unless self.pending? || self.failure?
     if type
       transaction do
         update_attributes(status: SmsOrder::SUCCEED)
-        supplier.update_attributes(pay_sms: supplier.pay_sms.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
+        account.update_attributes(pay_sms: account.pay_sms.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
       end
     else
       update_attributes(status: SmsOrder::FAILURE)

@@ -3,12 +3,12 @@ class Biz::PointGiftsController < Biz::VipController
   before_filter :find_shop_branches, only: [:new, :update, :create, :edit]
 
   def index
-    @search = current_user.point_gifts.online.latest.where('status > 0').search(params[:search])
+    @search = current_site.point_gifts.online.latest.where('status > 0').search(params[:search])
     @gifts = @search.page(params[:page])
   end
 
   def new
-    @gift = current_user.point_gifts.new(award_in_days: 7)
+    @gift = current_site.point_gifts.new(award_in_days: 7)
     render :form, layout: 'application_pop'
   end
 
@@ -19,7 +19,7 @@ class Biz::PointGiftsController < Biz::VipController
   def save
     params[:point_gift][:shop_branch_ids] = params[:point_gift][:shop_branch_ids].to_a.map(&:to_i)
     params[:point_gift][:vip_grade_ids]   = params[:point_gift][:vip_grade_ids].to_a.map(&:to_i)
-    @gift ||= current_user.point_gifts.new
+    @gift ||= current_site.point_gifts.new
     @gift.attributes = params[:point_gift]
     if @gift.save
       flash[:notice] = "保存成功"
@@ -38,7 +38,7 @@ class Biz::PointGiftsController < Biz::VipController
 
   def get_shop
     @city_id = params[:city_id]
-    @shop_branchs = current_user.shop_branches.used.where(province_id: params[:province_id], city_id: params[:city_id])
+    @shop_branchs = current_site.shop_branches.used.where(province_id: params[:province_id], city_id: params[:city_id])
     render :partial => "shop_branch"
   end
 
@@ -47,7 +47,7 @@ class Biz::PointGiftsController < Biz::VipController
     @search = @total_point_gift_exchanges.search(params[:search])
     @point_gift_exchanges = @search.page(params[:page])
 
-    @shop_branches = @gift.shop_branch_limited ? current_user.shop_branches.used.where(id: @gift.shop_branch_ids) : current_user.shop_branches.used
+    @shop_branches = @gift.shop_branch_limited ? current_site.shop_branches.used.where(id: @gift.shop_branch_ids) : current_site.shop_branches.used
     @status = params[:search][:status_eq] if params[:search]
     @shop_branch = params[:search][:consume_applicable_id_eq] if params[:search]
 
@@ -62,7 +62,7 @@ class Biz::PointGiftsController < Biz::VipController
   end
 
   def use_gift
-    @shop_branches = @gift.shop_branch_limited ? current_user.shop_branches.used.where(id: @gift.shop_branch_ids) : current_user.shop_branches.used
+    @shop_branches = @gift.shop_branch_limited ? current_site.shop_branches.used.where(id: @gift.shop_branch_ids) : current_site.shop_branches.used
     render layout: 'application_pop'
   end
 
@@ -80,7 +80,7 @@ class Biz::PointGiftsController < Biz::VipController
 
   def update_consumes
     @consume = @gift.consumes.unused.unexpired.where(code: params[:code]).first
-    @shop_branch = current_user.shop_branches.used.any_shops(@gift.try(:shop_branch_ids)).where(id: params[:shop_branch_id]).first
+    @shop_branch = current_site.shop_branches.used.any_shops(@gift.try(:shop_branch_ids)).where(id: params[:shop_branch_id]).first
     if @consume && @consume.use!( @shop_branch )
       flash[:notice] = "使用成功"
       render inline: "<script>parent.location.reload();</script>"
@@ -92,15 +92,15 @@ class Biz::PointGiftsController < Biz::VipController
   private
 
   def find_gift
-    @gift = current_user.point_gifts.find params[:id]
+    @gift = current_site.point_gifts.find params[:id]
   end
 
   def find_shop_branches
     if @gift.try(:shop_branch_ids).present?
       @shop_branchs = []
-      city_ids = current_user.shop_branches.used.where(id: @gift.try(:shop_branch_ids)).uniq.pluck(:city_id)
+      city_ids = current_site.shop_branches.used.where(id: @gift.try(:shop_branch_ids)).uniq.pluck(:city_id)
       city_ids.each_with_index do |city_id,index|
-        branch = current_user.shop_branches.used.where(city_id: city_id)
+        branch = current_site.shop_branches.used.where(city_id: city_id)
         @shop_branchs << branch
         if index == 0
           @province_id = branch.first.province_id
@@ -110,7 +110,7 @@ class Biz::PointGiftsController < Biz::VipController
     else
       @province_id = 9
       @city_id = 73
-      @shop_branchs = [current_user.shop_branches.used.where(province_id: 9, city_id: 73)]
+      @shop_branchs = [current_site.shop_branches.used.where(province_id: 9, city_id: 73)]
     end
   end
 end

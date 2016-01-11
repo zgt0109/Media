@@ -5,9 +5,8 @@
   <%- if @activity.persisted? %>
       <%= hidden_field_tag :return_url, settings_guess_path(@activity)%>
   <%- end %>
-  <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
   <%= f.hidden_field :activity_type_id, value: ActivityType::GUESS %>
-  <%= render "weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key, include_activity_date: 3, include_description: 2 %>
+  <%= render "weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key, include_activity_date: 3, include_description: 2 %>
   <%= f.fields_for :guess_setting, (@activity.guess_setting || @activity.build_guess_setting) do |guess_setting_form| %>
   <%
   [

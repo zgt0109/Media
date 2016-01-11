@@ -52,7 +52,7 @@
         <div class="c-group">
           <label class="label-name"> 背景音乐 </label>
           <div class="c-box">
-            <%= select_tag :audio_id, options_for_select(current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id]}, @activity.extend.audio_id), prompt: "请选择", class: "col-sm-12" %>
+            <%= select_tag :audio_id, options_for_select(current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id]}, @activity.extend.audio_id), prompt: "请选择", class: "col-sm-12" %>
           </div>
         </div>
         <div class="c-group">

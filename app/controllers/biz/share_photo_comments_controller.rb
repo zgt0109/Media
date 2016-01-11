@@ -21,7 +21,7 @@ class Biz::SharePhotoCommentsController < ApplicationController
   private
 
   def find_share_photo
-    @share_photo = current_user.share_photos.where(id: params[:share_photo_id]).first
+    @share_photo = current_site.share_photos.where(id: params[:share_photo_id]).first
   end
 
 end

@@ -1,11 +1,11 @@
-<% if current_user.try(:website) %>
-<div class="pull-right" <%= hide_for_temp_user %>>
-  <span class="green lighter ShowQRCodeTxt">扫描微官网二维码</span>
-  <div class="showQRCode">
-    <i class="i-qrcode icon-qrcode icon-3x"></i>
-      <div class="QRCode">
-        <img src="<%= current_user.website.pic_url %>" width="170" height="170">
-      </div>
+<% if current_site.try(:website) %>
+  <div class="pull-right" <%= hide_for_temp_user %>>
+    <span class="green lighter ShowQRCodeTxt">扫描微官网二维码</span>
+    <div class="showQRCode">
+      <i class="i-qrcode icon-qrcode icon-3x"></i>
+        <div class="QRCode">
+          <img src="<%= current_site.website.pic_url %>" width="170" height="170">
+        </div>
+    </div>
   </div>
-</div>
 <% end %>

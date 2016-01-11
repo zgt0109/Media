@@ -31,7 +31,7 @@ class Api::V1::VipsController < Api::BaseController
   end
 
   def spm_vip
-    wx_mp_user = WxMpUser.where(uid: params[:mp_user_open_id]).first
+    wx_mp_user = WxMpUser.where(openid: params[:mp_user_open_id]).first
 
     if params[:mp_user_open_id].present? && wx_mp_user
       redirect_to app_vips_url(wxmuid: wx_mp_user.id, openid: params[:open_id])
@@ -120,7 +120,7 @@ class Api::V1::VipsController < Api::BaseController
     # 该方法会设置适当的参数，包括：wx_mp_user、supplier、vip_user
     def set_users
       open_id, mp_user_open_id, trade_token = params.values_at(:open_id, :mp_user_open_id, :trade_token)
-      @wx_mp_user = WxMpUser.where(uid: mp_user_open_id).last
+      @wx_mp_user = WxMpUser.where(openid: mp_user_open_id).last
       @supplier   = @wx_mp_user.try(:supplier)
       render json: { errcode: 1, errmsg: "参数不正确，找不到公众账号" } and return false unless @wx_mp_user && @supplier
       @vip_user   = @wx_mp_user.vip_users.visible.where(trade_token: params[:trade_token]).last

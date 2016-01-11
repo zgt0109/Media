@@ -1,21 +1,3 @@
-<% if current_user.bqq_account? %>
-<ul class="box-nav box important">
-  <% if current_user.has_privilege_for?(1001) %>
-  <li class="<%= action_name == 'helpers' ? "pagecurrent current" : "" %>">
-    <%= link_to helpers_url do %>
-      <span>生活小助手</span>
-    <% end %>
-  </li>
-  <% end %>
-  <% if current_user.has_privilege_for?(1002) %>
-  <li class="<%= action_name == 'games' ? "pagecurrent current" : "" %>">
-    <%= link_to games_url do %>
-      <span>休闲小游戏</span>
-    <% end %>
-  </li>
-  <% end %>
-</ul>
-<% else %>
 <ul class="box-nav box important">
   <li class="<%= current_page?(welcome_wx_mp_users_path) ? "pagecurrent current" : '' %>">
     <%= link_to welcome_wx_mp_users_path do %><span>首次关注</span><% end %>
@@ -39,4 +21,3 @@
     <% end %>
   </li>
 </ul>
-<% end %>

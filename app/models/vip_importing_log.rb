@@ -1,5 +1,5 @@
 class VipImportingLog < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   enum_attr :error_type, in: [
     ['synced', -1, '同步成功'],
     ['success', 0, '导入成功'],

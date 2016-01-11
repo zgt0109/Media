@@ -1,0 +1,45 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li><i class="icon-home home-icon"></i><%= link_to '首页', console_url %></li>
+      <li><%= link_to '微枚迪支付', pay_accounts_path %></li>
+      <li><%= link_to '支付申请', pay_accounts_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+  <div class="page-content">
+    <div class="tabbable ">
+      <div class="tab-pane active" id="tab-1">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="alert alert-block alert-success ">
+              <strong class="font-size20">微枚迪支付介绍</strong>
+              <ul class="no-margin-left">
+                <li>微枚迪支付是商户委托微枚迪代为收取消费者支付的相应服务款（货款），经结算系统结算并查验后结算给商户的代收代付产品，从而帮助广大商户提供更快捷、更便利的支付方式，解决商户申请支付方式困难、配置繁琐的问题。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12 margin-b-10">
+            <a href="<%= conditions_pay_accounts_path %>" class="font-size30">点击查看申请条件</a>
+          </div>
+          <%= render 'status' %>
+          <div class="col-sm-12 font-size16">
+             <%- if @pay_account.pending? %>
+                  <p>感谢您的申请，请尽快快递资料到我司，我们在收到资料后的三个工作日内完成审核！</p>
+                  <p>您可以在此页面查看到最终的审核结果，如有问题我们的工作人员会与您联系！</p>
+            <%- elsif @pay_account.normal? %>
+                <p>您的申请已经通过审核，可以正常使用微枚迪支付，如有问题可随时咨询客服了解。</p>
+            <%- elsif @pay_account.denied?%>
+                <p>审核状态：未通过</p>
+                <p>未通过原因：<%= @pay_account.deny_remark %></p>
+                <p>
+                  <a href="<%= apply_pay_accounts_path %>" class="btn btn-primary">修改申请资料</a>
+                </p>
+            <%- end %>
+            </div>
+      </div>
+<% end %>
+<% content_for :custom_js do %>
+
+<% end %>

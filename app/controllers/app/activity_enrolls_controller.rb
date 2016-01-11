@@ -16,9 +16,9 @@ module App
       @activity_enroll.wx_user_id = @wx_user.id
       @fields = params[:fields]
       @fields && @fields.keys.each do |field_name|
-        # 报名字段服务器端校验，比如手机的 activity_form_field.regular 应该是 1\d{10}
-        activity_form_field = ActivityForm.where(activity_id: @activity_enroll.activity_id, field_name: field_name).first.try(:activity_form_field)
-        regular_result = activity_form_field.try(:regular_result, @fields[field_name])
+        # 报名字段服务器端校验，比如手机的 form_field.regular 应该是 1\d{10}
+        form_field = ActivityForm.where(activity_id: @activity_enroll.activity_id, field_name: field_name).first.try(:form_field)
+        regular_result = form_field.try(:regular_result, @fields[field_name])
         @errors << regular_result if regular_result
       end
       if @errors.blank?
@@ -61,7 +61,7 @@ module App
           return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
         else #创建虚拟wx_user
           #use session.id in Rails 4.
-          @wx_user = @wx_mp_user.wx_users.where(uid: request.session_options[:id], supplier_id: @wx_mp_user.supplier_id).first_or_create
+          @wx_user = @wx_mp_user.wx_users.where(openid: request.session_options[:id], supplier_id: @wx_mp_user.supplier_id).first_or_create
         end
       end
     end

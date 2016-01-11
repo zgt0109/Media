@@ -15,19 +15,19 @@ class Api::Wmall::BaseController < ActionController::Base
   end
 
   def current_wx_user
-    @current_wx_user ||= current_wx_mp_user.wx_users.where(uid: params[:openid]).first
+    @current_wx_user ||= current_wx_mp_user.wx_users.where(openid: params[:openid]).first
   end
 
   def current_user
-    @current_user ||= Supplier.find_by_id(session[:pc_supplier_id]) || Supplier.find_by_id(params[:supplier_id])
+    @current_user ||= Account.find_by_id(session[:account_id]) || Account.find_by_id(params[:account_id])
   end
 
   def current_wx_mp_user
-    current_user.try(:wx_mp_user)
+    current_site.try(:wx_mp_user)
   end
 
   def current_mall
-    @current_mall = current_user.mall || current_user.create_mall
+    @current_mall = current_site.mall || current_site.create_mall
   end
 
   def set_headers

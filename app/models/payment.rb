@@ -6,7 +6,7 @@ class Payment < ActiveRecord::Base
   validates :subject, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
 
-  belongs_to :supplier
+  belongs_to :account
   belongs_to :customer, polymorphic: true
   belongs_to :paymentable, polymorphic: true
 
@@ -64,7 +64,7 @@ class Payment < ActiveRecord::Base
   end
 
   def settle_fee_rate
-    supplier.supplier_account.settle_fee_rate rescue 0.01
+    account.pay_account.settle_fee_rate rescue 0.01
   end
 
   def wx_total_fee
@@ -74,9 +74,9 @@ class Payment < ActiveRecord::Base
   def wxpay_delivery
     return unless wxpay?# || weixinpay?
 
-    wxpay_setting = supplier.payment_settings.wxpay.first
+    wxpay_setting = account.site.payment_settings.wxpay.first
 
-    wx_mp_user = supplier.wx_mp_user
+    wx_mp_user = account.site.wx_mp_user
     wx_mp_user.auth!
 
     timestamp = Time.now.to_i
@@ -166,7 +166,7 @@ class Payment < ActiveRecord::Base
         }
         return generate_tenpay_url(_options, tenpay.partner_id, tenpay.partner_key, options)
       else
-        raise "Supplier have no tenpay settings"
+        raise "Account have no tenpay settings"
       end
     when yeepay? || winwemedia_yeepay?
       request = args[0]
@@ -178,7 +178,7 @@ class Payment < ActiveRecord::Base
     when vip_userpay?
       Payment::VipUserpay.find(self.id).pay_url
     else
-      raise "Supplier have no special payment settings"
+      raise "Account have no special payment settings"
     end
   end
 

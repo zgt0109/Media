@@ -1,33 +1,5 @@
-# == Schema Information
-#
-# Table name: websites
-#
-#  id                            :integer          not null, primary key
-#  supplier_id                   :integer          not null
-#  wx_mp_user_id                 :integer          not null
-#  activity_id                   :integer
-#  name                          :string(255)      not null
-#  tel                           :string(255)
-#  is_open_popup_menu            :boolean          default(FALSE), not null
-#  is_open_life_popup            :boolean          default(FALSE), not null
-#  is_open_business_circle_popup :boolean          default(TRUE)
-#  is_open_cover_pic             :boolean          default(TRUE), not null
-#  template_id                   :integer          default(1), not null
-#  home_cover_pic                :string(255)
-#  website_type                  :integer          default(1), not null
-#  province_id                   :integer          default(9), not null
-#  city_id                       :integer          default(73), not null
-#  district_id                   :integer          default(702), not null
-#  address                       :string(255)
-#  status                        :integer          default(1), not null
-#  created_at                    :datetime         not null
-#  updated_at                    :datetime         not null
-#
 class Website < ActiveRecord::Base
-  mount_uploader :home_cover_pic, WebsiteUploader
-  mount_uploader :logo, WebsiteLogoUploader
-  img_is_exist({logo: :logo_key, home_cover_pic: :home_cover_pic_key})
-  # validates :home_cover_pic, presence: true, on: :create
+
   validates :name, presence: true, length: { maximum: 64, message: '官网名称过长' }
   validates :address, presence: true, if: :can_validate?
   # validates :address, presence: true
@@ -69,8 +41,7 @@ class Website < ActiveRecord::Base
     ['desc', 2, "时间倒序"]
   ]
 
-  belongs_to :supplier
-  belongs_to :wx_mp_user
+  belongs_to :site
   belongs_to :activity
   belongs_to :city
   has_one :website_setting, dependent: :destroy
@@ -108,15 +79,15 @@ class Website < ActiveRecord::Base
       break rqrcode = RQRCode::QRCode.new(url, :size => size, :level => :h ).to_img.resize(258, 258) rescue next
     end
     img = Magick::Image::read_inline(rqrcode.to_data_url).first.adaptive_blur #二维码作为背景图
-    if self.logo?
-      mark = Magick::ImageList.new
-      begin
-        logo = logo_key.present? ? mark.from_blob(open(qiniu_image_url(logo_key)).read) : mark.read(logo.current_path)
-        img = img.composite(logo.resize(60, 60), 99, 99, Magick::OverCompositeOp)
-      rescue
+    # if self.logo?
+    #   mark = Magick::ImageList.new
+    #   begin
+    #     logo = logo_key.present? ? mark.from_blob(open(qiniu_image_url(logo_key)).read) : mark.read(logo.current_path)
+    #     img = img.composite(logo.resize(60, 60), 99, 99, Magick::OverCompositeOp)
+    #   rescue
 
-      end
-    end
+    #   end
+    # end
     update_column(:qrcode_qiniu_key, ImgUploadQiniu.upload_qiniu(img.to_blob))
   end
 
@@ -178,7 +149,7 @@ class Website < ActiveRecord::Base
   end
 
   def custom_domain
-    domain || supplier_id
+    site_id
   end
 
   def rqrcode(url = nil)
@@ -191,14 +162,14 @@ class Website < ActiveRecord::Base
 
     # 二维码作为背景图
     img = Magick::Image::read_inline(rqrcode.to_data_url).first rescue ""
-    if self.logo?
-      mark = Magick::ImageList.new
-      begin
-        logo = logo_key.present? ? mark.from_blob(open(qiniu_image_url(logo_key)).read) : mark.read(logo.current_path)
-        img = img.composite(logo.resize(60, 60), 99, 99, Magick::OverCompositeOp)
-      rescue
-      end
-    end
+    # if self.logo?
+    #   mark = Magick::ImageList.new
+    #   begin
+    #     logo = logo_key.present? ? mark.from_blob(open(qiniu_image_url(logo_key)).read) : mark.read(logo.current_path)
+    #     img = img.composite(logo.resize(60, 60), 99, 99, Magick::OverCompositeOp)
+    #   rescue
+    #   end
+    # end
     return img
   end
 
@@ -368,7 +339,7 @@ class Website < ActiveRecord::Base
   end
 
   def logo_url(type = :big)
-    qiniu_image_url(logo_key) || logo.try(type)
+    qiniu_image_url(logo_key)
   end
 
   def default_preview_pic_url

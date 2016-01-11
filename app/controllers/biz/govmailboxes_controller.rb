@@ -52,7 +52,7 @@ class Biz::GovmailboxesController < ApplicationController
   end
 
   def set_activity_and_boxes
-    @activity = current_user.wx_mp_user.activities.govmail.show.first || current_user.wx_mp_user.create_activity_for_govmail
+    @activity = current_site.activities.govmail.show.first || current_site.create_activity_for_govmail
     @boxes = @activity.govmailboxes.normal.page(params[:page])
   end
 end

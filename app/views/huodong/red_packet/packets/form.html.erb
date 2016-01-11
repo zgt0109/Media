@@ -15,9 +15,8 @@
             <%= render "weixin_preview", wx_title: @packet.try(:name) || '标题', wx_summary: @packet.try(:summary) || '描述' %>
             <%= form_for @packet, url: @options[:url], method: @options[:method], validate: true, html:{class: 'form col-sm-7'} do |f| %>
                 <%= f.fields_for :activity do |activity| %>
-                    <%= activity.hidden_field :supplier_id, value: current_user.id %>
                     <%= activity.hidden_field :status, value: 1 %>
-                    <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
+                    <%= activity.hidden_field :site_id, value: current_site.id %>
                     <%= activity.hidden_field :ready_at, value: nil %>
                     <div class="form-group">
                       <label>
@@ -43,7 +42,7 @@
                         <span class="required-star">*</span>
                       </label>
                       <div class="clearfix">
-                        <div data-name="red_packet_setting[activity_attributes][qiniu_pic_key]" data-img = "<%= @packet.activity.pic_url.present? ? @packet.activity.pic_url : @packet.activity.default_pic_url %>" data-key="<%= @packet.activity.qiniu_pic_key %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
+                        <div data-name="red_packet_setting[activity_attributes][pic_key]" data-img = "<%= @packet.activity.pic_url.present? ? @packet.activity.pic_url : @packet.activity.default_pic_url %>" data-key="<%= @packet.activity.pic_key %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
                         <span class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</span>
                       </div>
                     </div>

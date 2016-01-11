@@ -2,7 +2,7 @@ class WxPlot < ActiveRecord::Base
 
   attr_accessor :is_delete_cover_pic
 
-  belongs_to :supplier
+  belongs_to :site
   has_many :wx_plot_bulletins
   has_many :wx_plot_lives
   has_many :wx_plot_telephones
@@ -23,9 +23,9 @@ class WxPlot < ActiveRecord::Base
 
   has_many :sms_settings, class_name: 'WxPlotSmsSetting', dependent: :destroy
 
-  accepts_nested_attributes_for :wx_plot_categories, :sms_settings, :supplier, :allow_destroy => true
+  accepts_nested_attributes_for :wx_plot_categories, :sms_settings, :site, :allow_destroy => true
 
-  validates :supplier_id, :name, :bulletin, :repair, :complain, :telephone, :owner, :life, presence: true
+  validates :site_id, :name, :bulletin, :repair, :complain, :telephone, :owner, :life, presence: true
   validates :repair_phone, format: { with: /^[0-9_\-]*$/, message: '联系电话格式不正确' }, allow_blank: true
   validates :complain_phone, format: { with: /^[0-9_\-]*$/, message: '联系电话格式不正确' }, allow_blank: true
 

@@ -1,14 +1,7 @@
 <div class="box-wrap">
-  <% if current_user.bqq_account? %>
-    <%= render 'bqq_active_notice'     if @activity.active_activity_notice %>
-    <%= render 'bqq_ready_notice'      if @activity.ready_activity_notice %>
-    <%= render 'bqq_stopped_notice'    if @activity.stopped_activity_notice %>
-  <% else %>
-    <%= render 'ready_notice'      if @activity.ready_activity_notice %>
-    <%= render 'active_notice'     if @activity.active_activity_notice %>
-    <%= render 'stopped_notice'    if @activity.stopped_activity_notice %>
-  <% end %>
-  
+  <%= render 'ready_notice'      if @activity.ready_activity_notice %>
+  <%= render 'active_notice'     if @activity.active_activity_notice %>
+  <%= render 'stopped_notice'    if @activity.stopped_activity_notice %>
   <%= render 'properties'        if @activity.lottery_activity? %>
   <%= render 'prizes'            if @activity.lottery_activity? %>
   <%= render 'no_prize_settings' if @activity.gua? %>

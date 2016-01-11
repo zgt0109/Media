@@ -1,6 +1,4 @@
 class CarOwner < ActiveRecord::Base
-  mount_uploader :pic, CarPictureUploader
-  img_is_exist({pic: :qiniu_pic_key}) 
   belongs_to :car_shop
 
   def result_day

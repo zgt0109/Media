@@ -18,7 +18,7 @@ class Biz::VipPackageItemsController < Biz::VipController
   end
 
   def create
-    @vip_package_item = @vip_card.vip_package_items.new(params[:vip_package_item].merge!(supplier_id: @vip_card.supplier_id, wx_mp_user_id: @vip_card.wx_mp_user_id))
+    @vip_package_item = @vip_card.vip_package_items.new(params[:vip_package_item].merge!(site_id: @vip_card.site_id))
     if @vip_package_item.save
       redirect_to vip_package_items_path, notice: '保存成功'
     else

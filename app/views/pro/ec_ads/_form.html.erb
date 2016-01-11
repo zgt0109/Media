@@ -40,7 +40,7 @@
 
       <div class="p">
         <span>选择活动<em>*</em></span>
-        <%= f.select :activity_id, current_user.activities.active.starting.map{|m| [truncate_u(m.name), m.id] }, { selected: f.object.try(:menuable_id) } %>
+        <%= f.select :activity_id, current_site.activities.active.starting.map{|m| [truncate_u(m.name), m.id] }, { selected: f.object.try(:menuable_id) } %>
       </div>
 
       <div class="box-upload not_null_errors">

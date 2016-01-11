@@ -1,5 +1,5 @@
 class Wmall::Mall < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
 
   has_many :shops
   has_many :categories

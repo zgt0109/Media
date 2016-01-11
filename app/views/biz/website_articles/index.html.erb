@@ -91,7 +91,7 @@
                 </td>
                 <td><%= article.created_at.strftime("%Y-%m-%d") %></td>
                 <td><%= article.title %></td>
-                <td><img src="<%= article.pic if article.pic? %>" width="50" height="50" class="margin-right-10"><a data-target="weisiteModal" data-toggle="modals" data-title="标题图编辑" data-height="1000" data-iframe="<%= edit_pic_website_articles_path(id: article.id) %>" title="标题图编辑">编辑</a></td>
+                <td><img src="<%= article.pic_key %>" width="50" height="50" class="margin-right-10"><a data-target="weisiteModal" data-toggle="modals" data-title="标题图编辑" data-height="1000" data-iframe="<%= edit_pic_website_articles_path(id: article.id) %>" title="标题图编辑">编辑</a></td>
                 <td><%= "#{article.try(:website_article_category).to_s(' - ')}" if article.website_article_category.present? %></td>
                 <td><input type="text" class="sort" value="<%= article.sort %>" size="5"></td>
                 <td>
@@ -109,7 +109,7 @@
                 <td>
                   <%= link_to '编辑', edit_website_article_path(article, article_type: params[:article_type]) %>
                   <%= link_to '复制', copy_article_website_articles_path(ids: article.id.to_s), method: :get, confirm: "你确定要复制吗?" %>
-                  <%= link_to '复制链接', 'javascript:;', class: 'copy-button', data: {clipboard_text: mobile_website_article_url(article, supplier_id: @website.supplier_id, article_type: params[:article_type])}, id: "copy-button_#{article.id}" %>
+                  <%= link_to '复制链接', 'javascript:;', class: 'copy-button', data: {clipboard_text: mobile_website_article_url(article, site_id: @website.site_id, article_type: params[:article_type])}, id: "copy-button_#{article.id}" %>
                   <%= link_to '删除', website_article_path(article), method: 'delete', confirm: "你确定要删除吗?" %>
                 </td>
               </tr>

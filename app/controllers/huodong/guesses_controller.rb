@@ -1,26 +1,19 @@
 class Huodong::GuessesController < ApplicationController
   before_filter :set_help_anchor
-  before_filter :require_wx_mp_user
 
   before_filter :find_activity, only: [:show, :edit, :settings, :load_more, :update, :destroy]
   before_filter :set_coupons_and_gifts,  only: [:settings]
 
-  def index
-  end
-
-  def edit
-  end
-
   def settings
     @guess = ::Activity::GuessActivity.find_by_id(params[:id])
-    @questions = current_user.guess_questions.where("status = ?", Activity::SETTED).limit(9).order('created_at desc')
-    @has_more =  current_user.guess_questions.where("status = ? and id < ?", Activity::SETTED, @questions.last.try(:id)).exists?
+    @questions = current_site.guess_questions.where("status = ?", Activity::SETTED).limit(9).order('created_at desc')
+    @has_more =  current_site.guess_questions.where("status = ? and id < ?", Activity::SETTED, @questions.last.try(:id)).exists?
   end
 
   def consumes
     sql = "join guess_participations as participation on participation.consume_id = consumes.id join activities as activity on participation.activity_id = activity.id"
-    activity_ids = current_user.activities.guess.pluck(:id)
-    @total_consumes = current_user.wx_mp_user.consumes.joins(sql).where("activity.id in (?)", activity_ids)
+    activity_ids = current_site.activities.guess.pluck(:id)
+    @total_consumes = current_site.wx_mp_user.consumes.joins(sql).where("activity.id in (?)", activity_ids)
     if params[:activity_id].present?
       activity_ids =  [params[:activity_id]]
       @consumes = @total_consumes.where("activity.id in (?)", activity_ids)
@@ -30,7 +23,7 @@ class Huodong::GuessesController < ApplicationController
 
     @consumes = @consumes.where(code: params[:code]) if params[:code].present?
 
-    @total = ::Activity::GuessActivity.where(supplier_id: current_user.id).map(&:guess_consumes_max_count).sum.to_i
+    @total = ::Activity::GuessActivity.where(site_id: current_site.id).map(&:guess_consumes_max_count).sum.to_i
     @total_consumes_count = @total_consumes.count
     @used_consumes_count = @total_consumes.used.count
 
@@ -44,13 +37,13 @@ class Huodong::GuessesController < ApplicationController
 
 
   def find_consume
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
     @consume = Consume.find_by_id(params[:id])
     render layout: 'application_pop'
   end
 
   def use_consume
-    @consume = current_user.wx_mp_user.consumes.unused.unexpired.find(params[:id])
+    @consume = current_site.consumes.unused.unexpired.find(params[:id])
     shop_branch = ShopBranch.find_by_id(params[:shop_branch_id])
     @consume.use!(shop_branch)
     flash.notice = '操作成功'
@@ -58,11 +51,11 @@ class Huodong::GuessesController < ApplicationController
   end
 
   def new
-    @activity = current_user.wx_mp_user.new_activity_for_guess
+    @activity = current_site.new_activity_for_guess
   end
 
   def create
-    @activity = current_user.wx_mp_user.new_activity_for_guess
+    @activity = current_site.new_activity_for_guess
     @activity.attributes = params[:activity]
     if @activity.save
       redirect_to settings_guess_path(@activity), notice: '保存成功'
@@ -74,8 +67,8 @@ class Huodong::GuessesController < ApplicationController
   def load_more
     if params[:last_id].present?
       last_id = params[:last_id].to_i
-      @questions = current_user.guess_questions.where("status = ? and id < ?", Activity::SETTED, last_id).limit(9).order('created_at desc')
-      @has_more =  current_user.guess_questions.where("status = ? and id < ?", Activity::SETTED, @questions.last.try(:id)).exists?
+      @questions = current_site.guess_questions.where("status = ? and id < ?", Activity::SETTED, last_id).limit(9).order('created_at desc')
+      @has_more =  current_site.guess_questions.where("status = ? and id < ?", Activity::SETTED, @questions.last.try(:id)).exists?
     end
   end
 
@@ -108,11 +101,11 @@ class Huodong::GuessesController < ApplicationController
     end
 
     def find_activity
-      @activity = current_user.wx_mp_user.activities.guess.show.find(params[:id])
+      @activity = current_site.activities.guess.show.find(params[:id])
     end
 
     def set_coupons_and_gifts
-      coupon_activity = current_user.wx_mp_user.activities.coupon.show.first
+      coupon_activity = current_site.activities.coupon.show.first
       if coupon_activity.present?
         @coupons = coupon_activity.coupons.normal.can_apply.select {|coupon| coupon.appliable? }
       else

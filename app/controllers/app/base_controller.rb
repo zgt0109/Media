@@ -27,7 +27,7 @@ class App::BaseController < ActionController::Base
     return render text: '该公众号服务已到期，暂不提供服务！' if @supplier.froze?
 
     session[:supplier_id] = @supplier.try(:id)
-    @supplier_footer = SupplierFooter.find_by_id(@supplier.try(:supplier_footer_id)) || SupplierFooter.default_footer
+    @account_footer = AccountFooter.find_by_id(@supplier.try(:account_footer_id)) || AccountFooter.default_footer
   rescue => error
     logger.info "*********** app load_data error: #{error.message} > #{error.backtrace}"
     # render :text => "请求页面参数不正确"

@@ -14,7 +14,7 @@
               <label>元素<%= index+1 %>：</label>
               <%= f.text_field :name, data: { id: element.id }, maxlength: 20, class: 'element_name unable-focus' %>
             </div>
-            <div class="cieldon-file width-100px margin-left-10" data-type="1" data-div="#img-<%= index %>" data-width="35" data-height="35" data-img="<%= element.pic_url %>" data-name="activity_prize_element[qiniu_pic_key]" data-key="<%= element.qiniu_pic_key %>" data-callback="submitElement(<%= element.id %>);"></div>
+            <div class="cieldon-file width-100px margin-left-10" data-type="1" data-div="#img-<%= index %>" data-width="35" data-height="35" data-img="<%= element.pic_url %>" data-name="activity_prize_element[pic_key]" data-key="<%= element.pic_key %>" data-callback="submitElement(<%= element.id %>);"></div>
             <img id="img-<%= index %>">
             <%- if index > 2 %>
             <%= link_to raw("&nbsp;&nbsp;删除"), activity_prize_element_path(element), method: 'delete' %>

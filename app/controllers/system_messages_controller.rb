@@ -46,7 +46,7 @@ class SystemMessagesController < ApplicationController
     errors << "提醒消息中不包含 #{params[:module_id]} 模块" unless smm = SystemMessageModule.where(module_id: params[:module_id]).first
 
     if errors.blank?
-      @supplier = Supplier.where(id: params[:supplier_id]).first
+      @supplier = Account.where(id: params[:supplier_id]).first
       @supplier ? @supplier.send_system_message(params, smm) : errors << "商户不存在"
     end
 

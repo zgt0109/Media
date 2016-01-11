@@ -26,7 +26,7 @@ class ShopCategory < ActiveRecord::Base
     ['normal', 1, '正常']
   ]
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :shop
   belongs_to :shop_branch

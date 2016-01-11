@@ -17,6 +17,9 @@ gem 'lazy_high_charts'
 
 gem 'rmagick', '2.13.2', require: 'RMagick'
 gem 'mini_magick'
+
+gem 'rucaptcha'
+
 gem 'carrierwave'
 gem 'jquery-fileupload-rails'
 

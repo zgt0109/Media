@@ -1,10 +1,6 @@
 class BookingItem < ActiveRecord::Base
-  mount_uploader :pic, PictureUploader
-  img_is_exist({pic: :qiniu_pic_key}) 
-  #mount_uploader 'booking_item_pictures_attributes[pic]', PictureUploader
 
-  belongs_to :supplier
-  belongs_to :wx_mp_user
+  belongs_to :site
   belongs_to :booking_category
 
   has_many :booking_orders
@@ -21,9 +17,6 @@ class BookingItem < ActiveRecord::Base
       ['day_qty_limit', 3, '限定每日量'],
       ['qty_limit', 4, '限定全部总量'],
   ]
-
-
-  before_create :add_default_attrs
 
   accepts_nested_attributes_for :booking_item_pictures, allow_destroy: true
   validates_associated :booking_item_pictures
@@ -68,13 +61,6 @@ class BookingItem < ActiveRecord::Base
     end
 
     booking_categories_selects
-  end
-
-  private
-
-  def add_default_attrs
-    return unless supplier
-    self.wx_mp_user_id = supplier.wx_mp_user.try(:id)
   end
 
 end

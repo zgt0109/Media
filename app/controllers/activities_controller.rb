@@ -2,18 +2,17 @@ class ActivitiesController < ApplicationController
 
   TIME_ERROR_MESSAGE = '活动时间填写不正确，开始时间（如填写）必须大于当前时间，结束时间（如填写）必须大于开始时间'
 
-  before_filter :require_wx_mp_user
   before_filter :set_activity, only: [:show, :edit, :update, :destroy,
                                       :stop, :active, :delete, :unset_delete,
                                       :deal_success, :deal_failed,
                                       :edit_prepare_settings, :edit_start_settings,
                                       :edit_rule_settings, :edit_prize_settings,
                                       :prepare_settings, :start_settings, :rule_settings,
-                                      :prize_settings, :vote_items, :vote_form, :edit_group, :show_group, :vote_qrcode, :vote_qrcode_download]
-  before_filter :restrict_trial_supplier, only: [:new, :consumes, :report, :new_group]
+                                      :prize_settings, :vote_items, :vote_form, :edit_group,
+                                      :show_group, :vote_qrcode, :vote_qrcode_download]
 
   def index
-    @total_activities = current_user.activities.show.marketing_activities.includes([:wx_mp_user,:activity_type]).order('id DESC')
+    @total_activities = current_site.activities.show.marketing_activities.includes([:activity_type]).order('id DESC')
     @search = @total_activities.search(params[:search])
     @activities = @search.page(params[:page])
   end
@@ -80,7 +79,7 @@ class ActivitiesController < ApplicationController
 
   def new_group
     @current_titles = %w(微团购)
-    @activity ||= current_user.activities.new(wx_mp_user: current_user.wx_mp_user)
+    @activity ||= current_site.activities.new
     @activity.activity_type = ActivityType.find(14)
     @activity.activity_property = @activity.build_activity_property(activity_type: @activity.activity_type)
     render layout: 'biz/group', template: "activities/groups/new"
@@ -101,16 +100,16 @@ class ActivitiesController < ApplicationController
   def survey
     @activity_type_id = 15
     @activity = if params[:id]
-      current_user.activities.where(id: params[:id]).first
+      current_site.activities.where(id: params[:id]).first
     else
-      current_user.activities.new(activity_type_id: @activity_type_id, qiniu_pic_key: 'FrUR4000rp69hhv75MXSZTFlp0bZ')
+      current_site.activities.new(activity_type_id: @activity_type_id, pic_key: 'FrUR4000rp69hhv75MXSZTFlp0bZ')
     end
   end
 
   def surveys
     #search_activities_by_type(ActivityType::SURVEYS, false)
     @activity_type_id = 15
-    @total_activities = current_user.activities.show.includes([:wx_mp_user,:activity_type]).where("activities.activity_type_id = 15").order('activities.id DESC')
+    @total_activities = current_site.activities.show.includes([:activity_type]).where("activities.activity_type_id = 15").order('activities.id DESC')
     case params[:status]
       when '-1'
         @activities = @total_activities.where("((activities.status = 0 or activities.status = 1) and activities.end_at is not null and activities.end_at < '#{Time.now}') or activities.status = -1")
@@ -126,7 +125,7 @@ class ActivitiesController < ApplicationController
   end
 
   def votes
-    @total_activities = current_user.activities.show.includes([:wx_mp_user,:activity_type]).where("activities.activity_type_id = 12").order('activities.id DESC')
+    @total_activities = current_site.activities.show.includes([:activity_type]).where("activities.activity_type_id = 12").order('activities.id DESC')
     case params[:status]
       when '-1'
         @activities = @total_activities.where("((activities.status = -3 or activities.status = 1) and activities.end_at is not null and activities.end_at < '#{Time.now}') or activities.status = -1")
@@ -146,7 +145,7 @@ class ActivitiesController < ApplicationController
 
   def vote_form
     unless @activity
-      @activity = current_user.activities.new(activity_type_id: 12, qiniu_pic_key: 'FuVB_Al9UIXQZItrVsXwAMbJXxiX')
+      @activity = current_site.activities.new(activity_type_id: 12, pic_key: 'FuVB_Al9UIXQZItrVsXwAMbJXxiX')
       @activity.activity_property = @activity.activity_properties.new(activity_type_id: @activity.activity_type_id)
       @activity.activity_property.activity = @activity
     end
@@ -164,7 +163,7 @@ class ActivitiesController < ApplicationController
   end
 
   def user_data
-    @search = current_user.activity_users.includes(:activity).where("activities.activity_type_id = 12 and (activities.status > -2 or activities.status = -3)").order('activity_users.created_at DESC').search(params[:search])
+    @search = current_site.activity_users.includes(:activity).where("activities.activity_type_id = 12 and (activities.status > -2 or activities.status = -3)").order('activity_users.created_at DESC').search(params[:search])
     activity_id = params[:search].to_h["activity_id_eq"].presence
     @activity_users = @search.page(params[:page])
 
@@ -177,7 +176,7 @@ class ActivitiesController < ApplicationController
       }
       format.xls{
         if activity_id
-          @activity_vote_item_ids = current_user.activities.where(id: activity_id).first.try(:activity_vote_item_ids).to_a
+          @activity_vote_item_ids = current_site.activities.where(id: activity_id).first.try(:activity_vote_item_ids).to_a
           @activity_users_excel = @search.page(params[:page_exl]).per(EXPORTING_COUNT)
         end
       }
@@ -185,12 +184,12 @@ class ActivitiesController < ApplicationController
   end
 
   def diagram
-    @activity = current_user.activities.vote.find params[:id]
+    @activity = current_site.activities.vote.find params[:id]
     @activity_vote_items = @activity.activity_vote_items.sort{|x, y| y.select_count <=> x.select_count}
   end
 
   def update_vote_items
-    @activity = current_user.activities.includes(:activity_vote_items).where("activities.id = ? AND activities.activity_type_id = 12", params[:id]).first
+    @activity = current_site.activities.includes(:activity_vote_items).where("activities.id = ? AND activities.activity_type_id = 12", params[:id]).first
     @activity.activity_vote_items.each do |m|
       m.adjust_votes = params[:activity][:activity_vote_items_attributes].select{|k, v| v['id'].to_i == m.id}.values.first['adjust_votes'].to_i
       m.update_column('adjust_votes', m.adjust_votes) if m.adjust_votes_changed?
@@ -201,18 +200,18 @@ class ActivitiesController < ApplicationController
   end
 
   def associated_activities
-    @activities = current_user.activities.show.unexpired.where(activity_type_id: params[:activity_type_id])
+    @activities = current_site.activities.show.unexpired.where(activity_type_id: params[:activity_type_id])
     render json: {data: @activities}
   end
 
   def report
     @total = 0
     if (@search_params.nil? || @search_params[:activity_id_eq].nil?) #没有指定活动 id,就是全部活动
-      as = current_user.activities.where(activity_type_id: params[:activity_type_id])
+      as = current_site.activities.where(activity_type_id: params[:activity_type_id])
       as.each do |a|
         @total += (a.activity_property.try(:coupon_count) || 0)
       end
-      @total_activity_consumes = current_user.activity_consumes.where("activity_id in (?)", current_user.activities.where(activity_type_id: params[:activity_type_id]) )
+      @total_activity_consumes = current_site.activity_consumes.where("activity_id in (?)", current_site.activities.where(activity_type_id: params[:activity_type_id]) )
 
       @activity = as.first
 
@@ -221,15 +220,15 @@ class ActivitiesController < ApplicationController
       elsif @activity.old_coupon?
         @total = as.joins(:activity_property).sum('activity_properties.coupon_count')
       elsif @activity.groups?
-        @total = current_user.activity_consumes.where("activity_group_id is not null").count
+        @total = current_site.activity_consumes.where("activity_group_id is not null").count
       else
         @total = ActivityPrize.where('activity_id in (?)', as.select(:id)).sum(:prize_count)
       end
     else #指定了activity_id_eq活动id
       @total = Activity.find(@search_params[:activity_id_eq]).activity_property.try(:coupon_count)
-      @total_activity_consumes = current_user.activity_consumes.where("activity_id in (?)", Activity.find(@search_params[:activity_id_eq]))
+      @total_activity_consumes = current_site.activity_consumes.where("activity_id in (?)", Activity.find(@search_params[:activity_id_eq]))
 
-      @activity = current_user.activities.where(id: params[:activity_id_eq]).first
+      @activity = current_site.activities.where(id: params[:activity_id_eq]).first
       if @activity.old_coupon?
         @total = @activity.activity_properties.first.try(:coupon_count)
       elsif @activity.groups?
@@ -262,9 +261,9 @@ class ActivitiesController < ApplicationController
     conds = { id: params[:activity_id], activity_type_id: params[:activity_type_id] }.reject { |k, v| v.blank? }
     return redirect_to :back if conds.blank?
     @total                   = @total_count = @total_used_count = 0
-    @activity                = current_user.activities.where(conds).first
+    @activity                = current_site.activities.where(conds).first
     @activity_type_id        = ( @activity.try(:activity_type_id) || params[:activity_type_id] ).to_s
-    activity_ids             = current_user.activities.where(conds).pluck(:id)
+    activity_ids             = current_site.activities.where(conds).pluck(:id)
 
     @total_activity_consumes = ActivityConsume.where(activity_id: activity_ids).includes(:activity).order("activity_consumes.id desc")
     @search                  = @total_activity_consumes.search(params[:search])
@@ -277,7 +276,7 @@ class ActivitiesController < ApplicationController
     if params[:activity_id].present?
       @total = Concerns::ActivityHelper.sn_code_count_for_activity( @activity )
     elsif params[:activity_type_id].present?
-      @total = Concerns::ActivityHelper.sn_code_count_for_activity_type( current_user, @activity_type_id, activity_ids )
+      @total = Concerns::ActivityHelper.sn_code_count_for_activity_type( current_site, @activity_type_id, activity_ids )
     end
 
     respond_to do |format|
@@ -428,10 +427,10 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    @activity = current_user.activities.new( ready_at: 10.minutes.since ) unless @activity_type
+    @activity = current_site.activities.new( ready_at: 10.minutes.since ) unless @activity_type
     @activity.activity_type_id = @activity_type || params[:activity_type] || 3
     if @activity.fight? && !@activity_type
-      @activity.active_activity_notice = @activity.activity_notices.new(wx_mp_user_id: current_user.wx_mp_user.id, title: '活动名称', pic: File.open(Rails.root.to_s+"/app/assets/images/activity_pics/8.jpg"), summary: "亲，请点击进入一战到底答题页面，快来参加活动吧！", activity_status: 1 )
+      @activity.active_activity_notice = @activity.activity_notices.new(title: '活动名称', pic_key: 'FknTGEgpxbPd-N0LhujFkAbVObEZ', summary: "亲，请点击进入一战到底答题页面，快来参加活动吧！", activity_status: 1 )
       @activity.activity_property = @activity.activity_properties.new(activity_type_id: @activity.activity_type_id)
       @activity.activity_property.activity = @activity
       %w(一等奖 二等奖 三等奖).each do |title|
@@ -542,7 +541,7 @@ class ActivitiesController < ApplicationController
   end
 
   def create
-    @activity = current_user.activities.new(params[:activity])
+    @activity = current_site.activities.new(params[:activity])
     #@activity.extend.closing_note = params[:extend_closing_note] if params[:extend_closing_note].present?
     #@activity.extend.allow_repeat_apply = params[:allow_repeat_apply].to_i
     extend_format
@@ -568,7 +567,7 @@ class ActivitiesController < ApplicationController
       redirect_to case
       when @activity.fight?         then fight_papers_path({activity_id: @activity.id})
       when @activity.vote?          then vote_items_activity_path(@activity)
-      when @activity.surveys?       then activity_survey_questions_url(activity_id: @activity.id)
+      when @activity.surveys?       then survey_questions_url(activity_id: @activity.id)
       when @activity.slot?          then edit_prepare_settings_activity_path(@activity)
       when @activity.car?           then :back
       when @activity.website?       then :back
@@ -674,7 +673,6 @@ class ActivitiesController < ApplicationController
 
       if @activity.save
         flash[:notice] = '保存成功'
-        # flash[:notice] = '微官网保存成功，请在账户中心微信扩展-自定义菜单设置中设置使用微官网' if @activity.website? && current_user.bqq_account?
         redirect_to case
         when @activity.surveys?      then surveys_activities_url(status: 'ok')
         when @activity.vote?         then votes_activities_url
@@ -682,12 +680,12 @@ class ActivitiesController < ApplicationController
         when @activity.panoramagram? then panoramagrams_path
         when @activity.wx_card?      then wx_cards_path
         when @activity.website?      then
-          if current_user.can_show_introduce? && current_user.task0?
-            current_user.update_attributes(show_introduce: 1)
-            websites_path(task: Time.now.to_i)
-          else
+          # if current_site.can_show_introduce? && current_site.task0?
+          #   current_site.update_attributes(show_introduce: 1)
+          #   websites_path(task: Time.now.to_i)
+          # else
             websites_path
-          end
+          # end
         when @activity.plot_related? then wx_plots_url
         else :back
         end
@@ -732,7 +730,7 @@ class ActivitiesController < ApplicationController
 
   private
     def set_activity
-      @activity = current_user.activities.find params[:id] if params[:id].present?
+      @activity = current_site.activities.find params[:id] if params[:id].present?
       if @activity && @activity.old_coupon? && @activity.ready_activity_notice.present?
         @activity.ready_activity_notice.summary = @activity.ready_activity_notice.summary
         day_hour_minute = DateTimeService.second_to_day_hour_minute(@activity.start_at.to_i - Time.now.to_i)
@@ -771,7 +769,7 @@ class ActivitiesController < ApplicationController
     end
 
     def search_activities_by_type(activity_type_id, render_index = true)
-      @total_activities = current_user.activities.show.includes([:wx_mp_user,:activity_type]).order('activities.id DESC')
+      @total_activities = current_site.activities.show.includes([:activity_type]).order('activities.id DESC')
       params[:search] ||= {}
       params[:search][:activity_type_id_eq] = activity_type_id
       @search           = @total_activities.search(params[:search])

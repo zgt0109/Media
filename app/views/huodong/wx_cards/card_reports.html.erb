@@ -21,7 +21,7 @@
                 <div class="col-md-3 row">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">卡券名称：</span>
-                    <% wx_cards = current_user.cards.latest.pluck(:title, :id) %>
+                    <% wx_cards = @wx_mp_user.cards.latest.pluck(:title, :id) %>
                     <%= f.select :consumable_id_eq, options_for_select(wx_cards), { selected: @wx_card.try(:id) }, class: "col-xs-12" %>
                   </div>
                 </div>

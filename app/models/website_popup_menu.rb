@@ -1,27 +1,5 @@
-# == Schema Information
-#
-# Table name: website_popup_menus
-#
-#  id            :integer          not null, primary key
-#  website_id    :integer
-#  sort          :integer          default(0), not null
-#  menu_type     :integer          default(1), not null
-#  menuable_id   :integer
-#  menuable_type :string(255)
-#  icon          :string(255)
-#  tel           :string(255)
-#  url           :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class WebsitePopupMenu < ActiveRecord::Base
   attr_accessor :single_material_id, :multiple_material_id, :activity_id
-
-  mount_uploader :icon, WebsitePopupMenuUploader
-  mount_uploader :pic, WebsitePopupMenuUploader
-
-  img_is_exist({icon: :icon_key, pic: :icon_key})
 
   scope :root, -> { where(parent_id: 0) }
 
@@ -153,10 +131,8 @@ class WebsitePopupMenu < ActiveRecord::Base
 
   def icon_dispose
     if self.icon_key.present?
-      self.remove_icon!
       self.font_icon = nil
     elsif self.font_icon.present?
-      self.remove_icon!
       self.icon_key = nil
     elsif
       self.icon_key = nil
@@ -177,7 +153,7 @@ class WebsitePopupMenu < ActiveRecord::Base
   end
 
   def icon_url(type = :thumb)
-    qiniu_image_url(icon_key) || icon.try(type)
+    qiniu_image_url(icon_key)
   end
 
   def parent_name

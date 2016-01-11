@@ -1,10 +1,7 @@
 class PlatformsController < ApplicationController
+  skip_before_filter :check_auth_mobile
 
-  skip_before_filter :check_auth_tel
-
-  before_filter :set_wx_mp_user
-
-  def index; end
+  before_filter :load_wx_mp_user
 
   def bind
   	# if @wx_mp_user && !@wx_mp_user.cancel?
@@ -14,8 +11,8 @@ class PlatformsController < ApplicationController
     redirect_to "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=#{Settings.wx_plugin.component_app_id}&pre_auth_code=#{WxPluginService.pre_auth_code}&redirect_uri=#{redirect_uri}&supplier_id=#{current_user.id}"
   end
 
-  def set_wx_mp_user
-    @wx_mp_user = current_user.wx_mp_user || current_user.create_wx_mp_user!(name: current_user.nickname)
+  def load_wx_mp_user
+    @wx_mp_user = current_site.wx_mp_user || current_site.create_wx_mp_user!(account_id: current_user.id, nickname: current_user.nickname)
   end
 
 end

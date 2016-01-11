@@ -13,8 +13,6 @@
 #
 
 class HotelPicture < ActiveRecord::Base
-  mount_uploader :path, HotelPictureUploader
-  img_is_exist({path: :qiniu_path_key})
 
   validates :hotel_branch_id, presence: true
 

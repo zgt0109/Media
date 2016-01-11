@@ -1,7 +1,6 @@
 class HouseSeller < ActiveRecord::Base
-	mount_uploader :pic, CarSellerUploader
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :house
 

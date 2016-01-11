@@ -277,6 +277,7 @@ GEM
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.5)
+    posix-spawn (0.3.11)
     power_assert (0.2.2)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -361,6 +362,8 @@ GEM
       rmmseg-cpp (~> 0.2)
     rubyntlm (0.3.4)
     rubyzip (0.9.9)
+    rucaptcha (0.3.2)
+      posix-spawn (>= 0.3.0)
     rvm-capistrano (1.5.6)
       capistrano (~> 2.15.4)
     sass (3.4.13)
@@ -528,6 +531,7 @@ DEPENDENCIES
   rspec-rails (~> 2.14.0)
   ruby-pinyin
   rubyntlm (~> 0.3.2)
+  rucaptcha
   rvm-capistrano
   sass-rails (~> 3.2.3)
   savon

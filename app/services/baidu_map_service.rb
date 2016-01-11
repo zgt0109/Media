@@ -2,7 +2,7 @@ class BaiduMapService
   class << self
     def respond_location(from_user_name, mp_user, keyword)
       to_user_name = mp_user.openid
-      wx_user = mp_user.wx_users.where(uid: from_user_name).first
+      wx_user = mp_user.wx_users.where(openid: from_user_name).first
 
       location_missed_or_expired = wx_user.location_updated_at.blank? || (Time.now - wx_user.location_updated_at >= 300)
       return require_location_info(from_user_name, to_user_name) if location_missed_or_expired
@@ -53,7 +53,7 @@ class BaiduMapService
     end
 
     def inline_map(lat, lng, name, address)
-      URI.encode("#{MOBILE_DOMAIN}/api/map_url?lat=#{lat}&lng=#{lng}&name=#{name}&address=#{address}")
+      URI.encode("#{MOBILE_DOMAIN}/api/wx/map_url?lat=#{lat}&lng=#{lng}&name=#{name}&address=#{address}")
     end
 
   end

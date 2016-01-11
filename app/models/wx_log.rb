@@ -54,7 +54,7 @@ class WxLog
       result[:total_requests] = WxLog.count
 
       # 总商家数
-      result[:total_suppliers] = Supplier.normal_account.count
+      result[:total_suppliers] = Account.normal_account.count
 
       # 日总请求数
       result[:daily_requests] = logs.count
@@ -208,7 +208,7 @@ class WxLog
 
   end
 
-  def supplier_name
+  def merchant_name
     self["ToUserName"].present? && WxMpUser.where(:openid => self.ToUserName).first.try(:name) || "未知商户"
   end
 

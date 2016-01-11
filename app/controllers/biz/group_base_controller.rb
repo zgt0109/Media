@@ -1,11 +1,11 @@
 class Biz::GroupBaseController < ApplicationController
   layout 'biz/group'
-  before_filter  :require_wx_mp_user,  :require_education_industry, :require_group, :set_seo
+  before_filter :require_education_industry, :require_group, :set_seo
 
   private
 
   def require_group
-    @group = current_user.group
+    @group = current_site.group
     redirect_to groups_path, notice: "请先设置微团购" unless @group
   end
 
@@ -14,6 +14,6 @@ class Biz::GroupBaseController < ApplicationController
   end
 
   def require_education_industry
-    #redirect_to account_path, alert: '你没有权限,请选择行业版本' unless current_user.industry_group?
+    #redirect_to profile_path, alert: '你没有权限,请选择行业版本' unless current_site.industry_group?
   end
 end

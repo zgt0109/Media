@@ -34,7 +34,7 @@
                 <%= f.fields_for 'items_attributes', item, index: item.id do |item_form| %>
                   <%= item_form.hidden_field :id %>
                   <%= item_form.hidden_field :_destroy %>
-                  <%= item_form.hidden_field :qiniu_pic_key %>
+                  <%= item_form.hidden_field :pic_key %>
                   <%= item_form.hidden_field :sort  %>
                 <% end %>
               <% end %>
@@ -43,7 +43,7 @@
           <div class="form-group">
             <label class="control-label">列表页缩略图<span class="required-star">*</span>（缩略图显示在360全景图列表页）</label>
             <div class="clearfix">
-              <%= render "upload_image_div", name: "panoramagram[qiniu_pic_key]", key: @panoramagram.qiniu_pic_key, img: (@panoramagram.pic_url || '/assets/bg_fm.jpg'), width: 157, height: 70,  suggest: "建议尺寸：宽628像素 * 高280像素" %>
+              <%= render "upload_image_div", name: "panoramagram[pic_key]", key: @panoramagram.pic_key, img: (@panoramagram.pic_url || '/assets/bg_fm.jpg'), width: 157, height: 70,  suggest: "建议尺寸：宽628像素 * 高280像素" %>
             </div>
           </div>
           <div class="form-group">
@@ -76,7 +76,7 @@
     if($(".file-del").length == 0){
       showTip('warning', '请上传全景图片');
       return false;
-    }else if($("[name='panoramagram[qiniu_pic_key]']").val() == ""){
+    }else if($("[name='panoramagram[pic_key]']").val() == ""){
       showTip('warning', '请上传列表页缩略图');
       return false;
     }else{

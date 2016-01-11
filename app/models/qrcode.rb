@@ -4,7 +4,7 @@ class Qrcode < ActiveRecord::Base
 
 
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   has_many :qrcode_logs
   has_many :qrcode_users

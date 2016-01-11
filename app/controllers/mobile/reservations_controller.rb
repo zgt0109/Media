@@ -66,7 +66,7 @@ class Mobile::ReservationsController < Mobile::BaseController
           return redirect_to mobile_unknown_identity_url(@reservation.supplier_id, activity_id: @reservation.id)
         else #创建虚拟wx_user
           #use session.id in Rails 4.
-          @wx_user =  WxUser.where(uid: request.session_options[:id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
+          @wx_user =  WxUser.where(openid: request.session_options[:id], wx_mp_user_id: @wx_mp_user.id, supplier_id: @wx_mp_user.supplier_id).first_or_create
         end
       end
     end

@@ -8,7 +8,7 @@ class Govmailbox < ActiveRecord::Base
 	]
 
 	def logo_url
-		qiniu_image_url(qiniu_logo_key).presence || '/assets/email.jpg'
+		qiniu_image_url(logo_key).presence || '/assets/email.jpg'
 	end
 
 	def display_incomes

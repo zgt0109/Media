@@ -25,13 +25,13 @@
           <div class="col-md-3 row">
             <div class="input-group input-group-text">
               <span class="input-group-addon">选择活动：</span>
-              <%= select_tag :activity_id_eq, options_for_select(current_user.activities.show.where(activity_type_id: @activity_type_id).pluck(:name, :id).unshift(['全部', '']), params[:activity_id_eq]), class: "col-xs-12 select-field" %>
+              <%= select_tag :activity_id_eq, options_for_select(current_site.activities.show.where(activity_type_id: @activity_type_id).pluck(:name, :id).unshift(['全部', '']), params[:activity_id_eq]), class: "col-xs-12 select-field" %>
             </div>
           </div>
           <div class="col-md-3">
             <div class="input-group input-group-text">
               <span class="input-group-addon">选择门店：</span>
-              <%= select_tag :shop_branch_id_eq, options_for_select(current_user.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), params[:shop_branch_id_eq]), class: "col-xs-12 select-field" %>
+              <%= select_tag :shop_branch_id_eq, options_for_select(current_site.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), params[:shop_branch_id_eq]), class: "col-xs-12 select-field" %>
             </div>
           </div>
           <div class="col-md-3">

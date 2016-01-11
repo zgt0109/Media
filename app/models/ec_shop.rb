@@ -16,12 +16,8 @@
 #
 
 class EcShop < ActiveRecord::Base
-  #attr_accessible :description, :logo, :name, :status, :wx_mp_user_id, :supplier_id
 
-  mount_uploader :logo, WebsiteUploader
-  mount_uploader :cover_pic, WebsiteUploader
-
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   has_many :categories, :class_name => "EcSellerCat", :dependent => :destroy#, order: :sort_order
   has_many :ads, :class_name => "EcAd"

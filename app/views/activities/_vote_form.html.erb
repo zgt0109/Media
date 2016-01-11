@@ -26,7 +26,6 @@
     <div class="des-r" style="width:560px">
       <%= form_for @activity, validate: true do |f| %>
         <%= f.hidden_field :activity_type_id %>
-        <%= f.hidden_field :wx_mp_user_id, value: @activity.supplier.wx_mp_user.id %>
         <%= f.hidden_field :status %>
         <div class="p">
           <span>关键字<em>*</em>

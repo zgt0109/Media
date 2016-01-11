@@ -45,7 +45,7 @@
               <div class="form-group">
                 <label class="control-label ">LOGO图片<span class="required-star">*</span><small class="text-warning">图片建议尺寸：54像素*54像素</small></label>
                 <div class="clearfix">
-                  <div class="cieldon-file" data-name="car_shop[car_brand_attributes][qiniu_logo_key]" data-img="<%= @car_shop.car_brand.try(:logo_url) %>" data-key="<%= @car_shop.car_brand.try(:qiniu_logo_key) %>" data-width="90" data-height="90" data-type="0"></div>
+                  <div class="cieldon-file" data-name="car_shop[car_brand_attributes][logo_key]" data-img="<%= @car_shop.car_brand.try(:logo_url) %>" data-key="<%= @car_shop.car_brand.try(:logo_key) %>" data-width="90" data-height="90" data-type="0"></div>
                 </div>
               </div>
             <%- end %>
@@ -56,7 +56,7 @@
                 <%= car_activity_notice.hidden_field :car_shop_id, value: @car_shop.id %>
                 <%= car_activity_notice.hidden_field :notice_type, value: '1' %>
                 <%= car_activity_notice.fields_for :activity do |activity| %>
-                  <%= render "weixin_setting", activity: activity, data_img: activity.object.pic_url, pic_data_name:"car_shop[car_activity_notices_attributes][0][activity_attributes][qiniu_pic_key]", pic_data_key: activity.object.qiniu_pic_key %>
+                  <%= render "weixin_setting", activity: activity, data_img: activity.object.pic_url, pic_data_name:"car_shop[car_activity_notices_attributes][0][activity_attributes][pic_key]", pic_data_key: activity.object.pic_key %>
                   <div class="form-group">
                    <input type="submit" class="btn btn-sm btn-primary" value="保存">
                   </div>

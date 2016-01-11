@@ -16,7 +16,6 @@
 #
 
 class HouseExpert < ActiveRecord::Base
-  mount_uploader :pic, HouseExpertUploader
 
 	validates :name, :intro, presence: true, length: { maximum: 50 }
 	validates :pic, presence: true

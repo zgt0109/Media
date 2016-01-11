@@ -15,7 +15,7 @@
               </div>
               <dl>
                 <dt class="border">
-                  <a class="icon-right" href="/app/vips/map?address=<%= shop.address%>&city_name=<%= shop.city.try(:name)%>&supplier_name=<%= shop.name%>">
+                  <a class="icon-right" href="/app/vips/map?address=<%= shop.address%>&city_name=<%= shop.city.try(:name)%>&merchant_name=<%= shop.name%>">
                     <i class="icon icon-10"></i>
                     <span>地址：<%= "#{shop.city.try(:province).try(:name)}#{shop.city.try(:name)}#{shop.district.try(:name)}#{shop.address}" %></span>
                   </a>

@@ -1,106 +1,16 @@
 <% current_class = (controller.send(:_layout) == "application_gm") ? 'pagecurrent current' : 'pagecurrent current' %>
 
 <ul class="box-nav box important">
-  <% if current_user.bqq_account? %>
-    <li class="<%= (request.original_url =~ /leaving_messages/i || @activity.try(:activity_type_id)==24 || @activity_type_id=='24') ? current_class : '' %>">
-      <% if current_user.has_privilege_for?(6007) %>
-        <%= link_to(edit_activity_leaving_messages_path) do %><span>微留言</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>微留言</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= (controller_name == 'activity_forms' or controller_name == 'activity_enrolls') ? current_class : '' %>">
-      <% if current_user.has_privilege_for?(6002) %>
-        <%= link_to(activity_forms_url) do %><span>微报名</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>微报名</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /vote/i || (request.original_url =~ /user_data/i && !request.original_url.include?("survey")) || (request.original_url =~ /diagram/i && !request.original_url.include?('activity_survey_questions')) || @activity.try(:activity_type_id)==12 || @activity_type_id=='12') ? current_class : '' %>">
-      <% if current_user.has_privilege_for?(6003) %>
-        <%= link_to(votes_activities_path) do %><span>微投票</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>微投票</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= (controller_name.include?('activity_survey_questions') || action_name.include?('surveys') || @activity.try(:activity_type_id)==15 ) ? current_class : '' %>">
-      <% if current_user.has_privilege_for?(6004) %>
-        <%= link_to(surveys_activities_path) do %><span>微调研</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>微调研</span><% end %>
-      <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /groups/i || @activity.try(:activity_type_id)==14 || @activity_type_id=='14') && @activity.try(:activity_type_id)!=30 ? current_class : '' %>">
-    <% if current_user.has_privilege_for?(6005) %>
-      <%= link_to(groups_activities_path) do %><span>微团购</span><% end %>
-    <% else %>
-      <%= link_to('javascript:;', class: 'product_item') do %><span>微团购</span><% end %>
-    <% end %>
-    </li>
-
-    <li class="<%= (request.original_url =~ /album/i || @activity.try(:activity_type_id)==19 || @activity_type_id=='19') ? current_class : '' %>">
-    <% if current_user.has_privilege_for?(6006) %>
-      <%= link_to(activity_albums_path) do %><span>微相册</span><% end %>
-    <% else %>
-      <%= link_to('javascript:;', class: 'product_item') do %><span>微相册</span><% end %>
-    <% end %>
-    </li>
-
-    <li class="<%= (controller_name =~ /micro_shop/i) ? "pagecurrent current" : '' %>">
-      <% if current_user.has_privilege_for?(6001) %>
-        <%= link_to(micro_shops_url) do %><span>微门店</span><% end %>
-      <% else %>
-        <%= link_to('javascript:;', class: 'product_item') do %><span>微门店</span><% end %>
-      <% end %>
-    </li>
-
-    <!--
-    <% if current_user.has_privilege_for?(6008) %>
-    <li class="<%= (request.original_url =~ /greet/i || @activity.try(:activity_type_id)==33 || @activity_type_id=='33') ? current_class : '' %>">
-      <%= link_to activity_greets_path do %><span>微贺卡</span><% end %>
-    </li>
-    <% end %>
-    <% if current_user.has_privilege_for?(6009) %>
-    <li class="<%= ['kf_settings', 'staffs'].include?(controller_name) ? "pagecurrent current" : '' %>"><%= link_to kf_settings_path do %><span>微客服</span><% end %></li>
-      <% end %>
-      <% if current_user.has_privilege_for?(6010) %>
-    <li class="<%= ['wx_walls','wx_wall_user_prizes','wx_wall_messages'].include?(controller_name) ? "pagecurrent current" : '' %>"><%= link_to wx_walls_path do %><span>微信墙</span><% end %></li>
-      <% end %>
-      <% if current_user.has_privilege_for?(6011) %>
-    <li class="<%= ['supplier_prints', 'supplier_print_picutures', 'supplier_print_clients'].include?(controller_name) ? "pagecurrent current" : '' %>">
-      <%= link_to supplier_prints_path do %><span>微打印</span><% end %>
-    </li>
-    <% end %>
-    -->
-  <% elsif current_user.id == 14715 %>
-    <li class="<%= (request.original_url =~ /leaving_messages/i || @activity.try(:activity_type_id)==24 || @activity_type_id=='24') ? current_class : '' %>">
-      <%= link_to edit_activity_leaving_messages_path do %><span>微留言</span><% end %>
-    </li>
-  <% elsif [20371].include?(current_user.id) %>
-    <li class="<%= (request.original_url =~ /donation/i || @activity.try(:activity_type_id)==53 || @activity_type_id=='53') ? current_class : '' %>">
-      <%= link_to activity_donations_path do %><span>微捐款</span><% end %>
-    </li>
-  <% else %>
-    <% if [10001,10002,13053].include?(current_user.id) %>
-      <li class="<%= (request.original_url =~ /donation/i || @activity.try(:activity_type_id)==53 || @activity_type_id=='53') ? current_class : '' %>">
-        <%= link_to activity_donations_path do %><span>微捐款</span><% end %>
-      </li>
-    <% end %>
-
     <li class="<%= (controller_name =~ /micro_shop/i) ? "pagecurrent current" : '' %>">
       <%= link_to micro_shops_url do %><span>微门店</span><% end %>
     </li>
     <li class="<%= (controller_name == 'activity_forms' or controller_name == 'activity_enrolls') ? current_class : '' %>">
       <%= link_to activity_forms_url do %><span>微报名</span><% end %>
     </li>
-    <li class="<%= (request.original_url =~ /vote/i || (request.original_url =~ /user_data/i && !request.original_url.include?("survey")) || (request.original_url =~ /diagram/i && !request.original_url.include?('activity_survey_questions')) || @activity.try(:activity_type_id)==12 || @activity_type_id=='12') ? current_class : '' %>">
+    <li class="<%= (request.original_url =~ /vote/i || (request.original_url =~ /user_data/i && !request.original_url.include?("survey")) || (request.original_url =~ /diagram/i && !request.original_url.include?('survey_questions')) || @activity.try(:activity_type_id)==12 || @activity_type_id=='12') ? current_class : '' %>">
       <%= link_to votes_activities_path do %><span>微投票</span><% end %>
     </li>
-    <li class="<%= (controller_name.include?('activity_survey_questions') || action_name.include?('surveys') || @activity.try(:activity_type_id)==15 ) ? current_class : '' %>">
+    <li class="<%= (controller_name.include?('survey_questions') || action_name.include?('surveys') || @activity.try(:activity_type_id)==15 ) ? current_class : '' %>">
       <%= link_to surveys_activities_path do %><span>微调研</span><% end %>
     </li>
     <li class="<%= (request.original_url =~ /groups/i || @activity.try(:activity_type_id)==14 || @activity_type_id=='14') && @activity.try(:activity_type_id)!=30 ? current_class : '' %>">
@@ -120,8 +30,8 @@
       <%= link_to activity_greets_path do %><span>微贺卡</span><% end %>
     </li>
     <li class="<%= ['kf_settings', 'staffs'].include?(controller_name) ? "pagecurrent current" : '' %>"><%= link_to kf_settings_path do %><span>微信客服系统</span><% end %></li>
-    <li class="<%= ['supplier_prints', 'supplier_print_picutures', 'supplier_print_clients'].include?(controller_name) ? "pagecurrent current" : '' %>">
-      <%= link_to activities_supplier_prints_path do %><span>微信打印系统</span><% end %>
+    <li class="<%= ['prints', 'supplier_print_picutures', 'supplier_print_clients'].include?(controller_name) ? "pagecurrent current" : '' %>">
+      <%= link_to activities_prints_path do %><span>微信打印系统</span><% end %>
     </li>
 
     <li class="<%= ['wifi_clients'].include?(controller_name) ? "pagecurrent current" : '' %>">
@@ -132,7 +42,6 @@
     <li class="<%= ['wbbs_communities', 'wbbs_topics'].include?(controller_name) ? "pagecurrent current" : '' %>">
       <%= link_to wbbs_communities_path do %><span>微社区</span><% end %>
     </li>
-  <% end %>
 </ul>
 
 <%- if request.original_url =~ /greet/i || @activity.try(:activity_type_id)==33 || @activity_type_id=='33' %>
@@ -141,19 +50,4 @@
 
 <%- if request.original_url =~ /wx_wall/i || @activity.try(:activity_type_id)==38 || @activity_type_id=='38' %>
   <div class="help"><%= link_to "", help_wx_walls_path %></div>
-<%- end %>
-
-<% if current_user.bqq_account? %>
-<script>
-$(function(){
-  $(".box-nav").on("click","a",function(){
-    var $this = $(this);
-
-    if ( $this.hasClass('product_item') ) {
-      alert('您的套餐类型无法使用该功能，请联系经销商升级高版本套餐')
-      return false;
-    }
-  });
-});
-</script>
 <%- end %>

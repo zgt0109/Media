@@ -31,7 +31,7 @@
                   <div class="col-md-12">
                     <div class="col-md-3 row">
                       <div class="input-group input-group-text col-xs-12 row">
-                        <% options = current_user.activities.show.where(activity_type_id: 10).order('created_at desc').map{|a|[a.name,a.id]} %>
+                        <% options = current_site.activities.show.where(activity_type_id: 10).order('created_at desc').map{|a|[a.name,a.id]} %>
                         <%= f.select :id_eq, options_for_select(options.insert(0,["全部活动",""]), @activity_id), {}, class: 'col-xs-12' %>
                       </div>
                     </div>

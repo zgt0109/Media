@@ -2,9 +2,9 @@ __filename = "enroll_users.xls"
 sheet1 = xls.create_worksheet
 
 @activity = if params[:id].present?
-				      current_user.activities.find(params[:id])
+				      current_site.activities.find(params[:id])
 				    elsif params[:search][:id_eq].present?
-				      current_user.activities.find(params[:search][:id_eq])
+				      current_site.activities.find(params[:search][:id_eq])
 				    else
 				      @activity_enrolls_all.first.try(:activity)
 				    end

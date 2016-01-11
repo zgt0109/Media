@@ -79,7 +79,7 @@
                      </td>
                      <% if @activity_type_id == 15 %>
                      <td title="题目数量">
-                       <%= activity.activity_survey_questions.count %>
+                       <%= activity.survey_questions.count %>
                      </td>
                      <% end  %>
                      <td class="tleft">
@@ -138,10 +138,10 @@
                             <a  onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="查看微调研" data-iframe="<%= activity_path(activity) %>">查看</a>
                           <%- end %>
                           <% if activity.allow_set_question? %>
-                           &nbsp; <a  onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击管理题目" data-title="题目设置 - <%= activity.name %>" data-iframe="<%= activity_survey_questions_path(activity_id: activity.id) %>">题目</a>
+                           &nbsp; <a  onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击管理题目" data-title="题目设置 - <%= activity.name %>" data-iframe="<%= survey_questions_path(activity_id: activity.id) %>">题目</a>
                           <% end %>
-                          <% if (!activity.setting?) && activity.activity_survey_questions.present? %>
-                           &nbsp; <a  onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击查看统计图表" data-title="统计图表" data-iframe="<%= diagram_activity_survey_questions_path(id: activity.id) %>">统计</a>
+                          <% if (!activity.setting?) && activity.survey_questions.present? %>
+                           &nbsp; <a  onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击查看统计图表" data-title="统计图表" data-iframe="<%= diagram_survey_questions_path(id: activity.id) %>">统计</a>
                           <% end %>
                           <%= link_to '停止', [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => "调研活动正在进行，确认停止吗？") }, style: "margin-left:5px;"  if ['进行中'].include? show_activity_status(activity)%>
                           <%= link_to '开启', [:active, activity], method: :post, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, style: "margin-left:5px;"  if activity.allow_active? %>
@@ -255,7 +255,7 @@
        </td>
        <% if @activity_type_id == 15 %>
        <td title="题目数量">
-         <%= activity.activity_survey_questions.count %>
+         <%= activity.survey_questions.count %>
        </td>
        <% end  %>
        <td class="tleft">
@@ -312,10 +312,10 @@
               <a class="green" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="查看微调研" data-url="<%= activity_path(activity) %>">查看</a>
             <%- end %>
             <% if activity.allow_set_question? %>
-             &nbsp; <a class="green" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击管理题目" data-title="题目设置 - <%= activity.name %>" data-url="<%= activity_survey_questions_path(activity_id: activity.id) %>">题目</a>
+             &nbsp; <a class="green" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击管理题目" data-title="题目设置 - <%= activity.name %>" data-url="<%= survey_questions_path(activity_id: activity.id) %>">题目</a>
             <% end %>
-            <% if (!activity.setting?) && activity.activity_survey_questions.present? %>
-             &nbsp; <a class="green" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击查看统计图表" data-title="统计图表" data-url="<%= diagram_activity_survey_questions_path(id: activity.id) %>">统计</a>
+            <% if (!activity.setting?) && activity.survey_questions.present? %>
+             &nbsp; <a class="green" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" title="点击查看统计图表" data-title="统计图表" data-url="<%= diagram_survey_questions_path(id: activity.id) %>">统计</a>
             <% end %>
             <%= link_to '停止', [:stop, activity], method: :post, :data => { :confirm => t('.confirm', :default => "调研活动正在进行，确认停止吗？") }, style: "margin-left:5px;",  class:"green"  if ['进行中'].include? show_activity_status(activity)%>
             <%= link_to '开启', [:active, activity], method: :post, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, style: "margin-left:5px;",  class:"green" if activity.allow_active? %>

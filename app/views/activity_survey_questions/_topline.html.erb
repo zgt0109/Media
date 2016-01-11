@@ -1,6 +1,0 @@
-<div class="topline">
-  <%= link_to "微调研", surveys_activities_path %>
-  <%= link_to "题目设置", asks_activity_survey_questions_path, class: "h1 #{((controller_name == 'activity_survey_questions' && %( index new edit show).include?(action_name))? 'active' : '')}" %>
-  <%= link_to "统计图表", diagram_activity_survey_questions_path, class: "#{request.original_url.include?('diagram') ? 'active' : '' }" %>
-  <%= link_to "用户数据", user_data_activity_survey_questions_path, class: "#{request.original_url.include?('user_data') ? 'active' : '' }" %>
-</div>

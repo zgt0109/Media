@@ -1,7 +1,8 @@
 class WxWallUser < ActiveRecord::Base
   EXIT_CODE = '0'
   LIVE_MINUTES = 30
-  belongs_to :wx_user
+
+  belongs_to :user
   belongs_to :wx_wall
   has_many :wx_wall_messages
   has_many :award_prizes, class_name: 'WxWallPrizesWxWallUser'
@@ -66,7 +67,7 @@ class WxWallUser < ActiveRecord::Base
     return false unless matched?
     wx_user.wx_wall_mode!
     return false if wx_wall.vote.try(:keyword) == msg # 如果是投票关键词，则不作处理
-    return into_wx_shake if wx_wall.shake.try(:keyword) == msg # 如果是摇一摇关键词，则不作处理
+    return into_shake if wx_wall.shake.try(:keyword) == msg # 如果是摇一摇关键词，则不作处理
     return false if wx_wall.enroll.try(:keyword) == msg # 如果是报名关键词，则不作处理
     return reply_exit_message if msg == EXIT_CODE
 
@@ -87,7 +88,7 @@ class WxWallUser < ActiveRecord::Base
     end
   end
 
-  def into_wx_shake
+  def into_shake
     update_attributes(matched_at: Time.now, matched_mode: NULL_MODE)
     return false
   end

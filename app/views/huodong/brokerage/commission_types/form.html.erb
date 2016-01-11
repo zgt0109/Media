@@ -1,5 +1,5 @@
 <%= form_for @commission_type, url: brokerage_commission_type_path, validate: true, :html => { :class => 'box-form fl' } do |f| %>
-  <%= f.hidden_field :activity_id, value: current_user.brokerage_activity.id %>
+  <%= f.hidden_field :activity_id, value: current_site.brokerage_activity.id %>
   <div class="modal-body">
     <div class="form-group">
       <div class="input-group input-group-text width-100">

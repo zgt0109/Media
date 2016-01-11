@@ -58,8 +58,8 @@ staging:
 
 development:
   <<: *common
-  hostname: "localhost:3000"
-  mhostname: "m.localhost.com:3000"
+  hostname: "winwemedia.dev:3000"
+  mhostname: "m.winwemedia.dev:3000"
 
 test:
   <<: *common

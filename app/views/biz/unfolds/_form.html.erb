@@ -3,8 +3,6 @@
   <div class="row">
     <%= render 'weixin_preview', wx_title: @activity.name, wx_summary: @activity.summary %>
     <%= form_for @activity, :url => @activity.new_record? ? unfolds_path : unfold_path(@activity), validate: true, html: {class: 'form col-sm-7'} do |activity| %>
-    <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
-    <%= activity.hidden_field :supplier_id, value: current_user.id %>
 
     <div class="form-group">
       <label class="control-label">活动名称<span class="required-star">*</span><span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="不能超过64个字"> </span></label>
@@ -23,7 +21,7 @@
    <div class="form-group">
     <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
     <div class="clearfix">
-      <div data-name="activity[qiniu_pic_key]" data-img = "<%= @activity.pic_url %>" data-key="<%= @activity.qiniu_pic_key  %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+      <div data-name="activity[pic_key]" data-img = "<%= @activity.pic_url %>" data-key="<%= @activity.pic_key  %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
       <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
     </div>
   </div>

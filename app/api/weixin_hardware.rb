@@ -48,10 +48,10 @@ class WeixinHardware
     def respond_inlead_print(wx_user, mp_user, activity, raw_post)
       return respond_exit(wx_user, mp_user) if wx_user.match_at <= 5.minutes.ago # 大于5分钟直接退出
 
-      print_url      = mp_user.supplier.supplier_prints.small.first.url
+      print_url      = mp_user.supplier.prints.small.first.url
       from_user_name = wx_user.openid
       to_user_name   = mp_user.openid
-      if activity && activity.supplier_print?
+      if activity && activity.wx_print?
         result  = RestClient.post(print_url, raw_post, content_type: :xml, accept: :xml)
         if result.start_with?('<xml>')
           wx_user.print! #切换为打印模式
@@ -59,7 +59,7 @@ class WeixinHardware
         else
           Weixin.respond_text(from_user_name, to_user_name, '打印图片失败，请重新上传图片')
         end
-      elsif activity && activity.exit_supplier_print? #退出微打印状态
+      elsif activity && activity.exit_wx_print? #退出微打印状态
         respond_exit(wx_user, mp_user, activity.summary)
       else #直接转发给inleader
         result = RestClient.post(print_url, raw_post, content_type: :xml, accept: :xml)
@@ -71,7 +71,7 @@ class WeixinHardware
     # welomo
     def respond_welomo_print(wx_user, mp_user, activity, raw_post, options={})
       # WinwemediaLog::Base.logger('wxprint', "welomo print raw_post: #{raw_post}, params: #{options}")
-      return if mp_user.supplier.supplier_prints.welomo.normal.count == 0
+      return if mp_user.supplier.prints.welomo.normal.count == 0
 
       from_user_name, to_user_name = wx_user.openid, mp_user.openid
 
@@ -100,7 +100,7 @@ class WeixinHardware
         else
           #直接转发给 welomo
           begin
-            supplier_print = mp_user.supplier.supplier_prints.welomo.normal.first
+            supplier_print = mp_user.supplier.prints.welomo.normal.first
             signature = Digest::SHA1.hexdigest([supplier_print.token, options[:timestamp], options[:nonce]].map!(&:to_s).sort.join)
 
             post_uri = URI(supplier_print.url)

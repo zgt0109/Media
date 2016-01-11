@@ -7,22 +7,11 @@ class Biz::CouponsController < ApplicationController
   def index
   end
 
-  def new
-  end
-
-  def edit
-  end
-
   def create
     @coupon.attributes = params[:coupon]
     if @coupon.save
       @coupon.create_offline_consumes
-      if current_user.can_show_introduce? && current_user.task2?
-        current_user.update_attributes(show_introduce: 3)
-        redirect_to coupons_path(task: Time.now.to_i, task_name: 'coupon'), notice: '保存成功'
-      else
-        redirect_to coupons_path, notice: '保存成功'
-      end
+      redirect_to coupons_path, notice: '保存成功'
     else
       render_with_alert :new, "保存失败: #{@coupon.errors.full_messages.join('\n')}"
     end
@@ -104,7 +93,7 @@ class Biz::CouponsController < ApplicationController
   end
 
   def confirm_use_consume
-    consume = current_user.wx_mp_user.consumes.unused.unexpired.coupon_use_start.where(code: params[:sn_code]).readonly(false).first
+    consume = current_site.consumes.unused.unexpired.coupon_use_start.where(code: params[:sn_code]).readonly(false).first
     if consume.try(:can_use?)
       consume.update_attributes(status: Consume::USED, applicable_type: 'ShopBranch', applicable_id: params[:shop_branch_id], used_at: Time.now)
       flash[:notice] = "核销成功"
@@ -115,7 +104,7 @@ class Biz::CouponsController < ApplicationController
   end
 
   def find_consume
-    consume = current_user.wx_mp_user.consumes.unused.unexpired.coupon_use_start.where(code: params[:sn_code]).readonly(false).first
+    consume = current_site.consumes.unused.unexpired.coupon_use_start.where(code: params[:sn_code]).readonly(false).first
     Rails.logger.warn consume.inspect
     if consume.try(:can_use?)
       render json: {consume_status: 1, baseinfo: consume.baseinfo, sn_code: params[:sn_code]}
@@ -150,10 +139,10 @@ class Biz::CouponsController < ApplicationController
     end
 
     def set_activity
-      if current_user.activities.coupon.exists?
-        @activity = current_user.activities.coupon.show.first
+      if current_site.activities.coupon.exists?
+        @activity = current_site.activities.coupon.show.first
       else
-        @activity = current_user.wx_mp_user.create_activity_for_coupon
+        @activity = current_site.create_activity_for_coupon
       end
     end
 
@@ -191,9 +180,9 @@ class Biz::CouponsController < ApplicationController
     def find_shop_branches
       if @coupon.try(:shop_branch_ids).present?
         @shop_branchs = []
-        city_ids = current_user.shop_branches.used.where(id: @coupon.try(:shop_branch_ids)).uniq.pluck(:city_id)
+        city_ids = current_site.shop_branches.used.where(id: @coupon.try(:shop_branch_ids)).uniq.pluck(:city_id)
         city_ids.each_with_index do |city_id,index|
-          branch = current_user.shop_branches.used.where(city_id: city_id)
+          branch = current_site.shop_branches.used.where(city_id: city_id)
           @shop_branchs << branch
           if index == 0
             @province_id = branch.first.province_id
@@ -203,7 +192,7 @@ class Biz::CouponsController < ApplicationController
       else
         @province_id = 9
         @city_id = 73
-        @shop_branchs = [current_user.shop_branches.used.where(province_id: 9, city_id: 73)]
+        @shop_branchs = [current_site.shop_branches.used.where(province_id: 9, city_id: 73)]
       end
     end
 end

@@ -84,7 +84,7 @@ class Pro::BookRulesController < Pro::ShopBaseController
   private
 
   def authorize_shop_branch_account
-    return if current_user.is_a?(Supplier)
+    return if current_user.is_a?(Account)
 
     if current_user.is_gift?
       if current_user.disabled? || !current_user.can_any?('manage_catering_book_rules', 'manage_takeout_book_rules')

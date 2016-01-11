@@ -8,8 +8,8 @@ class ShopBranchPrintTemplate < ActiveRecord::Base
     ['ec_order',     4, '电商小票']
   ]
 
-  def name 
-    self.template_type_name
+  def name
+    template_type_name
   end
 
   enum_attr :print_type, :in => [

@@ -4,7 +4,7 @@ class Mobile::DonationsController < Mobile::BaseController
 
   def index
     @activity = Activity.find(params[:aid])
-    @supplier = Supplier.find(params[:supplier_id])
+    @supplier = Account.find(params[:supplier_id])
     @wx_user = WxUser.find(session[:wx_user_id])
     @donations = @supplier.donations.normal.where(activity_id: @activity.id).order("donations.order ASC")
   end

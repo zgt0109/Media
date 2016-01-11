@@ -50,7 +50,7 @@
               <%= f.text_field :expiry_num, class: 'input-small margin-right-10' %>个月
             </div>
           </div>
-          <% if current_user.shop_branches.used.present? %>
+          <% if current_site.shop_branches.used.present? %>
             <div class="form-group shop_branch_list">
               <div class="checkbox-list">
                 <label class="control-label">

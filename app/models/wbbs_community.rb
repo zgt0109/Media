@@ -1,5 +1,5 @@
 class WbbsCommunity < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   has_many :wbbs_topics
   has_many :wbbs_replies

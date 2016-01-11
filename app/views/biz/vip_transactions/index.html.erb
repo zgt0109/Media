@@ -9,7 +9,7 @@
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
-  <% if @supplier_password.new_record? %>
+  <% if @account_password.new_record? %>
     <div class="page-content">
       <div class="row">
         <div class="col-xs-12">
@@ -26,8 +26,8 @@
             </div>
 
               <div class="col-xs-12">
-                <%= form_for @supplier_password, url: vip_transactions_path, method: :post, validate: true, html: {id: "transaction_form", class: "form width-800"} do |f| %>
-                  <%= f.hidden_field :supplier_id %>
+                <%= form_for @account_password, url: vip_transactions_path, method: :post, validate: true, html: {id: "transaction_form", class: "form width-800"} do |f| %>
+                  <%= f.hidden_field :account_id %>
                   <%= f.hidden_field :password_type, value: 1 %>
                   <div class="form-group">
                     <label class="control-label">邮箱地址<span class="required-star">*</span></label>
@@ -52,7 +52,7 @@
                   <div class="form-group">
                     <label class="control-label">密保问题<small class="help-inle test text-warning line-height-32"> 为方便日后密码的丢失找回，建议设置密保问题</small></label>
                     <div class="clearfix">
-                      <%= f.select :password_question_id, options_for_select(@supplier_password.password_question_arr.insert(0,["请选择密保问题",0]))%>
+                      <%= f.select :password_question_id, options_for_select(AccountPassword::QUESTIONS.insert(0,["请选择密保问题",0]))%>
                     </div>
                     <div class="clearfix margin-top-10">
                       <%= f.text_field :password_answer, class: 'col-md-8', placeholder: '请输入密保问题的答案' %>
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="col-xs-12">
-              <%= form_for @supplier_password, url: vip_transaction_path(@supplier_password), method: :put, validate: true, html: {id: "transaction_form", class: "form width-800"} do |f| %>
+              <%= form_for @account_password, url: vip_transaction_path(@account_password), method: :put, validate: true, html: {id: "transaction_form", class: "form width-800"} do |f| %>
                 <div class="form-group">
                   <label class="control-label">旧密码<span class="required-star">*</span></label>
                   <div class="clearfix">
@@ -124,13 +124,13 @@
   });
 
   function save_submit(){
-    if($('#supplier_password_email').val() == ""){
+    if($('#account_password_email').val() == ""){
       showTip('warning',"请设置邮箱地址！");
       return false;
-    }else if(!$('#supplier_password_email').val().match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)){
+    }else if(!$('#account_password_email').val().match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)){
       showTip('warning',"邮箱地址不正确！");
       return false;
-    }else if($('#supplier_password_password_question_id').val() != "0" && $('#supplier_password_password_answer').val() == ""){
+    }else if($('#account_password_password_question_id').val() != "0" && $('#account_password_password_answer').val() == ""){
       showTip('warning',"请设置密保问题的答案！");
       return false;
     }else{
@@ -151,7 +151,7 @@
     });
   });
   function update_submit(){
-    if(<%= @supplier_password.err_num %> > 2 && status == "false"){
+    if(<%= @account_password.err_num %> > 2 && status == "false"){
       // $("body").append("<%#= escape_javascript(render :partial => "/biz/vip_transactions/back_password") %>");
       $("#error_pwd").remove();
       $("body").append('<button class="hide" id="error_pwd" data-toggle="modals" data-target="delModal" data-text="忘记密码！赶紧找回？<br><div class=\'text-center\'><a href=\'<%= j 'javascript:$(".close").click();$("#forget_pwd").click();' %>\' class=\'btn btn-sm btn-primary\'>忘记密码</a></div>">ddd</button>');
@@ -159,13 +159,13 @@
     }else if($('#old_password').val().length == ""){
       showTip('warning',"请设置旧密码！");
       return false;
-    }else if($('#supplier_password_password_digest').val() == ""){
+    }else if($('#account_password_password_digest').val() == ""){
       showTip('warning',"请设置新密码！");
       return false;
-    }else if($('#supplier_password_password_digest').val().length != 6){
+    }else if($('#account_password_password_digest').val().length != 6){
       showTip('warning',"新密码长度不正确！");
       return false;
-    }else if($('#supplier_password_password_digest').val() != $('#supplier_password_password_digest_confirmation').val()){
+    }else if($('#account_password_password_digest').val() != $('#account_password_password_digest_confirmation').val()){
       showTip('warning',"新密码与确认密码不一致！");
       return false;
     }else{

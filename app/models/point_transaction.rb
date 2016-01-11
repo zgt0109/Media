@@ -17,7 +17,7 @@
 #
 
 class PointTransaction < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :vip_user, inverse_of: :vip_user_transactions
   belongs_to :shop_branch
   belongs_to :point_type

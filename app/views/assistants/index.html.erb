@@ -1,0 +1,76 @@
+<% content_for :main_content do %>
+<div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+           <ul class="breadcrumb">
+            <li> 
+                <i class="icon-home home-icon"></i>
+                <a href="#">首页</a>
+            </li>
+            <li>微插件</li>
+            <% if action_name == "games" %>
+                <li>休闲小游戏</li>
+            <% else %>
+                <li>生活小助手</li>
+            <% end %>
+        </ul>
+      <%= render '/layouts/qrcode' %>
+    </div>
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-block alert-info">
+                    <strong class="pull-left">提示：</strong>
+                    <ul class="vwebsiteHeadAlert">
+                        <li>为用户在微信上提供方便智能的
+                        <% if action_name == "games" %>
+                            休闲小游戏
+                        <% else %>    
+                            生活小助手
+                        <% end %>
+                        服务，让您的微信公众账号更受欢迎。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-12 handler">
+              <% @assistants.each_with_index do |assistant,i| %>
+                <div class="widget-box ">
+                    <div class="widget-header widget-header-large widget-header-flat">
+                        <h4>
+                            <i class="icon-<%= assistant.code %>"></i>
+                            <%= assistant.name %>
+                        </h4>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="widget-content">
+                                <%= truncate assistant.description, length: 40 %>
+                            </div>
+                            <div class="hr hr8 hr-double"></div>
+                            <div class="widget-foot">
+                                <label>
+                                    <input name="switch-field-1" class="ace ace-switch ace-switch-7" type="checkbox"
+                                    onclick="javascript:toggle_hidden_link(<%= assistant.id %>)"
+                                    <% if assistant.open_status current_user.id %>
+                                    checked="checked"
+                                    <% end %>
+                                    >
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%= link_to " ", toggle_assistants_path(id: assistant.id), method: :post, remote: true, class: "btn-pluin pluin-open hidden", id:"toggle_#{assistant.id}" %>
+            <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function toggle_hidden_link(a_id){
+        $("#toggle_"+a_id).click();
+    }
+</script>
+<% end %>

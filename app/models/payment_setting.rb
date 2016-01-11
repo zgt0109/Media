@@ -54,7 +54,7 @@ class PaymentSetting < ActiveRecord::Base
   validates :app_id, :app_secret, presence: true, if: :weixinpay?
   validates :app_id, :api_client_cert, :api_client_key, presence: true, if: :wx_redpacket_pay?
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :payment_type
 
   # attr_accessible :app_id, :app_secret, :partner_id, :partner_key, :pay_private_key, :pay_public_key, :pay_sign_key
@@ -76,7 +76,7 @@ class PaymentSetting < ActiveRecord::Base
     deliver_msg = 'ok'
     #a = ["appid", "appkey","openid","transid","out_trad_no","deliver_timestamp","deliver_status","deliver_msg"]
     sign = Digest::SHA1.hexdigest "appid=#{self.app_id}&appkey=#{self.pay_sign_key}&deliver_msg=#{deliver_msg}&deliver_status=#{deliver_status}&deliver_timestamp=#{timestamp}&openid=#{open_id}&out_trade_no=#{payment.out_trade_no}&transid=#{payment.trade_no}"
-    wx_mp_user = payment.supplier.wx_mp_user
+    wx_mp_user = payment.account.site.wx_mp_user
     wx_mp_user.auth!
     request_url = "https://api.weixin.qq.com/pay/delivernotify?access_token=#{wx_mp_user.access_token}"
     json = "{

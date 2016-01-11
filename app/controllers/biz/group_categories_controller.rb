@@ -90,7 +90,7 @@ class Biz::GroupCategoriesController < Biz::GroupBaseController
   private
 
   def set_group
-    @group = current_user.group
+    @group = current_site.group
     @activity =  @group.activity
   end
 

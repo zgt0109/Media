@@ -21,7 +21,7 @@
               <div class="col-md-3 row">
                 <div class="input-group input-group-text">
                   <span class="input-group-addon">选择活动：</span>
-                  <%= select_tag :id, options_for_select(current_user.wx_walls.show.order('id DESC').map{|a|[a.name,a.id]}, params[:id]), class: "col-xs-12" %>
+                  <%= select_tag :id, options_for_select(current_site.wx_walls.show.order('id DESC').map{|a|[a.name,a.id]}, params[:id]), class: "col-xs-12" %>
                 </div>
               </div>
               <div class="col-md-3">

@@ -1,15 +1,42 @@
 # coding: utf-8
 class WxUser < ActiveRecord::Base
+  acts_as_follower
+
+  MATCH_TYPE_OPTIONS = [
+    ['normal', 1, '正常模式'],
+    ['postcard', 2, '打印模式'],
+    ['share_photos', 3, '晒图模式'],
+    ['greet', 4, '贺卡模式'],
+    ['house_live_photos', 5, '实景拍摄模式'],
+    ['print', 6, '打印模式'],
+    ['wifi', 7, 'wifi模式'],
+    ['welomo_print', 8, '通用打印模式'],
+    ['hanming_wifi', 9, '汉明wifi'],
+    ['kefu', 10, '人工客服模式'],
+    ['kefu_rate', 11, '人工客服评价模式'],
+    ['wx_wall_mode', 12, '微信墙模式'],
+    ['shake_mode', 13, '摇一摇模式']
+  ]
+  enum_attr :match_type, in: MATCH_TYPE_OPTIONS
+
+  enum_attr :subscribe, :in => [
+    ['unsubscribe', 0, '未关注'],
+    ['subscribed',  1, '已关注']
+  ]
+
+  acts_as_enum :sex, :in => [
+    ['secret', 0, '未知'],
+    ['male', 1, '男'],
+    ['female', 2, '女'],
+  ]
+
   validates :openid, presence: true
 
-  belongs_to :supplier
   belongs_to :wx_mp_user
-
   has_one :vip_user
   has_one :broker, class_name: '::Brokerage::Broker'
-
   has_many :wx_wall_users
-  has_many :wx_shake_users
+  has_many :shake_users
   has_many :wx_participates
   has_many :guess_participations, class_name: 'Guess::Participation'
   has_many :wx_prizes
@@ -45,36 +72,10 @@ class WxUser < ActiveRecord::Base
   has_many :complain_advices, class_name: 'WxPlotRepairComplain', conditions: { category: [WxPlotCategory::COMPLAIN, WxPlotCategory::ADVICE] }, order: 'wx_plot_repair_complains.created_at DESC'
   has_many :wx_invites, foreign_key: :from_wx_user_id
 
-  acts_as_follower
-
   scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
   scope :message_normal, ->{ where(leave_message_forbidden: 0)}
 
-  MATCH_TYPE_OPTIONS = [
-      ['normal', 1, '正常模式'],
-      ['postcard', 2, '打印模式'],
-      ['share_photos', 3, '晒图模式'],
-      ['greet', 4, '贺卡模式'],
-      ['house_live_photos', 5, '实景拍摄模式'],
-      ['print', 6, '打印模式'],
-      ['wifi', 7, 'wifi模式'],
-      ['welomo_print', 8, '通用打印模式'],
-      ['hanming_wifi', 9, '汉明wifi'],
-      ['kefu', 10, '人工客服模式'],
-      ['kefu_rate', 11, '人工客服评价模式'],
-      ['wx_wall_mode', 12, '微信墙模式'],
-      ['wx_shake_mode', 13, '摇一摇模式']
-  ]
-  enum_attr :match_type, in: MATCH_TYPE_OPTIONS
-
-  enum_attr :status, :in => [
-    ['unsubscribe', 0, '未关注'],
-    ['subscribe',   1, '关注']
-  ]
-
-  alias_attribute :subscribe, :status
-
-  # options: wx_user_openid, wx_mp_user_openid, client_type 1:QQ 2:微信
+  # Options: wx_user_openid, wx_mp_user_openid
   def self.follow(wx_mp_user, options = {})
     return unless wx_mp_user
 
@@ -82,9 +83,8 @@ class WxUser < ActiveRecord::Base
     wx_mp_user.update_openid_to(options[:wx_mp_user_openid])
     wx_user = wx_mp_user.wx_users.where(openid: options[:wx_user_openid]).first_or_create
 
-    attrs = { wx_mp_user_id: wx_mp_user.id, supplier_id: wx_mp_user.supplier_id }
-    attrs.merge!(userable_type: 'QqUser') if options[:client_type].to_i == 1
-    attrs.merge!(status: options[:status]) if options[:status].present?
+    attrs = { wx_mp_user_id: wx_mp_user.id }
+    attrs.merge!(subscribe: options[:subscribe]) if options[:subscribe].present?
     wx_user.attributes = attrs
     wx_user.save if wx_user.changed?
 
@@ -173,8 +173,8 @@ class WxUser < ActiveRecord::Base
     headimgurl || '/assets/wx_wall/user-img.jpg'
   end
 
-  def belongs_to?(supplier)
-    wx_mp_user_id == supplier.wx_mp_user.id
+  def belongs_to?(site)
+    wx_mp_user_id == site.wx_mp_user.id
   end
 
   def guess_left_count(activity)
@@ -188,7 +188,6 @@ class WxUser < ActiveRecord::Base
    end
    [arr.min, 0].max
   end
-
 
   def can_not_guess?(activity)
     guess_left_count(activity) == 0
@@ -234,8 +233,8 @@ class WxUser < ActiveRecord::Base
     wx_wall_mode? && matched_in_minutes?(WxWallUser::LIVE_MINUTES)
   end
 
-  def enter_wx_shake?
-    wx_shake_mode? && matched_in_minutes?(WxShakeUser::LIVE_MINUTES)
+  def enter_shake?
+    shake_mode? && matched_in_minutes?(ShakeUser::LIVE_MINUTES)
   end
 
   def enter_postcard?

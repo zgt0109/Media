@@ -32,7 +32,7 @@
                   </div>
 
                   <%= f.fields_for :activity  do |activity| %>
-                    <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "hospital[activity_attributes][qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key %>
+                    <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "hospital[activity_attributes][pic_key]", pic_data_key: @activity.pic_key %>
                   <% end %>
 
                   <div class="form-group">

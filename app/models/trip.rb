@@ -1,11 +1,8 @@
 class Trip < ActiveRecord::Base
-  # status:状态（1正常 -1停止）
-  mount_uploader :logo, PictureUploader
 
   validates :name, presence: true
-  # validates :logo, presence: true, on: :create
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
 
   has_many :trip_orders, dependent: :destroy

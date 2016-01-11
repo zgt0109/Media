@@ -3,7 +3,7 @@ class Huodong::FansGamesController < ApplicationController
 	before_filter :find_activity, except: [ :create ]
 	
 	def index
-    @activity ||= current_user.activities.new(activity_type_id:67)
+    @activity ||= current_site.activities.new(activity_type_id:67)
 	end
 
 	def show
@@ -13,7 +13,7 @@ class Huodong::FansGamesController < ApplicationController
 	end
 
 	def create
-		@activity = current_user.activities.new(params[:activity])
+		@activity = current_site.activities.new(params[:activity])
 		@activity.wx_mp_user_id = current_user.wx_mp_user.id
 		@activity.activity_type_id = 67
 		@activity.status = 1
@@ -40,6 +40,6 @@ class Huodong::FansGamesController < ApplicationController
 
 	private
     def find_activity
-      @activity = current_user.activities.fans_game.first
+      @activity = current_site.activities.fans_game.first
     end
 end

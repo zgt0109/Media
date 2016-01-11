@@ -9,7 +9,7 @@ class Pro::ShopBaseController < ApplicationController
     # def update_industry
     #   industry_id = params[:industry_id].to_i if params[:industry_id].present?
     #   if industry_id && current_user.has_industry_for?(industry_id)
-    #     supplier = current_user.is_a?(Supplier) ? current_user : current_shop_supplier
+    #     supplier = current_user.is_a?(Account) ? current_user : current_shop_account
     #     if supplier.supplier_industry_id != industry_id
     #       supplier.update_attributes(supplier_industry_id: industry_id)
     #       current_user(true) # force reload current_user to update supplier_industry_id
@@ -18,7 +18,7 @@ class Pro::ShopBaseController < ApplicationController
     # end
 
     def require_industry
-      if current_user.has_industry_for?(10001) || current_user.has_industry_for?(10002) || current_user.has_industry_for?(10007)
+      if current_site.has_industry_for?(10001) || current_site.has_industry_for?(10002) || current_site.has_industry_for?(10007)
         industry_id = params[:industry_id].to_i
         if [10001,10002,10007].include?(industry_id)
           session[:current_industry_id] = industry_id
@@ -39,6 +39,6 @@ class Pro::ShopBaseController < ApplicationController
     end
 
     def can_see?
-      current_user.is_a?(Supplier)
+      current_user.is_a?(Account)
     end
 end

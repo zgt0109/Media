@@ -14,7 +14,7 @@ class Pro::WxPlotRepairComplainsController < Pro::WxPlotBaseController
   end
 
   def reply
-    @message = @repair_complain.messages.new(messageable_id: current_user.id, messageable_type: 'Supplier')
+    @message = @repair_complain.messages.new(messageable_id: current_user.id, messageable_type: 'Account')
     @messages = @repair_complain.messages + @repair_complain.statuses
     @messages = @messages.reject{|f| f.new_record? }.sort{|x, y| x.created_at <=> y.created_at}
     render layout: 'application_pop'

@@ -41,7 +41,7 @@
   <%= link_to "用户数据", votes_user_data_activities_path, class: "h1 #{((request.original_url =~ /activities\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
 <% end %>
 <% if @search.activity_type_id_eq == 15 %>
-  <%# = link_to "题目设置", activity_survey_questions_path, class: "h1 #{((controller_name == 'activity_survey_questions' && %(index new edit show).include?(action_name))? 'pagecurrent' : 'uncurrent')}" %>
-  <%# = link_to "统计图表", diagram_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/diagram/i)) ? 'pagecurrent' : 'uncurrent'}" %>
-  <%= link_to "用户数据", user_data_activity_survey_questions_path, class: "h1 #{((request.original_url =~ /activity_survey_questions\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
+  <%# = link_to "题目设置", survey_questions_path, class: "h1 #{((controller_name == 'survey_questions' && %(index new edit show).include?(action_name))? 'pagecurrent' : 'uncurrent')}" %>
+  <%# = link_to "统计图表", diagram_survey_questions_path, class: "h1 #{((request.original_url =~ /survey_questions\/diagram/i)) ? 'pagecurrent' : 'uncurrent'}" %>
+  <%= link_to "用户数据", user_data_survey_questions_path, class: "h1 #{((request.original_url =~ /survey_questions\/user_data/i) ? 'pagecurrent' : 'uncurrent')}" %>
 <% end %>

@@ -26,7 +26,6 @@
             </div>
             <div class="col-sm-12">
               <%= form_for @activity, validate: true, class: "form" do |f| %>
-                <%= f.hidden_field :wx_mp_user_id %>
                 <%= f.hidden_field :activity_type_id %>
                 <%= f.hidden_field :status %>
                 <%= render "weixin_preview", wx_title: f.object.try(:name) || '标题', wx_summary: f.object.try(:summary) || '描述' %>
@@ -46,7 +45,7 @@
                   <div class="form-group">
                     <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                     <div class="clearfix">
-                      <div data-name="activity[qiniu_pic_key]" data-img = "<%= f.object.qiniu_pic_url || f.object.default_pic_url %>" data-key="<%= f.object.qiniu_pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[f.object.activity_type_id] : f.object.qiniu_pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+                      <div data-name="activity[pic_key]" data-img = "<%= f.object.qiniu_pic_url || f.object.default_pic_url %>" data-key="<%= f.object.pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[f.object.activity_type_id] : f.object.pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
                       <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
                     </div>
                   </div>
@@ -59,13 +58,13 @@
                   <div class="form-group">
                     <label class="control-label">商户名称<span class="required-star">*</span><small class="help-inline text-warning line-height-32">不超过12个字</small></label>
                     <div class="clearfix">
-                      <%= f.text_field :page_title, class: 'col-xs-6', validate: true, maxlength: 12, value: @activity.page_title || current_user.wx_mp_user.name %>
+                      <%= f.text_field :page_title, class: 'col-xs-6', validate: true, maxlength: 12, value: @activity.page_title || current_site.wx_mp_user.nickname %>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="control-label">商家Logo<span class="required-star">*</span></label>
                     <div class="col-sm-12 no-padding-left">
-                      <div class="cieldon-file width-100px " data-type="0" data-height="90" data-width="90"  data-name="activity[qiniu_logo_key]" data-img="<%= f.object.logo_url %>" data-key="<%= f.object.qiniu_logo_key %>"></div>
+                      <div class="cieldon-file width-100px " data-type="0" data-height="90" data-width="90"  data-name="activity[logo_key]" data-img="<%= f.object.logo_url %>" data-key="<%= f.object.logo_key %>"></div>
                       <small class="text-warning pull-left display-block margin-top-20 line-height-32">图片建议尺寸：300像素*300像素</small>
                     </div>
                     <div class="clearfix"></div>

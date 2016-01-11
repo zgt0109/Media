@@ -3,7 +3,7 @@
     <div class="breadcrumbs" id="breadcrumbs">
       <ul class="breadcrumb">
         <%= render 'partials/home' %>
-        <li><%= link_to '系统设置', account_url %></li>
+        <li><%= link_to '系统设置', profile_path %></li>
         <li><%= link_to '修改密码', new_password_url %></li>
       </ul>
       <%= render '/layouts/qrcode' %>
@@ -11,88 +11,75 @@
 
     <div class="page-content">
       <div class="row">
-        <div class="tabbable">
-          <%= render 'suppliers/tab' %>
-          <div class="tab-content no-border padding-24  ">
-            <div id="tab-1" class="tab-pane active">
-              <div class="row">
-                <div class="col-sm-12">
-                  <%= form_for current_user, url: passwords_path, method: :post, html: { class: 'form width-800' } do |f| -%>
-<!--                     <div class="form-group">
-                      <label class="control-label">用户名：</label>
-                      <div class="clearfix">
-                        <%= current_user.nickname %><%#= f.text_field :nickname, class: 'col-sm-4', readonly: true %>
-                      </div>
-                    </div> -->
-                    <div class="form-group">
-                      <label class="control-label">当前密码：</label>
-                      <div class="clearfix">
-                        <%= f.password_field :current_password, value: '', class: 'col-sm-4' %>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label">新密码：</label>
-                      <div class="clearfix">
-                        <%= f.password_field :password, autocomplete: :off, class: 'col-sm-4' %>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label">确认密码：</label>
-                      <div class="clearfix">
-                        <%= f.password_field :password_confirmation, class: 'col-sm-4' %>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <input type="submit" class="btn btn-primary btn-sm" id="save_password" value="保存">
-                    </div>
-                  <% end %>
-                </div>
+        <div class="col-sm-12">
+          <%= form_for current_user, url: passwords_path, method: :post, html: { class: 'form width-800' } do |f| -%>
+            <div class="form-group">
+              <label class="control-label">当前密码：</label>
+              <div class="clearfix">
+                <%= f.password_field :current_password, value: '', class: 'col-sm-4' %>
               </div>
             </div>
-          </div>
+            <div class="form-group">
+              <label class="control-label">新密码：</label>
+              <div class="clearfix">
+                <%= f.password_field :password, autocomplete: :off, class: 'col-sm-4' %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">确认密码：</label>
+              <div class="clearfix">
+                <%= f.password_field :password_confirmation, class: 'col-sm-4' %>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary btn-sm" id="save_password" value="保存">
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
+
+  </div>
 <% end %>
 
 <% content_for :custom_js do %>
-<script type="text/javascript">
-$(document).ready(function(){
-  var origin_pwd = $('#supplier_current_password')
-  var pwd1 = $("#supplier_password")
-  var pwd2 = $("#supplier_password_confirmation")
-  origin_pwd.blur(function(){
-    $(".message").remove();
-    if(origin_pwd.val() == ""){
-      addErrorMessage(origin_pwd, '请输入当前密码');
-    }else{
-      removeErrorMessage(origin_pwd)
-    }
-  });
-  pwd1.blur(function(){
-    $(".message").remove();
-    if(pwd1.val() == ""){
-      addErrorMessage(pwd1, '新密码不能为空');
-    }else if(pwd1.val().length < 6 || pwd1.val().length > 20){
-      addErrorMessage(pwd1, '新密码必须在6-20位之间');
-    }else{
-      removeErrorMessage(pwd1)
-    }
-  });
-  pwd2.blur(function(){
-    $(".message").remove();
-    if(pwd1.val() != pwd2.val()){
-      addErrorMessage(pwd2, '两次密码不一致');
-    }else{
-      removeErrorMessage(pwd2)
-    }
-  });
-  $('#save_password').click(function(event){
-    if (!origin_pwd.val() || !pwd1.val() || !pwd2.val() ){
-      event.preventDefault();
-      return false;
-    }
-  })
-});
-</script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var origin_pwd = $('#account_current_password')
+      var pwd1 = $("#account_password")
+      var pwd2 = $("#account_password_confirmation")
+      origin_pwd.blur(function(){
+        $(".message").remove();
+        if(origin_pwd.val() == ""){
+          addErrorMessage(origin_pwd, '请输入当前密码');
+        }else{
+          removeErrorMessage(origin_pwd)
+        }
+      });
+      pwd1.blur(function(){
+        $(".message").remove();
+        if(pwd1.val() == ""){
+          addErrorMessage(pwd1, '新密码不能为空');
+        }else if(pwd1.val().length < 6 || pwd1.val().length > 20){
+          addErrorMessage(pwd1, '新密码必须在6-20位之间');
+        }else{
+          removeErrorMessage(pwd1)
+        }
+      });
+      pwd2.blur(function(){
+        $(".message").remove();
+        if(pwd1.val() != pwd2.val()){
+          addErrorMessage(pwd2, '两次密码不一致');
+        }else{
+          removeErrorMessage(pwd2)
+        }
+      });
+      $('#save_password').click(function(event){
+        if (!origin_pwd.val() || !pwd1.val() || !pwd2.val() ){
+          event.preventDefault();
+          return false;
+        }
+      })
+    });
+  </script>
 <% end %>

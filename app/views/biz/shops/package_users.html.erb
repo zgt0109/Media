@@ -8,14 +8,14 @@
         <ul class="nav nav-tabs padding-24">
           <% if current_sub_account.can?('manage_vip_package_release') %>
             <li class="active">
-              <a href="<%= shops_package_users_path(supplier_id: current_shop_supplier.id) %>">
+              <a href="<%= shops_package_users_path(supplier_id: current_shop_account.id) %>">
                 套餐发放
               </a>
             </li>
           <% end %>
           <% if current_sub_account.can?('manage_vip_package_write_off') %>
             <li>
-              <a href="<%= shops_item_consumes_path(supplier_id: current_shop_supplier.id) %>">
+              <a href="<%= shops_item_consumes_path(supplier_id: current_shop_account.id) %>">
                 套餐核销
               </a>
             </li>
@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="col-sm-12 row">
-              <%= form_for @search, url: shops_package_users_path(supplier_id: current_shop_supplier.id), :html => { method: :get } do |f| %>
+              <%= form_for @search, url: shops_package_users_path(supplier_id: current_shop_account.id), :html => { method: :get } do |f| %>
                 <div class="col-md-3 row">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">时间范围：</span>
@@ -54,13 +54,13 @@
                 <div class="col-md-3">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">套餐：</span>
-                    <% options = current_shop_supplier.vip_card.vip_packages.show.latest.pluck(:name, :id) rescue [] %>
+                    <% options = current_shop_account.vip_card.vip_packages.show.latest.pluck(:name, :id) rescue [] %>
                     <%= f.select :vip_package_id_eq, options_for_select(options.insert(0,['请选择套餐','']), (params[:search][:vip_package_id_eq] if params[:search])), {}, class: "col-xs-12" %>
                   </div>
                 </div>
                 <div class="col-md-3 row pull-right">
                   <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
-                  <%= link_to '导出EXCEL', shops_package_users_path(supplier_id: current_shop_supplier.id, format: :xls,search: params[:search]) , class: 'btn btn-primary btn-sm btn-filter' %>
+                  <%= link_to '导出EXCEL', shops_package_users_path(supplier_id: current_shop_account.id, format: :xls,search: params[:search]) , class: 'btn btn-primary btn-sm btn-filter' %>
                 </div>
               <% end %>
             </div>

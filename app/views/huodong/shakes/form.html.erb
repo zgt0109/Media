@@ -1,0 +1,158 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <%= render 'partials/home' %>
+        <li><%= link_to '微活动', activities_path %></li>
+        <li><%= link_to '摇一摇', shakes_path %></li>
+        <li><%= link_to '摇一摇管理', shakes_path %></li>
+      </ul>
+      <%= render partial: '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <%= render "weixin_preview", wx_title: @shake.try(:name) || '标题', wx_summary: @shake.try(:summary) || '描述', wx_pic: (@shake.activity.new_record? ? '/assets/activity_pics/12.jpg' : @shake.activity.pic_url) %>
+        <% @shake.activity.can_validate = true %>
+        <div class="col-sm-7">
+          <%= form_for @shake, validate: true, class: 'form width-800' do |shake| %>
+            <%= shake.hidden_field :template_id %>
+            <%= shake.fields_for :activity do |activity| %>
+            <%- if @shake.new_record? %>
+            <%= activity.hidden_field :status, value: 1 %>
+            <%= activity.hidden_field :site_id, value: current_site.id %>
+            <%- end %>
+            <div class="form-group">
+              <label>活动名称<span class="required-star">*</span>
+                <small class="text-warning">(不超过15个字)</small>
+              </label>
+              <div class="clearfix">
+                <%= activity.text_field :name, id: 'wx_title', class: 'required col-md-8', placeholder: '请输入活动主题名称', maxlength: 15, rel: 'ready_activity_title'  %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>触发关键字<span class="required-star">*</span>
+                <small class="text-warning">(不能与其它关键字重复)</small>
+              </label>
+              <div class="clearfix">
+                <%= activity.text_field :keyword, class: 'required col-md-8', placeholder: '请输入摇一摇对应的关键字', maxlength: 15 %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>活动开始微信消息图片<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <div data-name="shake[activity_attributes][pic_key]" data-img = "<%= @shake.activity.pic_url.present? ? @shake.activity.pic_url : @shake.activity.default_pic_url %>" data-key="<%= @shake.activity.pic_key %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
+                <span class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>活动开始微信消息摘要<span class="required-star">*</span></label>
+              <div class="clearfix">
+                <%= activity.text_area :summary, maxlength: 500, id: 'wx_summary', class: "col-xs-8", rows: 5, rel: 'ready_activity_notice_summary' %>
+              </div>
+            </div>
+            <% end %>
+            <% if current_site.wx_mp_user.qrcode_key.blank? %>
+              <div class="form-group">
+                <label>公众号二维码<span class="required-star">*</span>
+                  <small class="text-warning">(请到<a href="<%= profile_path %>">系统设置</a>上传二维码)</small>
+                </label>
+              </div>
+            <% end %>
+            <div class="form-group">
+              <label>主办方logo<span class="required-star">*</span>
+                <small class="text-warning">(放置在大屏幕做品牌形象展示)</small>
+              </label>
+              <div class="clearfix">
+                <div data-name="shake[logo_key]" data-img = "<%= @shake.logo_url.presence %>" data-key="<%= @shake.logo_key %>" class="cieldon-file width-220px" data-width="180" data-height="60" data-type="0"></div>
+                <span class="help-inline text-warning line-height-32">建议尺寸:180*60px</span>
+              </div>
+            </div>
+            <div class="radio-tab-content">
+              <div class="form-group">
+                <label>摇动次数<span class="required-star">*</span>
+                  <small class="text-warning">(最先摇到规定次数胜，建议设置200次以上)</small>
+                </label>
+                <div class="radio-tab-pane">
+                  <%= shake.text_field :mode_value, class: 'required inputSmall' %>次
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>开始倒计时<span class="required-star">*</span>
+                <small class="text-warning">(点击开始按钮后开始倒计时，不少于5秒)</small>
+              </label>
+              <div class="clearfix">
+                <div class="input-group col-sm-8 no-padding-left">
+                  <%= shake.text_field :countdown, class: 'required form-control' %>
+                  <span class="input-group-addon">秒</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>每轮中奖人数<span class="required-star">*</span>
+                <small class="text-warning">(每结束一轮摇一摇活动产生的SN码数)</small>
+              </label>
+              <div class="clearfix">
+                <div class="input-group col-sm-8 no-padding-left">
+                  <%= shake.text_field :prize_user_num, class: 'required form-control' %>
+                  <span class="input-group-addon">人</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>选择模板
+                <span class="required-star">*</span>
+              </label>
+
+              <div class="clearfix">
+                <div class="col-sm-12">
+                  <div class="row template-list">
+                    <ul class="ace-thumbnails">
+                      <li class="<%= 'active' if @shake.template_id.blank? || @shake.template1? %>">
+                        <a href="javascript:;" class="choose_temp" data-tmp="1">
+                          <img alt="" src="/assets/shake_template/shakeindex.png">
+                          <div class="text">
+                            <div class="inner">选择此模板
+                            </div>
+                          </div>
+                          <span>漫威英雄</span>
+                        </a>
+                      </li>
+                      <li class="<%= 'active' if @shake.template_id.blank? || @shake.template2? %>">
+                        <a href="javascript:;" class="choose_temp" data-tmp="2">
+                          <img alt="" src="/assets/shake_template/world_cup.jpg">
+                          <div class="text">
+                            <div class="inner">选择此模板
+                            </div>
+                          </div>
+                          <span>2014世界杯</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label><%= shake.check_box :mobile_check, class: 'ace' %><span class="lbl"> 需要填写手机号码 </span></label>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="保存" class="btn btn-primary btn-sm">
+              <button type="button" class="btn btn-sm btn-default"  onclick="window.location.href='<%= shakes_url %>'">取消</button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% content_for :custom_js do %>
+<script>
+$(function(){
+  $('form').validate();
+});
+$('.choose_temp').on('click', function(){
+  $('#shake_template_id').val($(this).data("tmp"));
+})
+</script>
+<% end %>

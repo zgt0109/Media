@@ -1,29 +1,12 @@
-# == Schema Information
-#
-# Table name: activity_users
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  wx_user_id    :integer          not null
-#  activity_id   :integer          not null
-#  name          :string(255)      not null
-#  mobile        :string(255)      not null
-#  status        :integer          default(0), not null
-#  description   :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class ActivityUser < ActiveRecord::Base
 
   has_many :aid_results, class_name: 'Aid::Result'
-  has_many :activity_survey_answers
+  has_many :survey_answers
   has_many :guess_participations, class_name: 'Guess::Participation'
   has_many :red_packet_releases, class_name: 'RedPacket::Release'
   has_many :activity_user_vote_items
   belongs_to :activity
-  belongs_to :wx_user
+  belongs_to :user
   has_one :activity_feedback
 
   accepts_nested_attributes_for :guess_participations
@@ -48,9 +31,9 @@ class ActivityUser < ActiveRecord::Base
   def survey_options
     return '' unless activity
     arr = []
-    questions = activity.activity_survey_questions.order(:position)
-    answers = activity_survey_answers.order('activity_survey_answers.activity_survey_question_id')
-    questions.collect(&:id).each{|m| arr << answers.select{|f| f.activity_survey_question_id == m }.flatten.collect(&:answer).join(',')}
+    questions = activity.survey_questions.order(:position)
+    answers = survey_answers.order('survey_answers.survey_question_id')
+    questions.collect(&:id).each{|m| arr << answers.select{|f| f.survey_question_id == m }.flatten.collect(&:answer).join(',')}
     arr.each_with_index{|m, index| arr[index] = "第#{index+1}题:#{m}"}.join(' | ')
   end
 

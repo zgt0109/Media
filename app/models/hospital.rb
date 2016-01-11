@@ -1,5 +1,5 @@
 class Hospital < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
 
   has_one :activity, as: :activityable

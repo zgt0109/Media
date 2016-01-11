@@ -8,10 +8,8 @@
 <% end %>
 
 <%= form_for @booking_order, url: mobile_booking_orders_path, method: 'post' do |f| %>
-    <%= f.hidden_field :wx_user_id %>
+    <%= f.hidden_field :user_id %>
     <%= f.hidden_field :booking_item_id %>
-    <%= f.hidden_field :wx_mp_user_id %>
-    <%= f.hidden_field :supplier_id %>
     <%= f.hidden_field :price %>
     <%= f.hidden_field :status %>
     <%= hidden_field_tag :is_flow_supplier, f.object.is_flow_supplier %>

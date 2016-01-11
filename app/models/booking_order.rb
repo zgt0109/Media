@@ -1,5 +1,5 @@
 class BookingOrder < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :wx_user
   belongs_to :booking_item

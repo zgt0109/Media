@@ -3,7 +3,7 @@ class MultipleMaterialsController < ApplicationController
   before_filter :find_material, only: [:show, :edit, :update, :destroy]
 
   def index
-    @materials = current_user.materials.root.multiple_graphic.graphic_select.page(params[:page]).order("id desc")
+    @materials = current_site.materials.root.multiple_graphic.graphic_select.page(params[:page]).order("id desc")
   end
 
   def show
@@ -14,12 +14,12 @@ class MultipleMaterialsController < ApplicationController
   end
 
   def new
-    @material = current_user.materials.new(material_type: 2)
-    @material.children.build(supplier_id: current_user.id, material_type: 2, title: '标题')
+    @material = current_site.materials.new(material_type: 2)
+    @material.children.build(site_id: current_site.id, material_type: 2, title: '标题')
   end
 
   def create
-    @material = current_user.materials.new(params[:material])
+    @material = current_site.materials.new(params[:material])
 
     if @material.save
       @material.children.create(params[:materials])
@@ -77,7 +77,7 @@ class MultipleMaterialsController < ApplicationController
 
   private
     def find_material
-      @material = current_user.materials.multiple_graphic.where(id: params[:id]).first
+      @material = current_site.materials.multiple_graphic.where(id: params[:id]).first
       return render text: '素材不存在' unless @material
     end
 

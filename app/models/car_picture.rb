@@ -13,8 +13,6 @@
 #
 
 class CarPicture < ActiveRecord::Base
-  mount_uploader :path, CarPictureUploader
-  img_is_exist({path: :qiniu_path_key}) 
 
 	# validates :car_catena_id, :path, presence: true
 

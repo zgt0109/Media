@@ -16,7 +16,7 @@
 #
 
 class VipUserMessage < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :vip_user
 
   scope :read,   ->( is_read = true ) { where(is_read: is_read) unless is_read.nil?  }

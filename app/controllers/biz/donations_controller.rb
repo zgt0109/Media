@@ -2,22 +2,21 @@
 class Biz::DonationsController < ApplicationController
 
   def index
-    @search = current_user.donations.search(params[:search])
+    @search = current_site.donations.search(params[:search])
     @donations = @search.page(params[:page])
   end
 
   #new activity
   def activity
-    @activity = current_user.activities.new(activity_type_id: ActivityType::DONATION)
+    @activity = current_site.activities.new(activity_type_id: ActivityType::DONATION)
   end
 
   def update_activity
     unless params[:aid].blank?
-      @activity = current_user.activities.find(params[:aid])
+      @activity = current_site.activities.find(params[:aid])
       @activity.update_attributes(params[:activity])
     else
-      @activity = current_user.activities.new(params[:activity])
-      @activity.wx_mp_user_id = current_user.wx_mp_user.id
+      @activity = current_site.activities.new(params[:activity])
     end
     if @activity.save!
       return redirect_to list_activities_donations_url,  notice: '保存成功'
@@ -27,12 +26,12 @@ class Biz::DonationsController < ApplicationController
   end
 
   def edit_activity
-    @activity = current_user.activities.where(id: params[:aid]).first
+    @activity = current_site.activities.where(id: params[:aid]).first
     render 'activity'
   end
 
   def update
-    @donation = current_user.donations.find(params[:id])
+    @donation = current_site.donations.find(params[:id])
     if @donation.update_attributes params[:donation]
       return redirect_to donations_url, notice: "更新成功"
     else
@@ -41,15 +40,15 @@ class Biz::DonationsController < ApplicationController
   end
 
   def new
-    @donation = current_user.donations.new
+    @donation = current_site.donations.new
   end
 
   def list_activities
-    @activities = current_user.activities.where(activity_type_id: 53).page(params[:page])
+    @activities = current_site.activities.where(activity_type_id: 53).page(params[:page])
   end
 
   def create
-    @donation = current_user.donations.build params[:donation]
+    @donation = current_site.donations.build params[:donation]
     @donation.status = 1 #默认进行中
 
     if @donation.save
@@ -60,11 +59,11 @@ class Biz::DonationsController < ApplicationController
   end
 
   def edit
-    @donation = current_user.donations.find(params[:id])
+    @donation = current_site.donations.find(params[:id])
   end
 
   def orders
-    @search = @current_user.donation_orders.order("donation_orders.created_at DESC").search(params[:search])
+    @search = @current_site.donation_orders.order("donation_orders.created_at DESC").search(params[:search])
     @donation_orders = @search.page(params[:page])
     respond_to do |format|
       format.html
@@ -78,7 +77,7 @@ class Biz::DonationsController < ApplicationController
   end
 
   def start
-    @donation = current_user.donations.find(params[:id])
+    @donation = current_site.donations.find(params[:id])
     @donation.update_column("status", 1)
     respond_to do |format|
       format.js
@@ -86,7 +85,7 @@ class Biz::DonationsController < ApplicationController
   end
 
   def stop
-    @donation = current_user.donations.find(params[:id])
+    @donation = current_site.donations.find(params[:id])
     @donation.update_column("status", -1)
     respond_to do |format|
       format.js
@@ -94,7 +93,7 @@ class Biz::DonationsController < ApplicationController
   end
 
   def destroy
-    @donation = current_user.donations.find(params[:id])
+    @donation = current_site.donations.find(params[:id])
     if @donation.donation_orders.count > 0 #有过捐款了
       return redirect_to donations_url, notice: "该项目已经有捐款了, 不能删除"
     end

@@ -44,7 +44,7 @@ class Api::V1::WxController < Api::BaseController
       return render json: { errcode: 1, errmsg: "missing attributes: url" }, status: 400 unless @url.present?
 
       if params[:auth_token].present?
-        @supplier = Supplier.where(auth_token: params[:auth_token]).first
+        @supplier = Account.where(auth_token: params[:auth_token]).first
         @wx_mp_user = @supplier.try(:wx_mp_user)
       elsif params[:app_id].present?
         @wx_mp_user = WxMpUser.where(app_id: params[:app_id]).first

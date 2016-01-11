@@ -3,14 +3,13 @@ class Biz::GreetsController < ApplicationController
   before_filter :find_greet_activity
   before_filter :set_activity_url, only: [:activity, :create_activity, :update_activity]
   before_filter :check_activity, except: [:activity, :create_activity]
-  before_filter :restrict_trial_supplier, except: [:index, :activity]
-  before_filter :require_wx_mp_user, only: [:activity, :index]
+  # before_filter :require_wx_mp_user, only: [:activity, :index]
 
   def activity
   end
 
   def create_activity
-    @activity = current_user.wx_mp_user.build_greet_activity params[:activity]
+    @activity = current_site.build_greet_activity params[:activity]
     if @activity.save
       redirect_to activity_greets_path, notice: '保存成功'
     else
@@ -20,8 +19,8 @@ class Biz::GreetsController < ApplicationController
 
   #顶部图片更新
   def update_activity
-    @activity = current_user.greet_activity
-    @activity = current_user.wx_mp_user.build_greet_activity params[:activity]
+    @activity = current_site.greet_activity
+    @activity = current_site.build_greet_activity params[:activity]
     if @activity.update_attributes params[:activity]
       redirect_to activity_greets_path, notice: '保存成功'
     else
@@ -30,7 +29,7 @@ class Biz::GreetsController < ApplicationController
   end
 
   def index
-    @search = current_user.greets.order('id ASC').search(params[:search])
+    @search = current_site.greets.order('id ASC').search(params[:search])
     @greet = @search.page(params[:page])
   end
 
@@ -41,14 +40,14 @@ class Biz::GreetsController < ApplicationController
   end
 
   def edit
-    @greet = current_user.greets.find params[:id]
+    @greet = current_site.greets.find params[:id]
     # @photos = @album.photos.order('id ASC')
     # @photo  = AlbumPhoto.new
     render layout: 'application_pop'
   end
 
   def create
-    @greet  = current_user.greets.build(params[:greet].merge wx_mp_user: current_user.wx_mp_user, activity: @activity)
+    @greet  = current_site.greets.build(params[:greet].merge activity: @activity)
     if @greet.save
       redirect_to greet_cards_path, notice: '保存成功'
     else
@@ -59,13 +58,13 @@ class Biz::GreetsController < ApplicationController
   end
 
   def update
-    @greet = current_user.greets.find params[:id]
+    @greet = current_site.greets.find params[:id]
     @greet.update_attributes(params[:greet])
     redirect_to greet_cards_url, notice: "更新成功"
   end
 
   def destroy
-    # album = current_user.albums.find params[:id]
+    # album = current_site.albums.find params[:id]
     # album.destroy
     # respond_to do |format|
     #   format.html { redirect_to :back, notice: '删除成功' }
@@ -76,7 +75,7 @@ class Biz::GreetsController < ApplicationController
   private
 
     def find_greet_activity
-      @activity = current_user.greet_activity || current_user.wx_mp_user.build_greet_activity
+      @activity = current_site.greet_activity || current_site.build_greet_activity
     end
 
     def set_activity_url
@@ -84,7 +83,7 @@ class Biz::GreetsController < ApplicationController
     end
 
     def check_activity
-      return redirect_to activity_greets_path, notice: '请先填写活动信息' unless current_user.greet_activity
+      return redirect_to activity_greets_path, notice: '请先填写活动信息' unless current_site.greet_activity
     end
 
 end

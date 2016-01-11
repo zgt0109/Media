@@ -21,7 +21,7 @@
                 <div class="col-md-3 row">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">微信卡券名称：</span>
-                    <% wx_cards = current_user.cards.latest.pluck(:title, :id) %>
+                    <% wx_cards = current_site.wx_mp_user.cards.latest.pluck(:title, :id) %>
                     <%= f.select :consumable_id_eq, options_for_select(wx_cards.insert(0,['请选择卡券名称','']), (params[:search][:consumable_id_eq] if params[:search])), {}, class: "col-sm-12" %>
                   </div>
                 </div>

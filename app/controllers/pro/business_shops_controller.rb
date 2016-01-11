@@ -87,8 +87,8 @@ class Pro::BusinessShopsController < WebsiteShared::WebsiteBaseController
 
   def group_activities
     ids = @business_shop.activities_business_shops.collect(&:activity_id)
-    @total_group_activities = current_user.activities.where(["id not in (?) and status in (?) and now() < end_at and activity_type_id=14",ids.blank? ? "" : ids,[0,1]]).order('id DESC')
-    @shop_activitys = current_user.activities.where(["id in (?)",ids]).order('id DESC').page(params[:page])
+    @total_group_activities = current_site.activities.where(["id not in (?) and status in (?) and now() < end_at and activity_type_id=14",ids.blank? ? "" : ids,[0,1]]).order('id DESC')
+    @shop_activitys = current_site.activities.where(["id in (?)",ids]).order('id DESC').page(params[:page])
   end
 
   def update_group_activities

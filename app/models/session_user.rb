@@ -1,7 +1,7 @@
 class SessionUser < ActiveRecord::Base
   BEGIN_ID = 1000_000_000
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   has_many :activity_users, foreign_key: :wx_user_id, conditions: "wx_user_id > #{BEGIN_ID}"
 

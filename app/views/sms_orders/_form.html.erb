@@ -1,5 +1,4 @@
 <%= form_for @sms_order, validate: true do |f| %>
-  <%= f.hidden_field :supplier_id %>
   <div class="modal-body">
     <div class="radioTab">
       <% SmsOrder.usable_buy.each_with_index do |m, i| %>

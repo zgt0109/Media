@@ -8,7 +8,7 @@ class Biz::UnfoldsController < ApplicationController
     if params[:activity_id]
       activites_ids = [] << params[:activity_id]
     else
-      activites_ids = current_user.activities.unfold.pluck(:id)
+      activites_ids = current_site.activities.unfold.pluck(:id)
     end
     @search = WxPrize.where(activity_id: activites_ids).reached
     if params[:code].present?
@@ -24,7 +24,7 @@ class Biz::UnfoldsController < ApplicationController
   end
 
   def create
-    @activity = current_user.activities.new(activity_type_id: 71)
+    @activity = current_site.activities.new(activity_type_id: 71)
     @activity.attributes = params[:activity]
     @activity.extend.base_info_required = params[:base_info_required] if params[:base_info_required]
 
@@ -54,7 +54,7 @@ class Biz::UnfoldsController < ApplicationController
   end
 
   def find_consume
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
     consume = Consume.find_by_id(params[:id])
     consumable = consume.consumable
     if consumable && consumable.is_a?(Coupon) && consumable.shop_branch_ids.present?
@@ -64,7 +64,7 @@ class Biz::UnfoldsController < ApplicationController
   end
 
   def use_consume
-     @consume = current_user.wx_mp_user.consumes.unused.unexpired.find(params[:id])
+     @consume = current_site.consumes.unused.unexpired.find(params[:id])
      shop_branch = ShopBranch.find_by_id(params[:shop_branch_id])
      @consume.use!(shop_branch)
      flash.notice = '操作成功'
@@ -117,7 +117,7 @@ class Biz::UnfoldsController < ApplicationController
 
   private
   def find_activity
-    @activity = current_user.activities.unfold.find_by_id(params[:id]) || current_user.activities.new(activity_type_id: 71, name: '拆包有奖', summary: '请点击进入拆包有奖页面', description: '拆包有奖说明')
+    @activity = current_site.activities.unfold.find_by_id(params[:id]) || current_site.activities.new(activity_type_id: 71, name: '拆包有奖', summary: '请点击进入拆包有奖页面', description: '拆包有奖说明')
   end
 
   def activity_time_valid?
@@ -136,7 +136,7 @@ class Biz::UnfoldsController < ApplicationController
   end
 
   def set_coupons_and_gifts
-    coupon_activity = current_user.wx_mp_user.activities.coupon.show.first
+    coupon_activity = current_site.activities.coupon.show.first
     if coupon_activity.present?
       @coupons = coupon_activity.coupons.normal.activity_coupon.can_apply.select {|coupon| coupon.appliable? }
     else

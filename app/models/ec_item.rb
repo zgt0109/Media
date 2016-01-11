@@ -3,7 +3,7 @@
 # Table name: ec_items
 #
 #  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
+#  site_id   :integer          not null
 #  wx_mp_user_id :integer          not null
 #  ec_shop_id    :integer
 #  cid           :integer
@@ -18,10 +18,8 @@
 #
 
 class EcItem < ActiveRecord::Base
-  # attr_accessible :cid, :iid, :num_iid, :pic_url, :price, :seller_cid, :title
-  mount_uploader :pic_url, ItemPictureUploader
 
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
 
   belongs_to :ec_seller_cat, :primary_key => :cid, foreign_key: :seller_cid
@@ -120,14 +118,11 @@ class EcItem < ActiveRecord::Base
     ec_seller_cat_selects
   end
 
-
-
-
   private
 
   def add_default_attrs
-    return unless supplier
-    self.wx_mp_user_id = supplier.wx_mp_user.try(:id)
-    self.ec_shop_id = supplier.ec_shop.try(:id)
+    return unless site
+    self.wx_mp_user_id = site.wx_mp_user.try(:id)
+    self.ec_shop_id = site.ec_shop.try(:id)
   end
 end

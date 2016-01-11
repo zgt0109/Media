@@ -1,5 +1,5 @@
 class SystemMessage < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :system_message_module
   belongs_to :system_message_setting
 

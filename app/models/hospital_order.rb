@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 class HospitalOrder < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
   belongs_to :wx_user
   belongs_to :hospital

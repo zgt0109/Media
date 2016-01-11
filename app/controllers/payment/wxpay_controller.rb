@@ -43,7 +43,7 @@ class Payment::WxpayController < ApplicationController
   end
 
   def test
-    @supplier = Supplier.where(id: params[:supplier_id]).first
+    @supplier = Account.where(id: params[:supplier_id]).first
     return render text: "请传入商户ID" unless @supplier
 
     @wxpay = @supplier.payment_settings.weixinpay.first
@@ -70,11 +70,11 @@ class Payment::WxpayController < ApplicationController
 
   # TODO 需要用网页授权获取openid
   def pay
-    @supplier = Supplier.where(id: params[:supplier_id]).first
+    @supplier = Account.where(id: params[:supplier_id]).first
     return render json: {errcode: 001, errmsg: "supplier not found"} unless @supplier
 
     if params[:openid].present?
-      @wx_user = @supplier.try(:wx_mp_user).try(:wx_users).where(uid: params[:openid]).first
+      @wx_user = @supplier.try(:wx_mp_user).try(:wx_users).where(openid: params[:openid]).first
       @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: params[:openid], wx_mp_user_openid: @supplier.wx_mp_user.try(:openid)) unless @wx_user
     else
       return render json: {errcode: 006, errmsg: "weixin user not found"}
@@ -96,7 +96,7 @@ class Payment::WxpayController < ApplicationController
     xml = params[:xml]
     #xml = {"OpenId"=>"obsaptzAbROOwY7pn4oZI7lXhtLc", "AppId"=>"wx7224575773890d83", "TimeStamp"=>"1395728008", "MsgType"=>"request", "FeedBackId"=>"13234327155953740587", "TransId"=>"1218314601201403218341624917", "Reason"=>"娴嬭瘯", "Solution"=>"娴嬭瘯", "ExtInfo"=>"娴嬭瘯娴嬭瘯娴嬭瘯娴嬭瘯 12052360607", "AppSignature"=>"40d5864372a50000fca64c2acc29f99efe202cd4", "SignMethod"=>"sha1"}
     #xml = {"OpenId"=>"obsapt8YtkO2Y-qe39X0-ySxm4lA", "AppId"=>"wx7224575773890d83", "TimeStamp"=>"1395729382", "MsgType"=>"reject", "FeedBackId"=>"13234327155953740587", "Reason"=>"", "AppSignature"=>"05b4a520b085a0615b39d08c6885daea2ec06bb7", "SignMethod"=>"sha1"}
-    wx_user = WxUser.where(uid: xml['OpenId']).first
+    wx_user = WxUser.where(openid: xml['OpenId']).first
     mp_user = WxMpUser.where(app_id: xml['AppId']).first
     feedback = WxFeedback.where(feed_back_id: xml['FeedBackId']).first || WxFeedback.new
     msg_type = WxFeedback.msg_type_status xml['MsgType']

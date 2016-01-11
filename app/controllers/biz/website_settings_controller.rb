@@ -1,16 +1,11 @@
 class Biz::WebsiteSettingsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => [:set_template_id, :update_update_nav_template]
-  before_filter :require_wx_mp_user
   before_filter :find_website
 
-  def index    
+  def index
     @website_tags = WebsiteTag.order(:sort) #if @use_website_tag
-    if [10001,10002].include?(current_user.id)
-      @website_templates = WebsiteTemplate.order('website_templates.style_index DESC')
-    else
-      @website_templates = WebsiteTemplate.show.supplier_templates(current_user).order('website_templates.style_index DESC')
-    end
+    @website_templates = WebsiteTemplate.show.supplier_templates(current_site).order('website_templates.style_index DESC')
   end
 
   def set_template_id
@@ -32,9 +27,6 @@ class Biz::WebsiteSettingsController < ApplicationController
     end
   end
 
-  def bg_pic
-  end
-
   def navs
     @nav_type_columns = {
       1 => 'index_nav_template_id',
@@ -44,10 +36,6 @@ class Biz::WebsiteSettingsController < ApplicationController
 
     @bqq_website = false
     @bqq_style_index = []
-    if current_user.bqq_account?
-      @bqq_style_index = current_user.bqq_website_product[4] || []
-      @bqq_website = true
-    end
 
     render layout: 'application_pop'
   end
@@ -87,7 +75,7 @@ class Biz::WebsiteSettingsController < ApplicationController
   private
 
   def find_website
-    @website = current_user.website
+    @website = current_site.website
     return redirect_to websites_path, alert: '请先设置微官网' unless @website
     @website_setting = @website.website_setting ||= @website.create_default_setting
   end

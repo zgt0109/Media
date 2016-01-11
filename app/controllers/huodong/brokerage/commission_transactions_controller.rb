@@ -2,7 +2,7 @@ class Huodong::Brokerage::CommissionTransactionsController < ApplicationControll
   before_filter :find_broker
 
   def index
-    @brokerage_commission_transactions = current_user.brokerage_commission_transactions.where(broker_id: params[:broker_id]).order("id DESC").page(params[:page])
+    @brokerage_commission_transactions = current_site.brokerage_commission_transactions.where(broker_id: params[:broker_id]).order("id DESC").page(params[:page])
   end
 
   def new
@@ -23,6 +23,6 @@ class Huodong::Brokerage::CommissionTransactionsController < ApplicationControll
   private
 
     def find_broker
-      @brokerage_broker = current_user.brokerage_brokers.find(params[:broker_id])
+      @brokerage_broker = current_site.brokerage_brokers.find(params[:broker_id])
     end
 end

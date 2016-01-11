@@ -27,7 +27,7 @@
                     <%= content_tag :option, value: -2,  selected: ( @given_group_id_eq == -2 ) do %>
                       未分组
                     <% end %>
-                    <%= options_for_select(current_user.vip_card.vip_groups.pluck(:name, :id), selected: @given_group_id_eq) %>
+                    <%= options_for_select(current_site.vip_card.vip_groups.pluck(:name, :id), selected: @given_group_id_eq) %>
                     <%= options_for_select((1..12).map{|a|[a.to_s+"月份生日的会员",'month'+a.to_s ]}, selected: 'month'+@care_month_eq.to_s) %>
                   </select>
                 </div>

@@ -26,7 +26,7 @@
                     <div class="col-md-3 row">
                         <div class="input-group input-group-text">
                             <span class="input-group-addon">选择活动：</span>
-                            <%= f.select :activity_id_eq, current_user.activities.show.where(activity_type_id: @activity_type_id).pluck(:name, :id), { include_blank: '全部活动' }, class: "select-field" %>
+                            <%= f.select :activity_id_eq, current_site.activities.show.where(activity_type_id: @activity_type_id).pluck(:name, :id), { include_blank: '全部活动' }, class: "select-field" %>
                         </div>
                     </div>
                     <div class="col-md-3">

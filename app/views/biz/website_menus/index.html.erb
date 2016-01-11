@@ -28,7 +28,7 @@
           </div>
           <div class=" col-sm-12">
             <div class="showOnline">
-              <iframe src="<%= mobile_root_url(supplier_id: @website.supplier_id, openid: @website.supplier.wx_users.first.try(:openid)) %>" width="320" height="460"></iframe>
+              <iframe src="<%= mobile_root_url(site_id: @website.site_id, openid: @website.site.wx_mp_user.wx_users.first.try(:openid)) %>" width="320" height="460"></iframe>
             </div>
             <div class="col-xs-12 col-sm-offset-1 col-sm-6">
               <div id="tree1">
@@ -79,18 +79,18 @@
     <%= javascript_include_tag "/javascripts/jquery-ui" %>
     <script type="text/javascript">
         $(function () {
-          <% if current_user.can_show_introduce? %>
-            <% if params[:next_task] == '2' && current_user.try(:task1?) %>
-              // 新手任务完成弹出层
-              $(".tree .tree-folder .tree-folder-header .tree-tools").eq(0).css("display","inline").find(".tree-add").addClass("highcolor step_tip1");        //新增高亮  按钮样式  
-              $(".shadow").show();   // 添加蒙板                
-            <% elsif params[:task].present? && current_user.try(:task2?) %>
-              //显示任务完成  0 是第一个任务 1 2 3，
-              $(".shadow").show();   // 添加蒙板   
-              $(".mission_cont").show();
-              $(".mission_box2").eq(1).show().find(".mission_box_div").eq(1).show();               
-            <% end %>
-          <% end %>
+          // <%# if current_user.can_show_introduce? %>
+          //   <%# if params[:next_task] == '2' && current_user.try(:task1?) %>
+          //     // 新手任务完成弹出层
+          //     $(".tree .tree-folder .tree-folder-header .tree-tools").eq(0).css("display","inline").find(".tree-add").addClass("highcolor step_tip1");        //新增高亮  按钮样式  
+          //     $(".shadow").show();   // 添加蒙板                
+          //   <%# elsif params[:task].present? && current_user.try(:task2?) %>
+          //     //显示任务完成  0 是第一个任务 1 2 3，
+          //     $(".shadow").show();   // 添加蒙板   
+          //     $(".mission_cont").show();
+          //     $(".mission_box2").eq(1).show().find(".mission_box_div").eq(1).show();               
+          //   <%# end %>
+          // <%# end %>
 
             $('#tree1').on("click", ".fa-plus-square, .fa-minus-square", function () {
 		var self = $(this), default_html = '<p class="mod-loading"><img src="/assets/loading.gif"></p>';                

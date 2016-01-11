@@ -56,7 +56,7 @@
                 $('.icon-info-sign').addClass('icon-animated-vertical');
                 play_music(data);
                 system_message_detail();
-                scrollTitle('（新消息）' + "<%= current_user.bqq_account? ? '移动版网站' : "微枚迪 客户ID: #{current_user.try(:id)}" %>");
+                scrollTitle('（新消息）' + "<%= "微枚迪 客户ID: #{current_user.try(:id)}" %>");
             }
             else if(data['operate'].trim() == 'delete'){
                 var li = ui_li_ul.find('li#system_message_ui_li_ul_li_'+data['id'])

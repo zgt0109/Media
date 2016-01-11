@@ -61,7 +61,7 @@
 
       <div class="p form-address">
         <span>选择活动<em>*</em></span>
-        <%= f.select :activity_id, current_user.activities.active.starting.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @picture.try(:menuable_id) }, validate: true %>
+        <%= f.select :activity_id, current_site.activities.active.starting.pluck(:name,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @picture.try(:menuable_id) }, validate: true %>
       </div>
 
       <div class="p form-address">

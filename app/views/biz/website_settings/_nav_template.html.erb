@@ -17,7 +17,7 @@
             <% if @website_setting.index_nav_template_id == 0 %>
                 请选择模板
             <% else %>
-                <%= image_tag @website_setting.home_nav_template.pic.large, style: "height: 320px;width: 320px;" %>
+                <%= image_tag @website_setting.home_nav_template.pic_url, style: "height: 320px;width: 320px;" %>
             <% end %>
 
           </div>
@@ -44,7 +44,7 @@
             <% if @website_setting.nav_template_id == 0 %>
                 请选择模板
             <% else %>
-                <image src="<%= @website_setting.try(:inside_nav_template).try(:pic).try(:large) %>" height='320' width='320'/>
+                <image src="<%= @website_setting.try(:inside_nav_template).pic_url %>" height='320' width='320'/>
             <% end %>
 
           </div>

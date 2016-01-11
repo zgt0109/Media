@@ -7,8 +7,7 @@
         <div class="col-sm-12 margin-top-20">
           <%= form_for @brokerage, validate: true, class: "form" do |f| %>
             <%= f.fields_for :activity do |activity| %>
-              <%= activity.hidden_field :supplier_id, value: current_user.id %>
-              <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
+              <%= activity.hidden_field :site_id, value: current_site.id %>
               <%= activity.hidden_field :activity_type_id %>
               <%= activity.hidden_field :status, value: Activity::SETTED %>
               <%= render "weixin_preview", wx_title: activity.object.try(:name) || '标题', wx_summary: activity.object.try(:summary) || '描述' %>
@@ -28,7 +27,7 @@
                 <div class="form-group">
                   <label class="control-label">微信消息图<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                   <div class="clearfix">
-                    <div data-name="brokerage_setting[activity_attributes][qiniu_pic_key]" data-img = "<%= activity.object.qiniu_pic_url || activity.object.default_pic_url %>" data-key="<%= activity.object.qiniu_pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity.object.activity_type_id] : activity.object.qiniu_pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
+                    <div data-name="brokerage_setting[activity_attributes][pic_key]" data-img = "<%= activity.object.qiniu_pic_url || activity.object.default_pic_url %>" data-key="<%= activity.object.pic_key.blank? ? Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity.object.activity_type_id] : activity.object.pic_key %>" class="cieldon-file width-100px" data-type="1" data-div="#img-1" data-height="200"></div>
                     <small class="help-inline text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
                   </div>
                 </div>

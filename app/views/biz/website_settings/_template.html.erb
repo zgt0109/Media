@@ -1,6 +1,6 @@
 <li class="<%= li_class.to_s %>"  template_id="<%= template.style_index %>" template_type="<%= template_type %>" tag_id="<%= template.website_tag_id %>" boutique='<%= template.is_boutique %>' <%= template.support_html_li_attrs %> >
   <a href="javascript:;">
-    <%= image_tag template.pic.thumb, style: 'height: 240px;width: 160px;' %>
+    <%= image_tag template.pic_url, style: 'height: 240px;width: 160px;' %>
     <div class="text">
       <div class="inner">
         <% if template.home_template? %>

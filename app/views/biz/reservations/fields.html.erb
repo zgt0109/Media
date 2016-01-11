@@ -14,7 +14,7 @@
         <%= form_for @search, url: fields_reservations_path, html: {method: :get} do |f| %>
           <div class="col-sm-12">
             <div class="col-md-3 row">
-              <%= select_tag :id, options_for_select(current_user.activities.reservations.show.map{ |x| [x.extend.service, x.id]}, params[:id]), class: 'col-xs-12' %>
+              <%= select_tag :id, options_for_select(current_site.activities.reservations.show.map{ |x| [x.extend.service, x.id]}, params[:id]), class: 'col-xs-12' %>
             </div>
             <div class="col-md-2">
             <%= f.text_field :name_like, class: 'col-xs-12', placeholder: '请输入字段名称' %>

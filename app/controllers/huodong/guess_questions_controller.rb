@@ -19,7 +19,7 @@ class Huodong::GuessQuestionsController < FightQuestionsController         #  gu
     end
 
     def scoped_questions
-      current_user.guess_questions
+      current_site.guess_questions
     end
 
     def model_name

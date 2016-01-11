@@ -3,7 +3,7 @@ class Biz::VipUsersController < Biz::VipController
   before_filter :find_vip_user, except: [:index, :pending, :rejected, :deleted, :freezed, :inactive]
 
   def index
-    @total_vip_users  = current_user.vip_users.sorted.normal.includes(:vip_grade, :supplier)
+    @total_vip_users  = current_site.vip_users.sorted.normal.includes(:vip_grade, :supplier)
     @search           = @total_vip_users.search(params[:search])
     @vip_grade_select = params[:search][:vip_grade_id_eq] if params[:search]
     @vip_users        = @search.page(params[:page]).per(20)
@@ -58,7 +58,7 @@ class Biz::VipUsersController < Biz::VipController
   end
 
   def pending
-    @total_vip_users ||= current_user.vip_users.pending.sorted
+    @total_vip_users ||= current_site.vip_users.pending.sorted
     @search          = @total_vip_users.search(params[:search])
     @vip_users       = @search.page(params[:page])
 
@@ -69,22 +69,22 @@ class Biz::VipUsersController < Biz::VipController
   end
 
   def deleted
-    @total_vip_users = current_user.vip_users.deleted.sorted
+    @total_vip_users = current_site.vip_users.deleted.sorted
     pending
   end
 
   def rejected
-    @total_vip_users = current_user.vip_users.rejected.sorted
+    @total_vip_users = current_site.vip_users.rejected.sorted
     pending
   end
 
   def freezed
-    @total_vip_users = current_user.vip_users.freeze_user.sorted
+    @total_vip_users = current_site.vip_users.freeze_user.sorted
     pending
   end
 
   def inactive
-    @total_vip_users = current_user.vip_users.inactive.sorted
+    @total_vip_users = current_site.vip_users.inactive.sorted
     pending
   end
 
@@ -95,7 +95,6 @@ class Biz::VipUsersController < Biz::VipController
 
   def delete
     @vip_user.update_attributes(
-      wx_mp_user_id: Time.now.to_i,
       status: VipUser::DELETED,
       wx_user_id: -@vip_user.wx_user_id,
       vip_group_id: (@vip_user.vip_group_id && -@vip_user.vip_group_id),
@@ -135,7 +134,7 @@ class Biz::VipUsersController < Biz::VipController
   def award
     point = params[:point].to_i
     if point > 0
-      @vip_user.point_transactions.create direction_type: PointTransaction::IN, points: point, supplier_id: current_user.id, point_type_id: -1, description: params[:description]
+      @vip_user.point_transactions.create direction_type: PointTransaction::IN, points: point, site_id: current_site.id, point_type_id: -1, description: params[:description]
       @vip_user.update_attributes(total_points: @vip_user.total_points + point, usable_points: @vip_user.usable_points + point)
       render js: "$('#pop-award').fadeOut(); showTip('success', '操作成功');
       $('#usable_points_#{@vip_user.id}').html(#{@vip_user.usable_points});"
@@ -161,21 +160,21 @@ class Biz::VipUsersController < Biz::VipController
 
     if params[:direction_type] == '1'
       if @vip_user.increase_points!(points)
-        @vip_user.point_transactions.create direction_type: PointTransaction::ADJUST_IN, points: points, supplier_id: current_user.id, description: params[:description]
+        @vip_user.point_transactions.create direction_type: PointTransaction::ADJUST_IN, points: points, site_id: current_site.id, description: params[:description]
         flash[:notice] = '增加成功'
       else
         return redirect_to :back, alert: '增加失败,积分最小值为0'
       end
     elsif params[:direction_type].to_i == PointTransaction::ACTIVITY_PRIZE
       if @vip_user.increase_points!(points)
-        @vip_user.point_transactions.create direction_type: PointTransaction::ACTIVITY_PRIZE, points: points, supplier_id: current_user.id, description: params[:description]
+        @vip_user.point_transactions.create direction_type: PointTransaction::ACTIVITY_PRIZE, points: points, site_id: current_site.id, description: params[:description]
         flash[:notice] = '线上活动积分增加成功'
       else
         return redirect_to :back, alert: '线上活动积分增加失败,积分最小值为0'
       end
     else
       if @vip_user.decrease_points!(points)
-        @vip_user.point_transactions.create direction_type: PointTransaction::OUT, points: points, supplier_id: current_user.id, description: params[:description]
+        @vip_user.point_transactions.create direction_type: PointTransaction::OUT, points: points, site_id: current_site.id, description: params[:description]
         flash[:notice] = '减少成功'
       else
         return redirect_to :back, alert: '减少失败，积分最小值为0'
@@ -211,7 +210,7 @@ class Biz::VipUsersController < Biz::VipController
       @selected_privilege_ids = [recharge_discount_privilege.try(:id), recharge_point_privilege.try(:id), recharge_money_privilege.try(:id)].compact
       @pay_amount = @vip_user.recharge_discounted_amount(amount).to_f.round(2)
 
-      @given_points = current_user.giving_points(amount, PointType::RECHARGE, {}, @vip_user, pay: false)
+      @given_points = current_site.giving_points(amount, PointType::RECHARGE, {}, @vip_user, pay: false)
       @given_moneys = @vip_user.give_money(amount)
       @form = "charge"
     elsif ['2', '4'].include?(direction_type)
@@ -220,7 +219,7 @@ class Biz::VipUsersController < Biz::VipController
       @selected_privilege_ids = [consume_discount_privilege.try(:id), consume_point_privilege.try(:id)].compact
       @pay_amount = @vip_user.consumed_amount(amount).to_f.round(2)
 
-      @given_points = current_user.giving_points(amount, PointType::CONSUME, {}, @vip_user, pay: false)
+      @given_points = current_site.giving_points(amount, PointType::CONSUME, {}, @vip_user, pay: false)
       @form = "consume"
     end
   end
@@ -254,7 +253,7 @@ class Biz::VipUsersController < Biz::VipController
     if params[:vip_grade_id].to_i == @vip_user.vip_grade_id
       flash[:notice] = '未进行等级调节操作'
     else
-      vip_grade_log = @vip_user.vip_grade_logs.create supplier_id: current_user.id, old_vip_grade_id: @vip_user.vip_grade_id, old_vip_grade_name: @vip_user.vip_grade_name, description: params[:description]
+      vip_grade_log = @vip_user.vip_grade_logs.create site_id: current_site.id, old_vip_grade_id: @vip_user.vip_grade_id, old_vip_grade_name: @vip_user.vip_grade_name, description: params[:description]
       if @vip_user.update_attributes(vip_grade_id: params[:vip_grade_id], vip_grade_adjusted: true)
         vip_grade_log.update_attributes(now_vip_grade_id: @vip_user.vip_grade_id, now_vip_grade_name: @vip_user.vip_grade_name)
         flash[:notice] = '操作成功'
@@ -272,7 +271,7 @@ class Biz::VipUsersController < Biz::VipController
 
   private
     def find_vip_user
-      @vip_user = current_user.vip_users.find(params[:id])
+      @vip_user = current_site.vip_users.find(params[:id])
     end
 
 end

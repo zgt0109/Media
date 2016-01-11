@@ -11,7 +11,7 @@
                     <p>关注成功，恭喜您获得“<%= @gift.prize_name %>”</p>
                     <p>SN码：<%= @gift.code %>(<span class="text-red"><%= @gift.consume.try(:state_name) %></span>)<a class="addgetma" href="javascript:;" data-ma="<%= @gift.rqrcode %>"><img src="/assets/img/share/maash.png">二维码</a></p>
                 <%- else %>
-                    <p>亲，您还没有关注，关注“<%= @wx_mp_user.try(:name) %>”后将即拿到属于您的奖品</p>
+                    <p>亲，您还没有关注，关注“<%= @wx_mp_user.try(:nickname) %>”后将即拿到属于您的奖品</p>
                 <%- end %>
             </div>
         <%- end %>

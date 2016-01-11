@@ -18,7 +18,7 @@ class Pro::CarCatenasController < ApplicationController
 
   def create
     if params[:car_catena].present?
-      params[:car_catena] = params[:car_catena].merge(car_brand_id: @car_shop.car_brand.try(:id), supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.id)
+      params[:car_catena] = params[:car_catena].merge(car_brand_id: @car_shop.car_brand.try(:id), site_id: current_site.id)
       @car_catena = @car_shop.car_catenas.new(params[:car_catena])
       if @car_catena.save
         flash[:notice] =  "保存信息成功"
@@ -60,7 +60,7 @@ class Pro::CarCatenasController < ApplicationController
   end
 
 	def check_car_shop
-    @car_shop = current_user.car_shop
+    @car_shop = current_site.car_shop
     return redirect_to car_shops_path, alert: '请先设置我的4S店' unless @car_shop
 	end
 

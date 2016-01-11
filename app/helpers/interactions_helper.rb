@@ -9,7 +9,7 @@ module InteractionsHelper
   end
 
   def surveys_path?
-    return true if controller_name == 'activity_survey_questions'
+    return true if controller_name == 'survey_questions'
     return true if controller_name == 'activities' && action_name =~ /survey/
     return true if @activity.try(:surveys?)
   end

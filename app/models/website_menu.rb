@@ -21,18 +21,11 @@
 #  updated_at    :datetime         not null
 #
 class WebsiteMenu < ActiveRecord::Base
-  mount_uploader :pic, WebsiteMenuUploader
-  mount_uploader :cover_pic, WebsiteMenuUploader
-  img_is_exist({pic: :pic_key, cover_pic: :cover_pic_key})
+
   NEED_WX_USER_MENUS = ["微会员卡", "营销互动", "行业解决方案"]
   LIMIT_COLUMNS = %W(id website_id material_id parent_id children_count sort sort_type name summary summary_type menu_type menuable_id menuable_type icon icon_key font_icon url tel address location_x location_y pic pic_key created_at updated_at qq)
 
   validates :name, presence: true, length: { maximum: 64, message: '不能超过64个字' }
-  # validates :material_id, presence: true, if: :material_type?
-
-  #validates :cover_pic, presence: { on: :create }
-  validates :pic, presence: true, if: :can_validate?
-
   validates :tel, presence: true, if: :phone?
   #validates :url, presence: true, format: { with: /^(http|https):\/\/[a-zA-Z0-9].+$/, message: '地址格式不正确，必须以http(s)://开头' }, if: :link?
   validates :url, format: { with: /^(http|https):\/\/[a-zA-Z0-9].+$/, message: '地址格式不正确，必须以http(s)://开头' }, allow_blank: true
@@ -41,7 +34,6 @@ class WebsiteMenu < ActiveRecord::Base
 
   attr_accessor :single_material_id, :multiple_material_id, :activity_id, :life_assistant_id, :game_assistant_id, :audio_id, :title, :business_shop_id,
                 :docking_type, :docking_function, :good_id, :goods_category_id, :is_delete_cover_pic, :is_delete_pic, :old_parent_id, :album_id, :panoramagram_id
-
 
   belongs_to :website
   belongs_to :material
@@ -56,9 +48,6 @@ class WebsiteMenu < ActiveRecord::Base
   scope :root, -> { where(parent_id: 0) }
   scope :sorted, -> { order('sort ASC') }
   scope :limit_columns, ->(*columns_hash){ columns = LIMIT_COLUMNS; columns_hash.each{|k| columns = columns.send(k[:operator], k[:columns])}; select(columns.uniq.join(', ')) }
-
-  after_create :update_parent_children_count
-  after_destroy :update_parent_children_count
 
   enum_attr :menu_type, :in => [
     ['text',1,'纯文本'],
@@ -127,9 +116,11 @@ class WebsiteMenu < ActiveRecord::Base
       ['show_summary', 3, '显示说明'],
   ]
 
+  after_create :update_parent_children_count
+  after_destroy :update_parent_children_count
   before_save :cleanup, :icon_dispose, :add_default_attrs
   after_save :update_for_website_menu
-  after_create :generate_preview_pic
+  # after_create :generate_preview_pic
   #before_destroy :is_allow_destroy
   #before_create :add_default_attrs
 
@@ -143,7 +134,7 @@ class WebsiteMenu < ActiveRecord::Base
     end
     wmc.content = text
   end
-  
+
   def need_wx_user?
     WebsiteMenu::NEED_WX_USER_MENUS.include?(self.menu_type_name)
   end
@@ -372,29 +363,16 @@ class WebsiteMenu < ActiveRecord::Base
 
   def icon_dispose
     if self.pic_key.present?
-      self.remove_pic!
       self.font_icon = nil
     elsif self.font_icon.present?
-      self.remove_pic!
       self.pic_key = nil
-    elsif self.pic?
-      self.font_icon = nil
-      self.pic_key = nil
-    end
-
-    if self.cover_pic_key.present?
-      self.remove_cover_pic!
-    elsif self.cover_pic?
-      self.cover_pic_key = nil
     end
 
     if self.is_delete_cover_pic.to_i == 1
-      self.remove_cover_pic!
       self.cover_pic_key = nil
     end
 
     if self.is_delete_pic.to_i == 1
-      self.remove_pic!
       self.pic_key = nil
       self.font_icon = nil
     end
@@ -514,9 +492,7 @@ class WebsiteMenu < ActiveRecord::Base
   end
 
   def mobile_websitev02_style(website_template)
-
   end
-
 
   def multilevel_menu_down index, params, menu_categories_selects
     if has_children?
@@ -569,12 +545,12 @@ class WebsiteMenu < ActiveRecord::Base
     end
   end
 
-  def pic_url(type = :custom)
-    qiniu_image_url(pic_key) || pic.try(type)
+  def pic_url
+    qiniu_image_url(pic_key)
   end
 
-  def cover_pic_url(type = :custom)
-    qiniu_image_url(cover_pic_key) || cover_pic.try(type)
+  def cover_pic_url
+    qiniu_image_url(cover_pic_key)
   end
 
   def default_preview_pic_url
@@ -586,9 +562,6 @@ class WebsiteMenu < ActiveRecord::Base
   end
 
   def generate_preview_pic
-    # return unless website.try(:supplier).try(:bqq_account?)
-    return unless website.try(:supplier).try(:api_user).try(:bqqv3?)
-
     WebsitePreviewPicWorker.perform_async(website_menu_id: parent.id) if parent
   end
 

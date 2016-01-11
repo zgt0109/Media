@@ -1,5 +1,5 @@
 class VipPackage < ActiveRecord::Base
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :wx_mp_user
 	has_many :vip_package_items_vip_packages
 	has_many :vip_packages_vip_users

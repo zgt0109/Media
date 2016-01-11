@@ -94,7 +94,7 @@
          <%= f.fields_for :thermal_printers do |printer| %>     
 
             <div class="input-group input-group-sm input-group-text margin-top-10">
-              <span class="input-group-addon">http://www.winwemedia.com/recepit/print?supplier_id=</span>
+              <span class="input-group-addon">http://www.winwemedia.com/recepit/print?no=</span>
               <%= printer.text_field :no, validate: true, class: "col-xs-12" %>
               <span class="input-group-btn">
                 <input type="button" value="添加" class="btn btn-sm btn-filter btn-primary btn-add-print">
@@ -128,7 +128,7 @@
       window.location = $("#btn_"+$(this).val()).attr("href");
     });
     $(".btn-add-print").click(function(){
-      var html = '<div class="input-group input-group-sm input-group-text margin-top-10"><span class="input-group-addon">http://www.winwemedia.com/recepit/print?supplier_id=</span><input class="col-xs-12" id="shop_branch_print_template_thermal_printers_attributes_'+Date.now()+'_no" name="shop_branch_print_template[thermal_printers_attributes]['+Date.now()+'][no]" size="30" type="text"><span class="input-group-btn"><input type="button" value="删除" class="btn btn-sm btn-filter btn-primary btn-delete"></span><input class="cd" id="shop_branch_print_template_thermal_printers_attributes_'+Date.now()+'__destroy" name="shop_branch_print_template[thermal_printers_attributes]['+Date.now()+'][_destroy]" type="checkbox" value="1"></div>';
+      var html = '<div class="input-group input-group-sm input-group-text margin-top-10"><span class="input-group-addon">http://www.winwemedia.com/recepit/print?no=</span><input class="col-xs-12" id="shop_branch_print_template_thermal_printers_attributes_'+Date.now()+'_no" name="shop_branch_print_template[thermal_printers_attributes]['+Date.now()+'][no]" size="30" type="text"><span class="input-group-btn"><input type="button" value="删除" class="btn btn-sm btn-filter btn-primary btn-delete"></span><input class="cd" id="shop_branch_print_template_thermal_printers_attributes_'+Date.now()+'__destroy" name="shop_branch_print_template[thermal_printers_attributes]['+Date.now()+'][_destroy]" type="checkbox" value="1"></div>';
 
       $(".input-list").append(html);
     });

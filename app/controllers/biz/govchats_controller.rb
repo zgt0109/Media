@@ -69,6 +69,6 @@ class Biz::GovchatsController < ApplicationController
   end
 
   def set_activity
-    @activity = current_user.wx_mp_user.activities.govchat.show.first || current_user.wx_mp_user.create_activity_for_govchat
+    @activity = current_site.activities.govchat.show.first || current_site.create_activity_for_govchat
   end
 end

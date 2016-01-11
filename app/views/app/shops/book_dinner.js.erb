@@ -1,3 +1,0 @@
-var html = '<%= j (render :partial => 'app/shops/shop_branch_book_dinner', :collection => @shop_branches, :as => :branch) %>';
-$(".margin").before(html);
-$(".jiazai").html('<%= link_to_next_page @shop_branches, "<img src=\"/assets/loda.png\">努力加载中...".html_safe, :remote => true %>');

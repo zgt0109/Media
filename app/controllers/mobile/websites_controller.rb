@@ -133,7 +133,7 @@ class Mobile::WebsitesController < ActionController::Base
     @wx_mp_user = @supplier.try(:wx_mp_user)
     session[:wx_mp_user_id] = @wx_mp_user.try(:id)
 
-    @supplier_footer = @supplier.try(:app_footer) || SupplierFooter.default_footer
+    @account_footer = @supplier.try(:app_footer) || AccountFooter.default_footer
 
     @shortcut_menus =  @website.shortcut_menus.order(:sort)
     @website_menus = @website.website_menus.root.limit_columns.order(:sort)

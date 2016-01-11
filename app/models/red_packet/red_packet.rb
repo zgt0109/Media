@@ -2,7 +2,7 @@ class RedPacket::RedPacket < ActiveRecord::Base
   self.table_name = :red_packets
 
   belongs_to :activity
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :payment_type
   belongs_to :activity_prize
   has_many   :send_records, class_name: RedPacket::SendRecord
@@ -14,7 +14,7 @@ class RedPacket::RedPacket < ActiveRecord::Base
   validates_numericality_of :total_budget, greater_than_or_equal_to: 1
   validates :wishing, :remark, presence: true
   validates :send_at, presence: true
-  #validates_uniqueness_of :act_name, scope: :supplier_id, conditions: -> { where(status: RedPacket::RedPacket::NORMAL) } 
+  #validates_uniqueness_of :act_name, scope: :site_id, conditions: -> { where(status: RedPacket::RedPacket::NORMAL) } 
   # validate  :act_name_uniqueness_validate
   
   scope     :visible, -> { where(status: RedPacket::RedPacket::NORMAL) }
@@ -39,8 +39,8 @@ class RedPacket::RedPacket < ActiveRecord::Base
     total_amount <= budget_balance
   end
 
-  def sent?(uid)
-    send_rec = self.send_records.where(uid: uid).first 
+  def sent?(openid)
+    send_rec = self.send_records.where(openid: openid).first 
 
     send_rec.present? && !send_rec.ready? && !send_rec.failed? 
   end
@@ -67,10 +67,11 @@ class RedPacket::RedPacket < ActiveRecord::Base
   def self.update_red_packet_nick_and_send_name
     pp '--------------update all start'
     RedPacket::RedPacket.transaction do
-      Supplier.all.each do |s|
-        pp "===============supplier_id   #{s.id}"
-        next if s.red_packets.length < 1
-        s.red_packets.update_all(nick_name: s.wx_mp_user.try(:name), send_name: s.wx_mp_user.try(:name))
+      Account.all.each do |account|
+        pp "===============account_id   #{account.id}"
+        next if account.red_packets.length < 1
+        s = account.site
+        s.red_packets.update_all(nick_name: s.wx_mp_user.try(:nickname), send_name: s.wx_mp_user.try(:nickname))
       end
       pp '============ update all end'
     end
@@ -80,9 +81,9 @@ class RedPacket::RedPacket < ActiveRecord::Base
 
   def act_name_uniqueness_validate
     if self.new_record?
-      packet = RedPacket::RedPacket.where("act_name = ? and supplier_id = ? and status = #{RedPacket::RedPacket::NORMAL}", act_name, supplier_id)
+      packet = RedPacket::RedPacket.where("act_name = ? and site_id = ? and status = #{RedPacket::RedPacket::NORMAL}", act_name, site_id)
     else
-      packet = RedPacket::RedPacket.where("act_name = ? and supplier_id = ? and id != ? and status = #{RedPacket::RedPacket::NORMAL}", act_name, supplier_id, self.id)
+      packet = RedPacket::RedPacket.where("act_name = ? and site_id = ? and id != ? and status = #{RedPacket::RedPacket::NORMAL}", act_name, site_id, self.id)
     end
 
     if packet.present?

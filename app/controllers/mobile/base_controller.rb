@@ -26,7 +26,7 @@ class Mobile::BaseController < ActionController::Base
     session[:activity_id] = params[:activity_id] if params[:activity_id].present?
     session[:activity_notice_id] = params[:anid] if params[:anid].present?
 
-    @supplier = Supplier.find(session[:supplier_id].to_i)
+    @supplier = Account.find(session[:supplier_id].to_i)
 
     return render text: '该公众号服务已到期，暂不提供服务！' if @supplier.froze?
 
@@ -34,7 +34,7 @@ class Mobile::BaseController < ActionController::Base
     require_wx_mp_user
     session[:wx_mp_user_id] = @wx_mp_user.id
 
-    @supplier_footer = SupplierFooter.find_by_id(@supplier.supplier_footer_id) || SupplierFooter.default_footer
+    @account_footer = AccountFooter.find_by_id(@supplier.account_footer_id) || AccountFooter.default_footer
   rescue => error
     logger.info "*********** mobile load_data error: #{error.message} > #{error.backtrace}"
     # render :text => "请求页面参数不正确"

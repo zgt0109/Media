@@ -2,13 +2,13 @@ class RedPacket::SendRecord < ActiveRecord::Base
   belongs_to :activity
   belongs_to :activity_user
   belongs_to :wx_user
-  belongs_to :supplier
+  belongs_to :site
   belongs_to :red_packet, class_name: RedPacket::RedPacket, counter_cache: :records_count
   belongs_to :activity_consume, class_name: "::ActivityConsume" 
 
   validates :wx_user, :red_packet, presence: true
   validates :openid, presence: true
-  validates_uniqueness_of :openid, scope: [:supplier_id, :red_packet_id], if: :not_activity_redpacket?
+  validates_uniqueness_of :openid, scope: [:site_id, :red_packet_id], if: :not_activity_redpacket?
 
   scope :need_query, -> { where("status not in (?)", [FAILED, RECEIVED, REFUND]) }
 
@@ -39,17 +39,17 @@ class RedPacket::SendRecord < ActiveRecord::Base
     return_code = result[:return_code]
 
     if return_code == 'SUCCESS'
-      write_wxredpacket_log "pay success ========= supplier_id = #{supplier.id}, out_trade_no = #{result[:mch_billno]}, openid = #{result[:re_openid]}, appid = #{result[:wxappid]}, total_amount = #{result[:total_amount]}, send_time = #{result[:send_time]}, send_listid = #{result[:send_listid]}"
+      write_wxredpacket_log "pay success ========= site_id = #{site.id}, out_trade_no = #{result[:mch_billno]}, openid = #{result[:re_openid]}, appid = #{result[:wxappid]}, total_amount = #{result[:total_amount]}, send_time = #{result[:send_time]}, send_listid = #{result[:send_listid]}"
       result_code = result[:result_code]
       if result_code == 'SUCCESS'
         update_attributes(send_at: result[:send_time], trans_id: result[:send_listid], status: RedPacket::SendRecord::SENDED)
         red_packet.update_attributes(budget_balance: red_packet.budget_balance.to_f - self.total_amount.to_f)
       else
-        write_wxredpacket_log "pay fail ========= supplier_id = #{supplier.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
+        write_wxredpacket_log "pay fail ========= site_id = #{site.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
         update_attributes(status: RedPacket::SendRecord::FAILED)
       end
     elsif return_code == 'FAIL'
-      write_wxredpacket_log "pay fail ========= supplier_id = #{supplier.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
+      write_wxredpacket_log "pay fail ========= site_id = #{site.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
       update_attributes(status: RedPacket::SendRecord::FAILED)
     else
       write_wxredpacket_log "pay some abnormal fail" 
@@ -71,7 +71,7 @@ class RedPacket::SendRecord < ActiveRecord::Base
     return_code = result[:return_code]
 
     if return_code == 'SUCCESS'
-      write_wxredpacket_log "query success ========= supplier_id = #{supplier.id}, status = #{result[:status]}, out_trade_no = #{result[:mch_billno]}, openid = #{result[:openid]}, appid = #{result[:wxappid]}, total_amount = #{result[:total_amount]}, total_num = #{result[:total_num]}, send_time = #{result[:send_time]}, refund_time = #{result[:refund_time]}, refund_amount = #{:refund_amount}"
+      write_wxredpacket_log "query success ========= site_id = #{site.id}, status = #{result[:status]}, out_trade_no = #{result[:mch_billno]}, openid = #{result[:openid]}, appid = #{result[:wxappid]}, total_amount = #{result[:total_amount]}, total_num = #{result[:total_num]}, send_time = #{result[:send_time]}, refund_time = #{result[:refund_time]}, refund_amount = #{:refund_amount}"
       result_code = result[:result_code]
       if result_code == 'SUCCESS'
         update_attributes(status: transform_status(result[:status]), fault_reason: result[:reason], send_type: result[:send_type], hb_type: result[:hb_type], sent_at: result[:send_time], refunded_at: result[:refund_time], refund_amount: result[:refund_amount].to_i/100, detail_id: result[:detail_id])
@@ -84,10 +84,10 @@ class RedPacket::SendRecord < ActiveRecord::Base
           self.red_packet.update_attributes(budget_balance: self.red_packet.budget_balance.to_f + self.refund_amount.to_f)
         end
       else
-        write_wxredpacket_log "query fail ========supplier_id = #{supplier.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
+        write_wxredpacket_log "query fail ========site_id = #{site.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
       end
     elsif return_code == 'FAIL'
-      write_wxredpacket_log "query fail ========supplier_id = #{supplier.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
+      write_wxredpacket_log "query fail ========site_id = #{site.id}, out_trade_no = #{out_trade_no}, openid = #{uid}, total_amount = #{total_amount.to_f}, return_msg = #{result[:return_msg]}, err_code_des = #{result[:err_code_des]}"
     else
       write_wxredpacket_log "query some abnormal fail" 
     end
@@ -108,7 +108,7 @@ class RedPacket::SendRecord < ActiveRecord::Base
   def get_pay_setting
     case 
     when red_packet.payment_type.wx_redpacket_pay?
-      WxredpacketpaySetting.where(supplier_id: supplier.id, payment_type_id: red_packet.payment_type).first 
+      WxredpacketpaySetting.where(site_id: site.id, payment_type_id: red_packet.payment_type).first 
     end
   end
 

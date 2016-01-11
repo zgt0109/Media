@@ -1,0 +1,48 @@
+<% if current_user.need_auth_mobile? %>
+  $('.auth_mobile_modal').modal({backdrop:'static'});
+<% end %>
+
+var reg_tel = /^[0-9_\-]{11}$/;
+$(function () {
+    var count = 60;
+    $(".input-check").on("click", function () {
+        var self = $(this);
+        var checkClass = "input-check-forbid";
+        var countStr = "重发验证码({munber})";
+        var sendStr = "发送验证码";
+        var timer;
+        var counter = function () {
+            if (--count < 0) {
+                count = 60;
+                self.text(sendStr);
+                $(".input-check").attr("disabled", false);
+                if ($("#account_mobile").val() != "" && $("#account_mobile").val() != "手机号") {
+                    self.removeClass(checkClass);
+                }
+                clearTimeout(timer);
+                return false;
+            }
+
+            self.text(countStr.replace(/{munber}/, count));
+            timer = setTimeout(function () {
+                counter();
+            }, 1000);
+        };
+        //发送验证码
+        if ($('#account_mobile').val() == "" || !reg_tel.test($('#account_mobile').val())) {
+            alert('请输入正确的手机号码');
+            return false;
+        } else {
+            result = $.ajax({
+                url: "<%= send_sms_accounts_path %>?mobile=" + $('#account_mobile').val(),
+                type: 'get',
+                dataType: 'json',
+                success: function (data, textStatus, jqXhr) {
+                  counter();
+                  $(".input-check").attr("disabled", true);
+                  self.addClass(checkClass);
+                }
+            });
+        }
+    });
+});

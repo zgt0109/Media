@@ -31,9 +31,9 @@ class WxUserInfoUpdateWorker
   end
 
   def perform(mp_user_openid, openid)
-    mp_user = WxMpUser.where(uid: mp_user_openid).first
+    mp_user = WxMpUser.where(openid: mp_user_openid).first
     return unless mp_user
-    wx_user = mp_user.wx_users.where(uid: openid).first
+    wx_user = mp_user.wx_users.where(openid: openid).first
     return if wx_user.nil? || wx_user.nickname.present?
 
     if mp_user.try(:can_fetch_wx_user_info?)

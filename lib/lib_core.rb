@@ -8,7 +8,6 @@ def generate_sn_by_timestamp
   DateTime.now.strftime("%y%m%d%6N") + Random.rand(100...1000).to_s
 end
 
-
 class String
   def split_all(content='')
     content = self if content.empty?
@@ -17,6 +16,6 @@ class String
   end
 
   def to_search_string
-    self.gsub(/[\p{Punctuation}\p{Symbol}]/, " ")                                                                                                          
+    self.gsub(/[\p{Punctuation}\p{Symbol}]/, " ")
   end
 end

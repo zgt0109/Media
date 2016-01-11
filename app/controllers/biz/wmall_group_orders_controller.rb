@@ -5,7 +5,7 @@ class Biz::WmallGroupOrdersController < Biz::WmallGroupBaseController
   def index
     #conn = "and (wmall_shops.id like '%#{params[:mall_name]}%' or wmall_shops.name like '%#{params[:mall_name]}%')"if params[:mall_name].present?
     conn = GroupOrder.get_conditions params
-    @group_orders_search = current_user.group_orders.latest.search(params[:search])
+    @group_orders_search = current_site.group_orders.latest.search(params[:search])
     @wmall_group_orders = @group_orders_search.includes(:payments,:group_item =>:shop).where(conn).page(params[:order_page])
     respond_to do |format|
       format.html
@@ -16,7 +16,7 @@ class Biz::WmallGroupOrdersController < Biz::WmallGroupBaseController
 
   def list
     conn = GroupOrder.get_conditions params
-    @group_orders_search = current_user.group_orders.latest.consumed.search(params[:search])
+    @group_orders_search = current_site.group_orders.latest.consumed.search(params[:search])
     @wmall_group_orders = @group_orders_search.includes(:payments,:group_item => :shop).where(conn).page(params[:order_page])
     respond_to do |format|
       format.html
@@ -27,7 +27,7 @@ class Biz::WmallGroupOrdersController < Biz::WmallGroupBaseController
 
   def bill
     conn = "group_orders.created_at >= '#{params[:start_at]}' and group_orders.created_at <= '#{params[:end_at]}'" if params[:start_at].present? && params[:end_at].present?
-    @search = current_user.try(:mall).try(:shops).search(params[:search])
+    @search = current_site.try(:mall).try(:shops).search(params[:search])
     @shops = @search.joins(:group_items => :group_orders).where(conn).select("wmall_shops.sn, wmall_shops.id, wmall_shops.name, SUM(group_orders.qty) as qty, SUM(group_orders.total_amount) as amount").where("group_orders.status in (2,5,6)").group("wmall_shops.id").page(params[:page])
   end
 
@@ -55,7 +55,7 @@ class Biz::WmallGroupOrdersController < Biz::WmallGroupBaseController
   end
 
   def sn
-    @group_order = current_user.group_orders.where(code: params[:code]).first if params[:code].present?
+    @group_order = current_site.group_orders.where(code: params[:code]).first if params[:code].present?
     @group_order = nil if params[:shop_id].present? &&  @group_order.try(:group_item).try(:groupable_id) != params[:shop_id].to_i
     respond_to do |format|
       format.html{render layout: 'application_pop'}
@@ -81,12 +81,12 @@ class Biz::WmallGroupOrdersController < Biz::WmallGroupBaseController
 
   private
   def set_group_order
-    @group_order = current_user.group_orders.find(params[:id])
+    @group_order = current_site.group_orders.find(params[:id])
     @group_item  = @group_order.group_item
   end
 
   def set_group
-    @group = current_user.group
+    @group = current_site.group
     @activity =  @group.activity
   end
 end

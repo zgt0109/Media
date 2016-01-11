@@ -105,7 +105,7 @@
                                           <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
                                       <% end %>
                                       <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
-                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]"  %>
+                                      <%= item.hidden_field :pic_key, value: item.object.pic_key, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic_key]"  %>
                                     </div>
                                     <div class="margin-top-10 clearfix">
 
@@ -123,7 +123,7 @@
                                           <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
                                       <% end %>
                                       <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
-                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]" %>
+                                      <%= item.hidden_field :pic_key, value: item.object.pic_key, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic_key]" %>
                                     </div>
                                   </div>
                               <% elsif m[1] == Activity::TEXT_LINK %>
@@ -185,7 +185,7 @@
                                           <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
                                       <% end %>
                                       <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]" %>
-                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]"  %>
+                                      <%= item.hidden_field :pic_key, value: item.object.pic_key, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic_key]"  %>
                                     </div>
                                     <div class="margin-top-10 clearfix">
                                       <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="<%= item.object.pic_url %>" data-name="activity[activity_vote_items_attributes][<%= uuid %>][pic_key]" data-key="<%= item.object.pic_key %>"></div>
@@ -202,7 +202,7 @@
                                           <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
                                       <% end %>
                                       <%= item.check_box '_destroy', style:'display:none', disabled: flag, name: "activity[activity_vote_items_attributes][#{uuid}][_destroy]"  %>
-                                      <%= item.hidden_field :pic, value: item.object.pic, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic]"  %>
+                                      <%= item.hidden_field :pic_key, value: item.object.pic_key, class: 'pic', name: "activity[activity_vote_items_attributes][#{uuid}][pic_key]"  %>
                                     </div>
                                   </div>
                               <% elsif f.object.vote_item_type == Activity::TEXT_LINK %>
@@ -372,7 +372,7 @@
         <input type="text" size="30" name="activity[activity_vote_items_attributes][][name]" data-validate="true" class="col-md-8 vote_item_input_<%= Activity::TEXT_PICTURE %>" placeholder="">
         <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
         <input name="activity[activity_vote_items_attributes][][_destroy]" style="display:none" type="checkbox">
-        <input class="pic" name="activity[activity_vote_items_attributes][][pic]" type="hidden" value="">
+        <input class="pic_key" name="activity[activity_vote_items_attributes][][pic_key]" type="hidden" value="">
       </div>
       <div class="margin-top-10 clearfix">
         <div class="cieldon-file width-100px" data-type="0" data-div="#img-1" data-width="100" data-height="100" data-img="" data-name="activity[activity_vote_items_attributes][][pic_key]" data-key=""></div>
@@ -387,7 +387,7 @@
         <small class="text-warning margin-left-10">建议尺寸：宽264像素*高198像素</small>
         <a href="javascript:void(0);" class="margin-left-10 line-height-32 del">删除</a>
         <input name="activity[activity_vote_items_attributes][][_destroy]" style="display:none" type="checkbox">
-        <input class="pic" name="activity[activity_vote_items_attributes][][pic]" type="hidden" value="">
+        <input class="pic_key" name="activity[activity_vote_items_attributes][][pic_key]" type="hidden" value="">
       </div>
     </div>
 
@@ -607,7 +607,7 @@
                     new_template.find('input[type=text]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][name]');
                     new_template.find('input[type=text]').focus();
                     new_template.find('input[type=checkbox]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][_destroy]');
-                    new_template.find('input[type=hidden]').eq(0).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic]');
+                    new_template.find('input[type=hidden]').eq(0).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic_key]');
                     new_template.find('input[type=hidden]').eq(1).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic_key]');
                     new_template.find('input[type=hidden]').eq(1).val('');
                 }else if(parseInt(type) == <%= Activity::PICTURE %>){
@@ -620,7 +620,7 @@
                     new_template.find('input[type=checkbox]').attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][_destroy]');
                     new_template.find('input[type=hidden]').eq(0).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic_key]')
                     new_template.find('input[type=hidden]').eq(0).val('');
-                    new_template.find('input[type=hidden]').eq(1).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic]')
+                    new_template.find('input[type=hidden]').eq(1).attr('name', 'activity[activity_vote_items_attributes][' + uuid + '][pic_key]')
                 }else if(parseInt(type) == <%= Activity::TEXT_LINK %>){
                     var template = $("[template_id='4']");
                     var tool =  $('.radio-tab-content .text_link:last');

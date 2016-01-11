@@ -26,8 +26,8 @@ task :dbdump => :environment do
 
   system "#{dump} activity_feedbacks --where=#{sql_activity} --no-create-info >> #{db}"
 
-  system "#{dump} activity_form_fields --where='supplier_id = 0' --no-create-info >> #{db}"
-  system "#{dump} activity_form_fields --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} form_fields --where='supplier_id = 0' --no-create-info >> #{db}"
+  system "#{dump} form_fields --where=#{sql_supplier} --no-create-info >> #{db}"
   system "#{dump} activity_forms --where=#{sql_activity} --no-create-info >> #{db}"
 
   system "#{dump} activity_groups --where=#{sql_activity} --no-create-info >> #{db}"
@@ -44,10 +44,10 @@ task :dbdump => :environment do
   system "#{dump} activity_settings --where=#{sql_activity} --no-create-info >> #{db}"
 
   survey_activity_ids = "\'activity_id in (2270712, 2294986)\'"
-  activity_survey_question_ids = ActivitySurveyQuestion.where(activity_id: [2270712, 2294986]).pluck(:id).join(',')
-  # system "#{dump} activity_survey_questions --where=#{sql_activity} --no-create-info >> #{db}"
-  system "#{dump} activity_survey_questions --where=#{survey_activity_ids} --no-create-info >> #{db}"
-  system "#{dump} activity_survey_answers --where=#{sql_activity} --no-create-info >> #{db}"
+  survey_question_ids = SurveyQuestion.where(activity_id: [2270712, 2294986]).pluck(:id).join(',')
+  # system "#{dump} survey_questions --where=#{sql_activity} --no-create-info >> #{db}"
+  system "#{dump} survey_questions --where=#{survey_activity_ids} --no-create-info >> #{db}"
+  system "#{dump} survey_answers --where=#{sql_activity} --no-create-info >> #{db}"
 
   system "#{dump} activity_types --no-create-info >> #{db}"
 
@@ -58,7 +58,7 @@ task :dbdump => :environment do
   system "#{dump} agents --where=#{sql_agent} --no-create-info >> #{db}"
 
   system "#{dump} assistants --no-create-info >> #{db}"
-  system "#{dump} assistants_suppliers --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} assistants_accounts --where=#{sql_supplier} --no-create-info >> #{db}"
 
   system "#{dump} cities --no-create-info >> #{db}"
 
@@ -117,18 +117,18 @@ task :dbdump => :environment do
   system "#{dump} spread_records --where=#{sql_spread_record} --no-create-info >> #{db}"
 
   system "#{dump} supplier_apps --where=#{sql_supplier} --no-create-info >> #{db}"
-  system "#{dump} supplier_footers --where='id in (1, 8182)' --no-create-info >> #{db}"
+  system "#{dump} account_footers --where='id in (1, 8182)' --no-create-info >> #{db}"
   system "#{dump} supplier_industries --no-create-info >> #{db}"
 
   system "#{dump} supplier_print_settings --where=#{sql_supplier} --no-create-info >> #{db}"
-  system "#{dump} supplier_prints --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} prints --where=#{sql_supplier} --no-create-info >> #{db}"
 
   system "#{dump} supplier_privileges --no-create-info >> #{db}"
   system "#{dump} supplier_products --no-create-info >> #{db}"
 
   system "#{dump} suppliers --where='id in (79750)' --no-create-info >> #{db}"
 
-  sql_survey = "\'activity_survey_question_id in (#{activity_survey_question_ids})\'"
+  sql_survey = "\'survey_question_id in (#{survey_question_ids})\'"
   system "#{dump} survey_question_choices --where=#{sql_survey} --no-create-info >> #{db}"
 
   # system "#{dump} user_greet_cards --where='greet_card_id in (1202)' --no-create-info >> #{db}"
@@ -172,13 +172,13 @@ task :dbdump => :environment do
   system "#{dump} wx_mp_users --where=#{sql_supplier} --no-create-info >> #{db}"
   system "#{dump} wx_participates --where=#{sql_activity} --no-create-info >> #{db}"
   system "#{dump} wx_prizes --where=#{sql_activity} --no-create-info >> #{db}"
-  system "#{dump} wx_replies --where=#{sql_wx_mp_user} --no-create-info >> #{db}"
+  system "#{dump} replies --where=#{sql_wx_mp_user} --no-create-info >> #{db}"
   system "#{dump} wx_requests --where=#{sql_supplier} --no-create-info >> #{db}"
 
-  system "#{dump} wx_shake_prizes --where=#{sql_supplier} --no-create-info >> #{db}"
-  system "#{dump} wx_shake_rounds --where=#{sql_supplier} --no-create-info >> #{db}"
-  system "#{dump} wx_shake_users --where=#{sql_supplier} --no-create-info >> #{db}"
-  system "#{dump} wx_shakes --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} shake_prizes --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} shake_rounds --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} shake_users --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} shakes --where=#{sql_supplier} --no-create-info >> #{db}"
 
   # wx_user_addresses
   system "#{dump} wx_users --where=#{sql_supplier} --no-create-info >> #{db}"

@@ -1,6 +1,6 @@
 class SmsExpense < ActiveRecord::Base
 
-  belongs_to :supplier
+  belongs_to :account
   
   enum_attr :status, :in => [
     ['succeed', 1, '发送成功'],
@@ -14,12 +14,10 @@ class SmsExpense < ActiveRecord::Base
       ['catering', 2, '餐饮'],
       ['hotel', 3, '酒店'],
       ['wplot', 4, '小区'],
-      # ['oa', 5, 'OA'],
       ['vip', 6, '会员卡'],
-      # ['hongbao', 7, '红包'],
   ]
 
-  FREE_MODULE = %w[OA 微客生活圈 易站 红包]
+  FREE_MODULE = %w[微生活圈]
 
   class << self
 

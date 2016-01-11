@@ -151,9 +151,6 @@
     -->
     <div class="c-right">
       <%= form_for @supplier_apply, validate: false, remote: true do |f| %>
-        <%= f.hidden_field :apply_type %>
-        <%= f.hidden_field :promotion_code, value: session[:promotion_code] %>
-        <%= f.hidden_field :intro, value: f.object.intro || "公司简介"%>
         <%= f.hidden_field :qq, value: f.object.qq || "000000"%>
         <div class="m-form">
           <div class="m-input-text">

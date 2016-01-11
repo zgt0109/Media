@@ -12,7 +12,7 @@
             <option value="">标签分类</option>
           </select>
           <% options = tag.children.pluck(:name, :id) %>
-          <%= f.select :tag_children_ids, [current_user.wx_mp_user].map{|wx_mp_user|[wx_mp_user.name,wx_mp_user.id]}, {name: 'website_article[tag_ids][]', class: 'form-control form-select-2'} %>
+          <%= f.select :tag_children_ids, [current_user.wx_mp_user].map{|wx_mp_user|[wx_mp_user.nickname,wx_mp_user.id]}, {name: 'website_article[tag_ids][]', class: 'form-control form-select-2'} %>
         </div>
         <div class="input-group input-group-text col-md-5 no-padding-right">
           <span class="input-group-addon">具体描述：</span>

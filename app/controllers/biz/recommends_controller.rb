@@ -8,7 +8,7 @@ class Biz::RecommendsController < ApplicationController
     if params[:activity_id].present?
       @search = Consume.where(consumable_type: 'Activity', consumable_id: params[:activity_id])
    else
-      @search = Consume.where(consumable_type: 'Activity', consumable_id: current_user.activities.show.recommend.pluck(:id))
+      @search = Consume.where(consumable_type: 'Activity', consumable_id: current_site.activities.show.recommend.pluck(:id))
    end
 
     @search = @search.order('id DESC').search(params[:search])
@@ -20,7 +20,7 @@ class Biz::RecommendsController < ApplicationController
   end
 
   def create
-    @activity = current_user.activities.new(activity_type_id: 70)
+    @activity = current_site.activities.new(activity_type_id: 70)
     @activity.attributes = params[:activity]
     if activity_time_invalid?
       render_with_alert :new, '活动时间填写不正确'
@@ -41,7 +41,7 @@ class Biz::RecommendsController < ApplicationController
   end
 
   def chart
-    wx_participates = WxParticipate.where(activity_id: current_user.activities.recommend.show.map(&:id))
+    wx_participates = WxParticipate.where(activity_id: current_site.activities.recommend.show.map(&:id))
     @search = wx_participates.search(params[:search])
     @participates = @search.page(params[:page])
     @total_count = @search.count
@@ -53,13 +53,13 @@ class Biz::RecommendsController < ApplicationController
   end
 
   def find_consume
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
     consume = Consume.find_by_id(params[:id])
     render layout: 'application_pop'
   end
 
   def use_consume
-    @consume = current_user.wx_mp_user.consumes.unused.unexpired.find(params[:id])
+    @consume = current_site.consumes.unused.unexpired.find(params[:id])
     shop_branch = ShopBranch.find_by_id(params[:shop_branch_id])
     # @consume.use!(shop_branch)
     flash.notice = @consume.use!(shop_branch) ? "操作成功" : "操作失败:  #{@consume.errors.full_messages.join(', ')}" 
@@ -112,7 +112,7 @@ class Biz::RecommendsController < ApplicationController
 
   private
   def find_activity
-    @activity = current_user.activities.recommend.find_by_id(params[:id]) || current_user.activities.new(activity_type_id: 70, name: '推荐有奖', summary: '请点击进入推荐有奖页面', description: '推荐有奖说明')
+    @activity = current_site.activities.recommend.find_by_id(params[:id]) || current_site.activities.new(activity_type_id: 70, name: '推荐有奖', summary: '请点击进入推荐有奖页面', description: '推荐有奖说明')
   end
 
   def activity_time_valid?
@@ -131,7 +131,7 @@ class Biz::RecommendsController < ApplicationController
   end
 
   def set_coupons_and_gifts
-    coupon_activity = current_user.wx_mp_user.activities.coupon.show.first
+    coupon_activity = current_site.activities.coupon.show.first
     if coupon_activity.present?
       @coupons = coupon_activity.coupons.normal.can_apply.select {|coupon| coupon.appliable? }
     else

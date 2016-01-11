@@ -21,7 +21,7 @@
     <div class="tr">
       <div class="p">
         <span>特权</span>
-        <%= f.select :vip_privilege_id_eq, current_user.vip_privileges.not_deteled.map{|vip_privilege|[vip_privilege.title, vip_privilege.id]},{include_blank: "全部"} %>
+        <%= f.select :vip_privilege_id_eq, current_site.vip_privileges.not_deteled.map{|vip_privilege|[vip_privilege.title, vip_privilege.id]},{include_blank: "全部"} %>
         
         <span>SN码</span>
         <%= f.text_field :code_like, class: "input-text", placeholder: '请输入SN码' %>

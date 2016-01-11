@@ -19,7 +19,7 @@ module ApiControllerHelper
   def respond_wmall_activity(from_user_name, to_user_name, qrcodeable)
     url = wmall_shop_url({shop_id: qrcodeable.id, wx_user_open_id: from_user_name, wx_mp_user_open_id: to_user_name, supplier_id: qrcodeable.try(:mall).try(:supplier_id)})
     activity = Activity.where(activity_type_id: 54,activityable_type:"Wmall::Shop", activityable_id: qrcodeable.id).first
-    pic_url = (activity && activity.qiniu_pic_key.present?) ? activity.qiniu_pic_url_for_wmall : qrcodeable.pic_url
+    pic_url = (activity && activity.pic_key.present?) ? activity.qiniu_pic_url_for_wmall : qrcodeable.pic_url
     items = [{title: qrcodeable.name, description: qrcodeable.description, pic_url: pic_url , url: url}]
     @echostr = Weixin.respond_news(from_user_name, to_user_name, items)
   end

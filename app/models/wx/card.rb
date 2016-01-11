@@ -1,7 +1,7 @@
 class Wx::Card < ActiveRecord::Base
   include WxCardApi
   serialize :location_id_list, Array
-  belongs_to :supplier
+  belongs_to :site
   has_many :consumes, as: :consumable
 
   scope :latest, -> { order('id DESC') }

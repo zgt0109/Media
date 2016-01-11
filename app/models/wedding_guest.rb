@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: wedding_guests
-#
-#  id           :integer          not null, primary key
-#  wedding_id   :integer          not null
-#  username     :string(255)      not null
-#  phone        :string(255)      not null
-#  people_count :integer          default(1), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  wx_user_id   :integer          not null
-#
-
 class WeddingGuest < ActiveRecord::Base
   belongs_to :wedding
  # attr_accessible :people_count, :phone, :username

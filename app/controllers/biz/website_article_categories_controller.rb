@@ -1,5 +1,4 @@
 class Biz::WebsiteArticleCategoriesController < ApplicationController
-  before_filter :require_wx_mp_user
   before_filter :set_website
   before_filter :set_categories, only: [:index, :new, :create, :edit, :update]
   before_filter :set_category, only: [:edit, :update, :destroy, :update_sorts, :copy]
@@ -69,7 +68,7 @@ class Biz::WebsiteArticleCategoriesController < ApplicationController
   private
 
   def set_website
-    @website = current_user.website
+    @website = current_site.website
     return redirect_to websites_path, alert: '请先设置微官网' unless @website
   end
 

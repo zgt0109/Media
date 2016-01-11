@@ -13,7 +13,7 @@ class Biz::WmallGroupItemsController < Biz::WmallGroupBaseController
       @wmall_group_items = @wmall_group_items.page(params[:item_page]) 
     end  
 
-    #@group_orders_search = current_user.group_orders.latest.search(params[:search])
+    #@group_orders_search = current_site.group_orders.latest.search(params[:search])
     respond_to do |format|
       format.html
       format.json
@@ -26,9 +26,9 @@ class Biz::WmallGroupItemsController < Biz::WmallGroupBaseController
   end
 
   def create
-    @shop = current_user.try(:mall).try(:shops).where(id: params[:shop_id]).first
+    @shop = current_site.try(:mall).try(:shops).where(id: params[:shop_id]).first
     return redirect_to :back, notice: "无效的商家" unless @shop
-    @group_item = @shop.group_items.build(wx_mp_user_id: @group.wx_mp_user_id, group_category_id: 0, group_type: 2, supplier_id: current_user.id, group_id: @group.id)
+    @group_item = @shop.group_items.build(group_category_id: 0, group_type: 2, site_id: current_site.id, group_id: @group.id)
     @group_item.attributes = params[:group_item]
     if @group_item.save
       redirect_to wmall_group_items_path, notice: "添加成功"
@@ -39,7 +39,7 @@ class Biz::WmallGroupItemsController < Biz::WmallGroupBaseController
 
   def recommend_switch
     tag = @group_item.recommend?
-    if current_user.group_items.tagged_with('recommend', on: :recommends).count < 3
+    if current_site.group_items.tagged_with('recommend', on: :recommends).count < 3
       tag ? @group_item.recommend_list.remove('recommend') : @group_item.recommend_list.add('recommend')
       return render js: "$('#item_#{@group_item.id}').html('#{tag ? '': '取消'}推荐')" if @group_item.save
     else
@@ -53,12 +53,12 @@ class Biz::WmallGroupItemsController < Biz::WmallGroupBaseController
   end
 
   def recommend_list
-    @group_items = current_user.group_items.tagged_with('recommend', on: :recommends).limit(3) #||  current_user.group_items.latest.limit(3)
-    @group_items =  current_user.group_items.seller_items.selling.latest.limit(3) if @group_items.blank?
+    @group_items = current_site.group_items.tagged_with('recommend', on: :recommends).limit(3) #||  current_site.group_items.latest.limit(3)
+    @group_items =  current_site.group_items.seller_items.selling.latest.limit(3) if @group_items.blank?
   end
 
   def edit
-   # @shops = current_user.try(:mall).try(:shops).map{|s| [s.name,s.id]}
+   # @shops = current_site.try(:mall).try(:shops).map{|s| [s.name,s.id]}
     @shop = [@group_item.try(:groupable).try(:name),@group_item.try(:groupable).try(:id)]
   end
 
@@ -88,8 +88,8 @@ class Biz::WmallGroupItemsController < Biz::WmallGroupBaseController
   private
 
   def set_group
-    @group = current_user.group
-    @group = current_user.wx_mp_user.create_group unless @group
+    @group = current_site.group
+    @group = current_site.create_group unless @group
   end
 
   def find_group_item
@@ -97,6 +97,6 @@ class Biz::WmallGroupItemsController < Biz::WmallGroupBaseController
   end
 
   def belongs_to_shops
-    @shops = current_user.try(:mall).try(:shops).pluck(:name, :id)
+    @shops = current_site.try(:mall).try(:shops).pluck(:name, :id)
   end
 end

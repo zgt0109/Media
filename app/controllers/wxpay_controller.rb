@@ -88,19 +88,19 @@ class WxpayController < ApplicationController
   end
 
   def index
-    @supplier = Supplier.where(id: params[:supplier_id]).first
-    return render text: "请传入商户ID" unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return render text: "请传入商户ID" unless @account
 
-    @wxpay = @supplier.payment_settings.wxpay.first
+    @wxpay = @account.payment_settings.wxpay.first
     return render text: "请先设置微信支付信息" unless @wxpay
 
-    attrs = {supplier_id: @supplier.id, wx_mp_user_id: @supplier.wx_mp_user.id, wx_user_id: 10025,ec_shop_id: (@supplier.ec_shop.id rescue 2),total_amount: 0.01}
+    attrs = {account_id: @account.id, user_id: 10025, ec_shop_id: (@account.ec_shop.id rescue 2),total_amount: 0.01}
     @order = EcOrder.create(attrs)#.first_or_create
 
     payment = Payment.setup({
       payment_type_id: 10001,
-      supplier_id: @supplier.id,
-      customer_id: @order.wx_user_id,
+      account_id: @account.id,
+      customer_id: @order.user_id,
       customer_type: 'WxUser',
       paymentable_id: @order.id,
       paymentable_type: @order.class.name,
@@ -113,10 +113,10 @@ class WxpayController < ApplicationController
   end
 
   def pay
-    @supplier = Supplier.where(id: params[:supplier_id]).first
-    return render json: {errcode: 001, errmsg: "supplier not found"} unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return render json: {errcode: 001, errmsg: "account not found"} unless @account
 
-    @wxpay = @supplier.payment_settings.wxpay.first
+    @wxpay = @account.payment_settings.wxpay.first
     return render json: {errcode: 002, errmsg: "please set wxpay info first"} unless @wxpay
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
@@ -126,28 +126,28 @@ class WxpayController < ApplicationController
 
   #用于永安的红包支付
   def hongbao_pay
-    @supplier = Supplier.find(params[:supplier_id])
+    @account = Account.find(params[:account_id])
     @kickback = Kickback.find(params[:id])
-    @wxpay = @supplier.payment_settings.wxpay.first
+    @wxpay = @account.payment_settings.wxpay.first
     render :layout =>  false
   rescue
     render :text => "请求支付失败"
   end
 
   def yaic_pay
-    @supplier = Supplier.where(id: params[:supplier_id]).first
-    return redirect_to wxpay_yaic_faild_path,notice: "无效的商户" unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return redirect_to wxpay_yaic_faild_path,notice: "无效的商户" unless @account
     @order = YonganOrder.find_by_order_no(params[:order_id])
     return redirect_to wxpay_yaic_faild_path,notice: "无效的订单" unless @order
     return redirect_to wxpay_yaic_faild_path,notice: @order.validate_policy if @order.amount == 2 && @order.validate_policy.present?
     @payment = Payment.where(out_trade_no: @order.order_no).first
-    @wxpay = @supplier.payment_settings.wxpay.first
+    @wxpay = @account.payment_settings.wxpay.first
     return redirect_to wxpay_yaic_faild_path,notice: "该商户没有开通微信支付" unless @wxpay
 
     if @payment.blank?
       @payment = Payment.setup({
         payment_type: 10001,
-        supplier_id: @supplier.id,
+        account_id: @account.id,
         customer_id: @order.wx_user_id,
         customer_type: 'WxUser',
         paymentable_id: @order.id,
@@ -169,15 +169,15 @@ class WxpayController < ApplicationController
     xml = params[:xml]
     #xml = {"OpenId"=>"obsaptzAbROOwY7pn4oZI7lXhtLc", "AppId"=>"wx7224575773890d83", "TimeStamp"=>"1395728008", "MsgType"=>"request", "FeedBackId"=>"13234327155953740587", "TransId"=>"1218314601201403218341624917", "Reason"=>"娴嬭瘯", "Solution"=>"娴嬭瘯", "ExtInfo"=>"娴嬭瘯娴嬭瘯娴嬭瘯娴嬭瘯 12052360607", "AppSignature"=>"40d5864372a50000fca64c2acc29f99efe202cd4", "SignMethod"=>"sha1"}
     #xml = {"OpenId"=>"obsapt8YtkO2Y-qe39X0-ySxm4lA", "AppId"=>"wx7224575773890d83", "TimeStamp"=>"1395729382", "MsgType"=>"reject", "FeedBackId"=>"13234327155953740587", "Reason"=>"", "AppSignature"=>"05b4a520b085a0615b39d08c6885daea2ec06bb7", "SignMethod"=>"sha1"}
-    wx_user = WxUser.where(uid: xml['OpenId']).first
+    wx_user = WxUser.where(openid: xml['OpenId']).first
     mp_user = WxMpUser.where(app_id: xml['AppId']).first
     feedback = WxFeedback.where(feed_back_id: xml['FeedBackId']).first || WxFeedback.new
     msg_type = WxFeedback.msg_type_status xml['MsgType']
     if msg_type == 0
-      attrs = {wx_user_id: wx_user.id, supplier_id: mp_user.try{:supplier}.try{:id}, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
+      attrs = {wx_user_id: wx_user.id, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
               trans_id: xml['TransId'], reason: xml['Reason'], solution: xml['Solution'], ext_info: xml['ExtInfo'],pic_info: xml['PicInfo']}
     else
-      attrs = {wx_user_id: wx_user.id, supplier_id: mp_user.supplier.id, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
+      attrs = {wx_user_id: wx_user.id, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
                trans_id: xml['TransId'].to_s, reason: xml['Reason']}
       #attrs = {msg_type: msg_type, reason: xml['Reason']}
     end
@@ -212,22 +212,22 @@ class WxpayController < ApplicationController
 
   def ali_pay
     faild_url = ali_faild_wxpay_index_path
-    @supplier = Supplier.where(id: params[:supplier_id]).first
-    return redirect_to faild_url,notice: "无效的商户" unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return redirect_to faild_url,notice: "无效的商户" unless @account
     @order = YonganAliOrder.find_by_order_no(params[:order_no])
     return redirect_to faild_url,notice: "无效的订单" unless @order
     @policy = @order.yongan_ali_policy
     return redirect_to faild_url,notice: "无效的订单" if @policy.present? && @policy.actual_amount >= 200
     #return redirect_to faild_url,notice: @order.validate_policy if @order.amount == 2 && @order.validate_policy.present?
     @payment = Payment.where(out_trade_no: @order.order_no).first
-    @wxpay = @supplier.payment_settings.wxpay.first
+    @wxpay = @account.payment_settings.wxpay.first
     return redirect_to faild_url,notice: "该商户没有开通微信支付" unless @wxpay
 
     if @payment.blank?
       @payment = Payment.setup({
         payment_type: 10001,
-        supplier_id: @supplier.id,
-        customer_id: @order.wx_user_id,
+        account_id: @account.id,
+        customer_id: @order.user_id,
         customer_type: 'WxUser',
         paymentable_id: @order.id,
         paymentable_type: @order.class.name,
@@ -259,7 +259,7 @@ class WxpayController < ApplicationController
     policy.amount += order.amount
     policy.status = YonganPolicyOrder::PAID
     policy.save!
-    url = "#{YonganPolicyOrder::CALLBACK_URL}/#{policy.supplier_id}/yongan/policies/#{policy.id}?order_id=#{order.id}"
+    url = "#{YonganPolicyOrder::CALLBACK_URL}/#{policy.account_id}/yongan/policies/#{policy.id}?order_id=#{order.id}"
     content = "保险金额变更通知\n您的我要做雷锋的保单金额有变化\n产品名称：#{YonganPolicyOrder::PRODUCT_NAME}\n订单号：#{policy.order_no}\n最新保险金额：#{policy.policy_money}，点击<a href='#{url}'>查看详情</a>"
     wx_user = WxUser.where(id: policy.wx_user_id).first_or_create
     policy.send_payment_msg wx_user, content

@@ -1,5 +1,5 @@
 class Biz::ScenePagesController < ApplicationController
-  before_filter :require_wx_mp_user, :fetch_activity
+  before_filter :fetch_activity
   before_filter :fetch_scene_html, only: [:save_html, :save_json, :pages_config]
 
   def index
@@ -57,11 +57,11 @@ class Biz::ScenePagesController < ApplicationController
     end
 
     def fetch_activity
-      @activity = current_user.activities.scene.find(params[:activity_id])
+      @activity = current_site.activities.scene.find(params[:activity_id])
     end
 
     def collect_scene_links
-      activities = current_user.activities.show
+      activities = current_site.activities.show
       [
         {
           '微投票' => activities.vote.map{|e| {name: e.name, url: e.respond_mobile_url} },

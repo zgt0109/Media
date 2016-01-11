@@ -6,7 +6,7 @@
         <div class="col-md-3 row">
           <div class="input-group input-group-text">
             <span class="input-group-addon">选择活动：</span>
-            <%= f.select :activity_id_eq, current_user.activities.show.where(activity_type_id: 70).pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
+            <%= f.select :activity_id_eq, current_site.activities.show.where(activity_type_id: 70).pluck(:name, :id), { include_blank: '全部活动' }, class: "col-xs-12" %>
           </div>
         </div>
         <div class="col-md-2">

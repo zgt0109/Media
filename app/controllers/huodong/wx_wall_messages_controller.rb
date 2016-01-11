@@ -39,7 +39,7 @@ class Huodong::WxWallMessagesController < ApplicationController
     def get_wall
       session[:wx_wall_id] = params[:wx_wall_id] if params[:wx_wall_id]
       session[:wx_wall_id] = params[:search][:wx_wall_id_eq] if params[:search]
-      @wx_wall = current_user.wx_walls.where(id: session[:wx_wall_id]).first || current_user.wx_walls.show.first
+      @wx_wall = current_site.wx_walls.where(id: session[:wx_wall_id]).first || current_site.wx_walls.show.first
       return redirect_to wx_walls_path, alert: '请先添加微信墙活动' unless @wx_wall
       session[:wx_wall_id] = @wx_wall.id
     end

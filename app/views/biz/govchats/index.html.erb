@@ -14,7 +14,7 @@
 			<%= form_for @activity, class: "form col-xs-12", validate: true do |f| %>
 				<%= render "weixin_preview", wx_title: @activity.try(:name) || '这里显示<微信消息标题>', wx_summary: @activity.try(:summary) || '这里显示你输入的 <微信消息摘要>' %>
 				<div class="col-xs-12 col-md-6 col-lg-7">
-					<%= render "weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.qiniu_pic_key, include_description: 3 %>
+					<%= render "weixin_setting", activity: f, data_img: @activity.pic_url, pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key, include_description: 3 %>
 					<div class="form-group ">
 						<input type="submit" class="btn btn-sm btn-primary" value="保存"/>
 					</div>

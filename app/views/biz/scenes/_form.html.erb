@@ -12,15 +12,13 @@
     <div class="col-xs-12 col-md-6 col-lg-7">
       <%= form_for @activity, url: @activity.new_record? ? scenes_path : scene_path(id: @activity.id), validate: true do |activity| %>
         <%- if @activity.new_record? %>
-          <%= activity.hidden_field :supplier_id, value: current_user.id %>
           <%= activity.hidden_field :status, value: 1 %>
-          <%= activity.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
           <%= activity.hidden_field :activity_type_id, value: 73 %>
           <%= activity.hidden_field :ready_at, value: Time.now %>
           <%= activity.hidden_field :start_at, value: Time.now %>
           <%= activity.hidden_field :end_at, value: Time.now + 100.years %>
         <%- end %>
-      <%= render "weixin_setting", activity: activity, data_img: @activity.try(:pic_url), pic_data_name: "activity[qiniu_pic_key]", pic_data_key: @activity.try(:qiniu_pic_key), is_scene: true %>
+      <%= render "weixin_setting", activity: activity, data_img: @activity.try(:pic_url), pic_data_name: "activity[pic_key]", pic_data_key: @activity.try(:pic_key), is_scene: true %>
 
       <div class="alert alert-block alert-info" style="color:black;">以下设置需要认证的公众号并且与微枚迪后台关联了授权，具体请参考：<a href="http://winwemedia.com/site/dev_logs/203">http://winwemedia.com/site/dev_logs/203</a> </div>
 
@@ -28,7 +26,7 @@
         <div class="form-group">
           <label class="control-label">微信分享图片 <small class="help-inline text-muted line-height-30">(默认为微信消息图片)</small></label>
           <div class="clearfix">
-            <div data-name="activity[share_setting_attributes][qiniu_pic_key]" data-img = "<%= share.object.pic_url %>" data-key="<%= share.object.qiniu_pic_key %>" class="cieldon-file" data-type="0" data-width="100" data-height="100" style="width:22%;"></div>
+            <div data-name="activity[share_setting_attributes][pic_key]" data-img = "<%= share.object.pic_url %>" data-key="<%= share.object.pic_key %>" class="cieldon-file" data-type="0" data-width="100" data-height="100" style="width:22%;"></div>
             <small class="help-inline text-warning line-height-30">图片建议尺寸：200像素*200像素</small>
           </div>
         </div>
@@ -83,9 +81,9 @@
   $('.submit_wbbs').on('click', function(event) {
     var keyword = $('#keyword').val();
     <% if @activity.new_record? %>
-      var exists_keywords = <%= raw current_user.activities.show.pluck(:keyword).to_json %> ;
+      var exists_keywords = <%= raw current_site.activities.show.pluck(:keyword).to_json %> ;
     <% else %>
-      var exists_keywords = <%= raw current_user.activities.show.where("id != ?", @activity.try(:id)).pluck(:keyword).to_json %> ;
+      var exists_keywords = <%= raw current_site.activities.show.where("id != ?", @activity.try(:id)).pluck(:keyword).to_json %> ;
     <% end %>
     
     if ($.inArray(keyword, exists_keywords) >= 0) {

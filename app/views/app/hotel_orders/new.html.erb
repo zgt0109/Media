@@ -4,11 +4,10 @@
 </header>
 <div class="contxt cont-artical">
 	<%= form_for @hotel_order, url: app_hotel_orders_path(aid: params[:aid], wxmuid: (session[:wx_mp_user_id]), room_type_id: params[:room_type_id], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date], time: Time.now.to_i), validate: true do |f| %>
-	<%= f.hidden_field :supplier_id %>
-	<%= f.hidden_field :wx_mp_user_id %>
+	<%= f.hidden_field :site_id %>
 	<%= f.hidden_field :hotel_branch_id %>
 	<%= f.hidden_field :hotel_id %>
-	<%= f.hidden_field :wx_user_id %>
+	<%= f.hidden_field :user_id %>
 	<%= f.hidden_field :hotel_room_type_id %>
 	<%= f.hidden_field :check_in_date, value: params[:check_in_date] %>
 	<%= f.hidden_field :check_out_date, value: params[:check_out_date] %>

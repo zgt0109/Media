@@ -59,7 +59,7 @@
         <div class="col-md-3">
             <div class="input-group input-group-text">
                 <span class="input-group-addon">等级：</span>
-                <% options = [['全部等级', '']] + current_user.vip_card.vip_grades.visible.sorted.pluck(:name, :id) %>
+                <% options = [['全部等级', '']] + current_site.vip_card.vip_grades.visible.sorted.pluck(:name, :id) %>
                 <%= f.select :vip_grade_id_eq, options, {}, class: "col-xs-12" %>
             </div>
         </div>

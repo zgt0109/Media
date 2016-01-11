@@ -19,7 +19,7 @@
           <div class="form-group">
             <label class="control-label">商家名称<span class="required-star">*</span></label>
             <div class="clearfix">
-              <%= card.text_field :supplier_name, validate: true, class: 'col-xs-6', placeholder:'请输入商家名称' , id: 'supplier_name'%>
+              <%= card.text_field :merchant_name, validate: true, class: 'col-xs-6', placeholder:'请输入商家名称' , id: 'merchant_name'%>
             </div>
           </div>
 
@@ -32,7 +32,7 @@
           <div class="form-group">
             <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
             <div class="clearfix">
-              <div data-name="activity[qiniu_pic_key]" data-img = "<%= @activity.pic_url.blank? ? @activity.default_pic_url : @activity.pic_url %>" data-key="<%= @activity.qiniu_pic_key || "" %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
+              <div data-name="activity[pic_key]" data-img = "<%= @activity.pic_url.blank? ? @activity.default_pic_url : @activity.pic_url %>" data-key="<%= @activity.pic_key || "" %>" class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200"></div>
               <small class="help-inline text-warning line-height-30">建议尺寸：宽720像素*高400像素</small>
             </div>
           </div>
@@ -117,7 +117,7 @@
 <%= render 'biz/vip_cards/settings_tab' %>
 <% content_for :custom_js do %>
 <script type="text/javascript">
-$("#supplier_name, #keyword").focus(function(){
+$("#merchant_name, #keyword").focus(function(){
   $(this).parent().find('.error-message').remove();
 }).blur(function(){
   if($(this).val() == ""){
@@ -131,14 +131,9 @@ $('#address_keyword').on('keyup', function(){
 })
 
 $('.save-start').click(function(){
-  <% if current_user.bqq_account? && !current_user.has_privilege_for?(3001) %>
-    alert('您的套餐类型无法使用该功能，请联系经销商升级高版本套餐');
-    return false;
-  <% end %>
-
-  if($("#supplier_name").val() == ""){
-    $("#supplier_name").focus();
-    addErrorMessage($("#supplier_name"), '不能为空');
+  if($("#merchant_name").val() == ""){
+    $("#merchant_name").focus();
+    addErrorMessage($("#merchant_name"), '不能为空');
   }else if($("#keyword").val() == ""){
     $("#keyword").focus();
     addErrorMessage($("#keyword"), '不能为空');

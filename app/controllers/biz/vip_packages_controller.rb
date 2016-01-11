@@ -11,7 +11,7 @@ class Biz::VipPackagesController < Biz::VipController
   end
 
   def package_users
-    @total_package_users = current_user.vip_packages_vip_users.latest
+    @total_package_users = current_site.vip_packages_vip_users.latest
     @search = @total_package_users.search(params[:search])
     @package_users = @search.page(params[:page])
     @vip_package_id = params[:search][:vip_package_id] if params[:search]
@@ -27,7 +27,7 @@ class Biz::VipPackagesController < Biz::VipController
   end
 
   def item_consumes
-    @total_item_consumes = current_user.vip_package_item_consumes.used.latest
+    @total_item_consumes = current_site.vip_package_item_consumes.used.latest
     @search = @total_item_consumes.search(params[:search])
     @item_consumes = @search.page(params[:page])
 
@@ -53,7 +53,7 @@ class Biz::VipPackagesController < Biz::VipController
   def create
     params[:vip_package][:vip_package_items_vip_packages_attributes] = params[:vip_package][:vip_package_items_vip_packages_attributes].to_h.values
     params[:vip_package][:vip_package_items_vip_packages_attributes].delete_if { |h| !h.key?(:vip_package_item_id) || h[:items_count].blank? }
-    @vip_package = @vip_card.vip_packages.new(params[:vip_package].merge!(supplier_id: @vip_card.supplier_id, wx_mp_user_id: @vip_card.wx_mp_user_id))
+    @vip_package = @vip_card.vip_packages.new(params[:vip_package].merge!(site_id: @vip_card.site_id))
     if @vip_package.save
       redirect_to vip_packages_path, notice: "保存成功"
     else
@@ -90,7 +90,7 @@ class Biz::VipPackagesController < Biz::VipController
   end
 
   def find_vip_user
-    vip_user = current_user.wx_mp_user.vip_users.visible.where(user_no: params[:user_no]).first
+    vip_user = current_site.vip_users.visible.where(user_no: params[:user_no]).first
     if vip_user
       render json: {user_status: 1, user_no: params[:user_no], name: vip_user.name + "(#{vip_user.vip_grade_name})", mobile: vip_user.mobile, usable_amount: vip_user.usable_amount}
     else
@@ -104,12 +104,11 @@ class Biz::VipPackagesController < Biz::VipController
   end
 
   def save_release
-    vip_user = current_user.wx_mp_user.vip_users.visible.where(user_no: params[:user_no]).first
+    vip_user = current_site.vip_users.visible.where(user_no: params[:user_no]).first
     return render_with_alert :release, '该会员不存在', layout: 'application_pop' unless vip_user
     return render_with_alert :release, '发放失败', layout: 'application_pop' unless @vip_package
     VipPackageItemConsume.transaction do
-      vip_packages_vip_users = @vip_package.vip_packages_vip_users.new(supplier_id: @vip_package.supplier_id,
-                                                                        wx_mp_user_id: @vip_package.wx_mp_user_id,
+      vip_packages_vip_users = @vip_package.vip_packages_vip_users.new(site_id: @vip_package.site_id,
                                                                         vip_user_id: vip_user.id,
                                                                         description: params[:description],
                                                                         expired_at: Time.now+@vip_package.expiry_num.month,
@@ -118,8 +117,7 @@ class Biz::VipPackagesController < Biz::VipController
                                                                         payment_type: params[:payment_type])
       if vip_packages_vip_users.update_vip_user_amount(VipUserTransaction::SHOP_PAY_DOWN)
         @vip_package.vip_package_items_vip_packages.each do |vp|
-          vp.items_count.times{vip_user.vip_package_item_consumes.create(supplier_id: @vip_package.supplier_id,
-                                                                    wx_mp_user_id: @vip_package.wx_mp_user_id,
+          vp.items_count.times{vip_user.vip_package_item_consumes.create(site_id: @vip_package.site_id,
                                                                     vip_package_id: vp.vip_package_id,
                                                                     vip_packages_vip_user_id: vip_packages_vip_users.id,
                                                                     vip_package_item_id: vp.vip_package_item_id,
@@ -141,7 +139,7 @@ class Biz::VipPackagesController < Biz::VipController
   end
 
   def find_vip_package_item
-    item_consume = current_user.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
+    item_consume = current_site.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
     if item_consume.try(:can_use?)
       vip_package = @vip_card.vip_packages.where(id: item_consume.vip_package_id).first
       shop_html = vip_package.get_shop_html
@@ -153,7 +151,7 @@ class Biz::VipPackagesController < Biz::VipController
   end
 
   def update_consumes
-    item_consume = current_user.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
+    item_consume = current_site.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
     if item_consume.try(:can_use?)
       item_consume.update_attributes(status: VipPackageItemConsume::USED)
       flash[:notice] = "核销成功"
@@ -165,7 +163,7 @@ class Biz::VipPackagesController < Biz::VipController
 
   #发放套餐默认余额支付
   def use_usable_amount
-    vip_user = current_user.wx_mp_user.vip_users.visible.where(user_no: params[:user_no]).first
+    vip_user = current_site.vip_users.visible.where(user_no: params[:user_no]).first
     render json: {status: (vip_user && @vip_package && vip_user.usable_amount >= @vip_package.price ? true : false)}
   end
 
@@ -182,9 +180,9 @@ class Biz::VipPackagesController < Biz::VipController
     def first_shop_branch
       if @vip_package.try(:shop_branch_ids).present?
         @shop_branchs = []
-        city_ids = current_user.shop_branches.used.where(id: @vip_package.try(:shop_branch_ids)).uniq.pluck(:city_id)
+        city_ids = current_site.shop_branches.used.where(id: @vip_package.try(:shop_branch_ids)).uniq.pluck(:city_id)
         city_ids.each_with_index do |city_id,index|
-          branch = current_user.shop_branches.used.where(city_id: city_id)
+          branch = current_site.shop_branches.used.where(city_id: city_id)
           @shop_branchs << branch
           if index == 0
             @province_id = branch.first.province_id
@@ -194,7 +192,7 @@ class Biz::VipPackagesController < Biz::VipController
       else
         @province_id = 9
         @city_id = 73
-        @shop_branchs = [current_user.shop_branches.used.where(province_id: 9, city_id: 73)]
+        @shop_branchs = [current_site.shop_branches.used.where(province_id: 9, city_id: 73)]
       end
     end
 

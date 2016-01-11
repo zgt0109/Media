@@ -31,7 +31,7 @@
       </div>
 
 
-      <% reject_types = current_user.bqq_account? ? [3] : []
+      <% reject_types = []
          menu_type_options = WebsitePopupMenu.menu_type_options.reject{|m| reject_types.include?(m.last) } %>
       <%= render 'display_type', {:f => f, :menu_type_options => menu_type_options}%>
 
