@@ -42,11 +42,10 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     else
       @website = Website.micro_site.where(:domain => session[:site_id]).first
     end
-    
+
     @website_setting = @website.website_setting ||= @website.create_default_setting
     @site = @website.site
     return render text: '微官网不存在' unless @website
-
   rescue => error
     return render text: "出错了：#{error.message}"
   end

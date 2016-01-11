@@ -27,7 +27,7 @@ class Mobile::VoteController < Mobile::BaseController
 
   def success
     # return redirect_to :back, alert: "验证码不正确" if session[:image_code] != params[:verify_code]
-    return redirect_to mobile_vote_result_path(site_id: @activity.site_id, vote_id: @activity.id, wxmuid: @wx_mp_user.id), alert: "您已经投票过！" if @activity_user
+    return redirect_to mobile_vote_result_path(site_id: @activity.site_id, vote_id: @activity.id), alert: "您已经投票过！" if @activity_user
 
     @activity_user = @wx_user.activity_users.create(params[:activity_user].merge(site_id: @activity.site_id, activity_id: @activity.id))
     @activity.activity_vote_items.where(id: params[:ids].to_s.split(',').map!(&:to_i)).pluck(:id).each do |id|

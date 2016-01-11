@@ -5,11 +5,11 @@ module DetectUserAgent
     site_id = request.subdomains.first.to_i
     logger.info "******* request.subdomains :#{request.subdomains}"
     @site = Site.where(id: site_id).first
-    # @site ||= Site.first
-    if @site_id
-      session[:site_id] = site_id
-      @wx_mp_user = @site.wx_mp_user
-    end
+
+    # @site = Site.first unless @site
+
+    session[:site_id] = site_id
+    @wx_mp_user = @site.try(:wx_mp_user)
   end
 
   def load_user_data
@@ -21,8 +21,13 @@ module DetectUserAgent
       @wx_user = @wx_mp_user.wx_users.where(user_id: session[:user_id]).first
     end
 
-    session[:user_id] = @wx_user.try(:user_id)
-    session[:openid] = @wx_user.try(:openid)
+    if @wx_user
+      session[:user_id] = @wx_user.user_id
+      session[:openid] = @wx_user.openid
+
+      @user = @wx_user.user
+    end
+
   end
 
   def block_non_wx_browser
@@ -78,7 +83,7 @@ module DetectUserAgent
       false
     end
 
-    def auth
+     def auth
       return unless wx_browser?
 
       Rails.logger.info "==== auth"
@@ -105,7 +110,7 @@ module DetectUserAgent
           session[:user_id] = @user.user_id
           session[:openid] = @wx_user.openid
 
-          return redirect_to auth_back
+          return redirect_toauth_back
         end
 
         if @wx_user.blank?
@@ -155,6 +160,7 @@ module DetectUserAgent
 
           session[:user_id] = @wx_user.user_id
           session[:openid] = @wx_user.openid
+          @user = @wx_user.user
 
           return redirect_to auth_back
         end 
