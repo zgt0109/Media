@@ -363,7 +363,6 @@ module MobileHelper
       else
         return "javascript:;"
     end
-
     @url.sub!(request.host_with_port, Settings.mhostname) if @url =~ %r[http://#{request.host_with_port}/]
     @url
   rescue => e

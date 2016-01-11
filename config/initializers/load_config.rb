@@ -18,7 +18,7 @@ M_HOST             = "http://#{Settings.mhostname}"
 WWW_HOST           = "http://#{Settings.hostname}"
 
 # 常用变量声明
-APP_SUB_DOMAIN = Settings.mhostname.sub(/\.com.?/, '').split('.')[0..-2].join('.')
+APP_SUB_DOMAIN = Settings.mhostname.sub(/\.[com|dev].?/, '').split('.')[0..-2].join('.')
 
 WEBSITE_DOMAIN = "http://#{Settings.hostname}"
 MOBILE_DOMAIN  = "http://#{Settings.mhostname}"

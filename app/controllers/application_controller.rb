@@ -16,7 +16,8 @@ class ApplicationController < ActionController::Base
   # before_filter :check_account_expire
   # before_filter :check_auth_mobile
 
-  helper_method :current_user, :current_site, :services_config, :current_shop_account, :current_sub_account, :current_shop_branch
+  helper_method :current_user, :services_config, :current_shop_account, :current_sub_account, :current_shop_branch
+  helper_method :current_site, :mobile_subdomain
 
   private
 
@@ -70,6 +71,10 @@ class ApplicationController < ActionController::Base
 
   def current_shop_branch
     @current_shop_branch ||= current_sub_account.try(:user)
+  end
+
+  def mobile_subdomain
+    @mobile_subdomain = [current_user.id.to_s, MOBILE_SUB_DOMAIN].join('.')
   end
 
   def required_sign_in

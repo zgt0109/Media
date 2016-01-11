@@ -3,7 +3,7 @@ module DetectUserAgent
 
   def load_site
     site_id = request.subdomains.first.to_i
-    logger.info "******* request.subdomain :#{request.subdomains}"
+    logger.info "******* request.subdomains :#{request.subdomains}"
     @site = Site.where(id: site_id).first
     # @site ||= Site.first
     if @site_id
