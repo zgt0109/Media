@@ -19,7 +19,7 @@
       <b class="title" id="preview_title"><%= @activity.try(:name) || '标题' %></b>
       <span><%= Date.today %></span>
       <div cover="cover box-img" class="img">
-        <%= image_tag (@activity.pic.presence || @activity.default_pic_url), width: '258', id: 'preview_pic' %>
+        <%= image_tag (@activity.pic_url || @activity.default_pic_url), width: '258', id: 'preview_pic' %>
       </div>
       <p id="preview_summary"><%= @activity.try(:summary) %></p>
     </div>

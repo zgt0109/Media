@@ -11,9 +11,9 @@
       <% @website_pictures.each do |picture| %>
         <li>
           <% if picture.menu_type.present? %>
-            <%= link_to menu_url(picture) do %><%= image_tag picture.pic.big if picture.pic? %><% end %>
+            <%= link_to menu_url(picture) do %><%= image_tag picture.pic_url if picture.pic_url %><% end %>
           <% else %>
-            <%= image_tag picture.pic.big if picture.pic? %>
+            <%= image_tag picture.pic_url if picture.pic_url %>
           <% end %>
         </li>
       <% end %>

@@ -15,7 +15,7 @@
   </div>
 
   <div class="bd">
-    <%= image_tag @material.pic.try(:large) if @material.pic? && @material.is_show_pic %>
+    <%= image_tag @material.pic_url if @material.pic_url && @material.is_show_pic %>
     <%= raw @material.content %>
   </div>
 
@@ -26,7 +26,7 @@
   </div>
 
   <div class="bd">
-    <%= image_tag @website_popup_menu.pic.try(:large) if @website_popup_menu.pic? %>
+    <%= image_tag @website_popup_menu.pic_url if @website_popup_menu.pic_url %>
     <%= raw @website_popup_menu.try(:summary) %>
   </div>
 
@@ -76,7 +76,7 @@
   </div>
 
   <div class="bd">
-    <%#= image_tag @website_menu.pic.try(:large) if @website_menu.pic? %>
+    <%#= image_tag @website_menu.pic_url if @website_menu.pic_url %>
     <%= raw @website_menu.content %>
   </div>
 <% end %>

@@ -4,8 +4,8 @@
     <ul class="shopcar-list">
       <% @carts.each do |ec_cart|%>
           <li class="shopcar-info">
-            <% if ec_cart.ec_item.main_picture.try(:pic?) %>
-                <span class="info-fl"><%= image_tag ec_cart.ec_item.main_picture.pic.thumb  %></span>
+            <% if ec_cart.ec_item.main_picture.pic_url %>
+                <span class="info-fl"><%= image_tag ec_cart.ec_item.main_picture.pic_url  %></span>
             <% else %>
                 <span class="img-null info-fl">暂无<br/>图片</span>
             <% end %>

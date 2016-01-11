@@ -42,7 +42,7 @@
     <% @group_items.each do |item| %>
         <li>
           <%= link_to mobile_group_item_url(supplier_id: @supplier.id, id: item) do %>
-              <span class="left"><%= image_tag item.pic if item.pic? %></span>
+              <span class="left"><%= image_tag item.pic if item.pic_url %></span>
               <div class="auto">
                 <div class="h6"><%= item.name %></div>
                 <p><%= item.summary %></p>

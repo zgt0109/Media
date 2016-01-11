@@ -15,7 +15,7 @@
         <b class="activity_notice_title_preview" id="preview_title" style="word-break: break-all;"><%= @activity.new_record? ? "微信消息标题" : @activity.name %></b>
         <span><%= Time.now.strftime("%Y-%m-%d") %></span>
         <p class="img upload-preview-img-218-100" style="clear:both;">
-          <%= image_tag((@activity.pic.presence || @activity.default_pic_url), size: '211x120', id: 'preview_pic') %>
+          <%= image_tag((@activity.pic_url || @activity.default_pic_url), size: '211x120', id: 'preview_pic') %>
         </p>
         <p class="intro activity_notice_summary_preview" id="preview_summary" style="word-break: break-all;">
           <%#= @activity.new_record? ? "微信消息摘要" : truncate(@activity.summary, length: 20, omission: "...") %>

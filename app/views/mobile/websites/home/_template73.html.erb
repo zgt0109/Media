@@ -5,7 +5,7 @@
       </a>
       <% website_menus[0..7].to_a.each do |menu| %>
           <%= link_to menu_url(menu), class: "box mod-index" do %>
-              <% if menu.pic? || menu.font_icon.present? %>
+              <% if menu.pic_url || menu.font_icon.present? %>
                 <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" %>
               <% else %>
                 <i><small><%= menu.title %></small></i>

@@ -9,7 +9,7 @@
   <div class="box box-order">
     <div class="box-list">
       <% unless @group_item.new_record? %><a class="list-li" href="<%= mobile_group_item_path(supplier_id: @supplier.id, id: @group_item) %>"><% end %>
-        <% if @group_item.pic? %>
+        <% if @group_item.pic_url %>
           <div class="hd"><%= image_tag @group_item.pic %></div>
         <% else %>
             <div class="hd img-null">

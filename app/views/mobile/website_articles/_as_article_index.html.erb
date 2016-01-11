@@ -16,7 +16,7 @@
   <% @articles.each do |m| %>
     <%= link_to mobile_website_article_url(m, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], serach: params[:search]), class: 'list-box' do %>
       <div class="img">
-        <%= image_tag m.pic if m.pic? %>
+        <%= image_tag m.pic if m.pic_url %>
       </div>
       <div class="news-info">
         <h1><%= m.title %></h1>

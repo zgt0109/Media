@@ -22,7 +22,7 @@
   <ul class="poto-list poto-busniess">
     <% @photos.each do |photo| %>
     <li style="margin: 10px 21px; height: 180px;" id="album-photo-row-<%= photo.id %>">
-      <span class="list-img" style="height: 111px;"><%= image_tag(photo.pic.thumb, size: '200x111') if photo.pic? %></span>
+      <span class="list-img" style="height: 111px;"><%= image_tag(photo.pic_url, size: '200x111') if photo.pic_url %></span>
       <span class="list-txt">
         <i data-name="<%= photo.name %>"><%= photo.name %></i>
         <%= text_field_tag 'photo_name', photo.name, class: 'editable_photo_name', data: { id: photo.id, path: album_photo_path(@album, photo) } %>

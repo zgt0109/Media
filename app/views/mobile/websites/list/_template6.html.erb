@@ -2,9 +2,9 @@
   <div class="bd list-room">
     <% website_menu.sub_menus.each do |child| %>
       <a href="<%= menu_url child %>" class="table">
-        <% if child.pic? %>
+        <% if child.pic_url %>
           <b>
-            <img src="<%= child.is_a?(Assistant) ? child.pic.try(:thumb) : child.pic.try(:large) %>">
+            <img src="<%= child.is_a?(Assistant) ? child.pic_url : child.pic_url %>">
           </b>
         <% end %>
         <span><%= child.name %></span>

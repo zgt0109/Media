@@ -8,8 +8,8 @@ show_image ||= :yes
       <%if index % limit == 0%><li><%end%>
         <%= link_to menu_url(menu), class: 'box mod-index' do %>
             <% if show_image == :yes %>
-              <% if menu.pic? %>
-                <i><%= image_tag menu.pic.thumb %></i>
+              <% if menu.pic_url %>
+                <i><%= image_tag menu.pic_url %></i>
               <% else %>
                 <i class="fa <%= menu.font_icon %>"></i>
               <% end %>

@@ -18,7 +18,7 @@
         </div>
         <div class="bd">
           <div class="bd-detail detail-row">
-            <p><%= image_tag @article.pic.large %></p>
+            <p><%= image_tag @article.pic_url %></p>
             <div class="ckeditor_content"><%= @article.content.to_s.html_safe %></div>
           </div>
           <div class="bd-share detail-row">

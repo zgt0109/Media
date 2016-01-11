@@ -3,7 +3,7 @@
       <ul class='clearfix'>
         <% @website_pictures.each do |picture| %>
             <li>
-              <%= link_to picture.menu_type.present? ? menu_url(picture) : 'javascript:;' do %><%= image_tag picture.pic.large, class: 'img' if picture.pic? %><% end %>
+              <%= link_to picture.menu_type.present? ? menu_url(picture) : 'javascript:;' do %><%= image_tag picture.pic_url, class: 'img' if picture.pic_url %><% end %>
             </li>
         <% end %>
       </ul>

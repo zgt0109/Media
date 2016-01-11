@@ -9,14 +9,14 @@
               <% if main_material.children.count % 2 == 0 %>
                 <img src="/assets/mobile/vweisiteV01/42/img-null.png"/>
               <% else %>
-                  <%= image_tag main_material.pic.large if main_material.pic? %>
+                  <%= image_tag main_material.pic_url if main_material.pic_url %>
               <% end %>
           <% end %>
         </li>
         <% main_material.children.each do |child| %>
             <li>
               <%= link_to material_type_url(child, website_menu) do %>
-                  <%= image_tag child.pic.large %>
+                  <%= image_tag child.pic_url %>
               <% end %>
             </li>
         <% end %>
@@ -28,9 +28,9 @@
                   <% if count.odd? && index == 0 %>
                       <img src="/assets/mobile/vweisiteV01/42/img-null.png"/>
                   <% elsif child.is_a?(Assistant) %>
-                      <%= image_tag child.pic_url if child.pic? %>
-                  <% elsif child.pic? %>
-                      <%= image_tag child.pic.custom %>
+                      <%= image_tag child.pic_url if child.pic_url %>
+                  <% elsif child.pic_url %>
+                      <%= image_tag child.pic_url %>
                   <% else %>
                       <i class="<%= child.font_icon %>"></i>
                   <% end %>

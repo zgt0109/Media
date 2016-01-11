@@ -1,6 +1,6 @@
 <li class="inline-block" style="padding: 20px;">
   <%= link_to '删除', '#', data: { id: shop_image.id, url: shop_image_url(shop_image.id),  confirm: '确定要删除图文吗？' }, class: 'delete fr' %><br/>
-  <%= image_tag shop_image.pic.thumb %>
+  <%= image_tag shop_image.pic_url %>
   <br/>
   <%= shop_image.pic_name %>
 </li>

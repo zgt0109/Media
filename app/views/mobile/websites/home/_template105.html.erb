@@ -3,7 +3,7 @@
       <ul class="slider-list">
         <% website_menus.each_with_index do |menu, index| %>
             <li class="<%= 'play' if index == 0 %>" style="<%= 'z-index:9;' if index == 0%>">
-              <%= link_to menu_url(menu) do %><%= image_tag menu.pic.custom if menu.pic? %><% end %>
+              <%= link_to menu_url(menu) do %><%= image_tag menu.pic_url if menu.pic_url %><% end %>
             </li>
         <% end %>
         <div class="prev hide">

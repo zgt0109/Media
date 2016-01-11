@@ -14,8 +14,8 @@
             <a href="<%= mobile_booking_item_path(@booking_item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="li-fw">
               <li class="shopcar-info">
                 <% picture = @booking_item.booking_item_pictures.first %>
-                <span class="<%= picture.try(:pic?) ? "" : "img-null"%> info-fl">
-                <%=  picture.try(:pic?) ? (image_tag picture.pic.try(:thumb)) : "暂无<br/>图片".html_safe %>
+                <span class="<%= picture.pic_url ? "" : "img-null"%> info-fl">
+                <%=  picture.pic_url ? (image_tag picture.pic_url) : "暂无<br/>图片".html_safe %>
               </span>
                 <p>
                   <b><%= @booking_item.name %></b>

@@ -10,7 +10,7 @@
             </div>
             <a href="javascript:;" class="box mod-logo"><i><%= image_tag website.logo if website.logo? %></i></a>
           </div>
-          <%= image_tag @website_pictures[0].pic.large if @website_pictures[0].present? && @website_pictures[0].pic? %>
+          <%= image_tag @website_pictures[0].pic_url if @website_pictures[0].present? && @website_pictures[0].pic_url %>
         </li>
         <% if website_menus[10..13].present? %>
             <li>
@@ -37,12 +37,12 @@
                     <% end %>
                 <% end %>
               </div>
-              <%= image_tag @website_pictures[1].pic.large if @website_pictures[1].present? && @website_pictures[1].pic? %>
+              <%= image_tag @website_pictures[1].pic_url if @website_pictures[1].present? && @website_pictures[1].pic_url %>
             </li>
         <% end %>
         <% if website_menus[14].present? %>
             <li>
-              <%= link_to menu_url(website_menus[14]) do %><%= image_tag website_menus[14].pic.custom if website_menus[14].pic? %><% end %>
+              <%= link_to menu_url(website_menus[14]) do %><%= image_tag website_menus[14].pic_url if website_menus[14].pic_url %><% end %>
             </li>
         <% end %>
       </ul>

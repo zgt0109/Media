@@ -14,7 +14,7 @@
           <li class="<%= first_or_last i %>">
             <div class="pluin-hd">
               <span class="ico-<%= a.code %>">
-                <%= image_tag a.pic.try(:thumb) if a.pic.try(:thumb).present? %>
+                <%= image_tag a.pic_url if a.pic_url.present? %>
                 <i><%= a.name %></i>
               </span>
             </div>

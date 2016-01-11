@@ -30,7 +30,7 @@
 
     <div class="box-upload fl pic" rel="0">
       <div class="upload-img">
-        <span><%= image_tag(f.object.pic.presence || 'bg_fm.jpg', id: "business_item_pic", size: "160x90") %></span>
+        <span><%= image_tag(f.object.pic_url || 'bg_fm.jpg', id: "business_item_pic", size: "160x90") %></span>
       </div>
       <div class="upload-btn box-file">
         <%= f.file_field :pic, rel: "business_item_pic", class: "img_preview", validate: @business_item.pic_cache.blank?, data: { width: 720, height: 400 } %>

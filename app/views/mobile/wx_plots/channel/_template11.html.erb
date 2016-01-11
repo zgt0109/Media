@@ -9,7 +9,7 @@
           <%= link_to bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com') do %>
               <% if count % 2 == 1 && index == 0 %>
                   <img src="/assets/mobile/vweisiteV01/42/img-null.png"/>
-              <% elsif child.pic.present? %>
+              <% elsif child.pic_url.present? %>
                   <%= image_tag child.pic %>
               <% else %>
                   <i class="<%= child.font_icon %>"></i>

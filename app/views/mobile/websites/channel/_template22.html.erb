@@ -3,7 +3,7 @@
       <ul class="slider-list">
         <% child_material.each_with_index do |child, index| %>
             <li class="<%= 'play' if index == 0 %>">
-              <%= link_to material_type_url(child, website_menu) do %><%= image_tag child.pic.large if child.pic? %><% end %>
+              <%= link_to material_type_url(child, website_menu) do %><%= image_tag child.pic_url if child.pic_url %><% end %>
             </li>
         <% end %>
         <div class="prev hide">
@@ -19,7 +19,7 @@
       <ul class="slider-list">
         <% website_menu.sub_menus.each_with_index do |child, index| %>
             <li class="<%= 'play' if index == 0 %>">
-              <%= link_to menu_url(child) do %><%= image_tag child.pic.large if child.pic? %><% end %>
+              <%= link_to menu_url(child) do %><%= image_tag child.pic_url if child.pic_url %><% end %>
             </li>
         <% end %>
         <div class="prev hide">

@@ -27,7 +27,7 @@
             <img id="preview_business_shop_logo">
           <%- end %>
         </div>
-        <%= image_tag (@vip_card_branch.pic.presence || @vip_card_branch.vip_card.cover_pic), id: 'preview_pic' %>
+        <%= image_tag (@vip_card_branch.pic_url || @vip_card_branch.vip_card.cover_pic), id: 'preview_pic' %>
         <div class="vip_card_number" style="position:absolute;bottom:5px;right:5px;"><!--b class="preview_vip_card_number">会员卡等级名称</b><br/--><b class="preview_vip_card_number">88888888</b></div>
       </div>
     </div>

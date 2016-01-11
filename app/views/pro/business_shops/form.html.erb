@@ -67,7 +67,7 @@
       <b class="title preview_activity_title"><%= @business_shop.activity.try(:name) || '标题' %></b>
       <span><%= Date.today %></span>
       <div cover="cover box-img" class="img">
-        <%= image_tag(( @business_shop.activity.try(:pic?) ? @business_shop.activity.pic.large.presence : Activity.new(activity_type_id: 39).default_pic_url) , id: 'preview_shop_notice_pic', class: 'view', width: 258) %>
+        <%= image_tag(( @business_shop.activity.pic_url ? @business_shop.activity.pic_url.presence : Activity.new(activity_type_id: 39).default_pic_url) , id: 'preview_shop_notice_pic', class: 'view', width: 258) %>
       </div>
       <p class="preview_activity_summary"><%= @business_shop.activity.try(:summary) %></p>
     </div>

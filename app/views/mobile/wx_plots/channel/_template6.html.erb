@@ -3,7 +3,7 @@
   <div class="bd">
     <% @bulletins.each do |child| %>
         <a href="<%= bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com') %>">
-          <% if child.pic.present? %>
+          <% if child.pic_url.present? %>
               <%= image_tag child.pic %>
           <% else %>
               <i class="<%= child.font_icon %>"></i>

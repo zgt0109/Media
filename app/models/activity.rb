@@ -694,7 +694,7 @@ class Activity < ActiveRecord::Base
   end
 
   def pic_display_url
-    pic.try(:large).to_s.presence || default_pic_url
+    default_pic_url
   end
 
   def show_title_for_share_photo_setting

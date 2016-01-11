@@ -4,7 +4,7 @@
         <ul class="box-img-list">
           <% @website_pictures.each do |w| %>
             <li>
-              <%= "<a href='#{website_activity_link(w)}'>#{ image_tag w.pic.try(:large) }</a>".html_safe %>
+              <%= "<a href='#{website_activity_link(w)}'>#{ image_tag w.pic_url }</a>".html_safe %>
             </li>
           <% end %>
         </ul>

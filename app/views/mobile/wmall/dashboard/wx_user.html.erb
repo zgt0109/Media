@@ -48,7 +48,7 @@
         <li>
            <%= link_to assistant.url do %>
              <i class="u-icon u-icon-<%= assistant.font_icon%>"></i><%= "#{assistant.name}"%>
-             <%# image_tag assistant.is_a?(Assistant) ? assistant.pic.try(:thumb) : assistant.pic.try(:large)%>
+             <%# image_tag assistant.is_a?(Assistant) ? assistant.pic_url : assistant.pic_url%>
            <% end %>
         </li>
       <% end %>

@@ -11,7 +11,7 @@
 <div class="box-img" id="slider">
   <ul class="box-img-list">
     <% @booking_ads.each do |booking_ad|%>
-        <li><%= image_tag booking_ad.pic.try(:large) if booking_ad.pic? %></li>
+        <li><%= image_tag booking_ad.pic_url if booking_ad.pic_url %></li>
     <% end %>
   </ul>
   <div class="box-text">
@@ -39,7 +39,7 @@
                     <a class="box-block" onclick="javascript:location.href='<%= mobile_booking_item_url(item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>'"></a>
                     <div class="hd">
                           <span>
-                            <%= picture.try(:pic?) ? (image_tag picture.pic.try(:large)) : "暂无图片" %>
+                            <%= picture.pic_url ? (image_tag picture.pic_url) : "暂无图片" %>
                           </span>
                     </div>
                     <div class="bd">

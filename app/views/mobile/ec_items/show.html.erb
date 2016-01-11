@@ -12,7 +12,7 @@
         <% unless judge_andriod_version %>
         <div class="detail-wrap">
           <% @item_pictures.each do |pic| %>
-          <a><%= image_tag pic.pic.large if pic.pic? %></a>
+          <a><%= image_tag pic.pic_url if pic.pic_url %></a>
           <% end %>
         </div>
         <% else %>
@@ -20,7 +20,7 @@
         <div class="box-img" id="slider">
           <ul class="box-img-list">
             <% @item_pictures.each do |pic| %>
-                <li><a><%= image_tag pic.pic.large %></a></li>
+                <li><a><%= image_tag pic.pic_url %></a></li>
             <% end %>
           </ul>
           <div class="box-text">

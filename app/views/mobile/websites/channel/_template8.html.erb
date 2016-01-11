@@ -7,9 +7,9 @@
             <b><%= main_material.title %></b>
             <span> <%= main_material.summary.present? ? main_material.summary : main_material.created_at %></span>
           </div>
-          <% if main_material.pic? %>
+          <% if main_material.pic_url %>
           <div class="bd">
-            <%= image_tag main_material.pic.large %>
+            <%= image_tag main_material.pic_url %>
           </div>
           <% end %>
           <div class="ft">
@@ -25,9 +25,9 @@
               <b><%= child.title %></b>
               <span><%= child.summary.present? ? child.summary : child.created_at %></span>
             </div>
-            <% if child.pic? %>
+            <% if child.pic_url %>
             <div class="bd">
-              <%= image_tag child.pic.large %>
+              <%= image_tag child.pic_url %>
             </div>
             <% end %>
             <div class="ft">
@@ -49,12 +49,12 @@
             <%= "<span>#{child.summary}</span>".html_safe if child.summary %>
           </div>
 
-          <% if child.pic? || child.font_icon.present? %>
+          <% if child.pic_url || child.font_icon.present? %>
           <div class="bd">
             <% if child.is_a?(Assistant) %>
-              <%= image_tag child.pic.thumb if child.pic? %>
-            <% elsif child.pic? %>
-              <%= image_tag child.pic.custom %>
+              <%= image_tag child.pic_url if child.pic_url %>
+            <% elsif child.pic_url %>
+              <%= image_tag child.pic_url %>
             <% else %>
               <i class="<%= child.font_icon %>"></i>
             <% end %>

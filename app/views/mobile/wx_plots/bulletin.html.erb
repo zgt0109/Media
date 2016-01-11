@@ -16,7 +16,7 @@
       </div>
 
       <div class="bd">
-        <%#= image_tag @website_menu.pic.try(:large) if @website_menu.pic? %>
+        <%#= image_tag @website_menu.pic_url if @website_menu.pic_url %>
         <%= raw @bulletin.content %>
       </div>
   <% if @detail_template_id == 7 %></div><% end %>

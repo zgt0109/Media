@@ -34,7 +34,7 @@
   <% @pictures.each do |picture| %>
   <div class="photo-li" id="photo_<%= picture.id %>" style="width: 235px; height: 133.33333333333334px;">
       <div class="li-img">
-        <%= image_tag(picture.pic.thumb) if picture.pic? %>
+        <%= image_tag(picture.pic_url) if picture.pic_url %>
       </div>
       <div class="li-btn">
         <div class="li-p" data-id="21" data-title="">

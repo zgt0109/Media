@@ -15,8 +15,8 @@
         <% childs.each_with_index do |child, index| %>
             <% if index != 4 %><li><% end %>
             <%= link_to bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com'), class: 'box mod-index'  do %>
-                <% if child.pic.present? or child.font_icon.present? %>
-                    <% if child.pic.present? %>
+                <% if child.pic_url.present? or child.font_icon.present? %>
+                    <% if child.pic_url.present? %>
                         <i><%= image_tag child.pic %></i>
                     <% elsif child.font_icon.present? %>
                         <i class="<%= child.font_icon %>"></i>

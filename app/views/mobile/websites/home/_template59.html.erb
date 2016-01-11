@@ -14,7 +14,7 @@
   <% website_menus.each do |menu| %>
       <% next unless menu.multiple_graphic? || menu.has_sub_menus? %>
       <p class="index-title">
-        <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" if menu.pic? || menu.font_icon.present? %>
+        <%= menu.pic_or_icon :has_title => false, :pic_type => "thumb" if menu.pic_url || menu.font_icon.present? %>
         <b><%= menu.title %></b>
       </p>
 

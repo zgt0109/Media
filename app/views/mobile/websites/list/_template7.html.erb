@@ -1,12 +1,12 @@
 <div class="box box-list">
   <% website_menu.sub_menus.each do |child| %>
     <a href="<%= menu_url child %>" class="table">
-      <% if child.pic? %>
+      <% if child.pic_url %>
           <span class="fl box-circle td">
-            <b style="background-image:url(<%= child.pic.try(:thumb) %>)"></b>
+            <b style="background-image:url(<%= child.pic_url %>)"></b>
           </span>
       <% end %>
-      <span class="<%= child.pic? ? "fr td" : "fw td" %>">
+      <span class="<%= child.pic_url ? "fr td" : "fw td" %>">
         <b><%= child.name %></b>
         <!--<i><%#= date_format_full_l(child.created_at)  %></i>-->
         <em class="arrow"></em>

@@ -12,7 +12,7 @@
         <b id="preview_title"><%= @activity.new_record? ? "微信消息标题" : @activity.name %></b>
         <span><%= Time.now.strftime("%Y-%m-%d") %></span>
         <p class="img upload-preview-img-218-100">
-          <%= image_tag((@activity.pic.presence || @activity.default_pic_url), width: '218', id: 'preview_pic') %>
+          <%= image_tag((@activity.pic_url || @activity.default_pic_url), width: '218', id: 'preview_pic') %>
         </p>
         <p class="intro" id="preview_summary" style="margin-top: 30px;">
           <%= @activity.new_record? ? "微信消息摘要" : @activity.summary %>

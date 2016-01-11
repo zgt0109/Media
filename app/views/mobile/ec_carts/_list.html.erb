@@ -17,8 +17,8 @@
                       </div>
 
                       <div class="shopcar-info td">
-                        <% if item.main_picture.try(:pic?) %>
-                            <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="info-fl"><%= image_tag item.main_picture.pic.thumb  %></a>
+                        <% if item.main_picture.pic_url %>
+                            <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="info-fl"><%= image_tag item.main_picture.pic_url  %></a>
                         <% else %>
                             <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="img-null info-fl">暂无<br/>图片</a>
                         <% end %>

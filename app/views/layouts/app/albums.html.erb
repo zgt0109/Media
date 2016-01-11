@@ -39,7 +39,7 @@
         <% string = '' %>
         <% if !!@album %>
           <% @album.photos.each do |photo| %>
-          <% string += photo.pic.try(:to_s) %> 
+          <% string += photo.pic_url.try(:to_s) %> 
           <% string += ',' %>
           <% end %>
         <% end %>

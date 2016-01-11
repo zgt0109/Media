@@ -22,7 +22,7 @@
               <% @pictures.each do |picture| %>
                   <li>
                     <a href="javascript:;" title="<%= picture.title %>" data-rel="colorbox">
-                      <%= image_tag picture.pic.large %>
+                      <%= image_tag picture.pic_url %>
                       <div class="text">
                         <div class="inner"><%= picture.title %></div>
                       </div>

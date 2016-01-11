@@ -3,7 +3,7 @@
   <ul class="index-wrap">
     <% website_menus.each do |menu| %>
         <li>
-          <%= link_to menu_url(menu), class: 'box mod-index', style: "background-image:url(#{menu.pic.try(:custom)});" do %>
+          <%= link_to menu_url(menu), class: 'box mod-index', style: "background-image:url(#{menu.pic_url});" do %>
               <div class="index-name"><%= menu.title %></div>
               <div class="index-line"></div>
               <div class="index-icon"><i class="<%= menu.font_icon %>"></i></div>

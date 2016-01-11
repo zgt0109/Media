@@ -22,7 +22,7 @@
               <% childs.each do |child| %>
                   <%= link_to material_type_url(child, website_menu), class: 'box mod-index' do %>
                     <div class="p">
-                      <i><%= image_tag child.pic.large if child.pic? %></i>
+                      <i><%= image_tag child.pic_url if child.pic_url %></i>
                       <b><%= child.title.to_s[0..4] %></b>
                     </div>
                   <% end %>
@@ -35,9 +35,9 @@
               <% childs.each do |child| %>
                   <%= link_to menu_url(child), class: 'box mod-index' do %>
                       <div class="p">
-                        <% if child.pic? or child.font_icon.present? %>
-                            <% if child.pic? %>
-                                <i><%= image_tag child.pic.large %></i>
+                        <% if child.pic_url or child.font_icon.present? %>
+                            <% if child.pic_url %>
+                                <i><%= image_tag child.pic_url %></i>
                             <% elsif child.font_icon.present? %>
                                 <i class="<%= child.font_icon %>"></i>
                             <% else %>

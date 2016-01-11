@@ -27,7 +27,7 @@
           <% @order.order_items.each do |order_item| %>
             <li class="shopcar-info">
               <% if order_item.ec_item.present? && order_item.ec_item.main_picture.present? %>
-                <span class="info-fl"> <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id, id: order_item.ec_item ) %>"><%= image_tag order_item.ec_item.main_picture.pic.thumb %></a></span>
+                <span class="info-fl"> <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id, id: order_item.ec_item ) %>"><%= image_tag order_item.ec_item.main_picture.pic_url %></a></span>
               <% else %>
                 <span class="img-null info-fl">暂无<br/>图片</span>
               <% end %>

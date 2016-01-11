@@ -12,12 +12,12 @@
   </div>
 
   <% website_menus[3..-1].to_a.each do |menu| %>
-    <p class="index-title <%= menu.pic? || menu.font_icon.present? ? '': 'no-icon'%>">
+    <p class="index-title <%= menu.pic_url || menu.font_icon.present? ? '': 'no-icon'%>">
       <%= link_to menu_url(menu), class: 'box' do %>
           <%= menu.title %>
       <% end %>
     </p>
-    <% if menu.pic? || menu.font_icon.present? %>
+    <% if menu.pic_url || menu.font_icon.present? %>
           <div class="ul-text">
             <%= link_to menu_url(menu), class: 'box mod-index' do %>
                 <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>

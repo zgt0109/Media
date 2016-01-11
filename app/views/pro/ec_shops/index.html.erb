@@ -60,7 +60,7 @@
           <div class="box-upload fl">
             <span>微信消息图片<em>*</em><span class="fgray"> （发送关键词后返回的微信消息图片）</span></span>
             <div class="upload-img upload-preview-img">
-              <span><%= activity.object.pic? ? image_tag(activity.object.pic.large, id: 'preview_ec_shop_notice_pic', class: 'view') : "<img src='/assets/activity_pics/22.jpg' alt='微信消息图片' id='preview_ec_shop_notice_pic' class='view'/>".html_safe %></span>
+              <span><%= activity.object.pic_url ? image_tag(activity.object.pic_url, id: 'preview_ec_shop_notice_pic', class: 'view') : "<img src='/assets/activity_pics/22.jpg' alt='微信消息图片' id='preview_ec_shop_notice_pic' class='view'/>".html_safe %></span>
               <!-- <i>点击查看示意图</i> -->
             </div>
             <div class="upload-btn">

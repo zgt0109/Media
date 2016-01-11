@@ -5,8 +5,8 @@
         <% website_menus.each_with_index do |menu, index| %>
           <%if index % 4 == 0%><li><%end%>
             <%= link_to menu_url(menu) do %>
-              <% if menu.pic? %>
-                <i><%= image_tag menu.pic.thumb %></i>
+              <% if menu.pic_url %>
+                <i><%= image_tag menu.pic_url %></i>
               <% else %>
                 <i class="fa <%= menu.font_icon %>"></i>
               <% end %>

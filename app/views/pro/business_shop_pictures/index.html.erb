@@ -25,7 +25,7 @@
       <p>已上传的图片 </p>
       <ul class="poto-list poto-busniess" id="pics-ul">
         <% @business_shop_pictures.each do |picture| %>
-          <% if picture.pic? %>
+          <% if picture.pic_url %>
             <li id="picture-<%= picture.id %>">
               <span class="list-img"><%= image_tag(picture.pic) %></span>
                 <%= link_to '删除', business_shop_business_shop_picture_path(id: picture.id), method: :delete, data:{confirm: '确定删除？'}, remote: true %>

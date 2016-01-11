@@ -3,7 +3,7 @@
       <div class="box-img" id="slider">
         <ul class="box-img-list">
           <% @website_pictures.each do |w| %>
-              <li><%=  w.url? ? "<a href='#{ w.url}'>#{ image_tag w.pic.try(:large) }</a>".html_safe : image_tag(w.pic.try(:large)) %></li>
+              <li><%=  w.url? ? "<a href='#{ w.url}'>#{ image_tag w.pic_url }</a>".html_safe : image_tag(w.pic_url) %></li>
           <% end %>
         </ul>
         <div class="box-text">

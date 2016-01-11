@@ -8,9 +8,9 @@
               <span> <%= child.summary.present? ? child.summary : child.done_date_at %></span>
             </div>
 
-            <% if child.pic? || child.font_icon.present? %>
+            <% if child.pic_url || child.font_icon.present? %>
                 <div class="bd">
-                  <% if child.pic.present? %>
+                  <% if child.pic_url.present? %>
                       <%= image_tag child.pic %>
                   <% else %>
                       <i class="<%= child.font_icon %>"></i>

@@ -21,9 +21,9 @@
       <b><%= main_material.title %></b>
       <span><%= date_format_full_l(main_material.created_at)  %></span>
     </div>
-    <% if main_material.pic? %>
+    <% if main_material.pic_url %>
         <div class="bd">
-          <%= image_tag main_material.pic.try(:large)%>
+          <%= image_tag main_material.pic_url%>
         </div>
     <% end %>
     <div class="ft">
@@ -37,9 +37,9 @@
           <b><%= child.title %></b>
           <span><%= date_format_full_l(child.created_at)  %></span>
         </div>
-        <% if child.pic? %>
+        <% if child.pic_url %>
         <div class="bd">
-          <%= image_tag child.pic.try(:large)%>
+          <%= image_tag child.pic_url%>
         </div>
         <% end %>
         <div class="ft">

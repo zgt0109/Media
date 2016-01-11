@@ -7,7 +7,7 @@
       <% @album.photos.each do |photo| %> 
         <div class="grid">
             <a href="<%= mobile_album_url(:supplier_id => photo.album.supplier_id, :id => photo.id) %>">
-                <%= image_tag photo.pic.try(:thumb) %>
+                <%= image_tag photo.pic_url %>
                 <p>
                     <span><%= photo.name %></span>
                     <i class="box-bg"></i>

@@ -27,7 +27,7 @@
         <li>
             <% left_arr.each do |child| %>
               <%= link_to material_type_url(child, website_menu), class: 'box mod-index' do %>
-                  <i><%= image_tag main_material.pic.large if child.pic? %></i>
+                  <i><%= image_tag main_material.pic_url if child.pic_url %></i>
                   <small><%= child.title %></small>
               <% end %>
             <% end %>
@@ -36,7 +36,7 @@
         <li>
           <% right_arr.each do |child| %>
               <%= link_to material_type_url(child, website_menu), class: 'box mod-index' do %>
-                  <i><%= image_tag main_material.pic.large if child.pic? %></i>
+                  <i><%= image_tag main_material.pic_url if child.pic_url %></i>
                   <small><%= child.title %></small>
               <% end %>
           <% end %>
@@ -54,9 +54,9 @@
         <li>
           <% left_arr.each do |child| %>
               <%= link_to menu_url(child), class: 'box mod-index' do %>
-                  <% if child.pic? or child.font_icon.present? %>
-                      <% if child.pic? %>
-                          <i><%= image_tag child.pic.large %></i>
+                  <% if child.pic_url or child.font_icon.present? %>
+                      <% if child.pic_url %>
+                          <i><%= image_tag child.pic_url %></i>
                       <% elsif child.font_icon.present? %>
                           <i class="<%= child.font_icon %>"></i>
                       <% else %>
@@ -73,9 +73,9 @@
         <li>
           <% right_arr.each do |child| %>
               <%= link_to menu_url(child), class: 'box mod-index' do %>
-                  <% if child.pic? or child.font_icon.present? %>
-                      <% if child.pic? %>
-                          <i><%= image_tag child.pic.large %></i>
+                  <% if child.pic_url or child.font_icon.present? %>
+                      <% if child.pic_url %>
+                          <i><%= image_tag child.pic_url %></i>
                       <% elsif child.font_icon.present? %>
                           <i class="<%= child.font_icon %>"></i>
                       <% else %>

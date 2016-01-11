@@ -17,7 +17,7 @@
       <b class="title preview_activity_title"><%= @website.life_activity.try(:name) || '标题' %></b>
       <span><%= Date.today %></span>
       <div cover="cover box-img" class="img">
-        <%= image_tag((@website.life_activity.pic.presence || '/assets/bg_fm.jpg'), id: 'preview_shop_notice_pic', class: 'view', width: 258) %>
+        <%= image_tag((@website.life_activity.pic_url || '/assets/bg_fm.jpg'), id: 'preview_shop_notice_pic', class: 'view', width: 258) %>
       </div>
       <p class="preview_activity_summary"><%= @website.life_activity.try(:summary) %></p>
     </div>

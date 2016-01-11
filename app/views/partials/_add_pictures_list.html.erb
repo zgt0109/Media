@@ -9,7 +9,7 @@
   <% @pictures.each do |picture| %>
     <li id="photo_<%= picture.id %>">
       <a href="javascript:;" title="<%= picture.title %>" data-rel="colorbox" data-id="<%= picture.id %>" data-title="<%= picture.title %>">
-        <img alt="150x150" src="<%= picture.pic.large %>" />
+        <img alt="150x150" src="<%= picture.pic_url %>" />
         <div class="text">
           <div class="inner"><%= picture.title %></div>
         </div>

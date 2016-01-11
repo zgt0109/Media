@@ -43,8 +43,8 @@
                     <div class="list-li">
                       <a class="box-block" href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>"></a>
                       <div class="hd"><span>
-                        <% if item.main_picture.try(:pic?) %>
-                            <%= image_tag "#{item.main_picture.pic.large}" %>
+                        <% if item.main_picture.pic_url %>
+                            <%= image_tag "#{item.main_picture.pic_url}" %>
                         <% else %>
                             暂无图片
                         <% end %>

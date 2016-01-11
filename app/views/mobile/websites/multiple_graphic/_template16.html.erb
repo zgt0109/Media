@@ -1,14 +1,14 @@
 <a class="box-list box" href="<%= material_type_url main_material, website_menu %>">
   <b><%= main_material.title %></b>
   <span><%= date_format_full_l(main_material.created_at)  %></span>
-  <%= image_tag main_material.pic.try(:large) if main_material.pic? %>
+  <%= image_tag main_material.pic_url if main_material.pic_url %>
   <b class="ft">查看全文<i class="arrow"></i></b>
 </a>
 <% child_material.each do |child| %>
     <a class="box-list box" href="<%= material_type_url child, website_menu %>">
       <b><%= child.title %></b>
       <span><%= date_format_full_l(child.created_at)  %></span>
-      <%= image_tag child.pic.try(:large) if child.pic? %>
+      <%= image_tag child.pic_url if child.pic_url %>
       <b class="ft">查看全文<i class="arrow"></i></b>
     </a>
 <% end %>

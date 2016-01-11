@@ -1,6 +1,6 @@
 <% activity_vote_items.each_with_index do |item, index| %>
   <li rel="<%= item.id %>">
-    <div class="img J-img"><%= image_tag "#{item.pic.large}?imageView/2/w/110/h/70", data: {src: item.pic.large.to_s} if item.pic? %></div>
+    <div class="img J-img"><%= image_tag "#{item.pic_url}?imageView/2/w/110/h/70", data: {src: item.pic_url.to_s} if item.pic_url %></div>
     <div class="check-box"><%#= (activity_vote_items.current_page - 1) * activity_vote_items.limit_value + index + 1 %><%= item.item_no %>号<i class="<%= 'ra' unless select_count > 1 %>"></i></div>
   </li>
 <% end %>

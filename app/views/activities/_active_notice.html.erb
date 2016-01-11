@@ -6,7 +6,7 @@
         <b class="preview_active_notice_title"><%=  @activity.active_activity_notice.title %></b>
         <span><%= Date.today %></span>
         <span class="img upload-preview-img-218-100">
-          <img src="<%= @activity.active_activity_notice.pic %>" class="active_notice_pic">
+          <img src="<%= @activity.active_activity_notice.pic_url %>" class="active_notice_pic">
         </span>
         <span class="intro preview_active_notice_summary">
           <%= @activity.active_activity_notice.summary || @activity.active_activity_notice.description %>

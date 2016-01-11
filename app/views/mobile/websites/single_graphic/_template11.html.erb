@@ -27,9 +27,9 @@
   </div>
   <div class="box bd">
     <% if website_menu.text? %>
-        <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? %>
+        <%= image_tag website_menu.menuable.pic_url if website_menu.menuable && website_menu.menuable.pic_url %>
     <% else %>
-        <%= image_tag website_menu.menuable.pic.try(:large) if website_menu.menuable && website_menu.menuable.pic? && website_menu.menuable.is_show_pic %>
+        <%= image_tag website_menu.menuable.pic_url if website_menu.menuable && website_menu.menuable.pic_url && website_menu.menuable.is_show_pic %>
     <% end %>
     <p><%= raw website_menu.menuable.try(:content) %></p>
   </div>

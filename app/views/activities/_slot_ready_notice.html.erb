@@ -9,7 +9,7 @@
       <b class="activity_notice_title_preview"><%=  @activity.ready_activity_notice.title %></b>
       <span><%= Date.today %></span>
       <p class="img upload-preview-img-218-100">
-        <%= image_tag @activity.ready_activity_notice.pic, class: 'ready_pic' %>
+        <%= image_tag @activity.ready_activity_notice.pic_url, class: 'ready_pic' %>
       </p>
       <p class="intro activity_notice_summary_preview">
         <%= @activity.ready_activity_notice.summary || @activity.ready_activity_notice.description %>

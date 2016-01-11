@@ -18,7 +18,7 @@
       <label class="control-label">图片<span class="required-star">*</span></label>
       <div class="clearfix">
         <div id="logo" class="pull-left margin-right-10"></div>
-        <div class="cieldon-file width-100px" data-type="0" data-div="#logo" data-height="90" data-width="160" data-img="<%= f.object.pic.large %>" data-name="booking_ad[pic_key]" data-key="<%= f.object.pic_key %>"></div>
+        <div class="cieldon-file width-100px" data-type="0" data-div="#logo" data-height="90" data-width="160" data-img="<%= f.object.pic_url %>" data-name="booking_ad[pic_key]" data-key="<%= f.object.pic_key %>"></div>
       </div>
     </div>
 
@@ -34,7 +34,7 @@
       $(function(){
           $('input[type=submit]').click(function(){
               if($('#booking_ad_title').val()){
-                  if("<%= @picture.pic? %>" == 'false' && !$('input[name="booking_ad[pic_key]"]').val()){
+                  if("<%= @picture.pic_url %>" == 'false' && !$('input[name="booking_ad[pic_key]"]').val()){
                       showTip('warning', '请上传图片');
                       return false;
                   }

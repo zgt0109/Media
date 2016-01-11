@@ -34,7 +34,7 @@
         <span>图片<em>*</em></span>
         <div class="upload-img upload-preview-img">
           <span>
-            <%=image_tag f.object.pic? ?  f.object.pic.large : '/assets/bg_fm.jpg', id: 'preview_shop_logo', alt: '轮播图片'  %>
+            <%=image_tag f.object.pic_url ?  f.object.pic_url : '/assets/bg_fm.jpg', id: 'preview_shop_logo', alt: '轮播图片'  %>
           </span>
           <!-- <i>点击查看示意图</i> -->
         </div>

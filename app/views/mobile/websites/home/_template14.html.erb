@@ -13,8 +13,8 @@
               <% class_names = ["box", "mod-index", "index-#{menus.count}"] %>
               <% menus.each do |menu| %>
                 <%= link_to menu_url(menu), class: class_names.join(" ") do %>
-                    <% if menu.pic? %>
-                      <i><%= image_tag menu.pic.thumb %></i>
+                    <% if menu.pic_url %>
+                      <i><%= image_tag menu.pic_url %></i>
                     <% else %>
                       <i class="fa <%= menu.try(:font_icon) %>"></i>
                     <% end %>

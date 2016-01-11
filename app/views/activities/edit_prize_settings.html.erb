@@ -78,7 +78,7 @@
                 <% ids = activity_prize.object.activity_element_ids.to_s.split(',') %>
                 <% ids.each_with_index do |id, index| %>
                   <%- element = ActivityPrizeElement.find(ids[index].to_i) %>
-                  <%= image_tag element.pic.thumb, size: '35x35' %>
+                  <%= image_tag element.pic_url, size: '35x35' %>
                 <%- end %>
               <%- else %>
                 <div class="textbox"  style="font-size: 22px;">奖品设置</div>

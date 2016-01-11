@@ -23,7 +23,7 @@
           <!--<span><%#= date_format_full_l(child.created_at)  %></span>-->
         </div>
         <div class="bd">
-          <%= image_tag child.is_a?(Assistant) ? child.pic.try(:thumb) : child.pic.try(:large) if child.pic? %>
+          <%= image_tag child.is_a?(Assistant) ? child.pic_url : child.pic_url if child.pic_url %>
         </div>
         <div class="ft">
           查看全文 >

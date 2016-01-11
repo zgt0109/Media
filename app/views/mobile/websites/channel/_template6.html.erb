@@ -3,13 +3,13 @@
       <!--<div class="hd"><a class="ico-location fr"></a></div>-->
       <div class="bd">
         <a href="<%= material_type_url(main_material, website_menu) %>">
-          <% if main_material.pic? %><p><%= image_tag main_material.pic.large %></p><% end %>
+          <% if main_material.pic_url %><p><%= image_tag main_material.pic_url %></p><% end %>
           <h1><%= main_material.title %></h1>
         </a>
 
         <% main_material.children.each do |child| %>
           <a href="<%= material_type_url(child, website_menu) %>">
-            <% if child.pic? %><p><%= image_tag child.pic.large %></p><% end %>
+            <% if child.pic_url %><p><%= image_tag child.pic_url %></p><% end %>
             <h1><%= child.title %></h1>
           </a>
         <% end %>
@@ -22,9 +22,9 @@
         <% website_menu.sub_menus.each do |child| %>
           <a href="<%= menu_url child %>">
             <% if child.is_a?(Assistant) %>
-              <%= image_tag child.pic.thumb if child.pic? %>
-            <% elsif child.pic? %>
-              <%= image_tag child.pic.custom %>
+              <%= image_tag child.pic_url if child.pic_url %>
+            <% elsif child.pic_url %>
+              <%= image_tag child.pic_url %>
             <% else %>
               <i class="<%= child.font_icon %>"></i>
             <% end %>

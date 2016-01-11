@@ -5,7 +5,7 @@
       <div class="wrap-view">
         <b class="preview_ready_activity_title"><%=  @activity.ready_activity_notice.title %></b>
         <span><%= Date.today %></span>
-        <span class="img upload-preview-img-218-100"><%= image_tag @activity.ready_activity_notice.pic, class: 'ready_pic' %></span>
+        <span class="img upload-preview-img-218-100"><%= image_tag @activity.ready_activity_notice.pic_url, class: 'ready_pic' %></span>
         <span class="intro preview_ready_activity_notice_summary">
           <%= @activity.ready_activity_notice.summary || @activity.ready_activity_notice.description %>
         </span>

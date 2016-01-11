@@ -37,14 +37,14 @@
               <% main_material = menu.menuable %>
               <%= link_to material_type_url(main_material, menu), class: 'box mod-index' do %>
                 <div class="p">
-                  <i><%= image_tag main_material.pic.large %></i>
+                  <i><%= image_tag main_material.pic_url %></i>
                   <b><%= main_material.title %></b>
                 </div>
               <% end %>
               <% main_material.children.each do |child| %>
                   <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
                       <div class="p">
-                        <i><%= image_tag child.pic.large %></i>
+                        <i><%= image_tag child.pic_url %></i>
                         <b><%= child.title %></b>
                       </div>
                   <% end %>
@@ -53,8 +53,8 @@
               <% menu.sub_menus.each do |child| %>
                   <%= link_to menu_url(child), class: 'box mod-index' do %>
                       <div class="p">
-                        <% if child.pic? %>
-                            <i><%= image_tag child.pic.thumb %></i>
+                        <% if child.pic_url %>
+                            <i><%= image_tag child.pic_url %></i>
                         <% else %>
                             <i class="<%= child.try(:font_icon) %>"></i>
                         <% end %>

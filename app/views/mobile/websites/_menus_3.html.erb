@@ -3,8 +3,8 @@
   <%if index % limit == 0%>
     <a href="<%= menu_url(menu)%>" class="box mod-index index-1" style="background: <%= @bg_colors[@menu_index % 10]%>">
       <p>
-        <% if menu.pic? %>
-          <i><%= image_tag menu.pic.thumb %></i>
+        <% if menu.pic_url %>
+          <i><%= image_tag menu.pic_url %></i>
         <% else %>
           <i class="fa <%= menu.font_icon %>"></i>
         <% end %>
@@ -17,8 +17,8 @@
     <%class_names = ["box", "mod-index"]%>
     <%if index % limit == 1%><div class="index-row"><%end%>
     <%= link_to menu_url(menu), class: class_names.join(" "), style: "background: #{@bg_colors[@menu_index % 10]}" do %>
-        <% if menu.pic? %>
-            <i><%= image_tag menu.pic.thumb %></i>
+        <% if menu.pic_url %>
+            <i><%= image_tag menu.pic_url %></i>
           <% else %>
             <i class="fa <%= menu.font_icon %>"></i>
           <% end %>

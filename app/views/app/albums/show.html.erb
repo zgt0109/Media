@@ -41,7 +41,7 @@
         instance1 = PhotoSwipe.attach(
           [
             <% @photos.each do |p| %>
-            { url: '<%= p.pic.large %>', caption: '<%= p.name %>'},
+            { url: '<%= p.pic_url %>', caption: '<%= p.name %>'},
             <% end %>
           ],
           {

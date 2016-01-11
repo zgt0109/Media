@@ -5,7 +5,7 @@
       <% if menu.multiple_graphic? || menu.has_sub_menus? %>
 
           <p class="index-title">
-            <% if menu.pic? || menu.font_icon.present? %>
+            <% if menu.pic_url || menu.font_icon.present? %>
                 <%= menu.pic_or_icon :has_title => false, :pic_type => "custom" %>
             <% end %>
             <b><%= menu.title %></b>
@@ -21,10 +21,10 @@
                             <%= link_to menu_url(child), class: 'box mod-index' do %>
                                 <% if flag %>
                                     <% if child.is_a?(Assistant) %>
-                                        <i class="index-img"><%= image_tag child.pic.thumb %></i>
+                                        <i class="index-img"><%= image_tag child.pic_url %></i>
                                         <small><%= child.name %></small>
-                                    <% elsif child.pic? %>
-                                        <i class="index-img"><%= image_tag child.pic.thumb %></i>
+                                    <% elsif child.pic_url %>
+                                        <i class="index-img"><%= image_tag child.pic_url %></i>
                                         <small><%= child.name %></small>
                                     <% elsif child.font_icon.present? %>
                                         <i class="<%= child.font_icon %>"></i>
@@ -45,7 +45,7 @@
                     <li>
                       <%= link_to material_type_url(main_material, menu), class: 'box mod-index' do %>
                           <% if flag %>
-                              <i class="index-img"><%= image_tag main_material.pic.large %></i>
+                              <i class="index-img"><%= image_tag main_material.pic_url %></i>
                               <small><%= main_material.title %></small>
                           <% else %>
                               <i><%= main_material.title %></i>
@@ -55,7 +55,7 @@
                           <li>
                             <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
                                 <% if flag %>
-                                    <i class="index-img"><%= image_tag child.pic.large %></i>
+                                    <i class="index-img"><%= image_tag child.pic_url %></i>
                                     <small><%= child.title %></small>
                                 <% else %>
                                     <i><%= child.title %></i>
@@ -73,7 +73,7 @@
                         <li>
                           <%= link_to material_type_url(child, menu), class: 'box mod-index' do %>
                               <% if flag %>
-                                  <i class="index-img"><%= image_tag child.pic.large %></i>
+                                  <i class="index-img"><%= image_tag child.pic_url %></i>
                                   <small><%= child.title %></small>
                               <% else %>
                                   <i><%= child.title %></i>

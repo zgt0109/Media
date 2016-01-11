@@ -17,7 +17,7 @@
       <b class="title" id="preview_title"><%= @house.activity.try(:name) || '标题' %></b>
       <span><%= Date.today %></span>
       <div cover="cover box-img" class="img">
-        <%= image_tag ((@house && @house.activity && @house.activity.pic?) ? @house.activity.pic.presence : @house.activity.default_pic_url), width: '258', id: 'preview_pic' %>
+        <%= image_tag ((@house && @house.activity && @house.activity.pic_url) ? @house.activity.pic_url : @house.activity.default_pic_url), width: '258', id: 'preview_pic' %>
       </div>
       <p id="preview_summary"><%= @house.activity.try(:summary) %></p>
     </div>
