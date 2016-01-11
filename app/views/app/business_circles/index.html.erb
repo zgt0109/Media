@@ -24,7 +24,7 @@
                   <div class="slider-li" style="height:auto;">
                     <% children.each do |child| %>
                       <a href="<%= child.has_children? ?  page_app_business_circle_url(child.id, anchor: "mp.weixin.qq.com",wxmuid: session[:wx_mp_user_id]) : website_activity_link(child) %>">
-                        <b style="background-image:url(<%= child.pic.try(:thumb)  if child.pic? %>)"></b>
+                        <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
                         <% if child.menuable_type == 'Activity' %>
                           <% if child.menuable.try(:activityable_type) == 'BusinessShop' %>
                             <i><%= child.menuable.activityable.name %></i>

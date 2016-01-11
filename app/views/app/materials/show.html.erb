@@ -38,8 +38,8 @@
         </div>
       </div>
       <div class="page-content">
-        <% if @material.pic? && @material.is_show_pic %>
-            <div class="media" id="media"><%= image_tag @material.pic.large %></div>
+        <% if @material.pic_key.present? && @material.is_show_pic %>
+            <div class="media" id="media"><%= image_tag @material.pic_url %></div>
         <% end %>
         <div class="text"><%= raw @material.content %></div>
         <p class="page-url"><%= link_to '阅读原文', "#{@material.source_url}#mp.weixin.qq.com", class: 'page-url-link' if @material.source_url.present? %></p>

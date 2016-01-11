@@ -13,7 +13,7 @@
       <% unless judge_andriod_version %>
           <div class="detail-wrap">
             <% @booking_item.booking_item_pictures.each do |picture| %>
-                <a><%= image_tag picture.pic.large if picture.pic? %></a>
+                <a><%= image_tag picture.pic_url if picture.pic_url %></a>
             <% end %>
             <% if @booking_item.booking_item_pictures.count == 0 %>
                 <a>暂无图片</a>
@@ -24,7 +24,7 @@
           <div class="box-img" id="slider">
             <ul class="box-img-list">
               <% @booking_item.booking_item_pictures.each do |picture| %>
-                  <li><a><%= image_tag picture.pic.large if picture.pic?%></a></li>
+                  <li><a><%= image_tag picture.pic_url if picture.pic_url %></a></li>
               <% end %>
               <% if @booking_item.booking_item_pictures.count == 0 %>
                   <li><a>暂无图片</a></li>

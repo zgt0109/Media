@@ -76,7 +76,8 @@ class WebsiteTemplate < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_url(pic_key)
+    # qiniu_image_url(pic_key)
+    "/uploads/website_template/pic/thumb_#{pic}"
   end
 
 end

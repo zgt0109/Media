@@ -14,7 +14,7 @@
   <% @photos.each do |photo| %>
     <div class="photo-li">
       <div class="li-img">
-        <%= image_tag(photo.pic.large) if photo.pic? %>
+        <%= image_tag(photo.pic_url) if photo.pic_key.present? %>
       </div>
       <div class="li-btn">
         <div class="li-p">

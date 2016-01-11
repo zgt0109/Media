@@ -277,8 +277,8 @@ class Website < ActiveRecord::Base
       website_menu = WebsiteMenu.new(menu.attributes)
       full_attrs = {
           website_id: id,
-          pic: menu.pic? ? File.open(menu.pic.current_path) : nil,
-          cover_pic: menu.cover_pic? ? File.open(menu.cover_pic.current_path) : nil,
+          pic: menu.pic_key,
+          cover_pic: menu.cover_pic_key,
       }
 
       website_menu.update_attributes(full_attrs)
@@ -296,8 +296,8 @@ class Website < ActiveRecord::Base
       full_attrs = {
           website_id: id,
           parent_id: parent.id,
-          pic: menu.pic? ? File.open(menu.pic.current_path) : nil,
-          cover_pic: menu.cover_pic? ? File.open(menu.cover_pic.current_path) : nil,
+          pic: menu.pic_key,
+          cover_pic: menu.cover_pic_key,
       }
 
       website_menu.update_attributes(full_attrs)
@@ -332,7 +332,7 @@ class Website < ActiveRecord::Base
       website_popup_menu = WebsitePopupMenu.new(menu.attributes)
       full_attrs = {
           website_id: id,
-          icon: menu.icon? ? File.open(menu.icon.current_path) : nil,
+          icon: menu.icon_key,
       }
       website_popup_menu.update_attributes(full_attrs)
     end

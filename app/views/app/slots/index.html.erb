@@ -61,7 +61,7 @@
             <div class="game-p">
               <p data-result="1">
                 <%- @elements.each do |element| %>
-                  <span data-id="<%= element.id %>"><%= element.pic? ? image_tag(element.pic.thumb) : element.name %></span>
+                  <span data-id="<%= element.id %>"><%= element.pic_key.present? ? image_tag(element.pic_url) : element.name %></span>
                 <%- end %>
               </p>
             </div>
@@ -73,7 +73,7 @@
             <div class="game-p">
               <p data-result="2">
                 <%- @elements.each do |element| %>
-                  <span data-id="<%= element.id %>"><%= element.pic? ? image_tag(element.pic.thumb) : element.name %></span>
+                  <span data-id="<%= element.id %>"><%= element.pic_key.present? ? image_tag(element.pic_url) : element.name %></span>
                 <%- end %>
               </p>
             </div>
@@ -84,7 +84,7 @@
             <div class="game-p">
               <p data-result="3">
                 <%- @elements.each do |element| %>
-                  <span data-id="<%= element.id %>"><%= element.pic? ? image_tag(element.pic.thumb) : element.name %></span>
+                  <span data-id="<%= element.id %>"><%= element.pic_key.present? ? image_tag(element.pic_url) : element.name %></span>
                 <%- end %>
               </p>
             </div>

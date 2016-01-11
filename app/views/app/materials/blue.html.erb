@@ -22,7 +22,7 @@
           <span><%= @material.created_at.to_date %></span>
         </div>
         <div class="bd">
-          <%= image_tag @material.pic.large if @material.pic? && @material.is_show_pic %>
+          <%= image_tag @material.pic_url if @material.pic_key.present? && @material.is_show_pic %>
           <%= raw @material.content %>
         </div>
         </div>

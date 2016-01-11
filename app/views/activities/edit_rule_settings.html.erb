@@ -40,7 +40,7 @@
           </div>
 
           <%- if element.pic.present? %>
-            <%= image_tag element.pic.thumb, size: '35x35' if element.pic? %>
+            <%= image_tag element.pic_url, size: '35x35' if element.pic_key.present? %>
           <%- end %>
 
           <%- if index > 2 %>

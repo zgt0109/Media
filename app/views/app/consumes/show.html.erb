@@ -72,7 +72,7 @@ footer{height:30px;line-height:30px;border-top:1px solid #ccc;text-align:center;
 footer a{color:#888;text-decoration:none;font-family: Arial;font-size: 14px;}
 </style>
 <div>
-  <div class="cover"> <%= image_tag @activity_notice.pic if @activity_notice.pic? %> </div>
+  <div class="cover"> <%= image_tag @activity_notice.pic_url if @activity_notice.pic_key.present? %> </div>
   <div class="content">
   <% if @error_notice %>
     <%= @error_notice %>

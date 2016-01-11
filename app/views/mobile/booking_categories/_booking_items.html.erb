@@ -2,8 +2,8 @@
     <div class="list-li">
       <div class="hd">
         <% picture = booking_item.booking_item_pictures.first %>
-        <a href="<%= mobile_booking_item_path(supplier_id: @supplier.id, id: booking_item.id, anchor: "mp.weixin.qq.com") %>" class="<%=  picture.try(:pic?) ? "" : "img-null"%>">
-          <%= picture.try(:pic?) ? (image_tag picture.pic.try(:large)) : "暂无图片" %>
+        <a href="<%= mobile_booking_item_path(supplier_id: @supplier.id, id: booking_item.id, anchor: "mp.weixin.qq.com") %>" class="<%= picture.try(:pic_url) ? "" : "img-null"%>">
+          <%= picture.try(:pic_url) ? (image_tag picture.pic_url) : "暂无图片" %>
         </a>
       </div>
       <div class="bd">

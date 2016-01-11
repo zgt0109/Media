@@ -17,8 +17,8 @@ start_menu = 0
 <div class="index">
   <% website_menus[start_menu..-1].each_with_index do |menu, index| %>
     <%= link_to menu_url(menu), class: 'box mod-index' do %>
-        <% if menu.pic? && menu.font_icon.blank? %>
-          <i><%= image_tag menu.pic.custom %></i>
+        <% if menu.pic_url && menu.font_icon.blank? %>
+          <i><%= image_tag menu.pic_url %></i>
         <% else %>
           <i class="<%= menu.font_icon %>"></i>
         <% end %>

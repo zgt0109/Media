@@ -125,18 +125,18 @@ class WebsiteMenu < ActiveRecord::Base
     flag = true
     sub_menus.each do |child|
       if child.is_a?(Assistant)
-        (flag = false; break) unless child.pic?
+        (flag = false; break) unless child.pic_key.present?
       else
-        (flag = false; break) unless child.pic? || child.font_icon.present?
+        (flag = false; break) unless child.pic_key.present? || child.font_icon.present?
       end
     end
 
     if self.multiple_graphic?
       main_material = self.menuable
       if main_material.present?
-        flag = false unless main_material.pic?
+        flag = false unless main_material.pic_key.present?
         main_material.children.each do |child|
-          (flag = false; break) unless child.pic?
+          (flag = false; break) unless child.pic_key.present?
         end
       end
     end

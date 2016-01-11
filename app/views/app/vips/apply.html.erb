@@ -96,7 +96,7 @@
       monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
     });
 
-    $('.box-card .card-cont').css('background-image', 'url(<%= @vip_card.try(:cover_pic?) ? @vip_card.try(:cover_pic): "/assets/wmember/card.png" %>)');
+    $('.box-card .card-cont').css('background-image', 'url(<%= @vip_card.try(:cover_pic_key?) ? @vip_card.cover_pic_url: "/assets/wmember/card.png" %>)');
 
     if ($('.multiple')){
       $('.multiple').each(function(){

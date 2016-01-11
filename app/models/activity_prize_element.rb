@@ -11,7 +11,7 @@ class ActivityPrizeElement < ActiveRecord::Base
     'Ftb5bwV2gRKzcHm_2yHeufrjGkbZ'
   end
 
-  def pic_url(type = :thumb)
+  def pic_url
     qiniu_image_url(pic_key)
   end
 end

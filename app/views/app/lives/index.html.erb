@@ -20,7 +20,7 @@
             <h2 class="ellipsis"><%= menu.name %></h2>
             <a class="ico fr">查看更多</a>
           </div>
-          
+
           <div class="bd box-circle slider" style="height:auto;" id="slider0<%= index%>">
               <% if menu.has_children? %>
                 <div class="slider-cont" style="height:auto;">
@@ -28,7 +28,7 @@
                       <div class="slider-li" style="height:auto;">
                         <% value.each do |child| %>
                             <a href="<%= child.has_children? ?  page_app_life_url(child.id, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>">
-                              <b style="background-image:url(<%= child.pic.try(:thumb)  if child.pic? %>)"></b>
+                              <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
                               <i><%= child.name %></i>
                             </a>
                         <% end %>
