@@ -225,7 +225,7 @@ class Activity < ActiveRecord::Base
       elsif type_id == 12
         VOTE_STATUS.map{|e| e.first != -2 && e.reverse || nil}.compact
       elsif type_id == 10
-	     APPLY_STATUS.map{|e| e.first != -2 && e.reverse || nil}.compact
+        APPLY_STATUS.map{|e| e.first != -2 && e.reverse || nil}.compact
       elsif type_id == 15
         SURVEY_STATUS.map{|e| e.first != -2 && e.reverse || nil}.compact
       else
@@ -763,7 +763,7 @@ class Activity < ActiveRecord::Base
           [HAS_ENDED_NAME, false, false, true]
         elsif start_at.present? && start_at < Time.now
           [UNDER_WAY_NAME, false, true, false]
-	elsif start_at.present? && start_at > Time.now
+        elsif start_at.present? && start_at > Time.now
           [NOT_START_NAME, false, false, true]
         else
          [UNDER_WAY_NAME, false, true, false]
@@ -791,17 +791,17 @@ class Activity < ActiveRecord::Base
           [NOT_START_NAME, true, false, true]
         end
       when 1
-	      if end_at.present? && end_at < Time.now
+        if end_at.present? && end_at < Time.now
           [HAS_ENDED_NAME, false, false, true]
         elsif start_at.present? && start_at < Time.now
           [UNDER_WAY_NAME, false, true, false]
-	      elsif start_at.present? && start_at > Time.now
+        elsif start_at.present? && start_at > Time.now
           [NOT_START_NAME, false, false, true]
         else
          [UNDER_WAY_NAME, false, true, false]
         end
       when -1
-	     end_at.present? && end_at < Time.now ? [HAS_ENDED_NAME, false, false, true] : [HAS_ENDED_NAME, true, false, true]
+       end_at.present? && end_at < Time.now ? [HAS_ENDED_NAME, false, false, true] : [HAS_ENDED_NAME, true, false, true]
     end
   end
 

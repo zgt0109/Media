@@ -40,7 +40,7 @@
                           <%= f.fields_for :activity_vote_items, item do |m| %>
                               <tr>
                                 <td><%= index + 1%></td>
-                                <td><%= image_tag item.pic_url %>&nbsp;&nbsp;<%= item.name %></td>
+                                <td><%= image_tag item.qiniu_image_view_url if item.pic_key %>&nbsp;&nbsp;<%= item.name %></td>
                                 <td><%= f item.per(@activity.vote_items_count) %>%</td>
                                 <td><%= item.activity_user_vote_items_count %></td>
                                 <td><%= item.adjust_votes %></td>

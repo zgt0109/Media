@@ -130,7 +130,7 @@ class ActivitiesController < ApplicationController
       when '-1'
         @activities = @total_activities.where("((activities.status = -3 or activities.status = 1) and activities.end_at is not null and activities.end_at < '#{Time.now}') or activities.status = -1")
       when '0'
-	@activities = @total_activities.where("activities.status = 0")
+        @activities = @total_activities.where("activities.status = 0")
       when '1'
         #@activities = @total_activities.where("(activities.status = -3 and activities.start_at is not null and activities.start_at < '#{Time.now}' and not activities.end_at < '#{Time.now}') or (activities.status = 1 and activities.end_at is null)")
         @activities = @total_activities.where("(( (activities.status = -3 or activities.status = 1) and (activities.start_at is not null and activities.start_at < '#{Time.now}') and (activities.end_at is null or (activities.end_at is not null and activities.end_at > '#{Time.now}'))) or (activities.status = 1 and activities.start_at is null and (activities.end_at is null or (activities.end_at is not null and activities.end_at > '#{Time.now}'))) )")
