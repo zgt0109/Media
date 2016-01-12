@@ -15,7 +15,7 @@ class Mobile::VoteController < Mobile::BaseController
     @activity_user = @user.activity_users.new(activity_id: params[:vote_id], site_id: @site.id) unless @activity_user
     if @activity.vote_status_attrs[0].eql?(Activity::HAS_ENDED_NAME) || @activity_user.persisted?
       order_sql = @activity.activity_setting.try(:sort_desc?) ? 'item_select_count desc' : ''
-      @results = @search.select("item_no, name, pic, pic_key, link, activity_user_vote_items_count + adjust_votes as item_select_count, COALESCE(ROUND((activity_user_vote_items_count + adjust_votes) / #{@activity.vote_items_count} * 100, 2), 0.00) as item_per").order(order_sql).page(params[:page]).per(30)
+      @results = @search.select("item_no, name, pic_key, link, activity_user_vote_items_count + adjust_votes as item_select_count, COALESCE(ROUND((activity_user_vote_items_count + adjust_votes) / #{@activity.vote_items_count} * 100, 2), 0.00) as item_per").order(order_sql).page(params[:page]).per(30)
       #@results = Kaminari.paginate_array(ActivityVoteItem.sorted_by_vote_count(@activity)).page(params[:page]).per(30)
     else
       @activity_vote_items = @search.page(params[:page]).per(30)
@@ -29,7 +29,7 @@ class Mobile::VoteController < Mobile::BaseController
     # return redirect_to :back, alert: "验证码不正确" if session[:image_code] != params[:verify_code]
     return redirect_to mobile_vote_result_path(site_id: @activity.site_id, vote_id: @activity.id), alert: "您已经投票过！" if @activity_user
 
-    @activity_user = @wx_user.activity_users.create(params[:activity_user].merge(site_id: @activity.site_id, activity_id: @activity.id))
+    @activity_user = @user.activity_users.create(params[:activity_user].merge(site_id: @activity.site_id, activity_id: @activity.id))
     @activity.activity_vote_items.where(id: params[:ids].to_s.split(',').map!(&:to_i)).pluck(:id).each do |id|
       @activity.activity_user_vote_items.create(activity_user_id: @activity_user.id, name: params[:activity_user][:name], mobile: params[:activity_user][:mobile], activity_vote_item_id: id, user_id: @user.id)
     end
