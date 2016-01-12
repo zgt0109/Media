@@ -78,7 +78,7 @@ footer a{color:#888;text-decoration:none;font-family: Arial;font-size: 14px;}
     <%= @error_notice %>
   <% else %>
     <% if @activity_notice.active? %>
-      <% consume = @wx_user.activity_consumes.where(wx_mp_user_id: session[:wx_mp_user_id], code: params[:code]).first rescue nil %>
+      <% consume = @wx_user.activity_consumes.where(code: params[:code]).first rescue nil %>
       <p class="sncode"> 优惠券SN：<%= params[:code] %> <%= "(#{consume.status_name})" if consume %></p>
     <% end %>
 

@@ -14,7 +14,7 @@
 
 <p> 原始域名： </p>
 <p>
-  <% url = "http://#{APP_SUB_DOMAIN}.winwemedia.com/#{current_user.try(:id)}" %>
+  <% url = "http://#{MOBILE_SUB_DOMAIN}.winwemedia.com/#{current_user.try(:id)}" %>
   <span><%= link_to url, url, :target => "_blank" %></span>
 </p>
 
@@ -22,11 +22,11 @@
 
   <% if @website.domain.present? %>
     <p>个性化域名：</p>
-    <% url = "http://#{APP_SUB_DOMAIN}.winwemedia.com/#{@website.domain}" %>
+    <% url = "http://#{MOBILE_SUB_DOMAIN}.winwemedia.com/#{@website.domain}" %>
     <p><span><%= link_to url, url, :target => "_blank" %></span></p>
   <% else %>
     <p>请设定个性化域名：</p>
-    <p><%= "http://#{APP_SUB_DOMAIN}.winwemedia.com/" %><%= text_field_tag "name", "", class: "input-text", :maxlength => 20 %>　例如: zai_17</p>
+    <p><%= "http://#{MOBILE_SUB_DOMAIN}.winwemedia.com/" %><%= text_field_tag "name", "", class: "input-text", :maxlength => 20 %>　例如: zai_17</p>
     <p><%= submit_tag "保存", class: "btn btn-small form-submit" %></p>
   <% end %>
 

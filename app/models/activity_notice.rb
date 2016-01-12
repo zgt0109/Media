@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: activity_notices
-#
-#  id              :integer          not null, primary key
-#  wx_mp_user_id   :integer          not null
-#  activity_id     :integer          not null
-#  title           :string(255)
-#  pic             :string(255)
-#  summary         :string(255)
-#  description     :text
-#  activity_status :integer          default(0), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-
 class ActivityNotice < ActiveRecord::Base
 
   enum_attr :activity_status, :in => [
@@ -25,8 +9,6 @@ class ActivityNotice < ActiveRecord::Base
   before_create :set_default_pic
 
   validates :title, presence: true, length: { maximum: 64 }
-  # validates :pic, presence: true, on: :create
-  # validates :description, presence: true, length: { maximum: 2000 }, on: :update
 
   belongs_to :activity
   delegate :activity_type_id, to: :activity, allow_nil: true
@@ -74,7 +56,8 @@ class ActivityNotice < ActiveRecord::Base
     end
 
     def vip_notice(activity, openid)
-      vip_user = activity.supplier.vip_users.where('vip_users.status <> ?', VipUser::DELETED).joins(:wx_user).where('wx_users.openid = ?', openid).first
+      wx_user = WxUser.where(openid: openid).first
+      vip_user = activity.site.vip_users.where('vip_users.user_id = ? and vip_users.status <> ?', wx_user.user_id, VipUser::DELETED).first
       return activity.activity_notices.ready.first unless vip_user
 
       activity_notice = activity.activity_notices.active.first
@@ -112,9 +95,10 @@ class ActivityNotice < ActiveRecord::Base
         if activity.activity_consumes.count < activity.activity_property.coupon_count
           system_can = (activity.consume_day_allow_count.blank?) || (activity.activity_consumes.created_at_today.count < activity.consume_day_allow_count.to_i)
           if system_can
-            user_can = (wx_user) && (wx_user.activity_consumes.where(activity_id: activity.id).count < activity.activity_property.get_limit_count)
+            user = wx_user.user
+            user_can = (user) && (user.activity_consumes.where(activity_id: activity.id).count < activity.activity_property.get_limit_count)
             if user_can
-              activity_consume = activity.activity_consumes.create(supplier_id: activity.supplier_id, wx_mp_user_id: activity.wx_mp_user_id, wx_user_id: wx_user.id)
+              activity_consume = activity.activity_consumes.create(site_id: activity.site_id, user_id: user.id)
               activity_notice = activity.activity_notices.active.first
               if activity_notice
                 activity_notice.summary.to_s.gsub!('{code}', activity_consume.code.to_s)
@@ -143,7 +127,6 @@ class ActivityNotice < ActiveRecord::Base
   def pic_url
     qiniu_image_url(pic_key)
   end
-
 
   private
     def set_default_pic

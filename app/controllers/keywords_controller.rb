@@ -2,6 +2,10 @@ class KeywordsController < ApplicationController
 
   before_filter :load_keyword, only: [:show, :edit, :update, :destroy]
 
+  before_filter do
+    @partialLeftNav = "/layouts/partialLeftWeixin"
+  end
+
   def index
     @search = current_site.keywords.order('created_at DESC').search(params[:search])
     @keywords = @search.page(params[:page])

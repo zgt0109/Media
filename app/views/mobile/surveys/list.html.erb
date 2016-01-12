@@ -2,7 +2,7 @@
   <div class="text-box topic-list">
     <ul class="topic-ul">
       <%- @survey_questions.each do |question| %>
-        <%- question_url = questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: question.id) %>
+        <%- question_url = questions_mobile_survey_url(qid: question.id) %>
         <li class="item" onclick="location.href='<%= question_url %>'" style="cursor:pointer"><a href="<%= question_url %>" class="box"><%= question.name %></a></li>
       <%- end %>
     </ul>

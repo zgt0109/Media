@@ -90,7 +90,7 @@
                         $('#domainName').html(newValue);
                         $('#domainName').attr('exist', true);
                         $('.form-control.input-sm').val(newValue);
-                        $('.custom_domain').html('当前微官网网址：<%= "#{APP_SUB_DOMAIN}.winwemedia.com/" %>' + newValue);
+                        $('.custom_domain').html('当前微官网网址：<%= "#{MOBILE_SUB_DOMAIN}.winwemedia.com/" %>' + newValue);
                         showTip('success', response['info']);
                         $('.ace-thumbnails li img').replaceWith(response['img']);
                     }

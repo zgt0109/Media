@@ -1,6 +1,10 @@
 class RepliesController < ApplicationController
   before_filter :require_wx_mp_user
 
+  before_filter do
+    @partialLeftNav = "/layouts/partialLeftWeixin"
+  end
+
   def index
     @reply = @wx_mp_user.first_follow_reply || @wx_mp_user.replies.new(event_type: Reply::CLICK_EVENT)
   end

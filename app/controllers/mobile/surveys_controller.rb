@@ -4,7 +4,6 @@ class Mobile::SurveysController < Mobile::BaseController
   before_filter :find_activity
   before_filter :check_subscribe
   before_filter :find_activity_user
-  before_filter :load_vip_user, only: [:show]
 
   # api 里进来的,仅仅是显示描述,然后用户点击开始答题
   def show
@@ -28,7 +27,7 @@ class Mobile::SurveysController < Mobile::BaseController
       user_id:    @wx_user.id,
       site_id:   @activity.site_id
     ))
-    redirect_to questions_mobile_survey_url(site_id: @activity.site_id, id: params[:survey_id], qid: @first_qid) if @first_qid
+    redirect_to questions_mobile_survey_url(site_id: @activity.site_id, qid: @first_qid) if @first_qid
   end
 
   def questions
@@ -122,9 +121,7 @@ class Mobile::SurveysController < Mobile::BaseController
   end
 
   def find_activity
-    session[:aid] = params[:id] if params[:id].present?
-    session[:aid] = params[:survey_id] if params[:survey_id].present?
-    @activity = @site.activities.surveys.find session[:aid]
+    @activity = @site.activities.surveys.find session[:activity_id]
     return render_404 if @activity.deleted?
     @survey_questions = @activity.survey_questions.order(:position)
     @first_qid = @survey_questions.first.try(:id)

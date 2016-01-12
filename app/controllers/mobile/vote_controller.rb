@@ -2,13 +2,13 @@ class Mobile::VoteController < Mobile::BaseController
   layout 'mobile/vote'
   before_filter :block_non_wx_browser, :find_activity
   before_filter :check_subscribe
-  before_filter :load_vip_user, only: [:login]
   before_filter :find_activity_user, only: [:login, :success, :result]
   before_filter :validate_can_vote, only: [:success]
   skip_before_filter :fetch_wx_user_info
   before_filter :fetch_wx_user_info!
 
   def login
+    @vip_user = @user.@vip_user
     search_params = ["name = :q OR item_no = :q", {q: "#{params[:q]}"}]
     activity_votes = @activity.activity_vote_items
     @search = params[:q].blank? ? activity_votes : activity_votes.where(search_params)

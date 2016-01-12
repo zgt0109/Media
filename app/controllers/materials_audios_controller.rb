@@ -2,6 +2,10 @@ class MaterialsAudiosController < ApplicationController
   
   before_filter :upload_audio_to_qiniu, only: [:create]
 
+  before_filter do
+    @partialLeftNav = "/layouts/partialLeftWeixin"
+  end
+
   def index
     @material  = Material.new(material_type: Material::AUDIOS)
     @materials = current_site.materials.audio_select.page(params[:page]).order("id desc")

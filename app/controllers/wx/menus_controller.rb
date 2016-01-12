@@ -2,6 +2,10 @@ class Wx::MenusController < ApplicationController
   before_filter :require_wx_mp_user
   before_filter :find_wx_menu, only: [:show, :edit, :update, :destroy, :edit_wx_menu]
 
+  before_filter do
+    @partialLeftNav = "/layouts/partialLeftWeixin"
+  end
+
   def index
     @wx_menus = @wx_mp_user.wx_menus
   end

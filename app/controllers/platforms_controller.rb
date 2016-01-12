@@ -3,6 +3,10 @@ class PlatformsController < ApplicationController
 
   before_filter :load_wx_mp_user
 
+  before_filter do
+    @partialLeftNav = "/layouts/partialLeftWeixin"
+  end
+
   def bind
   	# if @wx_mp_user && !@wx_mp_user.cancel?
    #    return redirect_to platforms_path, alert: '您已经绑定过公众号'

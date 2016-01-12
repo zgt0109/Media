@@ -14,19 +14,18 @@ class Mobile::BaseController < ActionController::Base
   end
 
   def load_data
-    session[:site_id] = params[:site_id] if params[:site_id].present?
-
     # TODO 只投票有用，需要去掉
-    session[:activity_id] = params[:vote_id] if params[:vote_id].present?
+    # session[:activity_id] = params[:vote_id] if params[:vote_id].present?
     session[:activity_id] = params[:aid] if params[:aid].present?
     session[:activity_id] = params[:activity_id] if params[:activity_id].present?
     session[:activity_notice_id] = params[:anid] if params[:anid].present?
 
-    @site = Site.find(session[:site_id].to_i)
+    # session[:site_id] = params[:site_id] if params[:site_id].present?
+    # @site = Site.find(session[:site_id].to_i)
 
     return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
-    @wx_mp_user = @site.wx_mp_user
+    # @wx_mp_user = @site.wx_mp_user
     require_wx_mp_user
 
     @account_footer = AccountFooter.default_footer
@@ -37,10 +36,6 @@ class Mobile::BaseController < ActionController::Base
   end
 
   def notice
-  end
-
-  def load_vip_user
-    @vip_user = @site.vip_users.visible.where(user_id: session[:user_id]).first
   end
 
 end

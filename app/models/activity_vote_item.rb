@@ -31,7 +31,7 @@ class ActivityVoteItem < ActiveRecord::Base
     total_count == 0 ? 0 : Float(select_count) / Float(total_count) * 100
   end
 
-  def select_count 
+  def select_count
     activity_user_vote_items_count + adjust_votes
   end
 

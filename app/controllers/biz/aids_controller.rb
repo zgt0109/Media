@@ -71,18 +71,9 @@ class Biz::AidsController < ApplicationController
       redirect_to :back, alert: "保存失败: #{@activity.errors.full_messages.join(',')}"
     end
   end
-  
-  def edit
-  end
-
-  def show
-  end
 
   def edit_rule_settings
     @rule = rule 
-  end
-
-  def edit_prize_settings
   end
 
   def setted

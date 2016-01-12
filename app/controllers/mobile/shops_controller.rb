@@ -13,7 +13,7 @@ class Mobile::ShopsController < Mobile::BaseController
       end
     else
       redirect_to four_o_four_url
-    end 
+    end
   end
 
   def book_table

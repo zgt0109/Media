@@ -253,7 +253,7 @@ class Activity < ActiveRecord::Base
 
   def unique_keyword
     if active?
-      activity = Activity.valid.where(site_id: site_id, keyword: keyword).first
+      activity = Activity.valid.where(subdomain: mobile_subdomain, keyword: keyword).first
       if activity && self != activity
         errors.add :keyword, '已经被使用'
       end
@@ -517,10 +517,10 @@ class Activity < ActiveRecord::Base
 
   def create_default_properties!
     if website?
-      Website.where(activity_id: id).first_or_create(site_id: site_id, name: site.wx_mp_user.try(:nickname), template_id: 1)
+      Website.where(activity_id: id).first_or_create(subdomain: mobile_subdomain, name: site.wx_mp_user.try(:nickname), template_id: 1)
     elsif vip?
       merchant_name = site.account.nickname || site.wx_mp_user.nickname.presence
-      VipCard.where(activity_id: id).first_or_create(merchant_name: merchant_name, site_id: site_id, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)
+      VipCard.where(activity_id: id).first_or_create(merchant_name: merchant_name, subdomain: mobile_subdomain, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)
     elsif [4,5,25].include?(activity_type_id)
       ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id, repeat_draw_msg: "亲，抢券活动每人只能抽一次哦。", pic_key: ActivityProperty.win_pic_key)
     elsif activity_type_id == 28
@@ -531,7 +531,7 @@ class Activity < ActiveRecord::Base
       days = [*(start_at.to_date..end_at.to_date)]
       if days.size < 8
         days.each_with_index do |day, i|
-          fight_papers.create(site_id: site_id, activity_id: id, the_day: (i+1), active_date: day.to_date)
+          fight_papers.create(subdomain: mobile_subdomain, activity_id: id, the_day: (i+1), active_date: day.to_date)
         end
       end
     elsif activity_type_id == 37
@@ -871,8 +871,8 @@ class Activity < ActiveRecord::Base
 
   def activity_qrcode_url
     case
-      when vote?  then mobile_vote_login_url(site_id: site_id, vote_id: id, anchor: "mp.weixin.qq.com")
-      when surveys?  then mobile_survey_url(site_id: site_id, id: id, anchor: "mp.weixin.qq.com")
+      when vote?  then mobile_vote_login_url(subdomain: mobile_subdomain, vote_id: id, anchor: "mp.weixin.qq.com")
+      when surveys?  then mobile_survey_url(subdomain: mobile_subdomain, id: id, anchor: "mp.weixin.qq.com")
     end
   end
 
@@ -931,39 +931,43 @@ class Activity < ActiveRecord::Base
     self.save
   end
 
-  def respond_mobile_url(options = {})
-    activity_notice = activity_notices.active.first
+  def mobile_subdomain
+    [site_id.to_s, MOBILE_SUB_DOMAIN].join('.')
+  end
+
+  def respond_mobile_url(activity_notice, options = {})
+    activity_notice = activity_notice || activity_notices.active.first
 
     hotel_url = "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}"
     hotel_url << "&openid=#{options[:openid]}" if options[:openid]
 
     url = case
-      when website?            then mobile_root_url(site_id: site_id)
-      when vip?                then app_vips_url
-      when wave?               then mobile_waves_url(site_id: site_id, aid: id)
-      when consume? && setted? then app_consume_url(id: activity_notice.id, activity_id: id)
-      when gua? && setted?     then app_gua_url(id: id, anid: activity_notice.try(:id), source: 'notice')
-      when wheel? && setted?   then app_wheel_url(id: id, anid: activity_notice.try(:id), source: 'notice')
-      when book_dinner?        then book_dinner_mobile_shops_url(site_id: site_id, aid: id)
-      when book_table?         then book_table_mobile_shops_url(site_id: site_id, aid: id)
-      when fight?              then app_fight_index_url(anid: activity_notice.try(:id), aid: id, m: 'index')
-      when take_out?           then take_out_mobile_shops_url(site_id: site_id, aid: id)
+      when website?            then mobile_root_url(subdomain: mobile_subdomain)
+      when vip?                then app_vips_url(subdomain: mobile_subdomain)
+      when wave?               then mobile_waves_url(subdomain: mobile_subdomain, aid: id)
+      when consume?            then app_consume_url(aid: id, anid: activity_notice.id, code: option[:code])
+      when gua?                then app_gua_url(id: id, anid: activity_notice.try(:id), source: 'notice')
+      when wheel?              then app_wheel_url(id: id, anid: activity_notice.try(:id), source: 'notice')
+      when book_dinner?        then book_dinner_mobile_shops_url(subdomain: mobile_subdomain, aid: id)
+      when book_table?         then book_table_mobile_shops_url(subdomain: mobile_subdomain, aid: id)
+      when fight?              then app_fight_index_url(aid: id, anid: activity_notice.try(:id), m: 'index')
+      when take_out?           then take_out_mobile_shops_url(subdomain: mobile_subdomain, aid: id)
       when enroll?             then new_app_activity_enroll_url(aid: id)
-      when surveys?            then mobile_survey_url(site_id: site_id, id: id)
-      when reservation?        then mobile_reservations_url(site_id: site_id, aid: id)
-      when micro_store?        then mobile_micro_stores_url(site_id: site_id)
+      when surveys?            then mobile_survey_url(subdomain: mobile_subdomain, aid: id)
+      when reservation?        then mobile_reservations_url(subdomain: mobile_subdomain, aid: id)
+      when micro_store?        then mobile_micro_stores_url(subdomain: mobile_subdomain, aid: id)
       when vote?
         if stopped?
-          mobile_vote_result_url(site_id: site_id, vote_id: id)
+          mobile_vote_result_url(subdomain: mobile_subdomain, aid: id)
         else
-          mobile_vote_login_url(site_id: site_id, vote_id: id)
+          mobile_vote_login_url(subdomain: mobile_subdomain, aid: id)
         end
       when house?              then app_house_layouts_url(aid: id)
       when groups?             then app_activity_group_url(self)
       when car?                then car_url
-      when weddings?           then mobile_weddings_url(site_id: site_id, wid: activityable_id)
+      when weddings?           then mobile_weddings_url(subdomain: mobile_subdomain, wid: activityable_id)
       when hotel?              then hotel_url
-      when album?              then mobile_albums_url(site_id: site_id, aid: id)
+      when album?              then mobile_albums_url(subdomain: mobile_subdomain, aid: id)
       when educations?         then app_educations_url(cid: activityable_id)
       when life?               then app_lives_url(id: activityable_id, aid: id)
       when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_id: options[:openid])
@@ -973,18 +977,39 @@ class Activity < ActiveRecord::Base
       when house_bespeak?      then new_app_house_market_url(aid: id)
       when house_seller?       then app_house_sellers_url(aid: id)
       when slot?               then app_slots_url(aid: id)
-      when booking?            then mobile_bookings_url(site_id: site_id)
-      when group?              then mobile_groups_url(site_id: site_id)
-      when hospital?           then mobile_hospital_doctors_url(site_id: site_id, aid: id)
-      when trip?               then mobile_trips_url(site_id: site_id)
+      when booking?            then mobile_bookings_url(subdomain: mobile_subdomain)
+      when group?              then mobile_groups_url(subdomain: mobile_subdomain)
+      when hospital?           then mobile_hospital_doctors_url(subdomain: mobile_subdomain, aid: id)
+      when trip?               then mobile_trips_url(subdomain: mobile_subdomain)
       when business_shop?      then mobile_business_shop_url(supplier, activityable)
       when house_impression?   then app_house_impressions_url(aid: id)
       when house_live_photo?   then app_house_live_photos_url(aid: id)
       when house_intro?        then app_house_intros_url(aid: id)
-      when wbbs_community?     then mobile_wbbs_topics_url(site_id: site_id, aid: id)
-      when coupon?             then mobile_coupons_url(site_id: site_id, aid: id)
-      when broche?             then mobile_broche_photos_url(site_id: site_id, aid: id)
-    end
+      when wbbs_community?     then mobile_wbbs_topics_url(subdomain: mobile_subdomain, aid: id)
+      when coupon?             then mobile_coupons_url(subdomain: mobile_subdomain, aid: id)
+      when broche?             then mobile_broche_photos_url(subdomain: mobile_subdomain, aid: id)
+      when micro_aid?          then mobile_aids_url(aid: id)
+      when plot_bulletin?      then bulletins_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
+      when plot_repair?        then repair_complains_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid], type: 'repair')
+      when plot_complain?      then repair_complains_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid], type: 'complain')
+      when plot_telephone?     then telephones_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
+      when plot_owner?         then owners_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
+      when plot_life?          then lives_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
+      when fans_game?          then mobile_fans_games_url(site_id: site_id, aid: id, openid: options[:openid])
+      when govmail?            then mobile_govmails_url(site_id: site_id, aid: id, openid: options[:openid])
+      when govchat?            then mobile_govchats_url(site_id: site_id, aid: id, openid: options[:openid])
+      when unfold?             then mobile_unfolds_url(site_id: site_id, openid: options[:openid], aid: id)
+      when wmall_coupon?       then wmall_coupon_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
+      when scene?              then mobile_scenes_url(site_id: site_id, aid: id, openid: options[:openid])
+      when guess?              then mobile_guess_url(site_id: site_id, openid: options[:openid], aid: id)
+      when wx_card?            then mobile_wx_cards_url(site_id: site_id, openid: options[:openid], aid: id, wechat_card_js: 1)
+      when brokerage?          then mobile_brokerages_url(site_id: site_id, openid: options[:openid])
+      when red_packet?         then mobile_red_packets_url(site_id: site_id, openid: options[:openid], aid: id)
+      when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id_id)
+      when donation?           then mobile_donations_url(site_id: site_id_id, wid: activityable_id, aid: id)
+      when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id)
+      when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
+      end
     url || ''
   end
 
@@ -992,12 +1017,12 @@ class Activity < ActiveRecord::Base
     car_activity_notice = activityable
     case
       when car_activity_notice.blank?      then ''
-      when car_activity_notice.repair?     then car_bespeak_mobile_car_shops_url(site_id: site_id, aid: id, bespeak_type: CarBespeak::REPAIR)
-      when car_activity_notice.test_drive? then car_bespeak_mobile_car_shops_url(site_id: site_id, aid: id, bespeak_type: CarBespeak::TEST_DRIVE)
-      when car_activity_notice.sales_rep?  then car_seller_mobile_car_shops_url(site_id: site_id, aid: id, seller_type: CarSeller::SALES_REP)
-      when car_activity_notice.shop?       then mobile_car_shops_url(site_id: site_id, aid: id)
-      when car_activity_notice.owner?      then mobile_car_owners_url(site_id: site_id, aid: id)
-      when car_activity_notice.assistant?  then mobile_car_assistants_url(site_id: site_id, aid: id)
+      when car_activity_notice.repair?     then car_bespeak_mobile_car_shops_url(subdomain: mobile_subdomain, aid: id, bespeak_type: CarBespeak::REPAIR)
+      when car_activity_notice.test_drive? then car_bespeak_mobile_car_shops_url(subdomain: mobile_subdomain, aid: id, bespeak_type: CarBespeak::TEST_DRIVE)
+      when car_activity_notice.sales_rep?  then car_seller_mobile_car_shops_url(subdomain: mobile_subdomain, aid: id, seller_type: CarSeller::SALES_REP)
+      when car_activity_notice.shop?       then mobile_car_shops_url(subdomain: mobile_subdomain, aid: id)
+      when car_activity_notice.owner?      then mobile_car_owners_url(subdomain: mobile_subdomain, aid: id)
+      when car_activity_notice.assistant?  then mobile_car_assistants_url(subdomain: mobile_subdomain, aid: id)
     end
   end
 

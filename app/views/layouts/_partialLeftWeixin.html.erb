@@ -1,0 +1,30 @@
+<% parent_class, sub_class = 'open active', 'open active' %>
+
+<ul class="nav nav-list">
+  <% if current_site.has_privilege_for?(1010) %>
+    <li class=" <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies', 'platforms'].include?(controller_path) ? parent_class : '' %>">
+      <%= left_nav_dropdown 'icon-wrench', '微信设置' %>
+
+      <ul class="submenu" style="display: <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies', 'platforms'].include?(controller_path) ? 'block;' : 'none;'%>">
+
+        <%= link_to_left_nav( '首次关注', replies_path, current_page?(replies_path) ) %>
+        <%= link_to_left_nav( '自动回复', autoreply_replies_path, current_page?(autoreply_replies_path) ) %>
+        <%= link_to_left_nav( '关键字回复', keywords_url, controller_path == 'keywords' ) %>
+        <%= link_to_left_nav( '自定义菜单', wx_menus_url, controller_path == 'wx/menus' ) %>
+        <%#= link_to_left_nav( '网页授权', oauth_wx_mp_users_url, current_page?(oauth_wx_mp_users_url) ) %>
+        <%= link_to_left_nav( '公众号设置', platforms_path, current_page?(platforms_path) ) %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_site.has_privilege_for?(1000) %>
+    <li class="<%= controller_name.include?('materials') ? parent_class : ''%>">
+      <%= left_nav_dropdown 'fa fa-file-photo-o', '素材管理' %>
+      <ul class="submenu" style="display: <%= controller_name.include?('materials') ? 'block;' : 'none;'%>">
+        <%= link_to_left_nav( '单图文', materials_url, controller_name == 'materials' ) %>
+        <%= link_to_left_nav( '多图文', multiple_materials_url, controller_name == 'multiple_materials' ) %>
+        <%= link_to_left_nav( '语音素材', materials_audios_url, controller_name == 'materials_audios' ) %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

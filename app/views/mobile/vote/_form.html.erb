@@ -19,10 +19,10 @@
           <div class="form-title"></div>
 
           <div class="mod-li">
-            <%= f.text_field :name, placeholder: "请输入您的姓名", value: f.object.try(:name) || @vip_user.try(:name) %>
+            <%= f.text_field :name, placeholder: "请输入您的姓名", value: f.object.try(:name) || @user.vip_user.try(:name) %>
           </div>
           <div class="mod-li">
-            <%= f.text_field :mobile, placeholder: "请输入您的手机号码", value: f.object.try(:mobile) || @vip_user.try(:mobile) %>
+            <%= f.text_field :mobile, placeholder: "请输入您的手机号码", value: f.object.try(:mobile) || @user.vip_user.try(:mobile) %>
           </div>
 
           <!--<div class="mod-li">
@@ -52,22 +52,21 @@ $(function() {
     }
 
     var $submitBtn = $('#submit-btn'),
-            $alertMessage = $('#alert_message'),
-            submittedClass = 'submitted';
+      $alertMessage = $('#alert_message'),
+      submittedClass = 'submitted';
 
     function popError(errorMessage) {
-        $alertMessage.html(errorMessage);
-        showPop();
-       
-        return false;
+      $alertMessage.html(errorMessage);
+      showPop();
+      return false;
     }
     function submitVoteForm() {
-        $submitBtn.addClass(submittedClass);
-        var ids = $.map($('li.check'), function(li, i) {
-            return li.getAttribute('rel');
-        });
-        $('#ids').val(ids);
-        $('form').submit();
+      $submitBtn.addClass(submittedClass);
+      var ids = $.map($('li.check'), function(li, i) {
+          return li.getAttribute('rel');
+      });
+      $('#ids').val(ids);
+      $('form').submit();
     }
 
     $submitBtn.click(function() {

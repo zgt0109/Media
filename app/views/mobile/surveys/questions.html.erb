@@ -1,6 +1,5 @@
 <%= form_for :survey_question, url: create_answer_mobile_survey_url do |form| %>
 <%= hidden_field_tag 'qid', params[:qid] %>
-<%= hidden_field_tag 'supplier_id' , @activity.supplier_id %>
 <%= hidden_field_tag 'answers_ids' %>
 
 <div class="topic">
@@ -47,7 +46,7 @@
     <%- else %>
       <%- if @survey_question.has_prev? %>
         <div class="cell">
-          <a class="btn btn-bigest" href="<%= questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: @survey_question.prev_question_id) %>" >上一题</a>
+          <a class="btn btn-bigest" href="<%= questions_mobile_survey_url(qid: @survey_question.prev_question_id) %>" >上一题</a>
         </div>
         <%- if @survey_question.last? %>
           <%- unless @activity_user.try(:survey_finish?) %>
@@ -60,7 +59,7 @@
        <%- if @survey_question.has_next? %>
         <div class="cell">
           <%- if @activity_user.try(:survey_finish?) %>
-            <a class="btn btn-bigest btn-primary" href="<%= questions_mobile_survey_url(supplier_id: @activity.supplier_id, id: @activity.id, qid: @survey_question.next_question_id) %>">下一题(<%= @survey_question.activity_progess %> / <%= @survey_question.activity_questions_ids.count %>)</a>
+            <a class="btn btn-bigest btn-primary" href="<%= questions_mobile_survey_url(qid: @survey_question.next_question_id) %>">下一题(<%= @survey_question.activity_progess %> / <%= @survey_question.activity_questions_ids.count %>)</a>
           <%- else %>
             <a class="btn btn-bigest btn-primary submit">下一题(<%= @survey_question.activity_progess %>/<%= @survey_question.activity_questions_ids.count %>)</a>
           <%- end %>

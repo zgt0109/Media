@@ -36,7 +36,6 @@ class App::BaseController < ActionController::Base
 
   def app_params
     hash = {}
-    hash[:wxmuid] = session[:wx_mp_user_id]      if session[:wx_mp_user_id]
     hash[:aid]    = session[:activity_id]        if session[:activity_id]
     hash[:anid]   = session[:activity_notice_id] if session[:activity_notice_id]
     hash

@@ -29,8 +29,8 @@
               </li>
 
               <li>
-                  <a href="<%= platforms_url %>" class="<%= (@partialLeftNav.blank? || @partialLeftNav == "/layouts/partialLeftNav") && controller_name == 'platforms' ? 'active' : '' %>">
-                      <span class="margin-top-20">公众平台绑定</span>
+                  <a href="<%= platforms_url %>" class="<%= @partialLeftNav == "/layouts/partialLeftWeixin" ? 'active' : '' %>">
+                      <span class="margin-top-20">微信设置</span>
                   </a>
               </li>
 
