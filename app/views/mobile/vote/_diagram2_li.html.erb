@@ -1,7 +1,7 @@
 <% results.each_with_index do |f, index| %>
   <li>
     <span class="lih90-sign"><%#= (results.current_page - 1) * results.limit_value + index + 1 %><%= f.item_no%>、</span>
-    <div class="box"><%= image_tag "#{f.try(:pic).try(:large)}?imageView/2/w/110/h/70", data: {src: f.try(:pic).try(:large).to_s} if f.pic_url %></div>
+    <div class="box"><%= image_tag "#{f.pic_url}?imageView/2/w/110/h/70", data: {src: f.pic_url.to_s} if f.pic_url %></div>
     <p><span><%= truncate f.name, length: 36 %></span></p>
     <%= div_for f, class: 'line' do %>
       <label><b style="width:<%= f.item_per %>%;"></b></label>

@@ -36,7 +36,8 @@ class ActivityVoteItem < ActiveRecord::Base
   end
 
   def pic_url
-    qiniu_image_view_url
+    qiniu_image_url(pic_key)
+    # qiniu_image_view_url
   end
 
   def qiniu_image_view_url
