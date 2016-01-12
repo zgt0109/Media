@@ -22,7 +22,7 @@ class Mobile::BaseController < ActionController::Base
     session[:activity_id] = params[:activity_id] if params[:activity_id].present?
     session[:activity_notice_id] = params[:anid] if params[:anid].present?
 
-    # @site = Site.find(session[:site_id].to_i)
+    @site = Site.find(session[:site_id].to_i)
 
     return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
