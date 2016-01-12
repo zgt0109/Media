@@ -28,9 +28,6 @@
 
 <%= content_for :custom_js do %>
   <script>
-    var frm = $("#session_form")
-    // frm.submit( function(ev) {
-    //  ev.preventDefault();
 
     $(".rucaptcha-image-box").on('click', function(){
       var img = $(this).find('img:first'),

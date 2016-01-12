@@ -28,7 +28,6 @@ class SessionsController < ApplicationController
       AccountLog.logging(account, request)
 
       session[:account_id] = account.id
-      session[:image_code] = nil
 
       return render json: {code: 0, url: root_url, message: "登录成功!", num: 2, status: 1}
     else
