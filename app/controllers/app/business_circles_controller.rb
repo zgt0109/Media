@@ -7,7 +7,6 @@ module App
       @website = Website.find(params[:id])
       @website_popup_menus =  @website.website_popup_menus.order(:sort)
       @website_pictures = @website.website_pictures.sorted
-      render :akesu_index, layout: false if @supplier.try(:id) == 10941
     end
 
     def show
@@ -27,17 +26,14 @@ module App
       else
         @website_menu = WebsiteMenu.find(params[:id])
         @website = @website_menu.website
-        #@website_articles = @website_menu.website_articles.as_default
       end
       @website_popup_menus =  @website.website_popup_menus.order(:sort)
-      # @website_pictures = @website.website_pictures
     rescue
       return render text: '请求页面不存在'
     end
 
     def detail
       @article = WebsiteArticle.find(params[:id])
-      # @website_menu = @article.website_menu
       @website = @article.website
       @website_popup_menus =  @website.website_popup_menus.order(:sort)
       @website_pictures = @website.website_pictures

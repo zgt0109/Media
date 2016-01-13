@@ -15,10 +15,10 @@ class VipUserPayment < ActiveRecord::Base
 
   validates_uniqueness_of :out_trade_no
   validates :amount, numericality: { greater_than_or_equal_to: 0.01 }
-  validates :wx_mp_user_id, :open_id, :out_trade_no, :subject, presence: true
+  validates :open_id, :out_trade_no, :subject, presence: true
 
   def transfer_params
-    transfer_fields = %w(wx_mp_user_id supplier_id open_id out_trade_no subject body source)
+    transfer_fields = %w(site_id open_id out_trade_no subject body source)
     attributes.slice(*transfer_fields).merge(trade_token: vip_user.trade_token, amount: amount.to_f) if confirm_paid?
   end
 
@@ -39,7 +39,7 @@ class VipUserPayment < ActiveRecord::Base
 
   def trade_result
     {
-      supplier_id: supplier_id,
+      site_id: site_id,
       out_trade_no: out_trade_no,
       status: "#{pay_status}",
       amount: amount,
@@ -85,9 +85,9 @@ class VipUserPayment < ActiveRecord::Base
     def build_and_validate(vip_user, params)
       trade_data = HashWithIndifferentAccess.new({
         vip_user_id: vip_user.id,
-        wx_user_id: vip_user.wx_user_id,
+        user_id: vip_user.user_id,
         open_id: vip_user.wx_user.openid,
-        wx_mp_user_id: vip_user.wx_mp_user_id,
+        site_id: vip_user.site_id,
         raw_data: params.to_json,
         status: 0
       })
@@ -97,13 +97,13 @@ class VipUserPayment < ActiveRecord::Base
       vip_user_payment
     end
 
-    def detected_vip_user(wx_mp_user_id, open_id)
-      supplier = WxMpUser.where(id: wx_mp_user_id).first.try(:supplier)
-      wx_user = supplier.wx_users.where(openid: open_id).first
+    def detected_vip_user(site_id, open_id)
+      site = Site.where(id: site_id).first
+      wx_user = site.wx_users.where(openid: open_id).first
 
       return if supplier.nil? and wx_user.nil?
 
-      supplier.vip_users.visible.where(wx_user_id: wx_user.id).first rescue nil
+      supplier.vip_users.visible.where(user_id: wx_user.user_id).first rescue nil
       #has_many :vip_users
     end
 

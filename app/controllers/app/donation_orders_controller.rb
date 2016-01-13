@@ -5,7 +5,7 @@ module App
 
     def new
       @temp = params[:temp]
-      @donation_order = DonationOrder.new(:wx_user_id => session[:wx_user_id], :supplier_id => @supplier.try(:id))
+      @donation_order = DonationOrder.new(user_id: session[:user_id], :site_id => @site.try(:id))
     end
 
     def create

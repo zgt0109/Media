@@ -1,26 +1,25 @@
 module App
   class TripsController < BaseController
     layout 'app/trip'
-    before_filter :get_wx_user, :body_class
+    before_filter :body_class
 
     def index
-      @trip = @supplier.trip
+      @trip = @site.trip
       @trip_ads = @trip.trip_ads.order(:sort)
       @trip_tickets = @trip.trip_tickets.where(status: 1).latest
-      if @supplier.website.website_menus.where(menuable_type: 'Activity', menuable_id: session[:activity_id]).exists?
-        @url = mobile_root_url(supplier_id: @supplier.id)
+      if @site.website.website_menus.where(menuable_type: 'Activity', menuable_id: session[:activity_id]).exists?
+        @url = mobile_root_url(site_id: @site.id)
       end
     end
 
     def new_order
-      @ticket = @supplier.trip.trip_tickets.where(id: params[:id]).first
+      @ticket = @site.trip.trip_tickets.where(id: params[:id]).first
     end
 
     def create_order
-      params[:order][:supplier_id] = @supplier.id
-      params[:order][:wx_mp_user_id] = @wx_mp_user.id
-      params[:order][:wx_user_id] = @wx_user.id
-      params[:order][:trip_id] = @supplier.trip.id
+      params[:order][:site_id] = @site.id
+      params[:order][:user_id] = @user.id
+      params[:order][:trip_id] = @site.trip.id
       params[:order][:booking_at] = Time.now if params[:order][:booking_at].blank?
       now = Time.now
       params[:order][:order_no] = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
@@ -29,15 +28,10 @@ module App
     end
 
     def order_list
-      @orders = @supplier.trip.trip_orders.where(wx_user_id: @wx_user.id).order('created_at desc')
+      @orders = @site.trip.trip_orders.where(user_id: @user.id).order('created_at desc')
     end
 
     private
-
-    def get_wx_user
-      @wx_user = @wx_mp_user.wx_users.find session[:wx_user_id]
-      redirect_to four_o_four_url unless @wx_user || @wx_mp_user
-    end
 
     def body_class
       if action_name == "index"

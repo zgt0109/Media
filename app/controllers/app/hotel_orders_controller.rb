@@ -3,7 +3,7 @@ module App
     layout 'app/hotel'
   
     def index
-      @hotel_orders = HotelOrder.where(hotel_id: params[:aid], wx_user_id: session[:wx_user_id]).order("created_at desc").page(params[:page])
+      @hotel_orders = HotelOrder.where(hotel_id: params[:aid], user_id: session[:user_id]).order("created_at desc").page(params[:page])
       respond_to do |format|
         format.html
         format.js{}
@@ -13,7 +13,7 @@ module App
     def new
       @hotel_room_type = HotelRoomType.normal.where(id: params[:room_type_id],hotel_id: params[:aid]).first
       @hotel_branch = @hotel_room_type.hotel_branch
-      @hotel_order = @hotel_room_type.hotel_orders.new(supplier_id: session[:supplier_id], hotel_id: params[:aid], wx_mp_user_id: session[:wx_mp_user_id], wx_user_id: session[:wx_user_id], hotel_branch_id: @hotel_room_type.hotel_branch_id, hotel_room_type_id: params[:hotel_room_type_id], qty: 1)
+      @hotel_order = @hotel_room_type.hotel_orders.new(site_id: session[:site_id], hotel_id: params[:aid], user_id: session[:user_id], hotel_branch_id: @hotel_room_type.hotel_branch_id, hotel_room_type_id: params[:hotel_room_type_id], qty: 1)
       
       @max_available_qty = @hotel_room_type.hotel_room_settings.normal.where('date between ? and ?', params[:check_in_date] ,Date.parse(params[:check_out_date])-1.days).select('min(available_qty) available_qty').first.available_qty
     end
@@ -55,16 +55,15 @@ module App
       end
       if hotel_order
         # 微酒店订房成功
-        supplier = Account.where(id: @hotel_order.supplier_id).first
-        if @hotel_order.try(:hotel_branch).try(:mobile).present? && supplier
-          begin
-            sms_content = "微酒店订房通知：用户“#{@hotel_order.name}”电话：#{@hotel_order.mobile} 于 #{@hotel_order.created_at} 预定了《#{@hotel_order.hotel_room_type.try(:name)}》房间，所属分店：#{@hotel_order.hotel_branch.try(:name)}"
-            supplier.send_message(@hotel_order.hotel_branch.mobile, sms_content, "酒店")
-          rescue Exception => e
-            Rails.logger.error "微酒店订房通知短信发送失败：#{e}"
-          end
+        if @hotel_order.try(:hotel_branch).try(:mobile).present?
+          # begin
+          #   sms_content = "微酒店订房通知：用户“#{@hotel_order.name}”电话：#{@hotel_order.mobile} 于 #{@hotel_order.created_at} 预定了《#{@hotel_order.hotel_room_type.try(:name)}》房间，所属分店：#{@hotel_order.hotel_branch.try(:name)}"
+          #   @site.account.send_message(@hotel_order.hotel_branch.mobile, sms_content, "酒店")
+          # rescue Exception => e
+          #   Rails.logger.error "微酒店订房通知短信发送失败：#{e}"
+          # end
         end        
-        redirect_to success_app_hotel_orders_path(room_type_id: params[:room_type_id],hotel_order_id: @hotel_order.id, aid: params[:aid], wxmuid: session[:wx_mp_user_id], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date]), notice: '预订成功'
+        redirect_to success_app_hotel_orders_path(room_type_id: params[:room_type_id],hotel_order_id: @hotel_order.id, aid: params[:aid], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date]), notice: '预订成功'
       else
         redirect_to :back, notice: notice
       end

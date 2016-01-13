@@ -1029,7 +1029,7 @@ class Activity < ActiveRecord::Base
     return success_mobile_survey_url(options.merge(id: id)) if activity_user.survey_finish?
 
     question = survey_questions.first
-    question ? questions_mobile_survey_url(options.merge(qid: question.id)) : ''
+    question ? questions_mobile_survey_url(options.merge(id: id, qid: question.id)) : ''
   end
 
   def return_car_url(options = {})

@@ -12,21 +12,12 @@ class App::BaseController < ActionController::Base
   layout 'app'
 
   def load_data
-    # if params[:wxmuid].present? && params[:wxmuid] != session[:wx_mp_user_id]
-    #   session.clear
-    #   session[:wx_mp_user_id] = params[:wxmuid]
-    # end
-    # session[:wx_mp_user_id] = params[:wxmuid].to_i if params[:wxmuid].present?
-
-    session[:activity_id] = params[:activity_id] if params[:activity_id]
+    # session[:activity_id] = params[:activity_id] if params[:activity_id]
     session[:activity_id] = params[:aid] if params[:aid]
     session[:activity_notice_id] = params[:anid] if params[:anid]
 
-    # @wx_mp_user = WxMpUser.find(session[:wx_mp_user_id].to_i)
-    # @supplier = @wx_mp_user.supplier
     return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
-    # session[:supplier_id] = @supplier.try(:id)
     @account_footer = AccountFooter.default_footer
   rescue => error
     logger.info "*********** app load_data error: #{error.message} > #{error.backtrace}"

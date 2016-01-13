@@ -16,7 +16,7 @@ class Api::V1::BaseController < ActionController::Base
 
     def authenticate_user
       role_id, token = request_params.values_at(*%w[role_id token])
-      klass = request_params[:role] == 'supplier' ? Account : SubAccount
+      klass = request_params[:role] == 'account' ? Account : SubAccount
       @login_user = klass.where(id: role_id).first
       return render_error('参数不正确，找不到商家或门店') if @login_user.blank?
       # return render_error('token不正确') if @login_user.auth_token != token
@@ -34,8 +34,8 @@ class Api::V1::BaseController < ActionController::Base
       ShopBranch.find(current_shop_branch_id) if current_shop_branch_id.present?
     end
 
-    def require_supplier
-      render_error('只有商户才能执行该操作') if request_params[:role] != 'supplier'
+    def require_account
+      render_error('只有商户才能执行该操作') if request_params[:role] != 'account'
     end
 
     def require_vip_user

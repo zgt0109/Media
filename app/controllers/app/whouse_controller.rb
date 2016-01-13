@@ -1,6 +1,5 @@
 class App::WhouseController < App::BaseController
   layout 'app/whouse'
-  before_filter :find_wx_user
 
   def index
     @activity = Activity.where(id: params[:aid]).first
@@ -64,7 +63,7 @@ class App::WhouseController < App::BaseController
         if @activity.activity_type.house?
           @house = @activity.activityable
           if @house
-            @house_comment = @house.house_comments.new(supplier_id: session[:supplier_id], wx_mp_user_id:  session[:wx_mp_user_id], house_id: params[:hid])
+            @house_comment = @house.house_comments.new(site_id: session[:site_id], house_id: params[:hid])
           end
         end
       end
@@ -75,7 +74,7 @@ class App::WhouseController < App::BaseController
           @house = @activity.activityable
           if @house
             respond_to do |format|
-              if @house.house_comments.create!(supplier_id: @activity.supplier_id, wx_mp_user_id:  session[:wx_user_id], wx_user_id:  session[:wx_user_id], house_id: params[:hid], name: params[:name], mobile: params[:mobile], content: params[:content])
+              if @house.house_comments.create!(site_id: @activity.site_id, user_id:  session[:user_id], house_id: params[:hid], name: params[:name], mobile: params[:mobile], content: params[:content])
                 format.json { render json: {status: 1}}
               else
                 format.json { render json: {status: 0}}
@@ -110,10 +109,5 @@ class App::WhouseController < App::BaseController
       end
     end
   end
-
-  private
-    def find_wx_user
-      @wx_user = @wx_mp_user.wx_users.find session[:wx_user_id]
-    end
 
 end

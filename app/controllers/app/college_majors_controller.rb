@@ -21,7 +21,7 @@ module App
       session[:cid] = params[:cid] if params[:cid].present?
 
       @college  = College.includes(:majors).find(params[:cid] || session[:cid])
-      @college_enroll ||= @college.enrolls.new(wx_user_id: session[:wx_user_id])
+      @college_enroll ||= @college.enrolls.new(user_id: session[:user_id])
     rescue
       return render text: '请求参数不正确'
     end

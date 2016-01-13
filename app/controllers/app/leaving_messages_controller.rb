@@ -6,9 +6,9 @@ module App
       @activity = Activity.find(session[:activity_id])
       @share_image = @activity.qiniu_pic_url.present? ? @activity.qiniu_pic_url : @activity.default_pic_url
       site = @activity.site
-      @replier = site.wx_mp_user.wx_users.find_by_id(session[:wx_user_id])
+      @replier = site.users.find_by_id(session[:user_id])
 
-      @message = LeavingMessage.new(replier_id: session[:wx_user_id], replier_type: 'WxUser')
+      @message = LeavingMessage.new(replier_id: session[:user_id], replier_type: 'WxUser')
 
       @messages = site.leaving_messages.root
       @messages = @messages.audited if @activity.audited?
@@ -25,7 +25,7 @@ module App
       activity = Activity.find_by_id(session[:activity_id])
       if activity
         site = activity.site
-        replier = site.wx_mp_user.wx_users.find_by_id(session[:wx_user_id])
+        replier = site.users.find_by_id(session[:user_id])
 
         message = site.leaving_messages.create(params[:leaving_message])
 

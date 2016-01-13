@@ -4,11 +4,10 @@ module App
 
     def show
       @main_id = "stage"
-      @activity = @wx_mp_user.activities.wheel.show.find(params[:id])
+      @activity = @site.activities.wheel.show.find(params[:id])
       @activity_notice = @activity.activity_notices.find_by_id(session[:activity_notice_id]) || @activity.activity_notices.active.first
 
-      wx_user = @wx_mp_user.wx_users.where(id: session[:wx_user_id]).first if session[:wx_user_id].present?
-      @activity_consumes =  wx_user.present? ? wx_user.activity_consumes.includes(:activity_prize).where(activity_id: params[:aid]) : []
+      @activity_consumes =  @user.present? ? @user.activity_consumes.includes(:activity_prize).where(activity_id: params[:aid]) : []
       if @activity 
         @share_image = @activity_notice.try(:pic_url)
         if @activity.setted?  && @activity.activity_status == Activity::UNDER_WAY
@@ -28,16 +27,15 @@ module App
     def list
       @main_id = "stage"
       @main_class = "stage"
-      wx_user = @wx_mp_user.wx_users.find_by_id(session[:wx_user_id])
       @activity = Activity.find(params[:aid])
       @share_image = @activity.activity_notices.active.first.try(:pic_url)
-      @activity_consumes = wx_user.present? ? wx_user.activity_consumes.includes(:activity_prize).where(activity_id: params[:aid]).order(:created_at) : []
+      @activity_consumes = @user.present? ? @user.activity_consumes.includes(:activity_prize).where(activity_id: params[:aid]).order(:created_at) : []
     end
 
     def prize
       if params[:t].present? and params[:t].eql?('lottery')
         is_thank = false; is_error = true; @is_win = false; @activity_consume_id = ''; @sn_code = ''; level = ''; error_id = ''; error_msg = '对不起，网络连接错误，请重试'
-        @activity = Activity.wheel.where(id: params[:aid], wx_mp_user_id: session[:wx_mp_user_id]).first
+        @activity = Activity.wheel.where(id: params[:aid]).first
         if @activity
           logger.info "========活动存在"
           #抽奖活动尚在进行中
@@ -47,21 +45,21 @@ module App
             #全局设置判断 上线前,已有奖品记录关联插入到lottery_draws表
             lottery_draws = @activity.lottery_draws
             if lottery_draws
-              if @activity.activity_property.day_partake_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).today.count < @activity.activity_property.day_partake_limit #每人每天参与次数
-                if @activity.activity_property.partake_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).count < @activity.activity_property.partake_limit #每人参与总次数
-                  if @activity.activity_property.day_prize_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).today.win.count < @activity.activity_property.day_prize_limit #每人每天中奖次数
-                    if @activity.activity_property.prize_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).win.count < @activity.activity_property.prize_limit #每人总中奖次数
+              if @activity.activity_property.day_partake_limit == -1 or lottery_draws.where(user_id: session[:user_id]).today.count < @activity.activity_property.day_partake_limit #每人每天参与次数
+                if @activity.activity_property.partake_limit == -1 or lottery_draws.where(user_id: session[:user_id]).count < @activity.activity_property.partake_limit #每人参与总次数
+                  if @activity.activity_property.day_prize_limit == -1 or lottery_draws.where(user_id: session[:user_id]).today.win.count < @activity.activity_property.day_prize_limit #每人每天中奖次数
+                    if @activity.activity_property.prize_limit == -1 or lottery_draws.where(user_id: session[:user_id]).win.count < @activity.activity_property.prize_limit #每人总中奖次数
                       prize = @activity.get_prize #获取奖品
 
                       if prize #如果中奖
                         logger.info "========获取到奖券"
-                        if prize.people_day_limit_count == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id], activity_prize_id: prize.id).today.count < prize.people_day_limit_count # 某奖品每人每天次数
-                          if prize.people_limit_count == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id], activity_prize_id: prize.id).count < prize.people_limit_count # 某奖品每人总次数
+                        if prize.people_day_limit_count == -1 or lottery_draws.where(user_id: session[:user_id], activity_prize_id: prize.id).today.count < prize.people_day_limit_count # 某奖品每人每天次数
+                          if prize.people_limit_count == -1 or lottery_draws.where(user_id: session[:user_id], activity_prize_id: prize.id).count < prize.people_limit_count # 某奖品每人总次数
                             if prize.day_limit_count == -1 or lottery_draws.where(activity_prize_id: prize.id).today.count < prize.day_limit_count # 某奖品当天次数
                               #出奖次数未超过设置值
                               if lottery_draws.where(activity_prize_id: prize.id).count < prize.prize_count # 奖品数量 如果奖池中还有奖品
                                 logger.info "========生成奖品记录"
-                                activity_consume = prize.activity_consumes.create(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, activity_id: @activity.id, wx_user_id: session[:wx_user_id])
+                                activity_consume = prize.activity_consumes.create(site_id: @activity.site_id, activity_id: @activity.id, user_id: session[:user_id])
                                 @prize_title = prize.title
                                 @prize_type = prize.title
                                 @sn_code = activity_consume.code
@@ -107,7 +105,7 @@ module App
                     is_thank = true
                   end #每人每天中奖次数
 
-                  lottery_draw = @activity.lottery_draws.create(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, wx_user_id: session[:wx_user_id], activity_prize_id: (@is_win ? (prize ? prize.id : nil) : nil), status: (@is_win ? LotteryDraw::WIN : LotteryDraw::UNWIN) )
+                  lottery_draw = @activity.lottery_draws.create(site_id: @activity.site_id, user_id: session[:user_id], activity_prize_id: (@is_win ? (prize ? prize.id : nil) : nil), status: (@is_win ? LotteryDraw::WIN : LotteryDraw::UNWIN) )
 
                 else
                   logger.info "========参与总次数达上限,不能再抽奖了"
@@ -135,7 +133,7 @@ module App
         end
 
       elsif params[:t].present? and params[:t].eql?('mobile')
-        activity_consume = ActivityConsume.where(id: params[:acid], wx_user_id: session[:wx_user_id]).first
+        activity_consume = ActivityConsume.where(id: params[:acid], user_id: session[:user_id]).first
         respond_to do |format|
           logger.info "=====#{params.to_s}"
           if activity_consume and activity_consume.update_attributes(mobile: params[:mobile])

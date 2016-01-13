@@ -16,23 +16,23 @@ class App::HitEggsController < App::BaseController
         #全局设置判断 上线前,已有奖品记录关联插入到lottery_draws表
         lottery_draws = @activity.lottery_draws
         # if lottery_draws
-          if @activity.activity_property.day_partake_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).today.count < @activity.activity_property.day_partake_limit #每人每天参与次数
-            if @activity.activity_property.partake_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).count < @activity.activity_property.partake_limit #每人参与总次数
-              if @activity.activity_property.day_prize_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).today.win.count < @activity.activity_property.day_prize_limit #每人每天中奖次数
-                if @activity.activity_property.prize_limit == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id]).win.count < @activity.activity_property.prize_limit #每人总中奖次数
+          if @activity.activity_property.day_partake_limit == -1 or lottery_draws.where(user_id: session[:user_id]).today.count < @activity.activity_property.day_partake_limit #每人每天参与次数
+            if @activity.activity_property.partake_limit == -1 or lottery_draws.where(user_id: session[:user_id]).count < @activity.activity_property.partake_limit #每人参与总次数
+              if @activity.activity_property.day_prize_limit == -1 or lottery_draws.where(user_id: session[:user_id]).today.win.count < @activity.activity_property.day_prize_limit #每人每天中奖次数
+                if @activity.activity_property.prize_limit == -1 or lottery_draws.where(user_id: session[:user_id]).win.count < @activity.activity_property.prize_limit #每人总中奖次数
                   prize = @activity.get_prize #获取奖品
 
                   if prize #如果中奖
                     logger.info "========获取到奖券==========="
-                    if prize.people_day_limit_count == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id], activity_prize_id: prize.id).today.count < prize.people_day_limit_count # 某奖品每人每天次数
-                      if prize.people_limit_count == -1 or lottery_draws.where(wx_user_id: session[:wx_user_id], activity_prize_id: prize.id).count < prize.people_limit_count # 某奖品每人总次数
+                    if prize.people_day_limit_count == -1 or lottery_draws.where(user_id: session[:user_id], activity_prize_id: prize.id).today.count < prize.people_day_limit_count # 某奖品每人每天次数
+                      if prize.people_limit_count == -1 or lottery_draws.where(user_id: session[:user_id], activity_prize_id: prize.id).count < prize.people_limit_count # 某奖品每人总次数
                         if prize.day_limit_count == -1 or lottery_draws.where(activity_prize_id: prize.id).today.count < prize.day_limit_count # 某奖品当天次数
                                                                                                                                                #出奖次数未超过设置值
                           if lottery_draws.where(activity_prize_id: prize.id).count < prize.prize_count # 奖品数量 如果奖池中还有奖品
                             logger.info "========生成奖品记录,奖品为#{prize.title}============="
-                            @activity_consume = prize.activity_consumes.create(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, activity_id: @activity.id, wx_user_id: session[:wx_user_id])
+                            @activity_consume = prize.activity_consumes.create(site_id: @activity.site_id, activity_id: @activity.id, user_id: session[:user_id])
                             @prize_title = prize.title;  @prize_type = prize.title; @sn_code = @activity_consume.code;
-                            lottery_draw = @activity.lottery_draws.create(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, wx_user_id: session[:wx_user_id], activity_prize_id:  prize.id, status:1 )
+                            lottery_draw = @activity.lottery_draws.create(site_id: @activity.site_id, user_id: session[:user_id], activity_prize_id:  prize.id, status:1 )
                             render 'success.js'
                             return
                           else
@@ -65,7 +65,7 @@ class App::HitEggsController < App::BaseController
                 logger.info "========用户今天总的中奖次数达上限,不能再中奖了"
               end #每人每天中奖次数
 
-              lottery_draw = @activity.lottery_draws.create(supplier_id: @activity.supplier_id, wx_mp_user_id: @activity.wx_mp_user_id, wx_user_id: session[:wx_user_id], status: 0) if session[:wx_user_id]
+              lottery_draw = @activity.lottery_draws.create(site_id: @activity.site_id, user_id: session[:user_id], status: 0) if session[:user_id]
               
               logger.info "========砸金蛋返回失败页面"
               
@@ -110,7 +110,7 @@ class App::HitEggsController < App::BaseController
       @activity = Activity.hit_egg.where(id: params[:aid]).first
       if @activity
         @prizes = @activity.activity_prizes
-        @activity_consumes = @activity.activity_consumes.where(wx_user_id: session[:wx_user_id]) rescue []
+        @activity_consumes = @activity.activity_consumes.where(user_id: session[:user_id]) rescue []
       else
         redirect_to mobile_notice_url(msg: '活动不存在')
       end

@@ -12,12 +12,12 @@ module App
     end
     
     def new
-      @hotel = Hotel.where(id: params[:aid], wx_mp_user_id: session[:wx_mp_user_id]).first
+      @hotel = Hotel.where(id: params[:aid]).first
       @hotel_order = @hotel.hotel_orders.where(id: params[:oid]).first
       @hotel_branch = @hotel.hotel_branches.where(id: @hotel_order.try(:hotel_branch_id)).first
       return redirect_to :back, notice: '参数错误' if @hotel.nil? or @hotel_branch.nil?
 
-      @hotel_comment = @hotel_branch.hotel_comments.new(hotel_id: params[:aid], wx_user_id: session[:wx_user_id], supplier_id: session[:supplier_id], wx_mp_user_id: session[:wx_mp_user_id], hotel_order_id: params[:oid])
+      @hotel_comment = @hotel_branch.hotel_comments.new(hotel_id: params[:aid], user_id: session[:user_id], site_id: session[:site_id], hotel_order_id: params[:oid])
     end
     
     def create
@@ -27,7 +27,7 @@ module App
       @hotel_comment = @hotel_branch.hotel_comments.new(params[:hotel_comment])
 
       if @hotel_comment.save
-        redirect_to app_hotel_comments_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], branch_id: params[:hotel_comment][:hotel_branch_id], source: params[:source]), notice: '评论成功'
+        redirect_to app_hotel_comments_path(aid: params[:aid], branch_id: params[:hotel_comment][:hotel_branch_id], source: params[:source]), notice: '评论成功'
       else
         redirect_to :back, notice: '评论失败'
       end

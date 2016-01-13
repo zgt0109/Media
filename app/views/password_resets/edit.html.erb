@@ -68,8 +68,8 @@
   <script>
     $("#btn-submit").on('click',function() {
         checkInputDel($(".m-input-text"));
-        var password = $("#supplier_password").val(),
-            password_confirmation = $("#supplier_password_confirmation").val(),
+        var password = $("#account_password").val(),
+            password_confirmation = $("#account_password_confirmation").val(),
             password_length = password.length;
         if(password_length < 6 || password_length > 20){
             checkInput($(".m-input-text").eq(0), 0, "密码长度为6~16位数字和字符组成");

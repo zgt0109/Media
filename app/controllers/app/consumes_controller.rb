@@ -3,7 +3,7 @@ module App
     before_filter :block_non_wx_browser
 
     def show
-      @activity = @wx_mp_user.activities.old_coupon.find params[:aid]
+      @activity = @site.activities.old_coupon.find params[:aid]
       @activity_notice = @activity.activity_notices.find params[:anid]
 
       filter_for_user

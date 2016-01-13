@@ -30,7 +30,7 @@ module App
     def find_house
       @activity = Activity.find(session[:activity_id])
 
-      @house = House.find(@activity.supplier.house.id)
+      @house = House.find(@activity.site.house.id)
       @house_sellers = @house.sellers.normal
     rescue
       render :text => "参数不正确"

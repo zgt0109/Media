@@ -53,7 +53,7 @@
       size:20,
       realtimePercent:"true",
       scratchMove: function(e, percent) {
-        <%- if @wx_user.blank? || @wx_user.wx_mp_user != @wx_mp_user %>
+        <%- if @user.blank? || @user.wx_mp_user != @wx_mp_user %>
           showTips(".J-guanzhu");
         <%- elsif @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)  %>
           showTips(".J-register");

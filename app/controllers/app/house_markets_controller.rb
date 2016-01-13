@@ -4,7 +4,7 @@ module App
     before_filter :find_house, :require_wx_user
 
     def new
-      @house_bespeak = HouseBespeak.new(:wx_user_id => session[:wx_user_id])
+      @house_bespeak = HouseBespeak.new(user_id: session[:user_id])
     end
 
     def create
@@ -21,7 +21,7 @@ module App
     private
     def find_house
       @activity = Activity.find(session[:activity_id])
-      @house = House.find(@activity.supplier.house.id)
+      @house = House.find(@activity.site.house.id)
     rescue
       render :text => "参数错误"
     end

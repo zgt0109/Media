@@ -2,9 +2,9 @@ class VipUserMailer < ActionMailer::Base
 
   default :from => "forget_password@winwemedia.com"
 
-  def transaction_email(supplier_password)
-    @notice = "你的密码是：#{supplier_password.password_digest}，为保证账户安全请尽快修改密码！"
-    mail(:to => supplier_password.email, :subject => "交易密码找回")
+  def transaction_email(account_password)
+    @notice = "你的密码是：#{account_password.password_digest}，为保证账户安全请尽快修改密码！"
+    mail(:to => account_password.email, :subject => "交易密码找回")
   end
 
   # 自动绑定失败通知

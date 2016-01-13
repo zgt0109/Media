@@ -1,16 +1,12 @@
 class App::FightController < App::BaseController
-  skip_filter :require_wx_user
-  before_filter :block_non_wx_browser, :require_wx_mp_user
+  before_filter :block_non_wx_browser
 
   layout 'app/fight'
 
   def index
-    @activity = @wx_mp_user.activities.fight.find(params[:aid])
+    @activity = @site.activities.fight.find(params[:aid])
     if !@activity.deleted?
-
-      wx_user = @wx_mp_user.wx_users.where(id: session[:wx_user_id]).first
-      if wx_user
-        wx_mp_user = @activity.wx_mp_user
+      if @site.users.where(id: session[:user_id]).first
         @activity_notice = @activity.activity_notices.where(id: params[:anid]).first
         @share_title = @activity_notice.title
         @share_desc = @activity_notice.summary.try(:squish)
@@ -20,7 +16,7 @@ class App::FightController < App::BaseController
           logger.info "test log: ready go ..."
           if @activity.activity_status == Activity::UNDER_WAY
              logger.info "test log: 活动进行中...UNDER_WAY"
-             @fight_report_card = @activity.fight_report_cards.where(supplier_id: @activity.supplier_id, wx_mp_user_id: wx_mp_user.try(:id), wx_user_id: session[:wx_user_id]).first_or_create
+             @fight_report_card = @activity.fight_report_cards.where(site_id: @activity.site_id, user_id: session[:user_id]).first_or_create
 
              if "start".eql?(params[:m])
                logger.info "test log: m=>start update fight status to start ..."
@@ -29,7 +25,7 @@ class App::FightController < App::BaseController
                logger.info "test log: m=>register user sign up activity ..."
                if params[:name].present? and params[:mobile].present?
                  Activity.transaction do
-                   activity_user = @activity.activity_users.where(supplier_id: @activity.supplier_id, wx_mp_user_id: wx_mp_user.try(:id), wx_user_id: session[:wx_user_id]).first_or_create(name: params[:name], mobile: params[:mobile])
+                   activity_user = @activity.activity_users.where(site_id: @activity.site_id, user_id: session[:user_id]).first_or_create(name: params[:name], mobile: params[:mobile])
                    @fight_report_card = @activity.fight_report_cards.find(@fight_report_card.id) if activity_user and register_fight!(activity_user.id)
                  end
                end
@@ -40,7 +36,7 @@ class App::FightController < App::BaseController
                render 'index'
              elsif @fight_report_card.started?
                logger.info "test log: fight status is started, go to register ..."
-               last_user_info = @activity.wx_mp_user.activity_users.where(wx_user_id: session[:wx_user_id]).order('created_at desc').first
+               last_user_info = @activity.activity_users.where(user_id: session[:user_id]).order('created_at desc').first
                @activity_user = @activity.activity_users.new
                if last_user_info
                  @activity_user.name = last_user_info.name
@@ -79,7 +75,7 @@ class App::FightController < App::BaseController
                  # index or register
                  logger.info "\t m=>#{params[:m]} ..."
                  #当前用户当天未参赛
-                 if ( ("register".eql?(params[:m]) and @fight_paper.fight_answers.where(wx_user_id: session[:wx_user_id]).count == 0 ) or (@fight_paper.fight_answers.where(wx_user_id: session[:wx_user_id]).count == 0 and @fight_paper.fight_paper_questions.count > 0) )
+                 if ( ("register".eql?(params[:m]) and @fight_paper.fight_answers.where(user_id: session[:user_id]).count == 0 ) or (@fight_paper.fight_answers.where(user_id: session[:user_id]).count == 0 and @fight_paper.fight_paper_questions.count > 0) )
                    render 'read'
                  else
                    get_question(params)
@@ -98,7 +94,7 @@ class App::FightController < App::BaseController
              end
           elsif @activity.activity_status == Activity::SHOW_LIST
              logger.info "test log: 活动榜单公示期...SHOW_LIST"
-             @fight_report_card = @activity.fight_report_cards.where(supplier_id: @activity.supplier_id, wx_mp_user_id: wx_mp_user.try(:id), wx_user_id: session[:wx_user_id]).first_or_create
+             @fight_report_card = @activity.fight_report_cards.where(site_id: @activity.site_id, user_id: session[:user_id]).first_or_create
              if @fight_report_card.registered?
                if( "consume".eql?(params[:m]))
                  if( request.post? )
@@ -117,7 +113,7 @@ class App::FightController < App::BaseController
                  render 'result'
                end
              else
-               #@fight_report_card = @activity.fight_report_cards.new(supplier_id: @activity.supplier_id, wx_mp_user_id: wx_mp_user.try(:id), wx_user_id: session[:wx_user_id])
+               #@fight_report_card = @activity.fight_report_cards.new(site_id: @activity.site_id, user_id: session[:user_id])
                load_rankings
                render 'result'
                #render text: '活动已过期'
@@ -134,7 +130,7 @@ class App::FightController < App::BaseController
         end
       else
         #render text: '对不起,您无权访问此页面!'
-        #redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
+        #redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
       end
     else
       redirect_to mobile_notice_url(msg: '活动不存在')
@@ -154,7 +150,7 @@ class App::FightController < App::BaseController
   end
 
   def answer! params
-    attrs = { fight_paper_question_id: params[:fight_paper_question_id], activity_id: params[:aid], wx_mp_user_id: session[:wx_mp_user_id], wx_user_id: session[:wx_user_id], the_day: @fight_paper.the_day }
+    attrs = { fight_paper_question_id: params[:fight_paper_question_id], activity_id: params[:aid], user_id: session[:user_id], the_day: @fight_paper.the_day }
     answer = @fight_paper.fight_answers.where(attrs).first
     return answer if answer
     fight_question = @fight_paper.fight_questions.find(params[:question_id])
@@ -170,7 +166,7 @@ class App::FightController < App::BaseController
 
   def get_question params
     answered_question_ids = []
-    @fight_paper.fight_answers.where(wx_user_id: session[:wx_user_id]).select(:fight_paper_question_id).each {|fa| answered_question_ids.push(fa.fight_paper_question_id)}
+    @fight_paper.fight_answers.where(user_id: session[:user_id]).select(:fight_paper_question_id).each {|fa| answered_question_ids.push(fa.fight_paper_question_id)}
 
     @answered_questions_count = answered_question_ids.count+1
     fight_paper_questions_count = @fight_paper.fight_paper_questions.count
@@ -236,7 +232,7 @@ class App::FightController < App::BaseController
     sn = ''
     if @fight_report_card.wined? and @fight_report_card.activity_prize
       @activity.transaction do
-        activity_consume = @activity.activity_consumes.where(supplier_id: @activity.supplier_id, wx_mp_user_id: session[:wx_mp_user_id], wx_user_id: session[:wx_user_id],activity_prize_id: @fight_report_card.activity_prize.id).first_or_create(mobile: @fight_report_card.activity_user.try(:mobile))
+        activity_consume = @activity.activity_consumes.where(site_id: @activity.site_id, user_id: session[:user_id],activity_prize_id: @fight_report_card.activity_prize.id).first_or_create(mobile: @fight_report_card.activity_user.try(:mobile))
         if activity_consume
           @fight_report_card.update_attributes(win_status: FightReportCard::DRAWED, activity_consume_id: activity_consume.id)
           @fight_report_card.activity_consume = activity_consume
