@@ -1,6 +1,6 @@
 class Mobile::SurveysController < Mobile::BaseController
   layout 'mobile/surveys'
-  before_filter :block_non_wx_browser, :require_wx_mp_user
+  before_filter :block_non_wx_browser
   before_filter :find_activity
   before_filter :check_subscribe
   before_filter :find_activity_user
@@ -9,7 +9,7 @@ class Mobile::SurveysController < Mobile::BaseController
   def show
     return unless @activity_user
     return if @activity.survey_status_attrs[0] != '进行中'
-    return redirect_to success_mobile_survey_url(site_id: @activity.site_id, id: @activity.id) if @activity_user.survey_finish?
+    return redirect_to success_mobile_survey_url(site_id: @activity.site_id, aid: @activity.id) if @activity_user.survey_finish?
     if session[:last_question_id] && @activity.survey_questions.where(id: session[:last_question_id]).exists?
       first_qid = session[:last_question_id]
     else
@@ -24,14 +24,14 @@ class Mobile::SurveysController < Mobile::BaseController
 
   def new
     @activity_user ||= @activity.activity_users.create!(params[:activity_user].to_h.merge(
-      user_id:    @wx_user.id,
+      user_id:    @user.id,
       site_id:   @activity.site_id
     ))
-    redirect_to questions_mobile_survey_url(site_id: @activity.site_id, qid: @first_qid) if @first_qid
+    redirect_to questions_mobile_survey_url(site_id: @site.id, id: @activity.id, qid: @first_qid) if @first_qid
   end
 
   def questions
-    return redirect_to mobile_survey_url(site_id: @activity.site_id, id: @activity.id) unless @activity_user
+    return redirect_to mobile_survey_url(site_id: @activity.site_id, aid: @activity.id) unless @activity_user
     @survey_question = @activity.survey_questions.find(params[:qid])
     survey_answers = @survey_question.survey_answers.where(activity_user_id: @activity_user.id)
     @survey_answers_ids = survey_answers.pluck(:survey_question_choice_id).uniq.compact
@@ -121,7 +121,7 @@ class Mobile::SurveysController < Mobile::BaseController
   end
 
   def find_activity
-    @activity = @site.activities.surveys.find session[:activity_id]
+    @activity = @site.activities.find session[:activity_id]
     return render_404 if @activity.deleted?
     @survey_questions = @activity.survey_questions.order(:position)
     @first_qid = @survey_questions.first.try(:id)

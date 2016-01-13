@@ -44,7 +44,7 @@
             <% if @website_setting.nav_template_id == 0 %>
                 请选择模板
             <% else %>
-                <image src="<%= @website_setting.try(:inside_nav_template).pic_url %>" height='320' width='320'/>
+                <image src="<%= @website_setting.inside_nav_template.try(:pic_url) %>" height='320' width='320'/>
             <% end %>
 
           </div>

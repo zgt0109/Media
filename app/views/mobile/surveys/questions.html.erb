@@ -17,11 +17,11 @@
         <%- elsif @survey_question.text_picture? %>
           <div class="item-text"><%= choice.name %></div>
           <div class="item-pic">
-            <img src="<%= choice.pic %>" alt="">
+            <img src="<%= choice.pic_url %>" alt="">
           </div>
         <%- elsif @survey_question.picture? %>
           <div class="item-pic">
-            <img src="<%= choice.pic %>" alt="">
+            <img src="<%= choice.pic_url %>" alt="">
           </div>
         <%- end %>
       </li>
