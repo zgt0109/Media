@@ -3,7 +3,7 @@ class App::WhouseController < App::BaseController
   before_filter :find_wx_user
 
   def index
-    @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+    @activity = Activity.where(id: params[:aid]).first
     if @activity
       if @activity.activity_type.house?
         @house = @activity.activityable
@@ -18,7 +18,7 @@ class App::WhouseController < App::BaseController
   end
     
   def layout
-    @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+    @activity = Activity.where(id: params[:aid]).first
     if @activity
       if @activity.activity_type.house?
         @house = @activity.activityable
@@ -31,7 +31,7 @@ class App::WhouseController < App::BaseController
   end
 
   def intro
-    @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+    @activity = Activity.where(id: params[:aid]).first
     if @activity
       if @activity.activity_type.house?
         @house = @activity.activityable
@@ -43,7 +43,7 @@ class App::WhouseController < App::BaseController
   end
     
   def impress
-    @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+    @activity = Activity.where(id: params[:aid]).first
     if @activity
       if @activity.activity_type.house?
         @house = @activity.activityable
@@ -59,7 +59,7 @@ class App::WhouseController < App::BaseController
     
   def comment
     if request.get?
-      @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+      @activity = Activity.where(id: params[:aid]).first
       if @activity
         if @activity.activity_type.house?
           @house = @activity.activityable
@@ -69,7 +69,7 @@ class App::WhouseController < App::BaseController
         end
       end
     else
-      @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+      @activity = Activity.where(id: params[:aid]).first
       if @activity
         if @activity.activity_type.house?
           @house = @activity.activityable
@@ -88,7 +88,7 @@ class App::WhouseController < App::BaseController
   end
 
   def expert_comments
-    @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+    @activity = Activity.where(id: params[:aid]).first
     if @activity
       if @activity.activity_type.house?
         @house = @activity.activityable
@@ -100,7 +100,7 @@ class App::WhouseController < App::BaseController
   end
 
   def flashshow
-    @activity = Activity.where(id: params[:aid], wx_mp_user_id: session[:wx_user_id]).first
+    @activity = Activity.where(id: params[:aid]).first
     if @activity
       if @activity.activity_type.house?
         @house = @activity.activityable

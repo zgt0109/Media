@@ -107,7 +107,7 @@ class App::HitEggsController < App::BaseController
 
   private
     def find_activity
-      @activity = Activity.hit_egg.where(id: params[:id]).first
+      @activity = Activity.hit_egg.where(id: params[:aid]).first
       if @activity
         @prizes = @activity.activity_prizes
         @activity_consumes = @activity.activity_consumes.where(wx_user_id: session[:wx_user_id]) rescue []

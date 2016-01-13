@@ -446,6 +446,6 @@ class Mobile::AidsController < Mobile::BaseController
   end
   
   def mobile_params
-    session[:activity_id] = params[:id] if params[:id].present?
+    session[:activity_id] = params[:aid] if params[:aid].present?
   end
 end

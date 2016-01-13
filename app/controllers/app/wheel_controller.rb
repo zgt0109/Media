@@ -8,7 +8,7 @@ module App
       @activity_notice = @activity.activity_notices.find_by_id(session[:activity_notice_id]) || @activity.activity_notices.active.first
 
       wx_user = @wx_mp_user.wx_users.where(id: session[:wx_user_id]).first if session[:wx_user_id].present?
-      @activity_consumes =  wx_user.present? ? wx_user.activity_consumes.includes(:activity_prize).where(activity_id: params[:id]) : []
+      @activity_consumes =  wx_user.present? ? wx_user.activity_consumes.includes(:activity_prize).where(activity_id: params[:aid]) : []
       if @activity 
         @share_image = @activity_notice.try(:pic_url)
         if @activity.setted?  && @activity.activity_status == Activity::UNDER_WAY

@@ -319,16 +319,6 @@ class Activity < ActiveRecord::Base
     self.extend.wx_plot_sms.to_i == 1
   end
 
-  def hanming_callback_url
-    if self['extend'].blank?
-      "http://m.winwemedia.com"
-    elsif self['extend'].to_s.start_with?("http")
-      self['extend'].to_s
-    else
-      "http://#{self['extend'].to_s}"
-    end
-  end
-
   def vote_items_count
     @vote_items_count ||= activity_user_vote_items.count + activity_vote_items.sum(:adjust_votes)
     #@vote_items_count ||= Activity.find_by_sql(["select ((select SUM(activity_vote_items.adjust_votes) from activity_vote_items where activity_vote_items.activity_id = ?) + (select COUNT(*) from activity_user_vote_items where activity_user_vote_items.activity_id = ?)) as items_count", id, id]).first.try(:items_count).to_i
@@ -441,7 +431,7 @@ class Activity < ActiveRecord::Base
       self.custom_fields.where(field_type: '单行文本', name: '姓名', field_format: 'string').first_or_create
       self.custom_fields.where(field_type: '单行文本', name: '电话', field_format: 'string').first_or_create
       self.custom_fields.where(field_type: '日期和时间', name: '预定日期', field_format: 'datetime').first_or_create
-    elsif   (govchat? || govmail?) && custom_fields.blank?
+    elsif (govchat? || govmail?) && custom_fields.blank?
       self.custom_fields.where(field_type: '单行文本', name: '姓名', field_format: 'string').first_or_create
       self.custom_fields.where(field_type: '单行文本', name: '电话', field_format: 'string').first_or_create
     end
@@ -652,7 +642,7 @@ class Activity < ActiveRecord::Base
   end
 
   def keyword_duplicated?(keyword, user = nil)
-    user ||= supplier
+    user ||= site
     raise "Account can not be nil when validating uniqueness of activity's keyword" unless user
     repeats = user.activities.active.where(keyword: keyword).where('id <> ?', id)
     repeats.map(&:stop!)
@@ -660,7 +650,7 @@ class Activity < ActiveRecord::Base
   end
 
   def bg_music_url
-    bg_music.try(:qiniu_audio_url).try(:presence) || bg_music.try(:audio).try(:to_s)
+    bg_music.try(:qiniu_audio_url).try(:presence)
   end
 
   def bg_music
@@ -935,94 +925,135 @@ class Activity < ActiveRecord::Base
     [site_id.to_s, MOBILE_SUB_DOMAIN].join('.')
   end
 
-  def respond_mobile_url(activity_notice, options = {})
+  def respond_mobile_url(activity_notice = nil, options = {})
     activity_notice = activity_notice || activity_notices.active.first
+    if gua? && setted?
+      activity_notice = ActivityNotice.ready_or_active_notice(self, [WARM_UP, HAS_ENDED])
+    elsif wheel? && setted?
+      activity_notice = ActivityNotice.ready_or_active_notice(self)
+    elsif consume?
+      activity_notice = activity_notices.first
+      wx_user = WxUser.where(openid: options[:openid]).first
+      activity_consume = activity_consumes.where(site_id: site_id, user_id: wx_user.user_id).first
+      option[:code] = activity_consume.try(:code)
+    end
 
-    hotel_url = "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}"
-    hotel_url << "&openid=#{options[:openid]}" if options[:openid]
+    _default_params = { subdomain: mobile_subdomain, site_id: site_id, aid: id, openid: options[:openid] }
 
     url = case
-      when website?            then mobile_root_url(subdomain: mobile_subdomain)
-      when vip?                then app_vips_url(subdomain: mobile_subdomain)
-      when wave?               then mobile_waves_url(subdomain: mobile_subdomain, aid: id)
-      when consume?            then app_consume_url(aid: id, anid: activity_notice.id, code: option[:code])
-      when gua?                then app_gua_url(id: id, anid: activity_notice.try(:id), source: 'notice')
-      when wheel?              then app_wheel_url(id: id, anid: activity_notice.try(:id), source: 'notice')
-      when book_dinner?        then book_dinner_mobile_shops_url(subdomain: mobile_subdomain, aid: id)
-      when book_table?         then book_table_mobile_shops_url(subdomain: mobile_subdomain, aid: id)
-      when fight?              then app_fight_index_url(aid: id, anid: activity_notice.try(:id), m: 'index')
-      when take_out?           then take_out_mobile_shops_url(subdomain: mobile_subdomain, aid: id)
-      when enroll?             then new_app_activity_enroll_url(aid: id)
-      when surveys?            then mobile_survey_url(subdomain: mobile_subdomain, aid: id)
-      when reservation?        then mobile_reservations_url(subdomain: mobile_subdomain, aid: id)
-      when micro_store?        then mobile_micro_stores_url(subdomain: mobile_subdomain, aid: id)
+      when website?            then mobile_root_url(_default_params)
+      when vip?                then app_vips_url(_default_params)
+      when wave?               then mobile_waves_url(_default_params)
+      when consume?            then app_consume_url(_default_params.merge(anid: activity_notice.id, code: option[:code]))
+      when gua?                then app_gua_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
+      when wheel?              then app_wheel_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
+      when book_dinner?        then book_dinner_mobile_shops_url(_default_params)
+      when book_table?         then book_table_mobile_shops_url(_default_params)
+      when fight?              then app_fight_index_url(_default_params.merge(m: 'index'))
+      when take_out?           then take_out_mobile_shops_url(_default_params)
+      when enroll?             then new_app_activity_enroll_url(_default_params)
+      when surveys?            then return_survey_activity_url(_default_params)
+      when reservation?        then mobile_reservations_url(_default_params)
+      when micro_store?        then mobile_micro_stores_url(_default_params)
       when vote?
-        if stopped?
-          mobile_vote_result_url(subdomain: mobile_subdomain, aid: id)
-        else
-          mobile_vote_login_url(subdomain: mobile_subdomain, aid: id)
-        end
-      when house?              then app_house_layouts_url(aid: id)
-      when groups?             then app_activity_group_url(self)
-      when car?                then car_url
-      when weddings?           then mobile_weddings_url(subdomain: mobile_subdomain, wid: activityable_id)
-      when hotel?              then hotel_url
-      when album?              then mobile_albums_url(subdomain: mobile_subdomain, aid: id)
-      when educations?         then app_educations_url(cid: activityable_id)
-      when life?               then app_lives_url(id: activityable_id, aid: id)
-      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_id: options[:openid])
-      when circle?             then app_business_circles_url(id: activityable_id, aid: id)
-      when message?            then app_leaving_messages_url(aid: id)
+        stopped? ? mobile_vote_result_url(_default_params.merge(vote_id: id)) : mobile_vote_login_url(_default_params.merge(vote_id: id))
+      when house?              then app_house_layouts_url(_default_params)
+      when groups?             then app_activity_group_url(_default_params.merge(id: id))
+      when car?                then return_car_url(_default_params)
+      when weddings?           then mobile_weddings_url(_default_params.merge(wid: activityable_id))
+      when album?              then mobile_albums_url(_default_params)
+      when educations?         then app_educations_url(_default_params.merge(cid: activityable_id))
+      when life?               then app_lives_url(_default_params.merge(id: activityable_id))
+      when circle?             then app_business_circles_url(_default_params.merge(id: activityable_id))
+      when message?            then app_leaving_messages_url(_default_params)
       when hit_egg?            then app_hit_egg_url(activity_notice.try(:activity))
-      when house_bespeak?      then new_app_house_market_url(aid: id)
-      when house_seller?       then app_house_sellers_url(aid: id)
-      when slot?               then app_slots_url(aid: id)
-      when booking?            then mobile_bookings_url(subdomain: mobile_subdomain)
-      when group?              then mobile_groups_url(subdomain: mobile_subdomain)
-      when hospital?           then mobile_hospital_doctors_url(subdomain: mobile_subdomain, aid: id)
-      when trip?               then mobile_trips_url(subdomain: mobile_subdomain)
-      when business_shop?      then mobile_business_shop_url(supplier, activityable)
-      when house_impression?   then app_house_impressions_url(aid: id)
-      when house_live_photo?   then app_house_live_photos_url(aid: id)
-      when house_intro?        then app_house_intros_url(aid: id)
-      when wbbs_community?     then mobile_wbbs_topics_url(subdomain: mobile_subdomain, aid: id)
-      when coupon?             then mobile_coupons_url(subdomain: mobile_subdomain, aid: id)
-      when broche?             then mobile_broche_photos_url(subdomain: mobile_subdomain, aid: id)
-      when micro_aid?          then mobile_aids_url(aid: id)
-      when plot_bulletin?      then bulletins_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
-      when plot_repair?        then repair_complains_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid], type: 'repair')
-      when plot_complain?      then repair_complains_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid], type: 'complain')
-      when plot_telephone?     then telephones_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
-      when plot_owner?         then owners_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
-      when plot_life?          then lives_mobile_wx_plots_url(site_id: site_id, aid: id, openid: options[:openid])
-      when fans_game?          then mobile_fans_games_url(site_id: site_id, aid: id, openid: options[:openid])
-      when govmail?            then mobile_govmails_url(site_id: site_id, aid: id, openid: options[:openid])
-      when govchat?            then mobile_govchats_url(site_id: site_id, aid: id, openid: options[:openid])
-      when unfold?             then mobile_unfolds_url(site_id: site_id, openid: options[:openid], aid: id)
+      when house_bespeak?      then new_app_house_market_url(_default_params)
+      when house_seller?       then app_house_sellers_url(_default_params)
+      when slot?               then app_slots_url(_default_params)
+      when booking?            then mobile_bookings_url(_default_params)
+      when group?              then mobile_groups_url(_default_params.merge(id: id))
+      when hospital?           then mobile_hospital_doctors_url(_default_params)
+      when trip?               then mobile_trips_url(_default_params)
+      when business_shop?      then mobile_business_shop_url(site, activityable)
+      when house_impression?   then app_house_impressions_url(_default_params)
+      when house_live_photo?   then app_house_live_photos_url(_default_params)
+      when house_intro?        then app_house_intros_url(_default_params)
+      when wbbs_community?     then mobile_wbbs_topics_url(_default_params)
+      when coupon?             then mobile_coupons_url(_default_params)
+      when broche?             then mobile_broche_photos_url(_default_params)
+      when micro_aid?          then mobile_aids_url(_default_params)
+      when plot_bulletin?      then bulletins_mobile_wx_plots_url(_default_params)
+      when plot_repair?        then repair_complains_mobile_wx_plots_url(_default_params.merge(type: 'repair'))
+      when plot_complain?      then repair_complains_mobile_wx_plots_url(_default_params.merge(type: 'complain'))
+      when plot_telephone?     then telephones_mobile_wx_plots_url(_default_params)
+      when plot_owner?         then owners_mobile_wx_plots_url(_default_params)
+      when plot_life?          then lives_mobile_wx_plots_url(_default_params)
+      when fans_game?          then mobile_fans_games_url(_default_params)
+      when govmail?            then mobile_govmails_url(_default_params)
+      when govchat?            then mobile_govchats_url(_default_params)
+      when unfold?             then mobile_unfolds_url(_default_params)
       when wmall_coupon?       then wmall_coupon_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
-      when scene?              then mobile_scenes_url(site_id: site_id, aid: id, openid: options[:openid])
-      when guess?              then mobile_guess_url(site_id: site_id, openid: options[:openid], aid: id)
-      when wx_card?            then mobile_wx_cards_url(site_id: site_id, openid: options[:openid], aid: id, wechat_card_js: 1)
-      when brokerage?          then mobile_brokerages_url(site_id: site_id, openid: options[:openid])
-      when red_packet?         then mobile_red_packets_url(site_id: site_id, openid: options[:openid], aid: id)
-      when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id_id)
-      when donation?           then mobile_donations_url(site_id: site_id_id, wid: activityable_id, aid: id)
-      when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id)
-      when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
+      when scene?              then mobile_scenes_url(_default_params)
+      when guess?              then mobile_guess_url(_default_params)
+      when wx_card?            then mobile_wx_cards_url(_default_params.merge(wechat_card_js: 1))
+      when brokerage?          then mobile_brokerages_url(_default_params)
+      when red_packet?         then mobile_red_packets_url(_default_params)
+      when recommend?
+        if site.wx_mp_user.authorized_auth_subscribe?
+          mobile_recommends_url(_default_params)
+        else
+          mobile_recommends_url(_default_params)
+        end
+      when panoramagram?
+        if activityable_type == 'Panoramagram'
+          panorama_mobile_panoramagram_url(_default_params.merge(id: activityable_id))
+        else
+          mobile_panoramagrams_url(_default_params)
+        end
+      when donation?           then mobile_donations_url(stopped?.merge(wid: activityable_id))
+      when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
+      when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
+      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_id: options[:openid])
+      # when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
+      when hotel?              then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}&openid=#{options[:openid]}"
+      when wifi?               then "http://m.chaowifi.com/auth/wechat.do?guid=#{options[:openid]}"
+      when hanming_wifi?       then "#{activity.hanming_callback_url}?func=weixin&custom_wx_id=#{options[:openid]}&wx_id=#{site.wx_mp_user.openid}&ssid=winwemedia-#{site}&resulturl=#{hanming_callback_url}&resultAnchor=0"
       end
+
+    logger.info "************actvity url: #{url}"
     url || ''
   end
 
-  def car_url
+  def return_survey_activity_url(options = {})
+    wx_user = WxUser.where(openid: options[:openid]).first
+    activity_user = ActivityUser.where(user_id: wx_user.id, activity_id: id).first if wx_user
+    return mobile_survey_url(options.merge(id: id)) if activity_user.nil? || !setted?
+    return success_mobile_survey_url(options.merge(id: id)) if activity_user.survey_finish?
+
+    question = survey_questions.first
+    question ? questions_mobile_survey_url(options.merge(qid: question.id)) : ''
+  end
+
+  def return_car_url(options = {})
     car_activity_notice = activityable
     case
       when car_activity_notice.blank?      then ''
-      when car_activity_notice.repair?     then car_bespeak_mobile_car_shops_url(subdomain: mobile_subdomain, aid: id, bespeak_type: CarBespeak::REPAIR)
-      when car_activity_notice.test_drive? then car_bespeak_mobile_car_shops_url(subdomain: mobile_subdomain, aid: id, bespeak_type: CarBespeak::TEST_DRIVE)
-      when car_activity_notice.sales_rep?  then car_seller_mobile_car_shops_url(subdomain: mobile_subdomain, aid: id, seller_type: CarSeller::SALES_REP)
-      when car_activity_notice.shop?       then mobile_car_shops_url(subdomain: mobile_subdomain, aid: id)
-      when car_activity_notice.owner?      then mobile_car_owners_url(subdomain: mobile_subdomain, aid: id)
-      when car_activity_notice.assistant?  then mobile_car_assistants_url(subdomain: mobile_subdomain, aid: id)
+      when car_activity_notice.repair?     then car_bespeak_mobile_car_shops_url(options.merge(bespeak_type: CarBespeak::REPAIR))
+      when car_activity_notice.test_drive? then car_bespeak_mobile_car_shops_url(options.merge(bespeak_type: CarBespeak::TEST_DRIVE))
+      when car_activity_notice.sales_rep?  then car_seller_mobile_car_shops_url(options.merge(seller_type: CarSeller::SALES_REP))
+      when car_activity_notice.shop?       then mobile_car_shops_url(options)
+      when car_activity_notice.owner?      then mobile_car_owners_url(options)
+      when car_activity_notice.assistant?  then mobile_car_assistants_url(options)
+    end
+  end
+
+  def hanming_callback_url
+    if self['extend'].blank?
+      "http://m.winwemedia.com"
+    elsif self['extend'].to_s.start_with?("http")
+      self['extend'].to_s
+    else
+      "http://#{self['extend'].to_s}"
     end
   end
 

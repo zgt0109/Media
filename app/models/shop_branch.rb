@@ -1,33 +1,3 @@
-# -*- coding: utf-8 -*-
-# == Schema Information
-#
-# Table name: shop_branches
-#
-#  id               :integer          not null, primary key
-#  supplier_id      :integer          not null
-#  wx_mp_user_id    :integer          not null
-#  shop_id          :integer          not null
-#  name             :string(255)      not null
-#  tel              :string(255)      not null
-#  province_id      :integer          default(9)
-#  city_id          :integer          default(73)
-#  district_id      :integer          default(702)
-#  address          :string(255)
-#  start_time       :time
-#  end_time         :time
-#  hall_count       :integer          default(0), not null
-#  loge_count       :integer          default(0), not null
-#  open_hall_count  :integer          default(0), not null
-#  open_loge_count  :integer          default(0), not null
-#  open_at          :datetime
-#  status           :integer          default(1), not null
-#  book_table_rule  :text
-#  book_dinner_rule :text
-#  description      :text
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-
 class ShopBranch < ActiveRecord::Base
   EARTH_RADIUS = 6378137.0 #地球半径
   PI = Math::PI
@@ -43,7 +13,6 @@ class ShopBranch < ActiveRecord::Base
   validates :tel, presence: true, format: { with: /^[0-9_\-]*$/, message: '电话号码只能包含数字,-和_' }
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :shop
   belongs_to :province
   belongs_to :city
@@ -103,7 +72,7 @@ class ShopBranch < ActiveRecord::Base
   end
 
   def available_vip_packages
-    supplier.vip_card.vip_packages.where("shop_branch_limited = 0 OR id IN (select vip_package_id from shop_branches_vip_packages where shop_branch_id=#{id})")
+    site.vip_card.vip_packages.where("shop_branch_limited = 0 OR id IN (select vip_package_id from shop_branches_vip_packages where shop_branch_id=#{id})")
   end
 
   def no_password_and_can_validate?
@@ -203,13 +172,13 @@ class ShopBranch < ActiveRecord::Base
     qiniu_image_url(thumbnail)
   end
 
-  def self.some_shop_branches(supplier,wx_user)
+  def self.some_shop_branches(site,wx_user)
     if wx_user
-      supplier.shop_branches.used.sort do |s1,s2|
+      site.shop_branches.used.sort do |s1,s2|
         s1.distance_to(wx_user) - s2.distance_to(wx_user)
       end.take(9)
     else
-      supplier.shop_branches.used.limit(9)
+      site.shop_branches.used.limit(9)
     end
   end
 

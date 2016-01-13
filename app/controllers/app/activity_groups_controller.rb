@@ -49,7 +49,7 @@ module App
     end
 
     def require_activity
-      @activity = Activity.where(id: params[:id]).first
+      @activity = Activity.where(id: params[:aid]).first
 
       if @activity.blank?
         return render text: '活动不存在'

@@ -54,26 +54,26 @@ class WxLog
       result[:total_requests] = WxLog.count
 
       # 总商家数
-      result[:total_suppliers] = Account.normal_account.count
+      result[:total_sites] = Account.normal_account.count
 
       # 日总请求数
       result[:daily_requests] = logs.count
 
-      groups = logs.map_reduce(map, reduce).out(inline: true).map{|e| {:supplier => e["_id"], :requests => e["value"]["count"].to_i}}
+      groups = logs.map_reduce(map, reduce).out(inline: true).map{|e| {:site => e["_id"], :requests => e["value"]["count"].to_i}}
 
       # 有请求商户数
-      result[:daily_suppliers] = groups.count
+      result[:daily_sites] = groups.count
 
       # 平均请求数
-      result[:daily_avg_requests] = result[:daily_suppliers] > 0 && (result[:daily_requests] / result[:daily_suppliers]) || 0
+      result[:daily_avg_requests] = result[:daily_sites] > 0 && (result[:daily_requests] / result[:daily_sites]) || 0
 
       top_100_logs = groups.sort_by{|a| -a[:requests]}[0..99]
 
       # 日请求最大商家
-      result[:daily_max_supplier] = top_100_logs.first.try(:[], :supplier)
+      result[:daily_max_site] = top_100_logs.first.try(:[], :site)
 
       # 日请求最大数据
-      result[:daily_max_supplier_requests] = top_100_logs.first.try(:[], :requests) || 0
+      result[:daily_max_site_requests] = top_100_logs.first.try(:[], :requests) || 0
 
       requests_sum = top_100_logs.sum{|t| t[:requests]}
       requests_times = top_100_logs.count
@@ -87,7 +87,7 @@ class WxLog
       self.where(:ToUserName => uid)
     end
 
-    def supplier_data_by_date(date, uid)
+    def site_data_by_date(date, uid)
       h = {:text => 0, :event => 0, :image => 0, :voice => 0, :video => 0, :location => 0, :link => 0}
       map, reduce = self.set_map_and_reduce("this.MsgType")
       wx_logs = self.by_uid(uid).by_date(date)
@@ -116,7 +116,7 @@ class WxLog
       h
     end
 
-    def supplier_data_by_date_hours(date, uid)
+    def site_data_by_date_hours(date, uid)
       h = {:text => 0, :event => 0, :image => 0, :voice => 0, :video => 0, :location => 0, :link => 0}
       map, reduce = self.set_map_and_reduce("this.MsgType")
       wx_logs = self.by_uid(uid).by_date(date)
@@ -209,7 +209,7 @@ class WxLog
   end
 
   def merchant_name
-    self["ToUserName"].present? && WxMpUser.where(:openid => self.ToUserName).first.try(:name) || "未知商户"
+    self["ToUserName"].present? && WxMpUser.where(:openid => self.ToUserName).first.try(:nickname) || "未知商户"
   end
 
 end

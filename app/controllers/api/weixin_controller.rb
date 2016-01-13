@@ -109,7 +109,7 @@ class Api::WeixinController < ApplicationController
     @checked = params[:signature] == Digest::SHA1.hexdigest([token, params[:timestamp], params[:nonce]].map!(&:to_s).sort.join)
   end
 
-  def serve_get_wx_api    
+  def serve_get_wx_api
     @mp_user.update_attributes(bind_type: WxMpUser::MANUAL, status: WxMpUser::ACTIVE) if @checked
     @checked ? params[:echostr] : 'Token验证失败'
   end
@@ -175,7 +175,7 @@ class Api::WeixinController < ApplicationController
     return WeixinHardware.respond_wifi(@wx_user, @mp_user, @keyword.from(2)) if @keyword =~ /\A上网.+/
 
     # 根据关键字获取最合适的活动
-    activity = Activity.get_activity_by_keyword(@keyword, @mp_user.supplier_id)
+    activity = Activity.get_activity_by_keyword(@keyword, @mp_user.site_id)
 
     print_response = Print.respond_small_print(@wx_user, @mp_user, activity)
     return print_response if print_response
@@ -205,7 +205,7 @@ class Api::WeixinController < ApplicationController
       when @wx_user.print?                   then Print.respond_small_print_img(@wx_user, @mp_user, request.raw_post)
       when @wx_user.welomo_print?            then WeixinHardware.respond_welomo_print(@wx_user, @mp_user, nil, request.raw_post, params)
       when Print.postcard?(@wx_user) then Print.respond_postcard_img(@wx_user, @mp_user, request.raw_post)
-      when @mp_user.supplier.industry_house? then @mp_user.house.respond_create_live_photo(@wx_user, @xml)
+      # when @mp_user.site.industry_house? then @mp_user.house.respond_create_live_photo(@wx_user, @xml)
       else respond_default_reply()
     end
   rescue => error
@@ -221,7 +221,7 @@ class Api::WeixinController < ApplicationController
       if qrcode
         qrcode.create_or_normalize_log(@wx_user, @xml)
       else # 微客生活圈
-        mall         = Wmall::Mall.where(supplier_id: @mp_user.supplier_id).first
+        mall         = Wmall::Mall.where(site_id: @mp_user.site_id).first
         wmall_qrcode = Wmall::Qrcode.where(ticket: ticket, mall_id: mall.try(:id)).first
         if wmall_qrcode && wmall_qrcode.scene_id >= 50000
           if wmall_qrcode.qrcodeable_type == "Shop"
@@ -292,14 +292,14 @@ class Api::WeixinController < ApplicationController
     if @wx_user.update_attributes(location_x: @xml[:Location_X], location_y: @xml[:Location_Y], location_label: @xml[:Label], location_updated_at: Time.now)
       return @mp_user.house.respond_live_photo_location(@wx_user, @xml) if @wx_user.house_live_photos?
 
-      shop_branches = ShopBranch.some_shop_branches(@mp_user.supplier,@wx_user)
+      shop_branches = ShopBranch.some_shop_branches(@mp_user.site, @wx_user)
       return Weixin.respond_text(@from_user_name, @to_user_name, '该商家暂无门店信息') if shop_branches.blank?
       around_shop_branches(shop_branches)
     end
   end
 
   def around_shop_branches(shop_branches)
-    first_url = mobile_micro_stores_url(supplier_id: @mp_user.supplier_id, openid: @wx_user.openid, wxmuid: @mp_user.id, msg_type: "location")
+    first_url = mobile_micro_stores_url(site_id: @mp_user.site_id, openid: @wx_user.openid, wxmuid: @mp_user.id, msg_type: "location")
     first_pic = "#{host}/location_img/#{@wx_user.id}/img.png?#{Time.now.to_f}"
 
     items = [ {title: "点击查看周边#{shop_branches.count}家门店", pic_url: first_pic, url: first_url} ]
@@ -307,7 +307,7 @@ class Api::WeixinController < ApplicationController
       {
         title: "【#{branch.name}】#{branch.human_distance_to(@wx_user)}",
         pic_url: branch.thumbnail_url || "#{host}/assets/micro_stores/small_default.png",
-        url: mobile_micro_store_url(supplier_id: @mp_user.supplier_id, id: branch.id, openid: @wx_user.openid, wxmuid: @mp_user.id)
+        url: mobile_micro_store_url(site_id: @mp_user.site_id, id: branch.id, openid: @wx_user.openid, wxmuid: @mp_user.id)
       }
     end
     Weixin.respond_news(@from_user_name, @to_user_name, items)
@@ -333,7 +333,7 @@ class Api::WeixinController < ApplicationController
     items = [weixin_news_item_for_material(material)]
     if material.multiple_graphic?
       items += material.children.map do |child|
-        weixin_news_item_for_material(child, pic_size: :thumb)
+        weixin_news_item_for_material(child, openid: @from_user_name)
       end
     end
     Weixin.respond_news(@from_user_name, @to_user_name, items)
@@ -389,8 +389,7 @@ class Api::WeixinController < ApplicationController
 
     url = activity.respond_mobile_url(activity_notice)
     url << '#mp.weixin.qq.com'
-    pic_url ||= qiniu_image_url(activity_notice.pic_key) || "#{host}#{option[:cover_pic]}"
-    pic_url = "#{host}#{pic_url}" if pic_url !~ /^http/
+    pic_url ||= qiniu_image_url(activity_notice.pic_key) || qiniu_image_url(option[:cover_pic])
 
     items = [{title: activity_notice.title, description: activity_notice.summary, pic_url: pic_url, url: url}]
     Weixin.respond_news(from_user_name, to_user_name, items)
@@ -401,18 +400,15 @@ class Api::WeixinController < ApplicationController
   def respond_activity_directly(activity)
     logger.info "---------------------#{activity.activity_type_id}-------------------goto response_activity_directly "
     url = case
-            when activity.wifi?                  then "http://m.chaowifi.com/auth/wechat.do?guid=#{@to_user_name}"
-            when activity.hanming_wifi?          then "#{activity.hanming_callback_url}?func=weixin&custom_wx_id=#{@from_user_name}&wx_id=#{@to_user_name}&ssid=winwemedia-#{activity.supplier_id}&resulturl=#{activity.hanming_callback_url}&resultAnchor=0"
             when activity.greet?
               @wx_user.greet! #进入语音贺卡模式
               return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
-            when activity.trip?                  then mobile_trips_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
             when activity.share_photo? # 图片分享模式
               @wx_user.share_photos!
               return Weixin.respond_text(@from_user_name, @to_user_name, activity.summary)
             when activity.exit_share_photo? # 退出分享模式
               @wx_user.normal!
-              share = Activity.where(supplier_id: activity.supplier_id, activity_type_id: ActivityType::SHARE_PHOTO).first
+              share = Activity.where(siter_id: activity.siter_id, activity_type_id: ActivityType::SHARE_PHOTO).first
               message = activity.summary.to_s.gsub!('{share_keyword}', share.try(:keyword).to_s)
               return Weixin.respond_text(@from_user_name, @to_user_name, message)
             when activity.other_photos?          then return SharePhoto.respond_other_photo(@wx_user, @mp_user, activity)
@@ -421,19 +417,14 @@ class Api::WeixinController < ApplicationController
               @wx_user.greet! #进入语音贺卡模式
               return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
             when activity.shake?
-              url = "#{mobile_shakes_url(supplier_id: activity.supplier_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
-              pic_url = activity.pic_url(:large, host: host)
-              items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: pic_url, url: url}]
+              url = "#{mobile_shakes_url(siter_id: activity.siter_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
+              items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: activity.pic_url, url: url}]
               return Weixin.respond_news(@from_user_name, @to_user_name, items)
-            when activity.recommend?             then recommend_mobile_location(activity.id)
-            when activity.panoramagram?          then mobile_supplier_panoramagram_url(activity)
-            else activity.respond_mobile_url
+            else activity.respond_mobile_url(openid: @from_user_name)
           end
-    logger.info "------#{activity.hanming_wifi?}----#{url} ====="
     url << '#mp.weixin.qq.com' unless activity.hanming_wifi?
-    pic_url = activity.pic_url(:large, host: host) || activity.default_pic_url
 
-    items = [{title: activity.name, description: activity.summary, pic_url: pic_url, url: url}]
+    items = [{title: activity.name, description: activity.summary, pic_url: pic_url, url: activity.pic_url}]
     Weixin.respond_news(@from_user_name, @to_user_name, items)
   end
 
@@ -459,63 +450,4 @@ class Api::WeixinController < ApplicationController
     Weixin.respond_text(@from_user_name, @to_user_name, content)
   end
 
-  def respond_activity_link(activity)
-    return '' unless activity
-    activity_notice = activity.activity_notices.active.first
-
-    url = case
-            when activity.consume?
-              activity_notice = activity.activity_notices.first
-              activity_consume = activity.activity_consumes.where(supplier_id: activity.supplier_id, wx_mp_user_id: activity.wx_mp_user_id, wx_user_id: @wx_user.id).first
-              app_consume_url(activity_id: activity_notice.activity_id, id: activity_notice.id, code: activity_consume.try(:code), openid: @wx_user.openid)
-            when activity.gua? && activity.setted?
-              activity_notice = ActivityNotice.ready_or_active_notice(activity, [Activity::WARM_UP, Activity::HAS_ENDED])
-              app_gua_url(activity, anid: activity_notice.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.openid, source: :notice)
-            when activity.wheel? && activity.setted?
-              activity_notice = ActivityNotice.ready_or_active_notice(activity)
-              app_wheel_url(activity, anid: activity_notice.id, wxmuid: activity.wx_mp_user_id, openid: @wx_user.openid, source: :notice)
-            else activity.respond_mobile_url(openid: @from_user_name)
-          end
-    [url, '#mp.weixin.qq.com'].join
-  end
-
-  def respond_survey_activity_link(activity)
-    return '' unless activity
-    activity_user = ActivityUser.where(wx_user_id: @wx_user.id, activity_id: activity.id).first
-    return mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: @wx_user.openid) if activity_user.nil? || !activity.setted?
-    return success_mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: @wx_user.openid) if activity_user.survey_finish?
-
-    question = activity.survey_questions.first
-    question ? questions_mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, qid: question.id, openid: @wx_user.openid) : ''
-  end
-
-  def car_activity_url(activity)
-    return Weixin.respond_text(@from_user_name, @to_user_name, '活动不存在') unless activity.activityable
-    activity.car_url << "&openid=#{@wx_user.openid}"
-  end
-
-  def recommend_mobile_location(activity_id)
-    if @mp_user.authorized_auth_subscribe?
-      mobile_recommends_url(supplier_id: @mp_user.supplier_id, aid: activity_id)
-    else
-      mobile_recommends_url(supplier_id: @mp_user.supplier_id, aid: activity_id, openid: @from_user_name)
-    end
-  end
-
-  def mobile_supplier_booking_url(activity)
-    if BookingOrder.flow_suppliers.include?(activity.supplier_id)
-      new_mobile_booking_order_url(supplier_id: activity.supplier_id)
-    else
-      mobile_bookings_url(supplier_id: activity.supplier_id, openid: @wx_user.openid)
-    end
-  end
-
-  def mobile_supplier_panoramagram_url(activity)
-    if activity.activityable_type == 'Panoramagram'
-      panorama_mobile_panoramagram_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, id: activity.activityable_id)
-    else
-      mobile_panoramagrams_url(supplier_id: activity.supplier_id, openid: @wx_user.openid, aid: activity.id)
-    end
-  end
-  
 end
