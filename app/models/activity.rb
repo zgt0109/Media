@@ -253,7 +253,7 @@ class Activity < ActiveRecord::Base
 
   def unique_keyword
     if active?
-      activity = Activity.valid.where(subdomain: mobile_subdomain, keyword: keyword).first
+      activity = Activity.valid.where(site_id: site_id, keyword: keyword).first
       if activity && self != activity
         errors.add :keyword, '已经被使用'
       end
@@ -507,10 +507,10 @@ class Activity < ActiveRecord::Base
 
   def create_default_properties!
     if website?
-      Website.where(activity_id: id).first_or_create(subdomain: mobile_subdomain, name: site.wx_mp_user.try(:nickname), template_id: 1)
+      Website.where(activity_id: id).first_or_create(site_id: site_id, name: site.wx_mp_user.try(:nickname), template_id: 1)
     elsif vip?
       merchant_name = site.account.nickname || site.wx_mp_user.nickname.presence
-      VipCard.where(activity_id: id).first_or_create(merchant_name: merchant_name, subdomain: mobile_subdomain, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)
+      VipCard.where(activity_id: id).first_or_create(merchant_name: merchant_name, site_id: site_id, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)
     elsif [4,5,25].include?(activity_type_id)
       ActivityProperty.where(activity_id: id).first_or_create(activity_type_id: activity_type_id, repeat_draw_msg: "亲，抢券活动每人只能抽一次哦。", pic_key: ActivityProperty.win_pic_key)
     elsif activity_type_id == 28
@@ -521,7 +521,7 @@ class Activity < ActiveRecord::Base
       days = [*(start_at.to_date..end_at.to_date)]
       if days.size < 8
         days.each_with_index do |day, i|
-          fight_papers.create(subdomain: mobile_subdomain, activity_id: id, the_day: (i+1), active_date: day.to_date)
+          fight_papers.create(site_id: site_id, activity_id: id, the_day: (i+1), active_date: day.to_date)
         end
       end
     elsif activity_type_id == 37
@@ -860,10 +860,11 @@ class Activity < ActiveRecord::Base
   end
 
   def activity_qrcode_url
-    case
-      when vote?  then mobile_vote_login_url(subdomain: mobile_subdomain, vote_id: id, anchor: "mp.weixin.qq.com")
-      when surveys?  then mobile_survey_url(subdomain: mobile_subdomain, id: id, anchor: "mp.weixin.qq.com")
-    end
+    # case
+    #   when vote?  then mobile_vote_login_url(subdomain: mobile_subdomain, site_id: site_id, vote_id: id, anchor: "mp.weixin.qq.com")
+    #   when surveys?  then mobile_survey_url(subdomain: mobile_subdomain, site_id: site_id, id: id, anchor: "mp.weixin.qq.com")
+    # end
+    respond_mobile_url
   end
 
   def vote_qrcode_download(type = 258)
