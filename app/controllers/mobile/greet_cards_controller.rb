@@ -3,7 +3,7 @@ class Mobile::GreetCardsController < Mobile::BaseController
   before_filter :block_non_wx_browser
 
   def index
-    @activity = Activity.find(params[:activity_id])
+    @activity = Activity.find(params[:aid])
     @greet = @activity.greet
   end
 

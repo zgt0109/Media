@@ -28,7 +28,7 @@
 <script>
   $(function(){
 
-    var shop_products = fetch_wmall_data({path: "/api/wmall/products/shop.json"}, {supplier_id: '<%= session[:supplier_id] %>', shop_id: '<%= params[:id] %>'}, options = {}) || null
+    var shop_products = fetch_wmall_data({path: "/api/wmall/products/shop.json"}, {site_id: '<%= session[:site_id] %>', shop_id: '<%= params[:id] %>'}, options = {}) || null
     var ractive_shops = new Ractive({
       // The `el` option can be a node, an ID, or a CSS selector.
       el: '#ractive_shop_products_container',

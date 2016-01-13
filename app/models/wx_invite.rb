@@ -16,20 +16,19 @@ class WxInvite < ActiveRecord::Base
 
   def recommended!
     update_attributes(is_recommended: true)
-    if from_wx_user.present?
+
+    if from_user.present?
       from_participate = from_wx_user.wx_participates.normal.find_by_activity_id(activity_id)
-      if from_participate.present?
-          from_participate.check_prize!(to_wx_user_id)
-      end
+      from_participate.check_prize!(to_user_id) if from_participate.present?
     end
   end
 
-  def from_wx_user
-    WxUser.find_by_id(from_wx_user_id)
+  def from_user
+    User.find_by_id(from_user_id)
   end
 
-  def to_wx_user
-    WxUser.find_by_id(to_wx_user_id)
+  def to_user
+    User.find_by_id(to_user_id)
   end
 
 end

@@ -10,7 +10,7 @@
 					<img class="close" src="/assets/mobile/brokerage/close.png"/>	   
 				</div>
 				<div class="index-activity">
-					<%= @supplier.brokerage_activity.description.html_safe %>
+					<%= @site.brokerage_activity.description.html_safe %>
 					<div class="blank10"></div>
 				</div>
 
@@ -20,7 +20,7 @@
 				</div>
 			</div>
 			<div class="blank10"></div>
-			<div class="regist-btn"><%= link_to_broker(@wx_user.try(:broker),@supplier) %></div>
+			<div class="regist-btn"><%= link_to_broker(@wx_user.try(:broker),@site) %></div>
 		</section>
 	</div>
 	<div class="index-details">

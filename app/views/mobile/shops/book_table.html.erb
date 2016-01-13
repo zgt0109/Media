@@ -7,12 +7,12 @@
 	<section id="sec-index">
 		<div class="body">
 			<div class="box-search">
-				 <%= form_for @search, url: book_table_mobile_shops_url(supplier_id: session[:supplier_id]), method: :get, html: { class: 'fl' } do |f| %>
+				 <%= form_for @search, url: book_table_mobile_shops_url(site_id: session[:site_id]), method: :get, html: { class: 'fl' } do |f| %>
 				   <%= f.search_field :name_like, id: 'in', placeholder: '请输入要查找的门店', class: "input fl" %>
 				   <input type="submit" class="btn btn-small" value="搜索">
 				 <% end %>
 				<div class="fr">
-					<%= link_to "我的订座", mobile_shop_table_orders_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "fa fa-map-marker" %>
+					<%= link_to "我的订座", mobile_shop_table_orders_url(site_id: session[:site_id], anchor: "mp.weixin.qq.com"), class: "fa fa-map-marker" %>
 				</div>
 			</div>
 			<div class="index">

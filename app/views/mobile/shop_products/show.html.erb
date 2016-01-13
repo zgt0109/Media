@@ -29,10 +29,10 @@
           <div class="box box-ck"><%= raw @shop_product.description %></div>
 
           <div class="box">
-            <%= form_for @shop_product_comment, url: mobile_shop_product_comments_url(supplier_id: session[:supplier_id]), remote: true do |f| %>
+            <%= form_for @shop_product_comment, url: mobile_shop_product_comments_url(site_id: session[:site_id]), remote: true do |f| %>
               <div class="hd">评论</div>
               <%= f.hidden_field :shop_product_id %>
-              <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+              <%= f.hidden_field :user_id, value: session[:user_id] %>
               <div class="text"><%= f.text_area :content, class: "", cols: "30", rows: "5" %></div>
               <div class="ft"><%= f.submit "提交", class: "btn" %></div>
             <% end %>

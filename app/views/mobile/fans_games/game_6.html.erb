@@ -339,7 +339,7 @@
           var domain = domains[new Date().getTime()%4];
           window.shareData = {
             "imgUrl": "<%= MOBILE_DOMAIN %>/images/fans_game/game_6.jpg",
-            "timeLineLink": "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:6) %>",
+            "timeLineLink": "<%= mobile_fans_game_url(site_id: @site.id,id:6) %>",
             "tTitle": "经典的小青蛙过河",
             "tContent": "一款很经典的过河游戏。7块石头，6只青蛙要过河，最终3只公的和3只母的换个位置和方向。"
           };
@@ -502,7 +502,7 @@
     </div>
 
     <div id="infos" style="color: #505050;font-size: 14px;text-shadow: #fff 0 1px 0;text-align: center;font-weight: bolder;margin:20px auto;">
-      <a href="<%= mobile_fans_games_url(supplier_id: @supplier.id) %>" style="color: #505050;text-decoration:none;">想玩更多游戏，点这里！</a>
+      <a href="<%= mobile_fans_games_url(site_id: @site.id) %>" style="color: #505050;text-decoration:none;">想玩更多游戏，点这里！</a>
     </div>
     <%= render "application/mobile/hide_share" %>
   </body>

@@ -19,6 +19,10 @@ class ActivityUser < ActiveRecord::Base
     ['survey_finish',   2, '已答完微调研所有题目']
   ]
 
+  def wx_user
+    user.wx_user
+  end
+
   def vote_options(activity_vote_item_ids)
     return '' unless activity
     # activity_user_vote_items.pluck(:activity_vote_item_id).each_with_object([]) do |vote_item_id, arr|

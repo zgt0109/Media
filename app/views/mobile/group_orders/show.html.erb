@@ -1,6 +1,6 @@
 <% content_for(:topbar) do %>
     <header>
-    <a href="<%= mobile_group_orders_path(supplier_id: @supplier.id) %>" class="ico-prev tleft"><img src="/assets/mobile/group/ico-back.png"/></a>
+    <a href="<%= mobile_group_orders_path(site_id: @site.id) %>" class="ico-prev tleft"><img src="/assets/mobile/group/ico-back.png"/></a>
     <h1>我的团购订单</h1>
     </header><!-- header end -->
 <% end %>
@@ -8,7 +8,7 @@
 <form>
   <div class="box box-order">
     <div class="box-list">
-      <% unless @group_item.new_record? %><a class="list-li" href="<%= mobile_group_item_path(supplier_id: @supplier.id, id: @group_item) %>"><% end %>
+      <% unless @group_item.new_record? %><a class="list-li" href="<%= mobile_group_item_path(site_id: @site.id, id: @group_item) %>"><% end %>
         <% if @group_item.pic_url %>
           <div class="hd"><%= image_tag @group_item.pic %></div>
         <% else %>
@@ -40,13 +40,13 @@
           <div class="fr <%= @group_order.paid? ? '' : 'forange'%>">
               <% if @group_order.paid? %>
                 <div class="fr">
-                  <%= link_to "确认消费", mobile_group_order_path(supplier_id: @supplier.id, id:@group_order), :class => 'btn', :method => :put, data: { comfirm: '确认要消费吗？' } %>
+                  <%= link_to "确认消费", mobile_group_order_path(site_id: @site.id, id:@group_order), :class => 'btn', :method => :put, data: { comfirm: '确认要消费吗？' } %>
                 </div>
               <% elsif @group_order.consumed? %>
                 <% if @group_order.group_comments.present? %>
                     <span>已评价</span>
                 <% else %>
-                    <% unless @group_item.new_record? %><a href="<%= new_mobile_group_comment_path(supplier_id: @supplier.id, id: @group_order.group_item.id, group_order_id: @group_order.id) %>">去评价<i class="arrow"></i></a> <% end %>
+                    <% unless @group_item.new_record? %><a href="<%= new_mobile_group_comment_path(site_id: @site.id, id: @group_order.group_item.id, group_order_id: @group_order.id) %>">去评价<i class="arrow"></i></a> <% end %>
                 <% end %>
               <% elsif @group_order.canceled? %>
                   <span>已取消</span>
@@ -79,10 +79,10 @@
     <p class="tcenter">
       <% if @group_item.deleted? %>
           <a class="btn btn-gray fr">此商品已下架，无法进行支付</a>
-          <%#= link_to "此商品已下架，无法进行支付", pay_mobile_group_order_path(supplier_id: @supplier.id, id: @group_order), :class => "btn" %>
+          <%#= link_to "此商品已下架，无法进行支付", pay_mobile_group_order_path(site_id: @site.id, id: @group_order), :class => "btn" %>
       <% else %>
           <% if @group_order.pending? %>
-             <%= link_to "去支付", pay_mobile_group_order_path(supplier_id: @supplier.id, id: @group_order), :class => "btn", remote: "true" %>
+             <%= link_to "去支付", pay_mobile_group_order_path(site_id: @site.id, id: @group_order), :class => "btn", remote: "true" %>
           <% end %>
       <% end %>
     </p>

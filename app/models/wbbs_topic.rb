@@ -1,7 +1,6 @@
 class WbbsTopic < ActiveRecord::Base
   MAX_CONTENT_LENGTH = 140
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :wbbs_community
   belongs_to :poster, polymorphic: true
   belongs_to :receiver, polymorphic: true
@@ -41,9 +40,9 @@ class WbbsTopic < ActiveRecord::Base
     poster.try(:headimgurl) || super || '/assets/wx_wall/user-img.jpg'
   end
 
-  def wx_user
-    if poster_type == 'WxUser'
-      WxUser.find_by_id(poster_id)
+  def user
+    if poster_type == 'User'
+      User.find_by_id(poster_id)
     end
   end
 
@@ -75,12 +74,12 @@ class WbbsTopic < ActiveRecord::Base
     wbbs_votables.report.where(voter_type: voter.class.name, voter_id: voter.id).exists?
   end
 
-  def visible_for?( wx_user )
-    return true  if wx_user.nil? || wx_user == poster
-    return !poster.leave_message_forbidden? if poster.is_a?(WxUser)
+  def visible_for?( user )
+    return true  if user.nil? || user == poster
+    return !poster.wx.user.leave_message_forbidden? if poster.is_a?(User)
   end
 
-  def privates_visible_for?( wx_user )
-    return true  if wx_user.nil? || wx_user == poster || wx_user == receiver || messages?
+  def privates_visible_for?( user )
+    return true  if user.nil? || user == poster || user == receiver || messages?
   end
 end

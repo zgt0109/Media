@@ -9,7 +9,7 @@
 <section>
   <div class="box-adress table">
     <% if @address.present? %>
-    <a href="<%= mobile_ec_addresses_path(supplier_id: @supplier.id, from: "cart", items: @carts.map(&:ec_item_id))%>" class="address_href">
+    <a href="<%= mobile_ec_addresses_path(site_id: @site.id, from: "cart", items: @carts.map(&:ec_item_id))%>" class="address_href">
       <p class="td" style="padding: 0px;">
           <b>收货地址</b>
           <span><%= @address.try(:username) %>   <%= @address.try(:tel) %></span>
@@ -21,7 +21,7 @@
         <i class="arrow"></i>
     </p>
     <% else %>
-        <a href="<%= new_mobile_ec_address_path(supplier_id: @supplier.id, from: "cart", items: @carts.map(&:ec_item_id)) %>" class="box-adress table">
+        <a href="<%= new_mobile_ec_address_path(site_id: @site.id, from: "cart", items: @carts.map(&:ec_item_id)) %>" class="box-adress table">
           <p class="td">
             <b>您还没有填写收货地址</b>
           </p>
@@ -35,7 +35,7 @@
   </div>
   <%= form_for @ec_order, url: mobile_ec_orders_path do |f| %>
       <%= hidden_field_tag :ec_shop_id, @ec_order.ec_shop_id %>
-      <%= hidden_field_tag :wx_user_id, @ec_order.wx_user_id %>
+      <%= hidden_field_tag :user_id, @ec_order.user_id %>
       <%= hidden_field_tag :address_id, @address.try(:id) %>
       <dl class="box-orderList" id="ec_order">
          <%= render 'order', :locals => {:carts => @carts, :address => @address} %>
@@ -46,7 +46,7 @@
       function update_cart(id, operate, items){
           $.ajax({
                       type:"get",
-                      url: "<%= update_cart_mobile_ec_carts_path(supplier_id: @supplier.id)%>",
+                      url: "<%= update_cart_mobile_ec_carts_path(site_id: @site.id)%>",
                       data: {"ec_item_id": id, "operate": operate, "form": "order", "carts": items},
                       success: function(){
 //                      alert("提交成功!");
@@ -64,7 +64,7 @@
 //         console.log(qty);
               $.ajax({
                           type:"get",
-                          url: "<%= update_cart_with_qty_mobile_ec_carts_path(supplier_id: @supplier.id)%>",
+                          url: "<%= update_cart_with_qty_mobile_ec_carts_path(site_id: @site.id)%>",
                           data: {"ec_item_id": id, "qty": qty, "form": "order", "carts": carts},
                           success: function(){
 //                      alert("提交成功!");

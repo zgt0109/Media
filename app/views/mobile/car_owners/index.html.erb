@@ -3,12 +3,12 @@
   <div class="header">
     <p>
       <% if @car_owner.present? %>
-        <a href="<%= edit_mobile_car_owner_url(@car_owner,supplier_id: @supplier.id) %>">修改爱车信息</a>
+        <a href="<%= edit_mobile_car_owner_url(@car_owner,site_id: @site.id) %>">修改爱车信息</a>
       <% else %>
-        <a href="<%= new_mobile_car_owner_url(supplier_id: @supplier.id) %>">添加爱车信息</a>
+        <a href="<%= new_mobile_car_owner_url(site_id: @site.id) %>">添加爱车信息</a>
       <% end %>
-      <a href="<%= car_seller_mobile_car_shops_path(supplier_id: @supplier.id) %>#mp.weixin.qq.com">联系销售</a>
-      <a href="<%= car_bespeak_mobile_car_shops_path(supplier_id: @supplier.id, bespeak_type: 1) %>">预约保养</a>
+      <a href="<%= car_seller_mobile_car_shops_path(site_id: @site.id) %>#mp.weixin.qq.com">联系销售</a>
+      <a href="<%= car_bespeak_mobile_car_shops_path(site_id: @site.id, bespeak_type: 1) %>">预约保养</a>
     </p>
   </div>
   <div class="body">

@@ -10,11 +10,7 @@
 <%- end %>
 <%= javascript_include_tag 'jquery' %>
 <header>
-  <% if @supplier.try(:id) == 10978 %>
-    <img src="/assets/bg-header-kuajingtong.jpg" />
-  <% else %>
-    <img src="<%= @template.header_bg %>" />
-  <% end %>
+  <img src="<%= @template.header_bg %>" />
 </header>
 <section>
   <%= form_for @message, :html=> {:id => 'box-form'}, url: app_leaving_messages_path, validate: true do |f| %>

@@ -362,7 +362,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <%= form_for [:mobile, @donation_order] do |f| %>
   <div class="des-r box-form form-row">
     <%= f.text_field :donation_id %>
-    <%= f.text_field :wx_user_id %>
+    <%= f.text_field :user_id %>
     <div class="p">
       <span>捐款金额 <span class="fgray"></span></span>
       <%= f.text_field :fee, validate: true, class: "input-text", value: 0 %> <!-- 12.3 -->

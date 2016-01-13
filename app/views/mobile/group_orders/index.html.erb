@@ -17,8 +17,8 @@
             <div class="h6"><%= group_item.try(:name) %></div>
             <p>总价：<%= f group_order.total_amount %>元  数量：<%= group_order.qty %></p>
             <%= content_tag :div do %>
-              <%= link_to '付款', edit_mobile_group_order_url(group_order, supplier_id: @supplier.id, group_item_id: group_item.try(:id)), class: 'pay_btn sure' %>
-	      <%= link_to '删除',  mobile_group_order_url(group_order, supplier_id: @supplier.id), data: {method: :delete, confirm: '确定要删除吗？'}, class: 'pay_btn del2' %>
+              <%= link_to '付款', edit_mobile_group_order_url(group_order, site_id: @site.id, group_item_id: group_item.try(:id)), class: 'pay_btn sure' %>
+	      <%= link_to '删除',  mobile_group_order_url(group_order, site_id: @site.id), data: {method: :delete, confirm: '确定要删除吗？'}, class: 'pay_btn del2' %>
             <% end if group_order.pending? %>
           </div>
         </li>
@@ -55,7 +55,7 @@
             <div class="h6"><%= group_item.try(:name) %></div>
             <p>总价：<%= f group_order.total_amount %>元  数量：<%= group_order.qty %></p>
             <div>
-              <%= link_to '去评价', mobile_group_item_url(supplier_id: @supplier.id, id: group_item.id, group_order_id: group_order.id), class: 'pay_btn sure' %>
+              <%= link_to '去评价', mobile_group_item_url(site_id: @site.id, id: group_item.id, group_order_id: group_order.id), class: 'pay_btn sure' %>
             </div>
           </div>
         </li>

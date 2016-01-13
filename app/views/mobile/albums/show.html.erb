@@ -12,7 +12,7 @@
 </div>
 <div class="foot_bar">
   <span class="left">
-    <a href="<%= list_mobile_album_path(supplier_id: @supplier.id, id: @photos.first.try(:album_id)) %>">查看全部</a>
+    <a href="<%= list_mobile_album_path(site_id: @site.id, id: @photos.first.try(:album_id)) %>">查看全部</a>
   </span>
   <span class="right coment_btn">
     <a href="javascript:;" id="comment">相关评论</a>
@@ -32,7 +32,7 @@ $(function(){
 
   $("body").on("click","#comment",function(){
     var data_id = $(".swipe li.cur").attr("data-id");
-    $(this).attr("href","/<%= @supplier.id %>/albums/"+ data_id +"/comments");
+    $(this).attr("href","/<%= @site.id %>/albums/"+ data_id +"/comments");
   })
 
 })

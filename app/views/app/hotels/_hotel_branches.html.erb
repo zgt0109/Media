@@ -1,6 +1,6 @@
 <% @hotel_branches.each do |branch| %>
     <% pp branch.hotel_pictures.where(is_cover: true)%>
-<div class="list-li" onclick="javascript:window.location.href='<%= app_hotels_path %>/<%= branch.id%>?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=1#mp.weixin.qq.com'">
+<div class="list-li" onclick="javascript:window.location.href='<%= app_hotels_path %>/<%= branch.id%>?aid=<%= params[:aid] %>& %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=1#mp.weixin.qq.com'">
 	<div class="hd"><%= image_tag (branch.hotel_pictures.where(is_cover: true).first.try(:path) || '/assets/hotel/1.gif') %></div>
 	<div class="bd">
 		<b><%= branch.name %></b>

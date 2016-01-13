@@ -1,7 +1,7 @@
 <header>
-	<a class="ico-prev" href="/app/whouse?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>"></a>
+	<a class="ico-prev" href="/app/whouse?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>"></a>
 	<h1>房友印象</h1>
-	<a href="/app/whouse/comment?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>" class="ico-edit"></a>
+	<a href="/app/whouse/comment?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>" class="ico-edit"></a>
 </header>
 <div class="contxt">
 	<% if @cover_house_pictures %>
@@ -9,7 +9,7 @@
 		<div class="flashshow">
 			<div class="flashCont" id="defaultFlash">
 				<% @cover_house_pictures.each_with_index do |picture, i| %>
-				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
+				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
 				<% end %>
 			</div>
 		</div>

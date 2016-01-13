@@ -1,12 +1,12 @@
 <%= content_for(:topbar) do %>
     <header>
-      <a href="<%= order_mobile_group_item_path(supplier_id: @supplier.id, id: @group_item.id) %>" class="ico-prev tleft" id="return_order"><img src="/assets/mobile/group/ico-back.png"/></a>
+      <a href="<%= order_mobile_group_item_path(site_id: @site.id, id: @group_item.id) %>" class="ico-prev tleft" id="return_order"><img src="/assets/mobile/group/ico-back.png"/></a>
       <h1>确认订单</h1>
     </header><!-- header end -->
 <% end %>
 
 <section>
-  <%= form_for @group_order, :url => mobile_group_orders_path(supplier_id: @supplier.id) do |form| %>
+  <%= form_for @group_order, :url => mobile_group_orders_path(site_id: @site.id) do |form| %>
     <%= form.hidden_field :qty %>
     <%= form.hidden_field :group_item_id %>
     <%= form.hidden_field :price %>
@@ -95,7 +95,7 @@
 </section><!-- section end -->
 <script>
   $("#return_order").click(function(){
-      $('#new_group_order').attr('action', '<%= order_mobile_group_item_path(supplier_id: @supplier.id, id: @group_item.id) %>').attr('method', 'get')
+      $('#new_group_order').attr('action', '<%= order_mobile_group_item_path(site_id: @site.id, id: @group_item.id) %>').attr('method', 'get')
       $("#new_group_order").submit();
       return false;
   });

@@ -16,14 +16,14 @@
           <dd class="show">
             <div class="mod-form form-ver">
               <div class="form-li">
-                <% options = @supplier.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+                <% options = @site.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
                 <%= f.select :car_catena_id, options_for_select(options.insert(0,["选择车系",""]), @car_owner.try(:car_catena_id)), {}, class: "input" %>
               </div>
               <div class="form-li" id="car_type">
                 <% if @car_owner.new_record? %>
                   <%= f.select :car_type_id, options_for_select([["选择车型",""]]), {}, class: "input" %>
                 <% else %>
-                  <% options = @supplier.car_shop.car_types.where(car_catena_id: @car_owner.car_catena_id).order(:sort).pluck(:name, :id) %>
+                  <% options = @site.car_shop.car_types.where(car_catena_id: @car_owner.car_catena_id).order(:sort).pluck(:name, :id) %>
                   <%= f.select :car_type_id, options_for_select(options.insert(0,["选择车型",""]), @car_owner.try(:car_type_id)), {}, class: "input" %>
                 <% end %>
               </div>
@@ -128,7 +128,7 @@ $(function(){
 });
 
   $("[name='car_owner[car_catena_id]']").change(function(){
-    var set_url = "<%= select_type_mobile_car_owners_url(supplier_id: @supplier.id) %>" + "?car_catena_id=" + $("[name='car_owner[car_catena_id]']").val() + "&name=car_owner";
+    var set_url = "<%= select_type_mobile_car_owners_url(site_id: @site.id) %>" + "?car_catena_id=" + $("[name='car_owner[car_catena_id]']").val() + "&name=car_owner";
     jQuery.ajax({
       type: "GET",
       url: set_url,

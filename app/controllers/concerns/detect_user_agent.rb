@@ -139,7 +139,7 @@ module DetectUserAgent
       Rails.logger.info "==== @wx_user.blank? = #{@wx_user.blank?}"
       Rails.logger.info "==== is_oauth? = #{@wx_mp_user.try(:is_oauth?)}"
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
- 
+
       # no user and open id or none user infos
       if (@wx_user.blank? and @wx_mp_user.try(:is_oauth?) and app_id.present?) or !@wx_user.try(:has_info?)
         if params[:code].present?

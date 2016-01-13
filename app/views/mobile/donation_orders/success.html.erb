@@ -24,12 +24,12 @@
                 </div>
                 <div class="text">捐助成功，感谢您的爱心</div>
                 <div class="btn-box">
-<%= link_to my_orders_mobile_donations_url(supplier_id: session[:supplier_id]), class: "btn btn-orange mt" do %>
+<%= link_to my_orders_mobile_donations_url(site_id: session[:site_id]), class: "btn btn-orange mt" do %>
   <i class="fa fa-search"></i>查看我的捐助
 <% end %>
                 </div>
                 <div class="btn-box">
- <%= link_to mobile_donations_url(supplier_id: session[:supplier_id], aid: @activity.id), class: "btn mt" do %>
+ <%= link_to mobile_donations_url(site_id: session[:site_id], aid: @activity.id), class: "btn mt" do %>
     <i class="fa fa-heart-o"></i>继续献爱心
  <% end %>
                 </div>

@@ -13,7 +13,7 @@
   <div class="pop-body">
     <div class="pop-t">信息填写</div>
     <div class="pop-m">
-      <%= form_for :activity_user, url: mobile_vote_success_url(supplier_id: session[:supplier_id], vote_id: @activity.id), html: {method: 'POST'} do |f|%>
+      <%= form_for :activity_user, url: mobile_vote_success_url(site_id: session[:site_id], vote_id: @activity.id), html: {method: 'POST'} do |f|%>
         <%= hidden_field_tag "ids" %>
         <div class="mod-form">
           <div class="form-title"></div>

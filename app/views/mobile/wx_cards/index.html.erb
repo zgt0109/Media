@@ -22,7 +22,7 @@
           <div class="p-time">
             有效期：<%= wx_card.wx_card_type %>
           </div>
-          <% if wx_card.get_limit > wx_card.consumes.show.where(wx_user_id: @wx_user.id).count %>
+          <% if wx_card.get_limit > wx_card.consumes.show.where(user_id: @user.id).count %>
             <a href="javascript:;" class="btn btn-biger btn-white batchAddCard" data-card-json="<%= wx_card.basic_card_info(@wx_user).to_json %>">立即领取</a>
           <% else %>
             <a href="javascript:;" class="btn btn-biger btn-white">不可领取</a>
@@ -40,7 +40,7 @@
 
   var page = 2;
   function load(){
-    var get_url = "<%= mobile_wx_cards_path(@supplier) %>" + "?page=" + page;
+    var get_url = "<%= mobile_wx_cards_path(@site) %>" + "?page=" + page;
     $.getJSON(get_url, function(data) {
       if(data.wx_cards.length > 0){
         page += 1;

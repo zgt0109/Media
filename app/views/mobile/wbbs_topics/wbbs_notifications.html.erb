@@ -7,7 +7,7 @@
 
 <section id="sec-index">
   <header class="untoppable">
-    <%= link_to "", mobile_wbbs_topics_path( @supplier ), class: 'fa fa-chevron-left' %>
+    <%= link_to "", mobile_wbbs_topics_path( @site ), class: 'fa fa-chevron-left' %>
     <a></a>
     <a></a>
   </header>
@@ -30,14 +30,14 @@
 <script>
   $('.mod-box').on('click', '.hd-message', function(event) {
     // mark message status to be read
-    $.getScript( '<%= read_notification_mobile_wbbs_topics_path(@supplier) %>?id=' + $(this).data('id') );
+    $.getScript( '<%= read_notification_mobile_wbbs_topics_path(@site) %>?id=' + $(this).data('id') );
   });
 
   function load_more_notifications() {
       $(this).removeClass("load-btn").addClass("loading").html('<i class="fa fa-spinner"></i>正在加载..').show();
       var notification_id = $('.mod-load').data('id');
       if ( notification_id ) {
-        $.getScript('<%= wbbs_notifications_mobile_wbbs_topics_path(@supplier) %>?id=' + notification_id);
+        $.getScript('<%= wbbs_notifications_mobile_wbbs_topics_path(@site) %>?id=' + notification_id);
       }
   }
 </script>

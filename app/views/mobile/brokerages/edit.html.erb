@@ -1,7 +1,7 @@
 <div class="main">
 	<div class="bank-card">
 		<section>
-			<%= form_for @broker, url: mobile_brokerage_path(@supplier,@broker), remote: true, html: { method: :put } do |f| %>
+			<%= form_for @broker, url: mobile_brokerage_path(@site,@broker), remote: true, html: { method: :put } do |f| %>
 			<%= f.hidden_field :settlement_type %>
 				<div class="blank10"></div>
 				<div class="way">

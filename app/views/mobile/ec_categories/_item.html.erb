@@ -1,14 +1,14 @@
 <div class="list-li">
   <div class="hd">
     <% if item.main_picture.pic_url %>
-        <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id,id: item) %>"><%= image_tag item.main_picture.pic_url  %></a>
+        <a href="<%= mobile_ec_item_path(site_id: @site.id,id: item) %>"><%= image_tag item.main_picture.pic_url  %></a>
     <% else %>
-        <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id,id: item) %>" class="img-null">暂无图片</a>
+        <a href="<%= mobile_ec_item_path(site_id: @site.id,id: item) %>" class="img-null">暂无图片</a>
     <% end %>
 
   </div>
   <div class="bd">
-    <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id,id: item) %>"><%= item.title  %></a>
-    <p><span class="fred">￥<%= f item.price %></span><a href="<%= mobile_ec_comments_path(supplier_id: @supplier.id,:id => item.id)  %>" class="ico-comment fr"><%= item.ec_comments.count %></a></p>
+    <a href="<%= mobile_ec_item_path(site_id: @site.id,id: item) %>"><%= item.title  %></a>
+    <p><span class="fred">￥<%= f item.price %></span><a href="<%= mobile_ec_comments_path(site_id: @site.id,:id => item.id)  %>" class="ico-comment fr"><%= item.ec_comments.count %></a></p>
   </div>
 </div>

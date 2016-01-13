@@ -13,7 +13,7 @@
       <div style="position:fixed;"></div>
       <%= form_for [:mobile, @shop_table_order] do |f|%>
         <%= f.hidden_field :shop_branch_id %>
-        <%= f.hidden_field :wx_user_id %>
+        <%= f.hidden_field :user_id %>
         <%= f.hidden_field :ref_order_id %>
         <%= f.hidden_field :booking_count %>
         <%= f.hidden_field :table_type %>

@@ -1,9 +1,9 @@
 <div class="black"></div>
 <div class="main">
 	<section>
-		<%= form_for(@broker, url: mobile_brokerages_path(@supplier), remote: true) do |f| %>
-			<%= f.hidden_field :supplier_id %>
-			<%= f.hidden_field :wx_user_id, value: @wx_user.id %>
+		<%= form_for(@broker, url: mobile_brokerages_path(@site), remote: true) do |f| %>
+			<%= f.hidden_field :site_id %>
+			<%= f.hidden_field :user_id, value: @user.id %>
 			<div class="blank10"></div>
 			<div class="mark">
 				<%= image_tag @brokerage.logo_url %>

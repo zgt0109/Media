@@ -19,5 +19,5 @@
 		</div>
 	</div>
 	<br/><br/>
-	<div class="tcenter"><%= link_to "参与评论", new_app_hotel_comment_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], oid: @hotel_order.try(:id), anchor: "mp.weixin.qq.com"), class: "btn btn-big" %></div>
+	<div class="tcenter"><%= link_to "参与评论", new_app_hotel_comment_path(aid: params[:aid], oid: @hotel_order.try(:id), anchor: "mp.weixin.qq.com"), class: "btn btn-big" %></div>
 </div>

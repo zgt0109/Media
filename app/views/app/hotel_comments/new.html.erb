@@ -3,7 +3,7 @@
 	<h1>发表评论</h1>
 </header>
 <div class="contxt cont-artical">
-	<%= form_for @hotel_comment, url: app_hotel_comments_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], comment_time: Time.now.to_i, source: 'new'), validate: true do |f| %>
+	<%= form_for @hotel_comment, url: app_hotel_comments_path(aid: params[:aid], comment_time: Time.now.to_i, source: 'new'), validate: true do |f| %>
 	<%= f.hidden_field :site_id %>
 	<%= f.hidden_field :hotel_branch_id %>
 	<%= f.hidden_field :hotel_id %>

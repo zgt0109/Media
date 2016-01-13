@@ -7,15 +7,15 @@
 
 <section id="sec-index">
     <header class="untoppable">
-        <%= link_to "", mobile_wbbs_topics_path( @supplier, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
+        <%= link_to "", mobile_wbbs_topics_path( @site, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
         <% if @wx_user.present? && !@wx_user.leave_message_forbidden? %>
             <%- if @wx_user.has_info? %>
                 <%- if params[:receiver_id].blank? %>
-                    <%= link_to new_mobile_wbbs_topic_path(@supplier) do %>
+                    <%= link_to new_mobile_wbbs_topic_path(@site) do %>
                         <i class="fa fa-pencil-square-o"></i>发帖
                     <% end %>
                 <%- else %>
-                    <%= link_to new_mobile_wbbs_topic_path(@supplier, status: 2, receiver_id: params[:receiver_id]) do %>
+                    <%= link_to new_mobile_wbbs_topic_path(@site, status: 2, receiver_id: params[:receiver_id]) do %>
                         <i class="fa fa-pencil-square-o"></i>留言
                     <% end %>
                 <%- end %>
@@ -107,9 +107,9 @@
         $(self).remove();
     }
 
-    function setLinkForPop(supplier, topic, receiver, activity){
+    function setLinkForPop(site, topic, receiver, activity){
         $('#pop-tools .pop-ul').html('');
-        var links = '<a class="commentable" href="javascript:;" data-url="/'+supplier+'/wbbs_topics/'+topic+'/create_reply">回复</a><a href="/'+supplier+'/wbbs_topics/new?status=3&receiver_id='+receiver+'">私信</a><a href="/'+supplier+'/wbbs_topics/'+topic+' ?activity_id='+activity+'">查看话题</a><a href="/'+supplier+'/wbbs_topics?receiver_id='+receiver+'&activity_id='+activity+'">查看空间</a>';
+        var links = '<a class="commentable" href="javascript:;" data-url="/'+site+'/wbbs_topics/'+topic+'/create_reply">回复</a><a href="/'+site+'/wbbs_topics/new?status=3&receiver_id='+receiver+'">私信</a><a href="/'+site+'/wbbs_topics/'+topic+' ?activity_id='+activity+'">查看话题</a><a href="/'+site+'/wbbs_topics?receiver_id='+receiver+'&activity_id='+activity+'">查看空间</a>';
         $('#pop-tools .pop-ul').append(links);
         showPop('#pop-tools');
     }
@@ -131,7 +131,7 @@
         }
     }
     function report_wbbs_topic(topic_id) {
-        $.getScript('/<%= @supplier.id %>/wbbs_topics/' + topic_id + '/report');
+        $.getScript('/<%= @site.id %>/wbbs_topics/' + topic_id + '/report');
     }
 
     document.addEventListener("touchmove",function(e){
@@ -142,7 +142,7 @@
             var topic_id = $('#topics').data('topic-id');
             if ( topic_id ) {
                 var top_ids = $('#topics').data('top-ids');
-                var url = '<%= mobile_wbbs_topics_path(@supplier, receiver_id: params[:receiver_id]) %>?top_ids=' + top_ids + '&id=' + topic_id + "<%= params.key?(:my) ? '&my'.html_safe : '' %>";
+                var url = '<%= mobile_wbbs_topics_path(@site, receiver_id: params[:receiver_id]) %>?top_ids=' + top_ids + '&id=' + topic_id + "<%= params.key?(:my) ? '&my'.html_safe : '' %>";
                 $.getScript(url);
             } else {
                 setTimeout(function() { $(".mod-load").slideUp(); }, 20);

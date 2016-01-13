@@ -57,7 +57,7 @@
 <script>
   $(function(){
     var path = "/api/wmall/shops/<%= params[:id] %>" + ".json";
-    var shop = fetch_wmall_data({path: path}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    var shop = fetch_wmall_data({path: path}, {site_id: <%= session[:site_id] %>}, options = {})
 
     var ractive_shop = new Ractive({
       // The `el` option can be a node, an ID, or a CSS selector.
@@ -75,7 +75,7 @@ $(function(){
   // 提交评论
   $(".J-submit").on("click",function(){
     comment_data = $(".comment-bd").serializeArray()
-    comment_data.push({name: 'supplier_id', value: '<%= session[:supplier_id] %>'});
+    comment_data.push({name: 'site_id', value: '<%= session[:site_id] %>'});
 
     fetch_wmall_data(
       {

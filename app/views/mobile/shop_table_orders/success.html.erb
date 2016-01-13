@@ -1,7 +1,7 @@
 <% provide(:title, '我要订座') %>
 <div class="stage" id="stage">
   <header>
-    <%= link_to book_table_mobile_shops_url(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" do %>
+    <%= link_to book_table_mobile_shops_url(site_id: session[:site_id], anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" do %>
     <% end %>
     <h1>订座成功</h1>
   </header>
@@ -65,9 +65,9 @@
                 <div class="hd">
                   <div class="tcenter">
                     <% if @shop_table_order.ref_order_id.blank? %>
-                    <a class="btn btn-blue" href="/<%= session[:supplier_id] %>/shop_branches/<%= @shop_table_order.shop_branch.id %>/want_dinner?ref_order_id=<%= @shop_table_order.id %>">去点菜</a>
+                    <a class="btn btn-blue" href="/<%= session[:site_id] %>/shop_branches/<%= @shop_table_order.shop_branch.id %>/want_dinner?ref_order_id=<%= @shop_table_order.id %>">去点菜</a>
                     <% end %>
-                    <a href="<%= mobile_shop_table_order_url(supplier_id: session[:supplier_id], id: @shop_table_order.id) %>" class="btn">查看订单详情</a>
+                    <a href="<%= mobile_shop_table_order_url(site_id: session[:site_id], id: @shop_table_order.id) %>" class="btn">查看订单详情</a>
                   </div>
                 </div>
               </div>

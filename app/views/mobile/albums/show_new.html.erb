@@ -42,7 +42,7 @@
 
       }(window, window.Code.PhotoSwipe));
       function closeShow(){
-        window.location.href = "<%= list_mobile_album_path(supplier_id: @photo.album.supplier_id, id: @photo.album.id)%>";
+        window.location.href = "<%= list_mobile_album_path(site_id: @photo.album.site_id, id: @photo.album.id)%>";
       }
       function commetnLink(){
         window.location.href = $(".album_photo").val();

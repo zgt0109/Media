@@ -40,7 +40,7 @@
             if(!mobile){
                  alert('请输入您的手机号码');
             } else {
-                var url = window.encodeURI("/<%= session[:supplier_id] %>/unfolds/update_info?mobile=" + mobile + "&name="+name);
+                var url = window.encodeURI("/<%= session[:site_id] %>/unfolds/update_info?mobile=" + mobile + "&name="+name);
                 $.ajax({
                     type: "POST",
                     contentType: "application/json",

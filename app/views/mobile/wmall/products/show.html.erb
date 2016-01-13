@@ -18,7 +18,7 @@
 
     function get_product(id) {
       if (typeof(id) == "undefined") { id = "<%= params[:id]%>" }
-      return products = fetch_wmall_data({path: "/api/wmall/products/"+id+".json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+      return products = fetch_wmall_data({path: "/api/wmall/products/"+id+".json"}, {site_id: <%= session[:site_id] %>}, options = {})
     }
 
     product = get_product()

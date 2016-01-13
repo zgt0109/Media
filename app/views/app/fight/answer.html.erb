@@ -46,7 +46,7 @@
 		<div style="padding:20px 18px;">
 			<p class="sn_info2 clear"><img src="/assets/fight/sure.png" /><span class="c888" style="position:relative; top:20px;">恭喜你，答对了!
 			</span></p>
-			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
+			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
 		</div>
 	</div>
 </div>
@@ -55,7 +55,7 @@
 	<div class='m-box1-bd ad-form-bd ad-form-bd2' style="padding-top:0px;">
 		<div style="padding:20px 18px;">
 			<p class="sn_info2 clear"><img src="/assets/fight/errow.png" /><span class="c888">对不起，您的回答错误。<br />正确的答案是：</span><span class="c444" id="correct_answer"></span></p>
-			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
+			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
 		</div>
 	</div>
 </div>
@@ -66,7 +66,7 @@
 		<div style="padding:20px 18px;">
 			<p class="sn_info2 clear"><img src="/assets/fight/errow.png" /><span class="c888" style="position:relative; top:20px;">对不起，您的回答超时。</span>
 			</p>
-			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
+			<p class='ad-form-bd-submit'><a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&%>&m=question" class="btn_f last_question" style="height:60px;" >进入下一题</a></p>
 		</div>
 	</div>
 </div>
@@ -108,7 +108,7 @@ function submit_answer(opt){
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
-		url: "/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&wxmuid=<%= session[:wx_mp_user_id]%>&question_id=<%= @question.fight_question_id %>&fight_paper_question_id=<%= @question.id%>&user_answer="+opt+"&speed="+speed+"&m=answer",
+		url: "/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&%>&question_id=<%= @question.fight_question_id %>&fight_paper_question_id=<%= @question.id%>&user_answer="+opt+"&speed="+speed+"&m=answer",
 		dataType: 'json',
 		timeout:30000,
 		success: function (data) {

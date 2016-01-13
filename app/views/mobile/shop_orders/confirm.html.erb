@@ -21,7 +21,7 @@
 
         <% ref_order = ShopTableOrder.where(id: @shop_order.ref_order_id).first %>
 
-          <%= form_for @shop_order, url: success_mobile_shop_order_path(supplier_id: session[:supplier_id], anchor: "mp.weixin.qq.com"), method: :post, :html => {class: "mod-form form-hor"} do |f| %>
+          <%= form_for @shop_order, url: success_mobile_shop_order_path(site_id: session[:site_id], anchor: "mp.weixin.qq.com"), method: :post, :html => {class: "mod-form form-hor"} do |f| %>
 
             <%= f.hidden_field :book_status %>
             <%= f.hidden_field :pay_status, value: 1 %>
@@ -55,7 +55,7 @@
                   <%= f.number_field :captcha, class: "input js-input-captcha", placeholder: "请输入验证码" %>
                 </div>
                 <div class="li-r">
-                  <%= link_to "获取验证码", send_captcha_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id), class: "js-captcha btn btn-small btn-blue", method: :post, remote: true, onclick: "send_captcha();" %>
+                  <%= link_to "获取验证码", send_captcha_mobile_shop_order_path(site_id: session[:site_id], id: @shop_order.id), class: "js-captcha btn btn-small btn-blue", method: :post, remote: true, onclick: "send_captcha();" %>
                   <input type="hidden" id="hidden_answer">
                 </div>
               </div>
@@ -67,7 +67,7 @@
                   <%= f.number_field :captcha, class: "input js-input-captcha", placeholder: "请输入验证码" %>
                 </div>
                 <div class="li-r">
-                  <%= link_to "获取验证码", send_captcha_mobile_shop_order_path(supplier_id: session[:supplier_id], id: @shop_order.id), class: "js-captcha btn btn-small btn-blue", method: :post, remote: true, onclick: "send_captcha();" %>
+                  <%= link_to "获取验证码", send_captcha_mobile_shop_order_path(site_id: session[:site_id], id: @shop_order.id), class: "js-captcha btn btn-small btn-blue", method: :post, remote: true, onclick: "send_captcha();" %>
                   <input type="hidden" id="hidden_answer">
                 </div>
               </div>
@@ -248,7 +248,7 @@
                     </span>
 
                     <span class="mod-select fr">
-                      <% payment_settings = @shop_order.supplier.payment_settings.enabled.where('payment_settings.payment_type_id not in (10007,10008)') %>
+                      <% payment_settings = @shop_order.site.payment_settings.enabled.where('payment_settings.payment_type_id not in (10007,10008)') %>
 
                       <select name="shop_order[pay_type]">
                         <% if @shop_order.take_out? %>
@@ -288,7 +288,7 @@
                     </span>
                   </div>
                   <div class="tcenter">
-                    <a class="btn btn-blue" href="/<%= session[:supplier_id] %>/shop_orders/<%= @shop_order.id %>/menu">继续点菜</a>
+                    <a class="btn btn-blue" href="/<%= session[:site_id] %>/shop_orders/<%= @shop_order.id %>/menu">继续点菜</a>
                     <input type="submit" value="确认下单" class="btn confirm-btn">
                   </div>
                 </div>

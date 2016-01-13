@@ -67,7 +67,7 @@
       <% end %>
     </ul>
   </div>
-  <%= form_for @message, url: repair_complain_message_mobile_wx_plot_url(supplier_id: @supplier.id, id: @repair_complain.id, type: params[:type]) do |f| %>
+  <%= form_for @message, url: repair_complain_message_mobile_wx_plot_url(site_id: @site.id, id: @repair_complain.id, type: params[:type]) do |f| %>
       <%= f.hidden_field :messageable_id %>
       <%= f.hidden_field :messageable_type %>
       <div class="edit-message">

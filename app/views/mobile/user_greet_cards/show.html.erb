@@ -1,26 +1,26 @@
-<% provide(:title, @user_greet_card.greet_card.title) %>
+<% provide(:title, @greet_card_item.greet_card.title) %>
 <form>
   <div class="text">
     <div class="text-bg">
 
-      <% if @user_greet_card.greet_card.recommand_card_pic.blank? %>
-        <%= image_tag(@user_greet_card.greet_card.card_pic) %>
+      <% if @greet_card_item.greet_card.recommand_card_pic.blank? %>
+        <%= image_tag(@greet_card_item.greet_card.card_pic) %>
       <% else %>
-        <%= image_tag(@user_greet_card.greet_card.recommand_card_pic) %>
+        <%= image_tag(@greet_card_item.greet_card.recommand_card_pic) %>
       <% end %>
     </div>
     <div class="text-cont">
       <div class="check-box">
-      <% if @user_greet_card.greet_card.has_audio? && @user_greet_card.greet_card.card_type == 2 %>
+      <% if @greet_card_item.greet_card.has_audio? && @greet_card_item.greet_card.card_type == 2 %>
         <div class="label-box">
           <div class="audio-btn"></div><!-- 音乐开关 -->
         </div>
       <% end %>
       </div>
       <div class="text-info">
-        <p><%= @user_greet_card.content %></p>
-        <h2><%= @user_greet_card.sender_name %></h2>
-        <p class="tright"><%= @user_greet_card.created_at.strftime "%Y.%m.%d" %></p>
+        <p><%= @greet_card_item.content %></p>
+        <h2><%= @greet_card_item.sender_name %></h2>
+        <p class="tright"><%= @greet_card_item.created_at.strftime "%Y.%m.%d" %></p>
         <i class="fa fa-volume-down" style="float:right"></i>
       </div>
     </div>
@@ -49,15 +49,15 @@
 
 
 <!-- 音乐 -->
-<% if @user_greet_card.greet_card.has_audio? && @user_greet_card.greet_card.card_type == 2 %>
+<% if @greet_card_item.greet_card.has_audio? && @greet_card_item.greet_card.card_type == 2 %>
 
-<%= audio_tag(@user_greet_card.greet_card.material.try(:qiniu_audio_url), autoplay: true, :id => "music_audio") if @user_greet_card.greet_card.material && @user_greet_card.greet_card.card_type == 2 %>
+<%= audio_tag(@greet_card_item.greet_card.material.try(:qiniu_audio_url), autoplay: true, :id => "music_audio") if @greet_card_item.greet_card.material && @greet_card_item.greet_card.card_type == 2 %>
 
 <% end %>
 <!-- 人声 -->
-<% if @user_greet_card.greet_card.card_type == 1 %>
+<% if @greet_card_item.greet_card.card_type == 1 %>
 <a id="playbox" class="ico-music close" onclick="playbox.init(this).play();">
-<%= audio_tag(@user_greet_card.user_voice.try(:sound).try(:mp3), :id => "sound") if @user_greet_card.user_voice.try(:sound?) %>
+<%= audio_tag(@greet_card_item.user_voice.try(:sound).try(:mp3), :id => "sound") if @greet_card_item.user_voice.try(:sound?) %>
 </a>
 <% end %>
 <script>

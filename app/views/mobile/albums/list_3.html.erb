@@ -4,7 +4,7 @@
     <ul>
       <% @album.photos.page(1).each do |photo| %>
         <li>
-          <a href="<%= mobile_album_path(photo, supplier_id: photo.album.supplier_id) %>">
+          <a href="<%= mobile_album_path(photo, site_id: photo.album.site_id) %>">
             <img class="lazy" src="<%= photo.img_url %>"/>
           </a>
         </li>
@@ -28,7 +28,7 @@
     var page = 2,
         get_ajax = true;
     function load(){
-      var get_url = "<%= load_more_photos_mobile_album_path(@album.supplier_id,@album) %>" + "?page=" + page;
+      var get_url = "<%= load_more_photos_mobile_album_path(@album.site_id,@album) %>" + "?page=" + page;
       if(get_ajax){
         get_ajax = false;
         $.getJSON(get_url, function(data) {

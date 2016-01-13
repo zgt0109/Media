@@ -1,5 +1,5 @@
 class WxParticipate < ActiveRecord::Base
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :activity
   has_many :wx_invites
   enum_attr :prize_status, :in => [
@@ -12,20 +12,20 @@ class WxParticipate < ActiveRecord::Base
     ['normal', 0, '正常']
   ]
 
-  def check_prize!(to_wx_user_id)
+  def check_prize!(to_user_id)
     if activity.extend.prize_type == 'custom'
       gift_name = activity.extend.prize_name
       left_consumes_count =  activity.extend.prize_count.to_i - activity.consumes.count
       return if left_consumes_count <= 0
-      consume = Consume.where(wx_mp_user_id: activity.wx_mp_user_id, consumable_type: 'Activity', consumable_id: activity.id, expired_at:  activity.extend.prize_end, wx_user_id: to_wx_user_id).first_or_create
+      consume = Consume.where(site_id: activity.site_id, consumable_type: 'Activity', consumable_id: activity.id, expired_at:  activity.extend.prize_end, user_id: to_user_id).first_or_create
     elsif activity.extend.prize_type == 'coupon'
       coupon = Coupon.find_by_id(activity.extend.prize_id)
       gift_name = coupon.name
       left_consumes_count = coupon.limit_count - coupon.consumes.count
       return if left_consumes_count <= 0
-      consume = Consume.create(wx_mp_user_id: coupon.wx_mp_user_id,  consumable_type: 'Coupon', consumable_id: coupon.id, expired_at: coupon.use_end, wx_user_id: to_wx_user_id)
+      consume = Consume.create(site_id: coupon.site_id,  consumable_type: 'Coupon', consumable_id: coupon.id, expired_at: coupon.use_end, user_id: to_user_id)
      end
-     gift = WxPrize.where(wx_user_id: to_wx_user_id, activity_id: activity_id).first_or_create
+     gift = WxPrize.where(user_id: to_user_id, activity_id: activity_id).first_or_create
      gift.update_attributes(consume_id: consume.id, prize_name: gift_name, status: 1) if consume.present?
      update_attributes(prize_status: WxParticipate::NO_PRIZE) if has_prize?
   end

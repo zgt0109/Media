@@ -40,15 +40,15 @@ gjQipa.onGameOver = function() {
 <script type="text/javascript">
 if (IS_REFFER) {
 }
-document.write("<div class='moreGames'><a href='<%= mobile_fans_games_path(supplier_id: @supplier.id) %>'>更多奇葩游戏</a></div>");
+document.write("<div class='moreGames'><a href='<%= mobile_fans_games_path(site_id: @site.id) %>'>更多奇葩游戏</a></div>");
 </script>
 
 <script language="javascript">
 window.addEventListener("load",function(){setTimeout(function(){window.scrollTo(0,1)},0)});
-var mebtnopenurl = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:9) %>';
+var mebtnopenurl = '<%= mobile_fans_game_url(site_id: @site.id,id:9) %>';
 window.shareData = {
         "imgUrl": "<%= MOBILE_DOMAIN %>/images/fans_game/game_9.jpg",
-        "timeLineLink": "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:9) %>",
+        "timeLineLink": "<%= mobile_fans_game_url(site_id: @site.id,id:9) %>",
         "tTitle": "别踩白块",
         "tContent": "合理操作，在这黑白世界里走得更远吧！"
 };

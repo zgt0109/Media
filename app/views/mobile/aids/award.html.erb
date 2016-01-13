@@ -64,7 +64,7 @@
       }
 
       this.promise_ = $.ajax({
-        url: "<%= acceptance_mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>",
+        url: "<%= acceptance_mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) %>",
         type: "post",
         data: getPasswordAndShop(),
         dataType: "json",
@@ -74,14 +74,14 @@
           if (data.errcode == 0) {
             if (data.prize_type == 'point_prize') { // 积分奖特殊处理
               if (data.status == <%= ActivityConsume::USED %>) { // 积分奖充值, 回到主页
-                window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>";
+                window.location.href = "<%= mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) %>";
               }
               else {
                 showAccepteErrorInfo('会员未注册或无效会员');
               }
             }
             else { // 普通奖, 回到主页
-              window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>";
+              window.location.href = "<%= mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) %>";
             }
           }
           else {

@@ -1,7 +1,7 @@
 <div class="list">
   <div class="bd">
     <% @bulletins.each do |child| %>
-        <%= link_to bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com') do %>
+        <%= link_to bulletin_mobile_wx_plot_url(site_id: @site.id, id: child.id, anchor: 'mp.weixin.qq.com') do %>
             <p>
               <% if child.pic_url.present? %>
                   <%= image_tag child.pic %>

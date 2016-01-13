@@ -99,7 +99,7 @@ function click_num(num){
 }
 
 function change_type(id){
-  var set_url = "<%= change_type_mobile_car_shops_path(supplier_id: @supplier.id) %>" + "?car_type_id=" + id;
+  var set_url = "<%= change_type_mobile_car_shops_path(site_id: @site.id) %>" + "?car_type_id=" + id;
   jQuery.ajax({
     type: "GET",
     url: set_url,

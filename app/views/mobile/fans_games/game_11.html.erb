@@ -452,7 +452,7 @@ function preloadImg() {
 $(document).on("click touchstart", "#c18", function(a) {
 	a.preventDefault();
 	a.stopPropagation();
-	window.location.href = "<%= mobile_fans_games_url(supplier_id: @supplier.id) %>"
+	window.location.href = "<%= mobile_fans_games_url(site_id: @site.id) %>"
 });
 
 function winORlose() {
@@ -551,7 +551,7 @@ function winORlose() {
 }
 
 
-var shareUrl = "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:11) %>",
+var shareUrl = "<%= mobile_fans_game_url(site_id: @site.id,id:11) %>",
 	shareTitle = "中秋吃月饼大赛，求超越！",
 	share = "中秋吃月饼大赛，求超越！",
 	share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/game_11.jpg";

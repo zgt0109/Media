@@ -7,7 +7,7 @@
   </header>
   <section>
     <%= form_for @house_bespeak,:url => app_house_markets_path,:validate => true do |f|  %>
-      <%= f.hidden_field :wx_user_id %>
+      <%= f.hidden_field :user_id %>
       <div class="box-form">
         <p>
           <span>姓名：</span>
@@ -105,7 +105,7 @@
 
 </script>
 </div>
-  <%= @supplier.try(:piwik_js_code) %>
+  
 </body>
 <style>
 

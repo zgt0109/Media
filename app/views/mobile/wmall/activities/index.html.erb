@@ -24,7 +24,7 @@
 
 <script>
   $(function(){
-    var activities = fetch_wmall_data({path: "/api/wmall/activities/list.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    var activities = fetch_wmall_data({path: "/api/wmall/activities/list.json"}, {site_id: <%= session[:site_id] %>}, options = {})
 
     var ractive_activities = new Ractive({
       // The `el` option can be a node, an ID, or a CSS selector.

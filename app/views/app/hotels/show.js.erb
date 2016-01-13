@@ -1,4 +1,4 @@
 var html = '<%= j (render :partial => 'app/hotels/hotel_room_types', :object => @hotel_room_types, :as => :hotel_room_type) %>'
 $(".box-list-room").append(html);
 $("div.tcenter").remove();
-$(".box-list-room").append('<% unless @hotel_room_types.last_page? %><div class="tcenter"><a href="/app/hotels/<%= params[:id] %>?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>#mp.weixin.qq.com" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a></div><% end %>');
+$(".box-list-room").append('<% unless @hotel_room_types.last_page? %><div class="tcenter"><a href="/app/hotels/<%= params[:id] %>?aid=<%= params[:aid] %>& %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>#mp.weixin.qq.com" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a></div><% end %>');

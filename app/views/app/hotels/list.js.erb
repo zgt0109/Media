@@ -1,4 +1,4 @@
 var html = '<%= j (render :partial => 'app/hotels/hotel_branches', :object => @hotel_branches, :as => :hotel_branch) %>'
 $(".box-cont").append(html);
 $("div.tcenter").remove();
-$(".box-cont").append('<% unless @hotel_branches.last_page? %><div class="tcenter"><a href="/app/hotels/list?aid=<%= params[:aid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...</a><%#= link_to_next_page @hotel_branches, "点击查看更多...", class: "loading", :remote => true %></div><%end%>');
+$(".box-cont").append('<% unless @hotel_branches.last_page? %><div class="tcenter"><a href="/app/hotels/list?aid=<%= params[:aid] %>& %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...</a><%#= link_to_next_page @hotel_branches, "点击查看更多...", class: "loading", :remote => true %></div><%end%>');

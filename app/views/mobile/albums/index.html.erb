@@ -7,7 +7,7 @@
           <% if index == 0 %>
             <li class="on">
               <div class="big_pic">
-                <a href="<%= list_mobile_album_path(supplier_id: album.supplier_id, id: album.id) %>">
+                <a href="<%= list_mobile_album_path(site_id: album.site_id, id: album.id) %>">
                   <div class="shadow"><img class="img100" src="<%= album.cover_picture %>"/></div>
                   <span class="pic_num"><i class="icon photo_i mar-r-5"></i><%= album.photos_count %></span>
                   <div class="clear pic_txt f16">
@@ -19,7 +19,7 @@
             </li>
           <% else %>
             <li>
-              <a href="<%= list_mobile_album_path(supplier_id: album.supplier_id, id: album.id) %>">
+              <a href="<%= list_mobile_album_path(site_id: album.site_id, id: album.id) %>">
                 <i class="icon arrow2"></i>
                 <span class="left leftimg mar-r-5"><img  src="<%= album.cover_picture %>"/> </span>
                 <div class="auto">

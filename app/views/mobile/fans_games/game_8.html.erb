@@ -273,7 +273,7 @@
             <p>你的答案<span class="score">0</span></p>
             <div class="fb_plugin">
             <p><br><br><br></p>
-            <p><a href="<%= mobile_fans_game_url(supplier_id: @supplier.id,id:8) %>" class="button retry">再玩一次</a>&nbsp;&nbsp;<a href="<%= mobile_fans_games_path(supplier_id: @supplier.id) %>" class="button ">更多精彩</a></p>
+            <p><a href="<%= mobile_fans_game_url(site_id: @site.id,id:8) %>" class="button retry">再玩一次</a>&nbsp;&nbsp;<a href="<%= mobile_fans_games_path(site_id: @site.id) %>" class="button ">更多精彩</a></p>
             </div>
         </div>
     </div>
@@ -283,7 +283,7 @@
             <li class="cross" style="display: none;">错!</li>
         </ul>
     </div>
-    <div class="copyrights"><p style="font-size:17px;"><a href="<%= mobile_fans_games_path(supplier_id: @supplier.id) %>" title="更多游戏">更多游戏</a></p>
+    <div class="copyrights"><p style="font-size:17px;"><a href="<%= mobile_fans_games_path(site_id: @site.id) %>" title="更多游戏">更多游戏</a></p>
     <script src="/javascripts/fans_game/saved_resource"></script>
     </div>
 </div>
@@ -381,10 +381,10 @@ $(document).ready(function(){
 });
 </script>
 <script language="javascript">
-var mebtnopenurl = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:8) %>';
+var mebtnopenurl = '<%= mobile_fans_game_url(site_id: @site.id,id:8) %>';
 window.shareData = {
         "imgUrl": "<%= MOBILE_DOMAIN %>/images/fans_game/game_8.jpg",
-        "timeLineLink": "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:8) %>",
+        "timeLineLink": "<%= mobile_fans_game_url(site_id: @site.id,id:8) %>",
         "tTitle": "最坑人的辨色大比拼！",
         "tContent": "全世界最坑的辨色大比拼，1分钟内让你抓狂不已！"
 };
@@ -408,7 +408,7 @@ function dp_share(t){
 	window.shareData.tTitle = document.title;
 }
 function dp_Ranking(){
-	document.location.href = "<%= mobile_fans_games_url(supplier_id: @supplier.id) %>";
+	document.location.href = "<%= mobile_fans_games_url(site_id: @site.id) %>";
 }
 document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
     WeixinJSBridge.on('menu:share:appmessage', function(argv) {

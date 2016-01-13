@@ -1,6 +1,5 @@
 class Greet < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :activity
   has_many :greet_cards
 

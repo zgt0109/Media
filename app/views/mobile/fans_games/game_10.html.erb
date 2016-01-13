@@ -22,7 +22,7 @@
 						<h3></h3>
 						<div class="btn-wrap">
 							<button class="btn btn-restart">再来一次</button> 
-							<a href="<%= mobile_fans_games_url(supplier_id: @supplier.id) %>" class="btn btn-boyaa">更多游戏...</a>
+							<a href="<%= mobile_fans_games_url(site_id: @site.id) %>" class="btn btn-boyaa">更多游戏...</a>
 						</div>
 					</div>
 				</div>
@@ -31,7 +31,7 @@
 						<h3>游戏暂停</h3>
 						<div class="btn-wrap">
 							<button class="btn btn-resume">继续游戏</button> 
-							<a href="<%= mobile_fans_games_url(supplier_id: @supplier.id) %>" class="btn btn-boyaa">更多游戏...</a>
+							<a href="<%= mobile_fans_games_url(site_id: @site.id) %>" class="btn btn-boyaa">更多游戏...</a>
 						</div>
 					</div>
 				</div>
@@ -55,7 +55,7 @@
 	},
 		shareData = {
 			imgUrl: "<%= MOBILE_DOMAIN %>/images/fans_game/game_10.jpg",
-			timeLineLink: "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:10) %>",
+			timeLineLink: "<%= mobile_fans_game_url(site_id: @site.id,id:10) %>",
 			tTitle: "看你有多色？",
 			tContent: "找出所有色块中颜色不同的一块。"
 		};
@@ -161,7 +161,7 @@
 						var g = new Image;
 						g.onload = a, g.src = b[f]
 					} else d.render();
-	                var backurl = "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:10) %>";
+	                var backurl = "<%= mobile_fans_game_url(site_id: @site.id,id:10) %>";
 					document.addEventListener("WeixinJSBridgeReady", function() {
 						WeixinJSBridge && (WeixinJSBridge.on("menu:share:appmessage", function() {
 							var a = Game.lastLv > 0 ? "我闯过" + (Game.lastLv + 1) + "关，击败" + Game.lastGamePercent + "%的人！我是【" + Game.lastGameTxt + "】！不服来战！" : shareData.tTitle;
@@ -185,7 +185,7 @@
 								title: a
 							}, function(res) {
 	                            document.location.href = backurl;
-								setTimeout(function(){document.location.href = '<%= mobile_fans_games_url(supplier_id: @supplier.id) %>';},1000);
+								setTimeout(function(){document.location.href = '<%= mobile_fans_games_url(site_id: @site.id) %>';},1000);
 							})
 						}))
 					}, !1)

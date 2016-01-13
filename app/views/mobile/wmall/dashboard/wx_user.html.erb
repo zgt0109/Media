@@ -38,8 +38,8 @@
           <i class="u-icon u-icon-2"></i>会员卡
         <% end %>
       </li>
-      <% if @supplier.blog_bbs? %>
-        <li><%=link_to raw('<i class="u-icon u-icon-3"></i>会员论坛'), mobile_wbbs_topics_path(auth_params.slice(:supplier_id)) %></li>
+      <% if @site.blog_bbs? %>
+        <li><%=link_to raw('<i class="u-icon u-icon-3"></i>会员论坛'), mobile_wbbs_topics_path(auth_params.slice(:site_id)) %></li>
       <% end %>
     </ul>
 

@@ -101,13 +101,13 @@
     <div class="card-bd ivalign">
         <img src="/images/fans_game/7.jpg"/>
         <div id="snsActions" class="sns-acts">
-            <a href="<%= mobile_fans_games_path(supplier_id: @supplier.id) %>" class="btn btn-block btn-style1">玩更多游戏</a>
+            <a href="<%= mobile_fans_games_path(site_id: @site.id) %>" class="btn btn-block btn-style1">玩更多游戏</a>
         </div>
     </div>
 </script>
 
 <script>
-var mebtnopenurl = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:1) %>';
+var mebtnopenurl = '<%= mobile_fans_game_url(site_id: @site.id,id:1) %>';
 "document" in self && !("classList" in document.createElement("_")) && ! function(a) {
   "use strict";
   if ("Element" in a) {
@@ -1322,13 +1322,13 @@ function() {
     var b = new Image,
       c = "http://support.weixin.qq.com/cgi-bin/mmsupport-bin/webgamereport?1=1",
       d = j;
-    d.nUrOpState = a, c += "&appid=" + d.sAppID || "0", c += "&usropstate=" + d.nUrOpState || "0", c += "&networktype=" + d.nNetworkType || "0", c += "&device=" + d.sDeivceType || "0", c += "&clientversion=" + d.sClientVersion || "0", c += "&uin=" + d.sUin || "0", c += "&sourcescene=" + d.nSourceScene || "0", c += "&appstate=" + d.nAppState || "0", c += "&appversion=" + d.nAppVersion || "0", c += "&assiststate=" + d.nAssistState || "0", c += "&assistversion=" + d.nAssistVersion || "0", "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:1) %>?noticeid=" + d.nNoticeID || 0, b.src = c
+    d.nUrOpState = a, c += "&appid=" + d.sAppID || "0", c += "&usropstate=" + d.nUrOpState || "0", c += "&networktype=" + d.nNetworkType || "0", c += "&device=" + d.sDeivceType || "0", c += "&clientversion=" + d.sClientVersion || "0", c += "&uin=" + d.sUin || "0", c += "&sourcescene=" + d.nSourceScene || "0", c += "&appstate=" + d.nAppState || "0", c += "&appversion=" + d.nAppVersion || "0", c += "&assiststate=" + d.nAssistState || "0", c += "&assistversion=" + d.nAssistVersion || "0", "<%= mobile_fans_game_url(site_id: @site.id,id:1) %>?noticeid=" + d.nNoticeID || 0, b.src = c
   }
   var d = {
       img_url: "http://t1.qpic.cn/mblogpic/c2efbd0230e89fd8a902/460",
       img_width: "120",
       img_height: "120",
-      link: "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:1) %>",
+      link: "<%= mobile_fans_game_url(site_id: @site.id,id:1) %>",
       desc: "高智商手机魔术，敢挑战吗？",
       title: "微信爆红手机魔术“读心小博士”，瞬间猜出你所想！"
     },
@@ -1358,7 +1358,7 @@ function() {
   if (g) {
     var h = d.link,
       i = h.lastIndexOf("#wechat_redirect");
-    d.link = "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:1) %>?noticeid=" + g + "#wechat_redirect"
+    d.link = "<%= mobile_fans_game_url(site_id: @site.id,id:1) %>?noticeid=" + g + "#wechat_redirect"
   }
   var j = {
     sAppID: "wx71a56a23144e6db7",

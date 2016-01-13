@@ -1,6 +1,6 @@
 <div class="mod-block">
 
-  <%= link_to mobile_micro_store_url(:supplier_id => branch.supplier_id, id: branch.id, ref: "table", anchor: "mp.weixin.qq.com"), class: "mod-product" do %>
+  <%= link_to mobile_micro_store_url(:site_id => branch.site_id, id: branch.id, ref: "table", anchor: "mp.weixin.qq.com"), class: "mod-product" do %>
   <div class="product-text">
     <b><%= branch.name %></b>
     <span><%= branch.ditu_address %></span>
@@ -11,7 +11,7 @@
     <ul class="navLine-ul">
       <li>
         <a
-        href="<%= take_out_mobile_shop_branch_url(supplier_id: session[:supplier_id], id: branch.id) %>"
+        href="<%= take_out_mobile_shop_branch_url(site_id: session[:site_id], id: branch.id) %>"
         >
           <span class="icon icon-wine">外卖</span>
         </a>

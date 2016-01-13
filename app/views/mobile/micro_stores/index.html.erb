@@ -1,8 +1,8 @@
-<% content_for(:title, @supplier.shop.name || '门店列表') %>
+<% content_for(:title, @site.shop.name || '门店列表') %>
 <section id="sec-index">
   <header>
     <a></a>
-    <h1><%= @supplier.shop.name %></h1>
+    <h1><%= @site.shop.name %></h1>
     <a></a>
   </header>
   <div class="body">
@@ -14,7 +14,7 @@
           </div>
           <input type="submit" value="搜索" class="btn"/>
       <% end %>
-      <a href="<%= @shop_branches.blank? ? "javascript:;" : map_mobile_micro_stores_path(supplier_id: session[:supplier_id]) %>" class="near">我的周边</a>
+      <a href="<%= @shop_branches.blank? ? "javascript:;" : map_mobile_micro_stores_path(site_id: session[:site_id]) %>" class="near">我的周边</a>
     </div>
     <div class="list-box">
       <%= render partial: 'shop_branches', collection: @shop_branches, as: :branch %>

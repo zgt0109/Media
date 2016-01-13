@@ -189,7 +189,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <span>份爱心</span> 
       <a href="#p%3Dmyrecord">
         <div class="myrecord">
-          <%= link_to my_orders_mobile_donations_url(supplier_id: session[:supplier_id])  do %>
+          <%= link_to my_orders_mobile_donations_url(site_id: session[:site_id])  do %>
           <img src="http://mat1.gtimg.com/gongyi/m/wx/icon_5.png">
           <% end %>
         </div>
@@ -201,7 +201,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 
     <% if first_donation %>
-      <%= link_to mobile_donation_url(supplier_id: session[:supplier_id], id: first_donation.id), class: "btn" do %>
+      <%= link_to mobile_donation_url(site_id: session[:site_id], id: first_donation.id), class: "btn" do %>
         <div class="hot">   
           <img src="<%= first_donation.pic_url %>" class="img_big">   
           <img src="http://mat1.gtimg.com/gongyi/m/wx/home_btn.png" class="btn">  
@@ -220,7 +220,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
       <% @donations.each do |donation| %>
         <% unless donation == first_donation %>
-          <%= link_to mobile_donation_url(supplier_id: session[:supplier_id], id: donation.id), class: "btn" do %>
+          <%= link_to mobile_donation_url(site_id: session[:site_id], id: donation.id), class: "btn" do %>
           <div class="item bg1">   
             <img src="<%= donation.pic_url %>" class="fl">   
             <div class="t"> 

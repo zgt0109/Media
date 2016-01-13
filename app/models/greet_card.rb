@@ -3,8 +3,6 @@ class GreetCard < ActiveRecord::Base
   belongs_to :greet
 
   validates :title, :content, presence: true
-  # validates :title_pic, presence: true, on: :create
-  # validates :card_pic, presence: true, on: :create
 
   before_save :clean_up
 

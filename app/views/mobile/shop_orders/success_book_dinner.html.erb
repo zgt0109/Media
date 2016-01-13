@@ -1,7 +1,7 @@
 <% provide(:title, '我要订餐') %>
 <div class="stage" id="stage">
   <header>
-    <%= link_to "", mobile_shop_orders_url(supplier_id: session[:supplier_id], :order_type => 1, anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" %>
+    <%= link_to "", mobile_shop_orders_url(site_id: session[:site_id], :order_type => 1, anchor: "mp.weixin.qq.com"), class: "fa fa-angle-left fl" %>
 
     <h1><%= @shop_order.finish? ? '订餐成功' : '请重新支付' %></h1>
   </header>
@@ -69,10 +69,10 @@
                     <% if @shop_order.ref_order_id.blank? %>
                       <% if @shop_order.in_branch? || @shop_order.in_queue? %>
                       <% else %>
-                        <a class="btn btn-blue" href="/<%= session[:supplier_id] %>/shop_table_orders/new?shop_branch_id=<%= @shop_order.shop_branch.id %>&ref_order_id=<%= @shop_order.id %>">去订座</a>
+                        <a class="btn btn-blue" href="/<%= session[:site_id] %>/shop_table_orders/new?shop_branch_id=<%= @shop_order.shop_branch.id %>&ref_order_id=<%= @shop_order.id %>">去订座</a>
                       <% end %>
                     <% end %>
-                    <a href="<%= mobile_shop_order_url(supplier_id: session[:supplier_id], id: @shop_order.id) %>" class="btn">查看订单详情</a>
+                    <a href="<%= mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id) %>" class="btn">查看订单详情</a>
                   </div>
                 </div>
               </div>

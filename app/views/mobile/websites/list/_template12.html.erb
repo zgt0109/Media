@@ -32,8 +32,8 @@
 <div class="box-nav">
   <a href="javascript:history.go(-1);"><img src="/assets/website/template12/goback.png"/></a>
   <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#" %>"><img src="/assets/website/template12/phone.png"/></a>
-  <a href="<%= @website.address? ? mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) : "#"%>"><img src="/assets/website/template12/location.png"/></a>
-  <a href="<%= mobile_root_url(supplier_id: @website.supplier_id,id: @website.id, aid: session[:activity_id], wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>"><img src="/assets/website/template12/home.png"/></a>
+  <a href="<%= @website.address? ? mobile_map_url(site_id: @website.site_id, id: @website.id) : "#"%>"><img src="/assets/website/template12/location.png"/></a>
+  <a href="<%= mobile_root_url(site_id: @website.site_id,id: @website.id, aid: session[:activity_id], anchor: "mp.weixin.qq.com") %>"><img src="/assets/website/template12/home.png"/></a>
   <a class="last btn-share" onclick=""><img src="/assets/website/template12/share.png"/></a>
 </div>
 

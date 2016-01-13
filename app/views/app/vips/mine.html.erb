@@ -44,7 +44,7 @@
             <span>当前金额</span>
           </a>
         </div>
-        <%- if @supplier && @supplier.can_pay? && @vip_user && @vip_user.normal? %>
+        <%- if @site && @site.can_pay? && @vip_user && @vip_user.normal? %>
           <div class="item cur">
             <a href="/app/vips/go_recharge#mp.weixin.qq.com">
               <b><i class="img img-1"></i></b>
@@ -65,7 +65,7 @@
         <div class="list-box">
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= my_mobile_coupons_path(supplier_id: session[:supplier_id]) %>">
+              <a class="icon-right" href="<%= my_mobile_coupons_path(site_id: session[:site_id]) %>">
                 <i class="icon icon-2"></i>
                 <span>我的优惠券</span>
                 <div class="num"><%= @coupons_count %></div>
@@ -74,10 +74,10 @@
           </dl>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= exchanged_app_vips_path(wxmuid: session[:wx_mp_user_id]) %>">
+              <a class="icon-right" href="<%= exchanged_app_vips_path() %>">
                 <i class="icon icon-3"></i>
                 <span>我的礼品券</span>
-                <div class="num"><%= @supplier.point_gifts.exchangeable.count %></div>
+                <div class="num"><%= @site.point_gifts.exchangeable.count %></div>
               </a>
             </dt>
           </dl>

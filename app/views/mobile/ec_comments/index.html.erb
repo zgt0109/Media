@@ -1,9 +1,9 @@
 <% provide(:title, "商品评论") %>
 <%= content_for(:topbar) do %>
     <header>
-      <a href="<%= mobile_ec_item_path(supplier_id: @supplier.id,:id => @item.id, anchor: "mp.weixin.qq.com")  %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
+      <a href="<%= mobile_ec_item_path(site_id: @site.id,:id => @item.id, anchor: "mp.weixin.qq.com")  %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
       <h1>评论</h1>
-      <a href="<%= new_mobile_ec_comment_path(supplier_id: @supplier.id,:id => @item.id) %>"><img src="/assets/mobile/wshop/ico-comment.png"/></a>
+      <a href="<%= new_mobile_ec_comment_path(site_id: @site.id,:id => @item.id) %>"><img src="/assets/mobile/wshop/ico-comment.png"/></a>
     </header><!-- header end -->
 <% end %>
 

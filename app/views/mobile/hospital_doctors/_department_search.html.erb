@@ -12,7 +12,7 @@
 				<% if department.has_children? %>
 			  	<a data-target="<%= department.id %>"><span><%= department.name %></span><i class="arrow fr"></i></a>
 				<% else %>
-					<a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id, department_id: department.id) %>"><span><%= department.name %></span><i class="arrow fr"></i></a>
+					<a href="<%= mobile_hospital_doctors_path(site_id: @site.id, department_id: department.id) %>"><span><%= department.name %></span><i class="arrow fr"></i></a>
 				<% end %>
 			<% end %>
 		</p>
@@ -21,7 +21,7 @@
 			<% if department.has_children? %>
 				<p class="categoey hide" id="category-<%= department.id %>">
 					<% department.children.each do |d| %>
-						<a href="<%= mobile_hospital_doctors_path(supplier_id: @supplier.id, department_id: d.id) %>"><span><%= d.name %></span><i class="arrow fr"></i></a>
+						<a href="<%= mobile_hospital_doctors_path(site_id: @site.id, department_id: d.id) %>"><span><%= d.name %></span><i class="arrow fr"></i></a>
 					<% end %>
 				</p>
 			<% end %>

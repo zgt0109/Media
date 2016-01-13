@@ -41,14 +41,14 @@
     </div><!-- deail-name end -->
     <div class="detail-btn">
       <% if @item.selling? %>
-          <a href="<%= new_mobile_ec_order_path(supplier_id: @supplier.id, :items => [@item.id]) %>" class="btn"><%= image_tag "/assets/mobile/wshop/ico-money.png" %>立即购买</a>
+          <a href="<%= new_mobile_ec_order_path(site_id: @site.id, :items => [@item.id]) %>" class="btn"><%= image_tag "/assets/mobile/wshop/ico-money.png" %>立即购买</a>
           <a class="btn btn-red" id="btn-add"><%= image_tag "/assets/mobile/wshop/ico-car-add.png" %>加入购物车</a>
       <% else %>
           <a class="btn" style="background: #999">此商品已下架</a>
       <% end %>
     </div><!-- detail-btn end -->
     <div class="detail-tab">
-      <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_ec_comments_path(supplier_id: @supplier.id,id: @item.id) %>">商品评价(<%= @item.ec_comments.count %>)</a></div>
+      <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_ec_comments_path(site_id: @site.id,id: @item.id) %>">商品评价(<%= @item.ec_comments.count %>)</a></div>
       <div class="bd">
         <div class="ckeditor_content">
           <%= @item.description.to_s.html_safe %>

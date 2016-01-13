@@ -21,7 +21,7 @@
 <div class="pop" id="pop-comment">
 	<div class="pop-bd">
 		<p>评论成功</p>
-		<p><a class="btn" href="/app/whouse/impress?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>">确认</a></p>
+		<p><a class="btn" href="/app/whouse/impress?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>">确认</a></p>
 	</div>
 	<div class="pop-bg"></div>
 </div>
@@ -30,7 +30,7 @@ function post_comment(){
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
-		url: "/app/whouse/comment?aid=<%= params[:aid] %>&id=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&hid=<%= params[:hid] %>&name="+$('#house_comment_name').val()+"&mobile="+$('#house_comment_mobile').val()+"&content="+$('#house_comment_content').val(),
+		url: "/app/whouse/comment?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>&name="+$('#house_comment_name').val()+"&mobile="+$('#house_comment_mobile').val()+"&content="+$('#house_comment_content').val(),
 		dataType: 'json',
 		timeout:30000,
 		success: function (data) {

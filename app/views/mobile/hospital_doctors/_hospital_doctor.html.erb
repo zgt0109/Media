@@ -45,9 +45,9 @@
 
 <% if doctor.doctor_watches.count > 0 %>
  <% if doctor.is_online? && doctor.has_future_arrange && !doctor.is_full %>
- <%= link_to "在线挂号", mobile_doctor_watches_path(supplier_id: session[:supplier_id], doctor_id: doctor.id), class: "fw btn" %>
+ <%= link_to "在线挂号", mobile_doctor_watches_path(site_id: session[:site_id], doctor_id: doctor.id), class: "fw btn" %>
  <% elsif doctor.is_online? && doctor.is_full %>
- <%= link_to "查看排班表", mobile_doctor_watches_path(supplier_id: session[:supplier_id], doctor_id: doctor.id, readonly: true), class: "fw btn" %>
+ <%= link_to "查看排班表", mobile_doctor_watches_path(site_id: session[:site_id], doctor_id: doctor.id, readonly: true), class: "fw btn" %>
  <% end %>
 <% end %>
 </div>

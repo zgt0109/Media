@@ -2,9 +2,9 @@
 <% content_for :booking_top_pic do %>
     <header>
 
-      <a href="<%= mobile_bookings_url(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <a href="<%= mobile_bookings_url(site_id: @site.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
       <a href="<%= @booking.tel? ? "tel:#{@booking.tel}" : "#" %>"><img src="/assets/mobile/wserver/ico-phone.png"/></a>
-      <a href="<%= mobile_booking_orders_path(supplier_id: @supplier.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
+      <a href="<%= mobile_booking_orders_path(site_id: @site.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
       <a class="btn-list"><img src="/assets/mobile/wserver/ico-list.png"/></a>
     </header>
 <% end %>
@@ -26,17 +26,17 @@
     <div class="box-bg"></div>
   </div>
 </div>
-<% if @booking_categories.present? && @supplier.booking_items.count > 0  %>
+<% if @booking_categories.present? && @site.booking_items.count > 0  %>
    <% @booking_categories.each do |booking_category| %>
         <% @items = booking_category.products.slice(0, 6) %>
         <% next unless @items.present? %>
-        <div class="bd-title"><a href="<%= mobile_booking_category_url(supplier_id: @supplier.id, id: booking_category.id)%>"><%= booking_category.name %></a></div>
+        <div class="bd-title"><a href="<%= mobile_booking_category_url(site_id: @site.id, id: booking_category.id)%>"><%= booking_category.name %></a></div>
         <div class="box-list">
           <% if @items.present? %>
               <% @items.each do |item| %>
                   <% picture = item.booking_item_pictures.first %>
                   <div class="list-li">
-                    <a class="box-block" onclick="javascript:location.href='<%= mobile_booking_item_url(item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>'"></a>
+                    <a class="box-block" onclick="javascript:location.href='<%= mobile_booking_item_url(item, site_id: @site.id, anchor: "mp.weixin.qq.com") %>'"></a>
                     <div class="hd">
                           <span>
                             <%= picture.pic_url ? (image_tag picture.pic_url) : "暂无图片" %>

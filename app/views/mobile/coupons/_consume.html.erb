@@ -26,7 +26,7 @@
     <%- if consume.is_a?(Consume)%>
       <img src="<%= consume.coupon.logo_url %>" />
     <%- else %>
-      <img src="<%= consume.supplier.try(:website).try(:logo_url) %>">
+      <img src="<%= consume.site.try(:website).try(:logo_url) %>">
     <%- end %>
   </div>
 </a>

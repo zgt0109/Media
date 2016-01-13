@@ -131,7 +131,7 @@
         param = ('&' + name + '=' + value)
         field_params += param
       });
-      var url = window.encodeURI("/<%= session[:supplier_id] %>/reservations/reserve?" + field_params + '&captcha=' + $('#captcha').val() + '&mobile=' + $('#phone').val() + '&' + Math.random() +'#mp.weixin.qq.com')
+      var url = window.encodeURI("/<%= session[:site_id] %>/reservations/reserve?" + field_params + '&captcha=' + $('#captcha').val() + '&mobile=' + $('#phone').val() + '&' + Math.random() +'#mp.weixin.qq.com')
       success= function (data) {
         if (data.ajax_msg) {
           if(data.ajax_msg.status == 1){

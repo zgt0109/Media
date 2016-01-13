@@ -1,5 +1,5 @@
 <header>
-	<%= link_to "", app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id]), class: "ico-hd arr-hd" %>
+	<%= link_to "", app_hotels_path(aid: params[:aid]), class: "ico-hd arr-hd" %>
     <h1>入住城市</h1>
 </header>
 <div class="contxt cont-city">
@@ -13,7 +13,7 @@
             <dl id="<%= first_letter %>">
                 <dt><%= first_letter %></dt>
                 <% cities.each do |city|%>
-            <dd><a href="<%= app_hotels_path(aid: params[:aid], wxmuid: session[:wx_mp_user_id], city_id: city['city_id'], city_name: URI.escape(city['city_name'])) %>"><%= city['city_name'] %></a></dd>
+            <dd><a href="<%= app_hotels_path(aid: params[:aid], city_id: city['city_id'], city_name: URI.escape(city['city_name'])) %>"><%= city['city_name'] %></a></dd>
             <%end%>
         </dl>
         <% end -%>

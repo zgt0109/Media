@@ -6,9 +6,9 @@
 <div class="html">
   <div class="main">
     <header>
-      <a class="ico ico-arrow-left" href="<%= page_app_business_circle_path(@article.website_menu, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id]) %>"></a>
+      <a class="ico ico-arrow-left" href="<%= page_app_business_circle_path(@article.website_menu, anchor: "mp.weixin.qq.com") %>"></a>
       <h1 class="ellipsis"><%= @article.title %></h1>
-      <a class="ico ico-home" href="<%= app_business_circles_path(id:@website.id, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id]) %>"></a>
+      <a class="ico ico-home" href="<%= app_business_circles_path(id:@website.id, anchor: "mp.weixin.qq.com") %>"></a>
     </header><!-- header end -->
     <section>
       <div class="box box-index box-list box-detail">

@@ -1,6 +1,6 @@
 <section>
   <% if @carts.present? %>
-      <%= form_tag update_cart_mobile_ec_carts_path(supplier_id: @supplier.id), :id => "ec_cart", onsubmit: "return select_all_items();"  do %>
+      <%= form_tag update_cart_mobile_ec_carts_path(site_id: @site.id), :id => "ec_cart", onsubmit: "return select_all_items();"  do %>
           <dl class="box-shopcar">
             <dt>
               <input type="checkbox" id="input-all" checked = "checked" onclick="select_all_check_box();"/>
@@ -18,9 +18,9 @@
 
                       <div class="shopcar-info td">
                         <% if item.main_picture.pic_url %>
-                            <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="info-fl"><%= image_tag item.main_picture.pic_url  %></a>
+                            <a href="<%= mobile_ec_item_path(:site_id => @site.id,id: item,anchor: "mp.weixin.qq.com")%>" class="info-fl"><%= image_tag item.main_picture.pic_url  %></a>
                         <% else %>
-                            <a href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>" class="img-null info-fl">暂无<br/>图片</a>
+                            <a href="<%= mobile_ec_item_path(:site_id => @site.id,id: item,anchor: "mp.weixin.qq.com")%>" class="img-null info-fl">暂无<br/>图片</a>
                         <% end %>
                         <p><b><%= item.title %></b>
                         <span class="box-number">

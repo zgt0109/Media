@@ -19,7 +19,7 @@
 			</p>
 			<%= form_for @activity_group, url: app_activity_groups_url, validate: true do |f| %>
 			<%= f.hidden_field :activity_id %>
-			<%= f.hidden_field :wx_user_id %>
+			<%= f.hidden_field :user_id %>
 			<p>
 				<label>数       量：</label>
 				<a class="input-operate" id="input-minus" data-min="1"><</a>

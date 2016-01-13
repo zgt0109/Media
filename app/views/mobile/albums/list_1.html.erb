@@ -4,7 +4,7 @@
   <div id="waterfall" class="list3">
     <% @album.photos.page(1).each do |photo| %>
       <div class="cell">
-        <a href="<%= mobile_album_path(photo, supplier_id: photo.album.supplier_id) %>">
+        <a href="<%= mobile_album_path(photo, site_id: photo.album.site_id) %>">
           <%= image_tag photo.img_url %>
         </a>
       </div>
@@ -21,7 +21,7 @@
       getResource:function(index,render){
         var html='',
             data = [];
-        var get_url = "<%= load_more_photos_mobile_album_path(@album.supplier_id,@album) %>" + "?page=" + page;
+        var get_url = "<%= load_more_photos_mobile_album_path(@album.site_id,@album) %>" + "?page=" + page;
         if(get_ajax){
           get_ajax = false;
           $.ajax({

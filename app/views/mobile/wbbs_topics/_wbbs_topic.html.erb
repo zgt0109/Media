@@ -4,7 +4,7 @@
       <div class="mod-user">
         <%- if @wx_user %>
           <%- if @wx_user.has_info? %>
-            <a href="javascript:;" class="hd-img" onclick="setLinkForPop(<%= @supplier.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>)">
+            <a href="javascript:;" class="hd-img" onclick="setLinkForPop(<%= @site.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>)">
           <%- else %>
             <a href="javascript:;" class="hd-img" onclick="showPop('#pop-nichen')">
           <%- end %>
@@ -16,7 +16,7 @@
         <div class="hd-text">
           <%- if @wx_user %>
             <%- if @wx_user.has_info? %>
-              <b onclick="setLinkForPop(<%= @supplier.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>);"><%= wbbs_topic.poster_name %></b>
+              <b onclick="setLinkForPop(<%= @site.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>);"><%= wbbs_topic.poster_name %></b>
             <%- else %>
               <b onclick="showPop('#pop-nichen')"><%= wbbs_topic.poster_name %></b>
             <%- end %>
@@ -39,7 +39,7 @@
               <%- pics = all_pics.take(3) %>
               <ul>
                 <% pics.each do |pic| %>
-                  <li><%= link_to image_tag(qiniu_img_url(pic.sn, type: 10)), display_photo_mobile_wbbs_topic_path(supplier_id: @supplier, id: wbbs_topic) %></li>
+                  <li><%= link_to image_tag(qiniu_img_url(pic.sn, type: 10)), display_photo_mobile_wbbs_topic_path(site_id: @site, id: wbbs_topic) %></li>
                 <% end %>
               </ul>
               <%- if pics.count == 3 %>
@@ -58,14 +58,14 @@
         <%- if params[:receiver_id].blank? %>
           <a class="fa fa-thumbs-o-up btn-praise <%= 'fa-thumbs-up' if wbbs_topic.voted_up_by?( @wx_user ) %>" data-number="<%= wbbs_topic.up_count %>" data-id="<%= wbbs_topic.id %>" href="javascript:;"><%= wbbs_topic.up_count %></a>
           <%- unless @noshare %>
-            <%= link_to '分享', mobile_wbbs_topic_path(@supplier, wbbs_topic, activity_id: @activity.id), class: 'fa fa-share-square-o' %>
+            <%= link_to '分享', mobile_wbbs_topic_path(@site, wbbs_topic, activity_id: @activity.id), class: 'fa fa-share-square-o' %>
           <%- end %>
         <%- end %>
         <%- if wbbs_topic.privates? %>
           <span class="blue">私</span>
         <%- end %>
         <%- if (@wx_user && @wx_user.has_info?) || !@wx_user  %>
-          <a class="fa fa-comment-o commentable" href="javascript:;" data-url="<%= create_reply_mobile_wbbs_topic_path(@supplier, wbbs_topic) %>">回复</a>
+          <a class="fa fa-comment-o commentable" href="javascript:;" data-url="<%= create_reply_mobile_wbbs_topic_path(@site, wbbs_topic) %>">回复</a>
         <%- else %>
           <a class="fa fa-comment-o" href="javascript:;" onclick="showPop('#pop-nichen')">回复</a>
         <%- end %>
@@ -80,7 +80,7 @@
       </div>
       <% if replies_count > WbbsReply::PAGE_SIZE %>
       <div class="mod-more">
-        <a href="javascript:;" onclick="load_more_replies(<%= @supplier.id %>, <%= wbbs_topic.id %>, this)" data-id="<%= wbbs_replies.last.id %>" id="more-comment-<%= wbbs_topic.id %>">更多</a>
+        <a href="javascript:;" onclick="load_more_replies(<%= @site.id %>, <%= wbbs_topic.id %>, this)" data-id="<%= wbbs_replies.last.id %>" id="more-comment-<%= wbbs_topic.id %>">更多</a>
         <small>共<%= wbbs_topic.wbbs_replies_count %>条回复</small>
       </div>
       <% end %>

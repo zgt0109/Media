@@ -11,7 +11,7 @@
         <%- next if guess_activity_question.blank? %>
         <%- question = guess_activity_question.question %>
         <div class="box">
-          <a href="<%= detail_mobile_guess_path(guess_activity_question_id: guess_activity_question.id, aid: @activity.id, wxmuid: @wx_mp_user.id, openid: @wx_user.try(:openid)) %>">
+          <a href="<%= detail_mobile_guess_path(guess_activity_question_id: guess_activity_question.id, aid: @activity.id, openid: @wx_user.try(:openid)) %>">
           <span class="img">
             <%= image_tag question.pic_url, style:'width: 100%;' %>
           </span>
@@ -27,7 +27,7 @@
   <div class="footer">
     你还剩<em><%= @wx_user.guess_left_count(@activity) %></em>次答题机会
     <%- if @consumes.count > 0 %>
-      <a href="<%= prizes_mobile_guess_path(aid: @activity.id, wxmuid: @wx_mp_user.id, openid: @wx_user.try(:openid)) %>">我的奖品</a>
+      <a href="<%= prizes_mobile_guess_path(aid: @activity.id, openid: @wx_user.try(:openid)) %>">我的奖品</a>
     <%- end %>
   </div>
 </div>

@@ -1,9 +1,9 @@
 <% provide(:title, "我的收货地址") %>
 <% content_for(:topbar) do %>
 <header>
-  <%= link_to image_tag('mobile/wshop/ico-back.png'), member_mobile_ec_shops_path(supplier_id: @supplier.id) %>
+  <%= link_to image_tag('mobile/wshop/ico-back.png'), member_mobile_ec_shops_path(site_id: @site.id) %>
   <h1>管理收货地址</h1>
-  <%= link_to image_tag('mobile/wshop/ico-add.png'), new_mobile_ec_address_path(supplier_id: @supplier.id), class: 'ico-add' %>
+  <%= link_to image_tag('mobile/wshop/ico-add.png'), new_mobile_ec_address_path(site_id: @site.id), class: 'ico-add' %>
 </header>
 <% end %>
 
@@ -14,14 +14,14 @@
         <%= check_box_tag 'is_default', address.id, address.is_default, data: { id: address.id } %>
         <span>默认地址</span>
         <span class="fr">
-          <a href="<%= edit_mobile_ec_address_path(supplier_id: @supplier.id, id: address.id) %>" class="ico ico-edit">
+          <a href="<%= edit_mobile_ec_address_path(site_id: @site.id, id: address.id) %>" class="ico ico-edit">
             <%= image_tag 'mobile/wshop/ico-edit.png' %>编辑
           </a>
-          <%= link_to "#{image_tag('mobile/wshop/ico-detele-gray.png')}删除".html_safe, mobile_ec_address_path(supplier_id: @supplier.id, id: address.id), class: 'ico ico-detele', remote: true, method: :delete, confirm: '确定删除该地址？' %>
+          <%= link_to "#{image_tag('mobile/wshop/ico-detele-gray.png')}删除".html_safe, mobile_ec_address_path(site_id: @site.id, id: address.id), class: 'ico ico-detele', remote: true, method: :delete, confirm: '确定删除该地址？' %>
         </span>
       </p>
       <% if session[:from] == "cart" %>
-         <a href="<%= new_mobile_ec_order_path(supplier_id: @supplier.id, items: session[:item_ids], address_id: address.id)%>" class="address_list">
+         <a href="<%= new_mobile_ec_order_path(site_id: @site.id, items: session[:item_ids], address_id: address.id)%>" class="address_list">
            <p><%= address.province.try :name %> <%= address.city.try :name %></p>
            <p><%= address.address %></p>
            <p><%= address.username %>   <%= address.tel %></p>
@@ -46,7 +46,7 @@ $(function(){
     addresses.click(function() {
       addresses.removeAttr("checked");
       $(this).get(0).checked = true;
-      $.post('/<%= @supplier.id %>/ec_addresses/' + $(this).data('id') + '/set_default');
+      $.post('/<%= @site.id %>/ec_addresses/' + $(this).data('id') + '/set_default');
     });
   });    
 </script>

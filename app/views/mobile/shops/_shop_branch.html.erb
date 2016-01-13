@@ -1,5 +1,5 @@
 <div class="box box-list">
-  <%= link_to mobile_micro_store_url(:supplier_id => branch.supplier_id, id: branch.id, ref: "table", anchor: "mp.weixin.qq.com"), class: "bd fw" do %>
+  <%= link_to mobile_micro_store_url(:site_id => branch.site_id, id: branch.id, ref: "table", anchor: "mp.weixin.qq.com"), class: "bd fw" do %>
       <b><%= branch.name %></b>
       <p><%= branch.ditu_address %></p>
   <% end %><!-- 详情 -->

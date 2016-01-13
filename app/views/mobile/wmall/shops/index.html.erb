@@ -42,7 +42,7 @@
 
 <script>
   $(function(){
-    var category_shops = fetch_wmall_data({path: "/api/wmall/shops/list.json"}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    var category_shops = fetch_wmall_data({path: "/api/wmall/shops/list.json"}, {site_id: <%= session[:site_id] %>}, options = {})
 
     category_shops.map(function (item, index) {
       var shops_batch_array = [], swipe_nav_array = [], batch_index = 0;

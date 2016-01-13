@@ -31,7 +31,7 @@
 </section>
 <%- if @wx_user %>
   <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
-    <a href="list?aid=<%= params[:id] %>&wxmuid=<%= session[:wx_mp_user_id] %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
+    <a href="list?aid=<%= params[:id] %>& %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
    <%- end %>
 <%- end %>
 <section class="sec-detail sec-bg-top sec-bg-bottom">
@@ -86,7 +86,7 @@ $(function(){
         $.ajax({
           type: "POST",
           contentType: "application/json",
-          url: 'prize?aid=<%= params[:id] %>&anid=<%= params[:anid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&t=lottery&' + Math.random(),
+          url: 'prize?aid=<%= params[:id] %>&anid=<%= params[:anid] %>& %>&t=lottery&' + Math.random(),
           dataType: 'json',
           timeout:60000,
           success: function (data) {
@@ -158,7 +158,7 @@ function submitMobile(sn,id) {
   $.ajax({
     type: "POST",
     contentType: "application/json",
-    url: 'prize?anid=<%= params[:anid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&aid=<%= params[:id] %>&t=mobile&sn=' + sn + '&acid=' + id + '&mobile=' + tel + '&' + Math.random(),
+    url: 'prize?anid=<%= params[:anid] %>& %>&aid=<%= params[:id] %>&t=mobile&sn=' + sn + '&acid=' + id + '&mobile=' + tel + '&' + Math.random(),
     dataType: 'json',
     timeout:30000,
     success: function (data) {

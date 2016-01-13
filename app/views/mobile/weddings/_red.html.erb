@@ -83,7 +83,7 @@
         </a>
         <p class="tcenter">
           <a class="btn" onclick="showDiv('#order-go')">我要赴宴</a>
-          <a class="btn" href="<%= list_mobile_wedding_path(@supplier,@wedding) %>">祝福墙</a>
+          <a class="btn" href="<%= list_mobile_wedding_path(@site,@wedding) %>">祝福墙</a>
           <!-- <a class="btn" onclick="showDiv('#order&#45;bless')">祝福墙</a> -->
           <a class="btn" onclick="showPop('#pop-share')">分享喜帖</a>
         </p>
@@ -123,7 +123,7 @@
 								<a class="btn-close" onclick="hideDiv('#order-go')"></a>
 								</dt>
                 <dd>
-                  <%= form.hidden_field :wx_user_id %>
+                  <%= form.hidden_field :user_id %>
                   <div class="order-row">
                     <div class="fl">姓名：</div>
                     <div class="fr"><%= form.text_field :username%></div>

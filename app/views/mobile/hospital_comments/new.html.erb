@@ -23,7 +23,7 @@
 					<div class="fr">
 						<%= form_for @hospital_comment, url: mobile_hospital_comments_path, method: :post do |f| %>
 						<%= hidden_field_tag "id", @hospital_doctor.id  %>
-						<%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+						<%= f.hidden_field :user_id, value: session[:user_id] %>
 							<div class="comment-input">
 								<%= f.text_area :content, :rows => 3,  :placeholder => "请输入您的评论", maxlength: 140 %>
 								<div class="bd-face">

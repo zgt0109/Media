@@ -1,7 +1,7 @@
 <% title "分类商品一览" %>
 <% content_for :booking_top_pic do %>
     <header>
-      <a href="<%= mobile_bookings_url(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <a href="<%= mobile_bookings_url(site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
       <h1><%= @booking_category.name %></h1>
     </header><!-- header end -->
 <% end %>

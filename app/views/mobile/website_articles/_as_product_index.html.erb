@@ -1,7 +1,7 @@
 <% title '展示中心' %>
 
 <header>
-  <%= form_for @search, url: mobile_website_articles_url(supplier_id: @website.supplier_id) do |f| %>
+  <%= form_for @search, url: mobile_website_articles_url(site_id: @website.site_id) do |f| %>
   <%= hidden_field_tag :article_type, params[:article_type] %>
   <%= hidden_field_tag :category_id, params[:category_id] %>
   <%= f.hidden_field :taggings_tag_id_eq %>
@@ -36,7 +36,7 @@
 </div>
 <div class="product-list">
   <% @articles.each do |m| %>
-    <%= link_to mobile_website_article_url(m, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], search: {taggings_tag_id_eq: params[:search].to_h['taggings_tag_id_eq']}), class: 'list-box' do %>
+    <%= link_to mobile_website_article_url(m, site_id: @website.site_id, article_type: params[:article_type], category_id: params[:category_id], search: {taggings_tag_id_eq: params[:search].to_h['taggings_tag_id_eq']}), class: 'list-box' do %>
       <div class="img">
         <%= image_tag m.pic if m.pic_url %>
       </div>

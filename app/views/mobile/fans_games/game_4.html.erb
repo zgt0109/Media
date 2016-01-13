@@ -7,11 +7,11 @@
 <%= stylesheet_link_tag "/stylesheets/fans_game/game", media: "all" %>
 <%= javascript_include_tag "/javascripts/fans_game/require2", "/javascripts/fans_game/main2" %>
 <script language="javascript">
-var mebtnopenurl = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:4) %>';
-var mebtnopenurl2 = '<%= mobile_fans_games_url(supplier_id: @supplier.id) %>';
+var mebtnopenurl = '<%= mobile_fans_game_url(site_id: @site.id,id:4) %>';
+var mebtnopenurl2 = '<%= mobile_fans_games_url(site_id: @site.id) %>';
 window.shareData = {
         "imgUrl": "http://t1.qpic.cn/mblogpic/31d57f086327cd503c82/460",// 分享的图片
-        "hrefLink": "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:4) %>", // 分享的链接
+        "hrefLink": "<%= mobile_fans_game_url(site_id: @site.id,id:4) %>", // 分享的链接
         "tTitle": "一个都不能死", // 分享的标题
         "tContent": "玩起来怎么都停不下来的啊！" // 分享内容
 };

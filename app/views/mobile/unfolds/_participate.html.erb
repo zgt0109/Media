@@ -36,7 +36,7 @@
                             <%- if @from_wx_user_prize.present? && (@from_wx_user_prize.reached? || @activity.extend.invites_count.to_i  - @from_wx_user_invites.count <= 0)  %>
                                 <span>在小伙伴们的努力下我已经成功地把礼品搬回家了，你也来拆个自己的礼包吧！</span>
                             <%- else %>
-                                <%- index = @from_wx_user_invites.pluck(:to_wx_user_id).index(session[:wx_user_id]) || 0 %>
+                                <%- index = @from_wx_user_invites.pluck(:to_user_id).index(session[:user_id]) || 0 %>
                                 <span>你是第<%= index + 1 %>个帮他拆礼包的小伙伴，还差<%= @activity.extend.invites_count.to_i  - @from_wx_user_invites.count %>位小伙伴帮忙拆开礼包他就能把奖品带回家了！</span>
                             <%- end %>
                         </div>

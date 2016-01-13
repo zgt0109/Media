@@ -35,7 +35,7 @@
       return $.parseParams(url)["category"] || "全部"
     }
 
-    var category_shops = fetch_wmall_data({path: "/api/wmall/shops/category.json"}, {supplier_id: '<%= session[:supplier_id] %>', category: get_category}, options = {})
+    var category_shops = fetch_wmall_data({path: "/api/wmall/shops/category.json"}, {site_id: '<%= session[:site_id] %>', category: get_category}, options = {})
     var ractive_shops = new Ractive({
       // The `el` option can be a node, an ID, or a CSS selector.
       el: '#ractive_category_shops_container',

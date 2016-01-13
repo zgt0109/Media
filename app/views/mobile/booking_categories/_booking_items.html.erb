@@ -2,17 +2,17 @@
     <div class="list-li">
       <div class="hd">
         <% picture = booking_item.booking_item_pictures.first %>
-        <a href="<%= mobile_booking_item_path(supplier_id: @supplier.id, id: booking_item.id, anchor: "mp.weixin.qq.com") %>" class="<%= picture.try(:pic_url) ? "" : "img-null"%>">
+        <a href="<%= mobile_booking_item_path(site_id: @site.id, id: booking_item.id, anchor: "mp.weixin.qq.com") %>" class="<%= picture.try(:pic_url) ? "" : "img-null"%>">
           <%= picture.try(:pic_url) ? (image_tag picture.pic_url) : "暂无图片" %>
         </a>
       </div>
       <div class="bd">
-        <a href="<%= mobile_booking_item_path(supplier_id: @supplier.id, id: booking_item.id, anchor: "mp.weixin.qq.com")%>">
+        <a href="<%= mobile_booking_item_path(site_id: @site.id, id: booking_item.id, anchor: "mp.weixin.qq.com")%>">
           <%= booking_item.name%>
         </a>
         <p>
           <span class="fred">￥<%= f booking_item.price %></span>
-          <a href="<%= new_mobile_booking_comment_path(supplier_id: @supplier.id, booking_item_id: booking_item.id) %>" class="ico-comment fr"><%= booking_item.booking_comments.count %></a>
+          <a href="<%= new_mobile_booking_comment_path(site_id: @site.id, booking_item_id: booking_item.id) %>" class="ico-comment fr"><%= booking_item.booking_comments.count %></a>
         </p>
       </div>
     </div>

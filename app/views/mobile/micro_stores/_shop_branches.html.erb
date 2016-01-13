@@ -1,12 +1,12 @@
 <div class="list-li">
   <div class="list-img">
-    <%= link_to mobile_micro_store_path( :supplier_id => session[:supplier_id] , id: branch.id), class: "box" do %>
+    <%= link_to mobile_micro_store_path( :site_id => session[:site_id] , id: branch.id), class: "box" do %>
       <img src="<%= branch.pic_url %>">
     <% end %>
   </div>
   <div class="list-info">
     <div class="list-top">
-      <%= link_to mobile_micro_store_path( :supplier_id => session[:supplier_id] , id: branch.id), class: "box" do %>
+      <%= link_to mobile_micro_store_path( :site_id => session[:site_id] , id: branch.id), class: "box" do %>
         <div class="name"><%= branch.name %></div>
         <div class="mark"><%= branch.human_distance_to(@wx_user) if @wx_user.try(:location_x).present? %></div>
         <div class="add"><%= branch.ditu_address %></div>

@@ -2,10 +2,9 @@
   <%= render 'footer' %>
   <div class="body">
     <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>预约<%= params[:bespeak_type] == "1" ? "保养" : "试驾" %></div>
-    <%= form_for @car_bespeak, url: mobile_car_shops_path(supplier_id: @supplier.id), validate: true do |f| %>
-      <%= f.hidden_field :wx_user_id %>
-      <%= f.hidden_field :supplier_id %>
-      <%= f.hidden_field :wx_mp_user_id %>
+    <%= form_for @car_bespeak, url: mobile_car_shops_path(site_id: @site.id), validate: true do |f| %>
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :site_id %>
       <%= f.hidden_field :car_shop_id %>
       <%= f.hidden_field :bespeak_type %>
       <%= f.hidden_field :car_brand_id %>
@@ -13,11 +12,11 @@
         <dl>
           <dt>
             <% if @car_bespeak.repair? %>
-              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, supplier_id: @supplier.id) %>" class="fa fa-chevron-right fa-chevron-right">
+              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id) %>" class="fa fa-chevron-right fa-chevron-right">
                 <b>我的保养<em class="bg-green"><%= @user_bespeak %></em></b>
               </a>
             <% else %>
-              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, supplier_id: @supplier.id) %>" class="fa fa-chevron-right fa-chevron-right">
+              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id) %>" class="fa fa-chevron-right fa-chevron-right">
                 <b>我的试驾<em class="bg-green"><%= @user_bespeak %></em></b>
               </a>
             <% end %>
@@ -48,7 +47,7 @@
               <div class="form-li">
                 <div class="li-l"><b>选择车系：</b></div>
                 <div class="li-r">
-                  <% options = @supplier.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+                  <% options = @site.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
                   <%= select_tag("car_bespeak[car_catena_id]", options_for_select(options.insert(0,["选择车系",""]), @car_catena_id), id: 'car_catena', class: 'input') %>
                 </div>
               </div>
@@ -57,7 +56,7 @@
                 <div class="li-r" id="span_car_type">
                   <%
                   if @car_catena_id.present?
-                    options = @supplier.car_shop.car_types.where(car_catena_id: @car_catena_id).order(:sort).pluck(:name, :id)
+                    options = @site.car_shop.car_types.where(car_catena_id: @car_catena_id).order(:sort).pluck(:name, :id)
                   else
                     options = [["选择车型",""]]
                   end
@@ -93,7 +92,7 @@
 </section>
 <script type="text/javascript">
 $("[name='car_bespeak[car_catena_id]']").change(function(){
-  var set_url = "<%= select_type_mobile_car_owners_url(supplier_id: @supplier.id) %>" + "?car_catena_id=" + $("[name='car_bespeak[car_catena_id]']").val() + "&name=car_bespeak";
+  var set_url = "<%= select_type_mobile_car_owners_url(site_id: @site.id) %>" + "?car_catena_id=" + $("[name='car_bespeak[car_catena_id]']").val() + "&name=car_bespeak";
   jQuery.ajax({
     type: "GET",
     url: set_url,

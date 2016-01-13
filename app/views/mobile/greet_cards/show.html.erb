@@ -1,38 +1,37 @@
 <% provide(:title, "编辑贺卡") %>
-<%= form_for @user_greet_card, 
-  :url => mobile_greet_card_user_greet_cards_url(supplier_id: @user_greet_card.greet_card.greet.supplier_id, greet_card_id: @user_greet_card.greet_card_id), method: :post do |f| %>
+<%= form_for @greet_card_item, 
+  :url => mobile_greet_card_greet_card_items_url(@greet_card_item.greet_card), method: :post do |f| %>
 
-  <%= f.hidden_field :greet_card_id, value: @user_greet_card.greet_card.id %>
-  <%= f.hidden_field :wx_user_id, value: session[:wx_user_id] %>
+  <%= f.hidden_field :greet_card_id, value: @greet_card_item.greet_card.id %>
+  <%= f.hidden_field :user_id, value: session[:user_id] %>
 
   <div class="audio">
     <div class="audio-title">
-   
       <% if @greet_card.recommand_title_pic.blank? %>
         <%= image_tag(@greet_card.title_pic.large) %>
       <% else %>
         <%= image_tag(@greet_card.recommand_title_pic) %>
       <% end %>
 
-      <%= f.text_field :title,class: "input-text", value: @user_greet_card.greet_card.title %>
+      <%= f.text_field :title,class: "input-text", value: @greet_card_item.greet_card.title %>
       <div class="layout">
         <span>昵称：</span>
         <label>
           <%= f.text_field :sender_name, class: "input-text" %>
         </label>
       </div>
-      <% if @user_greet_card.greet_card.card_type == 1 %>
+      <% if @greet_card_item.greet_card.card_type == 1 %>
       <div class="layout">
         <span>选择语音：</span>
         <label>
-          <%= f.select :user_voice_id, WxUser.find(session[:wx_user_id]).user_voices.map{|user_voice|[user_voice.sound_name, user_voice.id]}, class: "select" %>
+          <%= f.select :user_voice_id, WxUser.find(session[:user_id]).user_voices.map{|user_voice|[user_voice.sound_name, user_voice.id]}, class: "select" %>
         </label>
       </div>
       <% end %>
       <div class="layout">
         <span>贺卡内容：</span>
         <label>
-          <%= f.text_area :content, class: "textarea", value: @user_greet_card.greet_card.content %>
+          <%= f.text_area :content, class: "textarea", value: @greet_card_item.greet_card.content %>
         </label>
       </div>
       <a href="javascript:submit_form();" class="btn">贺卡预览</a>
@@ -42,11 +41,11 @@
 <% end %>
 <script>
   function submit_form(){
-    if($("#user_greet_card_title").val() == ''){
+    if($("#greet_card_item_title").val() == ''){
       alert("标题不能为空");
-    }else if($("#user_greet_card_sender_name").val() == ''){
+    }else if($("#greet_card_item_sender_name").val() == ''){
       alert("昵称不能为空");
-    }else if($("#user_greet_card_content").val() == ''){
+    }else if($("#greet_card_item_content").val() == ''){
       alert("内容不能为空");
     }else{
       $("form").submit();

@@ -16,7 +16,7 @@
 <script type="text/javascript">
 	(function(window, PhotoSwipe){
     var path = "/api/wmall/shops/<%= params[:id] %>" + "/pictures.json";
-    var shop_slides = fetch_wmall_data({path: path}, {supplier_id: <%= session[:supplier_id] %>}, options = {})
+    var shop_slides = fetch_wmall_data({path: path}, {site_id: <%= session[:site_id] %>}, options = {})
 
 		document.addEventListener('DOMContentLoaded', function(){
 

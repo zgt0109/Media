@@ -18,7 +18,7 @@
 <div class="body">
   <%= form_for @repair_complain, url: create_repair_complain_mobile_wx_plots_url(type: params[:type]), method: :post, html: {class: 'mod-form form-hor'} do |f| %>
     <%= f.hidden_field :wx_plot_id %>
-    <%= f.hidden_field :wx_user_id %>
+    <%= f.hidden_field :user_id %>
     <%= f.hidden_field :category %>
     <%= f.hidden_field :status %>
     <div class="bd">

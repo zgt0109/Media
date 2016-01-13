@@ -34,14 +34,14 @@
   <% if @categories.present? %>
       <% @categories.each do |category| %>
           <%next if category.products.count == 0 %>
-          <div class="bd-title"><a href="<%= mobile_ec_category_path(supplier_id: @supplier.id, id: category)  %>"><%= category.name %></a></div>
+          <div class="bd-title"><a href="<%= mobile_ec_category_path(site_id: @site.id, id: category)  %>"><%= category.name %></a></div>
           <div class="box-list">
             <% @items = category.products.slice(0, 4) %>
             <% if @items.present? %>
                 <% @items.each do |item| %>
 
                     <div class="list-li">
-                      <a class="box-block" href="<%= mobile_ec_item_path(:supplier_id => @supplier.id,id: item,anchor: "mp.weixin.qq.com")%>"></a>
+                      <a class="box-block" href="<%= mobile_ec_item_path(:site_id => @site.id,id: item,anchor: "mp.weixin.qq.com")%>"></a>
                       <div class="hd"><span>
                         <% if item.main_picture.pic_url %>
                             <%= image_tag "#{item.main_picture.pic_url}" %>

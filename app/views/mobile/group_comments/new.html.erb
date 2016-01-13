@@ -20,11 +20,11 @@
       <div class="fr">
         <%= form_for @comment, :url=> mobile_group_comments_path, :method => :post, :validate => true do |form| %>
             <%= hidden_field_tag "id", @item.id  %>
-            <%= form.hidden_field :wx_user_id %>
+            <%= form.hidden_field :user_id %>
             <%= form.hidden_field :group_order_id %>
             <div class="bd-comment">
               <%= form.text_area :content, :rows => 3,  :placeholder => "请输入您的评论" %>
-              <%= form.hidden_field :wx_user_id, :value => session[:wx_user_id] %>
+              <%= form.hidden_field :user_id, :value => session[:user_id] %>
               <div class="bd-face">
                 <!--<a class="ico icon-smile"></a>-->
                 <span class="fr">140</span>

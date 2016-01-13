@@ -12,7 +12,7 @@
       <% @website.website_menus.root.order(:sort).each_with_index do |menu,index| %>
       <div class="box box-index">
         <div class="hd">
-          <a href="<%= app_business_circle_path(menu, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id])  %>" class="box-block"></a>
+          <a href="<%= app_business_circle_path(menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
           <h2 class="ellipsis"><%= menu.name %></h2>
           <a class="ico fr">查看更多</a>
         </div>
@@ -23,7 +23,7 @@
                 <% menu.children.sorted.each_slice(8).each do |children| %>
                   <div class="slider-li" style="height:auto;">
                     <% children.each do |child| %>
-                      <a href="<%= child.has_children? ?  page_app_business_circle_url(child.id, anchor: "mp.weixin.qq.com",wxmuid: session[:wx_mp_user_id]) : website_activity_link(child) %>">
+                      <a href="<%= child.has_children? ?  page_app_business_circle_url(child.id, anchor: "mp.weixin.qq.com",) : website_activity_link(child) %>">
                         <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
                         <% if child.menuable_type == 'Activity' %>
                           <% if child.menuable.try(:activityable_type) == 'BusinessShop' %>

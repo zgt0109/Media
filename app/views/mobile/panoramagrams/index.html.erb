@@ -3,7 +3,7 @@
     <ul>
       <% @panoramagrams.each do |panoramagram| %>
         <li>
-          <a href="<%= panorama_mobile_panoramagram_path(supplier_id: @supplier.id, id: panoramagram.id) %>#mp.weixin.qq.com">
+          <a href="<%= panorama_mobile_panoramagram_path(site_id: @site.id, id: panoramagram.id) %>#mp.weixin.qq.com">
             <%= image_tag panoramagram.pic_url %>
             <p class="full-txt"><%= panoramagram.name %></p>
           </a>
@@ -19,7 +19,7 @@
 
   var page = 2;
   function load(){
-    var get_url = "<%= load_more_items_mobile_panoramagrams_path(@supplier) %>" + "?page=" + page;
+    var get_url = "<%= load_more_items_mobile_panoramagrams_path(@site) %>" + "?page=" + page;
     $.getJSON(get_url, function(data) {
       if(data.items.length > 0){
         page += 1;

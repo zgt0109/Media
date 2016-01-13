@@ -13,7 +13,7 @@
     <% @greet.greet_cards.visitable.each do |card| %>
     <li>
       <div class="template-item">
-        <a href="<%= mobile_greet_card_url(supplier_id: @greet.supplier_id, id: card.id) %>">
+        <a href="<%= mobile_greet_card_url(site_id: @greet.site_id, id: card.id) %>">
           <div class="item-img">
             <% if card.recommand_title_pic.blank? %>
             <%= image_tag(card.title_pic) %>

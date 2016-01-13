@@ -1,7 +1,7 @@
 <% provide(:title, @category.name) %>
 <%= content_for(:topbar)  do %>
     <header>
-      <a href="<%= mobile_ec_shops_path(:supplier_id => @supplier.id) %>" class="ico-prev"><%= image_tag "/assets/mobile/wshop/ico-back.png" %></a>
+      <a href="<%= mobile_ec_shops_path(:site_id => @site.id) %>" class="ico-prev"><%= image_tag "/assets/mobile/wshop/ico-back.png" %></a>
       <h1><%= @category.name %></h1>
     </header><!-- header end --><!-- header end -->
 <% end %>

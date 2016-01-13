@@ -1,7 +1,7 @@
 <% if @pictures_arr.each do |pictures| %>
   <div class="mod-env <%= cycle('fl', 'fr') %>">
     <% pictures.each do |picture| %>
-      <%= link_to image_tag(picture.pic), flashshow_mobile_business_shop_path(@supplier.id, @business_shop.id) %>
+      <%= link_to image_tag(picture.pic), flashshow_mobile_business_shop_path(@site.id, @business_shop.id) %>
     <% end %>
   </div>
 <% end.blank? %>

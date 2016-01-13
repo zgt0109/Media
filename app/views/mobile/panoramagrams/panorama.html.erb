@@ -26,7 +26,7 @@
 			// add the skin object
 			skin=new pano2vrSkin(pano);
 			// load the configuration
-      pano.readConfigUrl("/<%= @supplier.id %>/panoramagrams/<%= @panoramagram.id %>/panorama.xml");
+      pano.readConfigUrl("/<%= @site.id %>/panoramagrams/<%= @panoramagram.id %>/panorama.xml");
 			// hide the URL bar on the iPhone
 			hideUrlBar();
 		} else if (swfobject.hasFlashPlayerVersion("9.0.0")) {
@@ -42,7 +42,7 @@
 			attributes.align = "middle";
 			flashvars.skinxml="http://imgcache.gtimg.cn/club/life/trade/libs/skin.xml?max_age=864000";
 			/*flashvars.panoxml=location.pathname.replace(/[\w\d_]+\.html.*$/i,"")+"ok.xml"*/
-			flashvars.panoxml= "/<%= @supplier.id %>/panoramagrams/<%= @panoramagram.id %>/panorama.xml";
+			flashvars.panoxml= "/<%= @site.id %>/panoramagrams/<%= @panoramagram.id %>/panorama.xml";
 			params.base=".";
 			swfobject.embedSWF(
 				"http://imgcache.gtimg.cn/club/life/trade/libs/pano2vr_player.swf?max_age=864000", "container", 

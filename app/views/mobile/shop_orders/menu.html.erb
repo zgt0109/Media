@@ -5,13 +5,13 @@
   <header>
     <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
     <h1><%= @shop_branch.name %></h1>
-    <%= link_to "", toggle_is_show_product_pic_mobile_shop_orders_path(supplier_id: session[:supplier_id]), class: "icon icon-image fr #{@wx_user.is_show_product_pic? ? 'active' : ''}", id: "btn-image1", remote: true, method: :post %>
+    <%= link_to "", toggle_is_show_product_pic_mobile_shop_orders_path(site_id: session[:site_id]), class: "icon icon-image fr #{@wx_user.is_show_product_pic? ? 'active' : ''}", id: "btn-image1", remote: true, method: :post %>
   </header>
 
   <section id="sec-index">
     <div class="body">
       <div class="box-search mb10 hide food-search">
-        <%= form_for @shop_order, url: search_mobile_shop_order_url(supplier_id: session[:supplier_id], id: @shop_order.id), remote: true, method: :get do |f| %>
+        <%= form_for @shop_order, url: search_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id), remote: true, method: :get do |f| %>
           <input class="input fl" name="search" type="search" placeholder="请输入您要查找的菜品">
           <input type="submit" class="btn btn-small" value="搜索">
         <% end %>
@@ -201,19 +201,19 @@
       <div class="pop-body">
         <div class="pop-hd pop-ul">
           <% if @shop_order.take_out? %>
-            <%= link_to "确定", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "" %>
+            <%= link_to "确定", confirm_mobile_shop_order_path(supllier_id: session[:site_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "" %>
           <% end %>
 
           <% if @shop_order.book_dinner? %>
             <% book_dinner_rule =  @shop_order.shop_branch.book_dinner_rule %>
             <% if book_dinner_rule.is_in_branch %>
-              <%= link_to "我在店", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 1, anchor: "mp.weixin.qq.com"), class: "" unless @shop_order.ref_order %>
+              <%= link_to "我在店", confirm_mobile_shop_order_path(supllier_id: session[:site_id], id: @shop_order, order_in_type: 1, anchor: "mp.weixin.qq.com"), class: "" unless @shop_order.ref_order %>
             <% end %>
             <% if book_dinner_rule.is_in_queue %>
-              <%= link_to "我在排号", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 2, anchor: "mp.weixin.qq.com"), class: "" unless @shop_order.ref_order %>
+              <%= link_to "我在排号", confirm_mobile_shop_order_path(supllier_id: session[:site_id], id: @shop_order, order_in_type: 2, anchor: "mp.weixin.qq.com"), class: "" unless @shop_order.ref_order %>
             <% end %>
             <% if book_dinner_rule.is_in_normal %>
-              <%= link_to "我要订餐订座", confirm_mobile_shop_order_path(supllier_id: session[:supplier_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "" %>
+              <%= link_to "我要订餐订座", confirm_mobile_shop_order_path(supllier_id: session[:site_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "" %>
             <% end %>
           <% end %>
 

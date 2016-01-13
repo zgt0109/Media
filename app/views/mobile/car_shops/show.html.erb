@@ -2,9 +2,9 @@
   <%= render 'footer' %>
   <div class="header">
     <p>
-      <a href="<%= compare_mobile_car_shop_path(supplier_id: @supplier.id, car_type_id: @car_type.id) %>">车型比较</a>
-      <a href="<%= car_seller_mobile_car_shops_path(supplier_id: @supplier.id) %>#mp.weixin.qq.com">联系销售</a>
-      <a href="<%= car_bespeak_mobile_car_shops_path(supplier_id: @supplier.id, bespeak_type: 2, car_type_id: @car_type.id, car_catena_id: @car_type.car_catena.id) %>">预约试驾</a>
+      <a href="<%= compare_mobile_car_shop_path(site_id: @site.id, car_type_id: @car_type.id) %>">车型比较</a>
+      <a href="<%= car_seller_mobile_car_shops_path(site_id: @site.id) %>#mp.weixin.qq.com">联系销售</a>
+      <a href="<%= car_bespeak_mobile_car_shops_path(site_id: @site.id, bespeak_type: 2, car_type_id: @car_type.id, car_catena_id: @car_type.car_catena.id) %>">预约试驾</a>
     </p>
   </div>
   <div class="body">
@@ -13,7 +13,7 @@
     </div>
     <div class="mod-detail">
       <div class="detail-img">
-        <a href="<%= photo_mobile_car_shops_path(supplier_id: @supplier.id, car_type_id: @car_type.id) %>">
+        <a href="<%= photo_mobile_car_shops_path(site_id: @site.id, car_type_id: @car_type.id) %>">
           <img src="<%= @generals.present? ? @generals.first.pic_url : '/assets/mobile/wcar/2.jpg' %>"/>
         </a>
       </div>

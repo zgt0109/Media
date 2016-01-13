@@ -34,7 +34,7 @@
             <dl class="form-li">
               <dd>
                 <select class="input" name="vip_recharge_order[pay_type]">
-                  <%- payment_settings = @supplier.enabled_payment_types %>
+                  <%- payment_settings = @site.enabled_payment_types %>
                   <%- if payment_settings.include?('支付宝') %>
                     <option value="1">充值方式：支付宝支付</option>
                   <%- end %>

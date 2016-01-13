@@ -72,7 +72,7 @@ $(function(){
                 }, 1000);
             }else{
                 //wpTimeEnd.text("活动已结束");
-                window.location.href = "<%= mobile_aids_path(supplier_id: @activity.supplier_id, activity_id: @activity.id) %>"
+                window.location.href = "<%= mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) %>"
                 return false;
             }
         };

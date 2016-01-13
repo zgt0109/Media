@@ -92,7 +92,7 @@
         field_params += param
       });
       field_params += ('&chat_type=<%= params[:chat_type] %>' );
-      var url = window.encodeURI("/<%= session[:supplier_id] %>/govchats?" + field_params + '&' + Math.random() +'#mp.weixin.qq.com')
+      var url = window.encodeURI("/<%= session[:site_id] %>/govchats?" + field_params + '&' + Math.random() +'#mp.weixin.qq.com')
       success= function (data) {
         if (data.ajax_msg && data.ajax_msg.status == 1) {
             $(".mod-pop").fadeIn();

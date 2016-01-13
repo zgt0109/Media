@@ -1,7 +1,7 @@
 <% content_for :website_top_pic do %>
     <header>
       <a href="javascript:history.go(-1);"><img src="/assets/website/template15/ico-prev.png"/></a>
-      <a href="<%= mobile_root_url(supplier_id: @website.supplier_id,id: @website.id, aid: session[:activity_id], wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>"><img src="/assets/website/template15/ico-home.png"/></a>
+      <a href="<%= mobile_root_url(site_id: @website.site_id,id: @website.id, aid: session[:activity_id], anchor: "mp.weixin.qq.com") %>"><img src="/assets/website/template15/ico-home.png"/></a>
       <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#" %>"><img src="/assets/website/template15/ico-phone.png"/></a>
       <a class="ico-list"><img src="/assets/website/template15/ico-list.png"/></a>
     </header>

@@ -16,7 +16,7 @@
             <a href="<%= vip_package_show_app_vips_path(id: @package.id) %>" class="btn btn-biger btn-gray">取消购买</a>
           </div>
           <div class="btn-cell">
-            <% if @supplier && @supplier.can_pay? && @vip_user && @vip_user.normal? %>
+            <% if @site && @site.can_pay? && @vip_user && @vip_user.normal? %>
               <a href="/app/vips/go_recharge?vip_package_id=<%= @package.id %>#mp.weixin.qq.com" class="btn btn-biger">前往充值</a>
             <% else %>
               <a href="tel:<%= @vip_card.phone_num %>" class="btn btn-biger">联系商家</a>

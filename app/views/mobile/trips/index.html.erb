@@ -89,7 +89,7 @@ $(function(){
 </script>
 <script type="text/javascript">
     
-    var category_data = <%= raw JSON.pretty_generate(@supplier.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, 
+    var category_data = <%= raw JSON.pretty_generate(@site.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, 
         select_data = []
         series = <%= raw @category.try(:series) || 1 %>;
 

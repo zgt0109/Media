@@ -13,7 +13,7 @@
 <div class="index">
   <% @bulletins.in_groups_of(4, false).each do |childs| %>
       <% childs.each_with_index do |child, index| %>
-          <%= link_to bulletin_mobile_wx_plot_url(supplier_id: @supplier.id, id: child.id, anchor: 'mp.weixin.qq.com'), class: 'box mod-index'  do %>
+          <%= link_to bulletin_mobile_wx_plot_url(site_id: @site.id, id: child.id, anchor: 'mp.weixin.qq.com'), class: 'box mod-index'  do %>
               <% if child.pic_url.present? or child.font_icon.present? %>
                   <% if child.pic_url %>
                       <% if index == 1 || index == 2%>

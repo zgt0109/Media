@@ -19,9 +19,9 @@
 	}
 	function updateShare(bestScore) {
 		imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/update.png";
-		var domains = ['<%= mobile_fans_game_url(supplier_id: @supplier.id,id:2) %>'];
+		var domains = ['<%= mobile_fans_game_url(site_id: @site.id,id:2) %>'];
 		var domain = domains[new Date().getTime()%4];
-		lineLink = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:2) %>';
+		lineLink = '<%= mobile_fans_game_url(site_id: @site.id,id:2) %>';
 		descContent = "考考你的眼力！你的眼睛跟得上吗？";
 		updateShareScore(bestScore);
 		appid = '';
@@ -54,7 +54,7 @@
 			<div id="msg" style="position: relative; display: none; opacity: 0; bottom: 50px;">关卡：10</div>
 		</div>
 		<div style="position:relative; display: block; margin: 0px auto;bottom:120px;z-index:20000">
-			<a style="font-size: 15px;color: #f00;font-weight: bold;display: block;height: 30px;line-height: 30px;" href="<%= mobile_fans_games_path(supplier_id: @supplier.id) %>">高智商手机魔术，敢挑战吗？</a>
+			<a style="font-size: 15px;color: #f00;font-weight: bold;display: block;height: 30px;line-height: 30px;" href="<%= mobile_fans_games_path(site_id: @site.id) %>">高智商手机魔术，敢挑战吗？</a>
 		</div>
 		<script>
 			function Delegate(){}

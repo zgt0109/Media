@@ -17,7 +17,6 @@
   var aid = '<%= params[:id] %>';
   var acid = '<%= @activity_consume_id %>';
   var anid = '<%= params[:anid] %>';
-  var wxmuid = '<%= session[:wx_mp_user_id] %>';
   var sn_code = '';
   var activity_id = '<%= params[:id] %>'
   var request_responsed = true;
@@ -49,12 +48,12 @@
       width: "240",
       height: "122",
       image: '/images/gua/bg-fail.png',
-      image2: '<%= @activity.try(:supplier_id) == 11351 ? '/images/gua/bg-gua-wrap-11351.jpg' : '/images/gua/bg-gua-wrap.jpg' %>',
+      image2: '<%= '/images/gua/bg-gua-wrap.jpg' %>',
       color:"#eee",
       size:20,
       realtimePercent:"true",
       scratchMove: function(e, percent) {
-        <%- if @wx_user.blank? || @wx_user.wx_mp_user_id != session[:wx_mp_user_id].to_i %>
+        <%- if @wx_user.blank? || @wx_user.wx_mp_user != @wx_mp_user %>
           showTips(".J-guanzhu");
         <%- elsif @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)  %>
           showTips(".J-register");

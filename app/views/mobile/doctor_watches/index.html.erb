@@ -90,7 +90,7 @@
         onSelect : function(dateText){
             $.ajax({
                 type: "GET",
-                url: "/<%= session[:supplier_id] %>/doctor_watches/items?time=" + $(this).val() + "&doctor_id=<%= @hospital_doctor.id %>"
+                url: "/<%= session[:site_id] %>/doctor_watches/items?time=" + $(this).val() + "&doctor_id=<%= @hospital_doctor.id %>"
             });
             thisDay = dateText;
         }

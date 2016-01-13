@@ -33,7 +33,7 @@
           <h1 id="activity-name"><%= @material.title %></h1>
           <p class="activity-info">
             <span id="post-date" class="activity-meta no-extra"><%= @material.created_at.try(:to_date) %></span>
-            <!--<a href="javascript:;" id="post-user" class="activity-meta"><span class="text-ellipsis"><%#= @material.supplier.try(:name) %></span><i class="icon_link_arrow"></i></a>-->
+            <!--<a href="javascript:;" id="post-user" class="activity-meta"><span class="text-ellipsis"><%#= @material.site.wx_mp_user.try(:nickname) %></span><i class="icon_link_arrow"></i></a>-->
           </p>
         </div>
       </div>

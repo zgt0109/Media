@@ -1,6 +1,6 @@
 <% title '文章中心' %>
 <header>
-  <%= form_for @search, url: mobile_website_articles_url(supplier_id: @website.supplier_id) do |f| %>
+  <%= form_for @search, url: mobile_website_articles_url(site_id: @website.site_id) do |f| %>
   <%= hidden_field_tag :article_type, params[:article_type] %>
   <%= hidden_field_tag :category_id, params[:category_id] %>
   <div class="head-name"><span>全部分类</span></div>
@@ -14,7 +14,7 @@
 </header>
 <div class="news-list">
   <% @articles.each do |m| %>
-    <%= link_to mobile_website_article_url(m, supplier_id: @website.supplier_id, article_type: params[:article_type], category_id: params[:category_id], serach: params[:search]), class: 'list-box' do %>
+    <%= link_to mobile_website_article_url(m, site_id: @website.site_id, article_type: params[:article_type], category_id: params[:category_id], serach: params[:search]), class: 'list-box' do %>
       <div class="img">
         <%= image_tag m.pic if m.pic_url %>
       </div>

@@ -21,7 +21,7 @@ function play68_submitScore(score) {
 }
 function updateShare(bestScore) {
 	imgUrl = 'http://t1.qpic.cn/mblogpic/1d5222a61f9bd5bf01f0/2000';
-	lineLink = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:5) %>';
+	lineLink = '<%= mobile_fans_game_url(site_id: @site.id,id:5) %>';
 	descContent = "你觉得你反应很快吗？试试就知道！";
 	updateShareScore(bestScore);
 	appid = '';
@@ -150,7 +150,7 @@ new Image().src = '';
 		<canvas id="jsGameScreen" width="480" height="640" style="width: 480px; height: 640px;"></canvas>
 	</div>
 	<script type="text/javascript">
-var mebtnopenurl = '<%= mobile_fans_game_url(supplier_id: @supplier.id,id:5) %>';
+var mebtnopenurl = '<%= mobile_fans_game_url(site_id: @site.id,id:5) %>';
 function shareFriend() {
 	WeixinJSBridge.invoke("sendAppMessage", {
 		appid: appid,
@@ -244,12 +244,12 @@ function isMobile() {
 function isIOS() {
 	return navigator.userAgent.match(/iphone|ipod|ios/i)
 }
-var HOME_PATH = HOME_PATH || "<%= mobile_fans_games_url(supplier_id: @supplier.id) %>",
+var HOME_PATH = HOME_PATH || "<%= mobile_fans_games_url(site_id: @site.id) %>",
 RESOURCE_IMG_PATH = RESOURCE_IMG_PATH || "/images/fans_game/",
 HORIZONTAL = HORIZONTAL || false,
 COVER_SHOW_TIME = COVER_SHOW_TIME || 2e3;
 // var imgUrl = "http://t1.qpic.cn/mblogpic/1d5222a61f9bd5bf01f0/2000";
-var lineLink = "<%= mobile_fans_game_url(supplier_id: @supplier.id,id:5) %>";
+var lineLink = "<%= mobile_fans_game_url(site_id: @site.id,id:5) %>";
 var descContent = "快来跟我一起玩！";
 var shareTitle = "最好玩的小游戏就在游戏排行榜！";
 var appid = "";

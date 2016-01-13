@@ -54,7 +54,7 @@
       $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: 'prize?anid=<%= params[:anid] %>&wxmuid=<%= session[:wx_mp_user_id] %>&aid=<%= params[:id] %>&t=mobile&sn=' + sn + '&acid=' + id + '&mobile=' + tel + '&' + Math.random(),
+        url: 'prize?anid=<%= params[:anid] %>& %>&aid=<%= params[:id] %>&t=mobile&sn=' + sn + '&acid=' + id + '&mobile=' + tel + '&' + Math.random(),
         dataType: 'json',
         timeout:30000,
         success: function (data) {

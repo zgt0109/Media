@@ -46,7 +46,7 @@ $(function(){
       new Spinner(opts).spin(target);
 
       var origin_openid = "<%= params[:origin_openid] %>";
-    	var url = window.encodeURI("/<%= session[:supplier_id] %>/unfolds/help_friend?origin_openid=" + origin_openid )
+    	var url = window.encodeURI("/<%= session[:site_id] %>/unfolds/help_friend?origin_openid=" + origin_openid )
       $.ajax({
           type: "POST",
           contentType: "application/json",
@@ -81,7 +81,7 @@ $(function(){
       target = document.getElementById('spin');
       new Spinner(opts).spin(target);
 
-    	var url = window.encodeURI("/<%= session[:supplier_id] %>/unfolds/participate");
+    	var url = window.encodeURI("/<%= session[:site_id] %>/unfolds/participate");
        $.ajax({
           type: "POST",
           contentType: "application/json",

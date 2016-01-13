@@ -1,11 +1,11 @@
 <% title "评论一览" %>
 <% content_for :booking_top_pic do %>
     <header>
-      <a href="<%= mobile_booking_item_url(@booking_item, supplier_id: @supplier.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev">
+      <a href="<%= mobile_booking_item_url(@booking_item, site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev">
         <img src="/assets/mobile/wserver/ico-back.png"/>
       </a>
       <h1>评论</h1>
-      <a href="<%= new_mobile_booking_comment_path(supplier_id: @supplier.id, booking_item_id: @booking_item.id) %>">
+      <a href="<%= new_mobile_booking_comment_path(site_id: @site.id, booking_item_id: @booking_item.id) %>">
         <img src="/assets/mobile/wserver/ico-comment.png"/>
       </a>
     </header>
@@ -23,7 +23,7 @@
           <div class="fr">
             <p><%= booking_comment.content %></p>
             <span>
-                <i class="fl"><%= booking_comment.wx_user.try(:nickname) %> </i>
+                <i class="fl"><%= booking_comment.user.try(:name) %> </i>
                 <i class="fr"><%= booking_comment.created_at.to_date %></i>
             </span>
           </div>

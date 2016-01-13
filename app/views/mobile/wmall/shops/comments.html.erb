@@ -44,7 +44,7 @@
 
 <script>
 $(function(){
-  var shop_comments = fetch_wmall_data({path: "/api/wmall/shops/<%= params[:id] -%>/comments.json"}, {supplier_id: '<%= session[:supplier_id] %>'}, options = {}) || null
+  var shop_comments = fetch_wmall_data({path: "/api/wmall/shops/<%= params[:id] -%>/comments.json"}, {site_id: '<%= session[:site_id] %>'}, options = {}) || null
 
   if (shop_comments == null) {
     shop_comments = {

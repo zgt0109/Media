@@ -8,8 +8,8 @@
     <section class="J-slider" id="sec-index">
       <!-- tab box start -->
       <div class="tab-box">
-        <%= link_to '全部礼品', gifts_app_vips_path(wxmuid: session[:wx_mp_user_id]) %>
-        <%= link_to '已兑换礼品', exchanged_app_vips_path(wxmuid: session[:wx_mp_user_id]), class: "cur"%>
+        <%= link_to '全部礼品', gifts_app_vips_path() %>
+        <%= link_to '已兑换礼品', exchanged_app_vips_path(), class: "cur"%>
       </div>
       <!-- tab box end -->
       <!-- list box start -->
