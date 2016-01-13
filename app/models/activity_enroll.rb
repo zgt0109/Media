@@ -26,7 +26,7 @@ class ActivityEnroll < ActiveRecord::Base
   # attr_accessible :title, :body
 
   belongs_to :activity
-  belongs_to :wx_user
+  belongs_to :user
 
   after_create :hook_supplier_applies
 

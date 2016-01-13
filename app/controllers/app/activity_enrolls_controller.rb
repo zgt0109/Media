@@ -1,7 +1,7 @@
 module App
   class ActivityEnrollsController < BaseController
     layout 'app/activity_enrolls'
-    before_filter :require_wx_mp_user, :check_subscribe
+    before_filter :check_subscribe
 
     def new
       @vip_user = @site.vip_users.visible.where(user_id: @user.id).first
@@ -13,7 +13,7 @@ module App
       @errors = []
       @activity_enroll = ActivityEnroll.new
       @activity_enroll.activity_id = session[:activity_id]
-      @activity_enroll.wx_user_id = @wx_user.id
+      @activity_enroll.user_id = @user.id
       @fields = params[:fields]
       @fields && @fields.keys.each do |field_name|
         # 报名字段服务器端校验，比如手机的 form_field.regular 应该是 1\d{10}
