@@ -8,9 +8,9 @@ class WxUser < ActiveRecord::Base
     ['share_photos', 3, '晒图模式'],
     ['greet', 4, '贺卡模式'],
     ['house_live_photos', 5, '实景拍摄模式'],
-    ['print', 6, '打印模式'],
+    ['wx_print', 6, '微信打印模式'],
     ['wifi', 7, 'wifi模式'],
-    ['welomo_print', 8, '通用打印模式'],
+    ['weixin_print', 8, '微信打印模式(不再使用)'],
     ['hanming_wifi', 9, '汉明wifi'],
     ['kefu', 10, '人工客服模式'],
     ['kefu_rate', 11, '人工客服评价模式'],
@@ -101,7 +101,7 @@ class WxUser < ActiveRecord::Base
   end
 
   def check_recommend
-    recommend =  WxInvite.recommend.pending_recommend.where(to_wx_user_id: id).last
+    recommend =  WxInvite.recommend.pending_recommend.where(to_user_id: user_id).last
     return unless recommend
 
     if wx_mp_user && wx_mp_user.auth_service? && wx_mp_user.is_oauth?
@@ -257,7 +257,7 @@ class WxUser < ActiveRecord::Base
   private
 
   def init_user
-    user = User.create(site_id: self.site_id)
+    user = User.create(site_id: wx_mp_user.site_id)
     update_attributes(user_id: user.try(:id))
   end
 end

@@ -121,8 +121,8 @@ class Api::WeixinController < ApplicationController
     word_or_pic_url = @msg_type == 'text' ? @keyword : @xml[:PicUrl]
 
     if @msg_type =~ /\Atext|image|voice\z/ && @wx_user.enter_kefu? # 人工客服接口处理
-      kefu_response = WeixinKefu.request(params, @mp_user)
-      return kefu_response.to_s if kefu_response != 'normal_match'
+      # kefu_response = WeixinKefu.request(params, @mp_user)
+      # return kefu_response.to_s if kefu_response != 'normal_match'
     elsif @msg_type =~ /\Atext|image\z/ && @wx_user.enter_wx_wall? # 微信墙
       message = @wx_user.wx_wall_users.last_replied.reply_wx_message(word_or_pic_url, @msg_type)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
@@ -159,13 +159,6 @@ class Api::WeixinController < ApplicationController
   def text_request
     return respond_no_auto_reply('没有输入关键词') if @keyword.blank?
 
-    # 返回放心提加粉红包关键词回复内容
-    if package = Fxt::Package.online.custom_subscribe.where(mp_openid: @to_user_name).first
-      if package.subscribe_keyword == @keyword && package.subscribe_reply.present?
-        return Weixin.respond_text(@from_user_name, @to_user_name, package.subscribe_reply )
-      end
-    end
-
     #return Weixin.respond_kefu(@from_user_name, @to_user_name) if @keyword == '多客服'
     return Weixin.respond_dkf(@from_user_name, @to_user_name) if @keyword == '多客服'
 
@@ -177,16 +170,12 @@ class Api::WeixinController < ApplicationController
     # 根据关键字获取最合适的活动
     activity = Activity.get_activity_by_keyword(@keyword, @mp_user.site_id)
 
-    print_response = Print.respond_small_print(@wx_user, @mp_user, activity)
-    return print_response if print_response
-
-    print_response = WeixinHardware.respond_welomo_print(@wx_user, @mp_user, activity, request.raw_post, params)
+    print_response = WeixinHardware.respond_printer(@wx_user, @mp_user, activity, request.raw_post, params)
     return print_response if print_response
 
     assistant = Assistant.enabled_helper(@keyword)
 
     case
-      when @wx_user.print?                                then WeixinHardware.respond_inlead_print(@wx_user, @mp_user, activity, request.raw_post)
       when @wx_user.wifi?                                 then WeixinHardware.respond_wifi(@wx_user, @mp_user, @keyword)
       # when @wx_user.hanming_wifi?                         then WeixinHardware.respond_hanming_wifi(@wx_user, @mp_user, @keyword)
       when @keyword == '为爱升级'                         then Weixin.respond_text(@from_user_name, @to_user_name, @mp_user.upgraded_text)
@@ -202,8 +191,7 @@ class Api::WeixinController < ApplicationController
   def image_request
     case
       when @wx_user.share_photos?            then SharePhoto.respond_create_share_photo(@wx_user, @mp_user, @xml[:PicUrl])
-      when @wx_user.print?                   then Print.respond_small_print_img(@wx_user, @mp_user, request.raw_post)
-      when @wx_user.welomo_print?            then WeixinHardware.respond_welomo_print(@wx_user, @mp_user, nil, request.raw_post, params)
+      when @wx_user.wx_print?            then WeixinHardware.respond_printer(@wx_user, @mp_user, nil, request.raw_post, params)
       when Print.postcard?(@wx_user) then Print.respond_postcard_img(@wx_user, @mp_user, request.raw_post)
       # when @mp_user.site.industry_house? then @mp_user.house.respond_create_live_photo(@wx_user, @xml)
       else respond_default_reply()
@@ -350,8 +338,8 @@ class Api::WeixinController < ApplicationController
       message = ShakeUser.reply_or_create(@wx_user, activity)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
       respond_activity_directly(activity)
-    elsif activity.wx_print?
-      Print.respond_text(@wx_user, @mp_user, '微打印', request.raw_post)
+    # elsif activity.enter_weixin_print?
+    #   Print.respond_text(@wx_user, @mp_user, '微打印', request.raw_post)
     elsif activity.website?
       return Weixin.respond_text(@from_user_name, @to_user_name, '微官网暂停使用') unless activity.setted?
       # activity_notice = ActivityNotice.website_notice(activity)

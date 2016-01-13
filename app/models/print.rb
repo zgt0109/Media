@@ -28,12 +28,6 @@ class Print < ActiveRecord::Base
     wx_user.postcard? && print_url(wx_user.supplier_id)
   end
 
-  def self.respond_small_print_img(wx_user, wx_mp_user, raw_post)
-    url = wx_mp_user.site.account.print.url
-    result = RestClient.post(url, raw_post, content_type: :xml, accept: :xml)
-    Print.normalize_wx_text_response(wx_user, wx_mp_user, result)
-  end
-
   def self.respond_postcard_img(wx_user, wx_mp_user, raw_post)
     url = print_url(wx_mp_user.supplier_id)
     result = RestClient.post(url, raw_post, content_type: :xml, accept: :xml)
@@ -55,18 +49,6 @@ class Print < ActiveRecord::Base
         result = RestClient.post(print_url, raw_post, content_type: :xml, accept: :xml)
         Print.normalize_wx_text_response(wx_user, wx_mp_user, result)
       end
-    end
-  end
-
-  def self.respond_small_print(wx_user, wx_mp_user, activity)
-    return if activity.nil? || !activity.wx_print?
-
-    if activity.site.account.print
-      wx_user.print! # 公众号有打印设备, 那么就进入打印模式
-      nil
-    else #没有打印设备
-      wx_user.normal!
-      Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '该公众帐号没有打印设备')
     end
   end
 

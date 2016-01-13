@@ -94,8 +94,8 @@ class ActivityType < ActiveRecord::Base
     ['wx_card',             76, '微信卡包'],
     ['brokerage',           77, '全民经纪人'],
     ['red_packet',          78, '节日礼包'],
-    ['enter_welomo_print',  79, '微打印(不再使用)'],
-    ['exit_welomo_print',   80, '退出微打印(不再使用)'],
+    ['enter_weixin_print',  79, '微打印(不再使用)'],
+    ['exit_weixin_print',   80, '退出微打印(不再使用)'],
     ['hanming_wifi',        81, '汉明wifi'],
     ['micro_aid',           82, '微助力'],
     ['wx_red_packet', 83, '微红包' ]

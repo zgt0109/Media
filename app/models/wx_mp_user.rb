@@ -55,7 +55,6 @@ class WxMpUser < ActiveRecord::Base
   has_one  :house, inverse_of: :wx_mp_user
   has_one  :wbbs_community
   has_one  :print_setting
-  has_one  :welomo_print_setting
 
   before_create { generate_token(:token) }
   before_create :generate_code
@@ -108,11 +107,12 @@ class WxMpUser < ActiveRecord::Base
     wx_users.where(conditions).first
   end
 
-  def update_uid_to(openid = nil)
-    if openid.present? && openid != openid
-      WxMpUser.where(openid: openid).where('id != ?', id).update_all(openid: "#{openid}_#{Time.now.to_i}", app_id: "#{app_id}_#{Time.now.to_i}")
-      update_attributes(openid: openid)
-    end
+  def update_openid_to(new_openid = nil)
+    # if openid.present? && openid != openid
+    #   WxMpUser.where(openid: openid).where('id != ?', id).update_all(openid: "#{openid}_#{Time.now.to_i}", app_id: "#{app_id}_#{Time.now.to_i}")
+    #   update_attributes(openid: openid)
+    # end
+    update_attributes(openid: new_openid) if openid.blank?
   end
 
   def authorized_auth_subscribe?

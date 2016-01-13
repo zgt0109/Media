@@ -187,7 +187,7 @@ class Activity < ActiveRecord::Base
           return activity
         elsif activity.guess? || activity.red_packet?
           return activity
-        elsif activity.enter_welomo_print? || activity.exit_welomo_print? || activity.hanming_wifi?
+        elsif activity.wx_print? || activity.exit_wx_print? || activity.hanming_wifi?
           return activity
         elsif (!activity.stopped? && (activity.wx_wall? && activity.activity_status == Activity::NOT_START  && activity.activityable && activity.activityable.pre_join?))
           # 如果是 微信墙
@@ -203,8 +203,6 @@ class Activity < ActiveRecord::Base
         elsif  activity.setted? && [WARM_UP, UNDER_WAY].include?(activity.activity_status)
           return activity
         elsif (!activity.stopped? && (activity.hotel? or activity.wshop? or activity.wmall? or activity.wmall_shop? or activity.wmall_coupon?))
-          return activity
-        elsif activity.wx_print?
           return activity
         elsif activity.micro_aid?
           return activity
