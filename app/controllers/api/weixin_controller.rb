@@ -184,7 +184,7 @@ class Api::WeixinController < ApplicationController
       when assistant                                     then assistant.handle_keyword(@mp_user, @from_user_name, @keyword)
       when activity                                      then respond_activity(activity)
       when @keyword =~ /\A游戏/                           then Assistant.respond_game(@wx_user, @mp_user, @keyword)
-      else                                                    respond_question()
+      else                                                    respond_keyword()
     end
   end
 
@@ -362,7 +362,7 @@ class Api::WeixinController < ApplicationController
     return Weixin.respond_text(from_user_name, to_user_name, '活动结束或不存在') unless activity_notice
     activity = activity_notice.activity
 
-    url = activity.respond_mobile_url(activity_notice)
+    url = activity.respond_mobile_url(activity_notice, openid: from_user_name)
     url << '#mp.weixin.qq.com'
     pic_url ||= qiniu_image_url(activity_notice.pic_key) || qiniu_image_url(option[:cover_pic])
 
@@ -395,15 +395,15 @@ class Api::WeixinController < ApplicationController
               url = "#{mobile_shakes_url(siter_id: activity.siter_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
               items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: activity.pic_url, url: url}]
               return Weixin.respond_news(@from_user_name, @to_user_name, items)
-            else activity.respond_mobile_url(openid: @from_user_name)
+            else activity.respond_mobile_url(nil, openid: @from_user_name)
           end
     url << '#mp.weixin.qq.com' unless activity.hanming_wifi?
 
-    items = [{title: activity.name, description: activity.summary, pic_url: pic_url, url: activity.pic_url}]
+    items = [{title: activity.name, description: activity.summary, pic_url: activity.pic_url, url: url}]
     Weixin.respond_news(@from_user_name, @to_user_name, items)
   end
 
-  def respond_question
+  def respond_keyword
     @is_success = 2
     question = @mp_user.site.keywords.search_keyword(@keyword) # 全匹配,或者模糊匹配中关键词相同的问题
     return respond_default_reply() unless question
