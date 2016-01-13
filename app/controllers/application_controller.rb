@@ -49,6 +49,8 @@ class ApplicationController < ActionController::Base
     return unless current_user
     # @current_site ||= Site.find_by_id(session[:site_id]) || current_user.sites.create
     @current_site ||= current_user.sites.first || current_user.sites.create
+    session[:pc_site_id]
+    @current_site
   end
 
   def user_layout
@@ -74,7 +76,7 @@ class ApplicationController < ActionController::Base
   end
 
   def mobile_subdomain
-    @mobile_subdomain = [current_user.id.to_s, MOBILE_SUB_DOMAIN].join('.')
+    @mobile_subdomain = [current_site.id.to_s, MOBILE_SUB_DOMAIN].join('.')
   end
 
   def required_sign_in

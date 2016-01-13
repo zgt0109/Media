@@ -8,12 +8,9 @@
         </ul>
         <!-- .breadcrumb -->
         <%= render '/layouts/qrcode' %>
-
       </div>
 
       <div class="page-content">
-
-
         <div class="row">
           <div class="col-sm-12">
             <!-- PAGE CONTENT BEGINS -->
@@ -28,7 +25,7 @@
           </div>
           <div class=" col-sm-12">
             <div class="showOnline">
-              <iframe src="<%= mobile_root_url(site_id: @website.site_id, openid: @website.site.wx_mp_user.wx_users.first.try(:openid)) %>" width="320" height="460"></iframe>
+              <iframe src="<%= mobile_root_url(subdomain: mobile_subdomain, site_id: @website.site_id, openid: @website.site.wx_mp_user.wx_users.first.try(:openid)) %>" width="320" height="460"></iframe>
             </div>
             <div class="col-xs-12 col-sm-offset-1 col-sm-6">
               <div id="tree1">

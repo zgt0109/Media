@@ -1019,8 +1019,6 @@ class Activity < ActiveRecord::Base
       when wifi?               then "http://m.chaowifi.com/auth/wechat.do?guid=#{options[:openid]}"
       when hanming_wifi?       then "#{activity.hanming_callback_url}?func=weixin&custom_wx_id=#{options[:openid]}&wx_id=#{site.wx_mp_user.openid}&ssid=winwemedia-#{site}&resulturl=#{hanming_callback_url}&resultAnchor=0"
       end
-
-    logger.info "************actvity url: #{url}"
     url || ''
   end
 
