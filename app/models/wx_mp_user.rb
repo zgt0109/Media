@@ -86,7 +86,7 @@ class WxMpUser < ActiveRecord::Base
     replies.click_event.first rescue nil
   end
 
-  def text_reply
+  def autoreply
     replies.text_event.first rescue nil
   end
 

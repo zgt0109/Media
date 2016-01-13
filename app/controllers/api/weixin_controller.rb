@@ -301,19 +301,6 @@ class Api::WeixinController < ApplicationController
     Weixin.respond_news(@from_user_name, @to_user_name, items)
   end
 
-  def respond_default_reply
-    @is_success = 0
-    text_reply = @mp_user.text_reply
-    case
-      when text_reply.blank?          then ''
-      when text_reply.text?           then Weixin.respond_text(@from_user_name, @to_user_name, text_reply.content)
-      when text_reply.activity?       then respond_activity(text_reply.replyable)
-      when text_reply.graphic?        then respond_material_news(text_reply.replyable)
-      when text_reply.audio_material? then Weixin.respond_music(@from_user_name, @to_user_name, text_reply.replyable)
-      when text_reply.games?          then Weixin.respond_game(@from_user_name, @to_user_name, text_reply.replyable)
-    end
-  end
-
   def respond_material_news(material)
     return Weixin.respond_text(@from_user_name, @to_user_name, '素材不存在') if material.blank?
     return unless material.graphic?
@@ -418,18 +405,31 @@ class Api::WeixinController < ApplicationController
 
   def respond_question
     @is_success = 2
-    question = @mp_user.questions.search_keyword(@keyword) # 全匹配,或者模糊匹配中关键词相同的问题
+    question = @mp_user.site.keywords.search_keyword(@keyword) # 全匹配,或者模糊匹配中关键词相同的问题
     return respond_default_reply() unless question
 
-    answer = question.answer
+    reply = question.reply
     case
-      when answer.blank?          then respond_no_auto_reply()
-      when answer.text?           then Weixin.respond_text(@from_user_name, @to_user_name, answer.content)
-      when answer.activity?       then respond_activity(answer.replyable)
-      when answer.graphic?        then respond_material_news(answer.replyable)
-      when answer.audio_material? then Weixin.respond_music(@from_user_name, @to_user_name, answer.replyable)
-      when answer.games?          then Weixin.respond_game(@from_user_name, @to_user_name, answer.replyable)
+      when reply.blank?          then respond_no_auto_reply()
+      when reply.text?           then Weixin.respond_text(@from_user_name, @to_user_name, reply.content)
+      when reply.activity?       then respond_activity(reply.replyable)
+      when reply.graphic?        then respond_material_news(reply.replyable)
+      when reply.audio_material? then Weixin.respond_music(@from_user_name, @to_user_name, reply.replyable)
+      when reply.games?          then Weixin.respond_game(@from_user_name, @to_user_name, reply.replyable)
       else respond_no_auto_reply()
+    end
+  end
+
+  def respond_default_reply
+    @is_success = 0
+    autoreply = @mp_user.autoreply
+    case
+      when autoreply.blank?          then ''
+      when autoreply.text?           then Weixin.respond_text(@from_user_name, @to_user_name, autoreply.content)
+      when autoreply.activity?       then respond_activity(autoreply.replyable)
+      when autoreply.graphic?        then respond_material_news(autoreply.replyable)
+      when autoreply.audio_material? then Weixin.respond_music(@from_user_name, @to_user_name, autoreply.replyable)
+      when autoreply.games?          then Weixin.respond_game(@from_user_name, @to_user_name, autoreply.replyable)
     end
   end
 

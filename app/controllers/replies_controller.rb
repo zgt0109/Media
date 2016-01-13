@@ -10,7 +10,7 @@ class RepliesController < ApplicationController
   end
 
   def autoreply
-    @reply = @wx_mp_user.text_reply || @wx_mp_user.replies.new(event_type: Reply::TEXT_EVENT)
+    @reply = @wx_mp_user.autoreply || @wx_mp_user.replies.new(event_type: Reply::TEXT_EVENT)
   end
 
   def create
