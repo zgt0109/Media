@@ -78,8 +78,8 @@ module MobileHelper
     end
   end
 
-  def mobile_subdomain
-    [session[:pc_site_id].to_s, MOBILE_SUB_DOMAIN].join('.')
+  def mobile_subdomain(site_id = nil)
+    [site_id.to_s, MOBILE_SUB_DOMAIN].join('.')
   end
 
   def website_activity_link(website_menu, options = {})
@@ -103,12 +103,12 @@ module MobileHelper
       when 3,1 then
         params =    website_menu.is_a?(WebsiteMenu)  ? {} : {popup_menu_id: website_menu.id}
         params = { website_picture_id: website_menu.id } if website_menu.is_a?(WebsitePicture)
-        url = mobile_channel_url( {subdomain: mobile_subdomain, site_id: website.custom_domain, website_menu_id: website_menu.id, ext_name: nil}.merge(params) ) + "#mp.weixin.qq.com"
+        url = mobile_channel_url( {subdomain: mobile_subdomain(website.site_id), site_id: website.custom_domain, website_menu_id: website_menu.id, ext_name: nil}.merge(params) ) + "#mp.weixin.qq.com"
       when 8 then
         if website.try(:website_type) == 2
           url = page_app_life_url(website_menu.id)
         elsif website.try(:website_type) == 3
-          url = page_app_business_circle_url(website_menu.id, subdomain: mobile_subdomain)
+          url = page_app_business_circle_url(website_menu.id, subdomain: mobile_subdomain(website.site_id))
         end
       when 10 then
         assistant = website_menu.menuable
@@ -117,7 +117,7 @@ module MobileHelper
         if assistant.try(:keyword) == "天气" && [3,4].include?(assistant.assistant_type)
           return life_assistant_weather_url(website_menu)
         elsif assistant.try(:keyword) == "公交" && [3,4].include?(assistant.assistant_type)
-          return  life_assistant_bus_url(website_menu, subdomain: mobile_subdomain)
+          return  life_assistant_bus_url(website_menu, subdomain: mobile_subdomain(website.site_id))
         else
           return website_menu.try(:menuable).try(:url)
         end
@@ -157,14 +157,14 @@ module MobileHelper
         if website_menu.is_a?(WebsiteMenu)
           @wx_user = WxUser.where(openid: session[:openid]).first
           openid = @wx_user.openid if @wx_user
-          url = list_mobile_album_url(subdomain: mobile_subdomain, site_id: website.site_id, aid: website_menu.menuable.try(:activity_id), openid: openid, id: website_menu.menuable_id)
+          url = list_mobile_album_url(subdomain: mobile_subdomain(website.site_id), site_id: website.site_id, aid: website_menu.menuable.try(:activity_id), openid: openid, id: website_menu.menuable_id)
         else
           "javascript:;"
         end
       when 22 then
-        url = mobile_website_articles_url(subdomain: mobile_subdomain, site_id: website.site_id, article_type: 'as_article')
+        url = mobile_website_articles_url(subdomain: mobile_subdomain(website.site_id), site_id: website.site_id, article_type: 'as_article')
       when 23 then
-        url = mobile_website_articles_url(subdomain: mobile_subdomain, site_id: website.site_id, article_type: 'as_product')
+        url = mobile_website_articles_url(subdomain: mobile_subdomain(website.site_id), site_id: website.site_id, article_type: 'as_product')
       else
         return "javascript:;"
     end
@@ -182,15 +182,15 @@ module MobileHelper
       child.url
     elsif (child.multiple_graphic? || child.has_children? || child.games?)
       child.class.to_s == 'WebsitePicture' ?
-          mobile_channel_url(subdomain: mobile_subdomain, site_id: @website.custom_domain, website_menu_id: child.id, website_picture_id: child.id, anchor: "mp.weixin.qq.com", ext_name: nil) :
-          mobile_channel_url(subdomain: mobile_subdomain, site_id: @website.custom_domain, website_menu_id: child.id, anchor: "mp.weixin.qq.com", ext_name: nil)
+          mobile_channel_url(subdomain: mobile_subdomain(@website.site_id), site_id: @website.custom_domain, website_menu_id: child.id, website_picture_id: child.id, anchor: "mp.weixin.qq.com", ext_name: nil) :
+          mobile_channel_url(subdomain: mobile_subdomain(@website.site_id), site_id: @website.custom_domain, website_menu_id: child.id, anchor: "mp.weixin.qq.com", ext_name: nil)
     elsif child.single_graphic?
       material_type_url child.try(:menuable), child
     elsif child.contact_by_qq? || child.mobile_qq?
-      mobile_detail_url(subdomain: mobile_subdomain, site_id: @website.custom_domain, website_menu_id: child.id, anchor: "mp.weixin.qq.com", ext_name: nil)
+      mobile_detail_url(subdomain: mobile_subdomain(@website.site_id), site_id: @website.custom_domain, website_menu_id: child.id, anchor: "mp.weixin.qq.com", ext_name: nil)
     elsif child.audio_material?
       child.menuable.try(:audio_absolute_path)
-      mobile_audio_url(subdomain: mobile_subdomain, site_id: @website.custom_domain, id: child.menuable.try(:id), ext_name: nil)
+      mobile_audio_url(subdomain: mobile_subdomain(@website.site_id), site_id: @website.custom_domain, id: child.menuable.try(:id), ext_name: nil)
     else
       website_activity_link(child)
     end
@@ -202,7 +202,7 @@ module MobileHelper
     return unless material
 
     if material.text?
-      mobile_detail_url(subdomain: mobile_subdomain, site_id: menu.website.custom_domain, material_id: material.id, website_menu_id: menu.id, anchor: "mp.weixin.qq.com", ext_name: nil)
+      mobile_detail_url(subdomain: mobile_subdomain(material.site_id), site_id: material.site_id, material_id: material.id, website_menu_id: menu.id, anchor: "mp.weixin.qq.com", ext_name: nil)
     elsif material.activity?
       material.menu_type = 2
       website_activity_link(material)
