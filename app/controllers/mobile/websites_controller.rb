@@ -74,7 +74,7 @@ class Mobile::WebsitesController < ActionController::Base
     @nav_menus = @nav_template_id > 0 && @website.inside_nav_menus.order(:sort) || []
     @website_menu = @website.website_menus.where(id: params[:website_menu_id].to_i).first
     @material = Material.where(id: params[:material_id].to_i).first
-    @share_image = @material.present? ? @material.pic :  @website_menu.try(:pic)
+    @share_image = @material.present? ? @material.pic_url :  @website_menu.try(:pic_key)
 
     return redirect_to four_o_four_url if @website_menu.blank? && @material.blank?
   end

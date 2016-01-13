@@ -8,9 +8,9 @@ class VipUser < ActiveRecord::Base
   store :meta, accessors: [:total_recharge_amount, :total_consume_amount, :avatar]
 
   validates :name, :mobile, presence: true
-  validates :mobile, uniqueness: { scope: :wx_mp_user_id, case_sensitive: false }
-  validates :user_no, uniqueness: { scope: :wx_mp_user_id }
-  validates :custom_user_no, uniqueness: { scope: :wx_mp_user_id }, allow_blank: true
+  validates :mobile, uniqueness: { scope: :site_id, case_sensitive: false }
+  validates :user_no, uniqueness: { scope: :site_id }
+  validates :custom_user_no, uniqueness: { scope: :site_id }, allow_blank: true
 
   validates :password, presence: true, length: { is: 6 }, if: :can_validate?
 
@@ -32,10 +32,9 @@ class VipUser < ActiveRecord::Base
 
   belongs_to :site
 
-  delegate :vip_card, to: :wx_mp_user, allow_nil: true
+  delegate :vip_card, to: :site, allow_nil: true
   delegate :open_card_sms_notify?, to: :vip_card, allow_nil: true
   delegate :recharge_consume_sms_notify?, to: :vip_card, allow_nil: true
-  delegate :openid, to: :wx_user, prefix: true, allow_nil: true
 
   belongs_to :user
   belongs_to :vip_group, counter_cache: true
@@ -85,45 +84,6 @@ class VipUser < ActiveRecord::Base
     where(conditions)
   end
 
-  def self.increase_points_by_spm(options = {})
-    points = options[:points].to_i
-    return {errcode: 40001, errmsg: "积分必须大于0"} if points < 0
-
-    wx_mp_user = WxMpUser.where(openid: options[:mp_user_open_id]).first
-    return {errcode: 40002, errmsg: "公众号不存在"} unless wx_mp_user
-
-    out_trade_no = options[:out_trade_no].to_s
-    return {errcode: 40005, errmsg: "订单不能重复操作"} if PointTransaction.where(out_trade_no: out_trade_no).first
-
-    sign = Digest::MD5.hexdigest(out_trade_no + wx_mp_user.app_id.to_s)
-    return {errcode: 40003, errmsg: "签名不正确"} unless sign == options[:trade_token]
-
-    wx_user = wx_mp_user.wx_users.where(openid: options[:open_id]).first
-    return {errcode: 40004, errmsg: "微信用户不存在"} unless wx_user
-
-    vip_user = wx_mp_user.vip_users.visible.where(wx_user_id: wx_user.id).first
-
-    unless vip_user
-      vip_user = wx_user.create_vip_user(site_id: user.site_id, name: wx_user.openid, mobile: wx_user.openid)
-      vip_user.status = INACTIVE
-    end
-
-    vip_user.usable_points += points
-    vip_user.total_points  += points
-    vip_user.save(validate: false)
-
-    point_transaction = vip_user.point_transactions.new(
-      direction_type: PointTransaction::SPM_IN,
-      points: points,
-      site_id: vip_user.site_id,
-      out_trade_no: out_trade_no,
-      description: '商品码活动积分奖励',
-    )
-    point_transaction.save(validate: false)
-
-    { errcode: 0, errmsg: "ok", points: points }
-  end
-
   def merchant_name
     vip_card.merchant_name.presence
   end
@@ -141,7 +101,7 @@ class VipUser < ActiveRecord::Base
   end
 
   def vip_card
-    wx_mp_user.vip_card
+    site.vip_card
   end
 
   def rqrcode
@@ -215,7 +175,7 @@ class VipUser < ActiveRecord::Base
           return privileged_amount
         else
           return unless change_amount_by!(-amount)
-          wx_user.qrcode_user_amount('vip_amount',-amount)
+          user.qrcode_user_amount('vip_amount',-amount)
         end
       end
       vip_user_transactions.create( direction_type: type,
@@ -234,7 +194,7 @@ class VipUser < ActiveRecord::Base
 
   def qrcode_amount(amount,direction)
     vip_amount = direction == '3' ? recharge_discounted_amount(amount) : amount
-    wx_user.qrcode_user_amount('vip_amount',vip_amount)
+    user.qrcode_user_amount('vip_amount',vip_amount)
   end
 
   def give_point(amount, type, params)
@@ -269,7 +229,7 @@ class VipUser < ActiveRecord::Base
     total_points = gift.points * qty
     transaction do
       point_gift_exchange = create_point_gift_exchanges_by_gift(gift, qty, total_points, vip_given)
-      wx_user.consumes.create wx_mp_user: wx_mp_user, consumable: point_gift_exchange, expired_at: gift.award_time_end_at
+      user.consumes.create site: site, consumable: point_gift_exchange, expired_at: gift.award_time_end_at
       create_point_transactions_by_gift(gift, total_points, vip_given)
       decrease_points!( total_points - given_point )
       vip_given.try(:used!)
@@ -485,7 +445,7 @@ class VipUser < ActiveRecord::Base
     end
 
     def generate_user_no
-      max_user_no = wx_mp_user.vip_users.visible.maximum(:user_no) || 16880000
+      max_user_no = site.vip_users.visible.maximum(:user_no) || 16880000
       self.user_no = max_user_no.succ
     end
 

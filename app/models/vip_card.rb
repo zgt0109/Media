@@ -48,9 +48,8 @@ class VipCard < ActiveRecord::Base
   belongs_to :city
   belongs_to :district
   belongs_to :site
-  delegate :vip_users, to: :supplier
+  delegate :vip_users, to: :site
   belongs_to :site_category
-  belongs_to :wx_mp_user
   belongs_to :activity
 
   has_many :vip_message_plans, dependent: :destroy
@@ -158,10 +157,6 @@ class VipCard < ActiveRecord::Base
     mobile.present? ? mobile : tel
   end
 
-  def parent_supplier_categories
-    supplier_category.parent.children rescue AccountCategory.root.first.children
-  end
-
   def self.export_excel(vip_users)
     xls_report = StringIO.new
     book = VipCard.new_excel
@@ -246,7 +241,7 @@ class VipCard < ActiveRecord::Base
 
   def checkin_enabled?
     return @checkin_enabled if defined?(@checkin_enabled)
-    @checkin_enabled = is_open_points? && supplier.point_types.normal.checkin.exists?
+    @checkin_enabled = is_open_points? && site.point_types.normal.checkin.exists?
   end
 
   private
