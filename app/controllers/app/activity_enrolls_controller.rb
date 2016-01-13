@@ -4,9 +4,9 @@ module App
     before_filter :require_wx_mp_user, :check_subscribe
 
     def new
-      @vip_user = @supplier.vip_users.visible.where(wx_user_id: @wx_user.id).first
+      @vip_user = @site.vip_users.visible.where(user_id: @user.id).first
       @activity_enrolls = @activity.activity_enrolls.order('id desc').page(params[:page]).per(50)
-      @exists_activity_enroll = ActivityEnroll.where(activity_id: @activity.id, wx_user_id: @wx_user.id).first
+      @exists_activity_enroll = ActivityEnroll.where(activity_id: @activity.id, user_id: @user.id).first
     end
 
     def create
@@ -52,16 +52,16 @@ module App
           attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
           @wx_user.update_attributes(attrs) if attrs.present?
           if @wx_user.unsubscribe? && !@activity.require_wx_user?
-            return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
+            return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
           end
         end
       else #非认证授权服务号的情况
         @openid=nil
         if !@activity.require_wx_user? #需要关注的情况
-          return redirect_to mobile_unknown_identity_url(@activity.supplier_id, activity_id: @activity.id)
+          return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
         else #创建虚拟wx_user
           #use session.id in Rails 4.
-          @wx_user = @wx_mp_user.wx_users.where(openid: request.session_options[:id], supplier_id: @wx_mp_user.supplier_id).first_or_create
+          @wx_user = @wx_mp_user.wx_users.where(openid: request.session_options[:id], site_id: @wx_mp_user.site_id).first_or_create
         end
       end
     end
