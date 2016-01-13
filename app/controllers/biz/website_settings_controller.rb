@@ -5,7 +5,7 @@ class Biz::WebsiteSettingsController < ApplicationController
 
   def index
     @website_tags = WebsiteTag.order(:sort) #if @use_website_tag
-    @website_templates = WebsiteTemplate.show.account_templates(current_site).order('website_templates.style_index DESC')
+    @website_templates = WebsiteTemplate.show.order('website_templates.style_index DESC')
   end
 
   def set_template_id

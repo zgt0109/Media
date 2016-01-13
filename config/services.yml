@@ -24,7 +24,7 @@ common: &common
 production:
   <<: *common
   hostname: "wx.winwemedia.com"
-  mhostname: "m.wx.winwemedia.com"
+  mhostname: "m.winwemedia.com"
   hotelhostname: "hotel.winwemedia.com"
   sms_service: 'zhilian'
   zhilian_user_id: 'J02110'
