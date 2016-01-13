@@ -47,7 +47,7 @@ class WeixinHardware
     # welomo
     def respond_printer(wx_user, mp_user, activity, raw_post, options={})
       # WinwemediaLog::Base.logger('wxprint', "welomo print raw_post: #{raw_post}, params: #{options}")
-      return unless mp_user.account.print
+      return unless mp_user.site.account.print
 
       from_user_name, to_user_name = wx_user.openid, mp_user.openid
 
@@ -76,7 +76,7 @@ class WeixinHardware
         else
           #直接转发给 welomo
           begin
-            account_print = mp_user.account.print
+            account_print = mp_user.site.account.print
             signature = Digest::SHA1.hexdigest([account_print.token, options[:timestamp], options[:nonce]].map!(&:to_s).sort.join)
 
             post_uri = URI(account_print.url)
