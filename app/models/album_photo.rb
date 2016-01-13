@@ -27,14 +27,14 @@ class AlbumPhoto < ActiveRecord::Base
   end
   
   def img_url
-    if qiniu_pic_url && album.supplier.album_activity.show_watermark? && album.supplier.album_activity.album_watermark_img.present?
-      return "#{qiniu_pic_url}?imageView2/2/w/640/h/1136|watermark/1/image/#{album.supplier.album_activity.album_watermark_encode}/dissolve/50"
+    if qiniu_pic_url && album.site.album_activity.show_watermark? && album.site.album_activity.album_watermark_img.present?
+      return "#{qiniu_pic_url}?imageView2/2/w/640/h/1136|watermark/1/image/#{album.site.album_activity.album_watermark_encode}/dissolve/50"
     end
     qiniu_pic_url
   end
 
   def thumb_pic_url
-    @thumb_pic_url ||= (thumb_qiniu_pic_url || pic.try(:thumb).to_s)
+    @thumb_pic_url ||= thumb_qiniu_pic_url
   end
 
   def thumb_qiniu_pic_url
