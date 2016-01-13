@@ -21,7 +21,7 @@
         <%- end %>
         <div class="box">
           <div class="hd">
-            <span class="input-title toggle_nickname" style="display:none;">昵称</span>
+            <span class="input-title toggle_name" style="display:none;">昵称</span>
             <input id="input-fed" type="text" placeholder="请输入您的留言..." maxlength="20" name="leaving_message[nickname]" onclick="javascript:editComment();" style="width: 90%;" />
           </div>
           <% if @activity.show_contact %>
@@ -73,7 +73,7 @@
       <div class="box">
         <div class="hd">
           <span class="input-title">昵称</span>
-          <input id="side-input-fed" type="text" placeholder="请输入昵称,限20个字符..." name="leaving_message[nickname]" maxlength="20" value="<%= @replier.present? ? @replier.nickname : '' %>" onclick="javascript:sideEditComment();" />
+          <input id="side-input-fed" type="text" placeholder="请输入昵称,限20个字符..." name="leaving_message[name]" maxlength="20" value="<%= @replier.present? ? @replier.name : '' %>" onclick="javascript:sideEditComment();" />
         </div>
         <% if @activity.show_contact %>
           <div class="hd">
@@ -106,8 +106,8 @@
     box.css({"height":"auto"});
     $("#side-btn-fed").fadeIn();
     $('#side-input-fed').css({"background":"#fff"}).attr("placeholder","请输入昵称,限20个字符");
-    <%- if @replier && @replier.nickname.present? %>
-      $('#side-input-fed').attr("value", '<%= @replier.nickname %>');
+    <%- if @replier && @replier.name.present? %>
+      $('#side-input-fed').attr("value", '<%= @replier.name %>');
     <%- end %>
   };
 
@@ -128,10 +128,10 @@
 
   function editComment(){
     $('#input-fed').css('width', '70%')
-    $('.toggle_nickname').show();
+    $('.toggle_name').show();
     $('#input-fed').attr("placeholder","请输入昵称,限20个字符").css({"background":"#fff"});
-    <%- if @replier && @replier.nickname.present? %>
-      $('#input-fed').attr("value", '<%= @replier.nickname %>');
+    <%- if @replier && @replier.name.present? %>
+      $('#input-fed').attr("value", '<%= @replier.name %>');
     <%- end %>
     $('#leaving_message_contact').fadeIn();
     box = $('#input-fed').parents(".box");

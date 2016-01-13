@@ -29,7 +29,7 @@ module App
 
         message = site.leaving_messages.create(params[:leaving_message])
 
-        replier.update_attributes(nickname: message.nickname) if replier.present? && message.nickname.present?
+        replier.update_attributes(name: message.nickname) if replier.present? && message.nickname.present?
 
         redirect_to app_leaving_messages_url
       else

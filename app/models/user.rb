@@ -50,8 +50,10 @@ class User < ActiveRecord::Base
   has_many :complain_advices, class_name: 'WxPlotRepairComplain', conditions: { category: [WxPlotCategory::COMPLAIN, WxPlotCategory::ADVICE] }, order: 'wx_plot_repair_complains.created_at DESC'
   has_many :wx_invites, foreign_key: :from_wx_user_id
 
-  scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
-  scope :message_normal, ->{ where(leave_message_forbidden: 0)}
+  delegate :leave_message_forbidden, to: :wx_user, allow_nil: true
+
+  # scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
+  # scope :message_normal, ->{ where(leave_message_forbidden: 0)}
 
   def to_s
     nickname || id.to_s
