@@ -64,7 +64,7 @@ class Mobile::VoteController < Mobile::BaseController
   end
 
   def find_activity
-    @activity = @site.activities.find(params[:aid])
+    @activity = @site.activities.find(session[:activity_id])
     return render_404 if @activity.nil? || @activity.deleted?
     @share_image = @activity.qiniu_pic_url.present? ? @activity.qiniu_pic_url : @activity.default_pic_url
   end
@@ -84,7 +84,7 @@ class Mobile::VoteController < Mobile::BaseController
     check_count  = params[:ids].to_s.split(',').count
     errors << "活动#{status_name}" unless status_name.eql?(Activity::UNDER_WAY_NAME)
     errors << "仅关注用户可参加投票" if errors.blank? && user_type == ActivitySetting::WX_USER && !@wx_user.subscribe?
-    errors << "仅会员可参加投票" if errors.blank? && user_type == ActivitySetting::VIP_USER && !@wx_user.vip_user
+    errors << "仅会员可参加投票" if errors.blank? && user_type == ActivitySetting::VIP_USER && !@user.vip_user
     errors << "最多可以投#{select_count}个" if errors.blank? && check_count > select_count
     errors << "最少必须投1个" if errors.blank? && check_count <= 0
     return redirect_to :back, alert: errors.join(',') if errors.present?

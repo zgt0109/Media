@@ -4,7 +4,7 @@
   <div id="top" class="header hd-cont">
     <div class="bd">
       <div class="box-num">
-        <span>参与人数</span> <em><%= @activity.activity_user_vote_items.count('distinct(wx_user_id)') %></em>
+        <span>参与人数</span> <em><%= @activity.activity_user_vote_items.count('distinct(user_id)') %></em>
       </div>
       <div class="box-title">
         <%# time_diff_components = Time.diff(@activity.end_at, Time.now) %>
