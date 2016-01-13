@@ -82,11 +82,11 @@ class User < ActiveRecord::Base
     coupon.usable_vip_grades.include?(vip.vip_grade)
   end
 
-  MATCH_TYPE_OPTIONS.map(&:first).each do |match_type|
-    define_method "#{match_type}!" do
-      update_attributes(match_type: WxUser.const_get(match_type.upcase), match_at: Time.now)
-    end
-  end
+  # MATCH_TYPE_OPTIONS.map(&:first).each do |match_type|
+  #   define_method "#{match_type}!" do
+  #     update_attributes(match_type: WxUser.const_get(match_type.upcase), match_at: Time.now)
+  #   end
+  # end
 
   def axis
     "#{location_x}, #{location_y}"

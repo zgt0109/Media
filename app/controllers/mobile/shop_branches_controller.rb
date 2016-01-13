@@ -41,9 +41,9 @@ class Mobile::ShopBranchesController < Mobile::BaseController
         return
       end
       if params[:ref_order_id]
-        @shop_order = ShopOrder.create(:user_id: session[:user_id], :order_type => 1, :shop_branch_id => @shop_branch.id, :status => ShopOrder::DRAFT, ref_order_id: params[:ref_order_id] ) 
+        @shop_order = ShopOrder.create(user_id: session[:user_id], :order_type => 1, :shop_branch_id => @shop_branch.id, :status => ShopOrder::DRAFT, ref_order_id: params[:ref_order_id] ) 
       else
-        @shop_order = ShopOrder.create(:user_id: session[:user_id], :order_type => 1, :shop_branch_id => @shop_branch.id, :status => ShopOrder::DRAFT )
+        @shop_order = ShopOrder.create(user_id: session[:user_id], :order_type => 1, :shop_branch_id => @shop_branch.id, :status => ShopOrder::DRAFT )
       end
     end
     

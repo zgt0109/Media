@@ -75,12 +75,12 @@ class WxMpUser < ActiveRecord::Base
   end
 
   def self.find_and_update_description(field, value, description, bind_type)
-    mp_user = WxMpUser.where(field => value).first
-    return unless mp_user
+    # mp_user = WxMpUser.where(field => value).first
+    # return unless mp_user
 
-    mp_user.attributes = {description: description, bind_type: bind_type}
-    mp_user.save if mp_user.changed?
-    mp_user
+    # mp_user.attributes = {description: description, bind_type: bind_type}
+    # mp_user.save if mp_user.changed?
+    # mp_user
   end
 
   def first_follow_reply

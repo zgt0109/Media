@@ -4,7 +4,6 @@ class Mobile::DonationsController < Mobile::BaseController
 
   def index
     @activity = Activity.find(params[:aid])
-    @site = Account.find(params[:site_id])
     @user = User.find(session[:user_id])
     @donations = @site.donations.normal.where(activity_id: @activity.id).order("donations.order ASC")
   end
@@ -12,7 +11,7 @@ class Mobile::DonationsController < Mobile::BaseController
   # 显示详细 并且新建捐款订单
   def show
     @donation = Donation.find(params[:id])
-    @donation_order = @donation.donation_orders.new(:user_id: session[:user_id], :site_id => @site.try(:id))
+    @donation_order = @donation.donation_orders.new(user_id: session[:user_id], site_id: @site.id)
   end
 
   def my_orders
