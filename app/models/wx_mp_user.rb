@@ -50,7 +50,7 @@ class WxMpUser < ActiveRecord::Base
   def self.find_by_code_or_app_id(code, app_id)
     case
       when code.present?   then find_and_update_description(:code, code, nil, 1)
-      when app_id.present? then find_and_update_description(:app_id, app_id, '3', 2)
+      when app_id.present? then find_and_update_description(:app_id, app_id, '2', 2)
     end
   end
 

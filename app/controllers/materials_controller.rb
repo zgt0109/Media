@@ -14,7 +14,7 @@ class MaterialsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render json: @material.attributes.merge!({pic: {large: {url: @material.pic_url.to_s}}}).to_json }
+      format.json { render json: @material.attributes.merge!(pic_url: @material.pic_url.to_s).to_json }
     end
   end
 

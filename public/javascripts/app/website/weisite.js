@@ -24,7 +24,7 @@ $(function(){
                 if(data){
                     $('p.img .title').html(data['title']);
                     $('p.img .date').html(data['created_at'].slice(0,10));
-                    $('p.img > img').attr('src', data['pic']['large']['url']);
+                    $('p.img > img').attr('src', data['pic_url']);
                 }
             }
         });

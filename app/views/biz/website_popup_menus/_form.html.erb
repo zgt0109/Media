@@ -205,7 +205,7 @@
                             self.closest('.tab-pane').find('span.title').html(data['title']);
                             self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
                             self.closest('.tab-pane').find('p.grey').html(data['summary']);
-                            self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                            self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic_url'] + ')');
                         }
                     }
                 });

@@ -103,7 +103,7 @@ class Api::WeixinController < ApplicationController
 
   def check_signature!
     return render text: '请求参数不正确' if params[:code].blank? && params[:app_id].blank?
-    $wx_mp_user = @mp_user = WxMpUser.find_by_code_or_app_id(params[:code].to_s, params[:app_id].to_s).first
+    $wx_mp_user = @mp_user = WxMpUser.find_by_code_or_app_id(params[:code].to_s, params[:app_id].to_s)
     return @checked = false unless @mp_user
     token = @mp_user.plugin? ? Settings.wx_plugin.token : @mp_user.token
     @checked = params[:signature] == Digest::SHA1.hexdigest([token, params[:timestamp], params[:nonce]].map!(&:to_s).sort.join)

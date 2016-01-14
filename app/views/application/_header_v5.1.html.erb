@@ -9,39 +9,40 @@
           <a href="javascript:;">产品<i class="arrow-down"></i></a>
 
           <div class="nav-son">
-            <a class="nav-item <%= 'active' if action_name == 'optimal_code' %>" href="<%= optimal_code_path %>">
+            <a class="nav-item <%= 'active' if action_name == 'optimal_code' %>" href="<%#= optimal_code_path %>">
               <strong class="nav-txt">优折码</strong>
             </a>
-            <a class="nav-item <%= 'active' if action_name == 'micro_channel' %>" href="<%= micro_channel_path %>">
+            <a class="nav-item <%= 'active' if action_name == 'micro_channel' %>" href="<%#= micro_channel_path %>">
               <strong class="nav-txt">微信营销系列</strong>
             </a>
-            <a class="nav-item <%= 'active' if action_name == 'h5_marketing' %>" href="<%= h5_marketing_path %>">
+            <a class="nav-item <%= 'active' if action_name == 'h5_marketing' %>" href="<%#= h5_marketing_path %>">
               <strong class="nav-txt">H5营销工具</strong>
             </a>
           </div>
 
         </li>
-
+<!-- 
         <li class="<%= 'active' if %w(store electricity retail large_customer).include?(action_name) %>">
           <a href="javascript:;">解决方案<i class="arrow-down"></i></a>
 
           <div class="nav-son">
-            <a href="<%= store_path %>"  class="nav-item <%= 'active' if action_name == 'store' %>">
+            <a href="<%#= store_path %>"  class="nav-item <%= 'active' if action_name == 'store' %>">
               <strong class="nav-txt">互联网+门店营销</strong>
             </a>
-            <a href="<%= electricity_path %>" class="nav-item <%= 'active' if action_name == 'electricity' %>">
+            <a href="<%#= electricity_path %>" class="nav-item <%= 'active' if action_name == 'electricity' %>">
               <strong class="nav-txt">电商v店社会化分销</strong>
             </a>
-            <a href="<%= retail_path %>" class="nav-item <%= 'active' if action_name == 'retail' %>">
+            <a href="<%#= retail_path %>" class="nav-item <%= 'active' if action_name == 'retail' %>">
               <strong class="nav-txt">传统零售商转型</strong>
             </a>
-            <a href="<%= large_customer_path %>" class="nav-item <%= 'active' if action_name == 'large_customer' %>">
+            <a href="<%#= large_customer_path %>" class="nav-item <%= 'active' if action_name == 'large_customer' %>">
               <strong class="nav-txt">大客户定制开发</strong>
             </a>
           </div>
         </li>
-        <li class="<%= 'active' if action_name == 'solution' %>"><a href="<%= solution_path %>">经典案例</a></li>
-        <li class="<%= 'active' if current_page?(spread_path) %>"><%= link_to "招商加盟", spread_path %></li>
+ -->
+        <!-- <li class="<%= 'active' if action_name == 'solution' %>"><a href="<%#= solution_path %>">经典案例</a></li> -->
+        <!-- <li class="<%= 'active' if current_page?(spread_path) %>"><%#= link_to "招商加盟", spread_path %></li> -->
         <li class="<%= 'active' if %w(about joins news).include?(action_name) %>">
           <a href="">关于我们<i class="arrow-down"></i></a>
           <div class="nav-son">
