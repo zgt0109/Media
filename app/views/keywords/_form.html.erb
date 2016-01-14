@@ -69,7 +69,7 @@
                                 <%= reply.object.single_graphic? ? reply.object.replyable.created_at.to_date : Date.today rescue Date.today %>
                             </span>
                         </div>
-                        <div class="vMSImg" id="img-1" style="background: url('<%= reply.object.replyable.try(:pic).try(:large)%>')"></div>
+                        <div class="vMSImg" id="img-1" style="background: url('<%= reply.object.replyable.try(:pic_url)%>')"></div>
                         <div class="vMSFoot">
                           <p class="grey">
                             <%= reply.object.replyable.try(:summary) rescue '' %>
@@ -107,7 +107,7 @@
                                 <%= reply.object.single_graphic? ? reply.object.replyable.created_at.to_date : Date.today rescue Date.today %>
                             </span>
                         </div>
-                        <div class="vMSImg" id="img-1" style="background: url('<%= reply.object.replyable.try(:pic).try(:large)%>')"></div>
+                        <div class="vMSImg" id="img-1" style="background: url('<%= reply.object.replyable.try(:pic_url)%>')"></div>
                         <div class="vMSFoot">
                           <p class="grey">
                             <%= reply.object.replyable.try(:summary)  rescue '' %>
@@ -224,7 +224,7 @@
                       self.closest('.tab-pane').find('span.title').html(data['title']);
                       self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
                       self.closest('.tab-pane').find('p.grey').html(data['summary']);
-                      self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                      self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic_url'] + ')');
                   }
               }
           });
@@ -248,7 +248,7 @@
                       self.closest('.tab-pane').find('span.title').html(data['title']);
                       self.closest('.tab-pane').find('span.grey').html(data['created_at'].slice(0,10));
                       self.closest('.tab-pane').find('p.grey').html(data['summary']);
-                      self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic']['large']['url'] + ')');
+                      self.closest('.tab-pane').find('#img-1').css("background-image", 'url(' + data['pic_url'] + ')');
                   }
               }
           });
