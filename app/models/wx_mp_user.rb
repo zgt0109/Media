@@ -43,24 +43,26 @@ class WxMpUser < ActiveRecord::Base
   before_save :format_data
   after_create :generate_url
 
-  def self.generate_key
-    'win'+SecureRandom.hex(20)
-  end
-
-  def self.find_by_code_or_app_id(code, app_id)
-    case
-      when code.present?   then find_and_update_description(:code, code, nil, 1)
-      when app_id.present? then find_and_update_description(:app_id, app_id, '2', 2)
+  class << self
+    def generate_key
+      'win'+SecureRandom.hex(20)
     end
-  end
 
-  def self.find_and_update_description(field, value, description, bind_type)
-    # mp_user = WxMpUser.where(field => value).first
-    # return unless mp_user
+    def find_by_code_or_app_id(code, app_id)
+      case
+        when code.present?   then find_and_update_description(:code, code, nil, 1)
+        when app_id.present? then find_and_update_description(:app_id, app_id, '2', 2)
+      end
+    end
 
-    # mp_user.attributes = {description: description, bind_type: bind_type}
-    # mp_user.save if mp_user.changed?
-    # mp_user
+    def find_and_update_description(field, value, description, bind_type)
+      mp_user = WxMpUser.where(field => value).first
+      return unless mp_user
+
+      mp_user.attributes = {description: description, bind_type: bind_type}
+      mp_user.save if mp_user.changed?
+      mp_user
+    end
   end
 
   def first_follow_reply
