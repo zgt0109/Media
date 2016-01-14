@@ -56,7 +56,7 @@ class ActivityType < ActiveRecord::Base
     ['greet',               37, '微贺卡'],
     ['wx_wall',             38, '微信墙'],
     ['business_shop',       39, '微商圈店铺'],
-    ['quna',                40, '去哪儿吃'],
+    ['quna',                40, '去哪儿吃(不再使用)'],
     ['house_impression',    41, '房友印象'],
     ['house_live_photo',    42, '实景拍摄'],
     ['house_review',        43, '专家点评'],
@@ -64,7 +64,7 @@ class ActivityType < ActiveRecord::Base
     ['wshop',               45, '微电商'],
     ['wx_print',            46, '微信打印'],
     ['exit_wx_print',       47, '退出微信打印'],
-    ['ktv_order',           48, 'KTV预定'],
+    ['ktv_order',           48, 'KTV预定(不再使用)'],
     ['wbbs_community',      49, '微社区'],
     ['wifi',                51, 'wifi'],
     ['wmall',               52, '微客生活圈'],
@@ -81,7 +81,7 @@ class ActivityType < ActiveRecord::Base
     ['reservation',         63, '微预定'],
     ['wave',                64, '摇一摇抽奖'],
     ['broche',              65, '微楼书'],
-    ['oa',                  66, '微OA'],
+    ['oa',                  66, '微OA(不再使用)'],
     ['fans_game',           67, '吸粉游戏'],
     ['govmail',             68, '微政务信访大厅'],
     ['govchat',             69, '微政务微信互动'],
@@ -127,19 +127,9 @@ class ActivityType < ActiveRecord::Base
     ]
   end
 
-  def self.bqq_markets
-    ids = [4, 5, 8, 25, 62]
-    id_options.select{|m| ids.include?(m.last)}#  + [['图片分享', '33, 34, 35, 36']]
-  end
-
   #业务管理
   def self.business
     ids = [11, 10, 12, 15, 14, 30, 19, 24, 49, 63, 73, 74]
-    id_options.select{|m| ids.include?(m.last)}
-  end
-
-  def self.bqq_business
-    ids = [24, 11, 12, 15, 14, 19, 10]
     id_options.select{|m| ids.include?(m.last)}
   end
 

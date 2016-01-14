@@ -4,7 +4,7 @@
       <ul class="ace-thumbnails">
         <% @website_templates.each_with_index do |nav, index| %>
             <% next if nav.style_index == 0 %>
-            <li class="<%= @website_setting[@nav_type_columns[params[:nav_type].to_i]] == nav.style_index ? 'active' : ''%> <%= @bqq_website && @bqq_style_index.include?(nav.style_index) ? '' : 'product_template' %>" rel="<%= nav.style_index%>">
+            <li class="<%= @website_setting[@nav_type_columns[params[:nav_type].to_i]] == nav.style_index ? 'active' : ''%> <%= 'product_template' %>" rel="<%= nav.style_index%>">
               <a href="javascript:;" class="">
                 <%= image_tag nav.pic_url, class: 'pic', style: "height: 320px;width: 320px;" %>
                 <span><%= nav.style_index %>.<%= nav.name %></span>

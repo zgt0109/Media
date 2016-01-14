@@ -34,9 +34,6 @@ class Biz::WebsiteSettingsController < ApplicationController
     }
     @website_templates = WebsiteTemplate.where(["template_type = ? and style_index <> 14", WebsiteTemplate::NAVIGATION]).order(:style_index)
 
-    @bqq_website = false
-    @bqq_style_index = []
-
     render layout: 'application_pop'
   end
 

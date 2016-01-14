@@ -166,7 +166,7 @@ class WxMpUser < ActiveRecord::Base
 
     if manual?
       return false if app_id.blank? || app_secret.blank?
-      result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/token?grant_type=#{grant_type}&appid=#{app_id}&secret=#{app_secret}"))
+      result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"))
       data = JSON(result)
       # WinwemediaLog::Base.logger('wxapi', "****** [Token] wx_mp_user #{id} get token response: #{data}")
       return update_attributes(access_token: data['access_token'], expires_in: 1.8.hours.from_now) if data['access_token'].present?
@@ -184,7 +184,7 @@ class WxMpUser < ActiveRecord::Base
   end
 
   def pingable?
-    result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/token?grant_type=#{grant_type}&appid=#{app_id}&secret=#{app_secret}"))
+    result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"))
     data = JSON(result)
     data['errcode'].to_i == 0
   end

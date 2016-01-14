@@ -1,7 +1,7 @@
 <%
-  if @activity.present? && @activity.active_activity_notice.present? 
-    data_img =  @activity.active_activity_notice.pic_url.present? ? @activity.active_activity_notice.pic_url : "/assets/mobile/aids/global_small_banner.jpg"
-    pic_data_key = @activity.active_activity_notice.pic_key.present? ? @activity.active_activity_notice.pic_key : "FmkcCvuv-qfnVgT3prcxrkHCFYds"
+  if @activity.present?
+    data_img =  @activity.pic_url.present? ? @activity.pic_url : "/assets/mobile/aids/global_small_banner.jpg"
+    pic_data_key = @activity.pic_key.present? ? @activity.pic_key : "FmkcCvuv-qfnVgT3prcxrkHCFYds"
   else
     data_img = "/assets/mobile/aids/global_small_banner.jpg"
     pic_data_key = "FmkcCvuv-qfnVgT3prcxrkHCFYds"
@@ -10,12 +10,10 @@
 <%= content_for :step do %>
   <div class="step-pane active" id="step1">
     <div class="row">
-      <%= render 'weixin_preview', wx_title: @activity.active_activity_notice.try(:title), wx_summary: @activity.active_activity_notice.try(:summary) %>
+      <%= render 'weixin_preview', wx_title: @activity.name, wx_summary: @activity.summary %>
       <%= form_for @activity, url: @activity.new_record? ? aids_path : aid_path(@activity), validate: true, html: {class: 'form col-sm-7'} do |activity| %>
         <%= hidden_field_tag :redirect_to, edit_rule_settings_aid_path(@activity) unless @activity.new_record? %>
-        <%= activity.fields_for :active_activity_notice do |notice| %>
-          <%= render 'active_notice', notice: notice, activity: activity, pic_data_key: pic_data_key, data_img: data_img %>
-        <% end %>
+        <%= render 'active_notice', activity: activity, pic_data_key: pic_data_key, data_img: data_img %>
         <div class="row-fluid">
           <%- if @activity.can_not_edit? %>
             <a href="<%= edit_rule_settings_aid_path(@activity) %>" class="btn btn-prev btn-sm"><i class="icon-arrow-right icon-on-right"></i>下一步</a>

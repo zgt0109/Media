@@ -5250,7 +5250,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "key"
     t.string   "url"
     t.string   "event_type",    :default => "click", :null => false
-    t.string   "menu_type",     :default => "1",     :null => false
+    t.integer  "menu_type",     :default => "1",     :null => false
     t.integer  "menuable_id"
     t.string   "menuable_type"
     t.text     "content"

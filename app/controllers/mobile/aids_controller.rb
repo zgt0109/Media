@@ -185,10 +185,10 @@ class Mobile::AidsController < Mobile::BaseController
     results = @activity_user.aid_results.includes(:wx_user).order('created_at desc').limit(Aid::Rule::AID_FRIENDS_LIMIT)
 
     results.map! do |result|
-      {      
+      {
         headimgurl: (result.wx_user.present? && result.wx_user.headimgurl.present?) ? result.wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png",
         nickname:   result.wx_user.present? && result.wx_user.nickname,
-        points:     result.points 
+        points:     result.points
       }
     end
 
@@ -203,7 +203,7 @@ class Mobile::AidsController < Mobile::BaseController
 
   def self?
     if params[:owner_openid].present? && params[:owner_openid] != @wx_user.openid
-      return false 
+      return false
     end
 
     if !params[:owner_openid].present? && params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
@@ -213,7 +213,7 @@ class Mobile::AidsController < Mobile::BaseController
     if @activity_user.present? && @activity_user.user_id != @wx_user.id
       return  false
     end
-     
+
     true
   end
 
@@ -276,14 +276,14 @@ class Mobile::AidsController < Mobile::BaseController
     @rule.present? && ((@rule.prize_model.to_i & Aid::Rule::PRIZE_USER_NAME_MASK) == Aid::Rule::PRIZE_USER_NAME_MASK)
   end
 
-  private 
-  
+  private
+
   def find_activity
-    @activity = Activity.micro_aid.find session[:activity_id] 
+    @activity = Activity.micro_aid.find session[:activity_id]
 
     return render_404 unless @activity.present? && @activity.setted?
 
-    @notice = if @activity.activity_status == Activity::WARM_UP 
+    @notice = if @activity.activity_status == Activity::WARM_UP
                 @activity.activity_notices.ready.first
               else
                 @activity.activity_notices.active.first
@@ -291,7 +291,7 @@ class Mobile::AidsController < Mobile::BaseController
 
     @owner_user =  @wx_mp_user.wx_users.where(openid: params[:owner_openid]).first  if params[:owner_openid].present?
     @origin_user = @wx_mp_user.wx_users.where(openid: params[:origin_openid]).first if params[:origin_openid].present?
-    
+
     if @owner_user.present?
       @activity_user ||= @activity.activity_users.where(user_id: @owner_user.id).first
 
@@ -306,7 +306,7 @@ class Mobile::AidsController < Mobile::BaseController
     @prizes = @activity.activity_prizes
     @prize_counts = @prizes.sum(:prize_count)
     @activity_consumes = @activity.activity_consumes.where(user_id: @user.id).order('id desc') rescue []
-    
+
     @ranking_list = get_ranking_list Aid::Rule::RANKING_LIST_LIMIT
 
     if @activity.activity_status == Activity::HAS_ENDED
