@@ -20,7 +20,7 @@ sidekiq部署：
   应用程序部署到 faye.service.winwemedia.com， 以root运行 `/etc/init.d/sidekiq restart`
 
 faye部署：
-  应用程序部署到 faye.service.winwemedia.com， 进入 /opt/apps/faye 目录，运行 `~/.rvm/gems/ruby-2.2.1/bin/rackup faye.ru -E production -p 9393 -D`
+  应用程序部署到 faye.service.winwemedia.com， 进入 /opt/apps/faye 目录，运行 `rackup faye.ru -E production -p 9393 -D`
 
 
 服务器配置：

@@ -81,6 +81,7 @@ gem 'sidekiq'
 gem 'sidekiq-status'
 gem 'sinatra', '>= 1.3.0', :require => nil
 
+gem 'thin'
 gem 'faye'
 
 group :development do
