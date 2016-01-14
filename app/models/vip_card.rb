@@ -1,6 +1,8 @@
 class VipCard < ActiveRecord::Base
   LABELED_CUSTOM_FIELD_NAMES = %w[婚姻状况 血型 星座 性别 生肖 学历]
+
   DATES = { 'one_weeks' => '最近7天', 'one_months' => '最近一月', 'six_months' => '最近半年', 'twelve_months' => '最近一年' }
+
   TEMPLATE_SETTINGS = {
    'anhei'        => { color_code: 'fff',    bg_image_name: '暗黑',      qiniu_key: 'FoIJL_uBwSNybPOI1K1mNkjJ7sNX'},
    'bodianlan'    => { color_code: '005b71', bg_image_name: '波点蓝',    qiniu_key: 'FsSsbEgO89prbjbSrDmx07DpJJN9'},
@@ -33,6 +35,7 @@ class VipCard < ActiveRecord::Base
   }
 
   MAX_LABELED_CUSTOM_FIELD_COUNT = 2
+
   store :metadata, accessors: [:show_introduce, :init_grade_name, :sms_check, :vip_importing_enabled, 
     :open_card_sms_notify, :recharge_consume_sms_notify, :labeled_custom_field_ids, :use_vip_avatar,
     :name_font_size, :card_font_size, :settings_json
@@ -52,6 +55,9 @@ class VipCard < ActiveRecord::Base
   belongs_to :site_category
   belongs_to :activity
 
+  has_one :vip_api_setting, dependent: :destroy
+  has_many :vip_external_http_apis, dependent: :destroy
+
   has_many :vip_message_plans, dependent: :destroy
   has_many :custom_fields, as: :customized
   has_many :vip_privileges, dependent: :destroy
@@ -61,101 +67,9 @@ class VipCard < ActiveRecord::Base
   has_many :vip_packages, dependent: :destroy
   has_many :vip_package_items, dependent: :destroy
 
-
-  has_one :vip_api_setting, dependent: :destroy
-  has_many :vip_external_http_apis, dependent: :destroy
-
   before_save :format_content
   before_create :init_metadata
-  after_create :create_default_vip_grade
-  after_create :create_default_custom_field
-
-  def init_grade_name
-    default_grade.try(:name).presence || metadata[:init_grade_name].presence || '普通会员'
-  end
-
-  def start!
-    update_attributes(status: NORMAL)
-  end
-
-  def template_key
-    cover_pic_key || 'FudiRXyXaCchVosPYrv22Ws9do1F'
-  end
-
-  def cover_pic_url
-    qiniu_image_url(template_key)
-  end
-
-  def logo_url
-    qiniu_image_url(logo_key)
-  end
-
-  def location_address
-    address
-  end
-
-  def available_conditions
-    {
-      1 => {'label' => '性别', 'type' => 'string',   'placeholder' => '请输入信息', 'choices' => '男,女'},
-      2 => {'label' => '年龄', 'type' => 'integer',  'placeholder' => '请输入信息'},
-      3 => {'label' => '生日', 'type' => 'datetime', 'placeholder' => '请输入信息'},
-      4 => {'label' => '身高', 'type' => 'integer',  'placeholder' => '请输入信息'},
-      5 => {'label' => '体重', 'type' => 'integer',  'placeholder' => '请输入信息'},
-      6 => {'label' => '婚姻状况','type' => 'string',   'placeholder' => '请输入信息'},
-      7 => {'label' => '血型', 'type' => 'string',   'placeholder' => '请输入信息'},
-      8 => {'label' => '生肖', 'type' => 'string',   'placeholder' => '请输入信息'},
-      9 => {'label' => '星座', 'type' => 'string',   'placeholder' => '请输入信息'},
-      10 => {'label' => '职业', 'type' => 'string',   'placeholder' => '请输入信息'},
-      11 => {'label' => '学历', 'type' => 'string',   'placeholder' => '请输入信息'},
-      12 => {'label' => '邮编', 'type' => 'string',   'placeholder' => '请输入信息'},
-      13 => {'label' => '住址', 'type' => 'string',   'placeholder' => '请输入信息'}
-    }
-  end
-
-  def self.bg_mini_image_path(pinyin)
-    url = qiniu_image_url(template_qiniu_key(pinyin))
-    if url.present?
-      url += '?imageView2/1/w/100/h/60'
-    end
-    url
-  end
-
-  def self.bg_images
-    TEMPLATE_SETTINGS.keys
-  end
-
-  def self.template_qiniu_key(pinyin)
-    TEMPLATE_SETTINGS[pinyin].to_h[:qiniu_key]
-  end
-
-  def labeled_custom_field_ids
-    metadata[:labeled_custom_field_ids] || []
-  end
-
-  def labeled_custom_fields
-    custom_fields.normal.where(id: labeled_custom_field_ids).sorted
-  end
-
-  def self.bg_image_name(pinyin)
-    TEMPLATE_SETTINGS[pinyin].to_h[:bg_image_name]
-  end
-
-
-  def self.color_code(pinyin)
-    TEMPLATE_SETTINGS[pinyin].to_h[:color_code]
-  end
-
-  def template_index
-    VipCard.template_qiniu_keys.index(template_key)
-  end
-
-  def self.template_qiniu_keys
-    VipCard::TEMPLATE_SETTINGS.values.map{|x| x.fetch(:qiniu_key)}
-  end
-
-  def phone_num
-    mobile.present? ? mobile : tel
-  end
+  after_create :create_default_vip_grade, :create_default_custom_field
 
   def self.export_excel(vip_users)
     xls_report = StringIO.new
@@ -205,6 +119,90 @@ class VipCard < ActiveRecord::Base
   end
   #==end数据魔方部分
 
+  def self.bg_images
+    TEMPLATE_SETTINGS.keys
+  end
+
+  def self.template_qiniu_key(pinyin)
+    TEMPLATE_SETTINGS[pinyin].to_h[:qiniu_key]
+  end
+
+  def self.bg_image_name(pinyin)
+    TEMPLATE_SETTINGS[pinyin].to_h[:bg_image_name]
+  end
+
+  def self.color_code(pinyin)
+    TEMPLATE_SETTINGS[pinyin].to_h[:color_code]
+  end
+
+  def init_grade_name
+    default_grade.try(:name).presence || metadata[:init_grade_name].presence || '普通会员'
+  end
+
+  def available_conditions
+    {
+      1 => {'label' => '性别', 'type' => 'string',   'placeholder' => '请输入信息', 'choices' => '男,女'},
+      2 => {'label' => '年龄', 'type' => 'integer',  'placeholder' => '请输入信息'},
+      3 => {'label' => '生日', 'type' => 'datetime', 'placeholder' => '请输入信息'},
+      4 => {'label' => '身高', 'type' => 'integer',  'placeholder' => '请输入信息'},
+      5 => {'label' => '体重', 'type' => 'integer',  'placeholder' => '请输入信息'},
+      6 => {'label' => '婚姻状况','type' => 'string',   'placeholder' => '请输入信息'},
+      7 => {'label' => '血型', 'type' => 'string',   'placeholder' => '请输入信息'},
+      8 => {'label' => '生肖', 'type' => 'string',   'placeholder' => '请输入信息'},
+      9 => {'label' => '星座', 'type' => 'string',   'placeholder' => '请输入信息'},
+      10 => {'label' => '职业', 'type' => 'string',   'placeholder' => '请输入信息'},
+      11 => {'label' => '学历', 'type' => 'string',   'placeholder' => '请输入信息'},
+      12 => {'label' => '邮编', 'type' => 'string',   'placeholder' => '请输入信息'},
+      13 => {'label' => '住址', 'type' => 'string',   'placeholder' => '请输入信息'}
+    }
+  end
+
+  def start!
+    update_attributes(status: NORMAL)
+  end
+
+  def template_key
+    cover_pic_key || 'FudiRXyXaCchVosPYrv22Ws9do1F'
+  end
+
+  def cover_pic_url
+    qiniu_image_url(template_key)
+  end
+
+  def logo_url
+    qiniu_image_url(logo_key)
+  end
+
+  def location_address
+    address
+  end
+
+  def self.bg_mini_image_path(pinyin)
+    url = qiniu_image_url(template_qiniu_key(pinyin))
+    url += '?imageView2/1/w/100/h/60' if url.present?
+    url
+  end
+
+  def labeled_custom_field_ids
+    metadata[:labeled_custom_field_ids] || []
+  end
+
+  def labeled_custom_fields
+    custom_fields.normal.where(id: labeled_custom_field_ids).sorted
+  end
+
+  def template_index
+    VipCard.template_qiniu_keys.index(template_key)
+  end
+
+  def self.template_qiniu_keys
+    VipCard::TEMPLATE_SETTINGS.values.map{|x| x.fetch(:qiniu_key)}
+  end
+
+  def phone_num
+    mobile.present? ? mobile : tel
+  end
+
   def open_card?
     vip_api_setting.try(:enabled?) && vip_external_http_apis.open_card.exists?
   end
@@ -247,8 +245,8 @@ class VipCard < ActiveRecord::Base
   private
 
     def create_default_custom_field
-        self.custom_fields.where(field_type: '单行文本', name: '姓名').first_or_create
-        self.custom_fields.where(field_type: '单行文本', name: '电话').first_or_create
+      self.custom_fields.where(field_type: '单行文本', name: '姓名').first_or_create
+      self.custom_fields.where(field_type: '单行文本', name: '电话').first_or_create
     end
 
     def format_content
@@ -257,6 +255,6 @@ class VipCard < ActiveRecord::Base
     end
 
     def init_metadata
-      self.sms_check = '1' if sms_check.nil?
+      # self.sms_check = '1' if sms_check.nil?
     end
 end

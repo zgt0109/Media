@@ -9,9 +9,11 @@ class ActivityNotice < ActiveRecord::Base
   validates :title, presence: true, length: { maximum: 64 }
 
   belongs_to :activity
+
   delegate :activity_type_id, to: :activity, allow_nil: true
 
   class << self
+
     def new_ready_notice_by_type( activity_type_id )
       case activity_type_id.to_i
       when 3  then coupon_ready_notice
@@ -73,6 +75,8 @@ class ActivityNotice < ActiveRecord::Base
       end
       activity_notice
     end
+
+  end
 
   def default_pic_url
     qiniu_image_url(Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id])

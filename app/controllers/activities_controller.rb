@@ -227,7 +227,7 @@ class ActivitiesController < ApplicationController
       @total_activity_consumes = current_site.activity_consumes.where("activity_id in (?)", Activity.find(@search_params[:activity_id_eq]))
 
       @activity = current_site.activities.where(id: params[:activity_id_eq]).first
-      elsif @activity.groups?
+      if @activity.groups?
         @total = @activity.activity_consumes.count
       else
         @total = @activity.activity_prizes.sum(:prize_count)

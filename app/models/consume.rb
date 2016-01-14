@@ -251,9 +251,9 @@ include HasBarcode
     point_gift_exchange? ? 'VipUser' : 'User'
   end
 
-  def user_id
-    point_gift_exchange? ? consumable.vip_user_id : user_id
-  end
+  # def user_id
+  #   point_gift_exchange? ? consumable.vip_user_id : user_id
+  # end
 
   def user_name
     point_gift_exchange? ? consumable.vip_user.name : user.wx_user.nickname
