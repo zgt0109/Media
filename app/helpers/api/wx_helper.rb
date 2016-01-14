@@ -24,6 +24,8 @@ module Api::WxHelper
 
     link_url = base_url+ path + '?' + query_parameters.merge(openid_params).to_query
 
+    logger.info "================== jsapi_ticket url #{link_url}"
+
     image_url = "http://#{Settings.mhostname}#{@share_image.to_s}" unless /^(http|https):\/\/[a-zA-Z0-9].+$/ =~ image_url
 
     { link_url: link_url, image_url: image_url }

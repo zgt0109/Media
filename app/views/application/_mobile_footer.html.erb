@@ -96,9 +96,8 @@ unless @mobile_footer_rendered
 
     <%- if @wx_mp_user.present? && (@wx_mp_user.auth_subscribe? || @wx_mp_user.auth_service?) %>
       <%
-      @share_image ||= @website_menu.try(:pic).to_s
-      @share_image = @supplier.try(:website).try(:logo).to_s if @share_image.blank?
-      @share_image = qiniu_image_url(@supplier.try(:website).try(:logo_key).to_s) if @share_image.blank?
+      @share_image ||= @website_menu.try(:pic_url).to_s
+      @share_image = @site.try(:website).try(:logo_url).to_s if @share_image.blank?
       @share_image = "/assets/qr.jpg" if @share_image.blank?
       wx_share_options = generate_wx_share_options(request.base_url, request.path, request.query_parameters, @share_image.try(:to_s), @wx_user.try(:openid))
       %>
@@ -207,10 +206,11 @@ unless @mobile_footer_rendered
     <%- end %>
   </script>
 <%- end %>
+
 <% if Rails.env.production? %>
-<script type="text/javascript">
-  var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-  document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F70cd0b5522647a22a0c663468ebfc0df' type='text/javascript'%3E%3C/script%3E"));
-</script>
+  <script type="text/javascript">
+    // var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    // document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F70cd0b5522647a22a0c663468ebfc0df' type='text/javascript'%3E%3C/script%3E"));
+  </script>
 <% end %>
 <% end %>

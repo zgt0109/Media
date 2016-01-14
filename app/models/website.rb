@@ -338,7 +338,7 @@ class Website < ActiveRecord::Base
     end
   end
 
-  def logo_url(type = :big)
+  def logo_url
     qiniu_image_url(logo_key)
   end
 
