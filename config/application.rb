@@ -91,6 +91,7 @@ module Wp
       button_apply_now.png
       home.css  sessions.css yeahsite.css home.js sessions.js yeahsite.js
       vip/vcard.css vip/vcard.js lib/jquery-ui.js
+      mobile/albums/jquery.water.min.js
     ]
     config.assets.precompile += Dir['app/assets/javascripts/mobile/**/*.js'].map{ |x| x.sub('app/assets/javascripts/', '') }
     config.assets.precompile += Dir['app/assets/stylesheets/mobile/**/*.css'].map{ |x| x.sub('app/assets/stylesheets/', '') }
