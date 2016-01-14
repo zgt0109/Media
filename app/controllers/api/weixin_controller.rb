@@ -124,10 +124,10 @@ class Api::WeixinController < ApplicationController
       # kefu_response = WeixinKefu.request(params, @mp_user)
       # return kefu_response.to_s if kefu_response != 'normal_match'
     elsif @msg_type =~ /\Atext|image\z/ && @wx_user.enter_wx_wall? # 微信墙
-      message = @wx_user.wx_wall_users.last_replied.reply_wx_message(word_or_pic_url, @msg_type)
+      message = @wx_user.user.wx_wall_users.last_replied.reply_wx_message(word_or_pic_url, @msg_type)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
     elsif @msg_type =~ /\Atext|image\z/ && @wx_user.enter_shake? # 摇一摇接口处理
-      shake_user = @wx_user.shake_users.last_replied
+      shake_user = @wx_user.user.shake_users.last_replied
       message = shake_user.reply_wx_message(word_or_pic_url, @msg_type)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
       return respond_activity(shake_user.shake.activity) if shake_user.reply_keyword?
@@ -190,8 +190,8 @@ class Api::WeixinController < ApplicationController
 
   def image_request
     case
-      when @wx_user.share_photos?            then SharePhoto.respond_create_share_photo(@wx_user, @mp_user, @xml[:PicUrl])
-      when @wx_user.wx_print?            then WeixinHardware.respond_printer(@wx_user, @mp_user, nil, request.raw_post, params)
+      when @wx_user.share_photos?    then SharePhoto.respond_create_share_photo(@wx_user, @mp_user, @xml[:PicUrl])
+      when @wx_user.wx_print?        then WeixinHardware.respond_printer(@wx_user, @mp_user, nil, request.raw_post, params)
       when Print.postcard?(@wx_user) then Print.respond_postcard_img(@wx_user, @mp_user, request.raw_post)
       # when @mp_user.site.industry_house? then @mp_user.house.respond_create_live_photo(@wx_user, @xml)
       else respond_default_reply()
@@ -244,16 +244,11 @@ class Api::WeixinController < ApplicationController
         end
       when 'unsubscribe'
         @wx_user.unsubscribe!
-        @wx_user.qrcode_logs.normal.deleted_all!
+        @wx_user.user.qrcode_logs.normal.deleted_all!
         ''
       when 'CLICK'
         wx_menu = WxMenu.where(key: @xml[:EventKey]).first
         return Weixin.respond_text(@from_user_name, @to_user_name, '菜单不存在') unless wx_menu
-
-        if wx_menu.id == 31100 && !@mp_user.vip_users.visible.where(wx_user_id: @wx_user.id).exists?
-          wx_menu = WxMenu.find_by_id(31170)
-          return respond_activity(wx_menu.menuable) if wx_menu
-        end
 
         case
           when wx_menu.text?     then Weixin.respond_text(@from_user_name, @to_user_name, wx_menu.content)
