@@ -20,7 +20,7 @@ class PaymentsController < ApplicationController
   end
 
   def alipayapi    
-    return redirect_to :back, alert: '您没有权限访问' unless session[:wx_user_id]
+    return redirect_to :back, alert: '您没有权限访问' unless session[:user_id]
 
     @payment = Payment.find(params[:id])
     @token = @payment.get_request_token
@@ -39,31 +39,31 @@ class PaymentsController < ApplicationController
 
     if paymentable.present?
       if paymentable.is_a?(EcOrder)
-        redirect_to mobile_ec_order_path(paymentable.supplier_id, paymentable)
+        redirect_to mobile_ec_order_path(paymentable.site_id, paymentable)
       elsif paymentable.is_a?(GroupOrder)
         if params['status'].present? && params['status'] == '1'
           paymentable.pay! if paymentable.pending?
           #商圈团购增加统计
           $redis.rpush("wmall:shop:#{paymentable.try(:group_item).try(:groupable_id)}:group:order", paymentable.id) if paymentable.try(:group_item).try(:groupable_type) == "Wmall::Shop"
           
-          #redirect_to mobile_group_order_path(paymentable.supplier_id, paymentable)
-          redirect_to mobile_group_orders_url(paymentable.supplier_id)
+          #redirect_to mobile_group_order_path(paymentable.site_id, paymentable)
+          redirect_to mobile_group_orders_url(paymentable.site_id)
         else
           # render text: '支付失败'
-          #redirect_to mobile_group_order_path(paymentable.supplier_id, paymentable)
-          redirect_to mobile_group_orders_url(paymentable.supplier_id)
+          #redirect_to mobile_group_order_path(paymentable.site_id, paymentable)
+          redirect_to mobile_group_orders_url(paymentable.site_id)
         end
       elsif paymentable.is_a?(VipRechargeOrder)
-        openid = paymentable.vip_user.wx_user.openid rescue nil
-        redirect_to recharge_back_app_vips_path(openid: openid, wxmuid: paymentable.wx_mp_user_id, order_id: paymentable.id)
+        openid = paymentable.vip_user.user.wx_user.openid rescue nil
+        redirect_to recharge_back_app_vips_path(openid: openid, site_id: paymentable.site_id, order_id: paymentable.id)
       elsif paymentable.is_a?(ShopOrder)
         if params['status'].present? && params['status'] == "1"
           #标记为支付成功!
           paymentable.pay!
-          redirect_to success_mobile_shop_order_url(supplier_id: paymentable.supplier.id, id: paymentable.id)
+          redirect_to success_mobile_shop_order_url(site_id: paymentable.site_id, id: paymentable.id)
         else
           # paymentable.unpay!
-          redirect_to mobile_shop_order_url(supplier_id: paymentable.supplier.id, id: paymentable.id)
+          redirect_to mobile_shop_order_url(site_id: paymentable.site_id, id: paymentable.id)
         end
       end
     else
@@ -100,15 +100,15 @@ class PaymentsController < ApplicationController
   end
 
   def payment_request
-    @supplier = Account.where(id: params[:supplier_id]).first
-    return render json: {errcode: 001, errmsg: "supplier not found"} unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return render json: {errcode: 001, errmsg: "account not found"} unless @account
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     tenpay_hash = { tenpay_callback: tenpay_callback_url.to_s, tenpay_notify: tenpay_notify_url.to_s}
     tenpay_hash[:user_ip] = params[:user_ip].present? ? params[:user_ip] : request.ip
 
     @payment ||= Payment.setup({
-      supplier_id: @supplier.id,
+      account_id: @account.id,
       payment_type_id: params[:payment_type_id],
       customer_id: params[:customer_id],
       customer_type: params[:customer_type],
@@ -123,7 +123,6 @@ class PaymentsController < ApplicationController
       merchant_url: params[:merchant_url],
       state: params[:state],
       source: params[:source],
-      wx_mp_user_id: params[:wx_mp_user_id],
       open_id: params[:open_id],
       pay_params: params.to_json
     })

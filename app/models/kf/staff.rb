@@ -5,7 +5,6 @@ class Kf::Staff < ActiveRecord::Base
   has_secure_password
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :account, class_name: 'Kf::Account'
 
   validates :staff_no, :account_id, presence: true
@@ -13,8 +12,6 @@ class Kf::Staff < ActiveRecord::Base
   validate :check_unique_staff_no
 
   before_save :postfix_staff_no
-
-  # attr_accessible :nickname, :password_digest, :public_no, :role, :staff_no, :password, :password_confirmation, :avatar, :wx_mp_user_id, :supplier_id
 
   def role_name
     self.role == 'admin' ? "管理员权限" : "普通权限"
@@ -26,7 +23,7 @@ class Kf::Staff < ActiveRecord::Base
   end
 
   def is_role_valid?
-    admin_scope = self.supplier.staffs.where(role: 'admin')
+    admin_scope = self.site.staffs.where(role: 'admin')
     return true if self.role != 'admin'
     return true if (self.new_record? && admin_scope.count == 0) || (!self.new_record? && admin_scope.where("id not in (?)", self.id).count == 0)
     return false
@@ -35,7 +32,7 @@ class Kf::Staff < ActiveRecord::Base
   private
 
     def postfix_staff_no
-      postfix = "@#{self.supplier.id}"
+      postfix = "@#{self.site.id}"
       postfix_regex = /#{postfix}$/
       unless self.staff_no =~ postfix_regex
         self.staff_no = "#{self.staff_no}#{postfix}"

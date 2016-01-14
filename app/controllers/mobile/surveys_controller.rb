@@ -110,8 +110,8 @@ class Mobile::SurveysController < Mobile::BaseController
         return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
       else #创建虚拟wx_user
         #use session.id in Rails 4.
-        session[:request_session_id] ||= request.session_options[:id]
-        @wx_user =  WxUser.where(openid: session[:request_session_id], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first_or_create
+        # session[:request_session_id] ||= request.session_options[:id]
+        # @wx_user =  WxUser.where(openid: session[:request_session_id], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first_or_create
       end
     end
   end

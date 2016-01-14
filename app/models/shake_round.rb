@@ -41,11 +41,11 @@ class ShakeRound < ActiveRecord::Base
 
   def first_or_create_shake_prize(shake_user, user_rank)
     shake_prizes.where(
-        supplier_id:      supplier_id,
-        wx_user_id:       shake_user.wx_user_id,
-        shake_id:      shake_id,
-        shake_user_id: shake_user.id,
-        user_rank:        user_rank
+      site_id:      site_id,
+      user_id:       shake_user.user_id,
+      shake_id:      shake_id,
+      shake_user_id: shake_user.id,
+      user_rank:     user_rank
     ).first_or_create
   end
 

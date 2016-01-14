@@ -1,27 +1,3 @@
-# == Schema Information
-#
-# Table name: weddings
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer
-#  wx_mp_user_id :integer          not null
-#  groom         :string(255)      not null
-#  bride         :string(255)      not null
-#  wedding_at    :datetime         not null
-#  phone         :string(255)      not null
-#  address       :string(255)      not null
-#  province_id   :integer          default(9), not null
-#  city_id       :integer          default(73), not null
-#  district_id   :integer
-#  music_url     :string(255)
-#  video_url     :string(255)
-#  story_title   :string(255)      not null
-#  story_content :text             default(""), not null
-#  seats_status  :integer          default(1), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class Wedding < ActiveRecord::Base
   WEEK = [[1,"一"],[2,"二"],[3,"三"],[4,"四"],[5,"五"],[6,"六"],[0,"日"]]
 
@@ -31,7 +7,6 @@ class Wedding < ActiveRecord::Base
   FileUtils.mkdir_p VIDEO_DIR unless File.exists?(VIDEO_DIR)
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :province
   belongs_to :city
   belongs_to :district

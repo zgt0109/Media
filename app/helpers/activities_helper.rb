@@ -120,7 +120,7 @@ module ActivitiesHelper
 
   def business_management?
     return false if controller_name =~ /^vip_group/
-    controller_name =~ /micro_shops|micro_shop_branches|donations|donation_orders|activity_forms|activity_enrolls|greet_cards|albums|group|kf_settings|staffs|wx_walls|prints|supplier_print_clients|supplier_print_pictures|wbbs/i ||
+    controller_name =~ /micro_shops|micro_shop_branches|donations|donation_orders|activity_forms|activity_enrolls|greet_cards|albums|group|kf_settings|staffs|wx_walls|prints|wbbs/i ||
     ['votes', 'groups', 'user_data', 'diagram', 'surveys'].include?(action_name) ||
     BIZ_ACTIVITY_IDS.include?(params[:activity_type]) ||
     BIZ_ACTIVITY_IDS.include?(@activity.try(:activity_type_id)) ||
@@ -130,7 +130,6 @@ module ActivitiesHelper
   def old_coupons_path?
     return true if controller_name =~ /old_coupons/
     return true if request.path == old_coupons_activities_path
-    return true if @activity.try(:old_coupon?)
     return true if params.values_at(:activity_type, :activity_type_id).include?(ActivityType::CONSUME.to_s)
   end
 

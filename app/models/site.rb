@@ -175,10 +175,10 @@ class Site < ActiveRecord::Base
   def has_industry_for?(industry_id)
     return true
 
-    (supplier_industry_ids + [supplier_industry_id]).compact.flatten.uniq.include?(industry_id)
+    (site_industry_ids + [site_industry_id]).compact.flatten.uniq.include?(industry_id)
   end
 
-  def supplier_privileges
+  def site_privileges
     AccountPrivilege.where(id: privileges.to_s.split(','))
   end
 
@@ -189,7 +189,7 @@ class Site < ActiveRecord::Base
   end
 
   def has_privilege_menu_for?(menu_id)
-    supplier_privileges.pluck(:menu_id).uniq.include?(menu_id)
+    site_privileges.pluck(:menu_id).uniq.include?(menu_id)
   end
 
   def find_or_generate_auth_token(encrypt = true)
@@ -432,7 +432,7 @@ START
     return if free_account?
     # return unless expired?
 
-    supplier_apps.clear
+    site_apps.clear
 
     privileges = [
       1000, 1001, 1002, 1003,
@@ -447,8 +447,8 @@ START
     attrs = {
       privileges: privileges.join(','),
       custom_privileges: nil,
-      supplier_product_id: 10000,
-      supplier_industry_id: 1000,
+      site_product_id: 10000,
+      site_industry_id: 1000,
       is_gift: false,
       account_type: 5,
       upgrade_type: normal_account? ? NORMAL_CHANGE_FREE : TRIAL_CHANGE_FREE,
@@ -469,7 +469,7 @@ START
         5000, 4, 62,
         6000, 73,
       ]
-    elsif supplier_product_id == 10006
+    elsif site_product_id == 10006
       new_privileges = [
         1000, 1001, 1002, 1003,
         1010, 1011, 1012, 1013, 1014, 1015,
@@ -483,7 +483,7 @@ START
         11, 14, 30,
         10007,
       ]
-    elsif supplier_product_id == 12000
+    elsif site_product_id == 12000
       new_privileges = [
         1000, 1001, 1002, 1003,
         1010, 1011, 1012, 1013, 1014, 1015,
@@ -506,10 +506,10 @@ START
       ]
     end
 
-    if supplier_product_id == 10006
-      new_custom_privileges = supplier_industry_ids + [supplier_industry_id] + custom_privileges.to_s.split(',').map(&:to_i)
+    if site_product_id == 10006
+      new_custom_privileges = site_industry_ids + [site_industry_id] + custom_privileges.to_s.split(',').map(&:to_i)
     else
-      new_custom_privileges = supplier_industry_ids + [supplier_industry_id]
+      new_custom_privileges = site_industry_ids + [site_industry_id]
     end
 
     update_attributes(privileges: new_privileges.uniq.join(','), custom_privileges: new_custom_privileges.uniq.join(','))
@@ -564,7 +564,7 @@ START
     #result = RestClient.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{mp_user.access_token}", json, :content_type => :json, :accept => :json)
   end
 
-  # supplier.delay.init_website_data
+  # site.delay.init_website_data
   def init_website_data
     if Rails.env.staging? || Rails.env.production?
       site_id = 10001

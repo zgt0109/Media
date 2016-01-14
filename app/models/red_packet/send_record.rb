@@ -1,12 +1,12 @@
 class RedPacket::SendRecord < ActiveRecord::Base
   belongs_to :activity
   belongs_to :activity_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :site
   belongs_to :red_packet, class_name: RedPacket::RedPacket, counter_cache: :records_count
   belongs_to :activity_consume, class_name: "::ActivityConsume" 
 
-  validates :wx_user, :red_packet, presence: true
+  validates :user, :red_packet, presence: true
   validates :openid, presence: true
   validates_uniqueness_of :openid, scope: [:site_id, :red_packet_id], if: :not_activity_redpacket?
 

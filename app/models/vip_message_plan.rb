@@ -18,7 +18,7 @@ class VipMessagePlan < ActiveRecord::Base
   end
 
   def wx_mp_user
-    vip_card.wx_mp_user
+    vip_card.site.wx_mp_user
   end
 
   alias receivers group_receivers

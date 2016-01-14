@@ -33,7 +33,7 @@ class SystemMessage < ActiveRecord::Base
 
   def change_view_remind_message
     message = {
-        channel: "/system_messages/change/#{supplier_id}",
+        channel: "/system_messages/change/#{site_id}",
         data: attributes.merge!({operate: (destroyed? || is_read) ? 'delete' : 'add', music: system_message_setting.music}.merge!(skip_url_attrs))
     }
     uri = URI.parse("http://#{FAYE_HOST}/faye")

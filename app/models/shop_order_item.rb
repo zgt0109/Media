@@ -1,34 +1,9 @@
-# == Schema Information
-#
-# Table name: shop_order_items
-#
-#  id              :integer          not null, primary key
-#  supplier_id     :integer          not null
-#  wx_mp_user_id   :integer          not null
-#  shop_id         :integer          not null
-#  shop_branch_id  :integer          not null
-#  shop_order_id   :integer          not null
-#  shop_product_id :integer          not null
-#  product_name    :string(255)      not null
-#  qty             :integer          default(0), not null
-#  price           :decimal(12, 2)   default(0.0), not null
-#  discount        :decimal(6, 2)    default(0.0)
-#  total_price     :decimal(12, 2)   default(0.0), not null
-#  total_pay_price :decimal(12, 2)   default(0.0), not null
-#  status          :integer          default(1), not null
-#  description     :text
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-
 class ShopOrderItem < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :shop
   belongs_to :shop_branch
   belongs_to :shop_order
   belongs_to :shop_product
-  # attr_accessible :description, :price, :product_name, :qty, :status, :total_price
 
   before_create :add_default_attrs
 
@@ -49,11 +24,6 @@ class ShopOrderItem < ActiveRecord::Base
   end
 
   def product_name_to_4
-    # if contain_cn(self.product_name)
-    #   self.product_name.ljust(10) 
-    # else
-    #   self.product_name.ljust(12) 
-    # end
     if self.product_name.length > 6
       return self.product_name[0,6]
     end
@@ -83,8 +53,7 @@ class ShopOrderItem < ActiveRecord::Base
 
   def add_default_attrs
     return unless self.shop_product
-    self.supplier_id = self.shop_product.supplier_id
-    self.wx_mp_user_id = self.shop_product.wx_mp_user_id
+    self.site_id = self.shop_product.site_id
     self.shop_id = self.shop_product.shop_id
     self.shop_branch_id = self.shop_order.shop_branch.id
     self.product_name = self.shop_product.name

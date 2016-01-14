@@ -7,7 +7,7 @@ class PointType < ActiveRecord::Base
   validates :amount, presence: true, numericality: { greater_than: 0 }, if: :consume_or_recharge?
   validates :points, presence: true, numericality: { greater_than_or_equal_to: 1, less_than: 10000000 }
   validates :succ_checkin_points, :succ_checkin_days, presence: true, numericality: { greater_than_or_equal_to: 1 }, if: :succ_checkin_enabled?
-  # validates  :amount, uniqueness: {:scope => [:supplier_id, :category], message: '该金额已存在' }
+  # validates  :amount, uniqueness: {:scope => [:site_id, :category], message: '该金额已存在' }
   validate :amount_exist?
 
   enum_attr :status, :in => [

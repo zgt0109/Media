@@ -30,7 +30,7 @@ class Brokerage::Client < ActiveRecord::Base
   end
 
   def higher_commission_types
-    @higher_commission_types ||= broker.supplier.brokerage_commission_types.enabled.higher_than(last_changed_commission_type)
+    @higher_commission_types ||= broker.site.brokerage_commission_types.enabled.higher_than(last_changed_commission_type)
   end
 
   #得到客户要修改的新状态，计算新状态对应的金额，将客户状态更新
@@ -38,7 +38,7 @@ class Brokerage::Client < ActiveRecord::Base
   #增加对应经纪人的unsettled_commission(未结算佣金)
   def change_commission_type(commission_type_id, client_commission)
     transaction do
-      new_commission_type = broker.supplier.brokerage_commission_types.find commission_type_id
+      new_commission_type = broker.site.brokerage_commission_types.find commission_type_id
       computed_commission = new_commission_type.get_commission(client_commission)
       old_commission_type = commission_type
 
@@ -54,7 +54,7 @@ class Brokerage::Client < ActiveRecord::Base
 
   private
     def init_commission_type
-      self.commission_type ||= broker.supplier.brokerage_commission_types.new_client.first
+      self.commission_type ||= broker.site.brokerage_commission_types.new_client.first
     end
 
     def validate_commission_type
@@ -77,7 +77,7 @@ class Brokerage::Client < ActiveRecord::Base
 
     def uniqueness_of_mobile
       return if errors.has_key?(:mobile)
-      if broker.supplier.brokerage_clients.where('brokerage_clients.mobile = ? and brokerage_clients.id != ?', mobile, id.to_i).exists?
+      if broker.site.brokerage_clients.where('brokerage_clients.mobile = ? and brokerage_clients.id != ?', mobile, id.to_i).exists?
         errors.add(:mobile, '已经被推荐过')
       end
     end

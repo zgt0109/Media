@@ -1,5 +1,5 @@
 class DonationOrder < ActiveRecord::Base
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :donation
   # attr_accessible :body, :fee, :paid_at, :pay_info, :state, :subject, :trade_no, :trade_state, :transaction_id
   validates :fee, :numericality => {:greater_than => 0}
@@ -11,7 +11,6 @@ class DonationOrder < ActiveRecord::Base
   ]
 
   before_create :add_default_attrs
-  
 
   def pay!
     update_column("state", 2)
@@ -25,10 +24,9 @@ class DonationOrder < ActiveRecord::Base
     self.donation.name
   end
 
-
   def add_default_attrs
     now = Time.now
     self.trade_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
-    self.supplier_id = self.donation.try(:supplier_id)
+    self.site_id = self.donation.try(:site_id)
   end
 end

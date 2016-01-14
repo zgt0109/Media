@@ -1,6 +1,5 @@
 class VipPackagesVipUser < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :vip_user
   belongs_to :vip_package
   belongs_to :shop_branch
@@ -55,13 +54,13 @@ class VipPackagesVipUser < ActiveRecord::Base
 
   def update_vip_user_amount(amount_source)
     vip_user.decrease_amount!(vip_package.price,"消费",{able: "vip_packages"}) if by_balance?
-    vip_user.wx_user.qrcode_user_amount("vip_amount",vip_package.price) if by_cash?
+    vip_user.user.qrcode_user_amount("vip_amount",vip_package.price) if by_cash?
     vip_user.vip_user_transactions.create(direction_type: VipUserTransaction::PAY_DOWN,
                                   direction: VipUserTransaction::OUT,
                                   amount: vip_package.price,
                                   total_amount: vip_user.total_amount,
                                   usable_amount: vip_user.usable_amount,
-                                  supplier_id: supplier.id,
+                                  site_id: site.id,
                                   description: description,
                                   payment_type: payment_type,
                                   transactionable: self,

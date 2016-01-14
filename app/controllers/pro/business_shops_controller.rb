@@ -59,13 +59,13 @@ class Pro::BusinessShopsController < WebsiteShared::WebsiteBaseController
   end
 
   def comments
-    @search   = Comment.where(commentable_type: 'BusinessShop', supplier_id: current_user.id).search(params[:search])
+    @search   = Comment.where(commentable_type: 'BusinessShop', site_id: current_site.id).search(params[:search])
     @comments = @search.page(params[:page])
     render layout: 'application_gm'
   end
 
   def destroy_comment
-    comment = Comment.where(commentable_type: 'BusinessShop', supplier_id: current_user.id).find params[:comment_id]
+    comment = Comment.where(commentable_type: 'BusinessShop', site_id: current_site.id).find params[:comment_id]
     comment.destroy
     render js: "$('#row-#{comment.id}').remove(); showTip('success', '删除成功');"
   end

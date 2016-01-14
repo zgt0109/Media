@@ -1,33 +1,10 @@
-# -*- coding: utf-8 -*-
-# == Schema Information
-#
-# Table name: shop_categories
-#
-#  id             :integer          not null, primary key
-#  supplier_id    :integer          not null
-#  wx_mp_user_id  :integer          not null
-#  shop_id        :integer          not null
-#  shop_branch_id :integer
-#  name           :string(255)      not null
-#  sort           :integer          default(0), not null
-#  status         :integer          default(1), not null
-#  description    :text
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#
-
 class ShopCategory < ActiveRecord::Base
-  # validates :name, presence: true, uniqueness: { case_sensitive: false }
-
-  # attr_accessible :description, :name, :sort, :status
-
   enum_attr :status, :in => [
     ['deleted', -1, '已删除'],
     ['normal', 1, '正常']
   ]
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :shop
   belongs_to :shop_branch
   belongs_to :shop_menu
@@ -121,8 +98,7 @@ class ShopCategory < ActiveRecord::Base
   def add_default_attrs
     return unless self.shop
 
-    self.supplier_id = self.shop.supplier_id
-    self.wx_mp_user_id = self.shop.wx_mp_user_id
+    self.site_id = self.shop.site_id
     self.shop_id = self.shop.id
   end
 

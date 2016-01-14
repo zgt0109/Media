@@ -14,7 +14,7 @@ class Api::Wmall::WxUsersController < Api::Wmall::BaseController
   # GET /api/wmall/wx_users/1.json
   def show
     @wx_user = WxUser.find params[:id]
-    @usable_points = VipUser.where(wx_user_id: @wx_user.id, supplier_id: current_user.id).first.try(:usable_points).to_i
+    @usable_points = VipUser.where(wx_user_id: @wx_user.id, site_id: current_site.id).first.try(:usable_points).to_i
   end
 
   def following_shops

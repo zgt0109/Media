@@ -3,7 +3,7 @@
 # Table name: point_gift_exchanges
 #
 #  id            :integer          not null, primary key
-#  supplier_id   :integer
+#  site_id   :integer
 #  vip_user_id   :integer          not null
 #  point_gift_id :integer          not null
 #  total_points  :integer          default(0), not null

@@ -12,7 +12,7 @@ module Kefu
 
     def create
       @staff = Kf::Staff.new(params[:kf_staff].merge({
-        supplier_id: current_user.id,
+        site_id: current_site.id,
         wx_mp_user_id: current_user.wx_mp_user.id,
         account_id: current_user.wx_mp_user.try(:kf_account).try(:id)
       }))
@@ -47,7 +47,7 @@ module Kefu
 
     def validate_staff_no
       if params[:staff_id] == '0'
-        staff = Kf::Staff.new(supplier_id: current_user.id, staff_no: params[:staff_no])
+        staff = Kf::Staff.new(site_id: current_site.id, staff_no: params[:staff_no])
       else
         staff = Kf::Staff.find(params[:staff_id])
         staff.staff_no = params[:staff_no]
@@ -57,7 +57,7 @@ module Kefu
 
     def validate_staff_role
       if params[:staff_id] == '0'
-        staff = Kf::Staff.new(supplier_id: current_user.id, role: params[:role])
+        staff = Kf::Staff.new(site_id: current_site.id, role: params[:role])
       else
         staff = Kf::Staff.find(params[:staff_id])
         staff.role = params[:role]

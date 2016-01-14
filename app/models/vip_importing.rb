@@ -6,10 +6,10 @@ class VipImporting < ActiveRecord::Base
 
   attr_accessor :vip_grade_names
 
-  validates :name, :supplier_id, :vip_grade_name, presence: true
+  validates :name, :site_id, :vip_grade_name, presence: true
   validates :total_amount, :total_recharge_amount, :total_consume_amount, :usable_amount, :total_points, :usable_points, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
-  validates :mobile,  presence: true, uniqueness: { scope: :supplier_id }
-  validates :user_no, presence: true, uniqueness: { scope: :supplier_id }
+  validates :mobile,  presence: true, uniqueness: { scope: :site_id }
+  validates :user_no, presence: true, uniqueness: { scope: :site_id }
   validate :vip_grade_must_exists
 
   HEADER_COLUMNS = %w(卡号 姓名 等级 手机号 可用金额 充值总额 消费总额 可用积分 历史总积分 开卡时间)
@@ -26,14 +26,14 @@ class VipImporting < ActiveRecord::Base
     '开卡时间'    => :open_card_time
   }
 
-  def self.validate_and_import(supplier, csv_file_path, sync: false)
-    vip_importing = VipImporting.new(supplier: supplier)
+  def self.validate_and_import(site, csv_file_path, sync: false)
+    vip_importing = VipImporting.new(site: site)
     data = vip_importing.parse_data(csv_file_path)
     hash = vip_importing.validate_data(data)
     return hash if hash[:error]
 
-    # VipImporting.import(supplier.id, csv_file_path, sync: sync)
-    VipImporting.delay(queue: :standard).import(supplier.id, csv_file_path, sync: sync)
+    # VipImporting.import(site.id, csv_file_path, sync: sync)
+    VipImporting.delay(queue: :standard).import(site.id, csv_file_path, sync: sync)
     data[:data].size
   rescue => e
     Rails.logger.error "vip importing error: #{e.message}"
@@ -41,12 +41,12 @@ class VipImporting < ActiveRecord::Base
     { error: true, message: '文件格式不正确' }
   end
 
-  def self.import(supplier_id, csv_file_path, sync: false)
-    VipImporting.new(supplier_id: supplier_id).import(csv_file_path, sync: sync)
+  def self.import(site_id, csv_file_path, sync: false)
+    VipImporting.new(site_id: site_id).import(csv_file_path, sync: sync)
   end
 
   def vip_grades
-    vip_grades_hash = Hash[supplier.vip_grades.visible.pluck(:name, :id)]
+    vip_grades_hash = Hash[site.vip_grades.visible.pluck(:name, :id)]
     self.vip_grade_names = vip_grades_hash.keys
     self
   end
@@ -85,14 +85,14 @@ class VipImporting < ActiveRecord::Base
 
   def insert_data(data, sync: false)
     total_count, sync_count = 0, 0
-    vip_grades_hash = Hash[supplier.vip_grades.visible.pluck(:name, :id)]
+    vip_grades_hash = Hash[site.vip_grades.visible.pluck(:name, :id)]
     vip_grade_names = vip_grades_hash.keys
 
     data[:data].each do |attrs|
       line = attrs.delete(:line)
-      attrs.merge!(supplier_id: supplier_id, vip_grade_names: vip_grade_names, vip_grade_id: vip_grades_hash[attrs[:vip_grade_name]])
+      attrs.merge!(site_id: site_id, vip_grade_names: vip_grade_names, vip_grade_id: vip_grades_hash[attrs[:vip_grade_name]])
       importing = VipImporting.new(attrs)
-      VipImporting.where(attrs.slice(:supplier_id, :mobile)).delete_all
+      VipImporting.where(attrs.slice(:site_id, :mobile)).delete_all
       if importing.save # 导入会员成功
         sync_count += 1 if sync && importing.sync_vip_user!
         total_count += 1
@@ -107,7 +107,7 @@ class VipImporting < ActiveRecord::Base
   end
 
   def activate_by(user)
-    return if user.blank? || supplier.vip_users.visible.where(mobile: mobile).exists?
+    return if user.blank? || site.vip_users.visible.where(mobile: mobile).exists?
     fields = %w(user_no name mobile vip_grade_id usable_amount total_recharge_amount total_consume_amount total_points usable_points)
     value_hash = fields.inject({}) do |h, field|
       if field == 'user_no'
@@ -117,11 +117,11 @@ class VipImporting < ActiveRecord::Base
       end
     end
     attrs = { user_id: user.id, is_sync: true, created_at: open_card_time }.merge!(value_hash)
-    supplier.vip_users.create(attrs)
+    site.vip_users.create(attrs)
   end
 
   def sync_vip_user!
-    vip_user = VipUser.where(is_sync: false, supplier_id: supplier_id, mobile: mobile).first
+    vip_user = VipUser.where(is_sync: false, site_id: site_id, mobile: mobile).first
     if vip_user
       vip_user.total_points += total_points
       vip_user.usable_points += usable_points
@@ -138,7 +138,7 @@ class VipImporting < ActiveRecord::Base
     if (HEADER_HASH.values.take(3) - data[:headers]).present?
       hash.merge!(error: true, message: '文件格式不正确')
     else
-      vip_grade_names = supplier.vip_grades.visible.pluck(:name)
+      vip_grade_names = site.vip_grades.visible.pluck(:name)
       data[:data].each { |attrs|
         if attrs[:vip_grade_name].blank?
           hash.merge!(error: true, message: '等级不能为空') and break

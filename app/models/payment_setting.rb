@@ -117,7 +117,7 @@ class PaymentSetting < ActiveRecord::Base
     return unless wxpay? || weixinpay?
     return if app_id.blank? || app_secret.blank?
 
-    wx_mp_user = supplier.try(:wx_mp_user)
+    wx_mp_user = site.try(:wx_mp_user)
     if wx_mp_user# && wx_mp_user.app_id.blank? && wx_mp_user.app_secret.blank?
       wx_mp_user.update_attributes!(app_id: app_id, app_secret: app_secret)
     end

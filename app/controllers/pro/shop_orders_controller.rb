@@ -189,7 +189,7 @@ class Pro::ShopOrdersController < Pro::ShopBaseController
   end
 
   def print_orders
-    @print_orders = PrintOrder.where(supplier_id: params[:supplier_id]).basic_columns.includes(:shop_order)
+    @print_orders = PrintOrder.where(site_id: params[:site_id]).basic_columns.includes(:shop_order)
   end
 
   # 后台跳过某次打印

@@ -72,7 +72,7 @@ class WebsitePicture < ActiveRecord::Base
   def sub_menus
     ret = Array.new
     if self.games? && !self.has_children?
-      games = self.website.supplier.assistants.games.enabled
+      games = self.website.site.assistants.games.enabled
       games.each do |game|
         ret << game
       end
@@ -108,13 +108,13 @@ class WebsitePicture < ActiveRecord::Base
     self.tel = nil
     if self.docking_function.to_i == 1
       self.menuable_type = 'Activity'
-      self.menuable_id = website.try(:supplier).try(:wshop).try(:id)
+      self.menuable_id = website.try(:site).try(:wshop).try(:id)
     #elsif vip_center?
     #  self.menuable_type = 'Vip'
-    #  self.menuable_id = website.supplier_id
+    #  self.menuable_id = website.site_id
     #elsif cart?
     #  self.menuable_type = 'EcCart'
-    #  self.menuable_id = website.supplier_id
+    #  self.menuable_id = website.site_id
     elsif self.docking_function.to_i == 4
       self.menuable_type = 'EcSellerCat'
       self.menuable_id = self.goods_category_id

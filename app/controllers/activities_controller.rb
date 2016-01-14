@@ -217,8 +217,6 @@ class ActivitiesController < ApplicationController
 
       if @activity.blank?
         # @total = 0
-      elsif @activity.old_coupon?
-        @total = as.joins(:activity_property).sum('activity_properties.coupon_count')
       elsif @activity.groups?
         @total = current_site.activity_consumes.where("activity_group_id is not null").count
       else
@@ -229,8 +227,6 @@ class ActivitiesController < ApplicationController
       @total_activity_consumes = current_site.activity_consumes.where("activity_id in (?)", Activity.find(@search_params[:activity_id_eq]))
 
       @activity = current_site.activities.where(id: params[:activity_id_eq]).first
-      if @activity.old_coupon?
-        @total = @activity.activity_properties.first.try(:coupon_count)
       elsif @activity.groups?
         @total = @activity.activity_consumes.count
       else
@@ -439,12 +435,7 @@ class ActivitiesController < ApplicationController
       return render :fight_form
     end
     @activity_type_id = @activity.activity_type_id
-    # @activity.activity_notices = ActivityNotice.notices_for(@activity_type_id)
-    # logger.info @activity.activity_notices
-    if @activity.old_coupon?
-      @activity.ready_activity_notice = ActivityNotice.coupon_ready_notice
-      return render "old_coupons/form"
-    elsif @activity.gua? || @activity.wheel? || @activity.hit_egg?
+    if @activity.gua? || @activity.wheel? || @activity.hit_egg?
       @activity.ready_activity_notice = ActivityNotice.new_ready_notice_by_type(@activity.activity_type_id)
       return render "guas/form"
     elsif @activity.guess?
@@ -618,8 +609,6 @@ class ActivitiesController < ApplicationController
       render layout: 'application_pop'
     elsif @activity.fight?
       render :fight_form
-    elsif @activity.old_coupon?
-      render "old_coupons/form"
     elsif @activity.gua? || @activity.wheel? || @activity.hit_egg?
       render "guas/form"
     end
@@ -731,13 +720,6 @@ class ActivitiesController < ApplicationController
   private
     def set_activity
       @activity = current_site.activities.find params[:id] if params[:id].present?
-      if @activity && @activity.old_coupon? && @activity.ready_activity_notice.present?
-        @activity.ready_activity_notice.summary = @activity.ready_activity_notice.summary
-        day_hour_minute = DateTimeService.second_to_day_hour_minute(@activity.start_at.to_i - Time.now.to_i)
-        day_hour_minute['day'] == 0 ? @activity.ready_activity_notice.summary.to_s.gsub!('{day}天', '') :  @activity.ready_activity_notice.summary.to_s.gsub!('{day}', day_hour_minute['day'].to_s)
-        day_hour_minute['hour'] == 0 ? @activity.ready_activity_notice.summary.to_s.gsub!('{hour}小时', '') :  @activity.ready_activity_notice.summary.to_s.gsub!('{hour}', day_hour_minute['hour'].to_s)
-        @activity.ready_activity_notice.summary.to_s.gsub!('{minute}', day_hour_minute['minute'].to_s)
-      end
     end
 
     def activity_time_valid?

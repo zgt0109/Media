@@ -1,26 +1,6 @@
-# == Schema Information
-#
-# Table name: ec_items
-#
-#  id            :integer          not null, primary key
-#  site_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  ec_shop_id    :integer
-#  cid           :integer
-#  seller_cid    :integer
-#  iid           :string(255)
-#  num_iid       :integer
-#  title         :string(255)      not null
-#  price         :decimal(12, 2)   default(0.0), not null
-#  pic_url       :string(500)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class EcItem < ActiveRecord::Base
 
   belongs_to :site
-  belongs_to :wx_mp_user
 
   belongs_to :ec_seller_cat, :primary_key => :cid, foreign_key: :seller_cid
   has_many :ec_comments
@@ -122,7 +102,6 @@ class EcItem < ActiveRecord::Base
 
   def add_default_attrs
     return unless site
-    self.wx_mp_user_id = site.wx_mp_user.try(:id)
     self.ec_shop_id = site.ec_shop.try(:id)
   end
 end

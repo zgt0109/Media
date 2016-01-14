@@ -1,17 +1,13 @@
 module QiniuHelper
-  def qiniu_img_url(pic, default_pic: "bg_fm.jpg", type: nil)
-    if pic.present?
-      if type
-        url = "#{qiniu_image_url(pic)}?imagePreview/#{type}"
-      else
-        url = qiniu_image_url(pic)
-      end
+  def qiniu_img_url(pic_key, default_pic: "bg_fm.jpg", type: nil)
+    if pic_key.present?
+      type ? "#{qiniu_image_url(pic_key)}?imagePreview/#{type}" : qiniu_image_url(pic_key)
     else
-      url = default_pic
+      default_pic
     end
   end
 
-  def qiniu_auto_orient_url(pic)  
-    "#{qiniu_image_url(pic)}?imageMogr2/auto-orient"
+  def qiniu_auto_orient_url(pic_key)  
+    "#{qiniu_image_url(pic_key)}?imageMogr2/auto-orient"
   end
 end

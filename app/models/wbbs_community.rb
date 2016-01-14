@@ -1,6 +1,5 @@
 class WbbsCommunity < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   has_many :wbbs_topics
   has_many :wbbs_replies
   has_one :activity, as: :activityable, conditions: { activity_type_id: ActivityType::WBBS_COMMUNITY }
@@ -17,11 +16,11 @@ class WbbsCommunity < ActiveRecord::Base
   end
 
   def normal_users
-    WxUser.where(id: user_ids).message_normal
+    User.where(id: user_ids).message_normal
   end
 
-  def wx_users
-    WxUser.where(id: user_ids)
+  def users
+    User.where(id: user_ids)
   end
 
   def user_ids
@@ -29,7 +28,7 @@ class WbbsCommunity < ActiveRecord::Base
   end
 
   def forbidden_users
-    WxUser.where(id: user_ids).message_forbidden
+    User.where(id: user_ids).message_forbidden
   end
 
   def mark_delete!
@@ -47,6 +46,6 @@ class WbbsCommunity < ActiveRecord::Base
 
   def create_wbbs_topics( content, poster )
     poster_name, poster_avatar = poster.try(:nickname), poster.try(:headimgurl)
-    wbbs_topics.create( supplier_id: supplier_id || activity.supplier_id, wx_mp_user_id: wx_mp_user_id || activity.wx_mp_user_id , content: content, poster: poster, poster_name: poster_name, poster_avatar: poster_avatar )
+    wbbs_topics.create( site_id: site_id || activity.site_id, content: content, poster: poster, poster_name: poster_name, poster_avatar: poster_avatar )
   end
 end

@@ -1,7 +1,6 @@
 class Booking < ActiveRecord::Base
 
   belongs_to :site
-  belongs_to :wx_mp_user
 
   has_one :activity, as: :activityable, dependent: :destroy
 
@@ -11,12 +10,12 @@ class Booking < ActiveRecord::Base
   accepts_nested_attributes_for :activity
 
   def clear_menus!
-    supplier.booking_categories.clear
+    site.booking_categories.clear
   end
 
   def multilevel_menu params
-    return [1, []] unless supplier
-    booking_categories, booking_categories_selects = supplier.booking_categories.root.order(:sort), []
+    return [1, []] unless site
+    booking_categories, booking_categories_selects = site.booking_categories.root.order(:sort), []
     index = 1
     booking_categories_selects.push([index, booking_categories])
     return booking_categories_selects if params["booking_category_id#{index}".to_sym].to_i <= 0 && params[:action] == 'index'
@@ -30,9 +29,9 @@ class Booking < ActiveRecord::Base
 
   def show_items params
 
-    return [] unless supplier
+    return [] unless site
     items = []
-    supplier.booking_categories.root.each do |category|
+    site.booking_categories.root.each do |category|
       if category.has_children?
         if category.id == params[:booking_category_id].to_i
           items << category.booking_items
@@ -46,7 +45,7 @@ class Booking < ActiveRecord::Base
       end
     end if params[:booking_category_id].present?
 
-    items = supplier.booking_items unless params[:booking_category_id].present?
+    items = site.booking_items unless params[:booking_category_id].present?
 
     items = items.flatten
 

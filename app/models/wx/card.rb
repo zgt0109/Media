@@ -1,7 +1,7 @@
 class Wx::Card < ActiveRecord::Base
   include WxCardApi
   serialize :location_id_list, Array
-  belongs_to :site
+  belongs_to :wx_mp_user
   has_many :consumes, as: :consumable
 
   scope :latest, -> { order('id DESC') }
@@ -87,8 +87,6 @@ class Wx::Card < ActiveRecord::Base
 
   before_create :card_create
 
-  delegate :wx_mp_user, to: :supplier, allow_nil: true
-
   def name
     title
   end
@@ -125,7 +123,7 @@ class Wx::Card < ActiveRecord::Base
   def basic_card_info(wx_user)
     card_list = []
     hash = {card_id: card_id, card_ext: {}}
-    consume = wx_mp_user.consumes.create(wx_user_id: wx_user.id, consumable: self, status: Consume::HIDDEN)
+    consume = wx_mp_user.consumes.create(user_id: user.id, consumable: self, status: Consume::HIDDEN)
     hash[:card_ext][:code] = consume.code
     hash[:card_ext][:timestamp] = Time.now.to_i.to_s
     hash[:card_ext][:signature] = Digest::SHA1.hexdigest([wx_mp_user.app_secret.to_s, hash[:card_ext][:timestamp], card_id.to_s, consume.code].sort.join)

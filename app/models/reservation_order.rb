@@ -1,7 +1,6 @@
 class ReservationOrder < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :activity
   has_many :custom_values, as: :customized
   scope :today, -> { where(created_at:  Date.today.beginning_of_day..Date.today.end_of_day) }
@@ -40,7 +39,7 @@ class ReservationOrder < ActiveRecord::Base
 
   private
     def igetui
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'supplier', role_id: supplier_id, token: supplier.try(:auth_token), messageable_id: self.id, messageable_type: 'ReservationOrder', source: 'winwemedia_reservation', message: '您有一笔新的微预定订单，请及时处理。'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site_id, token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'ReservationOrder', source: 'winwemedia_reservation', message: '您有一笔新的微预定订单，请及时处理。'})
     rescue => e
       Rails.logger.info "#{e}"
     end

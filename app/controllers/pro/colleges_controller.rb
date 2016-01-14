@@ -1,16 +1,15 @@
 class Pro::CollegesController < Pro::CollegesBaseController
-  before_filter :get_wx_mp_user
   skip_before_filter :require_college, only: [:index, :create, :show]
   before_filter :validate_college_info, only: :update
   before_filter :validate_college_activity, only: :message
 
   def index
-    @college = current_user.college || College.new
-    @college.activity ||= current_user.wx_mp_user.create_activity_for_college
+    @college = current_site.college || College.new
+    @college.activity ||= current_site.wx_mp_user.create_activity_for_college
   end
 
   def create
-    @college = current_user.build_college(params[:college].merge(wx_mp_user_id: current_user.wx_mp_user.id))
+    @college = current_site.build_college(params[:college])
     if @college.save
       redirect_to colleges_path, notice: '保存信息成功'
     else
@@ -29,7 +28,7 @@ class Pro::CollegesController < Pro::CollegesBaseController
   end
 
   def show
-    @college = current_user.college
+    @college = current_site.college
     @activity = @college.activity
     render :index
   end
@@ -40,13 +39,13 @@ class Pro::CollegesController < Pro::CollegesBaseController
   end
 
   def message
-    @college = current_user.college || College.new
-    @activity = current_user.college.try(:activity)
-    @activity ||= current_user.wx_mp_user.create_activity_for_college
+    @college = current_site.college || College.new
+    @activity = current_site.college.try(:activity)
+    @activity ||= current_site.create_activity_for_college
   end
 
   def create_activity
-    @activity = current_user.wx_mp_user.create_activity_for_college
+    @activity = current_site.create_activity_for_college
     if @activity.update_attributes params[:activity]
       redirect_to message_colleges_path, notice: '保存信息成功'
     else
@@ -63,12 +62,7 @@ class Pro::CollegesController < Pro::CollegesBaseController
     end
 
     def validate_college_activity
-      redirect_to colleges_path, alert: '请先设置微信消息' if current_user.college.activity.blank?
-    end
-
-    def get_wx_mp_user
-      @wx_mp_user = current_user.wx_mp_user
-      return redirect_to wx_mp_users_path, alert: '请先添加微信公共帐号' unless @wx_mp_user
+      redirect_to colleges_path, alert: '请先设置微信消息' if current_site.college.activity.blank?
     end
 
 end

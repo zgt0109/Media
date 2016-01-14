@@ -37,24 +37,6 @@ class WxMpUser < ActiveRecord::Base
   has_many :wx_users, inverse_of: :wx_mp_user
   has_many :wx_menus
   has_many :cards, class_name: "Wx::Card"
-  has_many :activities
-  has_many :activity_consumes
-  has_many :activity_users
-  has_many :ec_shops
-  has_many :reservation_orders
-  has_many :consumes
-  has_many :qrcodes
-  has_many :qrcode_logs
-
-  has_one  :shop
-  has_one  :website, conditions: { website_type: Website::MICRO_SITE }
-  has_one  :life, class_name: 'Website', conditions: { website_type: Website::MICRO_LIFE }
-  has_one  :vip_card
-  has_one  :trip
-  has_one  :share_photo_setting, inverse_of: :wx_mp_user
-  has_one  :house, inverse_of: :wx_mp_user
-  has_one  :wbbs_community
-  has_one  :print_setting
 
   before_create { generate_token(:token) }
   before_create :generate_code
@@ -62,7 +44,7 @@ class WxMpUser < ActiveRecord::Base
   after_create :generate_url
 
   def self.generate_key
-    'vcl'+SecureRandom.hex(20)
+    'win'+SecureRandom.hex(20)
   end
 
   def self.find_by_code_or_id_or_app_id(code, id, app_id)
@@ -243,7 +225,6 @@ class WxMpUser < ActiveRecord::Base
     return false
   end
 
-
   private
 
   def generate_token(column)
@@ -267,10 +248,6 @@ class WxMpUser < ActiveRecord::Base
     self.app_secret            = app_secret.to_s.strip
     self.encoding_aes_key      = encoding_aes_key.to_s.strip
     self.last_encoding_aes_key = encoding_aes_key_was if encoding_aes_key_changed?
-  end
-
-  def negative_vip_users_account_id
-    vip_users.update_all(wx_mp_user_id: -Time.now.to_i, account_id: -account_id.abs) rescue nil
   end
 
 end

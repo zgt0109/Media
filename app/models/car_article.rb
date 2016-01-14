@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: car_articles
-#
-#  id           :integer          not null, primary key
-#  car_shop_id  :integer          not null
-#  title        :string(255)      not null
-#  content      :text             default(""), not null
-#  status       :integer          default(1), not null
-#  article_type :integer          default(0), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#
-
 class CarArticle < ActiveRecord::Base
 	validates :title, :content, :article_type, presence: true
 

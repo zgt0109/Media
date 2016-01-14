@@ -6,7 +6,6 @@ class HospitalDoctor < ActiveRecord::Base
   validates_presence_of :hospital_job_titles, message: '职称不能为空'
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :hospital
   has_many :hospital_orders
   has_many :hospital_comments
@@ -68,8 +67,7 @@ class HospitalDoctor < ActiveRecord::Base
   def add_default_properties!
     return unless self.hospital
 
-    self.supplier_id = self.hospital.supplier_id
-    self.wx_mp_user_id = self.hospital.wx_mp_user_id
+    self.site_id = self.hospital.site_id
   end
 
 end

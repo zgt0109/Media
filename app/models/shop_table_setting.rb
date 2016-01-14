@@ -1,24 +1,5 @@
-# == Schema Information
-#
-# Table name: shop_table_settings
-#
-#  id              :integer          not null, primary key
-#  supplier_id     :integer          not null
-#  wx_mp_user_id   :integer          not null
-#  shop_id         :integer          not null
-#  shop_branch_id  :integer          not null
-#  date            :date             not null
-#  open_hall_count :integer          default(0), not null
-#  open_loge_count :integer          default(0), not null
-#  status          :integer          default(1), not null
-#  description     :text
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-
 class ShopTableSetting < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :shop
   belongs_to :shop_branch
   # attr_accessible :date, :open_hall_count, :open_loge_count
@@ -42,7 +23,6 @@ class ShopTableSetting < ActiveRecord::Base
     return unless self.shop_branch
 
     self.shop_id = self.shop_branch.shop_id
-    self.supplier_id = self.shop_branch.supplier_id
-    self.wx_mp_user_id = self.shop_branch.wx_mp_user_id
+    self.site_id = self.shop_branch.site_id
   end
 end

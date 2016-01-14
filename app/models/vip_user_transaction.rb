@@ -89,14 +89,14 @@ class VipUserTransaction < ActiveRecord::Base
       message = "您卡号为#{vip_user.user_no}的会员卡于#{time}在#{vip_user.merchant_name}"
       message << ((pay_up? || pay_down?) ? direction_type_name : "进行金额调整操作，#{in? ? '上' : '下'}调")
       message << "#{sprintf('%.2f', amount.round(2))}元，交易后余额为#{sprintf('%.2f', usable_amount.round(2))}元。"
-      supplier.send_message(vip_user.mobile, message, "会员卡")
+      site.send_message(vip_user.mobile, message, "会员卡")
     end
   end
 
   def self.return_amount_to_vip_user!(vip_user, amount, params = {})
     VipUserTransaction.transaction do
       vip_user.change_amount_by!(amount)
-      vip_user.vip_user_transactions.create! supplier_id:     vip_user.supplier_id,
+      vip_user.vip_user_transactions.create! site_id:     vip_user.site_id,
                                              direction:      VipUserTransaction::IN,
                                              direction_type: VipUserTransaction::EC_RETURN,
                                              amount:         amount,
@@ -135,7 +135,7 @@ class VipUserTransaction < ActiveRecord::Base
       direction:      IN,
       total_amount:   vip_user.total_amount,
       usable_amount:  vip_user.usable_amount,
-      supplier_id:    vip_user.supplier_id,
+      site_id:    vip_user.site_id,
     }.merge(extra_attrs)
   end
 

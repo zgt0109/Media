@@ -1,6 +1,5 @@
 class HospitalJobTitle < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :hospital
   
   # has_many :hospital_doctors, through: :hospital_doctor_job_titles
@@ -22,7 +21,6 @@ class HospitalJobTitle < ActiveRecord::Base
   end
 
   def add_default_properties!
-    self.supplier_id = self.hospital.supplier_id
-    self.wx_mp_user_id = self.hospital.wx_mp_user_id
+    self.site_id = self.hospital.site_id
   end
 end

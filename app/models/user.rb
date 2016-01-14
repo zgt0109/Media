@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   belongs_to :site
 
-  has_one :wx_user
+  has_one :user
   has_one :vip_user
 
   has_one :broker, class_name: '::Brokerage::Broker'
@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   has_many :wbbs_notifications, as: :notifier
   has_many :repairs, class_name: 'WxPlotRepairComplain', conditions: { category: WxPlotRepairComplain::REPAIR }, order: 'wx_plot_repair_complains.created_at DESC'
   has_many :complain_advices, class_name: 'WxPlotRepairComplain', conditions: { category: [WxPlotCategory::COMPLAIN, WxPlotCategory::ADVICE] }, order: 'wx_plot_repair_complains.created_at DESC'
-  has_many :wx_invites, foreign_key: :from_wx_user_id
+  has_many :wx_invites, foreign_key: :from_user_id
 
   delegate :leave_message_forbidden, to: :wx_user, allow_nil: true
 
@@ -120,10 +120,6 @@ class User < ActiveRecord::Base
     headimgurl || '/assets/wx_wall/user-img.jpg'
   end
 
-  def belongs_to?(supplier)
-    wx_mp_user_id == supplier.wx_mp_user.id
-  end
-
   def guess_left_count(activity)
    return '无限' if (activity.guess_setting.user_day_answer_limit == -1 && activity.guess_setting.user_total_answer_limit == -1)
    arr = []
@@ -145,13 +141,13 @@ class User < ActiveRecord::Base
   end
 
   def guess_participations_all(activity)
-    activity.guess_participations.where(wx_user_id: id)
+    activity.guess_participations.where(user_id: id)
   end
 
   def gua_left_count(activity_id)
     left_count_arr = []
     activity = Activity.find(activity_id)
-    self_lottery_draws = activity.lottery_draws.where(wx_user_id: id)
+    self_lottery_draws = activity.lottery_draws.where(user_id: id)
     if activity.activity_property.day_partake_limit != -1
       left_count_arr << activity.activity_property.day_partake_limit - self_lottery_draws.today.count #每人每天参与次数
     end
@@ -166,7 +162,7 @@ class User < ActiveRecord::Base
   def qrcode_user_amount(column_name,amount)
     qrcode = qrcode_logs.normal.earliest.first
     if qrcode
-      qrcode_user = qrcode_users.where(supplier_id: supplier_id, qrcode_id: qrcode.try(:qrcode_id)).first_or_create
+      qrcode_user = qrcode_users.where(site_id: site_id, qrcode_id: qrcode.try(:qrcode_id)).first_or_create
       qrcode_user[column_name] += amount.to_f
       qrcode_user.save if qrcode_user[column_name] >= 0
     end

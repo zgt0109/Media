@@ -50,8 +50,8 @@ class Material < ActiveRecord::Base
     end
   end
 
-  def pic_url(type = :large)
-    qiniu_image_url(pic_key) || nil
+  def pic_url
+    qiniu_image_url(pic_key)
   end
 
   def qiniu_pic_url

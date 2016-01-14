@@ -131,7 +131,7 @@
                          <% end -%>
 
 
-                        <% if activity.survey? %>
+                        <% if activity.surveys? %>
                           <%- if ['未配置'].include? show_activity_status(activity)  %>
                             <a  onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="修改微调研" data-iframe="<%= edit_activity_path(activity) %>">修改</a>
                           <%- else %>
@@ -305,7 +305,7 @@
            <% end -%>
 
 
-          <% if activity.survey? %>
+          <% if activity.surveys? %>
             <%- if ['未配置'].include? show_activity_status(activity)  %>
               <a class="green" onclick="popUrl(this)" data-name="name" data-w="900" data-h="0.8" data-title="修改微调研" data-url="<%= edit_activity_path(activity) %>">修改</a>
             <%- else %>

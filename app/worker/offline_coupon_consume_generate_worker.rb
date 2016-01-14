@@ -7,7 +7,7 @@ class OfflineCouponConsumeGenerateWorker
     return unless coupon
 
     coupon.limit_count.times do
-      coupon.consumes.create(wx_mp_user_id: coupon.wx_mp_user_id, wx_user_id: -1)
+      coupon.consumes.create(site_id: coupon.site_id, user_id: -1)
     end
   end
 end

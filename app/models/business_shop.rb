@@ -36,7 +36,7 @@ class BusinessShop < ActiveRecord::Base
 
   def save_vip_card_branch_to_db
     site = website.site
-    site.wx_mp_user.create_activity_for_vip_card unless site.vip_card
+    site.create_activity_for_vip_card unless site.vip_card
     unless vip_card_branch
       create_vip_card_branch(name: '店铺', discount_name: '微生活店铺', vip_card: site.vip_card(true), pic_key: site.vip_card.cover_pic_key)
     end

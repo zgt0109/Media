@@ -339,15 +339,12 @@ class Api::WeixinController < ApplicationController
     # elsif activity.wifi?
     #   @wx_user.wifi!
     #   return Weixin.respond_text(@from_user_name, @to_user_name, '请输入wifi验证码')
-    elsif activity.old_coupon?
-      result = ActivityNotice.respond_old_coupon(@wx_user, @mp_user, activity)
-      result.is_a?(String) ? result : respond_news_with_activity_notice(@from_user_name, @to_user_name, *result)
     elsif activity.gua? || activity.wheel? || activity.hit_egg? || activity.slot? || activity.micro_aid?
       return Weixin.respond_text(@from_user_name, @to_user_name, '活动还未开始') unless activity.setted?
       activity_notice = ActivityNotice.ready_or_active_notice(activity)
       respond_news_with_activity_notice(@from_user_name, @to_user_name, activity_notice)
     elsif activity.fight?
-      if activity.setted? || activity.apply?
+      if activity.setted? || activity.enroll?
         activity_notice = activity.activity_notices.active.first
         respond_news_with_activity_notice(@from_user_name, @to_user_name, activity_notice)
       else

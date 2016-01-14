@@ -1,22 +1,3 @@
-# == Schema Information
-#
-# Table name: ec_seller_cats
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  ec_shop_id    :integer
-#  parent_id     :integer          default(0)
-#  cid           :integer
-#  parent_cid    :integer          default(0)
-#  name          :string(255)
-#  pic_url       :string(255)
-#  sort_order    :integer          default(1), not null
-#  status        :string(255)      default("normal"), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class EcSellerCat < ActiveRecord::Base
   # attr_accessible :cid, :name, :parent_cid, :parent_id, :pic_url, :sort_order, :type
 
@@ -38,9 +19,8 @@ class EcSellerCat < ActiveRecord::Base
   scope :root, -> { where(parent_cid: 0) }
 
   enum_attr :status, :in => [
-      ['deleted',  '已删除'],
-      ['normal',  '正常']
-
+    ['deleted',  '已删除'],
+    ['normal',  '正常']
   ]
 
   def delete!
@@ -113,7 +93,7 @@ class EcSellerCat < ActiveRecord::Base
   end
 
   def multilevel_menu_up index, params, ec_seller_cat_selects
-    return unless supplier
+    return unless site
     return unless parent_id
     params["ec_seller_cat_id#{index}".to_sym] = id
     if parent_id == 0
@@ -154,7 +134,6 @@ class EcSellerCat < ActiveRecord::Base
     update_attributes(cid: id, parent_cid: parent_id) unless cid
   end
 
-
   def update_items_seller_cid
     parent.ec_items.update_all(seller_cid: id) if parent && parent.try(:children).count == 1
   end
@@ -163,8 +142,7 @@ class EcSellerCat < ActiveRecord::Base
 
   def add_default_attrs
     return unless ec_shop
-    self.wx_mp_user_id = ec_shop.wx_mp_user_id
-    self.supplier_id = ec_shop.supplier_id
+    self.site_id = ec_shop.site_id
   end
 
 end

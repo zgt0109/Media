@@ -6,8 +6,6 @@ class ActivityNotice < ActiveRecord::Base
     ['active', 1, '进行中']
   ]
 
-  before_create :set_default_pic
-
   validates :title, presence: true, length: { maximum: 64 }
 
   belongs_to :activity
@@ -76,63 +74,12 @@ class ActivityNotice < ActiveRecord::Base
       activity_notice
     end
 
-    def respond_old_coupon(wx_user, wx_mp_user, activity)
-      return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '活动还未开始') unless activity.setted?
-
-      options = {}
-      if activity.activity_status == Activity::WARM_UP
-        activity_notice = activity.activity_notices.ready.first
-        if activity_notice
-          hash = DateTimeService.second_to_day_hour_minute(activity.start_at.to_i - Time.now.to_i)
-          day, hour = hash['day'], hash['hour']
-          activity_notice.summary.to_s.gsub!('{day}天',   day == 0 ? '' : "#{day}天")
-          activity_notice.summary.to_s.gsub!('{hour}小时', hour == 0 ? '' : "#{hour}小时")
-          activity_notice.summary.to_s.gsub!('{minute}',  hash['minute'].to_s)
-        end
-      elsif activity.activity_status == Activity::HAS_ENDED
-        activity_notice = activity.activity_notices.stopped.first
-      elsif activity.activity_status == Activity::UNDER_WAY
-        if activity.activity_consumes.count < activity.activity_property.coupon_count
-          system_can = (activity.consume_day_allow_count.blank?) || (activity.activity_consumes.created_at_today.count < activity.consume_day_allow_count.to_i)
-          if system_can
-            user = wx_user.user
-            user_can = (user) && (user.activity_consumes.where(activity_id: activity.id).count < activity.activity_property.get_limit_count)
-            if user_can
-              activity_consume = activity.activity_consumes.create(site_id: activity.site_id, user_id: user.id)
-              activity_notice = activity.activity_notices.active.first
-              if activity_notice
-                activity_notice.summary.to_s.gsub!('{code}', activity_consume.code.to_s)
-                options[:code] = activity_consume.code.to_s
-              end
-            else
-              return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, activity.activity_property.repeat_draw_msg)
-            end
-          else
-            return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '今日的优惠券已发完啦')
-          end
-        else #已发放完毕
-          activity_notice = activity.activity_notices.stopped.first
-        end
-      else
-        return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '活动已结束')
-      end
-      [activity_notice, options]
-    end
-  end
-
   def default_pic_url
     qiniu_image_url(Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id])
   end
 
   def pic_url
-    qiniu_image_url(pic_key)
+    qiniu_image_url(pic_key) || default_pic_url
   end
-
-  private
-    def set_default_pic
-      if pic_url.blank?
-        self.pic_key = Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
-      end
-    end
 
 end

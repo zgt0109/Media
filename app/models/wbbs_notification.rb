@@ -24,7 +24,7 @@ class WbbsNotification < ActiveRecord::Base
   end
 
   def notifiable_url
-    return "http://#{Settings.mhostname}/#{notify_topic.supplier_id}/wbbs_topics/#{notify_topic.id}" if notify_topic
+    return "http://#{Settings.mhostname}/#{notify_topic.site_id}/wbbs_topics/#{notify_topic.id}" if notify_topic
   end
 
 end

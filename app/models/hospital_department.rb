@@ -3,7 +3,6 @@ class HospitalDepartment < ActiveRecord::Base
   validates :sort, presence: true
   
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :hospital
   
   belongs_to :parent, class_name: 'HospitalDepartment', foreign_key: :parent_id
@@ -43,7 +42,6 @@ class HospitalDepartment < ActiveRecord::Base
   
   def add_default_attrs
     return unless hospital
-    self.supplier_id = hospital.supplier_id
-    self.wx_mp_user_id = hospital.wx_mp_user_id
+    self.site_id = hospital.site_id
   end
 end

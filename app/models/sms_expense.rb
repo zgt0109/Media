@@ -5,7 +5,7 @@ class SmsExpense < ActiveRecord::Base
   enum_attr :status, :in => [
     ['succeed', 1, '发送成功'],
     ['not_sufficient', -4, '余额不足'],
-    ['supplier_not_sufficient', -99, '商户套餐余额不足'],
+    ['account_not_sufficient', -99, '商户套餐余额不足'],
   ]
 
   #收费模块

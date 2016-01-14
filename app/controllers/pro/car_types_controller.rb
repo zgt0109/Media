@@ -51,8 +51,8 @@ class Pro::CarTypesController < ApplicationController
 
 	def activity_notice
 		now = Time.now
-		@car_activity_notice = @car_shop.car_activity_notices.car_type.first || @car_shop.car_activity_notices.new(supplier_id: @car_shop.supplier_id, wx_mp_user_id: @car_shop.wx_mp_user_id, notice_type: CarActivityNotice::CAR_TYPE)
-		@car_activity_notice.activity = Activity.new(supplier_id: @car_shop.supplier_id, wx_mp_user_id: @car_shop.wx_mp_user_id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
+		@car_activity_notice = @car_shop.car_activity_notices.car_type.first || @car_shop.car_activity_notices.new(site_id: @car_shop.site_id, notice_type: CarActivityNotice::CAR_TYPE)
+		@car_activity_notice.activity = Activity.new(site_id: @car_shop.site_id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
 	end
 
 	private

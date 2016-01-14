@@ -1,6 +1,6 @@
 class QrcodeUser < ActiveRecord::Base
 	belongs_to :site
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :qrcode
 
   scope :one_weeks, ->(today) { where("created_date >= ? and created_date <= ?", (today - 6.day), today) }

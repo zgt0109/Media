@@ -25,11 +25,11 @@ class Print < ActiveRecord::Base
   end
 
   def self.postcard?(wx_user)
-    wx_user.postcard? && print_url(wx_user.supplier_id)
+    wx_user.postcard? && print_url(wx_user.site_id)
   end
 
   def self.respond_postcard_img(wx_user, wx_mp_user, raw_post)
-    url = print_url(wx_mp_user.supplier_id)
+    url = print_url(wx_mp_user.site_id)
     result = RestClient.post(url, raw_post, content_type: :xml, accept: :xml)
     Print.normalize_wx_text_response(wx_user, wx_mp_user, result)
   end
@@ -43,7 +43,7 @@ class Print < ActiveRecord::Base
         wx_user.normal!
         Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '您已经退出打印模式')
       else
-        print_url = print_url(wx_user.supplier_id)
+        print_url = print_url(wx_user.site_id)
         return unless print_url
         wx_user.touch :match_at
         result = RestClient.post(print_url, raw_post, content_type: :xml, accept: :xml)

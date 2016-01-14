@@ -41,7 +41,7 @@ class WebsitePreviewPicWorker
         # website.update_attributes(preview_pic: '')
         file_name = "logo.jpg"
         pic = pic_dir + file_name
-        url = [ host, website.supplier_id ].join('/')
+        url = [ host, website.site_id ].join('/')
         puts " website options: url:#{url} pic:#{pic}"
 
         begin
@@ -59,7 +59,7 @@ class WebsitePreviewPicWorker
         if website_menu.has_children?
           file_name = "#{website_menu.id}.jpg"
           pic = pic_dir + file_name
-          url = [ host, website.supplier_id, 'channel', website_menu.id ].join('/')
+          url = [ host, website.site_id, 'channel', website_menu.id ].join('/')
           puts "website_menu options: url:#{url} pic:#{pic}"
 
           begin

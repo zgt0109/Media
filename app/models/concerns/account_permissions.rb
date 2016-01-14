@@ -44,7 +44,7 @@ module AccountPermissions
     {
       id:                id,
       username:          nickname,
-      role:              'supplier',
+      role:              'account',
       token:             auth_token,
       expired_at:        expired_at.try(:strftime, '%F'),
       account_type_name: account_type_name,

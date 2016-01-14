@@ -1,19 +1,5 @@
-# == Schema Information
-#
-# Table name: car_activity_notices
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  car_shop_id   :integer          not null
-#  notice_type   :integer          default(1), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class CarActivityNotice < ActiveRecord::Base
 	belongs_to :car_shop
-  belongs_to :wx_mp_user
   has_one :activity, as: :activityable, order: :activity_type_id, dependent: :destroy
 
 	accepts_nested_attributes_for :activity

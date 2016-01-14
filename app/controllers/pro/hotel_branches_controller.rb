@@ -9,7 +9,7 @@ class Pro::HotelBranchesController < Pro::HotelsBaseController
   end
 
   def new
-    @hotel_branch = @hotel.hotel_branches.new(supplier_id: current_user.id, wx_mp_user_id: @hotel.wx_mp_user_id)
+    @hotel_branch = @hotel.hotel_branches.new(site_id: current_site.id)
   end
 
   def edit

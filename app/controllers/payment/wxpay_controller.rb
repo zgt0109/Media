@@ -43,18 +43,18 @@ class Payment::WxpayController < ApplicationController
   end
 
   def test
-    @supplier = Account.where(id: params[:supplier_id]).first
-    return render text: "请传入商户ID" unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return render text: "请传入商户ID" unless @account
 
-    @wxpay = @supplier.payment_settings.weixinpay.first
+    @wxpay = @account.site.payment_settings.weixinpay.first
     return render text: "请先设置微信支付信息" unless @wxpay
 
-    attrs = {supplier_id: @supplier.id, wx_mp_user_id: @supplier.wx_mp_user.id, wx_user_id: 10025,ec_shop_id: (@supplier.ec_shop.id rescue 2),total_amount: 0.01}
+    attrs = {account_id: @account.id, user_id: 10025, ec_shop_id: (@account.site.ec_shop.id rescue 2),total_amount: 0.01}
     @order = EcOrder.create(attrs)#.first_or_create
 
     @payment = Payment.setup({
       payment_type_id: 10001,
-      supplier_id: @supplier.id,
+      account_id: @account.id,
       customer_id: @order.wx_user_id,
       customer_type: 'WxUser',
       paymentable_id: @order.id,
@@ -70,17 +70,17 @@ class Payment::WxpayController < ApplicationController
 
   # TODO 需要用网页授权获取openid
   def pay
-    @supplier = Account.where(id: params[:supplier_id]).first
-    return render json: {errcode: 001, errmsg: "supplier not found"} unless @supplier
+    @account = Account.where(id: params[:account_id]).first
+    return render json: {errcode: 001, errmsg: "account not found"} unless @account
 
     if params[:openid].present?
-      @wx_user = @supplier.try(:wx_mp_user).try(:wx_users).where(openid: params[:openid]).first
-      @wx_user = WxUser.follow(@supplier.wx_mp_user, wx_user_openid: params[:openid], wx_mp_user_openid: @supplier.wx_mp_user.try(:openid)) unless @wx_user
+      @wx_user = @account.try(:wx_mp_user).try(:wx_users).where(openid: params[:openid]).first
+      @wx_user = WxUser.follow(@account.site.wx_mp_user, wx_user_openid: params[:openid], wx_mp_user_openid: @account.site.wx_mp_user.try(:openid)) unless @wx_user
     else
       return render json: {errcode: 006, errmsg: "weixin user not found"}
     end
 
-    @wxpay = @supplier.payment_settings.weixinpay.first
+    @wxpay = @account.site.payment_settings.weixinpay.first
     return render json: {errcode: 002, errmsg: "please set weixinpay info first"} unless @wxpay
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
@@ -101,10 +101,10 @@ class Payment::WxpayController < ApplicationController
     feedback = WxFeedback.where(feed_back_id: xml['FeedBackId']).first || WxFeedback.new
     msg_type = WxFeedback.msg_type_status xml['MsgType']
     if msg_type == 0
-      attrs = {wx_user_id: wx_user.id, supplier_id: mp_user.try{:supplier}.try{:id}, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
+      attrs = {wx_user_id: wx_user.id, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
               trans_id: xml['TransId'], reason: xml['Reason'], solution: xml['Solution'], ext_info: xml['ExtInfo'],pic_info: xml['PicInfo']}
     else
-      attrs = {wx_user_id: wx_user.id, supplier_id: mp_user.supplier.id, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
+      attrs = {wx_user_id: wx_user.id, wx_mp_user_id: mp_user.id, feed_back_id: xml['FeedBackId'], msg_type:msg_type,
                trans_id: xml['TransId'].to_s, reason: xml['Reason']}
       #attrs = {msg_type: msg_type, reason: xml['Reason']}
     end

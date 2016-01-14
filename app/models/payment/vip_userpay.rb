@@ -23,8 +23,7 @@ class Payment::VipUserpay < Payment::Base
     params[:notify_url] ||= default_params['notify_url']
 
     pay_params = {
-      wx_mp_user_id: wx_mp_user_id,
-      supplier_id: supplier_id,
+      site_id: site_id,
       open_id: open_id,
       out_trade_no: out_trade_no,
       amount: amount,

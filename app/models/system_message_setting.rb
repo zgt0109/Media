@@ -10,7 +10,7 @@ class SystemMessageSetting < ActiveRecord::Base
 
   def view_remind_music
     uri = URI.parse("http://#{FAYE_HOST}/faye")
-    Net::HTTP.post_form(uri, message: {channel: "/system_messages/change/#{supplier_id}", data: {operate: 'play', music: music}}.to_json)
+    Net::HTTP.post_form(uri, message: {channel: "/system_messages/change/#{site_id}", data: {operate: 'play', music: music}}.to_json)
   end
 
 end

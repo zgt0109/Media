@@ -1,26 +1,4 @@
-# == Schema Information
-#
-# Table name: fight_report_cards
-#
-#  id                  :integer          not null, primary key
-#  supplier_id         :integer          not null
-#  wx_mp_user_id       :integer          not null
-#  wx_user_id          :integer          not null
-#  activity_id         :integer          not null
-#  activity_user_id    :integer
-#  score               :integer          default(0), not null
-#  speed               :integer          default(0), not null
-#  win_status          :integer          default(0), not null
-#  status              :integer          default(0), not null
-#  activity_prize_id   :integer
-#  activity_consume_id :integer
-#  description         :text
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#
-
 class FightReportCard < ActiveRecord::Base
-  #attr_accessible :activity_consume_id, :activity_id, :activity_prize_id, :description, :score, :speed, :supplier_id, :win_status, :wx_mp_user_id, :wx_mp_user_id
 
   enum_attr :status, :in => [
     ['unstart', 0, '未开始'],
@@ -37,7 +15,7 @@ class FightReportCard < ActiveRecord::Base
   belongs_to :activity_user
   belongs_to :activity_prize
   belongs_to :activity_consume
-  belongs_to :wx_user
+  belongs_to :user
 
   def self.export_excel(search)
     xls_report = StringIO.new

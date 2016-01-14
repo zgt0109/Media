@@ -1,6 +1,6 @@
 class HouseLivePhoto < ActiveRecord::Base
   belongs_to :house
-  belongs_to :wx_user
+  belongs_to :user
 
   validates_presence_of :house_id, :wx_media_id
 

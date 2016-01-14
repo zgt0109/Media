@@ -1,7 +1,6 @@
 class QrcodeLog < ActiveRecord::Base
 	belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :qrcode
   belongs_to :qrcodeable, polymorphic: true
 

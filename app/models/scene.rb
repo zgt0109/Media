@@ -56,21 +56,21 @@ class Scene < ActiveRecord::Base
     if vote?
       activity =  Activity.vote.find_by_id(menuable_id)
       return related_link unless activity
-      related_link = mobile_vote_login_url(supplier_id: activity.supplier_id, vote_id: activity.id, openid: openid)
+      related_link = mobile_vote_login_url(site_id: activity.site_id, vote_id: activity.id, openid: openid)
     elsif link?
       related_link = url
     elsif enroll?
       activity = Activity.enroll.find_by_id(menuable_id)
       return related_link unless activity
-      related_link = new_app_activity_enroll_url(aid: activity.id, openid: openid, wxmuid: activity.wx_mp_user_id)
+      related_link = new_app_activity_enroll_url(site_id: activity.site_id, aid: activity.id, openid: openid)
     elsif reservation?
       activity = Activity.reservation.find_by_id(menuable_id)
       return related_link unless activity
-      related_link = mobile_reservations_url(supplier_id: activity.supplier_id, aid: activity.id, openid: openid)
+      related_link = mobile_reservations_url(site_id: activity.site_id, aid: activity.id, openid: openid)
     elsif surveys?
       activity = Activity.surveys.find_by_id(menuable_id)
       return related_link unless activity
-      related_link =  mobile_survey_url(supplier_id: activity.supplier_id, id: activity.id, openid: openid)
+      related_link =  mobile_survey_url(site_id: activity.site_id, id: activity.id, openid: openid)
     end
     related_link
   end

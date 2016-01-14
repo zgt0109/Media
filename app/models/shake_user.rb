@@ -2,7 +2,7 @@ class ShakeUser < ActiveRecord::Base
 	EXIT_CODE = '0'
   LIVE_MINUTES = 30
 
-	belongs_to :wx_user
+	belongs_to :user
   belongs_to :shake
   has_many :shake_prizes
 	enum_attr :status, :in => [
@@ -30,7 +30,7 @@ class ShakeUser < ActiveRecord::Base
   end
 
   def reply_exit_message
-    wx_user.normal!
+    user.wx_user.normal!
     update_attributes(matched_at: Time.now, status: NULL_AT)
     '您已退出摇一摇，非常感谢您的参与！'
   end
@@ -51,7 +51,7 @@ class ShakeUser < ActiveRecord::Base
   end
 
   def reply_welcome_message
-    wx_user.shake_mode!
+    user.wx_user.shake_mode!
     return reply_need_nickname if nickname.blank?
     return reply_change_avatar if avatar.blank?
     return reply_change_mobile if mobile.blank? && shake.mobile_check?
@@ -85,7 +85,7 @@ class ShakeUser < ActiveRecord::Base
     return false unless shake.normal?
     return reply_exit_message if !null_at? && msg == EXIT_CODE
 
-    wx_user.shake_mode!
+    user.wx_user.shake_mode!
     if shake_at?
       reply_welcome_message
     elsif nickname_at?
@@ -100,12 +100,12 @@ class ShakeUser < ActiveRecord::Base
     end
   end
 
-  def self.reply_or_create( wx_user, activity )
+  def self.reply_or_create( user, activity )
     return false unless activity.activityable.normal?
-    shake_user = wx_user.shake_users.where(shake_id: activity.activityable_id).first
+    shake_user = user.shake_users.where(shake_id: activity.activityable_id).first
     return shake_user.reply_welcome_message if shake_user
-    shake_user = wx_user.shake_users.create(supplier_id: activity.supplier_id, shake_id: activity.activityable_id, nickname: wx_user.nickname, avatar: wx_user.headimgurl, mobile: wx_user.mobile, matched_at: Time.now)
-    wx_user.shake_mode!
+    shake_user = user.shake_users.create(site_id: activity.site_id, shake_id: activity.activityable_id, nickname: user.wx_user.nickname, avatar: user.wx_user.headimgurl, mobile: user.wx_user.mobile, matched_at: Time.now)
+    user.shake_mode!
     if shake_user.nickname.blank?
       shake_user.reply_need_nickname
     elsif shake_user.avatar.blank?

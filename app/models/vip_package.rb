@@ -1,6 +1,5 @@
 class VipPackage < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
 	has_many :vip_package_items_vip_packages
 	has_many :vip_packages_vip_users
   has_many :vip_package_item_consumes
@@ -31,7 +30,7 @@ class VipPackage < ActiveRecord::Base
   end
 
   def get_shop_html
-    package_shop_branches = shop_branch_limited ? supplier.shop_branches.used.where(id: shop_branch_ids) : supplier.shop_branches.used
+    package_shop_branches = shop_branch_limited ? site.shop_branches.used.where(id: shop_branch_ids) : site.shop_branches.used
     html = ""
     package_shop_branches.each_with_index do |shop_branch,index|
       checked = "checked='checked'" if index == 0
@@ -53,25 +52,23 @@ class VipPackage < ActiveRecord::Base
 
   def release(vip_user_id: nil, shop_branch_id: nil, payment_type: nil, description: nil)
     VipPackageItemConsume.transaction do
-      vip_packages_vip_users = vip_packages_vip_users.new(supplier_id: supplier_id,
-                                                                        wx_mp_user_id: wx_mp_user_id,
-                                                                        vip_user_id: vip_user_id,
-                                                                        shop_branch_id: shop_branch_id,
-                                                                        description: description,
-                                                                        expired_at: Time.now+expiry_num.month,
-                                                                        package_name: name,
-                                                                        package_price: price,
-                                                                        payment_type: payment_type)
+      vip_packages_vip_users = vip_packages_vip_users.new(site_id: site_id,
+                                                          vip_user_id: vip_user_id,
+                                                          shop_branch_id: shop_branch_id,
+                                                          description: description,
+                                                          expired_at: Time.now+expiry_num.month,
+                                                          package_name: name,
+                                                          package_price: price,
+                                                          payment_type: payment_type)
       if vip_packages_vip_users.update_vip_user_amount(VipUserTransaction::SHOP_PAY_DOWN)
         vip_package_items_vip_packages.each do |vp|
-          vp.items_count.times{vip_package_item_consumes.create(supplier_id: supplier_id,
-                                                                    wx_mp_user_id: wx_mp_user_id,
-                                                                    vip_user_id: vip_user_id,
-                                                                    vip_packages_vip_user_id: vip_packages_vip_users.id,
-                                                                    vip_package_item_id: vp.vip_package_item_id,
-                                                                    status: VipPackageItemConsume::UNUSED,
-                                                                    package_item_name: vp.vip_package_item.name,
-                                                                    package_item_price: vp.vip_package_item.price)}
+          vp.items_count.times{vip_package_item_consumes.create(site_id: site_id,
+                                                                vip_user_id: vip_user_id,
+                                                                vip_packages_vip_user_id: vip_packages_vip_users.id,
+                                                                vip_package_item_id: vp.vip_package_item_id,
+                                                                status: VipPackageItemConsume::UNUSED,
+                                                                package_item_name: vp.vip_package_item.name,
+                                                                package_item_price: vp.vip_package_item.price)}
         end
         return true
       else

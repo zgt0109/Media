@@ -40,7 +40,7 @@ class Pro::ShopCategoriesController < Pro::ShopBaseController
   def create
     @shop_category = ShopCategory.new(params[:shop_category])
     @shop_category.shop_id = current_user.shop.id
-    @shop_category.supplier_id = current_user.id
+    @shop_category.site_id = current_site.id
     @shop_category.shop_menu_id = current_shop_branch.shop_menu_id if current_shop_branch.try(:shop_menu_id)
     respond_to do |format|
       if @shop_category.save!

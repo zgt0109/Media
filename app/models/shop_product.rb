@@ -1,27 +1,3 @@
-# -*- coding: utf-8 -*-
-# == Schema Information
-#
-# Table name: shop_products
-#
-#  id               :integer          not null, primary key
-#  supplier_id      :integer          not null
-#  wx_mp_user_id    :integer          not null
-#  shop_id          :integer          not null
-#  shop_branch_id   :integer          not null
-#  shop_category_id :integer          not null
-#  name             :string(255)      not null
-#  code             :string(255)      not null
-#  price            :decimal(12, 2)   default(0.0), not null
-#  discount         :decimal(6, 2)    default(0.0), not null
-#  is_new           :boolean          default(FALSE), not null
-#  is_hot           :boolean          default(FALSE), not null
-#  pic_url          :string(255)
-#  status           :integer          default(1), not null
-#  description      :text
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-
 class ShopProduct < ActiveRecord::Base
 
   validates :shop_menu_id, presence:true
@@ -42,21 +18,16 @@ class ShopProduct < ActiveRecord::Base
   ]
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :shop
-  # belongs_to :shop_branch
   belongs_to :shop_category
   belongs_to :shop_menu
   has_many :shop_product_comments
 
-  # scope :my_limit, ->(num) { limit(num)}
-  # scope :root, ->(c_id) { where(parent_id: ?), c_id }
   before_create :add_default_attrs
-
 
   default_scope where(["shop_products.status != ? ", -1 ])
 
-  def self.import_from_excel(file, supplier)
+  def self.import_from_excel(file, site)
     # Spreadsheet.client_encoding = 'UTF-8'
     book = Spreadsheet.open(file)
     sheet = book.worksheet(0)
@@ -65,8 +36,8 @@ class ShopProduct < ActiveRecord::Base
       sheet.each_with_index do |row, i|
         next if i == 0
 
-        shop_branch = supplier.shop_branches.where(name: row[0]).first
-        shop_category = supplier.shop_categories.where(name: row[1]).first
+        shop_branch = site.shop_branches.where(name: row[0]).first
+        shop_category = site.shop_categories.where(name: row[1]).first
         next unless shop_branch
         next unless shop_category
 
@@ -131,8 +102,7 @@ class ShopProduct < ActiveRecord::Base
 
   def add_default_attrs
     return unless self.shop
-    self.supplier_id = self.shop.supplier_id
-    self.wx_mp_user_id = self.shop.wx_mp_user_id
+    self.site_id = self.shop.site_id
     self.code = "#{self.category_parent_id}_#{self.shop.shop_products.count+1}"
     self.pic_url = self.pic_key if self.pic_key
   end

@@ -1,26 +1,4 @@
-# == Schema Information
-#
-# Table name: shop_table_orders
-#
-#  id             :integer          not null, primary key
-#  supplier_id    :integer          not null
-#  wx_mp_user_id  :integer          not null
-#  wx_user_id     :integer          not null
-#  shop_id        :integer          not null
-#  shop_branch_id :integer          not null
-#  table_type     :integer          default(1), not null
-#  order_no       :string(255)      not null
-#  booking_at     :datetime         not null
-#  booking_count  :integer          default(0), not null
-#  mobile         :string(255)      not null
-#  status         :integer          default(1), not null
-#  description    :text
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#
-
 class ShopTableOrder < ActiveRecord::Base
-  # attr_accessible :booking_at, :booking_count, :description, :mobile, :order_no, :status, :table_type
 
   enum_attr :table_type, :in => [
     ['loge_table', 1, '只要包厢'],
@@ -40,8 +18,7 @@ class ShopTableOrder < ActiveRecord::Base
   scope :by_date, proc { |date| where('DATE(shop_table_orders.booking_at) = ?', date) }
 
   belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :shop
   belongs_to :shop_branch
 
@@ -110,8 +87,7 @@ class ShopTableOrder < ActiveRecord::Base
 
     return unless self.shop_branch
 
-    self.supplier_id = self.shop_branch.supplier_id
-    self.wx_mp_user_id = self.shop_branch.wx_mp_user_id
+    self.site_id = self.shop_branch.site_id
     self.shop_id = self.shop_branch.shop_id
 
     ref_order = ShopOrder.where(id: self.ref_order_id).first
@@ -122,14 +98,13 @@ class ShopTableOrder < ActiveRecord::Base
   end
 
   def update_user_mobile
-    self.wx_user.mobile = self.mobile if self.mobile && self.wx_user
-    self.wx_user.nil? ? self.build_wx_user(:nickname => self.username) : self.wx_user.nickname = self.username if self.username
-    self.wx_user.save if self.wx_user
+    user.mobile = self.mobile if self.mobile
+    user.save
   end
 
   def igetui
     begin
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'supplier', role_id: supplier_id, token: supplier.try(:auth_token), messageable_id: self.id, messageable_type: 'ShopTableOrder', source: 'winwemedia_shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site_id, token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'ShopTableOrder', source: 'winwemedia_shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
     rescue => e
       Rails.logger.info "#{e}"
     end

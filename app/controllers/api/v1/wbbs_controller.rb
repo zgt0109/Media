@@ -19,7 +19,6 @@ class Api::V1::WbbsController < Api::BaseController
   end
 
   def create_wbbs
-
     name, keyword, site_id, summary, auth_token, logo_key, pic_key = params.values_at(:name, :keyword, :site_id, :summary, :auth_token, :logo_key, :pic_key)
 
     return render json: { errcode: 1, errmsg: "Missing auth_token" } unless auth_token == 'AxJKl390nbYhd'
@@ -28,12 +27,12 @@ class Api::V1::WbbsController < Api::BaseController
     return render json: { errcode: 1, errmsg: "Missing keyword" } unless keyword.present?
     return render json: { errcode: 1, errmsg: "duplicate keword" } if Activity.valid.where(site_id: site_id, keyword: keyword).exists?
 
-    supplier = Account.find_by_id(site_id)
-    return render json: { errcode: 1, errmsg: "supplier not found" } unless supplier.present?
+    site = Site.find_by_id(site_id)
+    return render json: { errcode: 1, errmsg: "site not found" } unless site.present?
 
     activity = Activity.create(status: 1, name: name, keyword: keyword, ready_at:  Time.now, start_at:  Time.now, end_at: Time.now + 100.years,
                         site_id: site_id, activity_type_id: 49, pic_key: pic_key, summary: summary)
-    wbbs = supplier.wbbs_communities.create(name: name, site_id: site_id, wx_mp_user_id: wx_mp_user_id, logo: logo_key)
+    wbbs = site.wbbs_communities.create(name: name, site_id: site_id, logo: logo_key)
     wbbs.activity = activity
     if activity && wbbs
       render json: { errcode: 0, site_id: site_id, aid: activity.id }

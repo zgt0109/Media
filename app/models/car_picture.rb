@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: car_pictures
-#
-#  id            :integer          not null, primary key
-#  car_shop_id   :integer          not null
-#  car_catena_id :integer          not null
-#  name          :string(255)
-#  path          :string(255)      not null
-#  is_cover      :boolean          default(FALSE), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class CarPicture < ActiveRecord::Base
 
 	# validates :car_catena_id, :path, presence: true
@@ -33,12 +19,8 @@ class CarPicture < ActiveRecord::Base
 		update_attributes(is_cover: false) if is_cover
 	end
 
-  def pic_url(type = :large)
-    qiniu_image_url(qiniu_path_key) || path.try(type).try(:url)
-  end
-
-  def pic_path(type = :large)
-    qiniu_image_url(qiniu_path_key) || "http://#{Settings.hostname}#{path.try(type).try(:url)}"
+  def pic_path_url
+    qiniu_image_url(qiniu_path_key)
   end
 
 end

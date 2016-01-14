@@ -150,10 +150,6 @@ class Activity < ActiveRecord::Base
 
   enum_attr :activity_type_id, in: ActivityType::ENUM_ID_OPTIONS
 
-  alias survey? surveys?
-  alias apply?  enroll?
-  alias old_coupon? consume?
-
   delegate :consume_day_allow_count, to: :activity_property, allow_nil: true
   delegate :consume_day_allow_count=, to: :activity_property, allow_nil: true
   delegate :plot_related?, to: :activity_type, allow_nil: true
@@ -192,7 +188,7 @@ class Activity < ActiveRecord::Base
         elsif (!activity.stopped? && (activity.wx_wall? && activity.activity_status == Activity::NOT_START  && activity.activityable && activity.activityable.pre_join?))
           # 如果是 微信墙
           return activity
-        elsif activity.setted? && (activity.old_coupon? || activity.wave?) && [WARM_UP, UNDER_WAY, HAS_ENDED].include?(activity.activity_status)
+        elsif activity.setted? && activity.wave? && [WARM_UP, UNDER_WAY, HAS_ENDED].include?(activity.activity_status)
           return activity
         elsif activity.setted? && activity.unfold? && [NOT_START, UNDER_WAY, HAS_ENDED].include?(activity.activity_status)
           return activity
@@ -319,11 +315,10 @@ class Activity < ActiveRecord::Base
 
   def vote_items_count
     @vote_items_count ||= activity_user_vote_items.count + activity_vote_items.sum(:adjust_votes)
-    #@vote_items_count ||= Activity.find_by_sql(["select ((select SUM(activity_vote_items.adjust_votes) from activity_vote_items where activity_vote_items.activity_id = ?) + (select COUNT(*) from activity_user_vote_items where activity_user_vote_items.activity_id = ?)) as items_count", id, id]).first.try(:items_count).to_i
   end
 
   def activity_user_vote_item_count
-    @activity_user_vote_item_count ||= activity_users.count('distinct(wx_user_id)') + activity_vote_items.sum(:adjust_votes)
+    @activity_user_vote_item_count ||= activity_users.count('distinct(user_id)') + activity_vote_items.sum(:adjust_votes)
   end
 
   def set_update_status_plan
@@ -437,9 +432,9 @@ class Activity < ActiveRecord::Base
 
   def activity_status_name
     now = Time.now
-    if self.survey?
+    if self.surveys?
       SURVEY_STATUS[self.status]
-    elsif self.apply?
+    elsif self.enroll?
       APPLY_STATUS[self.status]
     elsif self.vote?
       VOTE_STATUS[self.status]
@@ -620,7 +615,7 @@ class Activity < ActiveRecord::Base
 
   def set_time_fields
     now = Time.now
-    unless self.survey? || self.apply? || self.vote? || self.old_coupon?
+    unless self.surveys? || self.enroll? || self.vote?
       self.start_at ||= now
       self.end_at   ||= (now + 100.years)
     end
@@ -708,7 +703,7 @@ class Activity < ActiveRecord::Base
         result = [-1].include?(self.status)
       end
     elsif (self.start_at.nil? || self.start_at < Time.now)
-      if self.survey? && self.survey_questions.blank?
+      if self.surveys? && self.survey_questions.blank?
         # 如果是没有题目的微调研，不允许开启
       elsif self.vote? && self.setting?
         # 如果是未配置的微投票，不允许开启
@@ -827,11 +822,11 @@ class Activity < ActiveRecord::Base
   end
 
   # 是否允许设置题目
-  alias allow_set_question? survey?
+  alias allow_set_question? surveys?
 
   # 是否允许删除
   def allow_delete?
-    if survey?
+    if surveys?
       end_at && Time.now >= end_at || stopped?
     else
       !self.setted?
@@ -1012,7 +1007,7 @@ class Activity < ActiveRecord::Base
       when donation?           then mobile_donations_url(stopped?.merge(wid: activityable_id))
       when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
-      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_id: options[:openid])
+      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_openid: options[:openid])
       # when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
       when hotel?              then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}&openid=#{options[:openid]}"
       when wifi?               then "http://m.chaowifi.com/auth/wechat.do?guid=#{options[:openid]}"
@@ -1023,7 +1018,7 @@ class Activity < ActiveRecord::Base
 
   def return_survey_activity_url(options = {})
     wx_user = WxUser.where(openid: options[:openid]).first
-    activity_user = ActivityUser.where(user_id: wx_user.id, activity_id: id).first if wx_user
+    activity_user = ActivityUser.where(user_id: wx_user.user_id, activity_id: id).first if wx_user
     return mobile_survey_url(options.merge(id: id)) if activity_user.nil? || !setted?
     return success_mobile_survey_url(options.merge(id: id)) if activity_user.survey_finish?
 

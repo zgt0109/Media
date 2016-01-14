@@ -22,11 +22,11 @@ class VipMessagePlanWorker
     return unless plan
 
     receivers = plan.receivers
-    supplier = plan.vip_card.supplier
-    if receivers.present? && supplier.present?
+    site = plan.vip_card.site
+    if receivers.present? && site.present?
       receivers.each do |receiver|
         # to be optimized to reuse title and content of plan.
-        supplier.vip_user_messages.create(vip_user_id: receiver.id, title: plan.title, content: plan.content)
+        site.vip_user_messages.create(vip_user_id: receiver.id, title: plan.title, content: plan.content)
       end
     end
     plan.update_attributes vip_users_count: receivers.count, send_at: Time.now, skip_validate_send_at: true

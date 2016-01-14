@@ -45,9 +45,9 @@ class WxWallUser < ActiveRecord::Base
   end
 
   def self.reply_or_create(wx_user, activity)
-    wx_wall_user = wx_user.wx_wall_users.where(wx_wall_id: activity.activityable_id).first
+    wx_wall_user = user.wx_wall_users.where(wx_wall_id: activity.activityable_id).first
     return wx_wall_user.reply_welcome_message if wx_wall_user
-    wx_wall_user = wx_user.wx_wall_users.create(wx_wall_id: activity.activityable_id, nickname: wx_user.nickname, avatar: wx_user.headimgurl, matched_at: Time.now)
+    wx_wall_user = user.wx_wall_users.create(wx_wall_id: activity.activityable_id, nickname: wx_user.nickname, avatar: wx_user.headimgurl, matched_at: Time.now)
     wx_user.wx_wall_mode!
     if wx_wall_user.nickname.blank?
       wx_wall_user.reply_need_nickname
@@ -65,7 +65,7 @@ class WxWallUser < ActiveRecord::Base
 
   def reply_wx_message(msg, msg_type = 'text')
     return false unless matched?
-    wx_user.wx_wall_mode!
+    user.wx_user.wx_wall_mode!
     return false if wx_wall.vote.try(:keyword) == msg # 如果是投票关键词，则不作处理
     return into_shake if wx_wall.shake.try(:keyword) == msg # 如果是摇一摇关键词，则不作处理
     return false if wx_wall.enroll.try(:keyword) == msg # 如果是报名关键词，则不作处理
@@ -94,7 +94,7 @@ class WxWallUser < ActiveRecord::Base
   end
 
   def reply_welcome_message
-    wx_user.wx_wall_mode!
+    user.wx_user.wx_wall_mode!
     return reply_need_nickname if nickname.blank?
     return reply_upload_avatar if avatar.blank?
     update_attributes(avatar: avatar, matched_at: Time.now, matched_mode: MESSAGE_MODE)
@@ -103,7 +103,7 @@ class WxWallUser < ActiveRecord::Base
 
   def reply_exit_message
     update_attributes(matched_at: Time.now, matched_mode: NULL_MODE)
-    wx_user.normal!
+    user.wx_user.normal!
     '您已退出微信墙，非常感谢您的参与！'
   end
 
@@ -145,7 +145,7 @@ class WxWallUser < ActiveRecord::Base
   end
 
   def wx_wall_link
-    %Q(<a href="http://#{Settings.mhostname}/#{wx_wall.supplier_id}/wx_walls/#{wx_wall_id}">点击查看微信墙</a>)
+    %Q(<a href="http://#{Settings.mhostname}/#{wx_wall.site_id}/wx_walls/#{wx_wall_id}">点击查看微信墙</a>)
   end
 
   def nickname

@@ -1,10 +1,7 @@
 class ActivityConsume < ActiveRecord::Base
-  # validates :code, presence: true#, uniqueness: { case_sensitive: false }
-  # validates :wx_user_id, presence: true
   include HasBarcode
 
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :site
   belongs_to :activity
   belongs_to :vip_privilege
@@ -19,7 +16,6 @@ class ActivityConsume < ActiveRecord::Base
   scope :by_activity_type, ->(activity_type_id) { joins(:activity).where('activities.activity_type_id' => activity_type_id) }
 
   delegate :prize, to: :activity_prize, allow_nil: true
-
 
   enum_attr :status, in: [
     ['unused', 1, '未使用'],
@@ -67,7 +63,7 @@ class ActivityConsume < ActiveRecord::Base
     return false if used? || auto_used?
 
     if activity_prize.try(:point_prize?) # 积分奖需要判断是否是会员
-      vip_user = supplier.vip_users.normal.where(wx_user_id: wx_user.id).first # 避免历史数据错乱导致的不一至
+      vip_user = site.vip_users.normal.where(user_id: user.id).first # 避免历史数据错乱导致的不一至
 
       if activity_prize.try(:point_prize?) && vip_user.present? && vip_user.normal? 
         transaction do
@@ -77,11 +73,11 @@ class ActivityConsume < ActiveRecord::Base
           vip_user.increase_points!(activity_prize.points)
           vip_user.point_transactions.create!(
             direction_type: PointTransaction::ACTIVITY_PRIZE,
-	    points: activity_prize.points,
-	    supplier_id: supplier_id,
+            points: activity_prize.points,
+            site_id: site_id,
             shop_branch_id: self.shop_branch_id,
-	    description: '活动积分奖励',
-	    pointable: self
+            description: '活动积分奖励',
+            pointable: self
           )
 
           save!
@@ -101,7 +97,7 @@ class ActivityConsume < ActiveRecord::Base
 
       red_packet = activity_prize.try(:activity_red_packet)
       return false unless red_packet
-      jid = RedPacketWorker.perform_at red_packet.sidekiq_task_time.seconds.from_now, red_packet.id, wx_user.try(:id), id
+      jid = RedPacketWorker.perform_at red_packet.sidekiq_task_time.seconds.from_now, red_packet.id, user.wx_user.try(:id), id
       $redis.set(redis_key, jid, {ex: (red_packet.sidekiq_task_time + 3600)})
     else # 普通奖
       self.shop_branch_id = shop_branch.is_a?(ShopBranch) ? shop_branch.id : shop_branch
@@ -157,7 +153,7 @@ class ActivityConsume < ActiveRecord::Base
   end
 
   def vip_user
-    wx_user.try(:vip_user)
+    user.try(:vip_user)
   end
 
   def vip_mobile
@@ -181,15 +177,11 @@ class ActivityConsume < ActiveRecord::Base
   end
 
   def user_type
-    "WxUser"
-  end
-
-  def user_id
-    wx_user_id
+    "User"
   end
 
   def user_name
-    wx_user.nickname
+    user.wx_user.nickname
   end
 
   def shop_branch_count
@@ -201,8 +193,8 @@ class ActivityConsume < ActiveRecord::Base
   end
 
   def use_consume(shop_branch)
-    if vip_privilege && wx_user
-      vip_user = wx_mp_user.vip_users.visible.where(wx_user_id: wx_user_id).first
+    if vip_privilege && user
+      vip_user = site.vip_users.visible.where(user_id: user_id).first
       return false if vip_user.blank? || vip_user.freeze? || !@activity_consume.vip_privilege.pending? || @activity_consume.vip_privilege.privilege_status != VipPrivilege::STARTED
     end
     use!(shop_branch)
@@ -220,7 +212,7 @@ class ActivityConsume < ActiveRecord::Base
     return false if used? || auto_used?
 
     if activity_prize.try(:point_prize?) # 积分奖需要判断是否是会员
-      vip_user = supplier.vip_users.normal.where(wx_user_id: wx_user.id).first # 避免历史数据错乱导致的不一至
+      vip_user = site.vip_users.normal.where(user_id: user.id).first # 避免历史数据错乱导致的不一至
 
       if activity_prize.try(:point_prize?) && vip_user.present? && vip_user.normal? 
         transaction do
@@ -229,10 +221,10 @@ class ActivityConsume < ActiveRecord::Base
           vip_user.increase_points!(activity_prize.points)
           vip_user.point_transactions.create!(
             direction_type: PointTransaction::ACTIVITY_PRIZE,
-	    points: activity_prize.points,
-	    supplier_id: supplier_id,
-	    description: '活动积分奖励',
-	    pointable: self
+            points: activity_prize.points,
+            site_id: site_id,
+            description: '活动积分奖励',
+            pointable: self
           )
 
           save!
@@ -249,7 +241,7 @@ class ActivityConsume < ActiveRecord::Base
       retrun false unless red_packet
 
       redis_key = "activity_consume_id_#{id}"
-      jid = RedPacketWorker.perform_at red_packet.sidekiq_task_time.seconds.from_now, red_packet.id, wx_user.try(:id), id
+      jid = RedPacketWorker.perform_at red_packet.sidekiq_task_time.seconds.from_now, red_packet.id, user.wx_user.try(:id), id
       $redis.set(redis_key, jid, {ex: (red_packet.sidekiq_task_time + 3600)})
     end
   end

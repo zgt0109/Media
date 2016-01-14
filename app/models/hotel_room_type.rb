@@ -1,31 +1,3 @@
-# == Schema Information
-#
-# Table name: hotel_room_types
-#
-#  id              :integer          not null, primary key
-#  hotel_id        :integer          not null
-#  hotel_branch_id :integer          not null
-#  name            :string(255)      not null
-#  price           :integer          not null
-#  discount_price  :integer          not null
-#  open_qty        :integer          default(0)
-#  pic             :string(255)      not null
-#  status          :integer          default(1), not null
-#  is_breakfast    :boolean
-#  is_broadband    :boolean
-#  area            :integer
-#  floor           :string(255)
-#  is_big_bed      :boolean
-#  big_bed_spec    :string(255)
-#  big_bed_count   :integer
-#  is_small_bed    :boolean
-#  small_bed_spec  :string(255)
-#  small_bed_count :integer
-#  description     :text
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-
 class HotelRoomType < ActiveRecord::Base
   #attr_accessible :area, :big_bed_count, :big_bed_spec, :description, :floor, :hotel_branch_id, :hotel_id, :is_big_bed, :is_breakfast, :is_broadband, :is_small_bed, :name, :open_count, :pic, :preferential_price, :price, :small_bed_count, :small_bed_spec, :status
   attr_accessor :has_defaults
@@ -62,7 +34,7 @@ class HotelRoomType < ActiveRecord::Base
   ]
 
 
-  def pic_url(type = :large)
+  def pic_url
     qiniu_image_url(pic_key)
   end
 

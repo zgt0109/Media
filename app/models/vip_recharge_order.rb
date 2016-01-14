@@ -1,9 +1,8 @@
 class VipRechargeOrder < ActiveRecord::Base
 
-  belongs_to :wx_mp_user
   belongs_to :vip_user
 
-  has_one   :payment, as: :paymentable
+  has_one :payment, as: :paymentable
 
   #实际支付金额
   #validates :pay_amount, presence: true, numericality: {greater_than: 0}
@@ -27,19 +26,15 @@ class VipRechargeOrder < ActiveRecord::Base
     ['tenpay',  3,  '财付通']
   ]
 
-  def supplier_id
-    wx_mp_user.supplier_id
-  end
-
   def wx_user_id
-    vip_user.wx_user_id
+    vip_user.user.wx_user_id
   end
 
   def payment!
     transaction do
       payment ||= Payment.setup({
         payment_type_id: 10006,
-        supplier_id: supplier_id,
+        site_id: site_id,
         customer_id: vip_user_id,
         customer_type: 'VipUser',
         paymentable_id: id,
@@ -57,9 +52,9 @@ class VipRechargeOrder < ActiveRecord::Base
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
       payment_type_id: wxpayv2? ? 10001 : 10004,
-      supplier_id: supplier_id,
-      customer_id: wx_user_id,
-      customer_type: 'WxUser',
+      site_id: site_id,
+      customer_id: user_id,
+      customer_type: 'User',
       paymentable_id: id,
       paymentable_type: 'VipRechargeOrder',
       out_trade_no: order_no,

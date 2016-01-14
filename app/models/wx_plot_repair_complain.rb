@@ -50,13 +50,13 @@ class WxPlotRepairComplain < ActiveRecord::Base
 
     def send_sms
       is_open_sms = repair? ? wx_plot.try(:is_open_repair_sms) : wx_plot.try(:is_open_complain_sms)
-      return if wx_plot_category.nil? || wx_plot.try(:supplier).nil? || !is_open_sms
+      return if wx_plot_category.nil? || wx_plot.try(:site).nil? || !is_open_sms
       sms_settings = wx_plot_category.sms_settings.where(['wx_plot_sms_settings.start_at <= ? and wx_plot_sms_settings.end_at >= ?', created_at.strftime('%H:%M'), created_at.strftime('%H:%M')]).all
-      wx_plot.supplier.send_message(sms_settings.collect(&:phone).uniq.join(','), "#{created_at.strftime('%H:%M')}收到#{nickname}用户#{phone}的#{wx_plot_category.name}#{repair? ? '报修申请' : '投诉建议'}", '小区')
+      wx_plot.site.send_message(sms_settings.collect(&:phone).uniq.join(','), "#{created_at.strftime('%H:%M')}收到#{nickname}用户#{phone}的#{wx_plot_category.name}#{repair? ? '报修申请' : '投诉建议'}", '小区')
     end
 
     def igetui
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'supplier', role_id: wx_plot.try(:supplier_id), token: wx_plot.try(:supplier).try(:auth_token), messageable_id: self.id, messageable_type: 'WxPlotRepairComplain', source: 'winwemedia_wx_plot', message: '您有一笔新订单，请尽快处理。'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: wx_plot.try(:site_id), token: wx_plot.try(:site).try(:auth_token), messageable_id: self.id, messageable_type: 'WxPlotRepairComplain', source: 'winwemedia_wx_plot', message: '您有一笔新订单，请尽快处理。'})
     rescue => e
       Rails.logger.info "#{e}" 
     end

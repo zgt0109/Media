@@ -3,7 +3,6 @@ class GroupItem < ActiveRecord::Base
   acts_as_taggable_on :recommends
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :group_category
   belongs_to :group
   belongs_to :groupable, polymorphic: true
@@ -35,7 +34,6 @@ class GroupItem < ActiveRecord::Base
       ['selfgroup',1,'团购'],
       ['wmall', 2, '商圈']
   ]
-
 
   attr_accessor :date_range, :picture_keys
 

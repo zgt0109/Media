@@ -1,21 +1,17 @@
 class Group < ActiveRecord::Base
 
   belongs_to :site
-  belongs_to :wx_mp_user
 
   has_one :activity, as: :activityable
   has_many :group_items, :dependent => :destroy
   has_many :group_categories, :dependent => :destroy, :order => 'sort ASC'
 
-
-
   validates :name, presence: true, length: { maximum: 64, message: '名称过长' }
-  #validates :tel, presence: true, on: :update
 
   accepts_nested_attributes_for :activity
 
   def clear_menus!
-    supplier.group_categories.clear
+    site.group_categories.clear
   end
 
   def get_category params
@@ -41,17 +37,6 @@ class Group < ActiveRecord::Base
     conn
   end
 
-  # traversal all category and return to hash
-  # :key [:symbol] every node key was node.send(key)
-  # :fields [:array] every node value
-  # for node have children will traversal all children node to :children_list
-  # :proc if block_given? exec proc.call(children_list)
-  # else will wrappen node's child list to {children: children_list}
-  # usage:
-  # tree_hash = GroupCategory.tree_data(:name, [:name, :id]) do |children_tree|
-  #   _children_tree = Hash[children_tree.map{|key, value| [key, value.reverse_merge(type: "item")]}]
-  #  {additionalParameters: {children: _children_tree}}
-  # end
   def category_tree_data(key = :id ,fields = [:id, :name], &proc)
     tree_hash = {}
     group_categories.root.each do |child|

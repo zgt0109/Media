@@ -3,7 +3,7 @@
 # Table name: vip_user_signs
 #
 #  id          :integer          not null, primary key
-#  supplier_id :integer          not null
+#  site_id :integer          not null
 #  vip_user_id :integer          not null
 #  date        :date             not null
 #  points      :integer          default(0), not null

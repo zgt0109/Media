@@ -101,7 +101,7 @@ class VipPrivilege < ActiveRecord::Base
 
   def privilege
     if point?
-      privilege = vip_card.supplier.point_types.normal.where(category: category).map do |pt|
+      privilege = vip_card.site.point_types.normal.where(category: category).map do |pt|
         "#{pt.category_name[0, 2]}#{pt.amount}元送#{value.to_i * pt.points}积分"
       end.join("、").presence
     end

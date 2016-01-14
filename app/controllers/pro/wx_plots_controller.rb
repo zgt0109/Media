@@ -3,12 +3,12 @@ class Pro::WxPlotsController < Pro::WxPlotBaseController
 
   def index
     @wx_plot = current_user.wx_plot
-    @wx_plot = WxPlot.new(supplier_id: current_user.id) if @wx_plot.nil?
+    @wx_plot = WxPlot.new(site_id: current_site.id) if @wx_plot.nil?
   end
 
   def show
     @activity = current_site.activities.where(activity_type_id: params[:activity_type_id]).first
-    @activity = Activity.new(supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.try(:id), activity_type_id: params[:activity_type_id], status: Activity::SETTED) if @activity.nil?
+    @activity = Activity.new(site_id: current_site.id, activity_type_id: params[:activity_type_id], status: Activity::SETTED) if @activity.nil?
   end
 
   def create

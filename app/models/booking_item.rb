@@ -47,14 +47,14 @@ class BookingItem < ActiveRecord::Base
 
 
   def multilevel_menu params
-    return [1, []] unless supplier
+    return [1, []] unless site
     return [1, []] unless booking_category
 
     num, booking_categories_selects = booking_category.allow_menu_layer(1, true), []
     params["booking_category_id#{num}".to_sym] = booking_category.id
 
     if booking_category.parent_id == 0
-      booking_categories_selects.unshift([num, supplier.booking_categories.root.order(:sort)])
+      booking_categories_selects.unshift([num, site.booking_categories.root.order(:sort)])
     else
       booking_categories_selects.unshift([num, booking_category.parent.try(:children)])
       booking_category.parent.try(:multilevel_menu_up, num - 1, params, booking_categories_selects)

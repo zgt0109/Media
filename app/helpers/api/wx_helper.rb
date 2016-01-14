@@ -21,7 +21,7 @@ module Api::WxHelper
 
     openid_params = { origin_openid: openid }
     openid_params.merge!(owner_openid: openid) if query_parameters[:owner_openid].blank?
-    
+
     link_url = base_url+ path + '?' + query_parameters.merge(openid_params).to_query
 
     image_url = "http://#{Settings.mhostname}#{@share_image.to_s}" unless /^(http|https):\/\/[a-zA-Z0-9].+$/ =~ image_url

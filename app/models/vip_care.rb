@@ -7,7 +7,7 @@ class VipCare < ActiveRecord::Base
   serialize :given_coupon_ids, Array
   serialize :given_gift_ids, Array
 
-  delegate :wx_mp_user, :wx_mp_user_id, :supplier, :merchant_name, to: :vip_card, allow_nil: true
+  delegate :site, :merchant_name, to: :vip_card, allow_nil: true
 
   validates :care_day, presence: true, if: :festival?
   validates :name, :message_body, presence: true
@@ -57,7 +57,7 @@ class VipCare < ActiveRecord::Base
   end
 
   def can_send_care?
-    supplier && wx_mp_user && random_receivers.present?
+    site && random_receivers.present?
   end
 
   def send_care!
@@ -65,7 +65,6 @@ class VipCare < ActiveRecord::Base
     transaction do
       case
         when respond_to?(:point?)      && point?      then send_point_care!
-        when respond_to?(:old_coupon?) && old_coupon? then send_old_coupon_care!
         when respond_to?(:gift?)       && gift?       then send_gift_care!
         when respond_to?(:coupon?)     && coupon?     then send_coupon_care!
       end
@@ -84,7 +83,7 @@ class VipCare < ActiveRecord::Base
     random_receivers.each do |vip_user|
       content = get_message_body(vip_user.name)
       vip_user.vip_givens.create(vip_care_id: id, category: category, value: given_points, start_at: start_at, end_at: end_at)
-      supplier.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
+      site.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
     end
   end
 
@@ -96,10 +95,10 @@ class VipCare < ActiveRecord::Base
 
       random_receivers.take(limit_count).each do |vip_user|
         content = get_message_body(vip_user.name)
-        consume = activity.activity_consumes.create(supplier_id: activity.supplier_id, wx_mp_user_id: wx_mp_user_id, wx_user_id: vip_user.wx_user_id)
+        consume = activity.activity_consumes.create(site_id: activity.site_id, user_id: vip_user.user_id)
         content.gsub!('{优惠券}', %Q[<a href='#{M_HOST}/app/vips/old_coupons?init_id=#{consume.id}'>#{activity.name}</a>])
         vip_user.vip_givens.create(vip_care_id: id, category: category, givable_id: id, givable_type: 'Activity')
-        supplier.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
+        site.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
       end
     end
   end
@@ -109,11 +108,11 @@ class VipCare < ActiveRecord::Base
       point_gift = PointGift.find(id)
       random_receivers.each do |vip_user|
         content             = get_message_body(vip_user.name)
-        point_gift_exchange = PointGiftExchange.create(vip_user: vip_user, supplier: supplier, qty: 1, total_points: 0, description: "会员关怀：#{name}", point_gift: point_gift)
-        consume             = Consume.create(wx_user_id: vip_user.wx_user_id, wx_mp_user_id: wx_mp_user_id, consumable: point_gift_exchange, expired_at: point_gift.award_time_end_at)
+        point_gift_exchange = PointGiftExchange.create(vip_user: vip_user, site: site, qty: 1, total_points: 0, description: "会员关怀：#{name}", point_gift: point_gift)
+        consume             = Consume.create(user_id: vip_user.user_id, consumable: point_gift_exchange, expired_at: point_gift.award_time_end_at)
         content.gsub!('{礼品券}', %Q[<a href='#{M_HOST}/app/vips/exchanged?init_id=#{consume.id}'>#{point_gift.name}</a>])
         vip_user.vip_givens.create(vip_care_id: id, category: category, givable_id: id, givable_type: 'PointGift')
-        supplier.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
+        site.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
       end
     end
   end
@@ -125,10 +124,10 @@ class VipCare < ActiveRecord::Base
     random_receivers.take(limit_count).each do |vip_user|
       begin
         content = get_message_body(vip_user.name)
-        given_coupon.consumes.create!(wx_mp_user_id: vip_card.wx_mp_user_id, wx_user_id: vip_user.wx_user_id, consumable_id: given_coupon_id, consumable_type: 'Coupon')
-        content.gsub!('{优惠券}', %Q[<a href="#{M_HOST}/#{vip_card.supplier_id}/coupons/my?openid=#{vip_user.wx_user.openid}">我的优惠券</a>])
+        given_coupon.consumes.create!(user_id: vip_user.user_id, consumable_id: given_coupon_id, consumable_type: 'Coupon')
+        content.gsub!('{优惠券}', %Q[<a href="#{M_HOST}/#{vip_card.site_id}/coupons/my?openid=#{vip_user.user.wx_user.openid}">我的优惠券</a>])
         vip_user.vip_givens.create(vip_care_id: id, category: category, givable_id: given_coupon_id, givable_type: 'Coupon')
-        supplier.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
+        site.vip_user_messages.create(vip_user_id: vip_user.id, title: name, content: content)
       rescue => e
         Rails.logger.error "send coupon to vip_user failed: coupon_id: #{given_coupon_id}, vip_user_id: #{vip_user}"
       end

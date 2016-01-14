@@ -152,11 +152,11 @@ class Payment < ActiveRecord::Base
   def get_pay_url(options={}, *args)
     case
     when self.weixinpay?
-      "#{PaymentSetting::WEIXIN_PAY_URL}?out_trade_no=#{self.out_trade_no}&supplier_id=#{self.supplier_id}&openid=#{self.open_id.presence || customer.try(:openid)}&showwxpaytitle=1"
+      "#{PaymentSetting::WEIXIN_PAY_URL}?out_trade_no=#{self.out_trade_no}&account_id=#{self.account_id}&openid=#{self.open_id.presence || customer.try(:openid)}&showwxpaytitle=1"
     when self.wxpay?
-      "#{PaymentSetting::WXPAYURL}?out_trade_no=#{self.out_trade_no}&supplier_id=#{self.supplier_id}&showwxpaytitle=1"
+      "#{PaymentSetting::WXPAYURL}?out_trade_no=#{self.out_trade_no}&account_id=#{self.account_id}&showwxpaytitle=1"
     when self.tenpay?
-      tenpay  = self.supplier.payment_settings.tenpay.first
+      tenpay  = self.site.payment_settings.tenpay.first
       if tenpay.partner_key && tenpay.partner_key
         _options = { 
           :subject => self.subject,
@@ -207,8 +207,8 @@ class Payment < ActiveRecord::Base
 
   ## Alipay only
   def generate_md5(str)
-    raise '没有指定商家' unless supplier
-    alipay_key = supplier.alipay_key || (supplier.payment_settings.alipay.first.partner_key rescue nil)
+    raise '没有指定商家' unless site
+    alipay_key = site.alipay_key || (site.payment_settings.alipay.first.partner_key rescue nil)
     raise '没有指定支付方式' unless alipay_key
 
     require "digest/md5"
@@ -224,7 +224,7 @@ class Payment < ActiveRecord::Base
   end
 
   def default_pay_options
-    raise '没有指定商家' unless supplier
+    raise '没有指定商家' unless site
 
     if Rails.env.production?
       domain_url = 'http://www.winwemedia.com'
@@ -233,9 +233,9 @@ class Payment < ActiveRecord::Base
     else
       domain_url = 'http://testing.winwemedia.com'
     end
-    alipay_id = (supplier.payment_settings.alipay.first.partner_id rescue nil)
-    alipay_key = (supplier.payment_settings.alipay.first.partner_key rescue nil)
-    seller_account_name = (supplier.payment_settings.alipay.first.partner_account rescue nil)
+    alipay_id = (site.payment_settings.alipay.first.partner_id rescue nil)
+    alipay_key = (site.payment_settings.alipay.first.partner_key rescue nil)
+    seller_account_name = (site.payment_settings.alipay.first.partner_account rescue nil)
 
     {
       alipay_id: alipay_id,

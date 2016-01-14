@@ -1,6 +1,5 @@
 class VipExternalHttpApi < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :vip_card
 
   acts_as_enum :api_type, in: [
@@ -15,6 +14,6 @@ class VipExternalHttpApi < ActiveRecord::Base
   ]
 
   validates :api_type, :path, :http_method, presence: true
-  validates :api_type, uniqueness: { scope: :supplier_id }
+  validates :api_type, uniqueness: { scope: :site_id }
 
 end

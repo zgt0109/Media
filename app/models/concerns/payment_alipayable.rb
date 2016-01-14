@@ -3,7 +3,7 @@ module PaymentAlipayable
 
   included do
     def customer_setting
-      AlipaySetting.where(status: 1, supplier_id: supplier_id, payment_type_id: payment_type_id).first
+      AlipaySetting.where(status: 1, site_id: site_id, payment_type_id: payment_type_id).first
     end
 
     delegate :alipay_send_goods_url, :alipay_url, to: :customer_setting

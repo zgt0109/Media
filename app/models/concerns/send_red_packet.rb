@@ -10,7 +10,7 @@ module SendRedPacket
   end
 
   def all_fans_red_packet red_packet
-    wx_mp_user = red_packet.supplier.try(:wx_mp_user)
+    wx_mp_user = red_packet.site.try(:wx_mp_user)
     return nil unless wx_mp_user
     logger.info "-----------------send redpacket with all fans--------------------"
     wx_mp_user.wx_users.subscribed.find_each do |wx_user|
@@ -23,10 +23,10 @@ module SendRedPacket
   end
 
   def all_vips_red_packet red_packet
-    supplier = red_packet.supplier
-    return nil unless supplier
+    site = red_packet.site
+    return nil unless site
     logger.info "-----------------send redpacket with all vips--------------------"
-    supplier.vip_users.normal.find_each do |vip_user|
+    site.vip_users.normal.find_each do |vip_user|
       options = {user_id: vip_user.user_id, openid: vip_user.wx_user_openid }
       record = create_red_packet_send_record red_packet, options
       next unless record
@@ -38,12 +38,11 @@ module SendRedPacket
     logger.info "=============send redpacket with activity=================="
     wx_user = WxUser.find_by_id(wx_user_id)
     logger.info "=============wx_user_present #{wx_user.present?}=================="
-    return nil unless  wx_user
+    return nil unless wx_user
 
     activity_consume = ActivityConsume.find_by_id(activity_consume_id)
     logger.info "=============activity_consume_present #{activity_consume.present?}=================="
     return nil unless activity_consume
-    
 
     logger.info "=============send_record #{activity_consume.send_record.present?}=================="
     if activity_consume.send_record.present?
@@ -77,7 +76,7 @@ module SendRedPacket
   private
 
   def create_red_packet_send_record red_packet, **options
-    # options.merge!(supplier_id: red_packet.supplier_id, total_num: 1, total_amount: red_packet.total_amount, status: RedPacket::SendRecord::READY)
+    # options.merge!(site_id: red_packet.site_id, total_num: 1, total_amount: red_packet.total_amount, status: RedPacket::SendRecord::READY)
     red_packet = red_packet.send_records.where(options).first_or_initialize(site_id: red_packet.site_id, total_num: 1, total_amount: red_packet.total_amount, status: RedPacket::SendRecord::READY)
     red_packet.save
     red_packet

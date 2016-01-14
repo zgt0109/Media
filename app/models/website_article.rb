@@ -1,20 +1,3 @@
-# == Schema Information
-#
-# Table name: website_articles
-#
-#  id              :integer          not null, primary key
-#  supplier_id     :integer          not null
-#  wx_mp_user_id   :integer          not null
-#  website_id      :integer          not null
-#  website_menu_id :integer          not null
-#  is_recommend    :boolean          default(FALSE), not null
-#  title           :string(255)      not null
-#  content         :text
-#  pic             :string(255)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-
 class WebsiteArticle < ActiveRecord::Base
 
   acts_as_list column: 'sort', scope: [:website_id, :website_menu_id, :website_article_category_id]
@@ -41,7 +24,6 @@ class WebsiteArticle < ActiveRecord::Base
   validates :sort, presence: true, numericality: { only_integer: true }
 
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :website
   belongs_to :website_menu
   belongs_to :website_article_category

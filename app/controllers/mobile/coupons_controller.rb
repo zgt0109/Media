@@ -45,6 +45,7 @@ class Mobile::CouponsController < Mobile::BaseController
         end
       end
       consume = @user.consumes.create(
+        site_id: @site.id,
         consumable:    @coupon,
         expired_at:    @coupon.use_end
       )

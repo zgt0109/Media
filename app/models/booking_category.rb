@@ -74,11 +74,11 @@ class BookingCategory < ActiveRecord::Base
   end
 
   def multilevel_menu_up index, params, booking_categories_selects
-    return unless supplier
+    return unless site
     return unless parent_id
     params["booking_category_id#{index}".to_sym] = id
     if parent_id == 0
-      booking_categories_selects.unshift([index, supplier.booking_categories.root.order(:sort)])
+      booking_categories_selects.unshift([index, site.booking_categories.root.order(:sort)])
     else
       booking_categories_selects.unshift([index, parent.children.order(:sort)])
       parent.try(:multilevel_menu_up, index - 1, params, booking_categories_selects)
@@ -121,7 +121,7 @@ class BookingCategory < ActiveRecord::Base
     if self.parent
       self.sort = self.parent.children.order(:sort).try(:last).try(:sort).to_i + 1
     else
-      self.sort = supplier.booking_categories.root.order(:sort).try(:last).try(:sort).to_i + 1
+      self.sort = site.booking_categories.root.order(:sort).try(:last).try(:sort).to_i + 1
     end
   end
 

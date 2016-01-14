@@ -1,7 +1,6 @@
 class EcCart < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :ec_item
 
   before_save :attrs_price

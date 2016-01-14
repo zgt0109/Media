@@ -5,11 +5,11 @@ class FollowRedPacketWorker
   def self.send_follow_redpacket(wx_mp_user, wx_user)
     return unless wx_mp_user.present? and wx_user.present?
 
-    follow_redpacket = RedPacket::FollowRedPacket.visible.where(supplier_id: wx_mp_user.supplier.id).first 
+    follow_redpacket = RedPacket::FollowRedPacket.visible.where(site_id: wx_mp_user.site_id).first 
     return unless follow_redpacket.present?
 
     if follow_redpacket.can_send_redpacket? && !follow_redpacket.sent?(wx_user.openid)
-      Rails.logger.info "Send follow red packet ====== supplier_id: #{wx_mp_user.supplier.id}, open_id: #{wx_user.openid}"
+      Rails.logger.info "Send follow red packet ====== site_id: #{wx_mp_user.site_id}, open_id: #{wx_user.openid}"
       FollowRedPacketWorker.perform_async(wx_mp_user.openid, wx_user.openid)
     end
   end
@@ -23,12 +23,12 @@ class FollowRedPacketWorker
     wx_user = wx_mp_user.wx_users.where(openid: openid).first
     return unless wx_mp_user.present? and wx_user.present?
 
-    follow_redpacket = RedPacket::FollowRedPacket.visible.where(supplier_id: wx_mp_user.supplier.id).first
+    follow_redpacket = RedPacket::FollowRedPacket.visible.where(site_id: wx_mp_user.site_id).first
     return unless follow_redpacket.present?
 
     if subscribe?(wx_mp_user, openid) && follow_redpacket.can_send_redpacket? && !follow_redpacket.sent?(openid)
       send_rec = follow_redpacket.send_records.where(openid: openid).first ||
-                 follow_redpacket.send_records.create(supplier_id: wx_mp_user.supplier.id, wx_user_id: wx_user.id, openid: wx_user.openid, total_amount: follow_redpacket.total_amount, total_num: follow_redpacket.total_num, status: RedPacket::SendRecord::READY)
+                 follow_redpacket.send_records.create(site_id: wx_mp_user.site_id, user_id: wx_user.user_id, openid: wx_user.openid, total_amount: follow_redpacket.total_amount, total_num: follow_redpacket.total_num, status: RedPacket::SendRecord::READY)
 
       logger.info "send follow red packet ======== wx_mp_user_uid = #{wx_mp_user.openid}, wx_user_uid = #{wx_user.openid}, red_packet_id = #{follow_redpacket.id}"
 

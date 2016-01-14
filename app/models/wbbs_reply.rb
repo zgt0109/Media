@@ -28,9 +28,9 @@ class WbbsReply < ActiveRecord::Base
   end
 
 
-  def visible_for?( wx_user )
-    return true  if wx_user == replier
-    return !replier.leave_message_forbidden? if replier.is_a?(WxUser)
+  def visible_for?( user )
+    return true  if user == replier
+    return !replier.user.leave_message_forbidden? if replier.is_a?(User)
   end
 
   private
@@ -40,7 +40,7 @@ class WbbsReply < ActiveRecord::Base
         notifier_name: wbbs_topic.poster_name,
         notifier_avatar: wbbs_topic.poster_avatar,
         notifiable_content: content,
-        content: "#{replier_name} 回复了您的帖子，点击<a href=\"http://#{Settings.mhostname}/#{wbbs_topic.supplier_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
+        content: "#{replier_name} 回复了您的帖子，点击<a href=\"http://#{Settings.mhostname}/#{wbbs_topic.site_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
       ) if replier != wbbs_topic.poster
 
       wbbs_notifications.create(
@@ -49,7 +49,7 @@ class WbbsReply < ActiveRecord::Base
         notifier_name: parent.replier_name,
         notifier_avatar: parent.replier_avatar,
         notifiable_content: content,
-        content: "#{replier_name} 回复了您的评论，点击<a href=\"http://#{Settings.mhostname}/#{wbbs_topic.supplier_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
+        content: "#{replier_name} 回复了您的评论，点击<a href=\"http://#{Settings.mhostname}/#{wbbs_topic.site_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
       ) if parent && parent.replier && parent.replier != replier
     end
 

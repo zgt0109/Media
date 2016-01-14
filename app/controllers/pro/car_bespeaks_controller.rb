@@ -46,7 +46,7 @@ class Pro::CarBespeaksController < ApplicationController
       @page = "保养预约"
       @link = activity_notice_car_bespeaks_path(bespeak_type: 1)
     end
-		@car_activity_notice = current_site.car_activity_notices.where(notice_type: notice_type).first || current_site.car_activity_notices.new(site_id: current_site.id, wx_mp_user_id: current_site.wx_mp_user.id, notice_type: notice_type)
+		@car_activity_notice = current_site.car_activity_notices.where(notice_type: notice_type).first || current_site.car_activity_notices.new(site_id: current_site.id, notice_type: notice_type)
 		@car_activity_notice.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
 	end
 

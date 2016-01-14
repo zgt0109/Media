@@ -86,7 +86,7 @@ class VipUserPayment < ActiveRecord::Base
       trade_data = HashWithIndifferentAccess.new({
         vip_user_id: vip_user.id,
         user_id: vip_user.user_id,
-        open_id: vip_user.wx_user.openid,
+        open_id: vip_user.user.wx_user.openid,
         site_id: vip_user.site_id,
         raw_data: params.to_json,
         status: 0
@@ -101,9 +101,9 @@ class VipUserPayment < ActiveRecord::Base
       site = Site.where(id: site_id).first
       wx_user = site.wx_users.where(openid: open_id).first
 
-      return if supplier.nil? and wx_user.nil?
+      return if site.nil? and wx_user.nil?
 
-      supplier.vip_users.visible.where(user_id: wx_user.user_id).first rescue nil
+      site.vip_users.visible.where(user_id: wx_user.user_id).first rescue nil
       #has_many :vip_users
     end
 

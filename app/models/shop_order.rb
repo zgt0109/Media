@@ -1,29 +1,4 @@
-# -*- coding: utf-8 -*-
-# == Schema Information
-#
-# Table name: shop_orders
-#
-#  id             :integer          not null, primary key
-#  supplier_id    :integer          not null
-#  wx_mp_user_id  :integer          not null
-#  wx_user_id     :integer          not null
-#  shop_id        :integer          not null
-#  shop_branch_id :integer          not null
-#  order_no       :string(255)      not null
-#  total_amount   :decimal(12, 2)   default(0.0), not null
-#  pay_amount     :decimal(12, 2)   default(0.0), not null
-#  mobile         :string(255)      not null
-#  expired_at     :datetime
-#  status         :integer          default(1), not null
-#  description    :text
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  order_type     :integer          default(1), not null
-#  address        :string(255)
-#
-
 class ShopOrder < ActiveRecord::Base
-  # attr_accessible :description, :expired_at, :mobile, :order_no, :status, :total_amount
 
   enum_attr :status, :in => [
     ['draft',0,'购物车'],
@@ -73,8 +48,7 @@ class ShopOrder < ActiveRecord::Base
   DAYTIME = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
 
   belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :shop
   belongs_to :shop_branch
   belongs_to :shop
@@ -92,7 +66,7 @@ class ShopOrder < ActiveRecord::Base
   accepts_nested_attributes_for :shop_order_items, allow_destroy: true, reject_if: proc { |attributes| attributes['qty'] == '0' }
 
   before_create :add_default_attrs
-  before_save :update_wx_user_address
+  # before_save :update_wx_user_address
   after_save :update_expired
 
   def book_rule
@@ -305,7 +279,7 @@ class ShopOrder < ActiveRecord::Base
       else
         print_order = PrintOrder.new(address: printer.no,
                                      shop_order_id: self.id,
-                                     supplier_id: self.supplier_id,
+                                     site_id: self.site_id,
                                      shop_branch_id: self.shop_branch.id,
                                      shop_branch_print_template_id: template.id)
         print_order.status = -1
@@ -320,9 +294,9 @@ class ShopOrder < ActiveRecord::Base
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
       payment_type_id: pay_type,
-      supplier_id: supplier_id,
-      customer_id: wx_user_id,
-      customer_type: 'WxUser',
+      site_id: site_id,
+      customer_id: user_id,
+      customer_type: 'User',
       paymentable_id: id,
       paymentable_type: 'ShopOrder',
       out_trade_no: order_no,
@@ -330,8 +304,7 @@ class ShopOrder < ActiveRecord::Base
       body:  "订单 #{order_no}",
       subject:  "订单 #{order_no}",
       source: 'winwemedia_shop_order',
-      wx_mp_user_id:  wx_mp_user_id,
-      open_id: wx_user.try(:openid)
+      open_id: user.wx_user.try(:openid)
     }
     params.reverse_merge(_order_params)
   end
@@ -419,7 +392,7 @@ class ShopOrder < ActiveRecord::Base
 
   def shop_qrcode_amount
     column_name = book_dinner? ? "restaurant_amount" : "take_out_amount"
-    wx_user.qrcode_user_amount(column_name,total_amount)
+    user.qrcode_user_amount(column_name,total_amount)
   end
 
   def update_product_qty
@@ -433,11 +406,11 @@ class ShopOrder < ActiveRecord::Base
   def send_message
     return if shop_branch.mobile.blank?
 
-    if book_dinner?
-      supplier.send_message(shop_branch.mobile, "订餐通知：用户#{wx_user.nickname}（手机号：#{mobile}）于 #{Time.now.to_s} 预定了#{shop_branch.name}分店的餐品", "餐饮")
-    else
-      supplier.send_message(shop_branch.mobile, "外卖通知：您有一笔新的订单 门店：#{shop_branch.name}； 总价：￥#{total_amount} 菜品：#{shop_order_items.collect{|t| "#{t.shop_product.name}×#{t.qty} ￥#{t.total_price}" }.join('，')}；#{pay_type_name}；收货信息：#{username}（手机号：#{mobile}）；#{address}", "餐饮")
-    end
+    # if book_dinner?
+    #   site.send_message(shop_branch.mobile, "订餐通知：用户#{wx_user.nickname}（手机号：#{mobile}）于 #{Time.now.to_s} 预定了#{shop_branch.name}分店的餐品", "餐饮")
+    # else
+    #   site.send_message(shop_branch.mobile, "外卖通知：您有一笔新的订单 门店：#{shop_branch.name}； 总价：￥#{total_amount} 菜品：#{shop_order_items.collect{|t| "#{t.shop_product.name}×#{t.qty} ￥#{t.total_price}" }.join('，')}；#{pay_type_name}；收货信息：#{username}（手机号：#{mobile}）；#{address}", "餐饮")
+    # end
   end
 
   private
@@ -449,8 +422,7 @@ class ShopOrder < ActiveRecord::Base
 
     return unless self.shop_branch
 
-    self.supplier_id = self.shop_branch.supplier_id
-    self.wx_mp_user_id = self.shop_branch.wx_mp_user_id
+    self.site_id = self.shop_branch.site_id
     self.shop_id = self.shop_branch.shop_id
   end
 

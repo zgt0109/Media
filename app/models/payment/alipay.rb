@@ -42,10 +42,10 @@ class Payment::Alipay < Payment::Base
   end
 
   def generate_md5(str)
-    raise '没有指定商家' unless supplier
+    raise '没有指定商家' unless site
 
     require "digest/md5"
-    Digest::MD5.hexdigest(str.to_s + supplier.alipay_key)
+    Digest::MD5.hexdigest(str.to_s + site.alipay_key)
   end
 
   def sort_str(options = {})
@@ -57,7 +57,7 @@ class Payment::Alipay < Payment::Base
   end
 
   def default_pay_options
-    raise '没有指定商家' unless supplier
+    raise '没有指定商家' unless site
 
     if Rails.env.production?
       domain_url = 'http://www.winwemedia.com'
@@ -68,9 +68,9 @@ class Payment::Alipay < Payment::Base
     end
 
     {
-      alipay_id: supplier.alipay_id,
-      alipay_key: supplier.alipay_key,
-      seller_account_name: supplier.alipay_account_name,
+      alipay_id: site.alipay_id,
+      alipay_key: site.alipay_key,
+      seller_account_name: site.alipay_account_name,
       service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
       callback_url: "#{domain_url}/payments/callback",
       notify_url: "#{domain_url}/payments/notify",

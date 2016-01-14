@@ -38,16 +38,16 @@ class SystemMessagesController < ApplicationController
   end
 
   # 系统提醒信息http接口,调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/system_messages/api", {supplier_id: 10117, content: '电商短信测试', module_id: '1'})
+  # RestClient.post("http://dev.winwemedia.local:3000/system_messages/api", {account_id: 10117, content: '电商短信测试', module_id: '1'})
   def api
 
     errors = []
-    %i(supplier_id module_id content).each{|k| errors << "参数必须带有 #{k.to_s}" if params[k].blank? }
+    %i(account_id module_id content).each{|k| errors << "参数必须带有 #{k.to_s}" if params[k].blank? }
     errors << "提醒消息中不包含 #{params[:module_id]} 模块" unless smm = SystemMessageModule.where(module_id: params[:module_id]).first
 
     if errors.blank?
-      @supplier = Account.where(id: params[:supplier_id]).first
-      @supplier ? @supplier.send_system_message(params, smm) : errors << "商户不存在"
+      @account = Account.where(id: params[:account_id]).first
+      @account ? @account.send_system_message(params, smm) : errors << "商户不存在"
     end
 
     return render text: errors.present? ? errors.join("\n") : '提醒信息接收成功'

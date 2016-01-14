@@ -38,7 +38,7 @@ class LeavingMessage < ActiveRecord::Base
   end
 
   def replier_status
-    if replier_type == "WxUser" && replier.try(:leave_message_forbidden) == true
+    if replier_type == "User" && replier.wx_user.try(:leave_message_forbidden) == true
       "此用户已加入黑名单"
     end
   end

@@ -1,24 +1,6 @@
-# == Schema Information
-#
-# Table name: ec_shops
-#
-#  id                :integer          not null, primary key
-#  supplier_id       :integer          not null
-#  wx_mp_user_id     :integer          not null
-#  name              :string(255)      not null
-#  logo              :string(255)
-#  cover_pic         :string(255)
-#  is_open_cover_pic :boolean          default(TRUE)
-#  status            :integer          default(0), not null
-#  description       :text
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#
-
 class EcShop < ActiveRecord::Base
 
   belongs_to :site
-  belongs_to :wx_mp_user
   has_many :categories, :class_name => "EcSellerCat", :dependent => :destroy#, order: :sort_order
   has_many :ads, :class_name => "EcAd"
   has_one :activity, as: :activityable
@@ -88,8 +70,5 @@ class EcShop < ActiveRecord::Base
 
     items.flatten.sort{|x, y| y.created_at <=> x.created_at }
   end
-
-
-
 
 end

@@ -1,23 +1,8 @@
-# == Schema Information
-#
-# Table name: car_catenas
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  car_shop_id   :integer          not null
-#  car_brand_id  :integer          not null
-#  name          :string(255)      not null
-#  sort          :integer          default(0), not null
-#  status        :integer          default(1)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class CarCatena < ActiveRecord::Base
   belongs_to :car_brand
   has_many :car_pictures, dependent: :destroy
   has_many :car_types, dependent: :destroy
+
   validates :name, :presence => true
 
   enum_attr :status, :in => [
@@ -25,7 +10,7 @@ class CarCatena < ActiveRecord::Base
     ['deleted', -1, '已删除']
   ]
 
-  def pic_url(type = :large)
+  def pic_url
     qiniu_image_url(pic_key)
   end
 

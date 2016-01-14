@@ -29,9 +29,9 @@ class SubAccount < ActiveRecord::Base
 
   def method_missing(m, *args, &block)
     if user.is_a?(ShopBranch)
-      supplier = user.supplier
-      if supplier.respond_to?(m)
-        return supplier.public_send(m, *args, &block)
+      account = user.account
+      if account.respond_to?(m)
+        return account.public_send(m, *args, &block)
       end
     elsif user.respond_to?(m)
       return user.public_send(m, *args, &block)
@@ -39,8 +39,8 @@ class SubAccount < ActiveRecord::Base
     super
   end
 
-  def supplier
-    user.supplier
+  def account
+    user.account
   end
 
   def app_permissions
@@ -53,8 +53,8 @@ class SubAccount < ActiveRecord::Base
       username:          username,
       role:              'micro_shop',
       token:             auth_token,
-      expired_at:        supplier.expired_at.try(:strftime, '%F'),
-      account_type_name: supplier.account_type_name,
+      expired_at:        account.expired_at.try(:strftime, '%F'),
+      account_type_name: account.account_type_name,
       permissions:       app_permissions
     }
   end

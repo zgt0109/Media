@@ -46,7 +46,7 @@ class Huodong::ShakeSitesController < ApplicationController
   def shake_start
     shake_round = @shake.shake_rounds.last
     shake_round.update_attributes!(status: ShakeRound::STOPPED) if shake_round
-    new_shake_round = @shake.shake_rounds.create(supplier_id: shake_site.id, activity_id: @shake.activity.id, shake_round: (shake_round.try(:shake_round).to_i + 1), status: ShakeRound::ACTIVE)
+    new_shake_round = @shake.shake_rounds.create(site_id: shake_site.id, activity_id: @shake.activity.id, shake_round: (shake_round.try(:shake_round).to_i + 1), status: ShakeRound::ACTIVE)
     broadcast("/mobile/shake_start/#{session[:shake_id]}",{shake_round_id: new_shake_round.id})
     countdown = new_shake_round.shake_round.to_s.split('').map{|i| "<i>#{i}</i>" }.join
     render text: countdown

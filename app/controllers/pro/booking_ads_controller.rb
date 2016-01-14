@@ -3,12 +3,12 @@ class Pro::BookingAdsController < Pro::BookingBaseController
   before_filter :set_booking_ad, only: [:edit, :update, :destroy]
 
   def index
-    @pictures = current_user.booking_ads
-    @picture = current_user.booking_ads.where(id: params[:id]).first || BookingAd.new(supplier_id: @booking.supplier_id, wx_mp_user_id: @booking.wx_mp_user_id)
+    @pictures = current_site.booking_ads
+    @picture = current_site.booking_ads.where(id: params[:id]).first || BookingAd.new(site_id: @booking.site_id)
   end
 
   def new
-    @picture = current_user.booking_ads.new
+    @picture = current_site.booking_ads.new
     render layout: 'application_pop'
   end
 

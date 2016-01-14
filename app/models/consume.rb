@@ -1,8 +1,8 @@
 class Consume < ActiveRecord::Base
 include HasBarcode
 
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :site
+  belongs_to :user
   belongs_to :activity_prize
   belongs_to :consumable, polymorphic: true
   belongs_to :applicable, polymorphic: true
@@ -37,7 +37,7 @@ include HasBarcode
   scope :visible, -> { where("status != 3")}
   scope :today, -> { where("date(consumes.created_at) = ?", Date.today) }
   scope :wx_card_columns, -> { includes(:card).select("date(consumes.created_at) as created_date, count(consumes.*) as total_count, count(if(consumes.status='2',true,null )) as used_count, card.title as title, card.card_type_name as card_type_name").group('created_date') }
-  scope :wx_card_consumes, ->(wx_user_id) { where(wx_user_id: wx_user_id, consumable_type: 'Wx::Card') }
+  scope :wx_card_consumes, ->(user_id) { where(user_id: user_id, consumable_type: 'Wx::Card') }
   scope :show, -> { where("status != ?", 3)}
 
 
@@ -48,7 +48,6 @@ include HasBarcode
       '未使用'
     end
   end
-
 
   def self.point_gift_exchange_json
     point_gift_exchange.recent.includes(:applicable, :consumable).map.with_index do |consume, i|
@@ -61,7 +60,7 @@ include HasBarcode
     if activity_prize.try(:point_prize?) # 积分奖需要判断是否是会员
       return false if used? || auto_used?
 
-      vip_user = wx_mp_user.supplier.vip_users.normal.where(wx_user_id: wx_user.id).first # 避免历史数据错乱导致的不一至
+      vip_user = site.vip_users.normal.where(user_id: user.id).first # 避免历史数据错乱导致的不一至
 
       if activity_prize.try(:point_prize?) && vip_user.present? && vip_user.normal? 
         transaction do
@@ -76,7 +75,7 @@ include HasBarcode
           vip_user.point_transactions.create!(
             direction_type: PointTransaction::ACTIVITY_PRIZE,
             points: activity_prize.points,
-            supplier_id: wx_mp_user.supplier_id,
+            site_id: site.site_id,
             shop_branch_id: shop_branch_id,
             description: '活动积分奖励',
             pointable: self
@@ -130,7 +129,7 @@ include HasBarcode
   end
 
   def vip_user
-    wx_user.try(:vip_user)
+    user.try(:vip_user)
   end
 
   def wx_prize_mobile
@@ -249,19 +248,19 @@ include HasBarcode
   end
 
   def user_type
-    point_gift_exchange? ? 'VipUser' : 'WxUser'
+    point_gift_exchange? ? 'VipUser' : 'User'
   end
 
   def user_id
-    point_gift_exchange? ? consumable.vip_user_id : wx_user_id
+    point_gift_exchange? ? consumable.vip_user_id : user_id
   end
 
   def user_name
-    point_gift_exchange? ? consumable.vip_user.name : wx_user.nickname
+    point_gift_exchange? ? consumable.vip_user.name : user.wx_user.nickname
   end
 
   def user_mobile
-    point_gift_exchange? ? consumable.vip_user.mobile : wx_user.mobile
+    point_gift_exchange? ? consumable.vip_user.mobile : user.wx_user.mobile
   end
 
   def shop_branch_count
@@ -292,7 +291,7 @@ include HasBarcode
     return false if used? || auto_used?
 
     if activity_prize.try(:point_prize?) # 积分奖需要判断是否是会员
-      vip_user = wx_mp_user.supplier.vip_users.normal.where(wx_user_id: wx_user.id).first # 避免历史数据错乱导致的不一至
+      vip_user = site.vip_users.normal.where(user_id: user.id).first # 避免历史数据错乱导致的不一至
 
       if activity_prize.try(:point_prize?) && vip_user.present? && vip_user.normal? 
         transaction do
@@ -304,12 +303,11 @@ include HasBarcode
           vip_user.increase_points!(activity_prize.points)
           vip_user.point_transactions.create!(
             direction_type: PointTransaction::ACTIVITY_PRIZE,
-      points: activity_prize.points,
-      supplier_id: wx_mp_user.supplier_id,
-      description: '活动积分奖励',
-      pointable: self
+            points: activity_prize.points,
+            site_id: site.site_id,
+            description: '活动积分奖励',
+            pointable: self
           )
-
           save!
         end
       else # 会员未注册或无效会员

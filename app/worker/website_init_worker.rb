@@ -7,13 +7,13 @@ class WebsiteInitWorker
     now = Time.now
 
     if Rails.env.staging? || Rails.env.production?
-      from_supplier_id = 73290
+      from_account_id = 73290
     else
-      from_supplier_id = 35067
+      from_account_id = 35067
     end
 
     Account.transaction do
-      from_user = Account.where(id: from_supplier_id).first || Account.first
+      from_user = Account.where(id: from_account_id).first || Account.first
       return puts "from user not exists" unless from_user
       
       to_user = Account.where(id: to_supplier_id).first
@@ -26,14 +26,14 @@ class WebsiteInitWorker
       # return puts "wx_mp_user not exists" unless to_user.wx_mp_user
 
       # 初始化公众号和微官网
-      unless to_user.wx_mp_user
-        to_user.wx_mp_user = WxMpUser.where(supplier_id: to_user.id).first_or_create(name: to_user.nickname)
+      unless to_user.site.wx_mp_user
+        to_user.site.wx_mp_user = WxMpUser.where(site_id: to_user.site.id).first_or_create(name: to_user.nickname)
       end
 
       # wx_mp_user = create_wx_mp_user!(name: nickname) unless wx_mp_user
       # wx_mp_user.create_activity_for_website
 
-      user_cloner.wx_mp_user = to_user.wx_mp_user
+      user_cloner.wx_mp_user = to_user.site.wx_mp_user
 
       time = to_user.created_at || Time.now
 

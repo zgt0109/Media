@@ -63,25 +63,6 @@
                 <span class="lbl">赠送积分</span>
                 <%= f.number_field :given_points, class: 'input-small', maxlength: 20, min: 1 %> 分
             </label>
-            <% if @vip_care.respond_to?(:old_coupon?) %>
-            <label class="col-xs-12">
-                 <%= f.radio_button :given_type, 2, checked: @vip_care.old_coupon?, disabled: @coupons.blank?, class: 'ace given_type given_coupons', data: { toggle: :radioTab, target: :customField } %>
-                <span class="lbl">赠送优惠券</span>
-                <div class="row given_coupons given_types given_type_2">
-                    <%- @coupons.each do |coupon| %>
-                      <div class="checkbox-inline">
-                          <label class="block">
-                              <input type="checkbox" name="vip_care[given_coupon_ids][]" value="<%= coupon.id %>" class="ace">
-                              <span class="lbl"><%= coupon.name %>
-                                (<span class="coupon_num"><%= coupon.activity_property.coupon_count - coupon.activity_consumes.count %></span>)
-                              </span>
-                          </label>
-                      </div>
-                    <%- end %>
-                    <label id='coupon_info'><%= '没有可选的有效优惠券，请前往“营销互动-->优惠券”添加' if @coupons.blank? %></label>
-                </div>
-            </label>
-            <% end %>
             <% if @vip_care.respond_to?(:gift?) %>
             <label class="col-xs-12">
                 <%= f.radio_button :given_type, 3, checked: @vip_care.gift?, class: 'ace given_type', disabled: @point_gifts.blank?, data: { toggle: :radioTab, target: :customField } %>
@@ -270,19 +251,12 @@
         $('.vip_care_category input:checked').change();
         $('.select_given_type input[type=radio]:checked').click();
         <%- unless @vip_care.new_record? %>
-        <% if @vip_care.respond_to?(:old_coupon?) %>
-          <%- if @vip_care.old_coupon? %>
-            var given_coupon_ids = $('#given_coupon_ids').val().split(' ');
-            given_coupon_ids.forEach(function(entry){
-              $('.given_coupons input[value='+entry+']').attr('checked', true)
-            });
-          <%- elsif @vip_care.gift? %>
+          <%- if @vip_care.gift? %>
             var given_gift_ids = $('#given_gift_ids').val().split(' ');
             given_gift_ids.forEach(function(entry){
               $('.given_gifts input[value='+entry+']').attr('checked', true)
             });
           <%- end %>
-        <%- end %>
         <%- end %>
 
       function couponConfirm() {

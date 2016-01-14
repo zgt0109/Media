@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: shops
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  name          :string(255)      not null
-#  logo          :string(255)
-#  status        :integer          default(1), not null
-#  description   :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  shop_type     :integer          default(0), not null
-#
-
 class Shop < ActiveRecord::Base
 
   enum_attr :shop_type, :in => [['micro_store', 1, '微门店'],['book_dinner', 2, '订餐订座'],['take_out', 3, '外卖']]
@@ -34,7 +18,7 @@ class Shop < ActiveRecord::Base
   after_create :create_default_activities
 
   def logo_url
-    qiniu_image_url("logo/#{logo}") if logo.present?
+    qiniu_image_url(logo)
   end
 
   def check_activities_exist?

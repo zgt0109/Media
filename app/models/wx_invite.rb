@@ -18,7 +18,7 @@ class WxInvite < ActiveRecord::Base
     update_attributes(is_recommended: true)
 
     if from_user.present?
-      from_participate = from_wx_user.wx_participates.normal.find_by_activity_id(activity_id)
+      from_participate = from_user.wx_participates.normal.find_by_activity_id(activity_id)
       from_participate.check_prize!(to_user_id) if from_participate.present?
     end
   end

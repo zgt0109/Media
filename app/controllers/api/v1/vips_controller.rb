@@ -2,14 +2,14 @@ class Api::V1::VipsController < Api::BaseController
   before_filter :cors_set_access_control_headers
   before_filter :set_users, except: [:pay, :spm_points, :spm_vip]
   EC_SOURCE, HOTEL_SOURCE, SPM_SOURCE = 'winwemedia_ec', 'winwemedia_hotel', 'winwemedia_spm'
-  # 会员卡余额支付接口 wx_mp_user_id, supplier_id, open_id, out_trade_no, amount, subject, body, source, trade_token
+  # 会员卡余额支付接口 site_id, supplier_id, open_id, out_trade_no, amount, subject, body, source, trade_token
   def pay
-    open_id, wx_mp_user_id, trade_token, out_trade_no, subject, body = params.values_at(:open_id, :wx_mp_user_id, :trade_token, :out_trade_no, :subject, :body)
-    wx_mp_user = WxMpUser.where(id: wx_mp_user_id).first
+    open_id, site_id, trade_token, out_trade_no, subject, body = params.values_at(:open_id, :site_id, :trade_token, :out_trade_no, :subject, :body)
+    wx_mp_user = WxMpUser.where(site_id: site_id).first
     amount = params[:amount].to_f
     return render json: { errcode: 1, errmsg: "参数不正确，金额或折扣后金额必须大于0" } if amount <= 0
-    return render json: { errcode: 1, errmsg: "参数不正确，找不到公众账号" } unless wx_mp_user && wx_mp_user.supplier
-    vip_user = wx_mp_user.vip_users.visible.where(trade_token: params[:trade_token]).first
+    return render json: { errcode: 1, errmsg: "参数不正确，找不到公众账号" } unless wx_mp_user && wx_mp_user.site
+    vip_user = wx_mp_user.site.vip_users.visible.where(trade_token: params[:trade_token]).first
     vip_checker = VipUserChecker.new(vip_user, open_id)
     return render json: { errcode: 1, errmsg: vip_checker.error_message } if vip_checker.error?
     return render json: { errcode: -1, errmsg: "会员余额不足，无法完成支付" } unless vip_user.can_pay?(amount, discounted: true)
@@ -34,7 +34,7 @@ class Api::V1::VipsController < Api::BaseController
     wx_mp_user = WxMpUser.where(openid: params[:mp_user_open_id]).first
 
     if params[:mp_user_open_id].present? && wx_mp_user
-      redirect_to app_vips_url(wxmuid: wx_mp_user.id, openid: params[:open_id])
+      redirect_to app_vips_url(site_id: wx_mp_user.site_id, openid: params[:open_id])
     else
       render json: { errcode: 40001, errmsg: "公众号不存在" }
     end

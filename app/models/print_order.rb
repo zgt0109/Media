@@ -4,7 +4,7 @@ class PrintOrder < ActiveRecord::Base
   belongs_to :site
   belongs_to :shop_branch
   belongs_to :shop_branch_print_template
-  attr_accessible :status, :address, :shop_order_id, :supplier_id, :shop_branch_id, :shop_branch_print_template_id
+  attr_accessible :status, :address, :shop_order_id, :site_id, :shop_branch_id, :shop_branch_print_template_id
   scope :basic_columns, -> { select([:id, :shop_order_id, :status, :created_at]) }
   
   enum_attr :status, :in => [
@@ -28,7 +28,7 @@ class PrintOrder < ActiveRecord::Base
   end
 
   # 导出 excel
-  def self.export_excel(supplier_id)
+  def self.export_excel(site_id)
     book = PointTransaction.new_excel(title: '报表')
     book_excel = book[0]
     book_sheet = book[1]
@@ -36,13 +36,13 @@ class PrintOrder < ActiveRecord::Base
     sing_sheet = []
     sing_sheet << export_title
 
-    PrintOrder.where(supplier_id: supplier_id).includes(:shop_order).find_each do |order|
+    PrintOrder.where(site_id: site_id).includes(:shop_order).find_each do |order|
       shop_order = order.shop_order
       if shop_order
         money = shop_order.total_amount
         date = shop_order.created_at.to_s
         shop_order_id = shop_order.id
-        custom_id = shop_order.wx_user_id
+        custom_id = shop_order.user_id
         sing_sheet << [money,date,shop_order_id,custom_id].flatten
       end
     end

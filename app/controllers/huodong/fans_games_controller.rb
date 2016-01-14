@@ -14,7 +14,7 @@ class Huodong::FansGamesController < ApplicationController
 
 	def create
 		@activity = current_site.activities.new(params[:activity])
-		@activity.wx_mp_user_id = current_user.wx_mp_user.id
+		@activity.site_id = current_site.id
 		@activity.activity_type_id = 67
 		@activity.status = 1
 		if @activity.save

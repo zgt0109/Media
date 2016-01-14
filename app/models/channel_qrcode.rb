@@ -37,7 +37,7 @@ class ChannelQrcode < ActiveRecord::Base
       # info = {'ticket' => "gQEQ8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL0xFT1RjWlBtM2JTa3NFZjlnR19yAAIEBSUpUwMEAAAAAA=="}
       if info['ticket'].present?
         qrcode = wx_mp_user.qrcodes.where(ticket: info['ticket']).first
-        qrcode ||= wx_mp_user.qrcodes.create(supplier_id: supplier_id, name: name, expire_seconds: info['expire_seconds'].presence, action_name: "QR_LIMIT_SCENE", scene_id: scene_id, ticket: info['ticket'], description: description)
+        qrcode ||= wx_mp_user.qrcodes.create(site_id: site_id, name: name, expire_seconds: info['expire_seconds'].presence, action_name: "QR_LIMIT_SCENE", scene_id: scene_id, ticket: info['ticket'], description: description)
         url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=#{info['ticket']}"
         self.qrcode_id = qrcode.id
         img = Magick::ImageList.new

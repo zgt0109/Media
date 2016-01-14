@@ -12,7 +12,7 @@ class Pro::BrochePhotosController < Pro::HousesBaseController
       flash[:alert] = "最多只能上传5张图片"
       return render inline: '<script>parent.location.reload();</script>';
     end
-    @broche_photo = @broche.broche_photos.new(supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.id, sort: @broche.sort_value)
+    @broche_photo = @broche.broche_photos.new(site_id: current_site.id, sort: @broche.sort_value)
     render layout: "application_pop"
   end
 

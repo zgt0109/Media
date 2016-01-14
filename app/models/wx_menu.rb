@@ -1,25 +1,4 @@
-# == Schema Information
-#
-# Table name: wx_menus
-#
-#  id            :integer          not null, primary key
-#  wx_mp_user_id :integer          not null
-#  parent_id     :integer          default(0), not null
-#  sort          :integer          default(0), not null
-#  name          :string(255)
-#  key           :string(255)
-#  url           :string(255)
-#  event_type    :string(255)      default("click"), not null
-#  menu_type     :string(255)      default("1"), not null
-#  menuable_id   :integer
-#  menuable_type :string(255)
-#  content       :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class WxMenu < ActiveRecord::Base
-  # attr_accessible :event_type, :key, :name, :parent_id
   attr_accessor :material_id, :activity_id, :audio_id, :video_id, :album_id, :panoramagram_id
 
   validates :name, :key, :event_type, presence: true

@@ -1,6 +1,6 @@
 class ShakePrize < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :shake
   belongs_to :shake_round
   belongs_to :shake_user

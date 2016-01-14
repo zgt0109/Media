@@ -4,9 +4,9 @@ class Pro::HotelsController < Pro::HotelsBaseController
     @wx_mp_user = current_user.wx_mp_user
     return redirect_to wx_mp_users_path, alert: '请先添加微信公共帐号' unless @wx_mp_user
 
-    @hotel = current_user.hotel || Hotel.create(supplier_id: current_user.id, wx_mp_user_id: @wx_mp_user.id, name: '微酒店')
+    @hotel = current_user.hotel || Hotel.create(site_id: current_site.id, name: '微酒店')
     now = Time.now
-    @hotel.activity = Activity.create(supplier_id: current_user.id, wx_mp_user_id: @wx_mp_user.id, activity_type_id: ActivityType::HOTEL, activityable: @hotel, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @hotel.activity
+    @hotel.activity = Activity.create(site_id: current_site.id, activity_type_id: ActivityType::HOTEL, activityable: @hotel, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @hotel.activity
   end
 
   def new

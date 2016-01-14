@@ -5,8 +5,8 @@ class Pro::TripsController < Pro::TripBaseController
 
   def index
     @current_titles << '旅游服务'
-    @trip = current_user.trip || Trip.new(supplier_id: current_user.id, wx_mp_user_id: @wx_mp_user.id, name: "微旅游")
-    @trip.activity = Activity.new(supplier_id: current_user.id, wx_mp_user_id: @wx_mp_user.id, activity_type_id: ActivityType::TRIP, activityable: @trip, status: 1 ) unless @trip.activity
+    @trip = current_user.trip || Trip.new(site_id: current_site.id, name: "微旅游")
+    @trip.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::TRIP, activityable: @trip, status: 1 ) unless @trip.activity
 
     @trip_ads = @trip.trip_ads.order(:sort)
   end
@@ -42,7 +42,7 @@ class Pro::TripsController < Pro::TripBaseController
     trip_ad_params = HashWithIndifferentAccess.new(params[:trip_ad] || {})
 
     if sorts.length < 5
-      ad = TripAd.new(supplier_id: current_user.id, wx_mp_user_id: @wx_mp_user.id, trip_id: current_user.trip.id)
+      ad = TripAd.new(site_id: current_site.id, trip_id: current_user.trip.id)
       ad.title = trip_ad_params[:title]
       ad.pic_key = trip_ad_params[:pic_key]
       ad.sort = sorts.max || 0

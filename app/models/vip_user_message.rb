@@ -3,7 +3,7 @@
 # Table name: vip_user_messages
 #
 #  id          :integer          not null, primary key
-#  supplier_id :integer          not null
+#  site_id :integer          not null
 #  vip_user_id :integer          not null
 #  is_read     :boolean          default(FALSE), not null
 #  msg_type    :integer          default(1), not null
@@ -31,9 +31,9 @@ class VipUserMessage < ActiveRecord::Base
 
   scope :latest, -> { order('is_read, created_at DESC') }
 
-  def self.send_to_all(supplier, options = {})
-    supplier.vip_user_ids.each { |vip_user_id|
-      supplier.vip_user_messages.create options.merge(vip_user_id: vip_user_id)
+  def self.send_to_all(site, options = {})
+    site.vip_user_ids.each { |vip_user_id|
+      site.vip_user_messages.create options.merge(vip_user_id: vip_user_id)
     }
   end
 

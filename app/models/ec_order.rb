@@ -1,7 +1,6 @@
 class EcOrder < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :ec_shop
 
   has_many :payments, as: :paymentable
@@ -25,7 +24,7 @@ class EcOrder < ActiveRecord::Base
 
       ec_order = EcOrder.create!({
         ec_shop_id: params[:ec_shop_id],
-        wx_user_id: params[:wx_user_id],
+        user_id: params[:user_id],
         username: address.username,
         tel: address.tel,
         address: address.detail_info,
@@ -67,9 +66,9 @@ class EcOrder < ActiveRecord::Base
       else
         payment = Payment.setup({
           payment_type_id: 10006,
-          supplier_id: supplier_id,
-          customer_id: wx_user_id,
-          customer_type: 'WxUser',
+          site_id: site_id,
+          customer_id: user_id,
+          customer_type: 'User',
           paymentable_id: id,
           paymentable_type: 'EcOrder',
           out_trade_no: order_no,
@@ -112,8 +111,7 @@ class EcOrder < ActiveRecord::Base
   def add_default_attrs
     return unless self.ec_shop
 
-    self.supplier_id = self.ec_shop.supplier_id
-    self.wx_mp_user_id = self.ec_shop.wx_mp_user_id
+    self.site_id = self.ec_shop.site_id
   end
 
   def generate_order_no

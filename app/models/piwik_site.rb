@@ -5,7 +5,7 @@ class PiwikSite < ActiveRecord::Base
 
   class << self
 
-    def get_recent_data(supplier_id, sort, region = "recent_7")
+    def get_recent_data(site_id, sort, region = "recent_7")
       days = region.split("_").last.to_i
       h = {}
       categories = []
@@ -13,7 +13,7 @@ class PiwikSite < ActiveRecord::Base
       ((Date.yesterday - days)..Date.yesterday).each do |day|
         h[day] = 0
       end
-      piwiks = PiwikSite.where(:supplier_id => supplier_id).order("date desc").limit(days)
+      piwiks = PiwikSite.where(:site_id => site_id).order("date desc").limit(days)
       piwiks.each do |piwik|
         h[piwik.date] = piwik.try(sort) if ((Date.yesterday - days)..Date.yesterday).cover? piwik.date
       end
@@ -81,19 +81,19 @@ class PiwikSite < ActiveRecord::Base
     end
 
     # 同步商户数据到统计网站
-    def sync_suppliers_to_piwik
+    def sync_sites_to_piwik
       results = []
-      suppliers = Account.where(:piwik_domain_status => 1)
+      sites = Account.where(:piwik_domain_status => 1)
       i = 0
-      suppliers.each do |supplier|
-        supplier.add_domain_to_piwik
+      sites.each do |site|
+        site.add_domain_to_piwik
         i += 1
       end
       results << "已为 #{i} 个商家补充个性化域名"
-      suppliers = Account.where(:piwik_site_id => nil)
+      sites = Account.where(:piwik_site_id => nil)
       i = 0
-      suppliers.each do |supplier|
-        supplier.get_piwik_site_id
+      sites.each do |site|
+        site.get_piwik_site_id
         i += 1
       end
       results << "已为 #{i} 个商家添加统计代码"
@@ -102,11 +102,11 @@ class PiwikSite < ActiveRecord::Base
 
     # 获取Piwik昨天统计数据
     def get_yesterday_piwik_data
-      suppliers = Account.where(["piwik_site_id is not null"])
+      sites = Account.where(["piwik_site_id is not null"])
       i = 0
       date = Date.yesterday
-      suppliers.each do |supplier|
-        supplier.get_piwik_data(date)
+      sites.each do |site|
+        site.get_piwik_data(date)
         i += 1
       end
       "已获取 #{i} 个商家昨天的统计数据"

@@ -258,11 +258,11 @@ class Website < ActiveRecord::Base
   #获取测试帐号微官网数据
   def get_test_website
     if Rails.env.staging? || Rails.env.production?
-      @supplier_id = 11805
+      @site_id = 11805
     else
-      @supplier_id = 10001
+      @site_id = 10001
     end
-    Website.where(supplier_id: @supplier_id, website_type: Website::MICRO_SITE).first
+    Website.where(site_id: @site_id, website_type: Website::MICRO_SITE).first
   end
 
   #创建微官网站点初始化数据

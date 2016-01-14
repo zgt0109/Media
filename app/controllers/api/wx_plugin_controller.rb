@@ -25,7 +25,7 @@ class Api::WxPluginController < ApplicationController
       if wx_mp_user.blank?
         @error = '绑定失败！' 
       else
-        session[:account_id] = wx_mp_user.supplier_id  
+        session[:account_id] = wx_mp_user.site.account_id
       end
     else
       @error = '绑定失败！'

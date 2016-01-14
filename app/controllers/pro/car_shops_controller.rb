@@ -8,7 +8,7 @@ class Pro::CarShopsController < ApplicationController
 
     @car_shop = current_site.car_shop || CarShop.new
     @car_activity_notice = @car_shop.car_activity_notices.shop.first || @car_shop.car_activity_notices.new
-    @car_activity_notice.activity = Activity.new(supplier_id: @car_shop.supplier_id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
+    @car_activity_notice.activity = Activity.new(site_id: @car_shop.site_id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
     @car_brand = @car_shop.car_brand || @car_shop.build_car_brand
   end
 
@@ -22,8 +22,7 @@ class Pro::CarShopsController < ApplicationController
       @car_shop.site_id = current_site.id
       now = Time.now
       attrs = {
-        supplier_id: @car_shop.supplier_id,
-        wx_mp_user_id: @car_shop.wx_mp_user_id,
+        site_id: @car_shop.site_id,
         activity_type_id: ActivityType::CAR,
         activityable: @car_activity_notice,
         status: 1,

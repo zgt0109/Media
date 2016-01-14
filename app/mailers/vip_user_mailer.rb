@@ -18,7 +18,7 @@ class VipUserMailer < ActionMailer::Base
   end
 
   def find_password_email(vip_user)
-    @notice = "您在公众账号：#{vip_user.supplier.nickname}中的会员卡余额支付密码已重置，新密码为：#{vip_user.password}，为确保支付安全请尽快修改此密码！"
+    @notice = "您在公众账号：#{vip_user.site.account.nickname}中的会员卡余额支付密码已重置，新密码为：#{vip_user.password}，为确保支付安全请尽快修改此密码！"
     mail(:to => vip_user.password_email, :subject => "会员卡余额支付密码找回")
   end
 

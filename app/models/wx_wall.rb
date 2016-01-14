@@ -106,9 +106,9 @@ class WxWall < ActiveRecord::Base
     return ["","","",""] if users.count == 0
     temp = arr_user_temp(users)
     users = users.where("NOT EXISTS(select 1 from wx_wall_prizes_wx_wall_users where wx_wall_prizes_wx_wall_users.wx_wall_prize_id is null and wx_wall_users.id = wx_wall_prizes_wx_wall_users.wx_wall_user_id)")
-    win_wx_user_id = wx_wall_winning_users.normal.first.try(:wx_user_id)
-    if users.pluck(:wx_user_id).include?(win_wx_user_id)
-      user = wx_wall_users.where(wx_user_id: win_wx_user_id).first
+    win_user_id = wx_wall_winning_users.normal.first.try(:user_id)
+    if users.pluck(:user_id).include?(win_user_id)
+      user = wx_wall_users.where(user_id: win_user_id).first
     else
       user = WxWallUser.where(id: users.pluck(:id).sample).first
     end

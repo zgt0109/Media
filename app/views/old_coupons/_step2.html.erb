@@ -7,7 +7,6 @@
             <%= render 'old_coupons/activity_notice_form', ran: ran %>
         <% end %>
 
-        <%= render 'old_coupons/activity_property', f: f if @activity.old_coupon? %>
         <div class="form-group">
             <% prev_url = action_name == 'show' ? activity_path(@activity, step: params[:step].to_i - 1) : edit_activity_path(@activity, step: params[:step].to_i - 1) %>
             <a href="<%= prev_url %>" class="btn btn-prev btn-sm">

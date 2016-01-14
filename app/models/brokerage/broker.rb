@@ -1,11 +1,11 @@
 class Brokerage::Broker < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_user
+  belongs_to :user
   has_many :clients
   has_many :commission_transactions
   has_many :unsettled_client_changes, through: :clients, source: :client_changes, conditions: { commission_transaction_id: nil }
 
-  validates :supplier_id, :wx_user_id, :name, :mobile, presence: true
+  validates :site_id, :user_id, :name, :mobile, presence: true
   validates :bank_account_name, :bank_card_no, :bank_name, presence: true, if: :update_and_bank_card?
   validates :alipay_account_name, :alipay_receiver, presence: true, if: :alipay?
 
@@ -21,7 +21,7 @@ class Brokerage::Broker < ActiveRecord::Base
   # 4、将该经纪人未结算的客户状态修改的记录关联到第3步生成的佣金结算事务记录
   def settle_commission!
     #errors.add(:base, '未结佣金必须大于0') and return false if unsettled_commission <= 0
-    errors.add(:base, '未结佣金不能小于最低结算金额') and return false if unsettled_commission < supplier.brokerage_setting.min_settlement_amount
+    errors.add(:base, '未结佣金不能小于最低结算金额') and return false if unsettled_commission < site.brokerage_setting.min_settlement_amount
 
     transaction do
       old_unsettled_commission = unsettled_commission

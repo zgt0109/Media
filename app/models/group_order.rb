@@ -1,7 +1,6 @@
 class GroupOrder < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :group_item
   belongs_to :payment_type
   has_many   :group_comments
@@ -59,9 +58,9 @@ class GroupOrder < ActiveRecord::Base
 
     _order_params = {
       payment_type_id: payment_type_id,
-      supplier_id: supplier_id,
-      customer_id: wx_user_id,
-      customer_type: 'WxUser',
+      site_id: site_id,
+      customer_id: user_id,
+      customer_type: 'User',
       paymentable_id: id,
       paymentable_type: 'GroupOrder',
       out_trade_no: order_no,
@@ -114,10 +113,8 @@ class GroupOrder < ActiveRecord::Base
 
   def add_default_attrs
     return unless group_item
-    self.supplier_id = group_item.supplier_id
-    self.wx_mp_user_id = group_item.wx_mp_user_id
+    self.site_id = group_item.site_id
     self.group_id = group_item.group_id
-    # self.group_item_id = group_item.id
   end
 
   def generate_order_no

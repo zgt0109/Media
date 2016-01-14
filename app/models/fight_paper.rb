@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: fight_papers
-#
-#  id            :integer          not null, primary key
-#  supplier_id   :integer          not null
-#  wx_mp_user_id :integer          not null
-#  activity_id   :integer          not null
-#  the_day       :integer          not null
-#  active_date   :date             not null
-#  read_time     :integer
-#  description   :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#
-
 class FightPaper < ActiveRecord::Base
 
   belongs_to :activity
@@ -35,7 +19,6 @@ class FightPaper < ActiveRecord::Base
     end
     return true
   end
-
 
   def fight_questions_with_default
     fight_questions.present? ? fight_questions : Array.new(5) { FightQuestion.new }

@@ -9,7 +9,7 @@ class Pro::HouseExpertsController < ApplicationController
     @search = @total_house_experts.search(params[:search])
     @house_experts = @search.page(params[:page])
 
-    @house_expert = @total_house_experts.where("id = ?", params[:id]).first || @total_house_experts.new(supplier_id: current_user.id, wx_mp_user_id: current_user.wx_mp_user.id)
+    @house_expert = @total_house_experts.where("id = ?", params[:id]).first || @total_house_experts.new(site_id: current_site.id)
   end
 
   def show

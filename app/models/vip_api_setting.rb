@@ -1,6 +1,5 @@
 class VipApiSetting < ActiveRecord::Base
   belongs_to :site
-  belongs_to :wx_mp_user
   belongs_to :vip_card
 
   acts_as_enum :auth_type, in: [

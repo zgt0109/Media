@@ -139,7 +139,7 @@ module ApplicationHelper
       options_for_select([['', '']])
     else
       # car_brands = (@supplier||current_user).car_brands.normal
-      car_brands = [(@supplier||current_user).car_brand]
+      car_brands = [(@site||current_user).car_brand]
       options_for_select(car_brands.collect{ |b| [b.name, b.id] }, brand_id.to_i)
     end
   end
@@ -160,7 +160,7 @@ module ApplicationHelper
     if brand_id.blank?
       options_for_select([['', '']])
     else
-      car_catenas = (@supplier||current_user).car_brand.car_catenas.normal
+      car_catenas = (@site||current_user).car_brand.car_catenas.normal
       options_for_select(car_catenas.pluck(:name, :id), catena_id.to_i)
     end
   end
@@ -301,8 +301,7 @@ module ApplicationHelper
 
   def car_brands_for_js(options = {})
     car_brands = ''
-    logger.info "1111111#{(@supplier||current_user).id}"
-    [(@supplier||current_user).car_brand].each do |brand|
+    [(@site||current_user).car_brand].each do |brand|
       car_catenas = brand.car_catenas.normal.collect {|catena| "['#{catena.name}', #{catena.id.to_i}]"}
       car_catenas.unshift("['','']") if "mobile_car_type".eql?(options[:source])
       car_brands << "#{brand.id.to_i}: [#{car_catenas.join(', ')}],"
@@ -315,7 +314,7 @@ module ApplicationHelper
   def bespeak_car_brands_for_js
     car_brands = ''
 
-    [(@supplier||current_user).car_brand].each do |brand|
+    [(@site||current_user).car_brand].each do |brand|
       car_types = brand.car_types.normal.collect {|type| "['#{type.car_catena.try(:name)} - #{type.name}', #{type.id.to_i}]"}
       car_brands << "#{brand.id.to_i}: [#{car_types.join(', ')}],"
     end
@@ -365,9 +364,7 @@ module ApplicationHelper
     if activity.operation? || activity.wave?
       activity.activity_status_name
     elsif activity.activity_type.is_show?
-      if activity.old_coupon? && activity.starting?
-        gua_status_name(activity)
-      elsif activity.vote?
+      if activity.vote?
         activity.activity_status_name
       else
         if activity.setted?
@@ -584,9 +581,9 @@ module ApplicationHelper
       end
     elsif @website.website_type == 3
       if @website_menu.present? && @website_menu.parent.present? && @website_menu.parent.parent_id != 0
-        page_app_business_circle_url(id:@website_menu.parent.id, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id])
+        page_app_business_circle_url(id:@website_menu.parent.id, anchor: "mp.weixin.qq.com")
       else
-        app_business_circles_url(id:@website.id, anchor: "mp.weixin.qq.com", wxmuid: session[:wx_mp_user_id])
+        app_business_circles_url(id: @website.id, anchor: "mp.weixin.qq.com")
       end
     end
   end
@@ -598,9 +595,9 @@ module ApplicationHelper
 
   def require_ec_ad_link picture
     if picture.category?
-      mobile_ec_category_path(supplier_id: @supplier.id, id: picture.menuable_id)
+      mobile_ec_category_path(site_id: current_site.id, id: picture.menuable_id)
     elsif picture.product?
-      mobile_ec_item_path(supplier_id: @supplier.id, id: picture.menuable_id, anchor: "mp.weixin.qq.com")
+      mobile_ec_item_path(site_id: current_site.id, id: picture.menuable_id, anchor: "mp.weixin.qq.com")
     else
       website_activity_link(picture)
     end
@@ -615,11 +612,11 @@ module ApplicationHelper
   def quick_link_options
     {
       '请选择'     => '',
-      "积分换礼品"   => "http://#{Settings.mhostname}/app/vips/gifts?wxmuid=#{current_site.wx_mp_user.try(:id)}",
-      "会员签到"    => "http://#{Settings.mhostname}/app/vips/signin?wxmuid=#{current_site.wx_mp_user.try(:id)}",
-      "会员卡套餐"   => "http://#{Settings.mhostname}/app/vips/vip_packages?wxmuid=#{current_site.wx_mp_user.try(:id)}",
-      "会员消费记录"  => "http://#{Settings.mhostname}/app/vips/consumes?wxmuid=#{current_site.wx_mp_user.try(:id)}",
-      "会员积分记录"  => "http://#{Settings.mhostname}/app/vips/points?type=out&wxmuid=#{current_site.wx_mp_user.try(:id)}",
+      "积分换礼品"   => "http://#{Settings.mhostname}/app/vips/gifts?site_id=#{current_site.id}",
+      "会员签到"    => "http://#{Settings.mhostname}/app/vips/signin?site_id=#{current_site.id}",
+      "会员卡套餐"   => "http://#{Settings.mhostname}/app/vips/vip_packages?site_id=#{current_site.id}",
+      "会员消费记录"  => "http://#{Settings.mhostname}/app/vips/consumes?site_id=#{current_site.id}",
+      "会员积分记录"  => "http://#{Settings.mhostname}/app/vips/points?type=out&site_id=#{current_site.id}",
       "微酒店订单管理" => "#{HOTEL_HOST}/wehotel-all/#{current_user.id}/getOrderList"
     }
   end

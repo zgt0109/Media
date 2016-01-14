@@ -9,7 +9,7 @@ class Pro::BookingItemsController < Pro::BookingBaseController
   end
 
   def new
-    @booking_item = current_user.booking_items.new(wx_mp_user_id: @booking.wx_mp_user_id)
+    @booking_item = current_site.booking_items.new
     @booking_item_picture = @booking_item.booking_item_pictures.new
     @booking_categories_selects = @booking.multilevel_menu params
     @booking_categories_selects = [[1, []]] unless @booking_categories_selects.present?

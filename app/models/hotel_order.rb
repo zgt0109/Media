@@ -1,32 +1,4 @@
-# == Schema Information
-#
-# Table name: hotel_orders
-#
-#  id                 :integer          not null, primary key
-#  supplier_id        :integer          not null
-#  wx_mp_user_id      :integer          not null
-#  wx_user_id         :integer          not null
-#  hotel_id           :integer          not null
-#  hotel_branch_id    :integer          not null
-#  hotel_room_type_id :integer          not null
-#  order_no           :string(255)      not null
-#  expired_at         :datetime         not null
-#  name               :string(255)      not null
-#  mobile             :string(255)      not null
-#  qty                :integer          default(0), not null
-#  check_in_date      :date             not null
-#  check_out_date     :date             not null
-#  check_in_days      :integer          default(1), not null
-#  price              :decimal(12, 2)   default(0.0), not null
-#  total_amount       :integer          not null
-#  status             :integer          default(1), not null
-#  description        :text
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#
-
 class HotelOrder < ActiveRecord::Base
-  #attr_accessible :description, :expired_at, :hotel_branch_id, :hotel_id, :order_no, :status, :supplier_id, :total_amount, :wx_mp_user_id, :wx_user_id
   before_create :add_default_attrs
 
   belongs_to :hotel

@@ -3,7 +3,7 @@ class DoctorArrangeItem < ActiveRecord::Base
   belongs_to :hospital_doctor
   belongs_to :hospital_department
   belongs_to :doctor_watch
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :shop_branch
 
   before_create :add_default_attrs

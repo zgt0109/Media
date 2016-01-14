@@ -12,10 +12,6 @@
 #
 
 class City < ActiveRecord::Base
-  validates :name, presence: true
-
   belongs_to :province
   has_many :districts
-  has_many :hotel_branches
-  has_many :supplier_accounts
 end

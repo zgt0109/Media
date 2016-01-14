@@ -16,7 +16,6 @@ class TripOrder < ActiveRecord::Base
 
     return unless self.trip
 
-    self.supplier_id = self.trip.supplier_id
-    self.wx_mp_user_id = self.trip.wx_mp_user_id
+    self.site_id = self.trip.site_id
   end
 end

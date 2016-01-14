@@ -3,7 +3,7 @@
 # Table name: point_transactions
 #
 #  id             :integer          not null, primary key
-#  supplier_id    :integer          not null
+#  site_id    :integer          not null
 #  vip_user_id    :integer          not null
 #  point_type_id  :integer          not null
 #  direction_type :integer          default(1), not null

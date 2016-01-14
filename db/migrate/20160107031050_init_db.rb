@@ -1041,7 +1041,6 @@ class InitDb < ActiveRecord::Migration
     t.integer  "car_catena_id"
     t.integer  "car_type_id"
     t.string   "name"
-    t.string   "path"
     t.string   "qiniu_path_key"
     t.boolean  "is_cover",       :default => false, :null => false
     t.integer  "sort",           :default => 1

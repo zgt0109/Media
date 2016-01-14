@@ -8,7 +8,7 @@ class WeixinHardware
     def respond_hanming_wifi(wx_user, mp_user, message)
       Weixin.respond_text(wx_user.openid, mp_user.openid, 'hanming wifi')
     end
-    
+
     # resultCode
     # string
     # true

@@ -6,7 +6,7 @@ module Paymentable
   end
 
   def pay_result
-    require_fields = %w(supplier_id out_trade_no trade_no status amount state subject body gmt_payment source)
+    require_fields = %w(account_id out_trade_no trade_no status amount state subject body gmt_payment source)
     HashWithIndifferentAccess.new(attributes.slice(*require_fields))
   end
 

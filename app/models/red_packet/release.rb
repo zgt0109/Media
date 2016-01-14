@@ -1,6 +1,6 @@
 class RedPacket::Release < ActiveRecord::Base
   belongs_to :activity
-  belongs_to :wx_user
+  belongs_to :user
   belongs_to :activity_user
   has_one :consume, as: :consumable
 
@@ -28,6 +28,6 @@ class RedPacket::Release < ActiveRecord::Base
     end
 
     def create_release_consume
-      self.create_consume(wx_mp_user_id: activity.wx_mp_user_id, wx_user_id: wx_user.id, mobile: activity_user.mobile)
+      self.create_consume(user_id: user.id, mobile: activity_user.mobile)
     end
 end
