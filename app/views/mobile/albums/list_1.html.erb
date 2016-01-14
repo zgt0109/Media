@@ -5,7 +5,7 @@
     <% @album.photos.page(1).each do |photo| %>
       <div class="cell">
         <a href="<%= mobile_album_url(photo, site_id: photo.album.site_id) %>">
-          <%= image_tag photo.img_url %>
+          <%= image_tag(photo.img_url) if photo.img_url.present? %>
         </a>
       </div>
     <% end %>

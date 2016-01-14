@@ -26,7 +26,7 @@ module DetectUserAgent
       session[:user_id] = @wx_user.user_id
       session[:openid] = @wx_user.openid
 
-      @user = @wx_user.user
+      @user = @wx_user.setup_user
     end
 
   end

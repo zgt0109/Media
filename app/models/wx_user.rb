@@ -126,7 +126,7 @@ class WxUser < ActiveRecord::Base
     matched
   end
 
-  def setup
+  def setup_user
     user || init_user
   end
 
