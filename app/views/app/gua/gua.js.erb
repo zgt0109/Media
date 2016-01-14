@@ -1,6 +1,6 @@
 prize = '<%= @prize_title %>';
 sn_code = '<%= @sn_code %>';
-leftCount = parseInt('<%= @wx_user.gua_left_count(@activity.id) if @wx_user %>');
+leftCount = parseInt('<%= @user.gua_left_count(@activity.id) if @user %>');
 var html='';
 if(<%= !@is_win %>){
   if(leftCount > 0){

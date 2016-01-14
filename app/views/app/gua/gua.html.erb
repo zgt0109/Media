@@ -20,7 +20,7 @@
   var sn_code = '';
   var activity_id = '<%= params[:id] %>'
   var request_responsed = true;
-  var leftCount = parseInt('<%= @wx_user.try(:gua_left_count, @activity.id) %>');
+  var leftCount = parseInt('<%= @user.try(:gua_left_count, @activity.id) %>');
   var sp;
 
   bindGua();
@@ -55,7 +55,7 @@
       scratchMove: function(e, percent) {
         <%- if @user.blank? || @user.wx_mp_user != @wx_mp_user %>
           showTips(".J-guanzhu");
-        <%- elsif @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)  %>
+        <%- elsif @activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?)  %>
           showTips(".J-register");
         <%- else%>
           if(request_responsed && percent > 30 && percent != 100){
@@ -75,7 +75,7 @@
   function getSuccess(self){
     var h=$(".html").innerHeight();
     self=$(self);
-    var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+prize+'，</b><br/>兑奖SN码：'+sn_code+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @wx_user.try(:related_mobile) %>"/></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile();" readonly/></p></div></div></div></div>';
+    var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+prize+'，</b><br/>兑奖SN码：'+sn_code+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @user.try(:related_mobile) %>"/></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile();" readonly/></p></div></div></div></div>';
     $("body").append(html);
   }
   function submitMobile() {
