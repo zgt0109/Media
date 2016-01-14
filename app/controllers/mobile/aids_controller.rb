@@ -38,7 +38,7 @@ class Mobile::AidsController < Mobile::BaseController
 
     @activity_user ||= @activity.activity_users.create(
       site_id:   @activity.site.id,
-      user_id:   @user.user_id,
+      user_id:   @user.id,
       name:      @wx_user.nickname,
       mobile:    @user.mobile,
       address:   @wx_user.address
@@ -292,7 +292,7 @@ class Mobile::AidsController < Mobile::BaseController
     @origin_user = @wx_mp_user.wx_users.where(openid: params[:origin_openid]).first if params[:origin_openid].present?
 
     if @owner_user.present?
-      @activity_user ||= @activity.activity_users.where(user_id: @owner_user.id).first
+      @activity_user ||= @activity.activity_users.where(user_id: @owner_user.user_id).first
 
       return redirect_to mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) unless @activity_user.present?
     end
