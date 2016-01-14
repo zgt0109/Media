@@ -81,7 +81,7 @@ Wp::Application.routes.draw do
 
         #微贺卡
         resources :greet_cards, only: [:index, :show] do
-          resources :user_greet_cards, only: [:index, :show, :create]
+          resources :greet_card_items, only: [:index, :show, :create]
         end
 
         #微预定

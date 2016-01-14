@@ -1,11 +1,11 @@
 class Mobile::ShakesController < Mobile::BaseController
-	layout 'mobile/shake'
+  layout 'mobile/shake'
   before_filter :block_non_wx_browser
 
   def index
-  	@shake = @site.activities.shake.find(session[:activity_id]).activityable
-	  @shake_user = @shake.shake_users.where(user_id: session[:user_id]).first if @shake
-	  render_404 unless @shake_user && @shake.normal?
+    @shake = @site.activities.shake.find(session[:activity_id]).activityable
+    @shake_user = @shake.shake_users.where(user_id: session[:user_id]).first if @shake
+    render_404 unless @shake_user && @shake.normal?
   end
 
   def show
