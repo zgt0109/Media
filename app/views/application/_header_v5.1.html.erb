@@ -47,13 +47,13 @@
         <li class="<%= 'active' if %w(about joins news).include?(action_name) %>">
           <a href="">关于我们<i class="arrow-down"></i></a>
           <div class="nav-son">
-              <a href="<%= about_path %>"  class="nav-item <%= 'active' if action_name == 'about' %>">
+              <a href="<%#= about_path %>"  class="nav-item <%= 'active' if action_name == 'about' %>">
                   <strong class="nav-txt">关于微枚迪</strong>
               </a>
-              <a href="<%= joins_path %>"  class="nav-item <%= 'active' if action_name == 'joins' %>">
+              <a href="<%#= joins_path %>"  class="nav-item <%= 'active' if action_name == 'joins' %>">
                   <strong class="nav-txt">诚聘英才</strong>
               </a>
-              <a href="/news"  class="nav-item <%= 'active' if controller_name == 'news' %>">
+              <a href="#news_path"  class="nav-item <%= 'active' if controller_name == 'news' %>">
                   <strong class="nav-txt">媒体报道</strong>
               </a>
           </div>
