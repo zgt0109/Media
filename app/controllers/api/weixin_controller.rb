@@ -375,7 +375,7 @@ class Api::WeixinController < ApplicationController
               return Weixin.respond_text(@from_user_name, @to_user_name, activity.summary)
             when activity.exit_share_photo? # 退出分享模式
               @wx_user.normal!
-              share = Activity.where(siter_id: activity.siter_id, activity_type_id: ActivityType::SHARE_PHOTO).first
+              share = Activity.where(site_id: activity.site_id, activity_type_id: ActivityType::SHARE_PHOTO).first
               message = activity.summary.to_s.gsub!('{share_keyword}', share.try(:keyword).to_s)
               return Weixin.respond_text(@from_user_name, @to_user_name, message)
             when activity.other_photos?          then return SharePhoto.respond_other_photo(@wx_user, @mp_user, activity)
@@ -384,7 +384,7 @@ class Api::WeixinController < ApplicationController
               @wx_user.greet! #进入语音贺卡模式
               return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
             when activity.shake?
-              url = "#{mobile_shakes_url(siter_id: activity.siter_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
+              url = "#{mobile_shakes_url(site_id: activity.site_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
               items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: activity.pic_url, url: url}]
               return Weixin.respond_news(@from_user_name, @to_user_name, items)
             else activity.respond_mobile_url(nil, openid: @from_user_name)
