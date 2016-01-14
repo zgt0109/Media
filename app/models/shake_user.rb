@@ -104,8 +104,8 @@ class ShakeUser < ActiveRecord::Base
     return false unless activity.activityable.normal?
     shake_user = user.shake_users.where(shake_id: activity.activityable_id).first
     return shake_user.reply_welcome_message if shake_user
-    shake_user = user.shake_users.create(site_id: activity.site_id, shake_id: activity.activityable_id, nickname: user.wx_user.nickname, avatar: user.wx_user.headimgurl, mobile: user.wx_user.mobile, matched_at: Time.now)
-    user.shake_mode!
+    shake_user = user.shake_users.create(site_id: activity.site_id, shake_id: activity.activityable_id, nickname: user.nickname, avatar: user.headimgurl, mobile: user.mobile, matched_at: Time.now)
+    user.wx_user.shake_mode!
     if shake_user.nickname.blank?
       shake_user.reply_need_nickname
     elsif shake_user.avatar.blank?

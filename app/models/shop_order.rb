@@ -433,14 +433,14 @@ class ShopOrder < ActiveRecord::Base
   end
 
   def update_wx_user_address
-    if self.wx_user
-      self.wx_user.address = self.address
-      self.wx_user.mobile = self.mobile
-      self.wx_user.nickname = self.username
+    if self.user
+      # self.user.address = self.address
+      self.user.mobile = self.mobile
+      self.user.nickname = self.username
     else
-      self.build_wx_user(address: self.address, mobile: self.mobile, nickname: self.username)
+      # self.build_wx_user(address: self.address, mobile: self.mobile, nickname: self.username)
     end
-    self.wx_user.save if self.wx_user
+    self.user.save if self.user
   end
 
 end

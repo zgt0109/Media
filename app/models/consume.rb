@@ -256,11 +256,11 @@ include HasBarcode
   # end
 
   def user_name
-    point_gift_exchange? ? consumable.vip_user.name : user.wx_user.nickname
+    point_gift_exchange? ? consumable.vip_user.name : user.nickname
   end
 
   def user_mobile
-    point_gift_exchange? ? consumable.vip_user.mobile : user.wx_user.mobile
+    point_gift_exchange? ? consumable.vip_user.mobile : user.mobile
   end
 
   def shop_branch_count

@@ -322,7 +322,7 @@ class Api::WeixinController < ApplicationController
       message = WxWallUser.reply_or_create(@wx_user, activity)
       Weixin.respond_text(@from_user_name, @to_user_name, message)
     elsif activity.shake? && activity.setted? # 摇一摇接口处理
-      message = ShakeUser.reply_or_create(@wx_user, activity)
+      message = ShakeUser.reply_or_create(@wx_user.user, activity)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
       respond_activity_directly(activity)
     # elsif activity.enter_weixin_print?
