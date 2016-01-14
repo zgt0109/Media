@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
 
   has_one :user
   has_one :vip_user
+  has_one :wx_user
 
   has_one :broker, class_name: '::Brokerage::Broker'
   has_many :wx_wall_users
