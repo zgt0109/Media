@@ -13,14 +13,14 @@
   微信api接口的应用部署到： push1.winwemedia.com 和 push2.winwemedia.com 服务器的 /opt/apps/winwemedia_wx/current 目录。
     部署命令： `cap weixin deploy`
   其它环境的部署请参照 config/deploy.rb 文件；
-  
+
   注意： 如果部署到staging环境或生产环境， 并且 assets 文件有变动， 请先执行 cap {{stage}} precompile
 
 sidekiq部署：
   应用程序部署到 faye.service.winwemedia.com， 以root运行 `/etc/init.d/sidekiq restart`
 
 faye部署：
-  应用程序部署到 faye.service.winwemedia.com， 进入 /opt/apps/faye 目录，运行 `rackup faye.ru -E production -p 9393 -D`
+  应用程序部署到 faye.service.winwemedia.com， 进入 /opt/apps/faye 目录，运行 `~/.rvm/gems/ruby-2.2.1/bin/rackup faye.ru -E production -p 9393 -D`
 
 
 服务器配置：
@@ -31,7 +31,7 @@ faye部署：
 
 注意事项：
 当生产服务器的IP地址发生变更时，需要在微信开放平台 https://open.weixin.qq.com 修改白名单IP地址列表：
-203.195.131.131;203.195.143.22;203.195.143.224;203.195.143.64;203.195.197.87;203.195.194.11;203.195.161.50;203.195.161.56;203.195.188.198;203.195.188.119;182.254.181.56;182.254.181.249
+203.195.131.131;203.195.143.22;
 
 余额支付controller: app/controllers/api/v1/vips_controller.rb，文档： http://redmine.winwemedia.com/documents/2
 门店controller: app/controllers/biz/shops_controller.rb
