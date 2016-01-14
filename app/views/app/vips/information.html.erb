@@ -4,7 +4,7 @@
       <div class="list-box no-card-hide">
         <dl>
           <dt class="border">
-            <a class="icon-right" href="<%= @vip_card.get_user_info? ? vip_info_app_vip_apis_path : info_app_vips_path %>">
+            <a class="icon-right" href="<%= @vip_card.get_user_info? ? vip_info_app_vip_apis_url : info_app_vips_url %>">
               <i class="icon icon-6"></i>
               <span>个人资料</span>
             </a>
@@ -13,7 +13,7 @@
         <% if @vip_card.get_transactions? %>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= vip_transactions_app_vip_apis_path %>">
+              <a class="icon-right" href="<%= vip_transactions_app_vip_apis_url %>">
                 <i class="icon icon-6"></i>
                 <span>个人流水</span>
               </a>
@@ -25,7 +25,7 @@
         <% if @vip_user.password_digest.blank? %>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= passwd_app_vips_path %>">
+              <a class="icon-right" href="<%= passwd_app_vips_url %>">
                 <i class="icon icon-20"></i>
                 <span>设置支付密码</span>
               </a>
@@ -34,7 +34,7 @@
         <% else %>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= edit_passwd_app_vips_path %>">
+              <a class="icon-right" href="<%= edit_passwd_app_vips_url %>">
                 <i class="icon icon-20"></i>
                 <span>修改支付密码</span>
               </a>
@@ -42,7 +42,7 @@
           </dl>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= find_passwd_app_vips_path %>">
+              <a class="icon-right" href="<%= find_passwd_app_vips_url %>">
                 <i class="icon icon-21"></i>
                 <span>找回支付密码</span>
               </a>

@@ -37,7 +37,7 @@
         <%- end %>
     </div>
     <div class="btn-box">
-        <a href="<%= mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn btn-bigest btn-red">返回</a>
+        <a href="<%= mobile_recommends_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn btn-bigest btn-red">返回</a>
     </div>
 </div>
 <%= javascript_include_tag 'mobile/qcode' %>

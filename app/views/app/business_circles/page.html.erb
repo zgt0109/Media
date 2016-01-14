@@ -17,7 +17,7 @@
           <% if @website_menu.website_articles.as_default.present? %>
               <% @website_menu.website_articles.as_default.order("sort DESC, updated_at DESC").each do |article| %>
                   <div class="box box-index box-list">
-                    <a href="<%= detail_app_business_circle_path(article, anchor: "mp.weixin.qq.com") %>" class="box-block"></a>
+                    <a href="<%= detail_app_business_circle_url(article, anchor: "mp.weixin.qq.com") %>" class="box-block"></a>
                     <div class="hd">
                       <b><%= article.title %></b>
                       <i><%= date_format_full(article.created_at) %></i>

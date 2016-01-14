@@ -69,7 +69,7 @@ class App::VipsController < App::BaseController
   def tenpay_callback
     logger.info "----------- into mobile call back #{params}------------------"
     @order = VipRechargeOrder.find(params[:order_id])
-    redirect_to recharge_back_app_vips_path(order_id: @order.id)
+    redirect_to recharge_back_app_vips_url(order_id: @order.id)
   end
 
   def recharge_check
@@ -139,15 +139,15 @@ class App::VipsController < App::BaseController
   def passwd
     return if request.get?
     options = params.slice(:password, :password_email).merge(can_validate: true).reject { |k, v| v.blank? }
-    url     = params[:return_to].presence || information_app_vips_path
+    url     = params[:return_to].presence || information_app_vips_url
     notice  = @vip_user.update_attributes(options) ? "设置成功" : "设置失败"
     redirect_to url, notice: notice
   end
 
   def edit_passwd
     return if request.get?
-    return redirect_to passwd_app_vips_path if @vip_user.authenticate(params[:password])
-    redirect_to edit_passwd_app_vips_path, notice: "密码不正确"
+    return redirect_to passwd_app_vips_url if @vip_user.authenticate(params[:password])
+    redirect_to edit_passwd_app_vips_url, notice: "密码不正确"
   end
 
   def find_passwd
@@ -199,7 +199,7 @@ class App::VipsController < App::BaseController
     return redirect_to :back, alert: "兑换失败，该礼品已兑换完毕" if @gift.sku_lack?
     return redirect_to :back, alert: "每个用户最多可兑换#{@gift.people_limit_count}次" if @gift.limit_count_for( @vip_user ) == 0
     return redirect_to :back, alert: "积分不足，无法兑换该礼品" unless @vip_user.exchange_gift(@gift, qty, vip_given_id)
-    redirect_to exchanged_app_vips_path, notice: "兑换成功"
+    redirect_to exchanged_app_vips_url, notice: "兑换成功"
   end
 
   def shops
@@ -268,7 +268,7 @@ class App::VipsController < App::BaseController
     gift        = consume.consumable.point_gift
     shop_branch = gift.shop_branches.used.find(params[:shop_branch_id]) if gift && params[:shop_branch_id].to_i > 0
     if consume.use!(shop_branch)
-      redirect_to exchanged_app_vips_path(app_params), notice: "使用成功"
+      redirect_to exchanged_app_vips_url(app_params), notice: "使用成功"
     else
       redirect_to :back, alert: "使用失败"
     end
@@ -332,7 +332,7 @@ class App::VipsController < App::BaseController
   #支付密码
   def by_usable_amount
     @package = @vip_card.vip_packages.show.find(params[:id])
-    return redirect_to passwd_app_vips_path(return_to: by_usable_amount_app_vips_path(id: @package.id)) if @vip_user.password_digest.blank?
+    return redirect_to passwd_app_vips_url(return_to: by_usable_amount_app_vips_url(id: @package.id)) if @vip_user.password_digest.blank?
   end
 
   #确认支付
@@ -357,7 +357,7 @@ class App::VipsController < App::BaseController
                                                                       package_item_name: vp.vip_package_item.name,
                                                                       package_item_price: vp.vip_package_item.price)} if vp.items_count > 0
           end
-          redirect_to buy_success_app_vips_path(price: @vip_package.price), notice: "购买成功"
+          redirect_to buy_success_app_vips_url(price: @vip_package.price), notice: "购买成功"
         else
           redirect_to :back, alert: "购买失败"
         end
@@ -371,7 +371,7 @@ class App::VipsController < App::BaseController
   def buy_success;end
 
   def activate
-    return redirect_to app_vips_path, notice: '商家没有开启会员导入功能' if @vip_card.vip_importing_disabled?
+    return redirect_to app_vips_url, notice: '商家没有开启会员导入功能' if @vip_card.vip_importing_disabled?
     return if request.get?
     mobile, captcha = session[:mobile], session[:captcha]
     return render js: "alert('验证码不正确')" if captcha.blank? || params[:captcha] != captcha || params[:mobile] != mobile
@@ -382,7 +382,7 @@ class App::VipsController < App::BaseController
     if vip_user.blank?
       render js: "alert('领卡失败：您已经领取过会员卡了');"
     elsif vip_user.persisted?
-      render js: "alert('恭喜，您已成为线上会员！');location.href='#{app_vips_path}'"
+      render js: "alert('恭喜，您已成为线上会员！');location.href='#{app_vips_url}'"
     else
       render js: "alert('领卡失败： #{vip_user.full_error_message}');"
     end
@@ -392,7 +392,7 @@ class App::VipsController < App::BaseController
     return if request.get?
     if @vip_user.update_attributes(name: params[:name], mobile: params[:mobile])
       @vip_user.normal!
-      render js: "alert('恭喜，您已成为线上会员！');location.href='#{app_vips_path}'"
+      render js: "alert('恭喜，您已成为线上会员！');location.href='#{app_vips_url}'"
     else
       render js: "alert('激活失败： #{@vip_user.full_error_message}');"
     end
@@ -431,7 +431,7 @@ class App::VipsController < App::BaseController
       return if @vip_user.inactive?
 
       vip_checker = VipUserChecker.new(@vip_user)
-      redirect_to app_vips_path(app_params), notice: vip_checker.error_message if vip_checker.error?
+      redirect_to app_vips_url(app_params), notice: vip_checker.error_message if vip_checker.error?
     end
 
 end

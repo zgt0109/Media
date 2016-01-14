@@ -25,7 +25,7 @@ class Mobile::EcOrdersController < Mobile::BaseController
   def create
     @ec_order = EcOrder.setup(params)
     if @ec_order
-      redirect_to mobile_ec_order_path(@ec_order.site_id, @ec_order.id)
+      redirect_to mobile_ec_order_url(@ec_order.site_id, @ec_order.id)
     else
       render 'new', alert: '创建订单失败'
     end

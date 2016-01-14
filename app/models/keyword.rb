@@ -12,7 +12,7 @@ class Keyword < ActiveRecord::Base
   ]
 
   acts_as_enum :msg_type, :in => [
-    ['autoreply', 1, '关键词回复'],
+    ['keyword_reply', 1, '关键词回复'],
     ['subscribe', 2, '关注事件'],
     ['autoreply', 3, '自动回复']
   ]

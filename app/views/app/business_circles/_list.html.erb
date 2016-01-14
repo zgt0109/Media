@@ -18,14 +18,14 @@
 <% else %>
   <div class="box box-index">
     <div class="hd">
-      <a href="<%= app_business_circle_path(@website_menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
+      <a href="<%= app_business_circle_url(@website_menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
       <h2 class="ellipsis"><%= @website_menu.name %></h2>
       <a class="ico icon-angle-right fr"></a>
     </div>
     <% if @website_menu.has_children? %>
         <div class="bd box-circle">
           <% @website_menu.children.sorted.each do |child| %>
-              <a href="<%= child.has_children? ? page_app_business_circle_path(child, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>">
+              <a href="<%= child.has_children? ? page_app_business_circle_url(child, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>">
                 <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
                 <% if child.menuable_type == 'Activity' %>
                   <% if child.menuable.try(:activityable_type) == 'BusinessShop' %>

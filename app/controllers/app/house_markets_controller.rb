@@ -11,7 +11,7 @@ module App
      params[:house_bespeak][:order_time] =  "#{params[:house_bespeak][:order_time]} #{params[:order_for_time]['(4i)']}:#{params[:order_for_time]['(5i)']}"
       @house_bespeak = @house.bespeaks.build(params[:house_bespeak])
       if @house_bespeak.save!
-        redirect_to new_app_house_market_path, :notice => "报名成功"
+        redirect_to new_app_house_market_url, :notice => "报名成功"
       else
         flash[:notice] = "报名失败"
         render :action => :new

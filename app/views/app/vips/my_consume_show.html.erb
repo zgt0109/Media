@@ -12,7 +12,7 @@
       </div>
       <div class="service-box">
         <div class="coupons-d-box">
-          <div class="coupons-d-t"><a href="<%= shops_app_vips_path( ids: ( @vip_package.shop_branch_ids.join(',') if @vip_package.shop_branch_limited? ) ) %>">适用门店（<%= @vip_package.shop_branch_limited? ? @vip_package.shop_branches.count : "不限制" %>）</a></div>
+          <div class="coupons-d-t"><a href="<%= shops_app_vips_url( ids: ( @vip_package.shop_branch_ids.join(',') if @vip_package.shop_branch_limited? ) ) %>">适用门店（<%= @vip_package.shop_branch_limited? ? @vip_package.shop_branches.count : "不限制" %>）</a></div>
           <div class="coupons-d-m">
             <p><span>所属套餐：</span><%= truncate_utf(@vip_package.name) %></p>
             <p><span>服务项目：</span><%= @item_consume.package_item_name %></p>

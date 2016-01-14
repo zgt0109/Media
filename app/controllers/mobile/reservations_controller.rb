@@ -11,11 +11,11 @@ class Mobile::ReservationsController < Mobile::BaseController
   end
 
   def detail
-    redirect_to mobile_reservations_path unless @order.user_id.to_i == @wx_user.id
+    redirect_to mobile_reservations_url unless @order.user_id.to_i == @wx_user.id
   end
 
   def result
-    redirect_to mobile_reservations_path unless @order.user_id.to_i == @wx_user.id
+    redirect_to mobile_reservations_url unless @order.user_id.to_i == @wx_user.id
   end
 
   def new
@@ -23,7 +23,7 @@ class Mobile::ReservationsController < Mobile::BaseController
 
   def abandon
     @order.update_attributes(status: ReservationOrder::ABANDONED)
-    redirect_to mobile_reservations_path(activity_id: @reservation.id)
+    redirect_to mobile_reservations_url(activity_id: @reservation.id)
   end
 
   def show
@@ -37,7 +37,7 @@ class Mobile::ReservationsController < Mobile::BaseController
         field = CustomField.find(key)
         field.custom_values.create(customized_type: 'ReservationOrder', customized_id: @order.id, value: value)
       end
-      render json: { ajax_msg: { status: 1, url: result_mobile_reservation_path(id: @order.id, activity_id: @reservation.id) } }
+      render json: { ajax_msg: { status: 1, url: result_mobile_reservation_url(id: @order.id, activity_id: @reservation.id) } }
     else
       render json: { ajax_msg: { status: -1 } }
     end

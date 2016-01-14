@@ -11,11 +11,11 @@
                                 <%- if !@subscribed %>
                                     <a href="javascript:;" onclick="showPop('#pop-share')">
                                 <%- elsif @activity.extend.base_info_required == "off" %>
-                                    <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
+                                    <a href="<%= prize_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
                                 <%- elsif @prize.name.present? && @prize.mobile.present?  %>
-                                    <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
+                                    <a href="<%= prize_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
                                 <%- else %>
-                                    <a href="<%= user_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
+                                    <a href="<%= user_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
                                 <%- end %>
                                 我的礼包</a>看看吧!
                             <%- elsif @invites.present? %>
@@ -55,11 +55,11 @@
                         <%- if !@subscribed %>
                             <a href="javascript:;" onclick="showPop('#pop-share')">
                         <%- elsif @activity.extend.base_info_required == "off" %>
-                            <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
+                            <a href="<%= prize_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
                         <%- elsif @prize.name.present? && @prize.mobile.present?  %>
-                            <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
+                            <a href="<%= prize_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
                         <%- else %>
-                            <a href="<%= user_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
+                            <a href="<%= user_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">
                         <%- end %>
                         我的礼包</a>看看吧!
                 <%- elsif @invites.present? %>
@@ -113,7 +113,7 @@
     <%- end %>
     <div class="btn-box">
         <div class="cell">
-            <a href="<%= rules_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
+            <a href="<%= rules_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
                 <span>游戏规则</span>
             </a>
         </div>
@@ -133,16 +133,16 @@
             <%- if (@prize.present? && @prize.reached?) || (@activity.extend.invites_count.to_i  - @invites.count <= 0) %>
                 <div class="cell">
                 <%- if @activity.extend.base_info_required == "off" %>
-                    <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
+                    <a href="<%= prize_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
                         <span>我的礼包</span>
                     </a>
                 <%- else %>
                     <%- if @prize && @prize.name.present? && @prize.mobile.present?  %>
-                        <a href="<%= prize_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
+                        <a href="<%= prize_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
                             <span>我的礼包</span>
                         </a>
                    <%- else %>
-                        <a href="<%= user_mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
+                        <a href="<%= user_mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="btn">
                             <span>我的礼包</span>
                         </a>
                    <%- end %>

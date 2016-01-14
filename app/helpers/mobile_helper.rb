@@ -36,7 +36,7 @@ module MobileHelper
     if rel_type == 'album'
       album =  Album.find_by_id(rel_id)
       return url unless album
-      url = list_mobile_album_path(album.site_id, rel_id, openid: openid)
+      url = list_mobile_album_url(album.site_id, rel_id, openid: openid)
     elsif  rel_type == 'website'
       activity = Activity.find_by_id(rel_id)
       return url unless activity
@@ -132,10 +132,10 @@ module MobileHelper
         #return '' unless wx_user
         #业务对接
         if website_menu.menuable_type == 'EcCart'
-          #url = mobile_ec_carts_path(site_id: website_menu.menuable_id, openid: openid)
+          #url = mobile_ec_carts_url(site_id: website_menu.menuable_id, openid: openid)
           #return url = wshop_cart_url(wx_user_open_id: wx_user.try(:openid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:openid))
         elsif website_menu.menuable_type == 'Vip'
-          #url = member_mobile_ec_shops_path(site_id: website_menu.menuable_id, openid: openid)
+          #url = member_mobile_ec_shops_url(site_id: website_menu.menuable_id, openid: openid)
           #return url = wshop_wx_user_url(wx_user_open_id: wx_user.try(:openid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:openid))
         elsif website_menu.menuable_type == 'HotelOrder'
           return "#{website_menu.url}#{@wx_user.try(:openid)}"
@@ -147,7 +147,7 @@ module MobileHelper
           elsif website_menu.menuable_type.to_s == 'EcSellerCat'
             return url = wshop_category_url(category_id: website_menu.menuable_id, wx_mp_user_open_id: website.try(:site).try(:wx_mp_user).try(:openid), wx_user_open_id: @wx_user.try(:openid))
           elsif website_menu.menuable_type.to_s == 'EcItem'
-            #url = mobile_ec_item_path(site_id: activity.site_id, id: website_menu.menuable_id, openid: openid)
+            #url = mobile_ec_item_url(site_id: activity.site_id, id: website_menu.menuable_id, openid: openid)
             #return url = wshop_product_url(wx_user_open_id: wx_user.try(:openid), wx_mp_user_open_id: website_menu.menuable.wx_mp_user.try(:openid))
           end
         end

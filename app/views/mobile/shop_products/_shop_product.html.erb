@@ -24,11 +24,11 @@
     <p class="list-number">
       <b>数量：</b>
       <span class="box-number">
-        <%= link_to minus_app_shop_order_shop_order_item_path(@shop_order,product, anchor: "mp.weixin.qq.com"), remote:true, method: :post do %>
+        <%= link_to minus_app_shop_order_shop_order_item_url(@shop_order,product, anchor: "mp.weixin.qq.com"), remote:true, method: :post do %>
           <i>-</i>
         <% end %>  
         <input id="current_product_sum_<%= product.id %>" type="text" value="<%= @shop_order.find_item_qty_by_product product %>" disabled="true"/>       
-        <%= link_to plus_app_shop_order_shop_order_item_path(@shop_order,product, anchor: "mp.weixin.qq.com"), remote:true, method: :post do %>
+        <%= link_to plus_app_shop_order_shop_order_item_url(@shop_order,product, anchor: "mp.weixin.qq.com"), remote:true, method: :post do %>
           <i>+</i>
         <% end %>
       </span>

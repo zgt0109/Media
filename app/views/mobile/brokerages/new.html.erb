@@ -1,7 +1,7 @@
 <div class="black"></div>
 <div class="main">
 	<section>
-		<%= form_for(@broker, url: mobile_brokerages_path(@site), remote: true) do |f| %>
+		<%= form_for(@broker, url: mobile_brokerages_url(@site), remote: true) do |f| %>
 			<%= f.hidden_field :site_id %>
 			<%= f.hidden_field :user_id, value: @user.id %>
 			<div class="blank10"></div>
@@ -42,7 +42,7 @@ $('body').on('click','input.present',function(){
 	if($('#brokerage_broker_mobile').val() == "" || !reg.test($('#brokerage_broker_mobile').val())){
 		alert('请输入正确的手机号码');
 	}else{
-		$.getScript("<%= send_sms_mobile_brokerages_path %>?mobile=" + $('#brokerage_broker_mobile').val());
+		$.getScript("<%= send_sms_mobile_brokerages_url %>?mobile=" + $('#brokerage_broker_mobile').val());
 		$(this).removeClass('present').addClass('presents').val('再次发送（'+back+'）');
 		inter = setInterval(function(){
 			back--;

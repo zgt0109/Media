@@ -21,7 +21,7 @@ class Mobile::PanoramagramsController < Mobile::BaseController
 
   def load_more_items
     @items = @site.panoramagrams.normal.order(:sort).page(params[:page]).collect do |i| 
-      { link_to: panorama_mobile_panoramagram_path(i, site_id: i.site_id), img_url: i.pic_url, txt: i.name }
+      { link_to: panorama_mobile_panoramagram_url(i, site_id: i.site_id), img_url: i.pic_url, txt: i.name }
     end
     render json: {items: @items}
   end

@@ -17,9 +17,9 @@ class Mobile::EcCartsController < Mobile::BaseController
     end
     #@cart = EcCart.new(params[:ec_cart])
     if cart.save
-      redirect_to mobile_ec_carts_path(site_id: @site.id), :notice => "已加入购物车"
+      redirect_to mobile_ec_carts_url(site_id: @site.id), :notice => "已加入购物车"
     else
-      redirect_to mobile_ec_item_path(site_id: @site.id, id: cart.ec_item_id), :notice => "加入购物车失败"
+      redirect_to mobile_ec_item_url(site_id: @site.id, id: cart.ec_item_id), :notice => "加入购物车失败"
     end
   end
 
@@ -40,9 +40,9 @@ class Mobile::EcCartsController < Mobile::BaseController
   def destroy_cart
     carts = @wx_user.ec_carts.where(["site_id = ? and ec_item_id in (?)",session[:site_id], params[:items].map{|i| i.to_i} ])
     if carts.destroy_all
-      redirect_to mobile_ec_carts_path(site_id: @site.id), :notice => "商品删除成功"
+      redirect_to mobile_ec_carts_url(site_id: @site.id), :notice => "商品删除成功"
     else
-      redirect_to mobile_ec_carts_path(site_id: @site.id), :notice => "商品删除失败"
+      redirect_to mobile_ec_carts_url(site_id: @site.id), :notice => "商品删除失败"
     end
 
   end

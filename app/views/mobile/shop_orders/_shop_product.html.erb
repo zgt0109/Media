@@ -1,9 +1,9 @@
 <div class="mod-product" id="">
-  <a class="product-img" href="<%= mobile_shop_shop_product_path(site_id: session[:site_id], shop_id: product.shop_id, id: product.id) %>" style="<%= wx_user.is_show_product_pic? ? "display:block" : "display: none;" %>">
+  <a class="product-img" href="<%= mobile_shop_shop_product_url(site_id: session[:site_id], shop_id: product.shop_id, id: product.id) %>" style="<%= wx_user.is_show_product_pic? ? "display:block" : "display: none;" %>">
     <img src="<%= product.thumb_qiniu_pic_url %>">
   </a>
 
-  <a class="product-text" href="<%= mobile_shop_shop_product_path(site_id: session[:site_id], shop_id: product.shop_id, id: product.id) %>">
+  <a class="product-text" href="<%= mobile_shop_shop_product_url(site_id: session[:site_id], shop_id: product.shop_id, id: product.id) %>">
     <p>
       <b><%= product.name %></b>
       <span class="product-labels">
@@ -30,12 +30,12 @@
   <div class="mod-number fr">
     <%# if product.quantity.blank? || (product.quantity.present? && product.quantity > 0)%>
       <i class="number-minus ">
-        <%= link_to "", remove_item_mobile_shop_order_path(site_id: session[:site_id], id: @shop_order.id, product_id: product.id), remote: true, method: :post, class: "hidden_link", style: "left: 0;" %> 
+        <%= link_to "", remove_item_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id, product_id: product.id), remote: true, method: :post, class: "hidden_link", style: "left: 0;" %> 
       </i>
       <input type="text" class="js-number-change porduct-number-of-<%= product.id %>" id="porduct-number-of-<%= product.id %>" value="<%= @shop_order.find_item_qty_by_product product %>">
-      <%= link_to "", change_item_mobile_shop_order_path(site_id: session[:site_id], id: @shop_order.id, product_id: product.id), remote: true, method: :post, style: "display:none", class: "hidden-link" %>
+      <%= link_to "", change_item_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id, product_id: product.id), remote: true, method: :post, style: "display:none", class: "hidden-link" %>
       <i class="number-plus ">
-        <%= link_to "", add_item_mobile_shop_order_path(site_id: session[:site_id], id: @shop_order.id, product_id: product.id), remote: true, method: :post, class: "hidden_link", style: "left: 0;" %>
+        <%= link_to "", add_item_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id, product_id: product.id), remote: true, method: :post, class: "hidden_link", style: "left: 0;" %>
       </i>
     <%# else %>
       <!-- 已售完 -->

@@ -65,7 +65,7 @@ class Mobile::CarShopsController < Mobile::BaseController
     @car_bespeak = @site.car_bespeaks.new(params[:car_bespeak])
     if @car_bespeak.save
       flash[:notice] = '预约成功'
-      redirect_to car_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id)
+      redirect_to car_bespeak_mobile_car_shops_url(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id)
     else
       flash[:alert] = '预约失败'
       redirect_to :back
@@ -89,7 +89,7 @@ class Mobile::CarShopsController < Mobile::BaseController
     @car_bespeak = @site.car_bespeaks.find params[:car_bespeak_id]
     @car_bespeak.cancel!
     flash[:notice] = '取消成功'
-    redirect_to user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id)
+    redirect_to user_bespeak_mobile_car_shops_url(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id)
   end
 
   #车型大图

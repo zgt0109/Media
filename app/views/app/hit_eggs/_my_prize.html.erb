@@ -12,7 +12,7 @@
           <p>
             <span>中奖时间：<%= date_format_full activity_consume.created_at%>&nbsp;       <!--失效时间：<%#= date_format_full activity_consume.expire_at %>--></span>
             <span>状态：<%= activity_consume.status_text %></span>
-            <%= link_to "马上领取",get_prize_app_hit_eggs_path(acid: activity_consume.id, id: @activity.id),onclick: "btn_link();", remote: true, class: "btn btn_link" unless activity_consume.mobile %>
+            <%= link_to "马上领取",get_prize_app_hit_eggs_url(acid: activity_consume.id, id: @activity.id),onclick: "btn_link();", remote: true, class: "btn btn_link" unless activity_consume.mobile %>
           </p>
         </li>
         <% end %>

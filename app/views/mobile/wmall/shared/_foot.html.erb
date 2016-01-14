@@ -1,14 +1,14 @@
 <div class="footbar">
   <ul>
     <%= content_tag :li, class: menu_status('mobile/wmall/dashboard',"index","cur") do %>
-	    <%= link_to mobile_wmall_root_path, class: "foot-box" do %>
+	    <%= link_to mobile_wmall_root_url, class: "foot-box" do %>
 		    <i class="f-icon-1"></i>
         <span>首页</span>
      	<% end %>
    	<% end %>
 
     <%= content_tag :li, class: side_menu_group_status(['mobile/wmall/shops']) do %>
-	    <%= link_to mobile_wmall_shops_path, class: "foot-box" do %>
+	    <%= link_to mobile_wmall_shops_url, class: "foot-box" do %>
 		    <i class="f-icon-2"></i>
         <span>商户</span>
      	<% end %>
@@ -16,14 +16,14 @@
 
 
     <%= content_tag :li, class: side_menu_group_status(['mobile/wmall/products']) do %>
-	    <%= link_to mobile_wmall_products_path, class: "foot-box" do %>
+	    <%= link_to mobile_wmall_products_url, class: "foot-box" do %>
 		    <i class="f-icon-3"></i>
         <span>精品</span>
      	<% end %>
    	<% end %>
 
     <%= content_tag :li, class: (menu_status('mobile/wmall/dashboard',"wx_user", "cur") || menu_status('mobile/wmall/dashboard',"following_shops", "cur")) do %>
-	    <%= link_to mobile_wmall_wx_user_path(auth_params), class: "foot-box" do %>
+	    <%= link_to mobile_wmall_wx_user_url(auth_params), class: "foot-box" do %>
         <i class="f-icon-4"></i>
         <span></span>
         <span>我的</span>

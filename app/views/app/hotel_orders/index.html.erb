@@ -1,11 +1,11 @@
 <%= javascript_include_tag 'jquery','jquery_ujs' %>
 <header>
-	<%= link_to "", app_hotels_path(aid: params[:aid] , anchor: "mp.weixin.qq.com"), class: "ico-hd arr-hd" %>
+	<%= link_to "", app_hotels_url(aid: params[:aid] , anchor: "mp.weixin.qq.com"), class: "ico-hd arr-hd" %>
 	<h1>我的订单</h1>
 </header>
 <div class="contxt cont-artical">
 	<% if @hotel_orders.count == 0 %>
-	<%= link_to app_hotels_path(aid: params[:aid], anchor: "mp.weixin.qq.com"), class: "box-null" do %><%= image_tag "/assets/hotel/null.png" %><% end %>
+	<%= link_to app_hotels_url(aid: params[:aid], anchor: "mp.weixin.qq.com"), class: "box-null" do %><%= image_tag "/assets/hotel/null.png" %><% end %>
 	<% else %>
 	<div class="box-cont box-list-order page-cont">
     <%= render :partial => 'app/hotel_orders/hotel_orders', :object => @hotel_orders, :as => :hotel_order %>
@@ -19,7 +19,7 @@
 /*
 $("body").on("click",".list-li", function(event){
 	var order_id = $(this).attr('data-order-id');
-	window.location.href = "<%= app_hotel_orders_path %>/"+order_id+"?aid=<%= params[:aid] %>& %>";
+	window.location.href = "<%= app_hotel_orders_url %>/"+order_id+"?aid=<%= params[:aid] %>& %>";
 
 });
 */
@@ -34,6 +34,6 @@ $( document ).ajaxStop(function() {
 });
 
 function showOrder(order_id){
-	window.location.href = "<%= app_hotel_orders_path %>/"+order_id+"?aid=<%= params[:aid] %>& %>#mp.weixin.qq.com";
+	window.location.href = "<%= app_hotel_orders_url %>/"+order_id+"?aid=<%= params[:aid] %>& %>#mp.weixin.qq.com";
 }
 </script>

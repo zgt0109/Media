@@ -5,7 +5,7 @@
     <div class="index-title">
       <i class="icon icon-1"></i>
       <span>热门活动</span>
-      <%= link_to mobile_wmall_activities_path(site_id: session[:site_id]),class: "more" do %>
+      <%= link_to mobile_wmall_activities_url(site_id: session[:site_id]),class: "more" do %>
         更多<span>&gt;</span>
       <% end %>
     </div>
@@ -18,7 +18,7 @@
     <div class="index-title">
       <i class="icon icon-2"></i>
       <span>最新精品</span>
-      <%= link_to mobile_wmall_products_path(site_id: session[:site_id]),class: "more" do %>
+      <%= link_to mobile_wmall_products_url(site_id: session[:site_id]),class: "more" do %>
         更多<span>&gt;</span>
       <% end %>
     </div>
@@ -29,7 +29,7 @@
     <div class="index-title">
       <i class="icon icon-3"></i>
       <span>热门品牌</span>
-      <%= link_to mobile_wmall_shops_path(site_id: session[:site_id]),class: "more" do %>
+      <%= link_to mobile_wmall_shops_url(site_id: session[:site_id]),class: "more" do %>
         更多<span>&gt;</span>
       <% end %>
     </div>

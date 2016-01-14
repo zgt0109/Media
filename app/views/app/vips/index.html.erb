@@ -24,7 +24,7 @@
         </div>
 
         <div class="card-btn">
-          <%= link_to "激活会员卡享受积分", inactive_app_vips_path, class: "btn btn-reg J-reg" %>
+          <%= link_to "激活会员卡享受积分", inactive_app_vips_url, class: "btn btn-reg J-reg" %>
         </div>
       </div>
       <% else %>
@@ -50,7 +50,7 @@
             <% end %>
           <% else %>
             <div class="card-btn">
-              <%= link_to "点击领取会员卡", signup_app_vips_path, class: "btn btn-reg" %>
+              <%= link_to "点击领取会员卡", signup_app_vips_url, class: "btn btn-reg" %>
             </div>
           <% end %>
         </div>
@@ -86,7 +86,7 @@
         <div class="list-box no-card-hide">
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= my_mobile_coupons_path(site_id: session[:site_id]) %>">
+              <a class="icon-right" href="<%= my_mobile_coupons_url(site_id: session[:site_id]) %>">
                 <i class="icon icon-2"></i>
                 <span>会员优惠券</span>
                 <div class="num"><%= @coupons_count %></div>
@@ -95,7 +95,7 @@
           </dl>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= vip_packages_app_vips_path %>">
+              <a class="icon-right" href="<%= vip_packages_app_vips_url %>">
                 <i class="icon icon-2"></i>
                 <span>会员卡套餐</span>
                 <div class="num"><%= @item_consumes %></div>
@@ -104,7 +104,7 @@
           </dl>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= gifts_app_vips_path() %>">
+              <a class="icon-right" href="<%= gifts_app_vips_url() %>">
                 <i class="icon icon-3"></i>
                 <span>积分换礼品</span>
                 <div class="num"><%= @site.point_gifts.exchangeable.count %></div>

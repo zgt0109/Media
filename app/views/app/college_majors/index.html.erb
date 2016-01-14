@@ -6,7 +6,7 @@
         <% @college_majors.each do  |m| %>
 
         <p class="table">
-          <a class="tleft td" href="<%= app_college_major_path(m, anchor: "mp.weixin.qq.com") %>"><%= m.name%></a>
+          <a class="tleft td" href="<%= app_college_major_url(m, anchor: "mp.weixin.qq.com") %>"><%= m.name%></a>
           <!--a class=" td btn btn-small" href="tel:<%#= m.try(:college).try(:tel) %>">咨询</a-->
           <a class="td" href="tel:<%= m.try(:college).try(:tel) %>"><span class="tright btn btn-small">咨询</span></a>
         </p>

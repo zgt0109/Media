@@ -1,7 +1,7 @@
 <% provide(:title, "我的购物车") %>
 <%= content_for(:topbar) do %>
     <header>
-        <a href="<%= mobile_ec_shops_path(site_id: @site.id) %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
+        <a href="<%= mobile_ec_shops_url(site_id: @site.id) %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
         <h1>我的购物车</h1>
         <a class="ico-detele"><img src="/assets/mobile/wshop/ico-detele.png"/></a>
     </header>
@@ -20,7 +20,7 @@
           }
           if(flag == true){
              if ( confirm("确定要删除选中的商品吗？") ){
-                 $("#ec_cart").attr("action",'<%= destroy_cart_mobile_ec_carts_path() %>').submit();
+                 $("#ec_cart").attr("action",'<%= destroy_cart_mobile_ec_carts_url() %>').submit();
                  return false;
              }
           }else{
@@ -110,7 +110,7 @@
   function update_cart(id,operate, carts){
       $.ajax({
                   type:"get",
-                  url: "<%= update_cart_mobile_ec_carts_path(site_id: @site.id)%>",
+                  url: "<%= update_cart_mobile_ec_carts_url(site_id: @site.id)%>",
                   data: {"ec_item_id": id, "operate": operate, "form": "cart", "carts": carts},
                   success: function(){
 //                      alert("提交成功!");
@@ -127,7 +127,7 @@
 //         console.log(qty);
           $.ajax({
                       type:"get",
-                      url: "<%= update_cart_with_qty_mobile_ec_carts_path(site_id: @site.id)%>",
+                      url: "<%= update_cart_with_qty_mobile_ec_carts_url(site_id: @site.id)%>",
                       data: {"ec_item_id": id, "qty": qty, "form": "cart", "carts": carts},
                       success: function(){
 //                      alert("提交成功!");

@@ -2,7 +2,7 @@
   <div class="stage" id="stage">
     <section id="sec-index">
       <div class="vip-head">
-        <a href="<%= vip_packages_app_vips_path %>">
+        <a href="<%= vip_packages_app_vips_url %>">
           <img src="/assets/mobile/wcard/icon-right.png" alt="">
         </a>
         <h1><%= truncate_utf(@vip_package.name) %></h1>
@@ -35,7 +35,7 @@
               </a>
             </div>
             <div class="coupons-d-box">
-              <div class="coupons-d-t"><a href="<%= shops_app_vips_path( ids: ( @vip_package.shop_branch_ids.join(',') if @vip_package.shop_branch_limited? ) ) %>">适用门店（<%= @vip_package.shop_branch_limited? ? @vip_package.shop_branches.count : "不限制" %>）</a></div>
+              <div class="coupons-d-t"><a href="<%= shops_app_vips_url( ids: ( @vip_package.shop_branch_ids.join(',') if @vip_package.shop_branch_limited? ) ) %>">适用门店（<%= @vip_package.shop_branch_limited? ? @vip_package.shop_branches.count : "不限制" %>）</a></div>
               <div class="coupons-d-m">
                 <div class="c-d-name">使用说明</div>
                 <%= vpivp.vip_package_item.description.to_s.html_safe %>
@@ -49,7 +49,7 @@
         <% if @vip_user.nil? %>
           <%= link_to '立即购买', app_vips_url(vip_package_id: @vip_package.id), class: 'btn btn-yellow', confirm: '此套餐为会员专享，成为会员能够享受更多优惠，快快成为会员吧！' %>
         <% else %>
-          <a href="<%= buy_vip_package_app_vips_path(id: @vip_package.id) %>" class="btn btn-yellow">立即购买</a>
+          <a href="<%= buy_vip_package_app_vips_url(id: @vip_package.id) %>" class="btn btn-yellow">立即购买</a>
         <% end %>
       </div>
     </section>

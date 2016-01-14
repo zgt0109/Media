@@ -63,7 +63,7 @@ module App
           #   Rails.logger.error "微酒店订房通知短信发送失败：#{e}"
           # end
         end        
-        redirect_to success_app_hotel_orders_path(room_type_id: params[:room_type_id],hotel_order_id: @hotel_order.id, aid: params[:aid], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date]), notice: '预订成功'
+        redirect_to success_app_hotel_orders_url(room_type_id: params[:room_type_id],hotel_order_id: @hotel_order.id, aid: params[:aid], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date]), notice: '预订成功'
       else
         redirect_to :back, notice: notice
       end

@@ -43,7 +43,7 @@
     });
     $('tr[data-id]').click(function(event) {
       var id = $(this).data('id');
-      location.href = '<%= consume_app_vips_path %>?id=' + id;
+      location.href = '<%= consume_app_vips_url %>?id=' + id;
     });
   });
 

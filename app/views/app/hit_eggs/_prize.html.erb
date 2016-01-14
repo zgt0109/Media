@@ -7,7 +7,7 @@
     <div class="bd">
       <p><b>奖品为<%= @activity_consume.try(:activity_prize).try(:title) %>，</b><br/>兑奖SN码：<%= @activity_consume.code %></p>
       <p><%= @activity.activity_property.display_win_tip %></p>
-      <%= form_for  @activity_consume, url: create_activity_consume_app_hit_eggs_path, validate: true, method: :post, html: { onsubmit: "return submit_mobile();" } do |form| %>
+      <%= form_for  @activity_consume, url: create_activity_consume_app_hit_eggs_url, validate: true, method: :post, html: { onsubmit: "return submit_mobile();" } do |form| %>
           <%= hidden_field_tag :id, @activity.id %>
           <%= form.hidden_field :id %>
           <p><span>请输入您的手机号</span>

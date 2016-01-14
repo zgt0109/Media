@@ -23,7 +23,7 @@ class App::VipUserPaymentsController < ActionController::Base
           # TODO set vip_user password
           #redirect_to :set_vip_user_password , alert: "请先设置支付密码"
           result = {code: "-1", remark: "请先设置支付密码"}
-          return redirect_to passwd_app_vips_path(return_to: request.url, openid: @trade_data[:open_id])
+          return redirect_to passwd_app_vips_url(return_to: request.url, openid: @trade_data[:open_id])
         end
       else
         result = {code: "-1", remark: "您还没有申请会员卡，请先申请会员卡或用其他支付方式"}
@@ -74,7 +74,7 @@ class App::VipUserPaymentsController < ActionController::Base
       else
     end
 
-    render js: %Q{window.location.href= '#{app_vip_user_payment_path(@vip_user_payment, errmsg: params[:errmsg])}'}
+    render js: %Q{window.location.href= '#{app_vip_user_payment_url(@vip_user_payment, errmsg: params[:errmsg])}'}
   end
 
   private

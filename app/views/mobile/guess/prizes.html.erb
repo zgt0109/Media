@@ -11,7 +11,7 @@
           SN码：<%= consume.code %><%= consume.can_use? ? '' : "(#{consume.state_name})" %>
         </p>
         <%- if !consume.can_use? %>
-          <%= link_to '', hide_consume_mobile_guess_path(consume_id: consume.id), class: 'delete' %>
+          <%= link_to '', hide_consume_mobile_guess_url(consume_id: consume.id), class: 'delete' %>
         <%- end %>
       </li>
     <%- end.blank? %>

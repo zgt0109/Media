@@ -2,10 +2,10 @@
     <div class="stage" id="stage">
         <section id="sec-index">
             <div class="tab-box tab-1">
-                <a class="<%= 'cur' if params[:type].blank? %>" href="<%= vip_packages_app_vips_path %>">全部</a>
-                <a class="<%= 'cur' if params[:type] == 'unexpired' && params[:status] == 'unused' %>" href="<%= vip_packages_app_vips_path(type: 'unexpired',status: 'unused') %>">可使用</a>
-                <a class="<%= 'cur' if params[:status] == 'used' %>" href="<%= vip_packages_app_vips_path(type: 'unexpired',status: 'used') %>">已使用</a>
-                <a class="<%= 'cur' if params[:type] == 'expired' %>" href="<%= vip_packages_app_vips_path(type: 'expired',status: 'unused') %>">已过期</a>
+                <a class="<%= 'cur' if params[:type].blank? %>" href="<%= vip_packages_app_vips_url %>">全部</a>
+                <a class="<%= 'cur' if params[:type] == 'unexpired' && params[:status] == 'unused' %>" href="<%= vip_packages_app_vips_url(type: 'unexpired',status: 'unused') %>">可使用</a>
+                <a class="<%= 'cur' if params[:status] == 'used' %>" href="<%= vip_packages_app_vips_url(type: 'unexpired',status: 'used') %>">已使用</a>
+                <a class="<%= 'cur' if params[:type] == 'expired' %>" href="<%= vip_packages_app_vips_url(type: 'expired',status: 'unused') %>">已过期</a>
             </div>
             <% if params[:type].blank? %>
               <% if @vip_packages.blank? %>
@@ -17,7 +17,7 @@
                 <div class="vip-box">
                   <% @vip_packages.each do |package| %>
                     <div class="coupons vip-coupons c-normal">
-                        <a href="<%= vip_package_show_app_vips_path(id: package.id) %>">
+                        <a href="<%= vip_package_show_app_vips_url(id: package.id) %>">
                             <div class="coupons-l">
                                 <div class="c-name">
                                     <div class="coupons-img"></div>
@@ -40,7 +40,7 @@
               <div class="no-box hide" id="unused">
                 <div class="no-coupons-icon"></div>
                 <div class="text">暂无套餐，快去购买吧！</div>
-                <a href="<%= vip_packages_app_vips_path %>" >立即购买</a>
+                <a href="<%= vip_packages_app_vips_url %>" >立即购买</a>
               </div>
               <div class="no-box exceed-box hide" id="used">
                 <div class="no-coupons-icon"></div>
@@ -76,7 +76,7 @@
                         %>
                           <% if !consume.vip_package.deleted? && consume.vip_package_item.normal? %>
                             <div class="coupons vip-coupons <%= div_class %>">
-                              <a href="<%= params[:type] == 'unexpired' && params[:status] == 'unused' ? my_consume_show_app_vips_path(id: consume.id, vp_id: vpvu.vip_package.id, vpvu_id: vpvu.id) : 'javascript:;' %>">
+                              <a href="<%= params[:type] == 'unexpired' && params[:status] == 'unused' ? my_consume_show_app_vips_url(id: consume.id, vp_id: vpvu.vip_package.id, vpvu_id: vpvu.id) : 'javascript:;' %>">
                                 <div class="coupons-l">
                                   <div class="c-name">
                                     <div class="coupons-img"></div>
@@ -103,7 +103,7 @@
                             end
                           %>
                           <div class="coupons vip-coupons <%= div_class %>">
-                            <a href="<%= params[:type] == 'unexpired' && params[:status] == 'unused' ? my_consume_show_app_vips_path(vp_id: vpvu.vip_package.id, vpvu_id: vpvu.id, vpi_id: vpivp.vip_package_item_id) : 'javascript:;' %>">
+                            <a href="<%= params[:type] == 'unexpired' && params[:status] == 'unused' ? my_consume_show_app_vips_url(vp_id: vpvu.vip_package.id, vpvu_id: vpvu.id, vpi_id: vpivp.vip_package_item_id) : 'javascript:;' %>">
                               <div class="coupons-l">
                                 <div class="c-name">
                                   <div class="coupons-img"></div>

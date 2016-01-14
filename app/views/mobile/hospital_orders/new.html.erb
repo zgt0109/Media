@@ -2,14 +2,14 @@
 <section id="index">
 	<header>
 		<div class="wrap">
-			<a href="<%= mobile_hospital_doctors_path(site_id: @site.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+			<a href="<%= mobile_hospital_doctors_url(site_id: @site.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
 			<h1>预约挂号</h1>
       <!--<a class="ico-member" onclick="transition('#transition-order-list','#index',1)"><img src="/assets/mobile/whospital/ico-member.png"/></a>-->
-			<a class="ico-member" href="<%= mobile_hospital_orders_path(user_id: @user.id) %>"><img src="/assets/mobile/whospital/ico-member.png"/></a>
+			<a class="ico-member" href="<%= mobile_hospital_orders_url(user_id: @user.id) %>"><img src="/assets/mobile/whospital/ico-member.png"/></a>
 		</div>
 	</header><!-- header end -->
 	<div class="body">
-		<%= form_for @hospital_order, url: mobile_hospital_orders_path, method: :post do |f| %>
+		<%= form_for @hospital_order, url: mobile_hospital_orders_url, method: :post do |f| %>
 		<%= hidden_field_tag "id", @hospital_doctor.id %>
 		<%= f.hidden_field :completed_at, value: Time.now %>
 		<%= f.hidden_field :user_id %>

@@ -3,7 +3,7 @@
 </style>
 <div class="main">
 	<section>
-		<%= form_for(@client, url: save_client_mobile_brokerages_path(@site)) do |f| %>
+		<%= form_for(@client, url: save_client_mobile_brokerages_url(@site)) do |f| %>
 			<div class="text ">
 				<%= f.text_field :name, maxlength: 5, class: "fc", placeholder: '输入客户姓名' %>
 				<span>*</span>

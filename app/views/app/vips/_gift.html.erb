@@ -36,7 +36,7 @@
       <% if gift.shop_branches_count > 0 %>
         <p>
           <span class="c-6">使用门店：</span>
-          <span><a class="c-blue underline" href="<%= shops_app_vips_path( ids: ( gift.shop_branch_ids.join(',') if gift.shop_branch_limited? ) ) %>"><span><%= gift.shop_branches_count %>家</span></a></span>
+          <span><a class="c-blue underline" href="<%= shops_app_vips_url( ids: ( gift.shop_branch_ids.join(',') if gift.shop_branch_limited? ) ) %>"><span><%= gift.shop_branches_count %>家</span></a></span>
         </p>
       <% end %>
       <p>
@@ -47,7 +47,7 @@
         <span class="c-6">礼品兑换说明：</span>
       </p>
       <p><%= gift.description %></p>
-      <%= link_to '立即兑换', get_gift_app_vips_path(id: gift.id), id: "gift-exchange-#{gift.id}", class: 'btn btn-biger mt btn-exchange', data: { 'gift-id' => gift.id, 'gift-point' => gift.points, 'gift-limit-count' => @vip_user ? gift.limit_count_for(@vip_user) : 0, 'people-limit-count' => gift.people_limit_count } %>
+      <%= link_to '立即兑换', get_gift_app_vips_url(id: gift.id), id: "gift-exchange-#{gift.id}", class: 'btn btn-biger mt btn-exchange', data: { 'gift-id' => gift.id, 'gift-point' => gift.points, 'gift-limit-count' => @vip_user ? gift.limit_count_for(@vip_user) : 0, 'people-limit-count' => gift.people_limit_count } %>
       <% if gift.exchangeable_num <= 0 && gift.exchangeable_num != -1 %>
       <script>
         $("#gift-exchange-<%= gift.id %>").css({'background-color': '#ccc'}).addClass('disabled').click(function(event) {

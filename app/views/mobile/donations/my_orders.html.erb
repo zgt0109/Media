@@ -23,7 +23,7 @@
 
                   <% @donation_orders.each do |order| %>
                     <dl>
-                        <%= link_to mobile_donation_path(site_id: session[:site_id], id: order.donation.id) do %>
+                        <%= link_to mobile_donation_url(site_id: session[:site_id], id: order.donation.id) do %>
                             <dt><%= order.donation.name %></dt>
                             <dd>姓名：<%= order.name %></dd>
                             <dd><%= order.created_at.to_s %></dd>

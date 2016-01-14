@@ -35,8 +35,8 @@
       data: product
     });
 
-    shop_path = generate_path(path='<%= mobile_wmall_shop_path %>', {id: product.shop_id});
-    $("a.navgate_to_shop").attr("href", shop_path)
+    shop_url = generate_url(path='<%= mobile_wmall_shop_url %>', {id: product.shop_id});
+    $("a.navgate_to_shop").attr("href", shop_url)
   })
 
 </script>

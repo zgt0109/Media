@@ -25,7 +25,7 @@
     <div class="mod-list">
       <% @car_catenas.each do |catena| %>
       <% type_count = catena.car_types.count %>
-        <a href="<%= car_type_mobile_car_shop_path(catena, site_id: @site.id) %>" class="mod-fa fa fa-chevron-right">
+        <a href="<%= car_type_mobile_car_shop_url(catena, site_id: @site.id) %>" class="mod-fa fa fa-chevron-right">
           <div class="list-img">
             <span><img src="<%= catena.pic_url %>"/></span>
           </div>

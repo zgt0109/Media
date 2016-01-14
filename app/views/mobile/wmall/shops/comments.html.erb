@@ -4,12 +4,12 @@
 <script id='ractive_shop_comments_template' type='text/ractive'>
   <header class="box">
     <div class="mod-nav">
-      <%= link_to mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "tleft" do %>
+      <%= link_to mobile_wmall_shop_url(auth_params.merge(id: params[:id])), class: "tleft" do %>
         <img src="/mobile/img/wbusiness/icon-back.png">
       <% end %>
       {{#shop}}
       <span>店铺名称</span>
-      <%= link_to add_comment_mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "tright" do %>
+      <%= link_to add_comment_mobile_wmall_shop_url(auth_params.merge(id: params[:id])), class: "tright" do %>
         <img src="/mobile/img/wbusiness/icon-edit.png">
       <% end %>
       {{/shop}}

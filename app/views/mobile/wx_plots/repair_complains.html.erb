@@ -7,7 +7,7 @@
       </p>
   <% end %>
   <div class="btn-box" style="<%= 'padding: 32px 0;' unless @wx_plot["#{params[:type]}_phone"].present? %>">
-    <%= link_to "#{params[:type] == 'repair' ? '申请报修' : '我要投诉 | 建议'}", new_repair_complain_mobile_wx_plots_path(type: params[:type], anchor: 'mp.weixin.qq.com'), class: 'btn btn-block btn-primary'%>
+    <%= link_to "#{params[:type] == 'repair' ? '申请报修' : '我要投诉 | 建议'}", new_repair_complain_mobile_wx_plots_url(type: params[:type], anchor: 'mp.weixin.qq.com'), class: 'btn btn-block btn-primary'%>
   </div>
 </div>
 <div class="body">

@@ -7,7 +7,7 @@
 
 <section id="sec-index">
   <header class="untoppable">
-    <%= link_to "", mobile_wbbs_topics_path( @site , activity_id: @activity.id), class: 'fa fa-chevron-left' %>
+    <%= link_to "", mobile_wbbs_topics_url( @site , activity_id: @activity.id), class: 'fa fa-chevron-left' %>
     <% if @wx_user.present? && !@wx_user.leave_message_forbidden? %>
       <a href="javascript:;" class="commentable"><i class="fa fa-comment-o"></i>回复</a>
       <a class="fa fa-ellipsis-h <%= 'mod-tip-number' if @notifications_count > 0 %>" href="javascript:;" onclick="showPop('#pop-more')"><i><%= @notifications_count if @notifications_count > 0 %></i></a>
@@ -22,7 +22,7 @@
         喜欢这个话题，请点击右上角图标分享<i class="fa fa-share"></i>
       </div>
     <%- end %>
-    <a href="<%= mobile_wbbs_topics_path(@site, activity_id: @activity.id) %>" class="mod-hd mod-user hd-detail mod-fa fa fa-angle-right">
+    <a href="<%= mobile_wbbs_topics_url(@site, activity_id: @activity.id) %>" class="mod-hd mod-user hd-detail mod-fa fa fa-angle-right">
       <div class="hd-img">
         <%= image_tag @wbbs_community.logo_url %>
       </div>
@@ -50,7 +50,7 @@
                   <%- pics = all_pics.take(3) %>
                   <ul>
                     <% pics.each do |pic| %>
-                      <li><%= link_to image_tag(qiniu_img_url(pic.sn, type: 10)), display_photo_mobile_wbbs_topic_path(site_id: @site, id: @wbbs_topic)%></li>
+                      <li><%= link_to image_tag(qiniu_img_url(pic.sn, type: 10)), display_photo_mobile_wbbs_topic_url(site_id: @site, id: @wbbs_topic)%></li>
                     <% end %>
                   </ul>
                   <%- if pics.count == 3 %>

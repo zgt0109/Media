@@ -17,7 +17,7 @@
 				<!--   <a onclick="showDiv('#order&#45;bless')" class="btn">送上祝福</a> -->
 				<!-- </p> -->
 			<div class="box-order">
-				<%= form_for @wedding_wish,  :validate => true,:url=> create_wish_app_weddings_path, :html=>{:id => :wish_form} do |form| %>
+				<%= form_for @wedding_wish,  :validate => true,:url=> create_wish_app_weddings_url, :html=>{:id => :wish_form} do |form| %>
 					<dl>
 						<dt class="tcenter"><a class="btn-close" onclick="hideDiv2('#order-bless')"></a></dt>
 						<dd>

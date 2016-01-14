@@ -37,11 +37,11 @@
 											<em><%=layout.name%> 约<%=layout.reference_area%>平米</em>
 										</a>
 										<div class="house_photo house_arrow" style="<%= 'display:none' unless (ii==0 and i==0)%>">
-											<%=link_to "户型图", pictures_app_house_layout_path(layout), class: "ico_type"%>
+											<%=link_to "户型图", pictures_app_house_layout_url(layout), class: "ico_type"%>
 											<% if layout.panorama_type_list.first.eql?('720') and layout.standalone_panoramas.present? %>
 												<%= link_to "全景图", layout.standalone_panoramas.first.preview_url %>
 											<% elsif layout.panoramas.present? %>
-												<%=link_to "全景图", panoramas_app_house_layout_path(layout), class: "ico_360"%>
+												<%=link_to "全景图", panoramas_app_house_layout_url(layout), class: "ico_360"%>
 											<% else %>
 											<% end %>
 										</div>

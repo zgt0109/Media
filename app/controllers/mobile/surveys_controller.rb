@@ -19,7 +19,6 @@ class Mobile::SurveysController < Mobile::BaseController
   end
 
   def list
-
   end
 
   def new
@@ -42,7 +41,6 @@ class Mobile::SurveysController < Mobile::BaseController
 
   #用户答题提交
   def create_answer
-
     @survey_question = @activity.survey_questions.find(params[:qid])
 
     if !@activity_user.survey_finish?
@@ -80,7 +78,6 @@ class Mobile::SurveysController < Mobile::BaseController
   def feedback
     return redirect_to mobile_survey_url(site_id: @activity.site_id, id: @activity.id) unless @activity_user
     #读取所有题目
-
     @feedback = ActivityFeedback.where(:user_id => @wx_user.id, :activity_id => @activity.id,:activity_user_id => @activity_user.id, :feedback_type => 1).first
   end
 

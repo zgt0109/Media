@@ -13,7 +13,7 @@
   <img src="<%= @template.header_bg %>" />
 </header>
 <section>
-  <%= form_for @message, :html=> {:id => 'box-form'}, url: app_leaving_messages_path, validate: true do |f| %>
+  <%= form_for @message, :html=> {:id => 'box-form'}, url: app_leaving_messages_url, validate: true do |f| %>
     <div class="box-form">
         <%- if @replier %>
           <%= f.hidden_field :replier_id %>
@@ -63,7 +63,7 @@
   </div>
 </div>
 <div class="pop pop-form" id="pop-form" style="background:#f0f0f0;">
-   <%= form_for @message, :html=> {:id => 'side-box-form'}, url: app_leaving_messages_path, validate: true do |f| %>
+   <%= form_for @message, :html=> {:id => 'side-box-form'}, url: app_leaving_messages_url, validate: true do |f| %>
     <%- if @replier %>
       <%= f.hidden_field :replier_id %>
       <%= f.hidden_field :replier_type %>
@@ -217,7 +217,7 @@
         pageY=t.pageY;
       if(startY<=50){
         $(".loading").addClass("isloading").fadeIn();
-        $.getScript('<%= app_leaving_messages_path(from_head: true) %>')
+        $.getScript('<%= app_leaving_messages_url(from_head: true) %>')
         $(".loading").removeClass("isloading").fadeOut();
       }
   });

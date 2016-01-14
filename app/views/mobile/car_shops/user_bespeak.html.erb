@@ -25,7 +25,7 @@
                 <div class="li-r"><em class="<%= bespeak.visited? ? "green" : "red" %>"><%= bespeak.status_name %></em></div>
               </div>
               <% if bespeak.unvisit? %>
-                <a href="<%= delete_bespeak_mobile_car_shops_path(car_bespeak_id: bespeak.id, site_id: @site.id) %>" class="btn" onclick="if (confirm('确认取消预定?')){return true;};return false;">取消预定</a>
+                <a href="<%= delete_bespeak_mobile_car_shops_url(car_bespeak_id: bespeak.id, site_id: @site.id) %>" class="btn" onclick="if (confirm('确认取消预定?')){return true;};return false;">取消预定</a>
               <% end %>
             </div>
           </dd>

@@ -9,7 +9,7 @@
         <dl>
           <dt><span><img src="/assets/mobile/sculpture－1.png"/></span></dt>
           <dd>
-            <%= form_for @comment, url: create_comment_mobile_business_shop_path(@site,@business_shop) do |f| %>
+            <%= form_for @comment, url: create_comment_mobile_business_shop_url(@site,@business_shop) do |f| %>
               <div class="form-li">
                 <%= f.text_area :comment, rows: 5, placeholder: '请输入您的评论', class: "input comment_area" %>
               </div>

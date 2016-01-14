@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <a href="<%= mobile_unfolds_path(activity_id: @activity.try(:id), openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="t-btn t-btn-yellow foot-btn">返回首页</a>
+        <a href="<%= mobile_unfolds_url(activity_id: @activity.try(:id), openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>" class="t-btn t-btn-yellow foot-btn">返回首页</a>
     </div>
 </div>
 <%= javascript_include_tag 'mobile/qcode' %>

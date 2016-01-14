@@ -47,7 +47,7 @@
 
 <script id='ractive_shop_template' type='text/ractive'>
   <div class="mod-nav">
-    <%= link_to add_comment_mobile_wmall_shop_path(auth_params.merge(id: params[:id])), class: "tleft" do %>
+    <%= link_to add_comment_mobile_wmall_shop_url(auth_params.merge(id: params[:id])), class: "tleft" do %>
       <img src="/mobile/img/wbusiness/icon-back.png">
     <% end %>
     <span>{{name}}</span>
@@ -89,7 +89,7 @@ $(function(){
             $(".pop-success").fadeIn();
             setTimeout(function(){
               $(".pop-success").fadeOut(function(){
-                window.location.href='<%=raw comments_mobile_wmall_shop_path(auth_params.merge(id: params[:id]))%>';
+                window.location.href='<%=raw comments_mobile_wmall_shop_url(auth_params.merge(id: params[:id]))%>';
               });
             },1000);
           }else{

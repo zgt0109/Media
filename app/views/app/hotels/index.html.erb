@@ -1,10 +1,10 @@
 <header>
 	<h1><%= @hotel.try(:name) %></h1>
-	<%= link_to "我的订单", app_hotel_orders_path(aid: params[:aid]), class: "ico-hd ico-order" %>
+	<%= link_to "我的订单", app_hotel_orders_url(aid: params[:aid]), class: "ico-hd ico-order" %>
 </header>
 <div class="contxt cont-index">
 	<div class="box-cont box-half index-city">
-		<a href="<%= city_app_hotels_path(aid: params[:aid])%>" class="box-block"></a>
+		<a href="<%= city_app_hotels_url(aid: params[:aid])%>" class="box-block"></a>
 		<div class="hd">
 			<span class="ico ico-city">城 市</span>
 		</div>
@@ -40,7 +40,7 @@ function toBook(){
 	if(check_in_date >= check_out_date){
 		alert('离店时间必须大于入住时间!');
 	}else{
-		window.location.href = "<%= list_app_hotels_path %>?aid=<%= params[:aid] %>& %>&check_in_date="+check_in_date+"&check_out_date="+check_out_date+"&page=1#mp.weixin.qq.com";
+		window.location.href = "<%= list_app_hotels_url %>?aid=<%= params[:aid] %>& %>&check_in_date="+check_in_date+"&check_out_date="+check_out_date+"&page=1#mp.weixin.qq.com";
 	}
 }
 

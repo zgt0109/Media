@@ -6,9 +6,9 @@
 <div class="html">
   <div class="main">
     <header>
-      <a class="ico ico-arrow-left" href="<%= page_app_business_circle_path(@article.website_menu, anchor: "mp.weixin.qq.com") %>"></a>
+      <a class="ico ico-arrow-left" href="<%= page_app_business_circle_url(@article.website_menu, anchor: "mp.weixin.qq.com") %>"></a>
       <h1 class="ellipsis"><%= @article.title %></h1>
-      <a class="ico ico-home" href="<%= app_business_circles_path(id:@website.id, anchor: "mp.weixin.qq.com") %>"></a>
+      <a class="ico ico-home" href="<%= app_business_circles_url(id:@website.id, anchor: "mp.weixin.qq.com") %>"></a>
     </header><!-- header end -->
     <section>
       <div class="box box-index box-list box-detail">
@@ -26,7 +26,7 @@
             <a class="btn-share last"><span class="ico-pyq">分享到朋友圈</span></a>
           </div>
           <div class="bd-btn detail-row">
-            <a class="btn" href="<%= comment_app_business_circle_path(@article, anchor: "mp.weixin.qq.com") %>">我要评论</a>
+            <a class="btn" href="<%= comment_app_business_circle_url(@article, anchor: "mp.weixin.qq.com") %>">我要评论</a>
           </div>
         </div>
         <%= render :partial=> "comment", :object => @comments %>

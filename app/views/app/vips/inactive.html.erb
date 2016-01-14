@@ -6,10 +6,10 @@
 
             <%= render "app/vips/partials/vip_card_cover" %>
 
-            <%= form_tag inactive_app_vips_path, id: "activate_form", remote: true, class: "card_data" do |f| %>
+            <%= form_tag inactive_app_vips_url, id: "activate_form", remote: true, class: "card_data" do |f| %>
                 <!--<div class="data_title clearfix">
                     <span class="fl">重新注册新账户</span>
-                    <%= link_to '去注册', signup_app_vips_path, class: "fr in_b tcenter" %>
+                    <%= link_to '去注册', signup_app_vips_url, class: "fr in_b tcenter" %>
                 </div>-->
 
                 <ul class="card_phone">
@@ -60,7 +60,7 @@
 
             var $this = $(this);
             if(!$this.hasClass("btn-gray")){
-                $.get("<%= send_sms_app_vips_path %>?phone=" + $('#mobile').val(), function(data) {
+                $.get("<%= send_sms_app_vips_url %>?phone=" + $('#mobile').val(), function(data) {
                     if(data.error) {
                         alert(data.message);
                     } else {

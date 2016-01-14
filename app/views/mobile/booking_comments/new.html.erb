@@ -1,7 +1,7 @@
 <% title "写评论" %>
 <% content_for :booking_top_pic do %>
     <header>
-      <a href="<%= mobile_booking_comments_path(site_id: @site.id, booking_item_id: @booking_item.id) %>" class="ico-prev">
+      <a href="<%= mobile_booking_comments_url(site_id: @site.id, booking_item_id: @booking_item.id) %>" class="ico-prev">
         <img src="/assets/mobile/wserver/ico-back.png"/></a>
       <h1>写评论</h1>
     </header>
@@ -20,7 +20,7 @@
         </span>
       </div>
       <div class="fr">
-        <%= form_for @booking_comment, url: mobile_booking_comments_path, method: 'post' do |f| %>
+        <%= form_for @booking_comment, url: mobile_booking_comments_url, method: 'post' do |f| %>
             <%= f.hidden_field :user_id %>
             <%= f.hidden_field :booking_item_id %>
             <div class="bd-comment">
@@ -44,7 +44,7 @@
       <h3>热门评论</h3>
       <% @booking_comments.first(3).each do |booking_comment|%>
           <div class="ft-list">
-            <a href="<%= mobile_booking_comments_path(site_id: @site.id, booking_item_id: @booking_item.id)%>" class="box-block"></a>
+            <a href="<%= mobile_booking_comments_url(site_id: @site.id, booking_item_id: @booking_item.id)%>" class="box-block"></a>
             <div class="fl">
                 <span class="bd-img">
                    <%= image_tag "/assets/life/user_logo.png" %>

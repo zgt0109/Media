@@ -81,7 +81,7 @@
     $('.confirm_recharge').unbind('click');
     var amount = $(this).val();
     if(amount > 0){
-      $.get("<%= recharge_check_app_vips_path %>" + "?amount=" + amount);
+      $.get("<%= recharge_check_app_vips_url %>" + "?amount=" + amount);
     }else{
       $('.privilege_item').removeClass('selected');
       $('#vip_recharge_order_pay_amount').val(0);

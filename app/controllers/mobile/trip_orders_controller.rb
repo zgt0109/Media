@@ -16,7 +16,7 @@ class Mobile::TripOrdersController < Mobile::BaseController
      @ticket = @trip_order.trip_ticket
     
     if @trip_order.save!
-      redirect_to mobile_trip_orders_path, notice:"提交成功！"
+      redirect_to mobile_trip_orders_url, notice:"提交成功！"
     else
       render 'new', alert:"提交失败！"
     end

@@ -15,7 +15,7 @@ class Mobile::EcCommentsController < Mobile::BaseController
     @item = EcItem.find(params[:id])
     @comment = @item.ec_comments.new(params[:ec_comment])
     if @comment.save
-      redirect_to new_mobile_ec_comment_path(site_id: @site.id,:id => @item.id), :notice =>  "评论成功"
+      redirect_to new_mobile_ec_comment_url(site_id: @site.id,:id => @item.id), :notice =>  "评论成功"
     else
       render :action => :new, :notice => "评论失败"
     end

@@ -10,7 +10,7 @@
   </div>
   <div class="item-box">
     <div class="item">
-      <%= link_to mobile_wmall_following_shops_path(auth_params) do %>
+      <%= link_to mobile_wmall_following_shops_url(auth_params) do %>
         <span class="f-red">{{cnt_followings}}</span>
         <span>关注</span>
       <% end %>
@@ -26,7 +26,7 @@
     <ul class="nobg">
       <li>
         <a href="{{signin_url}}">
-        <%= link_to signin_app_vips_path(auth_params.slice(:wxmuid,:wxuid)) do %>
+        <%= link_to signin_app_vips_url(auth_params.slice(:wxmuid,:wxuid)) do %>
           <i class="u-icon u-icon-1"></i>签到
         <% end %>
       </li>
@@ -34,12 +34,12 @@
 
     <ul>
       <li>
-        <%= link_to app_vips_path(auth_params.slice(:wxmuid,:wxuid)) do %>
+        <%= link_to app_vips_url(auth_params.slice(:wxmuid,:wxuid)) do %>
           <i class="u-icon u-icon-2"></i>会员卡
         <% end %>
       </li>
       <% if @site.blog_bbs? %>
-        <li><%=link_to raw('<i class="u-icon u-icon-3"></i>会员论坛'), mobile_wbbs_topics_path(auth_params.slice(:site_id)) %></li>
+        <li><%=link_to raw('<i class="u-icon u-icon-3"></i>会员论坛'), mobile_wbbs_topics_url(auth_params.slice(:site_id)) %></li>
       <% end %>
     </ul>
 

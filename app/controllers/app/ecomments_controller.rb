@@ -16,7 +16,7 @@ module App
       @item = EcItem.find(params[:id])
       @comment = @item.ec_comments.new(params[:ec_comment])
       if @comment.save
-        redirect_to new_app_ecomment_path(:id => @item.id), :notice =>  "评论成功"
+        redirect_to new_app_ecomment_url(:id => @item.id), :notice =>  "评论成功"
       else
         render :action => :new, :notice => "评论失败"
       end

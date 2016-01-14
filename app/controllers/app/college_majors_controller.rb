@@ -11,7 +11,7 @@ module App
     def show
       @college_major = CollegeMajor.find_by_id(params[:id])
       unless @college_major.present?
-        redirect_to app_college_majors_path, :notice => "数据出错！"
+        redirect_to app_college_majors_url, :notice => "数据出错！"
       end
     end
 

@@ -2,7 +2,7 @@
 
 <% content_for :body_class do  %>bggrey<% end %>
   <div class="pad10">
-    <%= form_for @group_order, url: mobile_group_orders_path(site_id: @site.id), remote: true do |f| %>
+    <%= form_for @group_order, url: mobile_group_orders_url(site_id: @site.id), remote: true do |f| %>
       <%= f.hidden_field :group_item_id %>
       <%= f.hidden_field :price %>
       <%= f.hidden_field :username %>

@@ -22,7 +22,7 @@ class Mobile::GovmailsController < Mobile::BaseController
         field = CustomField.find(key)
         field.custom_values.create(customized: @mail, value: value)
       end
-      render json: { ajax_msg: { status: 1, url: mobile_govmails_path(activity_id: @activity.id) } }
+      render json: { ajax_msg: { status: 1, url: mobile_govmails_url(activity_id: @activity.id) } }
     else
       render json: { ajax_msg: { status: 0 } }
     end

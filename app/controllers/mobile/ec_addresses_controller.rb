@@ -13,32 +13,32 @@ class Mobile::EcAddressesController < Mobile::BaseController
 
   def new
     @address = WxUserAddress.new
-    @url = mobile_ec_addresses_path(site_id: @site.id)
+    @url = mobile_ec_addresses_url(site_id: @site.id)
   end
 
   def create
     @address = @wx_user.addresses.normal.build(params[:wx_user_address])
     if @address.save
       if session[:from] == "cart"
-        redirect_to new_mobile_ec_order_path(site_id: @site.id, items: session[:item_ids], address_id: @address.id)
+        redirect_to new_mobile_ec_order_url(site_id: @site.id, items: session[:item_ids], address_id: @address.id)
       else
-        redirect_to mobile_ec_addresses_path(site_id: @site.id)
+        redirect_to mobile_ec_addresses_url(site_id: @site.id)
       end
     else
-      @url = mobile_ec_addresses_path(site_id: @site.id)
+      @url = mobile_ec_addresses_url(site_id: @site.id)
       render :new
     end
   end
 
   def edit
-    @url = mobile_ec_address_path(site_id: session[:site_id], id: @address.id)
+    @url = mobile_ec_address_url(site_id: session[:site_id], id: @address.id)
   end
 
   def update
     if @address.update_attributes(params[:wx_user_address])
-      redirect_to mobile_ec_addresses_path(site_id: @site.id)
+      redirect_to mobile_ec_addresses_url(site_id: @site.id)
     else
-      @url = edit_mobile_ec_address_path(site_id: @site.id, id: @address.id)
+      @url = edit_mobile_ec_address_url(site_id: @site.id, id: @address.id)
       render :edit
     end
   end

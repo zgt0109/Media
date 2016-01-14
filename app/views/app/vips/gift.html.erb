@@ -61,7 +61,7 @@ $(function(){
       if(is_exchange){return false;}
       is_exchange = true;
       $.ajax({
-        url: '<%= exchange_gift_app_vips_path(id: @gift.try(:id)) %>',
+        url: '<%= exchange_gift_app_vips_url(id: @gift.try(:id)) %>',
         type: 'POST',
         dataType: 'script',
         data: { qty: $('#exchange_num_input').val() }

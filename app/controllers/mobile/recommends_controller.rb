@@ -32,11 +32,11 @@ class Mobile::RecommendsController < Mobile::BaseController
   end
 
   def prize
-    return redirect_to mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
+    return redirect_to mobile_recommends_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
   end
 
   def user
-    return redirect_to mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
+    return redirect_to mobile_recommends_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if (@prizes.blank? && @gift.blank?)
   end
 
   def update_info

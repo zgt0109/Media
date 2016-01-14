@@ -41,15 +41,15 @@ class Mobile::AlbumsController < Mobile::BaseController
     #if flag
     #  redirect_to :back, alert: "您今天已经发表过评论了！"
     if @comment.save
-      redirect_to comments_mobile_album_path(@site, @photo.id), notice: "评价成功！"
-      # redirect_to comments_mobile_album_path(@site, @photo), notice: "评价成功！"
+      redirect_to comments_mobile_album_url(@site, @photo.id), notice: "评价成功！"
+      # redirect_to comments_mobile_album_url(@site, @photo), notice: "评价成功！"
     else
       redirect_to :back, alert: "评价失败，#{@comment.errors.full_messages.first}"
     end
   end
 
   def load_more_photos
-    @photos = @album.photos.page(params[:page]).collect{|p| {link_to: mobile_album_path(p, site_id: p.album.site_id), img_url: p.img_url} }
+    @photos = @album.photos.page(params[:page]).collect{|p| {link_to: mobile_album_url(p, site_id: p.album.site_id), img_url: p.img_url} }
     render json: {photos: @photos}
   end
 

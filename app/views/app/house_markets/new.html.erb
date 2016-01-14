@@ -6,7 +6,7 @@
     <h1>预约看房报名</h1>
   </header>
   <section>
-    <%= form_for @house_bespeak,:url => app_house_markets_path,:validate => true do |f|  %>
+    <%= form_for @house_bespeak,:url => app_house_markets_url,:validate => true do |f|  %>
       <%= f.hidden_field :user_id %>
       <div class="box-form">
         <p>

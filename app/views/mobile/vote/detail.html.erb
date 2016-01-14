@@ -60,7 +60,7 @@
     <div id="mesg-vote" class="pop hide">
       <div class="bd">
         <p>投票成功</p>
-        <%= link_to mobile_vote_result_path(:aid =>
+        <%= link_to mobile_vote_result_url(:aid =>
         @activity.id), class:"btn confirm" do %>
         <span>确认</span>
         <% end %></div>
@@ -81,7 +81,7 @@
       var items  = $.map($("input:checked"), function(x) { return $(x).val(); });
       var name   = $("#name").val();
       var mobile = $("#mobile").val();
-      $.post('<%= mobile_vote_success_path %>', {items: items, name: name, mobile: mobile}, function(data) {
+      $.post('<%= mobile_vote_success_url %>', {items: items, name: name, mobile: mobile}, function(data) {
          $("#mesg-vote").removeClass('hide');
          $(".submit").unbind("click");
          location.href="#top";

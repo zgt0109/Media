@@ -3,7 +3,7 @@
 	<h1>填写订单</h1>
 </header>
 <div class="contxt cont-artical">
-	<%= form_for @hotel_order, url: app_hotel_orders_path(aid: params[:aid]), room_type_id: params[:room_type_id], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date], time: Time.now.to_i), validate: true do |f| %>
+	<%= form_for @hotel_order, url: app_hotel_orders_url(aid: params[:aid]), room_type_id: params[:room_type_id], check_in_date: params[:check_in_date], check_out_date: params[:check_out_date], time: Time.now.to_i), validate: true do |f| %>
 	<%= f.hidden_field :site_id %>
 	<%= f.hidden_field :hotel_branch_id %>
 	<%= f.hidden_field :hotel_id %>

@@ -9,7 +9,7 @@ class App::VipApisController < App::VipsController
     # @vip_hash = @vip_api_setting.get_user_info( @vip_user.mobile )
     logger.info "会员信息：#{@vip_hash}"
     # @vip_hash['error']
-    redirect_to info_app_vips_path if @vip_hash['error']
+    redirect_to info_app_vips_url if @vip_hash['error']
   end
 
   def vip_transactions
@@ -31,6 +31,6 @@ class App::VipApisController < App::VipsController
   private
     def require_enable_api_setting
       @vip_api_setting = @vip_card.vip_api_setting
-      redirect_to vips_app_path, notice: "商户没有开通会员接口功能" unless @vip_api_setting.try(:enabled?)
+      redirect_to vips_app_url, notice: "商户没有开通会员接口功能" unless @vip_api_setting.try(:enabled?)
     end
 end

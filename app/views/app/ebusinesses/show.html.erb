@@ -3,9 +3,9 @@
   <div class="main">
     <header>
       <div class="header">
-        <a class="ico ico-left" href="<%= app_ebusinesses_path(:id => @item.ec_shop_id) %>"><i></i>返回</a>
+        <a class="ico ico-left" href="<%= app_ebusinesses_url(:id => @item.ec_shop_id) %>"><i></i>返回</a>
         <h1><%= @item.title  %></h1>
-        <a class="ico ico-right" href="<%= app_ecomments_path(:id => @item.id)  %>">评论&nbsp;<%= @item.ec_comments.count %></a>
+        <a class="ico ico-right" href="<%= app_ecomments_url(:id => @item.id)  %>">评论&nbsp;<%= @item.ec_comments.count %></a>
       </div>
     </header><!-- header end -->
     <section>

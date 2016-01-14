@@ -12,7 +12,7 @@ class Mobile::SharePhotoCommentsController < Mobile::BaseController
   def create
     @share_photo_comment = @share_photo.share_photo_comments.new(params[:share_photo_comment])
     if @share_photo_comment.save
-      redirect_to mobile_share_photo_path(site_id: @site.id, id: @share_photo.id), notice: "评论成功"
+      redirect_to mobile_share_photo_url(site_id: @site.id, id: @share_photo.id), notice: "评论成功"
     else
       render :back, notice: "评论失败"
     end

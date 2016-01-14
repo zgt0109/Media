@@ -2,7 +2,7 @@
   <%= render 'footer' %>
   <div class="body">
     <div class="mod-title"><img src="<%= @car_brand.logo_url || '/assets/mobile/wcar/logo.png' %>"/>预约<%= params[:bespeak_type] == "1" ? "保养" : "试驾" %></div>
-    <%= form_for @car_bespeak, url: mobile_car_shops_path(site_id: @site.id), validate: true do |f| %>
+    <%= form_for @car_bespeak, url: mobile_car_shops_url(site_id: @site.id), validate: true do |f| %>
       <%= f.hidden_field :user_id %>
       <%= f.hidden_field :site_id %>
       <%= f.hidden_field :car_shop_id %>
@@ -12,11 +12,11 @@
         <dl>
           <dt>
             <% if @car_bespeak.repair? %>
-              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id) %>" class="fa fa-chevron-right fa-chevron-right">
+              <a href="<%= user_bespeak_mobile_car_shops_url(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id) %>" class="fa fa-chevron-right fa-chevron-right">
                 <b>我的保养<em class="bg-green"><%= @user_bespeak %></em></b>
               </a>
             <% else %>
-              <a href="<%= user_bespeak_mobile_car_shops_path(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id) %>" class="fa fa-chevron-right fa-chevron-right">
+              <a href="<%= user_bespeak_mobile_car_shops_url(bespeak_type: @car_bespeak.bespeak_type, site_id: @site.id) %>" class="fa fa-chevron-right fa-chevron-right">
                 <b>我的试驾<em class="bg-green"><%= @user_bespeak %></em></b>
               </a>
             <% end %>

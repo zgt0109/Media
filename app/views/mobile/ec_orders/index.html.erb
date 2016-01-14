@@ -1,14 +1,14 @@
 <% provide(:title, "我的订单") %>
 <% content_for :topbar do %>
   <header>
-    <%= link_to image_tag('mobile/wshop/ico-back.png'), member_mobile_ec_shops_path(site_id: @site.id) %>
+    <%= link_to image_tag('mobile/wshop/ico-back.png'), member_mobile_ec_shops_url(site_id: @site.id) %>
     <h1>全部订单</h1>
   </header>
 <% end %>
 
 <section>
   <% if @orders.each do |order| %>
-    <a href="<%= mobile_ec_order_path(order.site_id, order) %>" class="box-p">
+    <a href="<%= mobile_ec_order_url(order.site_id, order) %>" class="box-p">
       <p class="p-title"><b>订单号：</b><span><%= order.order_no %></span></p>
       <p><b>收货人：</b><span><%= order.username %></span></p>
       <p><b>下单时间：</b><span><%= order.created_at.to_s[0..18] %></span></p>

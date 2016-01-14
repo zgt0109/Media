@@ -5,12 +5,12 @@
 <section id="index">
   <header>
     <div class="wrap">
-      <a href="<%= mobile_hospital_doctors_path(site_id: @site.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
+      <a href="<%= mobile_hospital_doctors_url(site_id: @site.id) %>" class="ico-prev"><img src="/assets/mobile/whospital/ico-back.png"/></a>
       <h1>
         <a class="select-down" href="javascript:void(0);" onclick="transition('#index','#transition-category',1)">全部科室</a>
       </h1>
 
-        <%= link_to my_items_mobile_doctor_arrange_items_path, class: "ico-member" do %>
+        <%= link_to my_items_mobile_doctor_arrange_items_url, class: "ico-member" do %>
           <img src="/assets/mobile/whospital/ico-member.png">
         <% end %>
 

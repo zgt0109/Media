@@ -26,12 +26,12 @@ class Mobile::UnfoldsController < Mobile::BaseController
   end
 
   def prize
-    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) unless @prize.present?
-    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if @prize.abort?
+    return redirect_to mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) unless @prize.present?
+    return redirect_to mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) if @prize.abort?
   end
 
   def user
-    return redirect_to mobile_unfolds_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) unless @prize.present?
+    return redirect_to mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) unless @prize.present?
   end
 
   def update_info

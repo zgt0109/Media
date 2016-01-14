@@ -103,7 +103,7 @@
       if(!$this.hasClass("btn-gray")){
           $this.addClass("btn-gray").val("重新获取(60)");
           showTime();
-          $.get("<%= send_sms_app_vips_path %>" + "?phone=" + $('#phone').val());
+          $.get("<%= send_sms_app_vips_url %>" + "?phone=" + $('#phone').val());
       }
       function showTime(){
         if($time ==0){
@@ -136,7 +136,7 @@
   });
 
   function cancelSubmit() {
-    window.location.href = '<%= app_vips_path %>';
+    window.location.href = '<%= app_vips_url %>';
   }
 
   function submitMobile() {
@@ -190,14 +190,14 @@
               toggleToClass('#html','dirL');resize('#transitionRight','dirL');
               <% else %>
               alert('您的会员卡号为:' + data.ajax_msg.cardnumer);
-              window.location.href = '<%= app_vips_path %>';
+              window.location.href = '<%= app_vips_url %>';
               // toggleToClass('#html','dirL');resize('#transitionRight','dirL');toggleToClass('#body','body-null');
               <% end %>
             }else if(data.ajax_msg.status == 0){
               alert('您已经是会员了，会员卡号为:' + data.ajax_msg.cardnumer);
               // $('.btn-red').removeAttr("onclick");
               // toggleToClass('#html','dirL');resize('#transitionRight','dirL');toggleToClass('#body','body-null');
-              window.location.href = '<%= app_vips_path %>';
+              window.location.href = '<%= app_vips_url %>';
             }else if(data.ajax_msg.status == -2){
               alert('手机号码已被使用!');
             }else if(data.ajax_msg.status == -3){

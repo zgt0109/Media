@@ -11,7 +11,7 @@
 
       <section>
       <div style="position:fixed;"></div>
-      <%= form_tag mobile_shop_table_order_path(@shop_table_order), method: :delete do |f| %>
+      <%= form_tag mobile_shop_table_order_url(@shop_table_order), method: :delete do |f| %>
         <div class="box box-order-text">
           <p> <b>预定门店：</b>
             <span><%= @shop_table_order.shop_branch.try(:name) %></span>

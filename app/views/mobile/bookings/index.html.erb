@@ -4,7 +4,7 @@
 
       <a href="<%= mobile_bookings_url(site_id: @site.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
       <a href="<%= @booking.tel? ? "tel:#{@booking.tel}" : "#" %>"><img src="/assets/mobile/wserver/ico-phone.png"/></a>
-      <a href="<%= mobile_booking_orders_path(site_id: @site.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
+      <a href="<%= mobile_booking_orders_url(site_id: @site.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
       <a class="btn-list"><img src="/assets/mobile/wserver/ico-list.png"/></a>
     </header>
 <% end %>

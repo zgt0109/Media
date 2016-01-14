@@ -15,7 +15,7 @@ class Mobile::HospitalCommentsController < Mobile::BaseController
   def create
     @hospital_comment = @hospital_doctor.hospital_comments.new(params[:hospital_comment])
     if @hospital_comment.save
-      redirect_to new_mobile_hospital_comment_path(site_id: @site.id, id: @hospital_doctor.id), notice: "评论成功"
+      redirect_to new_mobile_hospital_comment_url(site_id: @site.id, id: @hospital_doctor.id), notice: "评论成功"
     else
       render :back, notice: "评论失败"
     end

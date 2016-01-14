@@ -40,7 +40,7 @@
 
   var page = 2;
   function load(){
-    var get_url = "<%= mobile_wx_cards_path(@site) %>" + "?page=" + page;
+    var get_url = "<%= mobile_wx_cards_url(@site) %>" + "?page=" + page;
     $.getJSON(get_url, function(data) {
       if(data.wx_cards.length > 0){
         page += 1;

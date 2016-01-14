@@ -9,7 +9,7 @@
       <div class="box box-hot">
         <h2 class="ellipsis">热门推荐</h2>
         <% @articles.each do |article| %>
-        <a href="<%= detail_app_business_circle_path(article, anchor: "mp.weixin.qq.com") %>">
+        <a href="<%= detail_app_business_circle_url(article, anchor: "mp.weixin.qq.com") %>">
           <span><%= article.title %></span>
           <i class="ico icon-angle-right"></i>
         </a>

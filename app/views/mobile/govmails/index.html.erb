@@ -46,9 +46,9 @@
 function handleMail(mail_type) {
     <%- if @wx_user.present? %>
         if(mail_type == 'my') {
-             location.href= "<%= my_mobile_govmails_path(activity_id: @activity.id)%>"
+             location.href= "<%= my_mobile_govmails_url(activity_id: @activity.id)%>"
         }else{
-            location.href="<%= new_mobile_govmail_path %>?box="+ mail_type;
+            location.href="<%= new_mobile_govmail_url %>?box="+ mail_type;
         }
     <%- else %>
         showTips('.J-guanzhu');

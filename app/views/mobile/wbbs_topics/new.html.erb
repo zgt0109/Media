@@ -9,12 +9,12 @@
 
 <section id="sec-index">
   <header class="untoppable">
-    <%= link_to "", mobile_wbbs_topics_path( @site, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
+    <%= link_to "", mobile_wbbs_topics_url( @site, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
     <a></a>
     <a></a>
   </header>
   <div class="body">
-    <%= form_for(@wbbs_topic, url: mobile_wbbs_topics_path(@site)) do |f| %>
+    <%= form_for(@wbbs_topic, url: mobile_wbbs_topics_url(@site)) do |f| %>
         <div class="mod-form form-ver">
           <%= f.text_area :content, rows: 7, class: :input, maxlength: WbbsTopic::MAX_CONTENT_LENGTH, placeholder: '说两句吧...' %>
           <div class="form-btn">
@@ -27,7 +27,7 @@
                 <%= f.hidden_field :receiver_id, value: params[:receiver_id] %>
             <%- end %>
             <%= hidden_field_tag :image_keys %>
-            <%= link_to '取消', mobile_wbbs_topics_path(@site), class: 'btn btn-gray' %>
+            <%= link_to '取消', mobile_wbbs_topics_url(@site), class: 'btn btn-gray' %>
             <%= f.submit '确定', class: 'btn btn-green form-submit' %>
           </div>
         </div>

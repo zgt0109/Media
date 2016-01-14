@@ -41,14 +41,14 @@
     </div><!-- deail-name end -->
     <div class="detail-btn">
       <% if @item.selling? %>
-          <a href="<%= new_mobile_ec_order_path(site_id: @site.id, :items => [@item.id]) %>" class="btn"><%= image_tag "/assets/mobile/wshop/ico-money.png" %>立即购买</a>
+          <a href="<%= new_mobile_ec_order_url(site_id: @site.id, :items => [@item.id]) %>" class="btn"><%= image_tag "/assets/mobile/wshop/ico-money.png" %>立即购买</a>
           <a class="btn btn-red" id="btn-add"><%= image_tag "/assets/mobile/wshop/ico-car-add.png" %>加入购物车</a>
       <% else %>
           <a class="btn" style="background: #999">此商品已下架</a>
       <% end %>
     </div><!-- detail-btn end -->
     <div class="detail-tab">
-      <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_ec_comments_path(site_id: @site.id,id: @item.id) %>">商品评价(<%= @item.ec_comments.count %>)</a></div>
+      <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_ec_comments_url(site_id: @site.id,id: @item.id) %>">商品评价(<%= @item.ec_comments.count %>)</a></div>
       <div class="bd">
         <div class="ckeditor_content">
           <%= @item.description.to_s.html_safe %>
@@ -67,7 +67,7 @@
         <b>购买数量</b>
       </div>
       <div class="bd">
-        <%= form_for @ec_cart,:url => mobile_ec_carts_path,:method => "post",:validate => true do |f| %>
+        <%= form_for @ec_cart,:url => mobile_ec_carts_url,:method => "post",:validate => true do |f| %>
 
         <%= f.hidden_field :ec_item_id, :value => @item.id %>
         <p class="box-number">

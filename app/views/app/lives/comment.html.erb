@@ -2,7 +2,7 @@
 <div class="html">
   <div class="main">
     <header>
-      <a class="ico ico-arrow-left" href="<%= detail_app_life_path(@article, anchor: "mp.weixin.qq.com") %>"></a>
+      <a class="ico ico-arrow-left" href="<%= detail_app_life_url(@article, anchor: "mp.weixin.qq.com") %>"></a>
       <h1 class="ellipsis">参与评论</h1>
     </header><!-- header end -->
     <section>
@@ -18,7 +18,7 @@
                     </span>
           </div>
           <div class="fr">
-            <%= form_for @comment, :validate => true, :url => create_comment_app_lives_path do |form| %>
+            <%= form_for @comment, :validate => true, :url => create_comment_app_lives_url do |form| %>
               <%= hidden_field_tag "website_article_id", @article.id  %>
               <div class="bd-comment">
                 <%= form.text_area :content, :rows=> 3, :maxlength => 140,:placeholder=> "请输入您的评论" %>

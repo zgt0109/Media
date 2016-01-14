@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: hotel_pictures
-#
-#  id              :integer          not null, primary key
-#  hotel_id        :integer          not null
-#  hotel_branch_id :integer          not null
-#  name            :string(255)
-#  path            :string(255)      not null
-#  is_cover        :boolean          default(FALSE), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-
 class HotelPicture < ActiveRecord::Base
 
   validates :hotel_branch_id, presence: true
@@ -27,8 +13,8 @@ class HotelPicture < ActiveRecord::Base
     update_attributes!(is_cover: false) if is_cover
   end
 
-  def path_url(type = :large)
-    qiniu_image_url(qiniu_path_key) || path.try(type)
+  def path_url
+    qiniu_image_url(qiniu_path_key)
   end
 
 end

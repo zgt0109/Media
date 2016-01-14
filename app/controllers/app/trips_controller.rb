@@ -24,7 +24,7 @@ module App
       now = Time.now
       params[:order][:order_no] = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
       TripOrder.create(params[:order])
-      redirect_to order_list_app_trips_path, alert:"提交成功！"
+      redirect_to order_list_app_trips_url, alert:"提交成功！"
     end
 
     def order_list

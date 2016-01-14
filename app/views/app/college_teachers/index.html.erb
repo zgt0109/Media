@@ -8,7 +8,7 @@
               <img src="<%= t.avatar  %>"/>
               <p>姓名： <%= t.name  %></p>
               <p>职称：  <%= t.position  %></p>
-              <p class="tright"><a class="btn btn-small" href="<%= app_college_teacher_path(t, anchor: "mp.weixin.qq.com")  %>">查看详情</a></p>
+              <p class="tright"><a class="btn btn-small" href="<%= app_college_teacher_url(t, anchor: "mp.weixin.qq.com")  %>">查看详情</a></p>
             </div>
         <% end %>
     <% else %>

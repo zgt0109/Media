@@ -25,7 +25,7 @@ module App
     def map
       @branch = CollegeBranch.find_by_id(params[:id])
       unless @branch.present?
-        redirect_to address_app_educations_path, notice: "数据不存在"
+        redirect_to address_app_educations_url, notice: "数据不存在"
         return
       end
       begin
@@ -35,7 +35,7 @@ module App
         @location = data['result']['location']
       rescue
         @location = {}
-        redirect_to address_app_educations_path, notice: "获取数据出错，请检查地址是否填写正确，或尝试刷新"
+        redirect_to address_app_educations_url, notice: "获取数据出错，请检查地址是否填写正确，或尝试刷新"
         return
       end
       render(layout: false)

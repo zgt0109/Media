@@ -16,7 +16,7 @@
         <% if @vip_card.vip_importing_enabled? %>
           <div class="data_title clearfix">
             <span class="fl">已有线下会员卡帐号</span>
-            <%= link_to '去绑定', activate_app_vips_path, class: "fr in_b tcenter" %>
+            <%= link_to '去绑定', activate_app_vips_url, class: "fr in_b tcenter" %>
           </div>
         <% end %>
         <ul class="card_phone">
@@ -105,7 +105,7 @@
           if(!$this.hasClass("btn-gray")){
               $this.addClass("btn-gray").text("重新获取(60)");
               showTime();
-              $.get("<%= send_sms_app_vips_path %>" + "?phone=" + $('#phone').val(), null, null, 'json');
+              $.get("<%= send_sms_app_vips_url %>" + "?phone=" + $('#phone').val(), null, null, 'json');
           }
           function showTime(){
               if($time ==0){
@@ -140,7 +140,7 @@
   });
 
   function cancelSubmit() {
-    location.href = "<%= app_vips_path %>";
+    location.href = "<%= app_vips_url %>";
   }
 
   function submitMobile() {
@@ -199,21 +199,21 @@
             if(data.ajax_msg.status == 1){
               <%- if @vip_card.audited? %>
                 alert('感谢您的提交，请等待审核');
-                location.href = "<%= app_vips_path %>";
+                location.href = "<%= app_vips_url %>";
               <% else %>
                 alert('您的会员卡号为:' + data.ajax_msg.cardnumer);
                 <% if params[:vip_package_id].present? %>
-                  window.location.href = '<%= vip_package_show_app_vips_path(id: params[:vip_package_id]) %>'
+                  window.location.href = '<%= vip_package_show_app_vips_url(id: params[:vip_package_id]) %>'
                 <% else %>
-                  location.href = "<%= app_vips_path %>";
+                  location.href = "<%= app_vips_url %>";
                 <% end %>
               <% end %>
             }else if(data.ajax_msg.status == 0){
               alert('您已经是会员了，会员卡号为:' + data.ajax_msg.cardnumer);
               <% if params[:vip_package_id].present? %>
-                window.location.href = '<%= vip_package_show_app_vips_path(id: params[:vip_package_id]) %>'
+                window.location.href = '<%= vip_package_show_app_vips_url(id: params[:vip_package_id]) %>'
               <% else %>
-                location.href = "<%= app_vips_path %>";
+                location.href = "<%= app_vips_url %>";
               <% end %>
             }else if(data.ajax_msg.status == -2){
               alert('手机号码已被使用!');

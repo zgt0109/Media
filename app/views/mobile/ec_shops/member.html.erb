@@ -10,8 +10,8 @@
   <!--<div class="box-img"><%#=  image_tag 'mobile/wshop/1.jpg' %> </div>-->
   <div class="box-img" style="margin-top: 50px;"> </div>
   <div class="box box-wrap">
-    <a href="<%= mobile_ec_orders_path(site_id: @site.id) %>" class="hd">全部订单<i class="arrow"></i></a>
-    <a href="<%= mobile_ec_addresses_path(site_id: @site.id) %>" class="hd">管理收货地址<i class="arrow"></i></a>
+    <a href="<%= mobile_ec_orders_url(site_id: @site.id) %>" class="hd">全部订单<i class="arrow"></i></a>
+    <a href="<%= mobile_ec_addresses_url(site_id: @site.id) %>" class="hd">管理收货地址<i class="arrow"></i></a>
   </div>
 </section>
 

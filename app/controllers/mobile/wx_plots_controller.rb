@@ -18,7 +18,7 @@ class Mobile::WxPlotsController < Mobile::BaseController
     @bulletin = @wx_plot.wx_plot_bulletins.done.where(id: params[:id]).first
     @share_image = @bulletin.pic_key.present? ? @bulletin.pic_url : @site.activity_wx_plot_bulletin.try(:qiniu_pic_url)
     render layout: 'mobile/wx_plot_website'
-    return redirect_to bulletins_mobile_wx_plots_path(anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot.bulletin}记录不存在" unless @bulletin
+    return redirect_to bulletins_mobile_wx_plots_url(anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot.bulletin}记录不存在" unless @bulletin
   end
 
   def repair_complains
@@ -46,7 +46,7 @@ class Mobile::WxPlotsController < Mobile::BaseController
     @repair_complain = @repair_complains.new(params[:wx_plot_repair_complain])
     if @repair_complain.save
       @site.send_system_message({site_id: @site.id, content: "#{@repair_complain.created_at.strftime('%H:%M')}收到#{@repair_complain.nickname}用户#{@repair_complain.phone}的#{@repair_complain.wx_plot_category.name}#{@repair_complain.repair? ? '报修申请' : '投诉建议'}", module_id: @repair_complain.repair? ? 1 : 2 }, SystemMessageModule.where(module_id: @repair_complain.repair? ? 1 : 2).first)
-      redirect_to repair_complains_mobile_wx_plots_path(type: params[:type], anchor: 'mp.weixin.qq.com'), notice: '提交成功'
+      redirect_to repair_complains_mobile_wx_plots_url(type: params[:type], anchor: 'mp.weixin.qq.com'), notice: '提交成功'
     else
       redirect_to :back, alert: '提交失败'
     end
@@ -63,7 +63,7 @@ class Mobile::WxPlotsController < Mobile::BaseController
 
   def cancel_repair_complain
     if @repair_complain.cancel!
-      redirect_to repair_complains_mobile_wx_plots_path(type: params[:type], anchor: 'mp.weixin.qq.com'), notice: '取消成功'
+      redirect_to repair_complains_mobile_wx_plots_url(type: params[:type], anchor: 'mp.weixin.qq.com'), notice: '取消成功'
     else
       redirect_to :back, alert: '取消失败'
     end
@@ -84,7 +84,7 @@ class Mobile::WxPlotsController < Mobile::BaseController
   def life
     @share_image = @site.activity_wx_plot_life.try(:qiniu_pic_url)
     @life = @wx_plot.wx_plot_lives.where(id: params[:id]).first
-    return redirect_to lives_mobile_wx_plots_path(anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot.life}记录不存在" unless @life
+    return redirect_to lives_mobile_wx_plots_url(anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot.life}记录不存在" unless @life
   end
 
   def owners
@@ -105,7 +105,7 @@ class Mobile::WxPlotsController < Mobile::BaseController
 
     def set_wx_plot_repair_complain
       @repair_complain = @repair_complains.where(id: params[:id]).first
-      return redirect_to repair_complains_mobile_wx_plots_path(type: params[:type], anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot[params[:type]]}记录不存在" unless @repair_complain
+      return redirect_to repair_complains_mobile_wx_plots_url(type: params[:type], anchor: 'mp.weixin.qq.com'), alert: "相关#{@wx_plot[params[:type]]}记录不存在" unless @repair_complain
     end
 
     def set_site_website

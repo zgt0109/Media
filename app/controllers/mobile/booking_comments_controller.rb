@@ -10,9 +10,9 @@ class Mobile::BookingCommentsController < Mobile::BaseController
   def create
     @booking_comment = BookingComment.new(params[:booking_comment])
     if @booking_comment.save
-      redirect_to new_mobile_booking_comment_path(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id])
+      redirect_to new_mobile_booking_comment_url(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id])
     else
-      redirect_to mobile_booking_comments_path(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id]), :notice => "评论失败"
+      redirect_to mobile_booking_comments_url(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id]), :notice => "评论失败"
     end
   end
 

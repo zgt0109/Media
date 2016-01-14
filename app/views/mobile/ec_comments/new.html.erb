@@ -1,7 +1,7 @@
 <% provide(:title, "写评论") %>
 <%= content_for(:topbar) do %>
     <header>
-      <a href="<%= mobile_ec_comments_path(:id => @item.id) %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
+      <a href="<%= mobile_ec_comments_url(:id => @item.id) %>" class="ico-prev"><img src="/assets/mobile/wshop/ico-back.png"/></a>
       <h1>写评论</h1>
     </header><!-- header end -->
 <% end %>
@@ -18,7 +18,7 @@
                     </span>
           </div>
           <div class="fr">
-            <%= form_for @comment, :url=> mobile_ec_comments_path, :method => :post, :validate => true do |form| %>
+            <%= form_for @comment, :url=> mobile_ec_comments_url, :method => :post, :validate => true do |form| %>
               <%= hidden_field_tag "id", @item.id  %>
               <div class="bd-comment">
                 <%= form.text_area :content, :rows => 3,  :placeholder => "请输入您的评论" %>

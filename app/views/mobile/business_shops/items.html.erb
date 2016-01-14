@@ -1,5 +1,5 @@
 <% if @items.each do |item| %>
-  <a class="mod-product" href="<%= item_mobile_business_shop_path(@site.id, @business_shop, item_id: item.id) %>
+  <a class="mod-product" href="<%= item_mobile_business_shop_url(@site.id, @business_shop, item_id: item.id) %>
     ">
     <div class="list-img">
       <%= image_tag item.pic, height: "100%" %></div>

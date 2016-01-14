@@ -9,7 +9,7 @@
 </section>
 <%- if @activity.activity_status != Activity::WARM_UP && @wx_user.present? %>
   <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
-    <a href="<%= gua_list_app_gua_index_path(aid: @activity.id) %>" class="btn btn-block">点击查看我获得的奖品 ></a>
+    <a href="<%= gua_list_app_gua_index_url(aid: @activity.id) %>" class="btn btn-block">点击查看我获得的奖品 ></a>
   <%- end %>
 <%- end %>
 <section class="sec-detail sec-bg-top sec-bg-bottom">

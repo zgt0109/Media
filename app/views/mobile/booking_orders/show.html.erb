@@ -1,7 +1,7 @@
 <% title "订单详情" %>
 <% content_for :booking_top_pic do %>
     <header>
-      <a href="<%= mobile_booking_orders_path(site_id: @site.id) %>" class="ico-prev">
+      <a href="<%= mobile_booking_orders_url(site_id: @site.id) %>" class="ico-prev">
         <img src="/assets/mobile/wserver/ico-back.png"/></a>
       <h1>订单详情</h1>
     </header>
@@ -11,7 +11,7 @@
     <dd>
       <ul class="shopcar-list">
         <% unless @booking_order.is_flow_site %>
-            <a href="<%= mobile_booking_item_path(@booking_item, site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="li-fw">
+            <a href="<%= mobile_booking_item_url(@booking_item, site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="li-fw">
               <li class="shopcar-info">
                 <% picture = @booking_item.booking_item_pictures.first %>
                 <span class="<%= picture.pic_url ? "" : "img-null"%> info-fl">

@@ -13,7 +13,7 @@ class Mobile::GroupItemsController < Mobile::BaseController
   def order
     @body_class = "shopcar"
     unless @group_item.limit_coupon_count == -1
-      redirect_to mobile_group_item_path(site_id: @site.id, id: @group_item), :notice => "此商品每人每天最多只能购买#{@group_item.limit_coupon_count}件" if @group_orders.sum(&:qty) >= @group_item.limit_coupon_count
+      redirect_to mobile_group_item_url(site_id: @site.id, id: @group_item), :notice => "此商品每人每天最多只能购买#{@group_item.limit_coupon_count}件" if @group_orders.sum(&:qty) >= @group_item.limit_coupon_count
     end
     params[:group_order] = {group_item_id: @group_item.id, price: @group_item.price, qty: 1} unless params[:group_order].present?
     @group_order = GroupOrder.new(params[:group_order])
@@ -30,7 +30,7 @@ class Mobile::GroupItemsController < Mobile::BaseController
 
   def set_group_item
     @group_item = GroupItem.find_by_id(params[:id])
-    redirect_to mobile_groups_path(site_id: @site), :notice => "此商品不存在或已下架" unless @group_item.present?
+    redirect_to mobile_groups_url(site_id: @site), :notice => "此商品不存在或已下架" unless @group_item.present?
   end
 
   def redirect_vcoolife

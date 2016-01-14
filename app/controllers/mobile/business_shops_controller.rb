@@ -72,7 +72,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     if Comment.already_today?(session[:user_id], @business_shop.id)
       redirect_to :back, alert: "您今天已经发表过评论了！"
     elsif @comment.save
-      redirect_to comments_mobile_business_shop_path(@site,@business_shop), notice: "评价成功！"
+      redirect_to comments_mobile_business_shop_url(@site,@business_shop), notice: "评价成功！"
     else
       redirect_to :back, alert: "评价失败，#{@comment.errors.full_messages.first}"
     end

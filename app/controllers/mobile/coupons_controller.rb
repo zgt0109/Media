@@ -41,7 +41,7 @@ class Mobile::CouponsController < Mobile::BaseController
       if @coupon.vip_only? && vip_card
         vip = @site.vip_users.visible.where(user_id: session[:user_id]).first
         unless @user.applicable_for_coupon_by_vip?(@coupon, vip)
-          return redirect_to app_vips_path(openid: session[:openid]), alert: "该优惠券仅限#{@coupon.usable_vip_grades.map(&:name).join(",")}领取，成为该等级会员领取优惠券"
+          return redirect_to app_vips_url(openid: session[:openid]), alert: "该优惠券仅限#{@coupon.usable_vip_grades.map(&:name).join(",")}领取，成为该等级会员领取优惠券"
         end
       end
       consume = @user.consumes.create(

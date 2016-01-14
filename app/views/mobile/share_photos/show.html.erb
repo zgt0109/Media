@@ -40,7 +40,7 @@
         留个言
       </a>
     </div>
-    <%= form_for @share_photo_comment, url: mobile_share_photo_comments_path(share_photo_id: @share_photo.id) do |f| %>
+    <%= form_for @share_photo_comment, url: mobile_share_photo_comments_url(share_photo_id: @share_photo.id) do |f| %>
     <%= f.hidden_field :share_photo_id, value: @share_photo.id  %>
     <%= f.hidden_field :user_id, value: session[:user_id] %>
     <div class="comment-add">

@@ -16,7 +16,7 @@
         <div class="list">
             <ul>
 							<% @panoramas.each do |it| %>
-								<li><%=link_to it.name.to_s, panorama_app_house_layout_path(@house_layout,panorama_id: it.id)%></li>
+								<li><%=link_to it.name.to_s, panorama_app_house_layout_url(@house_layout,panorama_id: it.id)%></li>
 							<% end %>
            </ul>
         </div>

@@ -21,11 +21,11 @@ class Mobile::HospitalOrdersController < Mobile::BaseController
     @hospital_order.booking_at = "#{params[:day]} #{params[:noon]}"
 
     if @hospital_doctor.hospital_orders.where(booking_at: (@hospital_order.booking_at.to_date)..(@hospital_order.booking_at.to_date+1.day)).count >= @hospital_doctor.limit_register_count and @hospital_doctor.limit_register_count != -1
-      redirect_to mobile_hospital_doctors_path, notice: "对不起，预约人数已满！"
+      redirect_to mobile_hospital_doctors_url, notice: "对不起，预约人数已满！"
     elsif @hospital_doctor.hospital_orders.where(booking_at: (@hospital_order.booking_at.to_date)..(@hospital_order.booking_at.to_date+1.day), user_id: @user.id).first
-      redirect_to mobile_hospital_doctors_path, notice: "对不起，您已经预约！"
+      redirect_to mobile_hospital_doctors_url, notice: "对不起，您已经预约！"
     elsif @hospital_order.save
-      redirect_to mobile_hospital_orders_path, notice: "预约成功"
+      redirect_to mobile_hospital_orders_url, notice: "预约成功"
     else
       render 'new', alert: '预约失败'
     end

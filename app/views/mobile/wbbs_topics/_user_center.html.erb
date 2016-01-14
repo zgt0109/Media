@@ -3,9 +3,9 @@
       <div class="pop-bg" onclick="hidePop('#pop-more')"></div>
       <div class="pop-body">
         <div class="pop-hd pop-ul">
-          <%= link_to '我的话题', "#{mobile_wbbs_topics_path(@site, activity_id: @activity.id)}?my" %>
-          <a href="<%= wbbs_notifications_mobile_wbbs_topics_path(@site, activity_id: @activity.id) %>" class="mod-tip-number">我的消息<i><%= @notifications_count %></i></a>
-          <%= link_to '我的空间', "#{mobile_wbbs_topics_path(@site, receiver_id: @wx_user.try(:id), activity_id: @activity.id)}" %>
+          <%= link_to '我的话题', "#{mobile_wbbs_topics_url(@site, activity_id: @activity.id)}?my" %>
+          <a href="<%= wbbs_notifications_mobile_wbbs_topics_url(@site, activity_id: @activity.id) %>" class="mod-tip-number">我的消息<i><%= @notifications_count %></i></a>
+          <%= link_to '我的空间', "#{mobile_wbbs_topics_url(@site, receiver_id: @wx_user.try(:id), activity_id: @activity.id)}" %>
         </div>
       </div>
     </div>

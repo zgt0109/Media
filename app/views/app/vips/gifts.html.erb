@@ -8,8 +8,8 @@
     <section class="J-slider" id="sec-index">
       <!-- tab box start -->
       <div class="tab-box">
-        <%= link_to '全部礼品', gifts_app_vips_path(), class: "cur" %>
-        <%= link_to '已兑换礼品', exchanged_app_vips_path(), id: 'exchanged' %>
+        <%= link_to '全部礼品', gifts_app_vips_url(), class: "cur" %>
+        <%= link_to '已兑换礼品', exchanged_app_vips_url(), id: 'exchanged' %>
       </div>
       <!-- tab box end -->
       <!-- list box start -->
@@ -57,14 +57,14 @@
           event.preventDefault();
           if ($(this).hasClass('disabled')) return false;
           if(confirm('这是会员专属礼品，开通会员可以获得更多特权惊喜，赶紧去开通吧！')) {
-              location.href = '<%= app_vips_path %>';
+              location.href = '<%= app_vips_url %>';
           }
           return false;
       })
       $('#exchanged').click(function(event) {
         event.preventDefault();
         if(confirm('您还不是会员，赶紧去开通吧！')) {
-            location.href = '<%= app_vips_path %>';
+            location.href = '<%= app_vips_url %>';
         }
         return false;
       });

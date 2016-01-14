@@ -11,7 +11,7 @@
     </div>
     <div class="mod-list">
       <% @car_types.each_with_index do |type,index| %>
-        <a href="<%= mobile_car_shop_path(type, site_id: @site.id) %>" class="mod-fa fa fa-chevron-right">
+        <a href="<%= mobile_car_shop_url(type, site_id: @site.id) %>" class="mod-fa fa fa-chevron-right">
           <b><%= type.name %></b><small><%= f type.price %>万元</small>
         </a>
       <% end %>

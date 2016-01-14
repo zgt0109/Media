@@ -92,9 +92,9 @@ class App::HitEggsController < App::BaseController
     @activity_consume = ActivityConsume.find(params[:activity_consume][:id])
     @activity_consume.update_attribute("mobile", params[:activity_consume][:mobile])
     @activity_consume.auto_use_point_prize_consume!
-    #redirect_to my_prize_app_hit_eggs_path
+    #redirect_to my_prize_app_hit_eggs_url
     flash[:notice] = "提交成功"
-    redirect_to app_hit_egg_path(@activity)
+    redirect_to app_hit_egg_url(@activity)
   rescue
     redirect_to mobile_notice_url(msg: '数据错误')
   end

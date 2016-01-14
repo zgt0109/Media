@@ -2,7 +2,7 @@
   <div class="footbar">
     <ul>
       <li class="<%= "cur" if action_name == "index" %>">
-        <a class="foot-box" href="<%= app_vips_path %>">
+        <a class="foot-box" href="<%= app_vips_url %>">
           <i class="f-icon-1"></i>
           <span>会员卡</span>
         </a>
@@ -23,7 +23,7 @@
       </li>
       <%if @vip_card.checkin_enabled? && @vip_user.normal? %>
         <li class="<%= "cur" if action_name == "mine" %>">
-          <a class="foot-box" href="<%= mine_app_vips_path %>">
+          <a class="foot-box" href="<%= mine_app_vips_url %>">
             <i class="f-icon-4"></i>
             <span>我的中心</span>
           </a>

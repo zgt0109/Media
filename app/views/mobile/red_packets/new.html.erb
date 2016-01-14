@@ -2,7 +2,7 @@
   <div class="package-box">
     <img src="<%= @activity.bg_pic_url || "/assets/red_packet/index_info.jpg" %>" alt="">
   </div>
-  <%= form_for @red_packet_release, url: mobile_red_packets_path, method: :POST, validate: true do |f| %>
+  <%= form_for @red_packet_release, url: mobile_red_packets_url, method: :POST, validate: true do |f| %>
       <%= f.hidden_field :activity_id, value: @activity.id %>
       <%= f.hidden_field :user_id, value: @wx_user.user_id %>
       <%= f.fields_for :activity_user do |user| %>

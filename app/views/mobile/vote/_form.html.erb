@@ -98,7 +98,7 @@ $(function() {
     function validate_image_code(){
         $.ajax({
             type: 'GET',
-            url: "<%= validate_image_code_path %>",
+            url: "<%= validate_image_code_url %>",
             async : false,
             data: {image_code: $("#check-place").val()},
             success: function(result){

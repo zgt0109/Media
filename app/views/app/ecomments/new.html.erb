@@ -3,7 +3,7 @@
   <div class="main">
     <header>
       <div class="header">
-        <a class="ico ico-left" href="<%= app_ecomments_path(:id => @item.id) %>"><i></i>返回</a>
+        <a class="ico ico-left" href="<%= app_ecomments_url(:id => @item.id) %>"><i></i>返回</a>
       </div>
     </header><!-- header end -->
     <section>
@@ -19,7 +19,7 @@
                     </span>
           </div>
           <div class="fr">
-            <%= form_for @comment, :url=> app_ecomments_path, :method => :post, :validate => true do |form| %>
+            <%= form_for @comment, :url=> app_ecomments_url, :method => :post, :validate => true do |form| %>
               <%= hidden_field_tag "id", @item.id  %>
               <div class="bd-comment">
                 <%= form.text_area :content, :rows => 3,  :placeholder => "请输入您的评论" %>

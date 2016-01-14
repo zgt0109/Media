@@ -16,7 +16,7 @@ class Mobile::WeddingsController < Mobile::BaseController
   def create_guest
     @wedding_guest.attributes = params[:wedding_guest]
     @wedding_guest.save!
-    #redirect_to guest_app_weddings_path, notice:"提交成功"
+    #redirect_to guest_app_weddings_url, notice:"提交成功"
     render :text => ''
   end
 

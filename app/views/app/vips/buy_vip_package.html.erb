@@ -8,12 +8,12 @@
       </div>
       <% if @amount_status %>
         <div class="form-list mt">
-          <a href="<%= by_usable_amount_app_vips_path(id: @package.id) %>" class="btn btn-biger">确定购买</a>
+          <a href="<%= by_usable_amount_app_vips_url(id: @package.id) %>" class="btn btn-biger">确定购买</a>
         </div>
       <% else %>
         <div class="btn-box">
           <div class="btn-cell cell-4">
-            <a href="<%= vip_package_show_app_vips_path(id: @package.id) %>" class="btn btn-biger btn-gray">取消购买</a>
+            <a href="<%= vip_package_show_app_vips_url(id: @package.id) %>" class="btn btn-biger btn-gray">取消购买</a>
           </div>
           <div class="btn-cell">
             <% if @site && @site.can_pay? && @vip_user && @vip_user.normal? %>

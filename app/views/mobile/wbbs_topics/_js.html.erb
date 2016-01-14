@@ -33,7 +33,7 @@
           self.html(number);
           self.attr("data-number",number);
           self.addClass('voted');
-          $.getJSON('<%= vote_up_mobile_wbbs_topics_path %>', { id: self.data('id') });
+          $.getJSON('<%= vote_up_mobile_wbbs_topics_url %>', { id: self.data('id') });
       };
   });
 

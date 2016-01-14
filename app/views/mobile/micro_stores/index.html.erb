@@ -7,14 +7,14 @@
   </header>
   <div class="body">
     <div class="search">
-      <%= form_for @search, url: mobile_micro_stores_path, method: :get, html: { class: 'form' } do |f| %>
+      <%= form_for @search, url: mobile_micro_stores_url, method: :get, html: { class: 'form' } do |f| %>
           <div class="search-box">
             <i></i>
             <%= f.search_field :name_like, id: 'in', placeholder: '请输入门店名称' %>
           </div>
           <input type="submit" value="搜索" class="btn"/>
       <% end %>
-      <a href="<%= @shop_branches.blank? ? "javascript:;" : map_mobile_micro_stores_path(site_id: session[:site_id]) %>" class="near">我的周边</a>
+      <a href="<%= @shop_branches.blank? ? "javascript:;" : map_mobile_micro_stores_url(site_id: session[:site_id]) %>" class="near">我的周边</a>
     </div>
     <div class="list-box">
       <%= render partial: 'shop_branches', collection: @shop_branches, as: :branch %>

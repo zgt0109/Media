@@ -1,7 +1,7 @@
 <div class="comment-hd"><p>留下您对本店铺的评价：</p></div>
 
 <div class="comment-bd">
-  <%= form_for @comment, url: create_comment_mobile_business_shop_path(@site,@business_shop) do |f| %>
+  <%= form_for @comment, url: create_comment_mobile_business_shop_url(@site,@business_shop) do |f| %>
     <ul>
       <li>
         <span>昵称</span>

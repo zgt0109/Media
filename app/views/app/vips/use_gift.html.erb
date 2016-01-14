@@ -30,7 +30,7 @@
         方式二 ：商家输入交易密码
       </div>
       <div class="list-cont">
-        <%= form_tag update_consumes_app_vips_path(id: @consume.id) do |f| %>
+        <%= form_tag update_consumes_app_vips_url(id: @consume.id) do |f| %>
           <dl class="form-li">
             <dd>
               <%= select_tag :shop_branch_id, options_for_select(@shop_branch_options), class: "input input-gray" %>

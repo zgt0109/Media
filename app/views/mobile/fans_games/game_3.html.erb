@@ -416,7 +416,7 @@ body{font-family:"Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin:0;padding:
 			<br/>
 			<div id="GameScoreLayer-btn" class="BOX">
 				<div class="btn BOX-S" onclick="replayBtn()">重来</div>&nbsp;
-				<div class="btn BOX-S" onclick="window.location.replace('<%= mobile_fans_games_path(site_id: @site.id) %>')">玩更多游戏</div>
+				<div class="btn BOX-S" onclick="window.location.replace('<%= mobile_fans_games_url(site_id: @site.id) %>')">玩更多游戏</div>
 			</div>
 			<br/>
 			<div id="GameScoreLayer-share" class="BOX">
@@ -433,7 +433,7 @@ body{font-family:"Helvetica Neue",Helvetica,STHeiTi,sans-serif;margin:0;padding:
 				<div style="font-size:2.2em; color:#fff; line-height:1.5em;">从最下面的套套开始，<br/>20秒内看你能拆开多少个<br/>套套，你就是一夜几次郎！</div><br/><br/>
 				<div id="ready-btn" class="btn loading" style="display:inline-block; margin:0 auto; width:8em; height:1.7em; line-height:1.7em; font-size:2.2em; color:#fff;"></div>
 			<br/><br/><br/>
-				<div style="font-size:1.6em;"><a style="color:#fff" href="<%= mobile_fans_games_path(site_id: @site.id) %>">高智商手机魔术，敢挑战吗？</a></div>
+				<div style="font-size:1.6em;"><a style="color:#fff" href="<%= mobile_fans_games_url(site_id: @site.id) %>">高智商手机魔术，敢挑战吗？</a></div>
 			</div>
 		</div>
 	</div>

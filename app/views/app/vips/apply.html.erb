@@ -107,7 +107,7 @@
 
 
   function cancelSubmit() {
-    window.location.href = '<%= app_vips_path %>';
+    window.location.href = '<%= app_vips_url %>';
   }
 
   function submitMobile() {
@@ -159,10 +159,10 @@
               <% else %>
               alert('您的会员卡号为:' + data.ajax_msg.cardnumer);
               <% end %>
-              window.location.href = '<%= app_vips_path %>';
+              window.location.href = '<%= app_vips_url %>';
             }else if(data.ajax_msg.status == 0){
               alert('您已经是会员了，会员卡号为:' + data.ajax_msg.cardnumer);
-              window.location.href = '<%= app_vips_path %>';
+              window.location.href = '<%= app_vips_url %>';
             }else if(data.ajax_msg.status == -2){
               alert('手机号码已被使用!');
             }else{

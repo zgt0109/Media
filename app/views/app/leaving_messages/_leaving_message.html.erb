@@ -6,7 +6,7 @@
     <div class="bd">
       <p><%= message.body %></p>
       <span><%= message.created_at %></span>
-      <%= form_for @message, :html=> {:id => "form_#{message.id}"}, url: app_leaving_messages_path, validate: true do |f| %>
+      <%= form_for @message, :html=> {:id => "form_#{message.id}"}, url: app_leaving_messages_url, validate: true do |f| %>
         <div class="box-form box-message" id="box_<%= message.id %>">
           <%= f.hidden_field :parent_id, value: message.id %>
           <%- if @replier %>

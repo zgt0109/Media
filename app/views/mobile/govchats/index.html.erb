@@ -80,9 +80,9 @@
 function handleChat(chat_type) {
     <%- if @wx_user.present? %>
         if(chat_type == 'my') {
-             location.href= "<%= my_mobile_govchats_path(activity_id: @activity.id)%>"
+             location.href= "<%= my_mobile_govchats_url(activity_id: @activity.id)%>"
         }else{
-            location.href="<%= new_mobile_govchat_path %>?chat_type=" + chat_type;
+            location.href="<%= new_mobile_govchat_url %>?chat_type=" + chat_type;
         }
     <%- else %>
         showTips('.J-guanzhu');

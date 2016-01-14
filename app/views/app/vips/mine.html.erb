@@ -65,7 +65,7 @@
         <div class="list-box">
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= my_mobile_coupons_path(site_id: session[:site_id]) %>">
+              <a class="icon-right" href="<%= my_mobile_coupons_url(site_id: session[:site_id]) %>">
                 <i class="icon icon-2"></i>
                 <span>我的优惠券</span>
                 <div class="num"><%= @coupons_count %></div>
@@ -74,7 +74,7 @@
           </dl>
           <dl>
             <dt class="border">
-              <a class="icon-right" href="<%= exchanged_app_vips_path() %>">
+              <a class="icon-right" href="<%= exchanged_app_vips_url() %>">
                 <i class="icon icon-3"></i>
                 <span>我的礼品券</span>
                 <div class="num"><%= @site.point_gifts.exchangeable.count %></div>

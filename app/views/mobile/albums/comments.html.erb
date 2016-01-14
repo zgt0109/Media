@@ -3,7 +3,7 @@
   <div class="padding10">
     <div class="bgf">
       <div class="comment_box">
-        <%= form_for @comment, url: create_comment_mobile_album_path(@site, @photo) do |f| %>
+        <%= form_for @comment, url: create_comment_mobile_album_url(@site, @photo) do |f| %>
           <ul>
             <li><div class="comm_tit color-3">添加评论</div></li>
             <li class="pad-m-10">
@@ -18,7 +18,7 @@
                 <%= button_tag "发布评论", type: 'button', class: "btn1 sub left", data: { disable_with: "发布中..." } %>
               </div>
               <div class="right wid50">
-                <a class="right btn1 reset" href="<%= mobile_album_path(@photo, site_id: @photo.album.site_id) %>">取消</a>
+                <a class="right btn1 reset" href="<%= mobile_album_url(@photo, site_id: @photo.album.site_id) %>">取消</a>
               </div>
             </li>
           </ul>
@@ -69,7 +69,7 @@
     var page = 1;
     function load(){
       page += 1;
-      var get_url = "<%= load_more_comments_mobile_album_path(@photo.album.site_id,@photo) %>" + "?page=" + page;
+      var get_url = "<%= load_more_comments_mobile_album_url(@photo.album.site_id,@photo) %>" + "?page=" + page;
       $.getJSON(get_url, function(data) {
         var html = '';
         for(i=0;i<data.comments.length;i++){

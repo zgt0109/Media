@@ -6,7 +6,7 @@
   <div class="main">
     <header>
       <div class="header">
-        <a class="ico ico-left" href="<%= app_ebusinesses_path(:id => @shop.id) %>"><i></i>首页</a>
+        <a class="ico ico-left" href="<%= app_ebusinesses_url(:id => @shop.id) %>"><i></i>首页</a>
         <a class="ico ico-right ico-list">分类</a>
       </div>
       <% if @ec_ads %>
@@ -31,13 +31,13 @@
     <section>
       <% if @shop_categories.present? %>
           <% @shop_categories.each do |category| %>
-          <div class="bd-title"><a href="<%= app_ecategory_path(category)  %>"><%= category.name %></a></div>
+          <div class="bd-title"><a href="<%= app_ecategory_url(category)  %>"><%= category.name %></a></div>
           <div class="box-list">
             <% @items = category.show_products.limit(2) %>
             <% if @items.present? %>
             <% @items.each do |item| %>
                 <div class="list-li">
-                  <a class="box-block" href="<%= app_ebusiness_path(item)%>"></a>
+                  <a class="box-block" href="<%= app_ebusiness_url(item)%>"></a>
                   <div class="hd"><span><%= image_tag "#{item.pic_url}" %></span><span class="ft"><%= f item.price%></span></div>
                   <div class="bd"><%= item.title %></div>
                 </div>

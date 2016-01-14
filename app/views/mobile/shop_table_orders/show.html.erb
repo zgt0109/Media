@@ -60,7 +60,7 @@
                
                     </div>
                     <div class="tcenter">
-                      <%= link_to "取消订单", mobile_shop_table_order_path(site_id: session[:site_id], id: @shop_table_order.id), method: :delete , data: { confirm: '确定要取消订单？' }, class: "btn btn-blue" %>
+                      <%= link_to "取消订单", mobile_shop_table_order_url(site_id: session[:site_id], id: @shop_table_order.id), method: :delete , data: { confirm: '确定要取消订单？' }, class: "btn btn-blue" %>
                       <a class="btn" href="/<%= session[:site_id] %>/shop_table_orders/new?shop_branch_id=<%= @shop_table_order.shop_branch_id %>">再次下单</a>
                     </div>
                   </div>

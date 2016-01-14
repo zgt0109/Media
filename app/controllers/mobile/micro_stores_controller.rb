@@ -17,10 +17,10 @@ class Mobile::MicroStoresController < Mobile::BaseController
   def show
     @shop_branch = ShopBranch.find(params[:id])
     @href = {
-      "dinner" => book_dinner_app_shops_path,
-      "out"    => take_out_app_shops_path,
-      "table"  => app_shops_path
-    }[params[:ref]] || mobile_micro_stores_path
+      "dinner" => book_dinner_app_shops_url,
+      "out"    => take_out_app_shops_url,
+      "table"  => app_shops_url
+    }[params[:ref]] || mobile_micro_stores_url
     params = { address: @shop_branch.ditu_address, output: 'json', ak: '9c72e3ee80443243eb9d61bebeed1735' }
     result = RestClient.get("http://api.map.baidu.com/geocoder/v2/", params: params)
     data = JSON(result)

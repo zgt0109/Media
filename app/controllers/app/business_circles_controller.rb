@@ -61,7 +61,7 @@ module App
       @article = WebsiteArticle.find(params[:website_article_id])
       @comment = @article.website_comments.new(params[:website_comment])
       if @comment.save
-        redirect_to detail_app_business_circle_path(@article), :notice => "评论成功！"
+        redirect_to detail_app_business_circle_url(@article), :notice => "评论成功！"
       else
         flash[:notice] = "评论失败！"
         render :acton => :comment

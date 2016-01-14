@@ -2,7 +2,7 @@
   <div class="stage" id="stage">
     <section id="sec-index">
       <div class="recharge-box">
-        <%= form_tag exchange_gift_app_vips_path(id: @gift.id), id: 'exchange_form', data: { url: exchange_gift_app_vips_path } do |f| %>
+        <%= form_tag exchange_gift_app_vips_url(id: @gift.id), id: 'exchange_form', data: { url: exchange_gift_app_vips_url } do |f| %>
           <%= hidden_field_tag :qty, 1 %>
           <%= hidden_field_tag :vip_given_id %>
           <h1 class="tcenter">兑换此礼品需要<span id="need_point"><%= @gift.points %></span>积分</h1>

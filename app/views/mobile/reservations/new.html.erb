@@ -83,7 +83,7 @@
     if(!$this.hasClass("btn-gray")){
       $this.css('background', '#ccc').addClass('btn-gray').text("重新获取(60)");
       showTime();
-      $.get("<%= send_sms_mobile_reservations_path %>" + "?phone=" + $('#phone').val());
+      $.get("<%= send_sms_mobile_reservations_url %>" + "?phone=" + $('#phone').val());
       $('#captcha').focus();
     }
     function showTime(){

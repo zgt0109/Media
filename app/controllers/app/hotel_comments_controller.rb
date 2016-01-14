@@ -27,7 +27,7 @@ module App
       @hotel_comment = @hotel_branch.hotel_comments.new(params[:hotel_comment])
 
       if @hotel_comment.save
-        redirect_to app_hotel_comments_path(aid: params[:aid], branch_id: params[:hotel_comment][:hotel_branch_id], source: params[:source]), notice: '评论成功'
+        redirect_to app_hotel_comments_url(aid: params[:aid], branch_id: params[:hotel_comment][:hotel_branch_id], source: params[:source]), notice: '评论成功'
       else
         redirect_to :back, notice: '评论失败'
       end

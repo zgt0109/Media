@@ -34,7 +34,7 @@
 					<img src="<%=@intro.pic_url%>" width="100%" height="175" id="bannerPic">
 					<!-- <img src="<%#=@intro.pictures.first.try :pic_url%>" width="100%" height="175" id="bannerPic" alt=''> -->
           <% if false and @intro.pictures.present? %>
-            <span><a href="<%= pictures_app_house_intro_path(@intro) %>">共<%= @intro.pictures.count %>张图片 <i class="fa fa-picture-o"></i></a></span>
+            <span><a href="<%= pictures_app_house_intro_url(@intro) %>">共<%= @intro.pictures.count %>张图片 <i class="fa fa-picture-o"></i></a></span>
           <% end %>
 				</div>
 			</div>

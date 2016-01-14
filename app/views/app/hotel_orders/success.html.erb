@@ -24,7 +24,7 @@
 			<!--<div class="hd"><span class="arrow arr-small"><b>分享给朋友</b></span></div>
 				<div class="bd"><span class="arrow arr-small"><b>带我去店里</b></span></div>
 				<div class="ft"><span class="arrow arr-small"><b>查看我的订单</b></span></div>-->
-        <div class="warp"><span class="arrow arr-small"><%= link_to app_hotel_orders_path(aid: params[:aid], anchor: "mp.weixin.qq.com") do %><b>查看我的订单</b><% end %></span></div>
+        <div class="warp"><span class="arrow arr-small"><%= link_to app_hotel_orders_url(aid: params[:aid], anchor: "mp.weixin.qq.com") do %><b>查看我的订单</b><% end %></span></div>
     </div>
-    <div class="tcenter"><%= link_to "确定", app_hotels_path(aid: params[:aid], anchor: "mp.weixin.qq.com"), class: "btn btn-big" %></div>
+    <div class="tcenter"><%= link_to "确定", app_hotels_url(aid: params[:aid], anchor: "mp.weixin.qq.com"), class: "btn btn-big" %></div>
 </div>

@@ -8,7 +8,7 @@
         <%= @order.paid? ? "充值成功#{@order.pay_amount}元" : '充值失败' %>
       </div>
       <div class="form-list mt">
-        <%= link_to '完成', @vip_package_id.present? ? buy_vip_package_app_vips_path(id: @vip_package_id) : app_vips_path, class: 'btn btn-big' %>
+        <%= link_to '完成', @vip_package_id.present? ? buy_vip_package_app_vips_url(id: @vip_package_id) : app_vips_url, class: 'btn btn-big' %>
       </div>
     </section>
     <!-- 会员卡首页 end -->

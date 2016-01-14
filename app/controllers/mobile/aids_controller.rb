@@ -24,7 +24,7 @@ class Mobile::AidsController < Mobile::BaseController
 =begin
       activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
       if self? && activity_consume.present? && activity_consume.unused?
-        redirect_to award_mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id, consume_id: activity_consume.id)
+        redirect_to award_mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id, consume_id: activity_consume.id)
       end
 =end
     end
@@ -45,9 +45,8 @@ class Mobile::AidsController < Mobile::BaseController
     )
 
     @results = @activity_user.aid_results.includes(:user) if @activity_user.present?
-    
+
     render json: {errcode: 0, nickname: @activity_user.wx_user.nickname, headimgurl: @activity_user.wx_user.headimgurl, rank_reached: rank_reached?, errmsg: "参与活动成功"}
-    
   rescue => e
     render json: {errcode: 400001, errmsg: "#{e.message} -- #{e.backtrace}"}, status: :internal_server_error
   end
@@ -295,7 +294,7 @@ class Mobile::AidsController < Mobile::BaseController
     if @owner_user.present?
       @activity_user ||= @activity.activity_users.where(user_id: @owner_user.id).first
 
-      return redirect_to mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) unless @activity_user.present?
+      return redirect_to mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) unless @activity_user.present?
     end
 
     @activity_user ||= @activity.activity_users.where(user_id: @user.id).first
@@ -316,7 +315,7 @@ class Mobile::AidsController < Mobile::BaseController
 
   def require_owner_user_none_self
     unless self?
-      redirect_to mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) unless @owner_user.present?
+      redirect_to mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) unless @owner_user.present?
     end
   end
 

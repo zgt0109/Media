@@ -52,7 +52,7 @@ class Mobile::GroupOrdersController < Mobile::BaseController
     if @group_order.save
       params[:id] = @group_order.id 
       pay
-      #redirect_to mobile_group_order_path(site_id: @site.id, id:@group_order)
+      #redirect_to mobile_group_order_url(site_id: @site.id, id:@group_order)
     else
       redirect_to new_mobile_group_order(site_id: @site.id, id: @group_order.id, group_item_id: @group_order.group_item_id), alert: "数据出错"
     end
@@ -67,28 +67,28 @@ class Mobile::GroupOrdersController < Mobile::BaseController
       params[:id] = @group_order.id 
       pay
     else
-      redirect_to edit_mobile_group_order_path(site_id: @site.id, id: @group_order.id, group_item_id: @group_order.group_item_id), alert: "数据出错"
+      redirect_to edit_mobile_group_order_url(site_id: @site.id, id: @group_order.id, group_item_id: @group_order.group_item_id), alert: "数据出错"
     end
   end
 
   def destroy
     if @group_order.destroy
-      redirect_to mobile_group_orders_path(site_id: @site.id), notice: "订单删除成功"
+      redirect_to mobile_group_orders_url(site_id: @site.id), notice: "订单删除成功"
     else
-      redirect_to mobile_group_orders_path(site_id: @site.id), alert: "订单删除失败"
+      redirect_to mobile_group_orders_url(site_id: @site.id), alert: "订单删除失败"
     end
   end
 
   def consume
     @group_order.update_attributes!({status: GroupOrder::CONSUMED, consume_at: Time.now})
-    redirect_to mobile_group_order_path(site_id: @site.id, id: @group_order), :notice => "恭喜您已成功消费"
+    redirect_to mobile_group_order_url(site_id: @site.id, id: @group_order), :notice => "恭喜您已成功消费"
   end
 
   private
   
   def set_group_order
     @group_order = GroupOrder.find(params[:id])
-    redirect_to mobile_group_orders_path(site_id: @site), alert: "订单不存在或已删除" unless @group_order
+    redirect_to mobile_group_orders_url(site_id: @site), alert: "订单不存在或已删除" unless @group_order
   end
 
   def set_wx_user
@@ -98,9 +98,9 @@ class Mobile::GroupOrdersController < Mobile::BaseController
   def set_group_item
     @group_item   = GroupItem.find_by_id(params[:group_item_id])
     @group_orders = @wx_user.group_orders.where(group_item_id: @group_item.id ).today
-    redirect_to mobile_groups_path(site_id: @site), alert: "此商品不存在或已下架" unless @group_item.present?
+    redirect_to mobile_groups_url(site_id: @site), alert: "此商品不存在或已下架" unless @group_item.present?
     unless @group_item.limit_coupon_count == -1
-      redirect_to mobile_group_item_path(site_id: @site.id, id: @group_item), alert: "此商品每人每天最多只能购买#{@group_item.limit_coupon_count}件" if @group_orders.sum(&:qty) >= @group_item.limit_coupon_count
+      redirect_to mobile_group_item_url(site_id: @site.id, id: @group_item), alert: "此商品每人每天最多只能购买#{@group_item.limit_coupon_count}件" if @group_orders.sum(&:qty) >= @group_item.limit_coupon_count
     end
   end
 

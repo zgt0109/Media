@@ -250,6 +250,7 @@ module DetectUserAgent
           session[:user_id] = @wx_user.user_id
           session[:openid] = @wx_user.openid
 
+          logger.info "*******************authorize auth_back:#{auth_back}"
           return redirect_to auth_back
         end
 

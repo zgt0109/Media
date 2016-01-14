@@ -10,7 +10,7 @@
 			<div class="my-client">
 				<dl>
 					<dt>
-						<a href="<%= my_clients_mobile_brokerages_path(@site) %>" class="my-ca">
+						<a href="<%= my_clients_mobile_brokerages_url(@site) %>" class="my-ca">
 				   		<p class="my-cp">我的客户</p>
 				   		<span>></span>
 				   	</a>
@@ -29,11 +29,11 @@
 				<dl>
 					<dt><h4 style="float:left;font-weight:normal;">我的佣金</h4>
 						<% if @broker.bank_account_name.blank? && @broker.alipay_account_name.blank? %>
-							<a href="<%= edit_mobile_brokerage_path(@site,@broker) %>">
+							<a href="<%= edit_mobile_brokerage_url(@site,@broker) %>">
 								<span style="font-size: 12px !important;">绑定结算账户&nbsp;&nbsp; > </span>
 							</a>
 						<% else %>
-							<a href="<%= commission_list_mobile_brokerages_path(@site) %>">
+							<a href="<%= commission_list_mobile_brokerages_url(@site) %>">
 								<span style="font-size: 12px !important;">结算明细&nbsp;&nbsp; > </span>
 							</a>
 						<% end %>
@@ -45,7 +45,7 @@
 				</dl>
 			</div>
 			<div class="blank40"></div>
-			<div class="broker-btn"><a href="<%= put_clients_mobile_brokerages_path(@site) %>">推荐客户</a></div>
+			<div class="broker-btn"><a href="<%= put_clients_mobile_brokerages_url(@site) %>">推荐客户</a></div>
 		</section> 
 	</div>
 </div>

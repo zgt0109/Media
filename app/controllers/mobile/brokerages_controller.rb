@@ -6,7 +6,7 @@ class Mobile::BrokeragesController < Mobile::BaseController
   def index;end
 
   def broker
-  	redirect_to new_mobile_brokerage_path(@site), notice: "请先注册！" unless @broker 
+  	redirect_to new_mobile_brokerage_url(@site), notice: "请先注册！" unless @broker 
   end
 
   def new
@@ -20,7 +20,7 @@ class Mobile::BrokeragesController < Mobile::BaseController
     return render js: 'alert("验证码不正确！");$("#broker").prop("disabled", false);' if params[:captcha].blank? || params[:captcha].to_i != session[:captcha].to_i
     @broker = @site.brokerage_brokers.new(params[:brokerage_broker])
     if @broker.save
-      render js: "alert('注册成功');location.href='#{broker_mobile_brokerages_path}';"
+      render js: "alert('注册成功');location.href='#{broker_mobile_brokerages_url}';"
     else
       render js: "alert('注册失败：#{@broker.errors.full_messages.join('\n')}');$('#broker').prop('disabled', false);"
     end
@@ -52,7 +52,7 @@ class Mobile::BrokeragesController < Mobile::BaseController
   def save_client
     @client = @broker.clients.new(params[:brokerage_client])
     if @client.save
-      redirect_to broker_mobile_brokerages_path, notice: "推荐成功"
+      redirect_to broker_mobile_brokerages_url, notice: "推荐成功"
     else
       render_with_alert :put_clients, "推荐失败,#{@client.errors.full_messages.join(',')}"
     end

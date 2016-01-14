@@ -12,7 +12,7 @@ module App
     def show
       @teacher = CollegeTeacher.find_by_id(params[:id])
       unless @teacher.present?
-        redirect_to app_college_teachers_path, :notice => "数据出错！"
+        redirect_to app_college_teachers_url, :notice => "数据出错！"
       end
     end
 

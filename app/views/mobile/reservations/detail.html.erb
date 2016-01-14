@@ -12,7 +12,7 @@
             </div>
             <div class="ft">
                 <%- if @order.created? && (@order.user_id.to_s == @user.id) %>
-                    <%= link_to '撤销预定',  abandon_mobile_reservations_path(id: @order.id), class: "btn btn-blue abandon", data: {confirm: '确定撤销么？' } %>
+                    <%= link_to '撤销预定',  abandon_mobile_reservations_url(id: @order.id), class: "btn btn-blue abandon", data: {confirm: '确定撤销么？' } %>
                  <%- end %>
                 <input type="button" value="返回" class="btn btn-gray" onclick="cancelSubmit();"/>
             </div>

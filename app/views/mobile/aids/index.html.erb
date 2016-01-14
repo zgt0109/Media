@@ -151,14 +151,14 @@
           if (data.errcode == 0) {
             if (data.prize_type == 'point_prize') { // 积分奖特殊处理
               if (data.status == <%= ActivityConsume::AUTO_USED %>) { // 积分奖自动充值, 回到主页
-                window.location.href = "<%= mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) %>";
+                window.location.href = "<%= mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) %>";
               }
               else {
                 showReceiveErrorInfo('会员未注册或无效会员');
               }
             }
             else { // 普通奖, 跳到兑奖页面
-              window.location.href = "<%= award_mobile_aids_path(site_id: @activity.site_id, activity_id: @activity.id) %>" + "&consume_id=" + data.consume_id;
+              window.location.href = "<%= award_mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) %>" + "&consume_id=" + data.consume_id;
             }
           }
         },
@@ -177,7 +177,7 @@
     // 获取短信验证码
     function getVerification() {
       $.ajax({
-        url: "<%= verification_mobile_aids_path(site_id: @activity.site_id) %>", 
+        url: "<%= verification_mobile_aids_url(site_id: @activity.site_id) %>", 
         type: "get",
         dataType: "json",
         data: getNameAndMobile(),
@@ -234,7 +234,7 @@
        }
 
        this.promise_ = $.ajax({
-         url: '<%= params[:owner_openid].present? ? aid_friends_mobile_aids_path(activity_id: @activity.id, owner_openid: params[:owner_openid]) : aid_friends_mobile_aids_path(activity_id: @activity.id) %>', 
+         url: '<%= params[:owner_openid].present? ? aid_friends_mobile_aids_url(activity_id: @activity.id, owner_openid: params[:owner_openid]) : aid_friends_mobile_aids_url(activity_id: @activity.id) %>', 
          type: 'get',
          dataType: 'json',
          success: function (data, textStatus, jqXhr) {
@@ -270,7 +270,7 @@
        }
 
        this.promise_ = $.ajax({
-         url: '<%= params[:owner_openid].present? ? rank_list_mobile_aids_path(activity_id: @activity.id, owner_openid: params[:owner_openid]) : rank_list_mobile_aids_path(activity_id: @activity.id) %>', 
+         url: '<%= params[:owner_openid].present? ? rank_list_mobile_aids_url(activity_id: @activity.id, owner_openid: params[:owner_openid]) : rank_list_mobile_aids_url(activity_id: @activity.id) %>', 
          type: 'get',
          dataType: 'json',
          success: function (data, textStatus, jqXhr) {
@@ -306,7 +306,7 @@
       // console.log("Weixin menu share successful");
 
       $.ajax({
-        url: "<%= params[:owner_openid].present? ? invite_friends_mobile_aids_path(activity_id: @activity.id, owner_openid: params[:owner_openid]) : invite_friends_mobile_aids_path(activity_id: @activity.id) %>", 
+        url: "<%= params[:owner_openid].present? ? invite_friends_mobile_aids_url(activity_id: @activity.id, owner_openid: params[:owner_openid]) : invite_friends_mobile_aids_url(activity_id: @activity.id) %>", 
         type: "post",
         dataType: "json",
         success: function(data, textStatus, jqXhr) {

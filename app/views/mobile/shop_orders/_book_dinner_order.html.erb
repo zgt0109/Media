@@ -1,4 +1,4 @@
-<%= link_to mobile_shop_order_path(site_id: session[:site_id], id: order.id, anchor: "mp.weixin.qq.com"), class: "mod-food fa fa-angle-right" do %>
+<%= link_to mobile_shop_order_url(site_id: session[:site_id], id: order.id, anchor: "mp.weixin.qq.com"), class: "mod-food fa fa-angle-right" do %>
     <p>
         <b>订餐编号：</b>
         <span><%= order.order_no %></span>

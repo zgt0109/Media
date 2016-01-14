@@ -60,12 +60,12 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
       end
       if params[:wbbs_topic][:receiver_id].present?
         if params[:wbbs_topic][:status] == '3'
-          render inline: "<script>alert('私信成功'); location.href = '#{mobile_wbbs_topics_path(@site, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
+          render inline: "<script>alert('私信成功'); location.href = '#{mobile_wbbs_topics_url(@site, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
         else
-          render inline: "<script>alert('留言成功'); location.href = '#{mobile_wbbs_topics_path(@site, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
+          render inline: "<script>alert('留言成功'); location.href = '#{mobile_wbbs_topics_url(@site, receiver_id: params[:wbbs_topic][:receiver_id])}';</script>"
         end
       else
-        render inline: "<script>alert('发帖成功'); location.href = '#{mobile_wbbs_topics_path(@site)}';</script>"
+        render inline: "<script>alert('发帖成功'); location.href = '#{mobile_wbbs_topics_url(@site)}';</script>"
       end
     else
       render inline: "<script>alert('发送失败，#{@wbbs_topic.errors.full_messages.first}');</script>"

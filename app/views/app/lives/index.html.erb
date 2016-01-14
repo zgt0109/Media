@@ -12,7 +12,7 @@
       <% @website.website_menus.root.order(:sort).each_with_index do |menu,index| %>
         <div class="box box-index">
           <div class="hd">
-            <a href="<%= app_life_path(menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
+            <a href="<%= app_life_url(menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
             <h2 class="ellipsis"><%= menu.name %></h2>
             <a class="ico fr">查看更多</a>
           </div>

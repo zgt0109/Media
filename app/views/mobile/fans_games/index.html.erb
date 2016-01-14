@@ -1,6 +1,6 @@
 <div class="game-list">
 	<% @activities_fans_games.each do |afg| %>
-	  <a href="<%= mobile_fans_game_path(id:afg.fans_game_id) %>" class="box">
+	  <a href="<%= mobile_fans_game_url(id:afg.fans_game_id) %>" class="box">
 	    <div class="game-img">
 	    	<%= image_tag "/images/fans_game/game_#{afg.fans_game_id}.jpg" %>
 	    </div>

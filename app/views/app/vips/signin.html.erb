@@ -37,7 +37,7 @@ $(function(){
       $('.signin').click(function (event) {
           event.preventDefault();
           if(confirm('开通会员可以签到送积分，赶紧去开通吧！')) {
-              location.href = '<%= app_vips_path %>';
+              location.href = '<%= app_vips_url %>';
           }
         return false;
       })
