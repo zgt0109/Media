@@ -47,11 +47,10 @@ class WxMpUser < ActiveRecord::Base
     'win'+SecureRandom.hex(20)
   end
 
-  def self.find_by_code_or_id_or_app_id(code, id, app_id)
+  def self.find_by_code_or_app_id(code, app_id)
     case
       when code.present?   then find_and_update_description(:code, code, nil, 1)
-      when id.present?     then find_and_update_description(:id, id, '2', 1)
-      when app_id.present? then find_and_update_description(:app_id, app_id, '3', 2)
+      when app_id.present? then find_and_update_description(:app_id, app_id, '2', 2)
     end
   end
 

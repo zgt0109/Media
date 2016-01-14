@@ -282,7 +282,7 @@
           if(data){
             $('#preview_pic .title').html(data['title']);
             $('#preview_pic .date').html(data['created_at'].slice(0,10));
-            $('#preview_pic img').attr('src', data['pic']['large']['url']);
+            $('#preview_pic img').attr('src', data['pic_url']);
           }
         }
       });
