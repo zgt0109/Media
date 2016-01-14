@@ -7,9 +7,6 @@ common: &common
   zhilian_user_id: 'J02110'
   zhilian_password: '599651'
   uploads_dir: <%= "#{Rails.root}/public/uploads" %>
-  taobao:
-    app_key: "21673788"
-    app_secret: "abae122a11a8e8b39426ee2ee08a5c5f"
   yeepay:
     yeepay_host: "http://ok.yeepay.com/"
     callbackurl: "http://ui.m.wx.winwemedia.com/yeepay/callback"
@@ -26,20 +23,11 @@ production:
   hostname: "wx.winwemedia.com"
   mhostname: "m.winwemedia.com"
   hotelhostname: "hotel.winwemedia.com"
-  sms_service: 'zhilian'
-  zhilian_user_id: 'J02110'
-  zhilian_password: '599651'
   uploads_dir: "/opt/apps/shared/winwemedia/uploads"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://wx.winwemedia.com/yeepay/callback"
     fcallbackurl: 'http://wx.winwemedia.com/yeepay/callback'
-  wx_plugin:
-    token: 60a485936f65c1319fc5737fb6e000ad
-    base64_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
-    component_app_id: wxc750a5fc2a5199bd
-    component_app_secret: 0c79e1fa963cd80cc0be99b20a18faeb
-    encoding_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
 
 staging:
   <<: *common
@@ -49,12 +37,6 @@ staging:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://staging.m.wx.winwemedia.com/yeepay/callback"
     fcallbackurl: 'http://staging.m.wx.winwemedia.com/yeepay/callback'
-  wx_plugin:
-    token: 60a485936f65c1319fc5737fb6e000ad
-    base64_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
-    component_app_id: wx0a47d4dcdd73b3ae
-    component_app_secret: 0c79e1fa963cd80cc0be99b20a18faeb
-    encoding_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
 
 development:
   <<: *common

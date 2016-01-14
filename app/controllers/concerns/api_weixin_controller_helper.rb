@@ -1,4 +1,8 @@
-module ApiControllerHelper
+module ApiWeixinControllerHelper
+
+  def custom_subdomain(site_id = nil)
+    [site_id.to_s, MOBILE_SUB_DOMAIN].join('.')
+  end
 
   def weixin_news_item_for_material(material, options = {})
     pic_url  = qiniu_image_url(material.pic_key)

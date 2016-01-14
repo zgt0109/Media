@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-class Api::WeixinController < ApplicationController
+class Api::WeixinController < Api::BaseController
   include WxReplyMessage
-  include ApiControllerHelper
+  include ApiWeixinControllerHelper
 
-  skip_before_filter *ADMIN_FILTERS, :verify_authenticity_token
+  skip_before_filter :verify_authenticity_token
   before_filter :check_signature!, only: :service
 
   def default_url_options
@@ -282,7 +282,7 @@ class Api::WeixinController < ApplicationController
   end
 
   def around_shop_branches(shop_branches)
-    first_url = mobile_micro_stores_url(site_id: @mp_user.site_id, openid: @wx_user.openid, wxmuid: @mp_user.id, msg_type: "location")
+    first_url = mobile_micro_stores_url(subdomain: custom_subdomain(@mp_user.site_id), site_id: @mp_user.site_id, openid: @wx_user.openid, msg_type: "location")
     first_pic = "#{host}/location_img/#{@wx_user.id}/img.png?#{Time.now.to_f}"
 
     items = [ {title: "点击查看周边#{shop_branches.count}家门店", pic_url: first_pic, url: first_url} ]
@@ -290,7 +290,7 @@ class Api::WeixinController < ApplicationController
       {
         title: "【#{branch.name}】#{branch.human_distance_to(@wx_user)}",
         pic_url: branch.thumbnail_url || "#{host}/assets/micro_stores/small_default.png",
-        url: mobile_micro_store_url(site_id: @mp_user.site_id, id: branch.id, openid: @wx_user.openid, wxmuid: @mp_user.id)
+        url: mobile_micro_store_url(subdomain: custom_subdomain(@mp_user.site_id), site_id: @mp_user.site_id, id: branch.id, openid: @wx_user.openid)
       }
     end
     Weixin.respond_news(@from_user_name, @to_user_name, items)
@@ -384,7 +384,7 @@ class Api::WeixinController < ApplicationController
               @wx_user.greet! #进入语音贺卡模式
               return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
             when activity.shake?
-              url = "#{mobile_shakes_url(site_id: activity.site_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
+              url = "#{mobile_shakes_url(subdomain: custom_subdomain(@mp_user.site_id), site_id: activity.site_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
               items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: activity.pic_url, url: url}]
               return Weixin.respond_news(@from_user_name, @to_user_name, items)
             else activity.respond_mobile_url(nil, openid: @from_user_name)
