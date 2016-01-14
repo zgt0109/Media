@@ -6,7 +6,7 @@ Wp::Application.routes.draw do
   end
 
   constraints subdomain: /m+/  do
-    defaults subdomain: MOBILE_SUB_DOMAIN do
+    # defaults subdomain: MOBILE_SUB_DOMAIN do
       #scope path: ":site_id(.:ext_name)", module: "mobile", as: "mobile" do
       scope path: ":site_id", module: "mobile", constraints: {site_id: /[^\/]+/ }, as: "mobile" do
         #微官网
@@ -146,7 +146,7 @@ Wp::Application.routes.draw do
         end
 
       end
-    end
+    # end
   end
 
   scope path: ':site_id', module: :mobile, constraints: {site_id: /\d+/ },  as: :mobile do
