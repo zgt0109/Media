@@ -29,8 +29,8 @@
 <section class="sec-text sec-bg-bottom">
   <em></em>亲，中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
 </section>
-<%- if @wx_user %>
-  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+<%- if @user %>
+  <%- unless (@activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?)) %>
     <a href="list?aid=<%= params[:id] %>& %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
    <%- end %>
 <%- end %>
@@ -75,9 +75,9 @@ $(function(){
   };
 
   $("#pointer").on("click",function(){
-    <%- if @wx_user.blank? %>
+    <%- if @user.blank? %>
       showTips(".J-guanzhu");
-    <%- elsif @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+    <%- elsif @activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?) %>
       showTips(".J-register");
     <%- else%>
       var self=$(this);
@@ -144,7 +144,7 @@ function getSuccess(self){
   var sn=self.attr("data-sn");
   var title=self.attr("data-title");
   var id=self.attr("data-id");
-  var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+title+'，</b><br/>兑奖SN码：'+sn+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @wx_user.try(:related_mobile) %>" /></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile(\''+sn+'\','+id+');" readonly/></p></div></div></div></div>';
+  var html='<div class="pop pop-form" id="pop-form" style="height:'+h+'px"><div class="pop-bd"><div class="box-pop"><div class="hd"><b>恭喜你，中奖了！</b></div><div class="bd"><p><b>奖品为'+title+'，</b><br/>兑奖SN码：'+sn+'</p><p><%= @activity.activity_property.display_win_tip %></p><p><span>请输入您的手机号</span><input type="text" class="input" id="phone" value="<%= @user.try(:related_mobile) %>" /></p><p><input id="btn-award" class="btn" type="submit" value="提交" onClick="submitMobile(\''+sn+'\','+id+');" readonly/></p></div></div></div></div>';
   $("body").append(html);
 }
 

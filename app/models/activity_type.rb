@@ -129,7 +129,7 @@ class ActivityType < ActiveRecord::Base
 
   #业务管理
   def self.business
-    ids = [11, 10, 12, 15, 14, 30, 19, 24, 49, 63, 73, 74]
+    ids = [11, 10, 12, 15, 14, 30, 19, 24, 49, 63, 73, 74, 37]
     id_options.select{|m| ids.include?(m.last)}
   end
 
