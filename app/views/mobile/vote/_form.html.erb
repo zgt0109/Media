@@ -78,7 +78,7 @@ $(function() {
                 return popError('姓名不能为空');
             }else if(!$('#activity_user_mobile').val()){
                 return popError('手机号码不能为空');
-            }else if($('#activity_user_mobile').val() && !winwemedia_validators.mobile_reg.test($('#activity_user_mobile').val())){
+            }else if(winwemedia_validators.mobile_reg.test($('#activity_user_mobile').val())){
                 return popError('手机号码格式不正确');
             }
         }
