@@ -9,7 +9,7 @@ class Huodong::ShakeSitesController < ApplicationController
   before_filter :find_shake, only: [:get_user_count, :update_user, :shake_start, :shake_end]
 
   def index
-    session[:shake_account_id] = Des.decrypt(params[:account_id], validate_time: false)
+    session[:shake_site_id] = Des.decrypt(params[:site_id], validate_time: false)
     session[:shake_id] = params[:id]
     @shake = shake_site.shakes.where(id: session[:shake_id]).first
   rescue
@@ -78,11 +78,11 @@ class Huodong::ShakeSitesController < ApplicationController
     end
 
     def require_shake_site
-      redirect_to shakes_path, alert: '操作失败' unless session[:shake_account_id]
+      redirect_to shakes_path, alert: '操作失败' unless session[:shake_site_id]
     end
 
     def shake_site
-      @shake_site ||= Account.where(id: session[:shake_account_id]).first.site
+      @shake_site ||= Site.where(id: session[:shake_site_id]).first
     end
 
     def find_shake

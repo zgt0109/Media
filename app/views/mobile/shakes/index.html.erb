@@ -45,7 +45,7 @@
       $('#shake_round_status').val("0");
       $("#countDown").html("活动已结束");
     });
-    
+
     window.addEventListener('shake', function(){
       if($('#shake_round_status').val() == "1"){
         count += 1;
@@ -54,11 +54,11 @@
 
     function start_game(){
       gaming = window.setInterval(function(){
-                  if(count > old_count){
-                    old_count = count;
-                    faye_publish(count);
-                  }
-                },1000);
+        if(count > old_count){
+          old_count = count;
+          faye_publish(count);
+        }
+      },1000);
     }
 
   });

@@ -23,11 +23,11 @@ class ServerAuth
   def incoming(message, callback)
     if message['data']
       if message['data']['shakes']
-        supplier_id = message['data']['shakes'][0]
+        site_id = message['data']['shakes'][0]
         shake_round_id = message['data']['shakes'][1]
         shake_user_id = message['data']['shakes'][2]
-        $redis.zincrby("shake:user_shake_count:#{supplier_id}:#{shake_round_id}", 1, shake_user_id)
-        message['data']['shakes'][3] = $redis.zscore("shake:user_shake_count:#{supplier_id}:#{shake_round_id}", shake_user_id)
+        $redis.zincrby("shake:user_shake_count:#{site_id}:#{shake_round_id}", 1, shake_user_id)
+        message['data']['shakes'][3] = $redis.zscore("shake:user_shake_count:#{site_id}:#{shake_round_id}", shake_user_id)
       end
     end
     callback.call(message)

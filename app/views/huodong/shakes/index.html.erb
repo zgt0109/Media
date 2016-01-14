@@ -73,7 +73,7 @@
                         <td><%= shake.created_at %></td>
                         <td>
                           <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                            <%= link_to "", shake_sites_path(id: shake.id, account_id: Des.encrypt(current_user.id.to_s)), class: "icon-eye-open", title: "摇一摇活动页面", target: '_blank' %>
+                            <%= link_to "", shake_sites_path(id: shake.id, site_id: Des.encrypt(current_site.id.to_s)), class: "icon-eye-open", title: "摇一摇活动页面", target: '_blank' %>
                             <%= link_to "", edit_shake_path(shake), class: "icon-pencil", title: "编辑摇一摇" %>
                             <%= link_to "", shake_round_shakes_path("search[activity_id_eq]" => shake.activity.id), class: "icon-bar-chart", title: "活动数据" %>
                             <% if shake.stopped? %>
