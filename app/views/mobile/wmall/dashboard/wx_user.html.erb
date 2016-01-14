@@ -26,7 +26,7 @@
     <ul class="nobg">
       <li>
         <a href="{{signin_url}}">
-        <%= link_to signin_app_vips_url(auth_params.slice(:wxmuid,:wxuid)) do %>
+        <%= link_to signin_app_vips_url(auth_params.slice(:site_id)) do %>
           <i class="u-icon u-icon-1"></i>签到
         <% end %>
       </li>
@@ -34,7 +34,7 @@
 
     <ul>
       <li>
-        <%= link_to app_vips_url(auth_params.slice(:wxmuid,:wxuid)) do %>
+        <%= link_to app_vips_url(auth_params.slice(:site_id)) do %>
           <i class="u-icon u-icon-2"></i>会员卡
         <% end %>
       </li>

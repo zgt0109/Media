@@ -120,7 +120,6 @@ class App::GuaController < App::BaseController
       if prize #如果中奖
         #如果奖池中还有奖品 出奖次数未超过设置值
         if prize.activity_consumes.count < prize.prize_count && (prize.limit_count == -1 || prize.activity_consumes.count < prize.limit_count)
-          #...
           activity_consume = prize.activity_consumes.create(site_id: @activity.site_id, activity_id: @activity.id, user_id: session[:user_id])
           @prize_title = prize.title
           @prize_type = prize.title

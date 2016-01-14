@@ -85,11 +85,11 @@
         $("a.dev-tel").attr("href", "tel:<%= @shortcut_menus.phone.first.try(:tel) || "电话号码未设置" %>");
 
         $("a.dev-member").click(function(){
-            $(this).attr("href", "<%= app_vips_url(wxmuid: @website.wx_mp_user_id, anchor: "mp.weixin.qq.com") %>")
+            $(this).attr("href", "<%= app_vips_url(site_id: session[:site_id], anchor: "mp.weixin.qq.com") %>")
         });
 
         $("a.dev-location").click(function(){
-            $(this).attr("href", "<%= mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) %>")
+            $(this).attr("href", "<%= mobile_map_url(site_id: session[:site_id], id: @website.id) %>")
         });
     });
 </script>

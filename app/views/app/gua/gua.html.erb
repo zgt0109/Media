@@ -1,5 +1,7 @@
 <% title @activity.try(:name) %>
+
 <%= stylesheet_link_tag 'mobile/gua' %>
+
 <div class="html">
   <!-- stage-end stage-start -->
   <div class="stage" id="stage">
@@ -11,6 +13,7 @@
     <%= render "description" %>
   </div>
 </div><!-- html end -->
+
 <%= javascript_include_tag 'mobile/gua', '/javascripts/app/wScratchPad.js' %>
 <script type="text/javascript">
   var prize = '<%= @prize_title.presence || '谢谢参与' %>';
@@ -48,7 +51,7 @@
       width: "240",
       height: "122",
       image: '/images/gua/bg-fail.png',
-      image2: '<%= '/images/gua/bg-gua-wrap.jpg' %>',
+      image2: "<%= '/images/gua/bg-gua-wrap.jpg' %>",
       color:"#eee",
       size:20,
       realtimePercent:"true",
@@ -64,7 +67,7 @@
               $.ajax({
                 type: "post",
                 dataType: "script",
-                url: 'gua?source=notice&acid='+acid+'&anid='+anid+'&wxmuid='+wxmuid+'&aid='+aid
+                url: 'gua?source=notice&acid='+acid+'&anid='+anid+'&aid='+aid
               })
             }
           }
@@ -87,7 +90,7 @@
     $.ajax({
       type: "POST",
       contentType: "application/json",
-      url: 'draw_prize?sn='+sn_code+'&acid='+acid+'&anid='+anid+'&wxmuid='+wxmuid+'&aid='+aid+'&mobile='+mobile+'&'+Math.random(),
+      url: 'draw_prize?sn='+sn_code+'&acid='+acid+'&anid='+anid+'&aid='+aid+'&mobile='+mobile+'&'+Math.random(),
       dataType: 'json',
       timeout:30000,
       success: function (data) {

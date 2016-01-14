@@ -42,7 +42,7 @@
       </div>
       <%- if defined?(@user) && @user.vip_user.blank? %>
         <div class="alert-cell">
-          <a href="<%= app_vips_path(wxmuid: session[:wx_mp_user_id]) %>" class="alert-f-btn J-close">领取会员卡</a>
+          <a href="<%= app_vips_path(site_id: session[:site_id]) %>" class="alert-f-btn J-close">领取会员卡</a>
         </div>
       <%- end %>
     </div>
