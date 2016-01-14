@@ -14,8 +14,8 @@ class Mobile::AidsController < Mobile::BaseController
 
   include ::Aid
 
-  # unstarted, underway and stopped page 
-  def index 
+  # unstarted, underway and stopped page
+  def index
     case @activity.activity_status
     when Activity::WARM_UP
       render :warm_up
@@ -31,40 +31,40 @@ class Mobile::AidsController < Mobile::BaseController
   end
 
   def invite_friends
-    return render json: {errcode: 20001, nickname: @activity_user.wx_user.nickname, headimgurl: @activity_user.wx_user.headimgurl, rank_reached: rank_reached?, errmsg: "已经参与活动"} if @activity_user.present?
-    return render json: {errcode: 20002, nickname: @activity_user.wx_user.nickname, headimgurl: @activity_user.wx_user.headimgurl, rank_reached: rank_reached?, errmsg: "亲，只能自己邀请朋友哟"} unless self?
+    return render json: {errcode: 20001, nickname: @activity_user.user.nickname, headimgurl: @activity_user.user.headimgurl, rank_reached: rank_reached?, errmsg: "已经参与活动"} if @activity_user.present?
+    return render json: {errcode: 20002, nickname: @activity_user.user.nickname, headimgurl: @activity_user.user.headimgurl, rank_reached: rank_reached?, errmsg: "亲，只能自己邀请朋友哟"} unless self?
 
     logger.info "Micro Aid ========== invite friends"
 
     @activity_user ||= @activity.activity_users.create(
       site_id:   @activity.site.id,
-      user_id:    @wx_user.user_id,
-      name:          @wx_user.nickname,
-      mobile:        @wx_user.mobile,
-      address:       @wx_user.address
+      user_id:   @user.user_id,
+      name:      @wx_user.nickname,
+      mobile:    @user.mobile,
+      address:   @wx_user.address
     )
 
     @results = @activity_user.aid_results.includes(:user) if @activity_user.present?
 
-    render json: {errcode: 0, nickname: @activity_user.wx_user.nickname, headimgurl: @activity_user.wx_user.headimgurl, rank_reached: rank_reached?, errmsg: "参与活动成功"}
+    render json: {errcode: 0, nickname: @activity_user.user.nickname, headimgurl: @activity_user.user.headimgurl, rank_reached: rank_reached?, errmsg: "参与活动成功"}
   rescue => e
     render json: {errcode: 400001, errmsg: "#{e.message} -- #{e.backtrace}"}, status: :internal_server_error
   end
 
   def friend_aid
     return render json: {errcode: 20001, errmsg: "助力对象无效"} unless @activity_user.present?
-    return render json: {errcode: 20002, errmsg: "你已经帮朋友助力过了"} if aided? @wx_user.id 
+    return render json: {errcode: 20002, errmsg: "你已经帮朋友助力过了"} if aided? @user.id
 
     Rails.logger.info "Micro Aid ========== friend aid"
 
     points = calc_points
     @activity_user.aid_results.create(
       user_id:  @user.id,
-      points: points 
+      points: points
     )
-    add_points points, @activity_user 
+    add_points points, @activity_user
 
-    render json: {errcode: 0, points: points, rank: get_rank(@activity_user), rank_reached: rank_reached?, errmsg: "给朋友助力成功"} 
+    render json: {errcode: 0, points: points, rank: get_rank(@activity_user), rank_reached: rank_reached?, errmsg: "给朋友助力成功"}
 
   rescue => e
     render json: {errcode: 400001, errmsg: "#{e.message} -- #{e.backtrace}"}, status: :internal_server_error
@@ -165,9 +165,9 @@ class Mobile::AidsController < Mobile::BaseController
       order += 1
       activity_user = rank[:activity_user]
       {
-        headimgurl: activity_user.wx_user.headimgurl, 
+        headimgurl: activity_user.user.headimgurl, 
         order: order,
-        nickname: activity_user.wx_user.nickname,
+        nickname: activity_user.user.nickname,
         points: rank[:points]
       }
     end
@@ -181,12 +181,12 @@ class Mobile::AidsController < Mobile::BaseController
   def aid_friends
     return render json: {errcode: 20001, errmsg: "用户未参与活动"} unless @activity_user.present?
 
-    results = @activity_user.aid_results.includes(:wx_user).order('created_at desc').limit(Aid::Rule::AID_FRIENDS_LIMIT)
+    results = @activity_user.aid_results.includes(:user).order('created_at desc').limit(Aid::Rule::AID_FRIENDS_LIMIT)
 
     results.map! do |result|
       {
-        headimgurl: (result.wx_user.present? && result.wx_user.headimgurl.present?) ? result.wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png",
-        nickname:   result.wx_user.present? && result.wx_user.nickname,
+        headimgurl: (result.user.present? && result.user.headimgurl.present?) ? result.user.headimgurl : "/assets/mobile/aids/global_portrait.png",
+        nickname:   result.user.present? && result.user.nickname,
         points:     result.points
       }
     end
@@ -209,7 +209,7 @@ class Mobile::AidsController < Mobile::BaseController
       return false
     end
 
-    if @activity_user.present? && @activity_user.user_id != @wx_user.id
+    if @activity_user.present? && @activity_user.user_id != @user.id
       return  false
     end
 
@@ -298,7 +298,7 @@ class Mobile::AidsController < Mobile::BaseController
     end
 
     @activity_user ||= @activity.activity_users.where(user_id: @user.id).first
-    @results = @activity_user.aid_results.includes(:wx_user) if @activity_user.present?
+    @results = @activity_user.aid_results.includes(:user) if @activity_user.present?
 
     @rule ||= @activity.extend.rule.presence
 
@@ -343,7 +343,7 @@ class Mobile::AidsController < Mobile::BaseController
     prize_counts = prizes.sum(:prize_count)
     ranking_list = get_ranking_list prize_counts
     ranking_list.reverse!
- 
+
     prizes.each do |prize|
       prize.prize_count.times do
         rank = ranking_list.pop
@@ -373,9 +373,9 @@ class Mobile::AidsController < Mobile::BaseController
 
     # prize
     activity_consume = @activity.activity_consumes.where(user_id: @activity_user.user_id).first || nil
-   
+
     return activity_consume.activity_prize if activity_consume.present? 
-    
+
     # calc prize 
     total_count = 0
     prize = prizes.each do |prize|
@@ -441,9 +441,9 @@ class Mobile::AidsController < Mobile::BaseController
   def wx_share_setting
     @share_title = @activity.try(:name) || '微助力活动'
     @share_desc  = @activity.try(:description) || '微助力活动' 
-    @share_image = qiniu_image_url(@activity.try(:pic_key))
+    @share_image = @activity.try(:pic_url)
   end
-  
+
   def mobile_params
     session[:activity_id] = params[:aid] if params[:aid].present?
   end
