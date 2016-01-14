@@ -42,7 +42,7 @@
         </li>
  -->
         <!-- <li class="<%= 'active' if action_name == 'solution' %>"><a href="<%#= solution_path %>">经典案例</a></li> -->
-        <!-- <li class="<%= 'active' if current_page?(spread_path) %>"><%#= link_to "招商加盟", spread_path %></li> -->
+        <!-- <li class="<%#= 'active' if current_page?(spread_path) %>"><%#= link_to "招商加盟", spread_path %></li> -->
         <li class="<%= 'active' if %w(about joins news).include?(action_name) %>">
           <a href="">关于我们<i class="arrow-down"></i></a>
           <div class="nav-son">
