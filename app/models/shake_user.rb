@@ -1,17 +1,18 @@
 class ShakeUser < ActiveRecord::Base
-	EXIT_CODE = '0'
+  EXIT_CODE = '0'
   LIVE_MINUTES = 30
 
-	belongs_to :user
-  belongs_to :shake
-  has_many :shake_prizes
-	enum_attr :status, :in => [
+  enum_attr :status, :in => [
     ['null_at',      0, '无'],
     ['shake_at',  1, '摇一摇'],
     ['nickname_at',  2, '昵称'],
     ['avatar_at',    3, '头像'],
     ['mobile_at',    4, '手机']
   ]
+
+  belongs_to :user
+  belongs_to :shake
+  has_many :shake_prizes
 
   acts_as_wx_media :avatar
 
@@ -55,7 +56,7 @@ class ShakeUser < ActiveRecord::Base
     return reply_need_nickname if nickname.blank?
     return reply_change_avatar if avatar.blank?
     return reply_change_mobile if mobile.blank? && shake.mobile_check?
-    update_attributes( nickname: nickname, avatar: avatar, mobile: mobile, matched_at: Time.now, status: WX_SHAKE_AT )
+    update_attributes( nickname: nickname, avatar: avatar, mobile: mobile, matched_at: Time.now, status: SHAKE_AT )
     return false
   end
 
@@ -69,19 +70,19 @@ class ShakeUser < ActiveRecord::Base
       update_attributes( avatar: avatar, matched_at: Time.now, status: MOBILE_AT )
       "1、请回复您的“手机号”进入“#{shake.name}”；\n2、取消进入请回复“0”；"
     else
-      update_attributes( avatar: avatar, matched_at: Time.now, status: WX_SHAKE_AT )
+      update_attributes( avatar: avatar, matched_at: Time.now, status: SHAKE_AT )
       return false
     end
   end
 
   def save_mobile_and_reply_goto_leave_message( msg )
     return '请输入正确的手机号码！' if msg.to_s.size != 11
-    update_attributes( mobile: msg, matched_at: Time.now, status: WX_SHAKE_AT )
+    update_attributes( mobile: msg, matched_at: Time.now, status: SHAKE_AT )
     return false
   end
 
   def reply_wx_message( msg, msg_type = 'text' )
-  	return false unless matched_at && matched_at > LIVE_MINUTES.minutes.ago
+    return false unless matched_at && matched_at > LIVE_MINUTES.minutes.ago
     return false unless shake.normal?
     return reply_exit_message if !null_at? && msg == EXIT_CODE
 
