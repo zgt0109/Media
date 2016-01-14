@@ -3,7 +3,7 @@
     <div class="list-t cf">
       <!--<div class="user-img"><%#= image_tag "/assets/life/user_logo.png" %></div>-->
       <div class="user-info">
-        <!--<p class="f-blue"><%#= @share_photo.wx_user.nickname? ? @share_photo.wx_user.nickname : "匿名" %></p>-->
+        <!--<p class="f-blue"><%#= @share_photo.user.nickname? ? @share_photo.user.nickname : "匿名" %></p>-->
         <p class="f-gray"><%= @share_photo.created_at.strftime("%Y-%m-%d %H:%M") %></p>
         <p><span>标签：</span><span><%= @share_photo.title? ? @share_photo.title : "晒图" %></span></p>
       </div>
@@ -12,7 +12,7 @@
       <%= image_tag @share_photo.try(:pic_url) %>
     </div>
     <div class="list-foot">
-      <% if @wx_user.present? %><a class="praise f-red" href="javascript:;"><i></i>赞</a><% end %>
+      <% if @user.present? %><a class="praise f-red" href="javascript:;"><i></i>赞</a><% end %>
       <em class="f-red" id="red"><%= @share_photo.likes_count %></em><span class="f-gray">人赞过</span>
     </div>
     <div class="comment-list">
@@ -45,7 +45,7 @@
     <%= f.hidden_field :user_id, value: session[:user_id] %>
     <div class="comment-add">
       <%= f.text_area :content, :rows => 3, :placeholder => "请您留言", class: "text", maxlength: 140 %>
-      <%= f.text_field :nickname, value: @wx_user.try(:nickname), placeholder: "请输入您的昵称", class: "input",size: 25 %>
+      <%= f.text_field :nickname, value: @user.try(:nickname), placeholder: "请输入您的昵称", class: "input",size: 25 %>
       <a class="btn form-submit" href="">发布</a>
     </div>
     <% end %>

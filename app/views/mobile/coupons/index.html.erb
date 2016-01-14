@@ -2,7 +2,7 @@
   <header>
     <a href="javascript:void(0);"></a>
     <h1>全部优惠券</h1>
-    <%- if @wx_user.present? %>
+    <%- if @user.present? %>
       <%= link_to image_tag('/mobile/img/coupons/ico-user.png'), my_mobile_coupons_url, class: 'tright' %>
     <%- else %>
       <a href="javascript:;" class="tright"></a>

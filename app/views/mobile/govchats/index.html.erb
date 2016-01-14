@@ -78,7 +78,7 @@
 </section>
 <script type="text/javascript">
 function handleChat(chat_type) {
-    <%- if @wx_user.present? %>
+    <%- if @user.present? %>
         if(chat_type == 'my') {
              location.href= "<%= my_mobile_govchats_url(activity_id: @activity.id)%>"
         }else{

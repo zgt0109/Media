@@ -1,7 +1,7 @@
 <div class="body">
     <div class="package-box">
         <%- if @friend %>
-            <%- if @from_wx_user_participate.present? %>
+            <%- if @from_user_participate.present? %>
                 <%- if @participate.present? %>
                     <%- if @invited %>
                         <img src="/assets/img/package/package-open.jpg" alt="">
@@ -33,7 +33,7 @@
                     <%- if @invited %>
                         <img src="/assets/img/package/package-open.jpg" alt="">
                         <div class="text">
-                            <%- if @from_wx_user_prize.present? && (@from_wx_user_prize.reached? || @activity.extend.invites_count.to_i  - @from_wx_user_invites.count <= 0)  %>
+                            <%- if @from_user_prize.present? && (@from_user_prize.reached? || @activity.extend.invites_count.to_i  - @from_wx_user_invites.count <= 0)  %>
                                 <span>在小伙伴们的努力下我已经成功地把礼品搬回家了，你也来拆个自己的礼包吧！</span>
                             <%- else %>
                                 <%- index = @from_wx_user_invites.pluck(:to_user_id).index(session[:user_id]) || 0 %>
@@ -73,7 +73,7 @@
         <%- end%>
     </div>
     <%- if @friend %>
-        <%- if @from_wx_user_participate.present? %>
+        <%- if @from_user_participate.present? %>
             <%- if @participate.present? %>
                 <%- if @invited %>
                     <a id="spin" class="p-btn p-btn-big" onclick="showPop('#pop-share')" style="cursor: pointer;">

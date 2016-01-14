@@ -41,7 +41,7 @@
         <%= f.hidden_field :status, value: ShopOrder::DRAFT %>
         <%= f.hidden_field :order_type, value: 1 %>
         <p class="inp">
-          <%= f.text_field :mobile, value: @wx_user.try(:mobile), class: 'text', placeholder: "请输入您的手机号码" %>
+          <%= f.text_field :mobile, value: @user.try(:mobile), class: 'text', placeholder: "请输入您的手机号码" %>
           <input name="reset" type="reset" class="reset" value="" />
         </p>
         <p class="sub">

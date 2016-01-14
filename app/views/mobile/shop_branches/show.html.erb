@@ -20,7 +20,7 @@
         <%= form_for :shop_table_order, url: new_app_shop_table_order_url, method: :get do |f|%>
           <%= f.hidden_field :shop_branch_id, value: @shop_branch.id %>
           <p class="inp">
-            <%= f.text_field :mobile, value: @wx_user.try(:mobile), class: 'text', placeholder: "请输入您的手机号码" %>
+            <%= f.text_field :mobile, value: @user.try(:mobile), class: 'text', placeholder: "请输入您的手机号码" %>
             <input name="reset" type="button" class="reset" value="" />
           </p>
           <p class="sub"><input type="image" src="/assets/shop_table/bg_but_ding.png" class="form-submit" /></p>

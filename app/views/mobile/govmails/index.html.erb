@@ -44,7 +44,7 @@
 </section>
 <script type="text/javascript">
 function handleMail(mail_type) {
-    <%- if @wx_user.present? %>
+    <%- if @user.present? %>
         if(mail_type == 'my') {
              location.href= "<%= my_mobile_govmails_url(activity_id: @activity.id)%>"
         }else{

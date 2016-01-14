@@ -36,7 +36,7 @@
     <p class="til"><img src="/assets/img/lottery/gift_pri.png"></p>
     <p class="showpri"></p>
     <p class="int"><%= @activity.activity_property.display_win_tip %></p>
-    <input type="text" class="inp" value="<%= @wx_user.try(:related_mobile) %>" id="phone">
+    <input type="text" class="inp" value="<%= @user.try(:related_mobile) %>" id="phone">
     <input type="hidden" id="acid">
     <p class="sub"><img src="/assets/img/lottery/submit.png" id="sentp" onClick="submitMobile();"></p>
 </div>

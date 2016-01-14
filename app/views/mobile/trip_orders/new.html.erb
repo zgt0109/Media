@@ -45,11 +45,11 @@
         <dd>
           <div class="order-row">
             <div class="fl">联系人：</div>
-            <div class="fr"><%= f.text_field :username, value: @wx_user.try(:nickname) %></div>
+            <div class="fr"><%= f.text_field :username, value: @user.try(:nickname) %></div>
           </div>
           <div class="order-row order-input">
             <div class="fl">手机号码：</div>
-            <div class="fr"><%= f.text_field :tel, type: :tel, value: @wx_user.try(:mobile) %></div>
+            <div class="fr"><%= f.text_field :tel, type: :tel, value: @user.try(:mobile) %></div>
           </div>
         </dd>
       </dl>

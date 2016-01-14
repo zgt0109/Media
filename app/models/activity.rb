@@ -545,11 +545,11 @@ class Activity < ActiveRecord::Base
         ActivityNotice.where(activity_id: id, activity_status: attrs[:activity_status]).first_or_create(attrs)
       end
     end
-    
+
     %w(一等奖 二等奖 三等奖).each do |title|
       ActivityPrize.where(activity_id: id, title: title).first_or_create
     end if gua? || wheel? || hit_egg? || slot? || wave? || recommend?
-  
+
     %w(元素一 元素二 元素三).each do |name|
       ActivityPrizeElement.where(activity_id: id, name: name).first_or_create(pic_key: ActivityPrizeElement.default_pic_key)
     end if slot?

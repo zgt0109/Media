@@ -15,7 +15,7 @@
         <%- end %>
       <%- end %>
     <div class="mod-btn" style="position: fixed; bottom: 0; left:0; width: 100%; z-index: 10;">
-      <%- if @wx_user.present? %>
+      <%- if @user.present? %>
         <a class="btn btn-blue btn-big" href="<%= new_mobile_reservation_url(activity_id: @reservation.id) %>">我要预定</a>
       <%- else %>
         <a class="btn btn-gray btn-big" href="#">关注微信账号预定</a>

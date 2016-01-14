@@ -55,8 +55,8 @@
 
     <div id="kz_begin">
       <p>
-      <%- if @wx_user %>
-        <%- if @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+      <%- if @user %>
+        <%- if @activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?) %>
                   <a class="btn" onclick="showTips('.J-register')">开始答题</a>
                 <%- else %>
           <a href="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&%>&m=start" class="btn_b">开始答题</a>

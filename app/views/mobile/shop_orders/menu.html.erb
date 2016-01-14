@@ -52,7 +52,7 @@
                 </dt>
                 <dd>
                   <% root.shop_products.shelve.where(shop_id: @shop_branch.shop_id).order("sort").each do |product| %>
-                    <%= render 'mobile/shop_orders/shop_product', :product => product, :wx_user => @wx_user %>
+                    <%= render 'mobile/shop_orders/shop_product', :product => product, :user => @user %>
                   <% end %>
                 </dd>
               </dl>
@@ -64,7 +64,7 @@
                   </dt>
                   <dd>
                     <% category.children_products.shelve.where(shop_id: @shop_branch.shop_id).order("sort").each do |product| %>
-                      <%= render 'mobile/shop_orders/shop_product', :product => product, :wx_user => @wx_user %>
+                      <%= render 'mobile/shop_orders/shop_product', :product => product, :user => @user %>
                     <% end %>
                   </dd>
                 </dl>

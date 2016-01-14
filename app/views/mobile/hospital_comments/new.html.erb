@@ -32,7 +32,7 @@
 								</div>
 							</div>
 							<div class="comment-text">
-								<%= f.text_field :nickname, value: @wx_user.try(:nickname), placeholder: "请输入您的昵称" %>
+								<%= f.text_field :nickname, value: @user.try(:nickname), placeholder: "请输入您的昵称" %>
 							</div>
 							<div class="comment-btn">
 								<input type="submit" class="btn fw form-submit" value="发布"/>

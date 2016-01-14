@@ -1,5 +1,5 @@
 <% if f.object.new_record? %>
-  <% default_pic_url = qiniu_image_url('FiF0tSo5WZzH_i0_CDUgemvPd8Et'); default_pic_key = 'FiF0tSo5WZzH_i0_CDUgemvPd8Et' %>
+  <% default_pic_url = qiniu_image_url('FlL1C_QEO1l-6TwumUieLdO8kjKN'); default_pic_key = 'FlL1C_QEO1l-6TwumUieLdO8kjKN' %>
 <% else %>
   <% default_pic_url = f.object.pic_url; default_pic_key = f.object.pic_key %>
 <% end %>
@@ -40,7 +40,7 @@
   <%= child.hidden_field :site_id %>
   
   <% if child.object.new_record? %>
-    <% default_child_pic_url = qiniu_image_url('FiF0tSo5WZzH_i0_CDUgemvPd8Et'); default_child_pic_key = 'FiF0tSo5WZzH_i0_CDUgemvPd8Et' %>
+    <% default_child_pic_url = qiniu_image_url('FlL1C_QEO1l-6TwumUieLdO8kjKN'); default_child_pic_key = 'FlL1C_QEO1l-6TwumUieLdO8kjKN' %>
   <% else %>
     <% default_child_pic_url = child.object.pic_url; default_child_pic_key = child.object.pic_key %>
   <% end %>

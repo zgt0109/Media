@@ -1,11 +1,11 @@
-<% if @wx_user %>
+<% if @user %>
     <div class="mod-pop" id="pop-more">
       <div class="pop-bg" onclick="hidePop('#pop-more')"></div>
       <div class="pop-body">
         <div class="pop-hd pop-ul">
           <%= link_to '我的话题', "#{mobile_wbbs_topics_url(@site, activity_id: @activity.id)}?my" %>
           <a href="<%= wbbs_notifications_mobile_wbbs_topics_url(@site, activity_id: @activity.id) %>" class="mod-tip-number">我的消息<i><%= @notifications_count %></i></a>
-          <%= link_to '我的空间', "#{mobile_wbbs_topics_url(@site, receiver_id: @wx_user.try(:id), activity_id: @activity.id)}" %>
+          <%= link_to '我的空间', "#{mobile_wbbs_topics_url(@site, receiver_id: @user.try(:id), activity_id: @activity.id)}" %>
         </div>
       </div>
     </div>
@@ -66,10 +66,10 @@
                 var headimgurl = $('#headimg_key').val();
                 var nickname = $('#nickname').val();
                 if(nickname){
-                    <%- if @wx_user.nickname.blank? %>
-                    var exists_nicknames = <%= raw @wbbs_community.wx_users.pluck(:nickname).to_json %>;
+                    <%- if @user.nickname.blank? %>
+                    var exists_nicknames = <%= raw @wbbs_community.users.pluck(:nickname).to_json %>;
                     <%- else %>
-                    var exists_nicknames = <%= raw @wbbs_community.wx_users.where("id != ?", @wx_user.try(:id)).pluck(:nickname).to_json %>;
+                    var exists_nicknames = <%= raw @wbbs_community.users.where("id != ?", @user.try(:id)).pluck(:nickname).to_json %>;
                     <%- end %>
                     if ($.inArray(nickname, exists_nicknames) >= 0){
                         alert('昵称重复，请重新选择昵称');

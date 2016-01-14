@@ -8,7 +8,7 @@
 <section id="sec-index">
   <header class="untoppable">
     <%= link_to "", mobile_wbbs_topics_url( @site , activity_id: @activity.id), class: 'fa fa-chevron-left' %>
-    <% if @wx_user.present? && !@wx_user.leave_message_forbidden? %>
+    <% if @user.present? && !@user.leave_message_forbidden? %>
       <a href="javascript:;" class="commentable"><i class="fa fa-comment-o"></i>回复</a>
       <a class="fa fa-ellipsis-h <%= 'mod-tip-number' if @notifications_count > 0 %>" href="javascript:;" onclick="showPop('#pop-more')"><i><%= @notifications_count if @notifications_count > 0 %></i></a>
     <% else %>
@@ -88,7 +88,7 @@
     $(".timeago").timeago();
 
     $('.commentable').on('click', function(event) {
-      <% if @wx_user %>
+      <% if @user %>
         showPop('#pop-comment');
         $('#new_wbbs_reply').attr( 'action', $(this).data('url') );
         $('#wbbs_reply_parent_id').val( $(this).data('parent_id') );

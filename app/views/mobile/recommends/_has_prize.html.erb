@@ -46,7 +46,7 @@
           <tbody>
            <%- @invites.each  do |invite| %>
             <tr>
-              <td><span><%= invite.to_wx_user.try(:nickname) %></span></td>
+              <td><span><%= invite.to_user.try(:nickname) %></span></td>
               <td><span><%= invite.created_at.try(:to_s) %></span></td>
             </tr>
           <%- end %>

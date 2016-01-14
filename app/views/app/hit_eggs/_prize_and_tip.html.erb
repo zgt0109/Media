@@ -16,8 +16,8 @@
   <b>兑奖说明:</b><br/>中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
 </section>
 
-<%- if @activity.activity_status != Activity::WARM_UP && @wx_user.present? %>
-  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+<%- if @activity.activity_status != Activity::WARM_UP && @user.present? %>
+  <%- unless (@activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?)) %>
     <section class="sec-list">
       <a id="btn-list">点击查看我获得的奖品>>></a>
     </section>

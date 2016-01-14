@@ -44,7 +44,7 @@
               <% @shop_product.shop_product_comments.each do |comment| %>
                 <% unless comment.new_record? %>
                   <p class="tr">
-                    <em class="td"><%= comment.try(:wx_user).try(:nickname) || "匿名" %></em>
+                    <em class="td"><%= comment.try(:user).try(:nickname) || "匿名" %></em>
                     <b class="td"><%= comment.content %></b>
                     <span class="td"><%= comment.created_at.strftime("%H:%M %m-%d") %></span>
                   </p>

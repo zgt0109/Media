@@ -52,13 +52,10 @@ class User < ActiveRecord::Base
   has_many :wx_invites, foreign_key: :from_user_id
 
   delegate :leave_message_forbidden, to: :wx_user, allow_nil: true
+  delegate :nickname, :headimgurl, to: :wx_user, allow_nil: true
 
   # scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
   # scope :message_normal, ->{ where(leave_message_forbidden: 0)}
-
-  def to_s
-    nickname || id.to_s
-  end
 
   def related_mobile
     vip_mobile || consumes_mobile
@@ -88,14 +85,6 @@ class User < ActiveRecord::Base
   #     update_attributes(match_type: WxUser.const_get(match_type.upcase), match_at: Time.now)
   #   end
   # end
-
-  def axis
-    "#{location_x}, #{location_y}"
-  end
-
-  def reset_match_type
-    normal! if greet? && updated_at <= 5.minutes.ago
-  end
 
   def wbbs_topics_count
     wbbs_topics.count

@@ -25,9 +25,9 @@
      <%- end %>
   </div>
   <div class="footer">
-    你还剩<em><%= @wx_user.guess_left_count(@activity) %></em>次答题机会
+    你还剩<em><%= @user.guess_left_count(@activity) %></em>次答题机会
     <%- if @consumes.count > 0 %>
-      <a href="<%= prizes_mobile_guess_url(aid: @activity.id, openid: @wx_user.try(:openid)) %>">我的奖品</a>
+      <a href="<%= prizes_mobile_guess_url(aid: @activity.id, openid: @user.try(:openid)) %>">我的奖品</a>
     <%- end %>
   </div>
 </div>

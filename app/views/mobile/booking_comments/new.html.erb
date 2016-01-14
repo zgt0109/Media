@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="bd-text">
-                <input type="text" placeholder="昵称" readonly="true" value="<%= @wx_user.name %>"/>
+                <input type="text" placeholder="昵称" readonly="true" value="<%= @user.name %>"/>
             </div>
             <div class="bd-btn">
               <input type="submit" class="btn" value="发布"/>
@@ -51,9 +51,9 @@
                 </span>
             </div>
             <div class="fr">
-              <b><%= booking_comment.wx_user.try(:nickname) %></b>
+              <b><%= booking_comment.user.try(:nickname) %></b>
               <span>
-                <i><%= booking_comment.created_at %>  <%#= booking_comment.wx_user.try(:wx_user_address).try(:address)%></i>
+                <i><%= booking_comment.created_at %>  <%#= booking_comment.user.wx_user.try(:wx_user_address).try(:address)%></i>
                 <!--<i class="fr ico icon-heart"><em>1692</em></i>-->
               </span>
               <p><%= booking_comment.content %></p>

@@ -33,7 +33,7 @@
                   <% if ref_order %>
                     <input type="text" name="shop_order[username]" value="<%= ref_order.username %>", id="shop_order_username", readonly="true", class="input" >
                   <% else %>
-                    <%= f.text_field :username, placeholder: "如何称呼你", class: "input", value: @wx_user.try(:nickname) %>
+                    <%= f.text_field :username, placeholder: "如何称呼你", class: "input", value: @user.try(:nickname) %>
                   <% end %>
                 </div>
               </div>
@@ -43,7 +43,7 @@
                   <% if ref_order %>
                     <input type="tel" name="shop_order[mobile]" value="<%= ref_order.mobile %>", id="your_tel", readonly="true", class="input">
                   <% else %>
-                    <%= f.telephone_field :mobile, id: "your_tel", placeholder: "请输入常用手机号码", class: "input", value: @wx_user.try(:mobile)  %>
+                    <%= f.telephone_field :mobile, id: "your_tel", placeholder: "请输入常用手机号码", class: "input", value: @user.try(:mobile)  %>
                   <% end %>
                 </div>
               </div>
@@ -215,7 +215,7 @@
               <a class="form-li last" href="javascript:void(0)">
                 <div class="li-l"><b>送餐地址：</b></div>
                 <div class="li-r">
-                  <%= f.text_area :address, id: "your_address", value: @shop_order.try(:wx_user).try(:address), rows: 1, class: "input input-textarea"  %>
+                  <%= f.text_area :address, id: "your_address", value: @shop_order.user.try(:wx_user).try(:address), rows: 1, class: "input input-textarea"  %>
                 </div>
               </a>
               <% end %>

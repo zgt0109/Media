@@ -23,8 +23,8 @@
 </section>
 
 <% if @activity.activity_status != Activity::WARM_UP %>
-  <%- if @wx_user %>
-    <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+  <%- if @user %>
+    <%- unless (@activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?)) %>
       <section class="sec-list">
         <a id="btn-list">点击查看我获得的奖品>>></a>
       </section>

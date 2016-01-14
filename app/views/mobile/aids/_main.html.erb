@@ -1,8 +1,8 @@
 <%
   if @activity_user.present? 
-    head_image_url = @activity_user.try(:wx_user).try(:headimgurl) ? @activity_user.wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png"
+    head_image_url = @activity_user.try(:user).try(:headimgurl) ? @activity_user.user.headimgurl : "/assets/mobile/aids/global_portrait.png"
   else
-    head_image_url = @wx_user.try(:headimgurl) ? @wx_user.headimgurl : "/assets/mobile/aids/global_portrait.png"
+    head_image_url = @user.try(:headimgurl) ? @user.headimgurl : "/assets/mobile/aids/global_portrait.png"
   end
 %>
 
@@ -35,7 +35,7 @@
     <div class="main-portrait">
       <img src="<%= head_image_url %>" width="140" height="140" class="img-full head-image">
     </div>
-    <div class="main-name"><%= @activity_user.try(:wx_user).try(:nickname) %></div>
+    <div class="main-name"><%= @activity_user.try(:user).try(:nickname) %></div>
     <div class="main-rank">当前排名<strong class="main-rank-strong"><%= get_rank(@activity_user) if @activity_user.present? %></strong></div>
     <div class="main-count">助力数：<strong class="main-count-strong"><%= number_to_currency(get_points(@activity_user), unit: '', precision: 0) if @activity_user.present? %></strong></div>
     <% if rank_reached? %>

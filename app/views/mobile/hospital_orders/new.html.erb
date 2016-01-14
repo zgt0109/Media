@@ -49,13 +49,13 @@
 							<div class="fl">联系人：</div>
 							<div class="fr">
 								<!-- <input type="text"/> -->
-								<%= f.text_field :username, value: @wx_user.try(:nickname) %>
+								<%= f.text_field :username, value: @user.try(:nickname) %>
 							</div>
 						</div>
 						<div class="order-row">
 							<div class="fl">手机：</div>
 							<div class="fr">
-								<%= f.text_field :tel, value: @wx_user.try(:mobile) %>
+								<%= f.text_field :tel, value: @user.try(:mobile) %>
 								<!--<input type="tel"/>-->
 								<!-- <span>wew3423423432</span> -->
 							</div>

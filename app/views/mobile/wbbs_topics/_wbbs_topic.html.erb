@@ -1,9 +1,9 @@
-<% if (params[:receiver_id].blank? && wbbs_topic.visible_for?(@wx_user)) || (params[:receiver_id].present? && wbbs_topic.privates_visible_for?(@wx_user))  %>
+<% if (params[:receiver_id].blank? && wbbs_topic.visible_for?(@user)) || (params[:receiver_id].present? && wbbs_topic.privates_visible_for?(@user))  %>
   <div class="mod-box">
     <div class="box-hd mod-fa fa fa-bars">
       <div class="mod-user">
-        <%- if @wx_user %>
-          <%- if @wx_user.has_info? %>
+        <%- if @user %>
+          <%- if @user.has_info? %>
             <a href="javascript:;" class="hd-img" onclick="setLinkForPop(<%= @site.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>)">
           <%- else %>
             <a href="javascript:;" class="hd-img" onclick="showPop('#pop-nichen')">
@@ -14,8 +14,8 @@
         <img src="<%= wbbs_topic.poster_avatar %>" alt="<%= wbbs_topic.poster_name %>">
         </a>
         <div class="hd-text">
-          <%- if @wx_user %>
-            <%- if @wx_user.has_info? %>
+          <%- if @user %>
+            <%- if @user.has_info? %>
               <b onclick="setLinkForPop(<%= @site.id %>, <%= wbbs_topic.id %>, <%= wbbs_topic.poster_id %>, <%= @activity.id %>);"><%= wbbs_topic.poster_name %></b>
             <%- else %>
               <b onclick="showPop('#pop-nichen')"><%= wbbs_topic.poster_name %></b>
@@ -24,7 +24,7 @@
             <b><%= wbbs_topic.poster_name %></b>
           <%- end %>
           <p><abbr class="timeago" title="<%= wbbs_topic.created_at.to_s(:local) %>"></abbr></p>
-          <%- unless wbbs_topic.reported_by?(@wx_user) %>
+          <%- unless wbbs_topic.reported_by?(@user) %>
             <a class="btn-tip" href="javascript:;" onclick="showTip(this, '.hd-text', <%= wbbs_topic.id %>)"></a>
           <%- end %>
         </div>
@@ -56,7 +56,7 @@
         <div class="mod-more" onclick="showAll(this)">全文</div>
         <% end %>
         <%- if params[:receiver_id].blank? %>
-          <a class="fa fa-thumbs-o-up btn-praise <%= 'fa-thumbs-up' if wbbs_topic.voted_up_by?( @wx_user ) %>" data-number="<%= wbbs_topic.up_count %>" data-id="<%= wbbs_topic.id %>" href="javascript:;"><%= wbbs_topic.up_count %></a>
+          <a class="fa fa-thumbs-o-up btn-praise <%= 'fa-thumbs-up' if wbbs_topic.voted_up_by?( @user ) %>" data-number="<%= wbbs_topic.up_count %>" data-id="<%= wbbs_topic.id %>" href="javascript:;"><%= wbbs_topic.up_count %></a>
           <%- unless @noshare %>
             <%= link_to '分享', mobile_wbbs_topic_url(@site, wbbs_topic, activity_id: @activity.id), class: 'fa fa-share-square-o' %>
           <%- end %>
@@ -64,7 +64,7 @@
         <%- if wbbs_topic.privates? %>
           <span class="blue">私</span>
         <%- end %>
-        <%- if (@wx_user && @wx_user.has_info?) || !@wx_user  %>
+        <%- if (@user && @user.has_info?) || !@user  %>
           <a class="fa fa-comment-o commentable" href="javascript:;" data-url="<%= create_reply_mobile_wbbs_topic_url(@site, wbbs_topic) %>">回复</a>
         <%- else %>
           <a class="fa fa-comment-o" href="javascript:;" onclick="showPop('#pop-nichen')">回复</a>

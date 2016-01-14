@@ -90,8 +90,8 @@
             </div>
           </div>
         </div>
-        <%- if @wx_user %>
-          <%- if @activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?) %>
+        <%- if @user %>
+          <%- if @activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?) %>
             <a class="btn" onclick="showTips('.J-register');">开始</a>
           <%- else %>
             <%- if @activity.slot_prizes_left_count < 1 %>

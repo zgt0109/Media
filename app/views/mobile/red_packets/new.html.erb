@@ -4,10 +4,10 @@
   </div>
   <%= form_for @red_packet_release, url: mobile_red_packets_url, method: :POST, validate: true do |f| %>
       <%= f.hidden_field :activity_id, value: @activity.id %>
-      <%= f.hidden_field :user_id, value: @wx_user.user_id %>
+      <%= f.hidden_field :user_id, value: @user.user_id %>
       <%= f.fields_for :activity_user do |user| %>
           <%= user.hidden_field :activity_id, value: @activity.id %>
-          <%= user.hidden_field :user_id, value: @wx_user.user_id %>
+          <%= user.hidden_field :user_id, value: @user.user_id %>
           <div class="info">
             <ul>
               <li><h3>用户资料填写</h3></li>

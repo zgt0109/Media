@@ -3,7 +3,7 @@
     <%= link_to image_tag('/mobile/img/coupons/ico-left.png'),
                 mobile_coupons_url %>
     <h1>优惠券详情</h1>
-    <%- if @wx_user.present? %>
+    <%- if @user.present? %>
       <%= link_to image_tag('/mobile/img/coupons/ico-user.png'), my_mobile_coupons_url, class: 'tright' %>
     <%- else %>
       <a href="javascript:;" class="tright"></a>

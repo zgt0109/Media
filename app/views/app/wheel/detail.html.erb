@@ -54,8 +54,8 @@
 <section class="sec-text sec-bg-bottom">
   <em></em>亲，中奖后请务必点击“ <b>我要领奖</b> ”输入您的手机号或牢记您的SN码，否则可能无法领奖哦！
 </section>
-<%- if @wx_user %>
-  <%- unless (@activity.activity_property.vip_only && (!@wx_user.vip_user.present? || !@wx_user.vip_user.normal?)) %>
+<%- if @user %>
+  <%- unless (@activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?)) %>
     <a href="list?aid=<%= params[:id] %>& %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
    <%- end %>
 <%- end %>

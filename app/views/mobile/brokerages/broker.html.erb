@@ -3,7 +3,7 @@
 		<section>
 			<div class="homepage-content">
 				<div class="blank5"></div>
-				<div class="person-photo"><img src="<%= @wx_user.headimgurl || '/assets/mobile/brokerage/person-logo.png' %>"/></div><div class="person-detail"><div class="blank10"></div><P><%= @broker.name %></P><P><%= @broker.mobile %></P></div>
+				<div class="person-photo"><img src="<%= @user.headimgurl || '/assets/mobile/brokerage/person-logo.png' %>"/></div><div class="person-detail"><div class="blank10"></div><P><%= @broker.name %></P><P><%= @broker.mobile %></P></div>
 				<div class="person-details">推荐人数:<span><%= @broker.clients_count %></span>人　总佣金:<span><%= @broker.total_commission %></span>元</div>
 			</div>
 			<div class="blank10"></div>

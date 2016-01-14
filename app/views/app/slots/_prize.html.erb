@@ -10,7 +10,7 @@
       <%= form_for  @activity_consume, :url => create_activity_consume_app_slots_url, :validate => true, :method => :post, html: { onsubmit: "return submit_mobile();" } do |form| %>
           <%= form.hidden_field :id %>
           <p><span>请输入您的手机号</span>
-        <%= form.text_field :mobile, :placeholder => "手机号码" , value: @wx_user.try(:related_mobile) %>
+        <%= form.text_field :mobile, :placeholder => "手机号码" , value: @user.try(:related_mobile) %>
       <p><%= form.submit "提交", :id => "btn-award", :class => "btn" %></p>
       <% end %>
     </div>
