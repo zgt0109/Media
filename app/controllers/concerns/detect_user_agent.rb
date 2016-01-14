@@ -1,5 +1,6 @@
 module DetectUserAgent
   OPENID_REG = /(\?|&)openid=/
+  STATE = 'winwemedia'
 
   def load_site
     site_id = request.subdomains.first.to_i
@@ -116,7 +117,7 @@ module DetectUserAgent
         end
 
         if @wx_user.blank?
-          oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
+          oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_base&state=#{STATE}#wechat_redirect"
           return redirect_to oauth_url
         end
       end
@@ -167,7 +168,7 @@ module DetectUserAgent
           return redirect_to auth_back
         end 
 
-        oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"
+        oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_userinfo&state=#{STATE}#wechat_redirect"
         redirect_to oauth_url
       end
     rescue => e
@@ -206,7 +207,7 @@ module DetectUserAgent
         end
 
         if @wx_user.blank?
-          oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_base&state=123&component_appid=#{Settings.wx_plugin.component_app_id}#wechat_redirect"
+          oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_base&state=#{STATE}&component_appid=#{Settings.wx_plugin.component_app_id}#wechat_redirect"
           return redirect_to oauth_url
         end
       end
@@ -254,7 +255,7 @@ module DetectUserAgent
           return redirect_to auth_back
         end
 
-        oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_userinfo&state=123&component_appid=#{Settings.wx_plugin.component_app_id}#wechat_redirect"
+        oauth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{app_id}&redirect_uri=#{Rack::Utils.escape(request.url)}&response_type=code&scope=snsapi_userinfo&state=#{STATE}&component_appid=#{Settings.wx_plugin.component_app_id}#wechat_redirect"
         return redirect_to oauth_url
       end
     rescue => e
