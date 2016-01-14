@@ -56,7 +56,7 @@
 </section>
 <%- if @user %>
   <%- unless (@activity.activity_property.vip_only && (!@user.vip_user.present? || !@user.vip_user.normal?)) %>
-    <a href="list?aid=<%= params[:id] %>& %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
+    <a href="list?aid=<%= params[:id] %>&anid=<%= params[:anid] %>" class="btn btn-block">点击查看我获得的奖品 ></a>
    <%- end %>
 <%- end %>
 <section class="sec-detail sec-bg-top sec-bg-bottom">

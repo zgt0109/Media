@@ -19,7 +19,7 @@
 /*
 $("body").on("click",".list-li", function(event){
 	var order_id = $(this).attr('data-order-id');
-	window.location.href = "<%= app_hotel_orders_url %>/"+order_id+"?aid=<%= params[:aid] %>& %>";
+	window.location.href = "<%= app_hotel_orders_url %>/"+order_id+"?aid=<%= params[:aid] %>";
 
 });
 */
@@ -34,6 +34,6 @@ $( document ).ajaxStop(function() {
 });
 
 function showOrder(order_id){
-	window.location.href = "<%= app_hotel_orders_url %>/"+order_id+"?aid=<%= params[:aid] %>& %>#mp.weixin.qq.com";
+	window.location.href = "<%= app_hotel_orders_url %>/"+order_id+"?aid=<%= params[:aid] %>#mp.weixin.qq.com";
 }
 </script>

@@ -37,11 +37,11 @@ class Mobile::AidsController < Mobile::BaseController
     logger.info "Micro Aid ========== invite friends"
 
     @activity_user ||= @activity.activity_users.create(
-      site_id:   @activity.site.id,
+      site_id:   @activity.site_id,
       user_id:   @user.id,
       name:      @wx_user.nickname,
-      mobile:    @user.mobile,
-      address:   @wx_user.address
+      mobile:    @user.mobile
+      # address:   @wx_user.address
     )
 
     @results = @activity_user.aid_results.includes(:user) if @activity_user.present?

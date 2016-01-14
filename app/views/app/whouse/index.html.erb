@@ -8,7 +8,7 @@
 		<div class="flashshow">
 			<div class="flashCont" id="defaultFlash">
 				<% @cover_house_pictures.each_with_index do |picture, i| %>
-				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
+				<a id="defaultflash<%= i %>" href="/app/whouse/flashshow?aid=<%= params[:aid] %>&id=<%= params[:id] %>&hid=<%= params[:hid] %>&flash=<%= i %>" <%= 'class=current' if i == 0 %>><%= image_tag picture.path %></a>
 				<% end %>
 			</div>
 		</div>
@@ -17,7 +17,7 @@
 
 	<% if @house %>
 	<div class="box-cont cont-listTxt">
-		<a href="/app/whouse/intro?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>" class="box-block"><span class="visuallyhidden">链接</span></a>
+		<a href="/app/whouse/intro?aid=<%= params[:aid] %>&id=<%= params[:id] %>&hid=<%= params[:hid] %>" class="box-block"><span class="visuallyhidden">链接</span></a>
 		<p><span class="tleft"><%= @house.name %><em class="ico-intro"><%= @house.house_type_name %></em></span><span class="tright">售价：<b><%= @house.price > 0 ? "#{f @house.price}元/平米" : '待定' %></b></span></p>
 		<p><b>楼盘详情：</b><span><%= @house.intro %></span></p>
 	</div>
@@ -28,7 +28,7 @@
 		<h1>户型展示</h1>
 		<% @house_layouts.each_with_index do |layout, i| %>
 		<div class="box-house box-more <%= i<2 ? 'show' : 'hide' %>">
-			<a href="/app/whouse/layout?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>&hlid=<%= layout.id %>#mp.weixin.qq.com" class="box-block"><span class="visuallyhidden">链接</span></a>
+			<a href="/app/whouse/layout?aid=<%= params[:aid] %>&id=<%= params[:id] %>&hid=<%= params[:hid] %>&hlid=<%= layout.id %>#mp.weixin.qq.com" class="box-block"><span class="visuallyhidden">链接</span></a>
 			<div class="hd">
 				<%= image_tag (layout.house_picture_id? ? layout.house_picture.try(:path) : '/assets/whouse/1.gif'), size: (i<2 ? '' : '309x113') %>
 				</div>
@@ -71,7 +71,7 @@
 		</div>
 		<%# end %>
 		<div class="box-ft">
-			<a href="/app/whouse/impress?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>">点击查看更多或参与评论</a>
+			<a href="/app/whouse/impress?aid=<%= params[:aid] %>&id=<%= params[:id] %>&hid=<%= params[:hid] %>">点击查看更多或参与评论</a>
 		</div>
 
 		<% if @house_expert_comments and @house_expert_comments.count > 0 %>
@@ -92,7 +92,7 @@
 		</div>
 		<% if @house_expert_comments.count >= 1%>
 		<div class="box-ft">
-			<a href="/app/whouse/expert_comments?aid=<%= params[:aid] %>&id=<%= params[:id] %>& %>&hid=<%= params[:hid] %>">点击查看更多专家点评</a>
+			<a href="/app/whouse/expert_comments?aid=<%= params[:aid] %>&id=<%= params[:id] %>&hid=<%= params[:hid] %>">点击查看更多专家点评</a>
 		</div>
 		<%end%>
 		<%end%>

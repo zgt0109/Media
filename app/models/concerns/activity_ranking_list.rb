@@ -1,15 +1,15 @@
 module Concerns::ActivityRankingList
-  
-  RANK_NAMESPACE = "#{Rails.env}:winwemedia:micro_aid:rank:" 
+
+  RANK_NAMESPACE = "#{Rails.env}:winwemedia:micro_aid:rank:"
   READY          = 'ready'
-  FINISHED       = 'finished' 
+  FINISHED       = 'finished'
 
   def rank_key()
     RANK_NAMESPACE + id.to_s
   end
 
   def add_score(score, member)
-    $redis.zincrby rank_key, score.to_i, member.to_s 
+    $redis.zincrby rank_key, score.to_i, member.to_s
   end
 
   def get_score(member)

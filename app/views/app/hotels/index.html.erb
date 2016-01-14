@@ -40,7 +40,7 @@ function toBook(){
 	if(check_in_date >= check_out_date){
 		alert('离店时间必须大于入住时间!');
 	}else{
-		window.location.href = "<%= list_app_hotels_url %>?aid=<%= params[:aid] %>& %>&check_in_date="+check_in_date+"&check_out_date="+check_out_date+"&page=1#mp.weixin.qq.com";
+		window.location.href = "<%= list_app_hotels_url %>?aid=<%= params[:aid] %>&check_in_date="+check_in_date+"&check_out_date="+check_out_date+"&page=1#mp.weixin.qq.com";
 	}
 }
 

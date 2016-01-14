@@ -1,6 +1,6 @@
 module App
   class WheelController < BaseController
-    before_filter :block_non_wx_browser, :require_wx_mp_user
+    before_filter :block_non_wx_browser
 
     def show
       @main_id = "stage"

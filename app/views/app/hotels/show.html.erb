@@ -11,7 +11,7 @@
       <div class="hotel-th"><span><%= link_to pictures_app_hotels_url(hotel_branch_id: @hotel_branch.id, url: url) do %><%= image_tag (@hotel_branch.hotel_pictures.where(is_cover: true).first.try(:path) || '/assets/hotel/1.gif') %><% end %></span></div>
 		<% end %>
     <div class="hotel-td">
-      <p><span class="ico ico-comment" onclick="javascript:window.location.href='<%= app_hotel_comments_url %>?aid=<%= params[:aid] %>& %>&branch_id=<%= @hotel_branch.try(:id) %>'"><%= @hotel_branch.hotel_comments.where('status > ?', HotelComment::DELETED).count %>条评论</span><i class="arrow arr-small"></i></p>
+      <p><span class="ico ico-comment" onclick="javascript:window.location.href='<%= app_hotel_comments_url %>?aid=<%= params[:aid] %>&branch_id=<%= @hotel_branch.try(:id) %>'"><%= @hotel_branch.hotel_comments.where('status > ?', HotelComment::DELETED).count %>条评论</span><i class="arrow arr-small"></i></p>
       <p><span class="ico ico-phone" onclick="javascript:window.location.href='tel:<%= @hotel_branch.tel%>'"><%= @hotel_branch.tel %><%= " 转 #{@hotel_branch.tel_extension}" if @hotel_branch.tel_extension? %></span><i class="arrow arr-small"></i></p>
     </div>
   </div>
@@ -32,7 +32,7 @@
   <div class="box-cont box-list-room">
     <%= render :partial => 'app/hotels/hotel_room_types', :object => @hotel_room_types, :as => :hotel_room_type %>
   </div>
-  <div class="tcenter"><% unless @hotel_room_types.last_page? %><a href="/app/hotels/<%= params[:id] %>?aid=<%= params[:aid] %>& %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>#mp.weixin.qq.com" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a><% end %></div>
+  <div class="tcenter"><% unless @hotel_room_types.last_page? %><a href="/app/hotels/<%= params[:id] %>?aid=<%= params[:aid] %>&check_in_date=<%= params[:check_in_date] %>&check_out_date=<%= params[:check_out_date] %>&page=<%= (params[:page].present? ? params[:page].to_i+1 : 1) %>#mp.weixin.qq.com" class="loading" data-remote="true" rel="next" id="more_loading">点击查看更多...<%= params[:maxpage]%></a><% end %></div>
   <div class="tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
 </div>
 
