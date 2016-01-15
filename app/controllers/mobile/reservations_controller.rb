@@ -27,7 +27,6 @@ class Mobile::ReservationsController < Mobile::BaseController
   end
 
   def reserve
-    binding.pry
     return render json: { ajax_msg: { status: -3 } } if captcha_invalid
     @order = @user.reservation_orders.create(site_id: @activity.site_id, user_id: @user.id, activity_id: @activity.id)
     if @order.persisted?
