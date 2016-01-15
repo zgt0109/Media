@@ -40,11 +40,9 @@ module App
     def check_subscribe
       @activity = Activity.show.find(session[:activity_id])
 
-      @activity_notice ||= @activity.activity_notices.first
-
-      @share_image = @activity_notice.try(:pic_url)
-      @share_title = @activity_notice.try(:title)
-      @share_desc = @activity_notice.try(:summary).try(:squish)
+      @share_image = @activity.try(:pic_url)
+      @share_title = @activity.try(:title)
+      @share_desc = @activity.try(:summary).try(:squish)
 
       if @wx_user.present? #分为已关注(不作处理)和授权获得两种
         @openid=@wx_user.openid
@@ -57,12 +55,13 @@ module App
         end
       else #非认证授权服务号的情况
         @openid=nil
-        if !@activity.require_wx_user? #需要关注的情况
-          return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
-        else #创建虚拟wx_user
-          #use session.id in Rails 4.
-          @wx_user = @wx_mp_user.wx_users.where(openid: request.session_options[:id], site_id: @wx_mp_user.site_id).first_or_create
-        end
+        # if !@activity.require_wx_user? #需要关注的情况
+        #   return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
+        # else #创建虚拟wx_user
+        #   #use session.id in Rails 4.
+        #   @wx_user = @wx_mp_user.wx_users.where(openid: request.session_options[:id], site_id: @wx_mp_user.site_id).first_or_create
+        # end
+        return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
       end
     end
 
