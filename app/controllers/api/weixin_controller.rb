@@ -179,7 +179,7 @@ class Api::WeixinController < Api::BaseController
       when @wx_user.wifi?                                 then WeixinHardware.respond_wifi(@wx_user, @mp_user, @keyword)
       # when @wx_user.hanming_wifi?                         then WeixinHardware.respond_hanming_wifi(@wx_user, @mp_user, @keyword)
       when @keyword == '为爱升级'                         then Weixin.respond_text(@from_user_name, @to_user_name, @mp_user.upgraded_text)
-      when @keyword =~ /\A标签/ && @wx_user.share_photos? then SharePhoto.respond_share_photo(@wx_user, @mp_user, @keyword.from(2).strip)
+      when @keyword =~ /\A标签/ && @wx_user.share_photos? then SharePhoto.respond_share_photo(@wx_user, @mp_user, @keyword.from(2).strip, activity)
       when @keyword =~ /\A语音/ && @wx_user.greet?        then GreetVoice.respond_greet_voice(@wx_user, @mp_user, @keyword.from(2).strip)
       when assistant                                     then assistant.handle_keyword(@mp_user, @from_user_name, @keyword)
       when activity                                      then respond_activity(activity)
