@@ -24,7 +24,7 @@ class SharePhoto < ActiveRecord::Base
 
   def self.respond_share_photo(wx_user, wx_mp_user, keyword)
     share_photo_setting = wx_mp_user.site.share_photo_setting
-    share_photo = share_photo_setting.share_photos.where(user_id: user.id).last
+    share_photo = share_photo_setting.share_photos.where(user_id: wx_user.user_id).last
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '请先上传照片') unless share_photo
 
     share_photo.update_attributes(title: keyword)
@@ -52,7 +52,7 @@ class SharePhoto < ActiveRecord::Base
 
   def self.respond_my_photo(wx_user, wx_mp_user, activity)
     #查看个人晒图模式
-    share_photos = wx_mp_user.site.share_photos.where(user_id: user.id).limit(10).order('id desc')
+    share_photos = wx_mp_user.site.share_photos.where(user_id: wx_user.user_id).limit(10).order('id desc')
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '您还未分享图片！') if share_photos.blank?
     
     if share_photos.count == 1
