@@ -905,7 +905,7 @@ class Activity < ActiveRecord::Base
       when wheel?              then app_wheel_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
       when fight?              then app_fight_index_url(_default_params.merge(anid: activity_notice.id, m: 'index'))
       when slot?               then app_slots_url(_default_params)
-      when hit_egg?            then app_hit_egg_url(_default_params)
+      when hit_egg?            then app_hit_egg_url(_default_params.merge(id: id))
       when wave?               then mobile_waves_url(_default_params)
       when micro_aid?          then mobile_aids_url(_default_params)
       when book_dinner?        then book_dinner_mobile_shops_url(_default_params)
