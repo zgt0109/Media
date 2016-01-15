@@ -899,18 +899,22 @@ class Activity < ActiveRecord::Base
     url = case
       when website?            then mobile_root_url(_default_params)
       when vip?                then app_vips_url(_default_params)
-      when wave?               then mobile_waves_url(_default_params)
+      when coupon?             then mobile_coupons_url(_default_params)
       when consume?            then app_consume_url(_default_params.merge(anid: activity_notice.id, code: option[:code]))
       when gua?                then app_gua_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
       when wheel?              then app_wheel_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
+      when fight?              then app_fight_index_url(_default_params.merge(anid: activity_notice.id, m: 'index'))
+      when slot?               then app_slots_url(_default_params)
+      when hit_egg?            then app_hit_egg_url(activity_notice.try(:activity))
+      when wave?               then mobile_waves_url(_default_params)
+      when micro_aid?          then mobile_aids_url(_default_params)
       when book_dinner?        then book_dinner_mobile_shops_url(_default_params)
       when book_table?         then book_table_mobile_shops_url(_default_params)
-      when fight?              then app_fight_index_url(_default_params.merge(m: 'index'))
       when take_out?           then take_out_mobile_shops_url(_default_params)
+      when micro_store?        then mobile_micro_stores_url(_default_params)
       when enroll?             then new_app_activity_enroll_url(_default_params)
       when surveys?            then return_survey_activity_url(_default_params)
       when reservation?        then mobile_reservations_url(_default_params)
-      when micro_store?        then mobile_micro_stores_url(_default_params)
       when vote?
         stopped? ? mobile_vote_result_url(_default_params.merge(vote_id: id)) : mobile_vote_login_url(_default_params.merge(vote_id: id))
       when house?              then app_house_layouts_url(_default_params)
@@ -922,10 +926,8 @@ class Activity < ActiveRecord::Base
       when life?               then app_lives_url(_default_params.merge(id: activityable_id))
       when circle?             then app_business_circles_url(_default_params.merge(id: activityable_id))
       when message?            then app_leaving_messages_url(_default_params)
-      when hit_egg?            then app_hit_egg_url(activity_notice.try(:activity))
       when house_bespeak?      then new_app_house_market_url(_default_params)
       when house_seller?       then app_house_sellers_url(_default_params)
-      when slot?               then app_slots_url(_default_params)
       when booking?            then mobile_bookings_url(_default_params)
       when group?              then mobile_groups_url(_default_params.merge(id: id))
       when hospital?           then mobile_hospital_doctors_url(_default_params)
@@ -935,9 +937,7 @@ class Activity < ActiveRecord::Base
       when house_live_photo?   then app_house_live_photos_url(_default_params)
       when house_intro?        then app_house_intros_url(_default_params)
       when wbbs_community?     then mobile_wbbs_topics_url(_default_params)
-      when coupon?             then mobile_coupons_url(_default_params)
       when broche?             then mobile_broche_photos_url(_default_params)
-      when micro_aid?          then mobile_aids_url(_default_params)
       when plot_bulletin?      then bulletins_mobile_wx_plots_url(_default_params)
       when plot_repair?        then repair_complains_mobile_wx_plots_url(_default_params.merge(type: 'repair'))
       when plot_complain?      then repair_complains_mobile_wx_plots_url(_default_params.merge(type: 'complain'))
@@ -1078,7 +1078,7 @@ class Activity < ActiveRecord::Base
   end
 
   def default_pic_url
-    qiniu_image_url(default_pic_url)
+    qiniu_image_url(default_pic_key)
   end
 
   def default_pic_key
