@@ -12,7 +12,7 @@ class Mobile::BaseController < ActionController::Base
   def load_data
     # TODO 只投票有用，需要去掉
     # session[:activity_id] = params[:vote_id] if params[:vote_id].present?
-    session[:activity_id] = params[:activity_id] if params[:activity_id].present?
+    # session[:activity_id] = params[:activity_id] if params[:activity_id].present?
     session[:activity_id] = params[:aid] if params[:aid].present?
     session[:activity_notice_id] = params[:anid] if params[:anid].present?
 

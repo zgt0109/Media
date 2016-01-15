@@ -16,7 +16,7 @@ class Mobile::ScenesController < Mobile::BaseController
   private
 
   def set_activity
-    @activity =  @site.activities.scene.show.find_by_id(params[:activity_id]) || @site.activities.scene.find_by_id(session[:activity_id])
+    @activity =  @site.activities.scene.show.find_by_id(params[:aid]) || @site.activities.scene.find_by_id(session[:activity_id])
     return render_404 unless @activity
     @share_image = @activity.share_setting_pic_url || @activity.pic_url
     @share_title = @activity.share_setting_title || @activity.name

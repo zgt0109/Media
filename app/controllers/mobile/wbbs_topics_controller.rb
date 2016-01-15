@@ -122,7 +122,7 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
   private
 
     def find_wbbs_community
-      @activity =  Activity.wbbs_community.find_by_id(params[:activity_id]) || Activity.wbbs_community.find_by_id(session[:activity_id])
+      @activity =  Activity.wbbs_community.find_by_id(params[:aid]) || Activity.wbbs_community.find_by_id(session[:activity_id])
       @wbbs_community = @activity.try(:activityable)
       return render_404 unless @wbbs_community
       if params[:noshare] == 'noshare'

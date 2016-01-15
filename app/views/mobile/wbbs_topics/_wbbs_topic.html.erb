@@ -58,7 +58,7 @@
         <%- if params[:receiver_id].blank? %>
           <a class="fa fa-thumbs-o-up btn-praise <%= 'fa-thumbs-up' if wbbs_topic.voted_up_by?( @user ) %>" data-number="<%= wbbs_topic.up_count %>" data-id="<%= wbbs_topic.id %>" href="javascript:;"><%= wbbs_topic.up_count %></a>
           <%- unless @noshare %>
-            <%= link_to '分享', mobile_wbbs_topic_url(@site, wbbs_topic, activity_id: @activity.id), class: 'fa fa-share-square-o' %>
+            <%= link_to '分享', mobile_wbbs_topic_url(@site, wbbs_topic), class: 'fa fa-share-square-o' %>
           <%- end %>
         <%- end %>
         <%- if wbbs_topic.privates? %>

@@ -86,7 +86,7 @@ class Mobile::RecommendsController < Mobile::BaseController
     end
 
     def find_activity
-      @activity = Activity.recommend.show.find_by_id(params[:activity_id]) || Activity.recommend.show.find_by_id(session[:activity_id])
+      @activity = Activity.recommend.show.find_by_id(session[:activity_id])
       return render_404 unless @activity
       session[:activity_id] ||= params[:activity_id]
       @share_title = "好友向你推荐关注 #{ @wx_mp_user.try(:nickname) } 公众号！"

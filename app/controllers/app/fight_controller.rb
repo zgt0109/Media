@@ -130,7 +130,7 @@ class App::FightController < App::BaseController
         end
       else
         #render text: '对不起,您无权访问此页面!'
-        #redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
+        #redirect_to mobile_unknown_identity_url(@activity.site_id, aid: session[:activity_id])
       end
     else
       redirect_to mobile_notice_url(msg: '活动不存在')

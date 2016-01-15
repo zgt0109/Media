@@ -58,12 +58,12 @@ class Mobile::ReservationsController < Mobile::BaseController
           attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
           @wx_user.update_attributes(attrs) if attrs.present?
           if @wx_user.unsubscribe? && !@reservation.require_wx_user?
-              return redirect_to mobile_unknown_identity_url(@reservation.site_id, activity_id: @reservation.id)
+              return redirect_to mobile_unknown_identity_url(@reservation.site_id, aid: @reservation.id)
           end
         end
       else #非认证授权服务号的情况
         if !@reservation.require_wx_user? #需要关注的情况
-          return redirect_to mobile_unknown_identity_url(@reservation.site_id, activity_id: @reservation.id)
+          return redirect_to mobile_unknown_identity_url(@reservation.site_id, aid: @reservation.id)
         else #创建虚拟wx_user
           #use session.id in Rails 4.
           @wx_user =  WxUser.where(openid: request.session_options[:id], site_id: @wx_mp_user.site_id).first_or_create
@@ -76,9 +76,9 @@ class Mobile::ReservationsController < Mobile::BaseController
     end
 
     def find_reservation
-      @reservation = Activity.reservation.find_by_id(params[:activity_id]) || Activity.reservation.find_by_id(session[:activity_id])
+      Activity.reservation.find_by_id(session[:activity_id])
       return render_404 unless @reservation
-      session[:activity_id] ||= params[:activity_id]
+      session[:activity_id] ||= params[:aid]
       @share_title = @reservation.name
       @share_desc = @reservation.summary.try(:squish)
       @share_image = @reservation.pic_url

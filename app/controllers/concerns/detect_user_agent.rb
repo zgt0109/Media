@@ -70,7 +70,7 @@ module DetectUserAgent
         end
 
         if @activity
-          return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
+          return redirect_to mobile_unknown_identity_url(@activity.site_id, aid: @activity.id)
         else
           return redirect_to mobile_notice_url(msg: '没有获取到微信用户身份')
         end

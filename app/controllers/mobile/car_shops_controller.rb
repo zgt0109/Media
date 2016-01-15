@@ -103,7 +103,7 @@ class Mobile::CarShopsController < Mobile::BaseController
 
   def redirect_unless_wx_user_present
     unless @wx_user.present?
-      return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
+      return redirect_to mobile_unknown_identity_url(@activity.site_id, aid: @activity.id)
     end
   end
 

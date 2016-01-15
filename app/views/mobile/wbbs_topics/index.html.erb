@@ -7,7 +7,7 @@
 
 <section id="sec-index">
     <header class="untoppable">
-        <%= link_to "", mobile_wbbs_topics_url( @site, activity_id: @activity.id ), class: 'fa fa-chevron-left' %>
+        <%= link_to "", mobile_wbbs_topics_url( @site, aid: @activity.id ), class: 'fa fa-chevron-left' %>
         <% if @user.present? && !@user.leave_message_forbidden %>
             <%- if @user.has_info? %>
                 <%- if params[:receiver_id].blank? %>

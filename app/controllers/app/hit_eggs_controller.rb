@@ -66,9 +66,9 @@ class App::HitEggsController < App::BaseController
               end #每人每天中奖次数
 
               lottery_draw = @activity.lottery_draws.create(site_id: @activity.site_id, user_id: session[:user_id], status: 0) if session[:user_id]
-              
+
               logger.info "========砸金蛋返回失败页面"
-              
+
               render 'faild.js'
               return
             else
