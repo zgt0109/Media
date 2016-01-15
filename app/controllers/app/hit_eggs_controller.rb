@@ -1,6 +1,6 @@
 class App::HitEggsController < App::BaseController
   layout 'app/hit_egg'
-  before_filter :block_non_wx_browser, :require_wx_mp_user, :find_activity
+  before_filter :block_non_wx_browser, :find_activity
   
   def show
     redirect_to mobile_notice_url(msg: '商户正在配置活动中') if @activity.setting?
