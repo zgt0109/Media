@@ -3,11 +3,12 @@
     <img src="<%= @activity.bg_pic_url || "/assets/red_packet/index_info.jpg" %>" alt="">
   </div>
   <%= form_for @red_packet_release, url: mobile_red_packets_url, method: :POST, validate: true do |f| %>
+      <%= f.hidden_field :site_id, value: @site.id %>
       <%= f.hidden_field :activity_id, value: @activity.id %>
-      <%= f.hidden_field :user_id, value: @user.user_id %>
+      <%= f.hidden_field :user_id, value: @user.id %>
       <%= f.fields_for :activity_user do |user| %>
           <%= user.hidden_field :activity_id, value: @activity.id %>
-          <%= user.hidden_field :user_id, value: @user.user_id %>
+          <%= user.hidden_field :user_id, value: @user.id %>
           <div class="info">
             <ul>
               <li><h3>用户资料填写</h3></li>

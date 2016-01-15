@@ -83,10 +83,10 @@
       <div class="pop-body" style="margin-top: 100px;">
         <div class="pop-t">信息填写</div>
           <div class="pop-m">
-            <%= form_for (@wx_user.guess_participations.new), url: create_participation_mobile_guess_path, remote: true  do |guess_participation| %>
+            <%= form_for (@user.guess_participations.new), url: create_participation_mobile_guess_path, remote: true  do |guess_participation| %>
               <%= guess_participation.hidden_field :answer %>
               <%= guess_participation.hidden_field :activity_user_id, value: @activity_user.id %>
-              <%= guess_participation.hidden_field :wx_user_id, value: @wx_user.id %>
+              <%= guess_participation.hidden_field :user_id, value: @wx_user.id %>
               <%= guess_participation.hidden_field :question_id, value: @question.id %>
               <%= guess_participation.hidden_field :activity_id, value: @activity.id %>
               <%= guess_participation.hidden_field :activity_question_id, value: @guess_activity_question.id %>
