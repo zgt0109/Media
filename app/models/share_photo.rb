@@ -16,14 +16,14 @@ class SharePhoto < ActiveRecord::Base
   end
 
   def self.respond_create_share_photo(wx_user, wx_mp_user, pic_url)
-    share_photo_setting = site.share_photo_setting
+    share_photo_setting = wx_mp_user.site.share_photo_setting
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '没有数据') unless share_photo_setting
 
     share_photo_setting.respond_create_share_photo(wx_user, pic_url)
   end
 
   def self.respond_share_photo(wx_user, wx_mp_user, keyword)
-    share_photo_setting = site.share_photo_setting
+    share_photo_setting = wx_mp_user.site.share_photo_setting
     share_photo = share_photo_setting.share_photos.where(user_id: user.id).last
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '请先上传照片') unless share_photo
 
@@ -38,6 +38,7 @@ class SharePhoto < ActiveRecord::Base
   end
 
   def self.respond_other_photo(wx_user, wx_mp_user, activity)
+    site = wx_mp_user.site
     share_photo = SharePhoto.where(site_id: activity.site_id).where("user_id != #{wx_user.user_id}").order('RAND()').first
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '还没有人分享图片！') unless share_photo
 
@@ -51,7 +52,7 @@ class SharePhoto < ActiveRecord::Base
 
   def self.respond_my_photo(wx_user, wx_mp_user, activity)
     #查看个人晒图模式
-    share_photos = activity.site.share_photos.where(user_id: user.id).limit(10).order('id desc')
+    share_photos = wx_mp_user.site.share_photos.where(user_id: user.id).limit(10).order('id desc')
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '您还未分享图片！') if share_photos.blank?
     
     if share_photos.count == 1
