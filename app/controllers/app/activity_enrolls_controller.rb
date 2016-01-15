@@ -40,9 +40,9 @@ module App
     def check_subscribe
       @activity = Activity.show.find(session[:activity_id])
 
-      @share_image = @activity.try(:pic_url)
-      @share_title = @activity.try(:title)
-      @share_desc = @activity.try(:summary).try(:squish)
+      @share_image = @activity.pic_url
+      @share_title = @activity.name
+      @share_desc = @activity.summary.try(:squish)
 
       if @wx_user.present? #分为已关注(不作处理)和授权获得两种
         @openid=@wx_user.openid
