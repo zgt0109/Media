@@ -12,7 +12,7 @@ class SubAccount < ActiveRecord::Base
   acts_as_enum :account_type, in: [
     ['shop_account', 1, '门店子账号']
   ]
-  
+
   acts_as_enum :status, in: [
     ['enabled',  1, '已启用'],
     ['disabled', 2, '已停用'],
@@ -29,7 +29,7 @@ class SubAccount < ActiveRecord::Base
 
   def method_missing(m, *args, &block)
     if user.is_a?(ShopBranch)
-      account = user.account
+      account = user.site.account
       if account.respond_to?(m)
         return account.public_send(m, *args, &block)
       end
@@ -40,7 +40,7 @@ class SubAccount < ActiveRecord::Base
   end
 
   def account
-    user.account
+    user.site.account
   end
 
   def app_permissions
@@ -61,6 +61,15 @@ class SubAccount < ActiveRecord::Base
 
   def vip_packages
     user.available_vip_packages.latest
+  end
+
+  # TODO
+  def industry_food?
+    true
+  end
+
+  def industry_takeout?
+    true
   end
 
   private

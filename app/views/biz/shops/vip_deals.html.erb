@@ -765,7 +765,7 @@ function showTip(type, str) {
 }
 
 //套餐发放
-var package_price = <%= raw Hash[current_shop_account.vip_packages.active.latest.pluck(:id, :price)].to_json %>
+var package_price = <%= raw Hash[current_shop_account.site.vip_packages.active.latest.pluck(:id, :price)].to_json %>
 $('#release').on("click", '.save_release', function(e){
   var select_id = $("#vip_package_id").val();
   if($('#vip_package_id').val() == ""){

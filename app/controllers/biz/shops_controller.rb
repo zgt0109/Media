@@ -22,7 +22,7 @@ class Biz::ShopsController < ApplicationController
   end
 
   def consume_reports
-    @activity = current_shop_account.activities.coupon.show.first || current_shop_account.create_activity_for_coupon
+    @activity = current_shop_account.site.activities.coupon.show.first || current_shop_account.site.create_activity_for_coupon
 
     @search = current_shop_branch.consumes.joins("join coupons on coupons.id = consumes.consumable_id AND consumes.consumable_type = 'Coupon'").coupon.used.search(coupon_filter_search)
 
@@ -441,7 +441,7 @@ class Biz::ShopsController < ApplicationController
       session[:sub_account_id] = sub_account_id
 
       signed_in_path = after_sign_in_path
-      return redirect_to shops_sign_in_path(supplier_id: params[:supplier_id]), alert: '商户没有授权该门店管理权限' unless signed_in_path
+      return redirect_to shops_sign_in_path(account_id: params[:account_id]), alert: '商户没有授权该门店管理权限' unless signed_in_path
       redirect_to signed_in_path if request.path != signed_in_path
     end
 

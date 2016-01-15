@@ -36,6 +36,15 @@ class Account < ActiveRecord::Base
   has_many :sms_orders
   has_many :feedbacks
 
+  has_one  :shop, through: :site
+  has_many :shop_branches, through: :shop
+  has_many :shop_branch_sub_accounts, through: :shop_branches, source: :sub_account, conditions: "shop_branches.status = #{ShopBranch::USED}"
+  has_many :shop_orders
+  has_many :shop_table_orders
+  has_many :shop_categories
+  has_many :shop_table_settings
+  has_many :shop_order_reports
+
   def self.current
     Thread.current[:account]
   end

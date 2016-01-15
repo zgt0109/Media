@@ -16,9 +16,9 @@ class Pro::ShopOrdersController < Pro::ShopBaseController
     params[:search][:shop_branch_id_eq] = current_shop_branch.id if current_shop_branch
 
     if session[:current_industry_id] == 10001
-      @search = current_user.shop_orders.where(:order_type =>1).formal.search(params[:search])
+      @search = current_site.shop_orders.where(:order_type =>1).formal.search(params[:search])
     elsif session[:current_industry_id] == 10002
-      @search = current_user.shop_orders.where(:order_type =>2).formal.search(params[:search])
+      @search = current_site.shop_orders.where(:order_type =>2).formal.search(params[:search])
     else
       return redirect_to :back, notice: "请先选择餐饮解决方案"
     end
@@ -124,7 +124,7 @@ class Pro::ShopOrdersController < Pro::ShopBaseController
   end
 
   def report
-    @search = current_user.shop_order_reports
+    @search = current_site.shop_order_reports
     if params[:industry_id].to_i == 10001
       @search = @search.where(order_type: 1)
       @search = @search.where(shop_branch_id: current_shop_branch.id, order_type: 1) if current_shop_branch
@@ -155,10 +155,10 @@ class Pro::ShopOrdersController < Pro::ShopBaseController
     end
     params[:search][:shop_branch_id_eq] = current_shop_branch.id if current_shop_branch
     if session[:current_industry_id].to_i == 10001
-      @search = current_user.shop_orders.book_dinner.search(params[:search])
+      @search = current_site.shop_orders.book_dinner.search(params[:search])
     end
     if session[:current_industry_id].to_i == 10002
-      @search = current_user.shop_orders.take_out.search(params[:search])
+      @search = current_site.shop_orders.take_out.search(params[:search])
     end 
     @shop_orders = @search.select('HOUR(created_at) hour, count(*) total_count').group('HOUR(created_at)')
     if session[:current_industry_id].to_i == 10001

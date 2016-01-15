@@ -19,15 +19,6 @@ class ShopOrder < ActiveRecord::Base
     ['finish',   2,   '已支付']
   ]
 
-  # enum_attr :pay_type, :in => [
-  #   ['offline', 0,  '现金支付'],
-  #   ['alipay',  1,  '支付宝支付'],
-  #   ['wxpayv1', 2,  '微信支付'],
-  #   ['wxpayv2', 4,  '微信支付'],
-  #   ['tenpay',  3,  '财付通支付'],
-  #   ['balance', 5,  '余额支付']
-  # ]
-
   enum_attr :pay_type, :in => [
     ['cashpay', 0,  '现金支付'],
     ['vip_userpay', 10007,  '余额支付'],
@@ -436,7 +427,7 @@ class ShopOrder < ActiveRecord::Base
     if self.user
       # self.user.address = self.address
       self.user.mobile = self.mobile
-      self.user.nickname = self.username
+      # self.user.nickname = self.username
     else
       # self.build_wx_user(address: self.address, mobile: self.mobile, nickname: self.username)
     end

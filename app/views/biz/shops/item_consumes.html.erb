@@ -52,14 +52,14 @@
                 <div class="col-md-3">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">套餐：</span>
-                    <% packages = current_shop_account.vip_card.vip_packages.show.latest.pluck(:name, :id) %>
+                    <% packages = current_shop_account.site.vip_card.vip_packages.show.latest.pluck(:name, :id) %>
                     <%= f.select :vip_package_id_eq, options_for_select(packages.insert(0,['请选择套餐','']), (params[:search][:vip_package_id_eq] if params[:search])), {}, class: "col-xs-12" %>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">服务：</span>
-                    <% items = current_shop_account.vip_card.vip_package_items.normal.latest.pluck(:name, :id) %>
+                    <% items = current_shop_account.site.vip_card.vip_package_items.normal.latest.pluck(:name, :id) %>
                     <%= f.select :vip_package_item_id_eq, options_for_select(items.insert(0,['请选择服务项目','']), (params[:search][:vip_package_item_id_eq] if params[:search])), {}, class: "col-xs-12" %>
                   </div>
                 </div>
