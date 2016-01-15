@@ -67,9 +67,9 @@
                 var nickname = $('#nickname').val();
                 if(nickname){
                     <%- if @user.nickname.blank? %>
-                    var exists_nicknames = <%= raw @wbbs_community.users.pluck(:nickname).to_json %>;
+                    var exists_nicknames = <%= raw @wbbs_community.users.pluck(:name).to_json %>;
                     <%- else %>
-                    var exists_nicknames = <%= raw @wbbs_community.users.where("id != ?", @user.try(:id)).pluck(:nickname).to_json %>;
+                    var exists_nicknames = <%= raw @wbbs_community.users.where("id != ?", @user.try(:id)).pluck(:name).to_json %>;
                     <%- end %>
                     if ($.inArray(nickname, exists_nicknames) >= 0){
                         alert('昵称重复，请重新选择昵称');

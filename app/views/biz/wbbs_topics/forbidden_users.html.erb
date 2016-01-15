@@ -24,8 +24,8 @@
       </tr>
       </thead>
       <tbody>
-        <% if @wx_users.present? %>
-          <%- @wx_users.each do |user| %>
+        <% if @users.present? %>
+          <%- @users.each do |user| %>
             <tr>
               <td><%= user.nickname.present? ? user.nickname : '游客' %></td>
               <td><%= user.wbbs_topics_count %></td>
@@ -42,7 +42,7 @@
         <% end %>
       </tbody>
     </table>
-    <%= paginate @wx_users %>
+    <%= paginate @users %>
   </div>
 </div>
 <%- end %>

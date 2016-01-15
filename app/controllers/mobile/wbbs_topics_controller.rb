@@ -5,17 +5,17 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
 
   def index
     if params[:receiver_id]
-      @receiver = WxUser.find_by_id(params[:receiver_id])
-      @wbbs_topics = @wbbs_community.wbbs_topics.where(receiver_type: 'WxUser', receiver_id: params[:receiver_id], status: [2,3]).recent
+      @receiver = User.find_by_id(params[:receiver_id])
+      @wbbs_topics = @wbbs_community.wbbs_topics.where(receiver_type: 'User', receiver_id: params[:receiver_id], status: [2,3]).recent
     else
       #空间
       @wbbs_topics = @wbbs_community.wbbs_topics.sticked.recent.normal
     end
 
     #我的话题
-    @wbbs_topics = @wbbs_topics.where(poster_type: 'WxUser', poster_id: @wx_user.id) if params.key?( :my )
+    @wbbs_topics = @wbbs_topics.where(poster_type: 'User', poster_id: @user.id) if params.key?( :my )
     #某个用户的话题
-    @wbbs_topics = @wbbs_topics.where(poster_type: 'WxUser', poster_id: params[:poster_id]) if params.key?( :poster_id )
+    @wbbs_topics = @wbbs_topics.where(poster_type: 'User', poster_id: params[:poster_id]) if params.key?( :poster_id )
 
     @wbbs_topics = @wbbs_topics.where("id < ?", params[:id]) if params[:id]
     top_ids = params[:top_ids].split(',') rescue []
@@ -50,10 +50,10 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
   end
 
   def create
-    @wbbs_topic = @wbbs_community.create_wbbs_topics( params[:wbbs_topic][:content], @wx_user )
+    @wbbs_topic = @wbbs_community.create_wbbs_topics( params[:wbbs_topic][:content], @user )
     if @wbbs_topic.persisted?
       @wbbs_topic.update_attributes(status: params[:wbbs_topic][:status]) if params[:wbbs_topic][:status].present?
-      @wbbs_topic.update_attributes(receiver_id: params[:wbbs_topic][:receiver_id].to_i, receiver_type: 'WxUser') if params[:wbbs_topic][:receiver_id].present?
+      @wbbs_topic.update_attributes(receiver_id: params[:wbbs_topic][:receiver_id].to_i, receiver_type: 'User') if params[:wbbs_topic][:receiver_id].present?
       image_keys = params[:image_keys].split(',').compact.flatten rescue []
       image_keys.each do |sn|
         @wbbs_topic.qiniu_pictures.where(sn: sn).first_or_create if sn.present?
@@ -73,7 +73,7 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
   end
 
   def vote_up
-    @wbbs_topic.vote_up!( @wx_user )
+    @wbbs_topic.vote_up!( @user )
     render nothing: true
   end
 
@@ -85,12 +85,12 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
   end
 
   def report
-    @wbbs_topic.report!( @wx_user )
+    @wbbs_topic.report!( @user )
     render js: "alert('举报成功');location.reload();"
   end
 
   def create_reply
-    wbbs_reply = @wbbs_topic.create_reply( params[:wbbs_reply], @wx_user )
+    wbbs_reply = @wbbs_topic.create_reply( params[:wbbs_reply], @user )
     if wbbs_reply.persisted?
       render js: "alert('回复成功'); location.reload();"
     else
@@ -104,7 +104,7 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
   end
 
   def wbbs_notifications
-    @wbbs_notifications = @wx_user.wbbs_notifications.unread.recent rescue WbbsNotification.none
+    @wbbs_notifications = @user.wbbs_notifications.unread.recent rescue WbbsNotification.none
     @wbbs_notifications = @wbbs_notifications.where("id < ?", params[:id]) if params[:id]
     @wbbs_notifications = @wbbs_notifications.page(params[:page])
     respond_to do |format|
@@ -140,6 +140,6 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
     end
 
     def load_unread_notifications_count
-      @notifications_count = @wx_user ? @wx_user.wbbs_notifications.unread.count : 0
+      @notifications_count = @user ? @user.wbbs_notifications.unread.count : 0
     end
 end

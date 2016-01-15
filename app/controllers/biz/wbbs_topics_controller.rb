@@ -38,23 +38,23 @@ class Biz::WbbsTopicsController < ApplicationController
   end
 
   def normal_users
-    @wx_users = @wbbs_community.normal_users.page(params[:page])
+    @users = @wbbs_community.normal_users.page(params[:page])
   end
 
   def forbidden_users
-    @wx_users = @wbbs_community.forbidden_users.page(params[:page])
+    @users = @wbbs_community.forbidden_users.page(params[:page])
   end
 
   def forbid_user
-    @wx_user = @wbbs_community.normal_users.find(params[:id])
-    @wx_user.update_column(:leave_message_forbidden, true)
+    @user = @wbbs_community.normal_users.find(params[:id])
+    @user.update_column(:leave_message_forbidden, true)
     flash[:notice] = "已屏蔽该用户"
     redirect_to :back
   end
 
   def cancel_forbid_user
-    @wx_user = @wbbs_community.forbidden_users.find(params[:id])
-    @wx_user.update_column(:leave_message_forbidden, false)
+    @user = @wbbs_community.forbidden_users.find(params[:id])
+    @user.update_column(:leave_message_forbidden, false)
     flash[:notice] = "已取消屏蔽该用户"
     redirect_to :back
   end

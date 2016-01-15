@@ -1,4 +1,4 @@
-<a <%= "href=\"#{wbbs_notification.notifiable_url}\"".html_safe if wbbs_notification.notifiable_url %>  class="box-hd mod-user hd-message" data-id="<%= wbbs_notification.id %>">
+<a href="<%= mobile_wbbs_topic_path(site_id: @site, id: wbbs_notification.notify_topic.id) %>" class="box-hd mod-user hd-message" data-id="<%= wbbs_notification.id %>">
   <div class="hd-img">
     <img src="<%= wbbs_notification.notifiable.replier_avatar %>">
   </div>
