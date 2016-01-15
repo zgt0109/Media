@@ -32,7 +32,7 @@
     </div>
 </div>
 <%- if (action_name != 'prize' ) && (@prizes.present? || @gift.present?) %>
-<div class="slide-btn"><a href="<%= prize_mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">我的奖品</a></div>
+<div class="slide-btn"><a href="<%= prize_mobile_recommends_path(aid: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>">我的奖品</a></div>
 <%- end %>
 <div class="mod-pop J-sn" style="height: 665px; display: none;">
     <div class="pop-body">
@@ -99,7 +99,7 @@ $('#submit_mobile').on('click', function(){
       target = document.getElementById('submit_mobile');
       new Spinner(opts).spin(target);
 
-      var url = window.encodeURI("/<%= session[:supplier_id] %>/recommends/update_info?prize_id="+prize_id+"&mobile="+consume_mobile);
+      var url = window.encodeURI("/<%= session[:site_id] %>/recommends/update_info?prize_id="+prize_id+"&mobile="+consume_mobile);
        $.ajax({
           type: "POST",
           contentType: "application/json",
@@ -107,7 +107,7 @@ $('#submit_mobile').on('click', function(){
           dataType: 'json',
           success: function (data) {
               if (data.status && data.status == 'ok'){
-                location.href="<%= mobile_recommends_path(activity_id: @activity.id, openid: @wx_user.openid) %>"
+                location.href="<%= mobile_recommends_path(aid: @activity.id, openid: @wx_user.openid) %>"
               }
           }
       })
