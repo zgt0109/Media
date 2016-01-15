@@ -85,15 +85,17 @@
   <span class="speed2"></span>
   <%= render "operations" %>
 </section>
+
 <a class="bgcover"></a>
+
 <div class="pop tomorrow">
-<img src="/assets/img/lottery/btn_tormmrow.png">
+  <img src="/assets/img/lottery/btn_tormmrow.png">
 </div>
 <div class="pop nochange">
-<img src="/assets/img/lottery/btn_nochange.png">
+  <img src="/assets/img/lottery/btn_nochange.png">
 </div>
 <div class="pop getpri">
-<p class="til"><img src="/assets/img/lottery/gift_pri.png"></p>
+  <p class="til"><img src="/assets/img/lottery/gift_pri.png"></p>
   <p class="showpri"></p>
   <p class="int"><%= @activity.activity_property.display_win_tip %></p>
   <input type="text" class="inp" value="<%= @user.try(:related_mobile) %>" id="phone">

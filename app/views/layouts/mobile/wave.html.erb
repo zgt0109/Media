@@ -46,11 +46,11 @@
     $.ajax({
       type: "POST",
       contentType: "application/json",
-      url: '/<%= session[:supplier_id] %>/waves/draw_prize?acid='+acid+'&mobile='+mobile+'&'+Math.random(),
+      url: '/<%= session[:site_id] %>/waves/draw_prize?acid='+acid+'&mobile='+mobile+'&'+Math.random(),
       dataType: 'json',
       timeout:30000,
       success: function (data) {
-        window.location.href='/<%= session[:supplier_id] %>/waves/prizes?activity_id=<%= @activity.try(:id) %>&simulate=<%= session[:simulate] %>'
+        window.location.href='/<%= session[:site_id] %>/waves/prizes?aid=<%= @activity.try(:id) %>&simulate=<%= session[:simulate] %>'
       },
       error: function(e){
       }
