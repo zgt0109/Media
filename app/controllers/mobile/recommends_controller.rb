@@ -45,7 +45,7 @@ class Mobile::RecommendsController < Mobile::BaseController
         base_count =  prize.prize_count - prize.consumes.count
         limit_count =  prize.recommends_count - @invites.count
         if base_count > 0 && limit_count <= 0
-          consume = prize.consumes.create(user_id: @user.id, consumable_type: 'Activity', consumable_id: @activity.id, expired_at:  @activity.end_at, mobile: params[:mobile])
+          consume = prize.consumes.create(site_id: @site_id, user_id: @user.id, consumable_type: 'Activity', consumable_id: @activity.id, expired_at:  @activity.end_at, mobile: params[:mobile])
           consume.auto_use_point_prize_consume!
           @participate.update_attributes(prize_status: WxParticipate::GOT_PRIZE, prize_title: prize.title)
           @user.update_attributes(mobile: params[:mobile])

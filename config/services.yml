@@ -5,7 +5,7 @@ common: &common
   sms_service: 'zhilian'
   zhilian_url: 'http://61.145.229.29:9003/MWGate/wmgw.asmx'
   zhilian_user_id: 'J02110'
-  zhilian_password: '599651'
+  zhilian_password: '696896'
   uploads_dir: <%= "#{Rails.root}/public/uploads" %>
   yeepay:
     yeepay_host: "http://ok.yeepay.com/"
