@@ -76,7 +76,7 @@ class WbbsTopic < ActiveRecord::Base
 
   def visible_for?( user )
     return true  if user.nil? || user == poster
-    return !poster.wx.user.leave_message_forbidden? if poster.is_a?(User)
+    return !poster.leave_message_forbidden if poster.is_a?(User)
   end
 
   def privates_visible_for?( user )

@@ -30,11 +30,11 @@ class LeavingMessage < ActiveRecord::Base
   end
 
   def forbid_replier!
-    replier.update_attributes(leave_message_forbidden: true)
+    replier.wx_user.update_attributes(leave_message_forbidden: true)
   end
 
   def cancel_forbid_replier!
-    replier.update_attributes(leave_message_forbidden: false)
+    replier.wx_user.update_attributes(leave_message_forbidden: false)
   end
 
   def replier_status
