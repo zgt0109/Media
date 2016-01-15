@@ -45,6 +45,7 @@ class WxWallUser < ActiveRecord::Base
   end
 
   def self.reply_or_create(wx_user, activity)
+    user = wx_user.user
     wx_wall_user = user.wx_wall_users.where(wx_wall_id: activity.activityable_id).first
     return wx_wall_user.reply_welcome_message if wx_wall_user
     wx_wall_user = user.wx_wall_users.create(wx_wall_id: activity.activityable_id, nickname: wx_user.nickname, avatar: wx_user.headimgurl, matched_at: Time.now)
