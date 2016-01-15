@@ -3,7 +3,7 @@
 	<% if @activity.ready_at <= Time.now and Time.now < @activity.start_at %>
     <a class="btn btn-blue"><span>团购即将开始</span></a>
     <% elsif (@activity.start_at <= Time.now and Time.now <= @activity.end_at) and @activity.setted? %>
-    <%= link_to new_app_activity_group_url(id: @activity.id), class: "btn btn-red" do %><span>报名参团</span><% end %>
+    <%= link_to new_app_activity_group_url(aid: @activity.id), class: "btn btn-red" do %><span>报名参团</span><% end %>
     <% elsif @activity.end_at < Time.now %>
     <a class="btn btn-blue"><span>团购已结束</span></a>
     <% end %>
