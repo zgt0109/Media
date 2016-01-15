@@ -6,36 +6,25 @@
           <li><%= link_to '微官网', websites_path %></li>
           <li><%= link_to '个性域名', qrcode_websites_path %></li>
         </ul>
-        <!-- .breadcrumb -->
         <%= render '/layouts/qrcode' %>
-
       </div>
 
       <div class="page-content">
-
-
         <div class="row">
           <div class="col-sm-12">
-            <!-- PAGE CONTENT BEGINS -->
-
             <div class="alert alert-block alert-info">
               <strong class="pull-left">提示：</strong>
               <ul class="vwebsiteHeadAlert">
                 <li> 1、将微官网地址生成二维码，可以拓宽您的推广渠道，用户只要扫一扫二维码，就可以通过浏览器打开您的微官网；</li>
                 <li> 2、拥有个性化域名有助于推广您的公众号，也可以提升您产品和企业的品牌；</li>
-                <li> 3、个性化域名只允许设定一次，设定好以后将不能再进行修改；</li>
-
+                <!-- <li> 3、个性化域名只允许设定一次，设定好以后将不能再进行修改；</li> -->
               </ul>
-
-
             </div>
-
-
           </div>
-          <div class=" col-sm-12">
 
+          <div class=" col-sm-12">
             <div>
-              <span class="custom_domain">当前微官网网址：<%= "#{Settings.mhostname}/#{@website.custom_domain}" %></span>
+              <span class="custom_domain">当前微官网网址：<%= "#{mobile_domain}/#{@website.custom_domain}" %></span>
             </div>
 
             <div class="websiteqr">
@@ -53,17 +42,16 @@
             </div>
 
             <div class="clearfix"></div>
-            <div class="setDomin">
+<!--             <div class="setDomin">
               <label class="control-label clearfix">请设定个性化域名</label>
               <div class="">
-                <span><%= "http://#{Settings.mhostname}/"%><a href="#" id="domainName" exist="<%= @website_domain.present? ? 'true' : 'false' %>"><%= @website_domain.present? ?  @website_domain : '点击设置个性化域名' %></a></span>
+                <span><%= "http://#{mobile_domain}/"%><a href="#" id="domainName" exist="<%= @website_domain.present? ? 'true' : 'false' %>"><%= @website_domain.present? ?  @website_domain : '点击设置个性化域名' %></a></span>
               </div>
             </div>
-
+ -->
           </div>
 
         </div>
-        <!-- /.page-content -->
       </div>
     </div>
 <% end %>
@@ -90,7 +78,7 @@
                         $('#domainName').html(newValue);
                         $('#domainName').attr('exist', true);
                         $('.form-control.input-sm').val(newValue);
-                        $('.custom_domain').html('当前微官网网址：<%= "#{MOBILE_SUB_DOMAIN}.winwemedia.com/" %>' + newValue);
+                        $('.custom_domain').html('当前微官网网址：<%= "#{mobile_domain}/" %>' + newValue);
                         showTip('success', response['info']);
                         $('.ace-thumbnails li img').replaceWith(response['img']);
                     }

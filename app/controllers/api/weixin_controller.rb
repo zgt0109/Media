@@ -11,7 +11,7 @@ class Api::WeixinController < Api::BaseController
   end
 
   def host
-    "http://#{Settings.mhostname}"
+    "http://#{@mp_user.site.id}.#{Settings.mhostname}"
   end
 
   def service

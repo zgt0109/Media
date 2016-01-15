@@ -38,7 +38,7 @@
 									<!-- <td></td> -->
 									<td>
 										<div class="wedding_qrcode"></div>
-										<%#= image_tag RQRCode::QRCode.new(URI.encode("http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}&title=#{it.content}"), size: 14, level: :l).to_img.resize(100,100).to_data_url %>
+										<%#= image_tag RQRCode::QRCode.new(URI.encode("http://#{mobile_domain}/#{@wedding.site_id}/weddings?wid=#{@wedding.id}&title=#{it.content}"), size: 14, level: :l).to_img.resize(100,100).to_data_url %>
 									</td>
 									<td class="">
 										<%= link_to '删除', wedding_qr_code_path(@wedding,it), data: {toggle: "modals", confirm: "确定要删除？", target: "delModel", url: wedding_qr_code_path(@wedding,it), method: "delete"}, method: :delete %>
@@ -67,7 +67,7 @@
 			});
 
 			var txt = encodeURI($(el).parent().siblings().first().text());
-      var txt = encodeURI( '<%= "http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}&title=" %>' + $(el).parent().siblings().first().text() );
+      var txt = encodeURI( '<%= "http://#{mobile_domain}/#{@wedding.site_id}/weddings?wid=#{@wedding.id}&title=" %>' + $(el).parent().siblings().first().text() );
 			qrcode.makeCode(txt);
 
 		});

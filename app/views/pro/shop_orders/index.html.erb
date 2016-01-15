@@ -175,7 +175,7 @@
                   </tr>
               <% end %>
               <% if @shop_orders.blank? %>
-                  <tr><td colspan="9">无记录</td></tr>
+                  <tr><td colspan="<%= current_user.industry_takeout? ? 12 : 9 %>">无记录</td></tr>
               <% end %>
 
               </tbody>

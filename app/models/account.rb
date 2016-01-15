@@ -162,6 +162,19 @@ class Account < ActiveRecord::Base
     true
   end
 
+  def has_industry_for?(id)
+    true
+  end
+
+  # TODO
+  def industry_food?
+    true
+  end
+
+  def industry_takeout?
+    true
+  end
+
   def need_auth_mobile?
     auth_mobile.to_i != 1
   end

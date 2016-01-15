@@ -15,7 +15,7 @@
           <p>用微信扫描二维码打开喜帖，点击右上角图片，转发给朋友或朋友圈。</p>
           <p>
             <!-- <img src="/assets/qr.jpg"> -->
-						<%= image_tag RQRCode::QRCode.new(URI.encode("http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}"), size: 8).to_img.resize(170,170).to_data_url %>
+						<%= image_tag RQRCode::QRCode.new(URI.encode("http://#{mobile_domain}/#{@wedding.site_id}/weddings?wid=#{@wedding.id}"), size: 8).to_img.resize(170,170).to_data_url %>
           </p>
         </div>
         <div class="col-xs-6">
@@ -56,7 +56,7 @@
     });
 
     sync_txt_to_qrcode = function(){
-      var txt = encodeURI( '<%= "http://#{Settings.mhostname}/#{@wedding.supplier.id}/weddings?wid=#{@wedding.id}&title=" %>' + $("#qrcode_text").val() );
+      var txt = encodeURI( '<%= "http://#{mobile_domain}/#{@wedding.site_id}/weddings?wid=#{@wedding.id}&title=" %>' + $("#qrcode_text").val() );
       qrcode.makeCode(txt);
     };
 
@@ -76,10 +76,6 @@
 				setTimeout("$('.qr_code_msg').fadeOut()",3000);
 			}
 		});
-
-
-
-
 
     $("#qr_code_list").on('click', function(){
       parent.location.href="/weddings/<%=@wedding.id%>/wedding_qr_codes"

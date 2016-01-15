@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   # before_filter :check_auth_mobile
 
   helper_method :current_user, :services_config, :current_shop_account, :current_sub_account, :current_shop_branch
-  helper_method :current_site, :mobile_subdomain
+  helper_method :current_site, :mobile_subdomain, :mobile_domain
 
   private
 
@@ -77,6 +77,10 @@ class ApplicationController < ActionController::Base
 
   def mobile_subdomain(site_id = current_site.id)
     @mobile_subdomain = [site_id.to_s, MOBILE_SUB_DOMAIN].join('.')
+  end
+
+  def mobile_domain(site_id = current_site.id)
+    @mobile_subdomain = [site_id.to_s, Settings.mhostname].join('.')
   end
 
   def required_sign_in

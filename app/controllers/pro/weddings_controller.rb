@@ -3,7 +3,7 @@ class Pro::WeddingsController < Pro::WeddingsBaseController
 
   def index
     conn = Wedding.get_conditions params
-    @weddings = current_user.weddings.includes(:activity).where(conn).order("weddings.created_at desc").page(params[:page])
+    @weddings = current_site.weddings.includes(:activity).where(conn).order("weddings.created_at desc").page(params[:page])
   end
 
   def edit_template
@@ -22,12 +22,12 @@ class Pro::WeddingsController < Pro::WeddingsBaseController
   end
 
   def edit
-    @activity = @wedding.activity || current_user.wx_mp_user.create_activity_for_wedding
+    @activity = @wedding.activity || current_site.create_activity_for_wedding
   end
 
   def new
-    @wedding ||= current_user.weddings.new
-    @activity = current_user.wx_mp_user.create_activity_for_wedding
+    @wedding ||= current_site.weddings.new
+    @activity = current_site.create_activity_for_wedding
   end
 
   def cities
@@ -35,10 +35,10 @@ class Pro::WeddingsController < Pro::WeddingsBaseController
   end
 
   def create
-    @activity = current_user.wx_mp_user.create_activity_for_wedding
+    @activity = current_site.create_activity_for_wedding
     if @activity.update_attributes params[:activity]
-      attrs    = { wx_mp_user: current_user.wx_mp_user, activity: @activity }
-      wedding = current_user.weddings.new params[:wedding].merge(attrs)
+      attrs    = { activity: @activity }
+      wedding = current_site.weddings.new params[:wedding].merge(attrs)
       if wedding.save
         flash[:notice] = '保存成功'
       else
@@ -51,10 +51,10 @@ class Pro::WeddingsController < Pro::WeddingsBaseController
   end
 
   def create_old
-    @activity = current_user.wx_mp_user.create_activity_for_wedding
+    @activity = current_site.create_activity_for_wedding
     @activity.update_attributes params[:wedding].delete(:activity_attributes)
-    attrs    = { wx_mp_user: current_user.wx_mp_user, activity: @activity }
-    @wedding  = current_user.weddings.build params[:wedding].merge(attrs)
+    attrs    = { activity: @activity }
+    @wedding  = current_site.weddings.build params[:wedding].merge(attrs)
     if @wedding.save
       flash[:notice] = '保存成功'
       render inline: '<script>parent.document.location = parent.document.location;</script>';
@@ -85,7 +85,7 @@ class Pro::WeddingsController < Pro::WeddingsBaseController
   end
 
   def update
-    @activity = @wedding.activity || current_user.wx_mp_user.create_activity_for_wedding
+    @activity = @wedding.activity || current_site.create_activity_for_wedding
     if @activity.update_attributes(params[:activity]) and @wedding.update_attributes(params[:wedding])
       flash[:notice] = '修改成功'
       redirect_to weddings_path
@@ -97,7 +97,7 @@ class Pro::WeddingsController < Pro::WeddingsBaseController
   end
 
   def set_seats_status
-    wedding = current_user.wedding
+    wedding = current_site.wedding
     if wedding.update_column(:seats_status, wedding.seats_status * (-1))
       render json: { success: 1}
     else
