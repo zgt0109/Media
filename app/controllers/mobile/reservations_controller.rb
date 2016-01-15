@@ -7,15 +7,15 @@ class Mobile::ReservationsController < Mobile::BaseController
   helper_method :captcha_invalid
 
   def index
-    @orders = @wx_user.try(:reservation_orders).where(activity_id: @reservation.id).order('created_at DESC') rescue []
+    @orders = @user.try(:reservation_orders).where(activity_id: @reservation.id).order('created_at DESC') rescue []
   end
 
   def detail
-    redirect_to mobile_reservations_url unless @order.user_id.to_i == @wx_user.id
+    redirect_to mobile_reservations_url unless @order.user_id.to_i == @user.id
   end
 
   def result
-    redirect_to mobile_reservations_url unless @order.user_id.to_i == @wx_user.id
+    redirect_to mobile_reservations_url unless @order.user_id.to_i == @user.id
   end
 
   def new
@@ -30,8 +30,9 @@ class Mobile::ReservationsController < Mobile::BaseController
   end
 
   def reserve
+    binding.pry
     return render json: { ajax_msg: { status: -3 } } if captcha_invalid
-    @order = @wx_user.reservation_orders.create(site_id: @reservation.site_id, user_id: @user.id, activity_id: @reservation.id)
+    @order = @user.reservation_orders.create(site_id: @reservation.site_id, user_id: @user.id, activity_id: @reservation.id)
     if @order.persisted?
       params[:custom_field].to_a.each do |key, value|
         field = CustomField.find(key)
