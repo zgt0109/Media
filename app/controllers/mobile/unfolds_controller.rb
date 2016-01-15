@@ -66,7 +66,7 @@ class Mobile::UnfoldsController < Mobile::BaseController
 
   def help_friend
     if params[:origin_openid].present?
-      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first
+      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first.user
       if from_wx_user.present? && from_wx_user.wx_participates.where(activity_id: @activity.id).exists?
         begin
           WxInvite.where(from_user_id: from_wx_user.id, to_user_id: @user.id, wx_invitable_id: @activity.id, wx_invitable_type: 'Activity').first_or_create
