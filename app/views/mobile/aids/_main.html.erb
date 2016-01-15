@@ -57,20 +57,20 @@
           <div class="main-action">
             <%= link_to "邀请好友为他助力", "javascript:;", class: "btn main-btn main-left main-btn-share" %>
             <% if self_joined? %>
-              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id), class: "btn main-btn main-right main-btn-join" %>
             <% else #self_joined %>
-              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id), class: "btn main-btn main-right main-btn-join" %>
             <% end #self_joined %>
           </div>
         <% else #aided? %>
           <div class="main-action">
-            <%= link_to "助好友一臂之力", friend_aid_mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id, owner_openid: @owner_user.openid), method: "post", remote: true, class: "btn main-btn main-left main-btn-help main-btn-help" %>
+            <%= link_to "助好友一臂之力", friend_aid_mobile_aids_url(site_id: @activity.site_id, owner_openid: @owner_user.openid), method: "post", remote: true, class: "btn main-btn main-left main-btn-help main-btn-help" %>
             <%= link_to "邀请好友为他助力", "javascript:;", class: "btn main-btn main-left main-btn-share main-btn-hidden" %>
 
             <% if self_joined? %>
-              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id), class: "btn main-btn main-right main-btn-join" %>
             <% else #self_joined %>
-              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id), class: "btn main-btn main-right main-btn-join" %>
             <% end #self_joined %>
           </div>
         <% end #aided? %>
@@ -83,7 +83,7 @@
               <% if accepted? %>
                 <a href="javascript:;" class="btn main-btn main-btn-full"><%= "您的" + (@prize.present? && @prize.title.to_s || '') + "已领取" %></a>
               <% else %>
-                <a href="<%= award_mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) %>" class="btn main-btn main-btn-full">兑取奖品</a>
+                <a href="<%= award_mobile_aids_url(site_id: @activity.site_id) %>" class="btn main-btn main-btn-full">兑取奖品</a>
               <% end %>
             </div>
           <% else # received? %>
@@ -101,7 +101,7 @@
           <div class="main-action">
             <% if self_joined? %>
               <a href="javascript:;" class="btn main-btn main-left"><%= "您朋友获得"+ (@prize.present? && @prize.title.to_s || '') %></a>
-              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id), class: "btn main-btn main-right" %>
+              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id), class: "btn main-btn main-right" %>
             <% else #self_joined  %>
               <a href="javascript:;" class="btn main-btn main-btn-full"><%= "您朋友获得"+ (@prize.present? && @prize.title.to_s || '') %></a>
             <% end #self_joined %>
@@ -110,7 +110,7 @@
           <div class="main-action">
             <% if self_joined? %>
               <a href="javascript:;" class="btn main-btn main-left">您朋友没有获奖</a>
-              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id), class: "btn main-btn main-right" %>
+              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id), class: "btn main-btn main-right" %>
             <% else #self_joined %>
               <a href="javascript:;" class="btn main-btn main-btn-full">您朋友没有获奖</a>
             <% end #self_joined %>

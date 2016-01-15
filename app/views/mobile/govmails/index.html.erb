@@ -46,7 +46,7 @@
 function handleMail(mail_type) {
     <%- if @user.present? %>
         if(mail_type == 'my') {
-             location.href= "<%= my_mobile_govmails_url(activity_id: @activity.id)%>"
+             location.href= "<%= my_mobile_govmails_url(aid: @activity.id)%>"
         }else{
             location.href="<%= new_mobile_govmail_url %>?box="+ mail_type;
         }

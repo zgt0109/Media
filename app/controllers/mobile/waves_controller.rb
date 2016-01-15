@@ -126,7 +126,7 @@ class Mobile::WavesController < Mobile::BaseController
 
   private
   def set_activity
-    @activity =  @site.activities.wave.setted.find_by_id(params[:activity_id]) || @site.activities.wave.setted.find_by_id(session[:activity_id])
+    @activity =  @site.activities.wave.setted.find_by_id(params[:aid]) || @site.activities.wave.setted.find_by_id(session[:activity_id])
     return render_404 unless @activity
     @share_image = @activity.pic_url
     @share_title = @activity.name

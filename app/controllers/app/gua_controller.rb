@@ -3,7 +3,7 @@ class App::GuaController < App::BaseController
 
   def show
     @activity_notice = ActivityNotice.where(id: params[:anid]).first
-    @activity = @site.activities.gua.find_by_id(params[:id]) || @activity_notice.try(:activity)
+    @activity = @site.activities.gua.find_by_id(session[:activity_id]) || @activity_notice.try(:activity)
     return render_404 unless @activity
 
     @share_image = @activity_notice.try(:pic_url)

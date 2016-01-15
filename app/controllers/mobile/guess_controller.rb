@@ -127,7 +127,7 @@ class Mobile::GuessController < Mobile::BaseController
 
     def find_activity
       @not_show_mark = true
-      @activity = Activity::GuessActivity.setted.find_by_id(params[:activity_id]) || Activity::GuessActivity.setted.find_by_id(session[:activity_id])
+      @activity = Activity::GuessActivity.setted.find_by_id(session[:activity_id])
       return render_404 unless @activity
       session[:activity_id] ||= params[:activity_id]
       @share_title = @activity.name

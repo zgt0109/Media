@@ -7,7 +7,7 @@
 
 <section id="sec-index">
   <header class="untoppable">
-    <%= link_to "", mobile_wbbs_topics_url( @site , activity_id: @activity.id), class: 'fa fa-chevron-left' %>
+    <%= link_to "", mobile_wbbs_topics_url( @site , aid: @activity.id), class: 'fa fa-chevron-left' %>
     <% if @user.present? && !@user.leave_message_forbidden %>
       <a href="javascript:;" class="commentable"><i class="fa fa-comment-o"></i>回复</a>
       <a class="fa fa-ellipsis-h <%= 'mod-tip-number' if @notifications_count > 0 %>" href="javascript:;" onclick="showPop('#pop-more')"><i><%= @notifications_count if @notifications_count > 0 %></i></a>
@@ -22,7 +22,7 @@
         喜欢这个话题，请点击右上角图标分享<i class="fa fa-share"></i>
       </div>
     <%- end %>
-    <a href="<%= mobile_wbbs_topics_url(@site, activity_id: @activity.id) %>" class="mod-hd mod-user hd-detail mod-fa fa fa-angle-right">
+    <a href="<%= mobile_wbbs_topics_url(@site, aid: @activity.id) %>" class="mod-hd mod-user hd-detail mod-fa fa fa-angle-right">
       <div class="hd-img">
         <%= image_tag @wbbs_community.logo_url %>
       </div>

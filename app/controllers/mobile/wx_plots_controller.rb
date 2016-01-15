@@ -27,7 +27,7 @@ class Mobile::WxPlotsController < Mobile::BaseController
 
   def repair_complain
     @share_image = params[:type] == 'repair' ? @site.activity_wx_plot_repair.try(:qiniu_pic_url) : @site.activity_wx_plot_complain.try(:qiniu_pic_url)
-    @message = @repair_complain.messages.new(messageable_id: session[:user_id], messageable_type: 'WxUser')
+    @message = @repair_complain.messages.new(messageable_id: session[:user_id], messageable_type: 'User')
   end
 
   def new_repair_complain

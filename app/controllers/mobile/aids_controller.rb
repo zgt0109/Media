@@ -4,8 +4,8 @@ class Mobile::AidsController < Mobile::BaseController
   before_filter :auth_with_user_info, if: -> { @wx_mp_user.manual? and !@wx_user.try(:has_info?) }
   before_filter :authorize_with_user_info, if: -> { @wx_mp_user.plugin? and !@wx_user.try(:has_info?) }
 
-  before_filter :block_non_wx_browser, :mobile_params, :block_none_wx_user, :find_activity, :require_owner_user_none_self
-  #before_filter :mobile_params, :find_activity, :require_owner_user_none_self
+  before_filter :block_non_wx_browser, :block_none_wx_user, :find_activity, :require_owner_user_none_self
+  #before_filter :find_activity, :require_owner_user_none_self
   before_filter :wx_share_setting
 
   helper_method :aided?, :self?, :prized?, :received?, :accepted?, :self_joined?, :rank_reached?, :auto_retry_received?
@@ -24,7 +24,7 @@ class Mobile::AidsController < Mobile::BaseController
 =begin
       activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
       if self? && activity_consume.present? && activity_consume.unused?
-        redirect_to award_mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id, consume_id: activity_consume.id)
+        redirect_to award_mobile_aids_url(site_id: @activity.site_id, consume_id: activity_consume.id)
       end
 =end
     end
@@ -294,7 +294,7 @@ class Mobile::AidsController < Mobile::BaseController
     if @owner_user.present?
       @activity_user ||= @activity.activity_users.where(user_id: @owner_user.user_id).first
 
-      return redirect_to mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) unless @activity_user.present?
+      return redirect_to mobile_aids_url(site_id: @activity.site_id) unless @activity_user.present?
     end
 
     @activity_user ||= @activity.activity_users.where(user_id: @user.id).first
@@ -315,7 +315,7 @@ class Mobile::AidsController < Mobile::BaseController
 
   def require_owner_user_none_self
     unless self?
-      redirect_to mobile_aids_url(site_id: @activity.site_id, activity_id: @activity.id) unless @owner_user.present?
+      redirect_to mobile_aids_url(site_id: @activity.site_id) unless @owner_user.present?
     end
   end
 
@@ -444,7 +444,4 @@ class Mobile::AidsController < Mobile::BaseController
     @share_image = @activity.try(:pic_url)
   end
 
-  def mobile_params
-    session[:activity_id] = params[:aid] if params[:aid].present?
-  end
 end

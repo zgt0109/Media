@@ -106,7 +106,7 @@ class Mobile::WebsitesController < ActionController::Base
 
   def unknown_identity
     @wx_mp_user = WxMpUser.where(site_id: params[:site_id].to_i).first
-    @activity = Activity.where(id: params[:activity_id].to_i).first
+    @activity = Activity.where(id: params[:aid].to_i).first
     render layout: false
   end
 

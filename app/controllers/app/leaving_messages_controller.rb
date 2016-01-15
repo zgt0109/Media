@@ -8,7 +8,7 @@ module App
       site = @activity.site
       @replier = site.users.find_by_id(session[:user_id])
 
-      @message = LeavingMessage.new(replier_id: session[:user_id], replier_type: 'WxUser')
+      @message = LeavingMessage.new(replier_id: session[:user_id], replier_type: 'User')
 
       @messages = site.leaving_messages.root
       @messages = @messages.audited if @activity.audited?

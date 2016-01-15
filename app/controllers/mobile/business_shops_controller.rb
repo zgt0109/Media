@@ -68,7 +68,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
   end
 
   def create_comment
-    @comment = @business_shop.comments.new(params[:comment].merge(commenter_id: session[:user_id], commenter_type: 'WxUser', site_id: @site.id))
+    @comment = @business_shop.comments.new(params[:comment].merge(commenter_id: session[:user_id], commenter_type: 'User', site_id: @site.id))
     if Comment.already_today?(session[:user_id], @business_shop.id)
       redirect_to :back, alert: "您今天已经发表过评论了！"
     elsif @comment.save

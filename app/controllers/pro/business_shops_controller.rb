@@ -105,7 +105,7 @@ class Pro::BusinessShopsController < WebsiteShared::WebsiteBaseController
   end
 
   def delete_group_activities
-    @business_shop.activities_business_shops.where(activity_id: params[:activity_id]).delete_all
+    @business_shop.activities_business_shops.where(activity_id: params[:aid]).delete_all
     render js: "showTip('success', '操作成功');window.location.reload();"
   end
 

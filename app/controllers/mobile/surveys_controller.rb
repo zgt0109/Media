@@ -99,12 +99,12 @@ class Mobile::SurveysController < Mobile::BaseController
         attrs = Weixin.get_wx_user_info(@wx_mp_user, @wx_user.openid)
         @wx_user.update_attributes(attrs) if attrs.present?
         if @wx_user.unsubscribe? && !@activity.require_wx_user?
-          return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
+          return redirect_to mobile_unknown_identity_url(@activity.site_id, aid: @activity.id)
         end
       end
     else #非认证授权服务号的情况
       if !@activity.require_wx_user? #需要关注的情况
-        return redirect_to mobile_unknown_identity_url(@activity.site_id, activity_id: @activity.id)
+        return redirect_to mobile_unknown_identity_url(@activity.site_id, aid: @activity.id)
       else #创建虚拟wx_user
         #use session.id in Rails 4.
         # session[:request_session_id] ||= request.session_options[:id]
