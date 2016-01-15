@@ -84,7 +84,7 @@
               setTimeout(function(){
                   self.removeClass("first").addClass("second");
                   $("#scene-index").delay(1000).fadeOut(function(){
-                      var url = "<%= hit_egg_app_hit_eggs_url(id: @activity.id) %>";
+                      var url = "<%= hit_egg_app_hit_eggs_url(aid: @activity.id) %>";
                       var data = $("#new_activity_enroll").serialize();
                       $.get(url, data, 'script');
                   });
