@@ -15,6 +15,7 @@ class Guess::Participation < ActiveRecord::Base
       self.answer_correct = true
       coupon = activity.guess_setting.prize
       consume = user.consumes.create(
+        site_id: user.site_id,
         consumable:    coupon,
         expired_at:    coupon.use_end
       )

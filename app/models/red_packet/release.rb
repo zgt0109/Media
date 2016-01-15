@@ -28,6 +28,6 @@ class RedPacket::Release < ActiveRecord::Base
     end
 
     def create_release_consume
-      self.create_consume(user_id: user.id, mobile: activity_user.mobile)
+      self.create_consume(site_id: user.site_id, user_id: user.id, mobile: activity_user.mobile)
     end
 end

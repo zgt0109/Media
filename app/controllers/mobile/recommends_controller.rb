@@ -10,14 +10,14 @@ class Mobile::RecommendsController < Mobile::BaseController
     end
 
     if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
-      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first
-      if from_wx_user.present?
-        from_wx_user_participate =  WxParticipate.normal.where(user_id: from_wx_user.id, activity_id: @activity.id).first
+      from_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first
+      if from_user.present?
+        from_user_participate =  WxParticipate.normal.where(user_id: from_user.id, activity_id: @activity.id).first
         if !@subscribed
          wx_invites = WxInvite.where(wx_invitable_id: @activity.id, wx_invitable_type: 'Activity', to_user_id: @user.id, is_recommend: true)
          if wx_invites.blank?
           begin
-            invite = wx_invites.create(from_user_id: from_wx_user.id, wx_participate_id: from_wx_user_participate.id)
+            invite = wx_invites.create(from_user_id: from_user.id, wx_participate_id: from_user_participate.id)
             #服务号的逻辑在关注后触发
             if @wx_mp_user.try(:subscribe?) || @wx_mp_user.try(:auth_subscribe?)
               invite.recommended!
@@ -48,7 +48,7 @@ class Mobile::RecommendsController < Mobile::BaseController
           consume = prize.consumes.create(user_id: @user.id, consumable_type: 'Activity', consumable_id: @activity.id, expired_at:  @activity.end_at, mobile: params[:mobile])
           consume.auto_use_point_prize_consume!
           @participate.update_attributes(prize_status: WxParticipate::GOT_PRIZE, prize_title: prize.title)
-          @wx_user.update_attributes(mobile: params[:mobile])
+          @user.update_attributes(mobile: params[:mobile])
           @participate.drop!
         end
       end
@@ -80,8 +80,8 @@ class Mobile::RecommendsController < Mobile::BaseController
 
     def find_participate
       @participate = WxParticipate.normal.where( user_id: @user.id, activity_id: @activity.id).first_or_create
-      @prizes = @wx_user.consumes.includes(:activity_prize).where(consumable_type: 'Activity', consumable_id: @activity.id).where("activity_prize_id is not null").order("created_at DESC") rescue []
-      @gift = @wx_user.wx_prizes.where(activity_id: @activity.id).reached.first
+      @prizes = @user.consumes.includes(:activity_prize).where(consumable_type: 'Activity', consumable_id: @activity.id).where("activity_prize_id is not null").order("created_at DESC") rescue []
+      @gift = @user.wx_prizes.where(activity_id: @activity.id).reached.first
       @invites = @participate.wx_invites.recommend.recommended
     end
 
