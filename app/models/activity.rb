@@ -1002,8 +1002,8 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def return_mobile_share_photo_url(share_photo_id = nil)
-    mobile_share_photo_url(subdomain: mobile_subdomain, site_id: site_id, id: share_photo_id, openid: options[:openid])
+  def return_mobile_share_photo_url(options = {})
+    mobile_share_photo_url(subdomain: mobile_subdomain, site_id: site_id, id: options[:share_photo_id], openid: options[:openid])
   end
 
   def hanming_callback_url
