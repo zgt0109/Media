@@ -16,17 +16,10 @@ class FightPapersController < ApplicationController
     end
   end
 
-  # GET /fight_papers/new
-  # GET /fight_papers/new.json
   def new
     @fight_paper = FightPaper.new
     render :index
   end
-
-  # GET /fight_papers/1/edit
-  def edit
-  end
-
 
   def create
     @fight_papers = current_site.fight_papers.where(activity_id: params[:activity_id])
@@ -38,8 +31,6 @@ class FightPapersController < ApplicationController
     end
   end
 
-  # PUT /fight_papers/1
-  # PUT /fight_papers/1.json
   def update
     @activity     = current_site.activities.find params[:activity_id]
     @fight_papers = current_site.fight_papers.where(activity_id: params[:activity_id])
@@ -56,8 +47,6 @@ class FightPapersController < ApplicationController
     end
   end
 
-  # DELETE /fight_papers/1
-  # DELETE /fight_papers/1.json
   def destroy
     @fight_paper.destroy
 
