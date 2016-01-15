@@ -10,7 +10,7 @@ class Mobile::RecommendsController < Mobile::BaseController
     end
 
     if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
-      from_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first.user
+      from_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id).first.user
       if from_user.present?
         from_user_participate =  WxParticipate.normal.where(user_id: from_user.id, activity_id: @activity.id).first
         if !@subscribed
