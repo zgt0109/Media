@@ -4531,8 +4531,8 @@ class InitDb < ActiveRecord::Migration
     t.integer  "site_id",                                            :null => false
     t.integer  "wbbs_community_id",                                  :null => false
     t.string   "poster_type"
-    t.string   "receiver_type"
     t.integer  "poster_id"
+    t.string   "receiver_type"
     t.string   "receiver_id"
     t.string   "poster_name"
     t.string   "poster_avatar"

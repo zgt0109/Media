@@ -14,7 +14,7 @@ class CarBrand < ActiveRecord::Base
     update_attributes(status: DELETED) if normal?
   end
 
-  def logo_url(type = :large)
+  def logo_url
     qiniu_image_url(logo_key)
   end
 

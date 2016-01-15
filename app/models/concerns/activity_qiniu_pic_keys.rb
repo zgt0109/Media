@@ -2,7 +2,9 @@ module Concerns::ActivityQiniuPicKeys
 
   KEY_MAPS = {
     ActivityType::VIP              => "FitJY1_Agsv5V9W5-dH-M5FVUM0E",
+    ActivityType::GUA              => "Fkgsh_bQL0bVzzB--_vlgXh_XEg-",
     ActivityType::FIGHT            => "FknTGEgpxbPd-N0LhujFkAbVObEZ",
+    ActivityType::WHEEL            => "Fl-25j4H93sfZ-B0ouwCusJfXK7D",
     ActivityType::ENROLL           => "Fq3yau2in3gxC15TcsIrImIDFbdw",
     ActivityType::MICRO_STORE      => "FjxNnverrDCafh3MuK05eqDv2SLD",
     ActivityType::VOTE             => "Fr_PWSHvO_toLXePQlM9yFdYU6qC",
@@ -46,7 +48,8 @@ module Concerns::ActivityQiniuPicKeys
     ActivityType::GUESS            => "Fjm04tDsI6TcKNbWFMsrugyUVjdx",
     ActivityType::WX_CARD          => "FsRRrPGYKkTga6uZf5dqEq213IBT",
     ActivityType::BROKERAGE        => "FqrqdYm_6c4ih0EGQ1rcEUMLtdlB",
-    ActivityType::RED_PACKET       => "FtyH1xI2Y61WKdpIeJO196XTKy-p"
+    ActivityType::RED_PACKET       => "FtyH1xI2Y61WKdpIeJO196XTKy-p",
+    ActivityType::MICRO_AID        => "FmkcCvuv-qfnVgT3prcxrkHCFYds",
   }
 
   class << self

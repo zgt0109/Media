@@ -118,7 +118,7 @@ class Activity < ActiveRecord::Base
 
   has_and_belongs_to_many :fans_games
 
-  before_create :add_default_properties!, :set_default_pic
+  before_create :add_default_properties!#, :set_default_pic
   before_save :set_time_fields, :save_extend_serialized_content
   after_create :create_default_properties!, :create_default_custom_field
   after_save :set_update_status_plan, :set_update_status
@@ -642,44 +642,6 @@ class Activity < ActiveRecord::Base
     repeats.present?
   end
 
-  def bg_music_url
-    bg_music.try(:qiniu_audio_url).try(:presence)
-  end
-
-  def bg_music
-    Material.find_by_id(self.extend.audio_id)
-  end
-
-  def qiniu_pic_url
-    bucket = (wmall? || wmall_shop? || wmall_coupon?) ? BUCKET_WMALL : BUCKET_PICTURES
-    qiniu_image_url(pic_key, bucket: bucket)
-  end
-
-  def qiniu_pic_url_for_wmall
-    qiniu_image_url(pic_key, bucket: BUCKET_WMALL)
-  end
-
-  def splash_url
-    qiniu_image_url(extend.splash_key, bucket: BUCKET_PICTURES)
-  end
-
-  #模板背景图片
-  def template_url
-    qiniu_image_url(template_qiniu_key)
-  end
-
-  def template_qiniu_key
-    extend.template_qiniu_key
-  end
-
-  def default_pic_url
-    qiniu_image_url(Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id])
-  end
-
-  def pic_display_url
-    default_pic_url
-  end
-
   def show_title_for_share_photo_setting
     if self.activity_type_id == ActivityType::SHARE_PHOTO
       return  "进入图片分享"
@@ -1064,21 +1026,59 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def pic_url
-    qiniu_pic_url || default_pic_url
+  def notice_title
+    activity_notice = self.activity_notices.first
+    activity_notice.try(:title).to_s
+  end
+
+  def bg_music_url
+    bg_music.try(:qiniu_audio_url).try(:presence)
+  end
+
+  def bg_music
+    Material.find_by_id(self.extend.audio_id)
+  end
+
+  def qiniu_pic_url
+    bucket = (wmall? || wmall_shop? || wmall_coupon?) ? BUCKET_WMALL : BUCKET_PICTURES
+    qiniu_image_url(pic_key, bucket: bucket)
+  end
+
+  def qiniu_pic_url_for_wmall
+    qiniu_image_url(pic_key, bucket: BUCKET_WMALL)
+  end
+
+  def splash_url
+    qiniu_image_url(extend.splash_key, bucket: BUCKET_PICTURES)
+  end
+
+  #模板背景图片
+  def template_url
+    qiniu_image_url(template_qiniu_key)
+  end
+
+  def template_qiniu_key
+    extend.template_qiniu_key
+  end
+
+  def pic_display_url
+    default_pic_url
   end
 
   def bg_pic_url
     qiniu_image_url(bg_pic_key)
   end
 
-  def logo_url(type = :large)
+  def logo_url
     qiniu_image_url(logo_key)
   end
 
-  def notice_title
-    activity_notice = self.activity_notices.first
-    activity_notice.try(:title).to_s
+  def pic_url
+    qiniu_pic_url || default_pic_url
+  end
+
+  def default_pic_url
+    qiniu_image_url(default_pic_url)
   end
 
   def default_pic_key
@@ -1087,7 +1087,7 @@ class Activity < ActiveRecord::Base
 
   private
     def set_default_pic
-      if pic_url.blank?
+      if self.pic_key.blank?
         self.pic_key = Concerns::ActivityQiniuPicKeys::KEY_MAPS[activity_type_id]
       end
     end

@@ -34,8 +34,8 @@ class HospitalDoctor < ActiveRecord::Base
 
   before_create :add_default_properties!
 
-  def avatar_url(type = :large)
-    qiniu_image_url(avatar_key) || (avatar? ? avatar.try(type) : nil)
+  def avatar_url
+    qiniu_image_url(avatar_key)
   end
 
   def delete!
