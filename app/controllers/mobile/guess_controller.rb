@@ -7,23 +7,23 @@ class Mobile::GuessController < Mobile::BaseController
 
   def index
     @questions = @activity.guess_activity_questions.visible
-    @consumes = @wx_user.consumes_for_activity(@activity).visible rescue []
+    @consumes = @user.consumes_for_activity(@activity).visible rescue []
     #TODO
   end
 
   def prizes
-    @consumes = @wx_user.consumes_for_activity(@activity).visible rescue []
+    @consumes = @user.consumes_for_activity(@activity).visible rescue []
   end
 
   def create_participation
     #TODO LIMIT
     if @activity_user.new_record?
       attrs = @activity_user_attrs.merge({name: params[:name], mobile: params[:mobile], email: params[:email], address: params[:address]})
-      @activity_user = @wx_user.activity_users.create(attrs)
+      @activity_user = @user.activity_users.create(attrs)
     end
 
-    if @wx_user.vip_user && @activity.guess_setting.use_points && @activity.guess_setting.answer_points
-      @vip_user = @wx_user.vip_user
+    if @user.vip_user && @activity.guess_setting.use_points && @activity.guess_setting.answer_points
+      @vip_user = @user.vip_user
       @vip_user.decrease_points!(@activity.guess_setting.answer_points)
       @vip_user.point_transactions.create direction_type: PointTransaction::ACTIVITY_OUT, points: @activity.guess_setting.answer_points, site_id: @site.id, description: '猜图活动'
     end
@@ -32,7 +32,7 @@ class Mobile::GuessController < Mobile::BaseController
       render js: "$('.guess_participations_pop').hide();alertTip({title: '提示', text: '#{@error}', btnText: '确定'});"
     else
       guess_participation = @activity_user.guess_participations.create(params[:guess_participation])
-      if guess_participation.check_correct(@wx_user)
+      if guess_participation.check_correct(@user)
         render js: "$('.guess_participations_pop').hide();alertTip({title: '答对啦', text: '请在我的奖品中查看奖品。', btnText: '确定'});"
       else
        render js: "$('.guess_participations_pop').hide();alertTip({title: '答错啦', text: '论成败，人生豪迈，大不了重新再来。', btnText: '确定'});"
@@ -41,7 +41,7 @@ class Mobile::GuessController < Mobile::BaseController
   end
 
   def hide_consume
-    @consume = @wx_user.consumes_for_activity(@activity).find_by_id(params[:consume_id])
+    @consume = @user.consumes_for_activity(@activity).find_by_id(params[:consume_id])
     @consume.hidden!
     redirect_to :back
   end
@@ -73,7 +73,7 @@ class Mobile::GuessController < Mobile::BaseController
         if @wx_user.present?
           @subscribed = true
         else
-          @wx_user = WxUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
+          # @wx_user = WxUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
         end
       end
     end
@@ -106,7 +106,7 @@ class Mobile::GuessController < Mobile::BaseController
 
       return @error = "亲，关注公众帐号并成为会员后才能参与猜图活动。" unless @wx_user
 
-      vip_user = @wx_user.vip_user
+      vip_user = @user.vip_user
       return @error = "亲，关注公众帐号并成为会员后才能参与猜图活动。" unless vip_user
       vip_checker = VipUserChecker.new(vip_user)
       return @error = vip_checker.error_message('亲，') if vip_checker.error?
@@ -117,7 +117,7 @@ class Mobile::GuessController < Mobile::BaseController
     def check_guess_status
       return if @error
 
-      return @error = "亲，您的答题次数已用完。" if @wx_user.can_not_guess?(@activity)
+      return @error = "亲，您的答题次数已用完。" if @user.can_not_guess?(@activity)
 
       prize_not_enough = (@activity.guess_setting.question_answer_limit <= @guess_activity_question.participations.today.answer_correct.count)
       return @error = "亲，奖品已领完。" if prize_not_enough
@@ -137,6 +137,6 @@ class Mobile::GuessController < Mobile::BaseController
 
     def find_activity_user
       @activity_user_attrs = {site_id: @site.id, activity_id: @activity.id}
-      @activity_user = @wx_user.activity_users.where(@activity_user_attrs).first_or_initialize
+      @activity_user = @user.activity_users.where(@activity_user_attrs).first_or_initialize
     end
 end
