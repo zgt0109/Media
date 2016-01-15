@@ -55,8 +55,16 @@ class User < ActiveRecord::Base
   delegate :leave_message_forbidden, to: :wx_user, allow_nil: true
   delegate :nickname, :headimgurl, to: :wx_user, allow_nil: true
 
+  #TODO
   # scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
   # scope :message_normal, ->{ where(leave_message_forbidden: 0)}
+  def self.message_forbidden
+    joins(:wx_user).where(wx_user: { leave_message_forbidden: 1 })
+  end
+
+  def self.message_normal
+    joins(:wx_user).where(wx_user: { leave_message_forbidden: 0 })
+  end
 
   def related_mobile
     vip_mobile || consumes_mobile
