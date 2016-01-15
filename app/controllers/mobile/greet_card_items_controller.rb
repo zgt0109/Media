@@ -8,17 +8,16 @@ class Mobile::GreetCardItemsController < Mobile::BaseController
   end
 
   def show
-    @user_greet_card = GreetCardItem.find(params[:id])
-    unless @user_greet_card.greet_card.try(:used?)
+    @greet_card_item = GreetCardItem.find(params[:id])
+    unless @greet_card_item.greet_card.try(:used?)
       return render text: '贺卡不存在'
     end
   end
 
   def create
-    @user_greet_card = GreetCardItem.new(params[:user_greet_card])
-    @user_greet_card.save!
-    redirect_to mobile_greet_card_user_greet_card_url(site_id: @user_greet_card.greet_card.greet.site_id, greet_card_id: @user_greet_card.greet_card_id, id: @user_greet_card.id)
-    #/:site_id/greet_cards/:greet_card_id/user_greet_cards/:id(.:format)
+    @greet_card_item = GreetCardItem.new(params[:greet_card_item])
+    @greet_card_item.save!
+    redirect_to mobile_greet_card_greet_card_item_url(site_id: @greet_card_item.greet_card.greet.site_id, greet_card_id: @greet_card_item.greet_card_id, id: @greet_card_item.id)
   end
 
 end

@@ -131,7 +131,7 @@ task :dbdump => :environment do
   sql_survey = "\'survey_question_id in (#{survey_question_ids})\'"
   system "#{dump} survey_question_choices --where=#{sql_survey} --no-create-info >> #{db}"
 
-  # system "#{dump} user_greet_cards --where='greet_card_id in (1202)' --no-create-info >> #{db}"
+  # system "#{dump} greet_card_items --where='greet_card_id in (1202)' --no-create-info >> #{db}"
   
   sql_vip_card = '\'vip_card_id = 26056\''
   sql_vip_privilege = '\'vip_privilege_id = 4705\''

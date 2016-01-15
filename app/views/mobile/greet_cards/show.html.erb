@@ -1,7 +1,6 @@
 <% provide(:title, "编辑贺卡") %>
-<%= form_for @greet_card_item, 
-  :url => mobile_greet_card_greet_card_items_url(@greet_card_item.greet_card), method: :post do |f| %>
-  <%= f.hidden_field :greet_card_id, value: @greet_card_item.greet_card.id %>
+<%= form_for @greet_card_item, :url => mobile_greet_card_greet_card_items_url(@greet_card_item.greet_card, site_id: @site.id), method: :post do |f| %>
+  <%= f.hidden_field :greet_card_id, value: @greet_card_item.greet_card_id %>
   <%= f.hidden_field :user_id, value: session[:user_id] %>
 
   <div class="audio">
@@ -23,7 +22,7 @@
       <div class="layout">
         <span>选择语音：</span>
         <label>
-          <%= f.select :user_voice_id, User.find(session[:user_id]).greet_voices.map{|greet_voice|[greet_voice.sound_name, greet_voice.id]}, class: "select" %>
+          <%= f.select :user_voice_id, @user.greet_voices.map{|greet_voice|[greet_voice.sound_name, greet_voice.id]}, class: "select" %>
         </label>
       </div>
       <% end %>
