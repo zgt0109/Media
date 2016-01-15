@@ -992,6 +992,7 @@ class Activity < ActiveRecord::Base
       when wx_card?            then mobile_wx_cards_url(_default_params.merge(wechat_card_js: 1))
       when brokerage?          then mobile_brokerages_url(_default_params)
       when red_packet?         then mobile_red_packets_url(_default_params)
+      when greet?              then mobile_greet_cards_url(_default_params)
       when recommend?
         if site.wx_mp_user.authorized_auth_subscribe?
           mobile_recommends_url(_default_params)

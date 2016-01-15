@@ -26,7 +26,7 @@ class GreetVoice < ActiveRecord::Base
   def self.respond_voice(wx_user, wx_mp_user, xml)
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '授权失败，请确保应用ID和应用匹配') unless wx_mp_user.auth! # 确保access_token要最新,不然调用不到下载
 
-    greet_voice  = user.greet_voices.new
+    greet_voice  = wx_user.user.greet_voices.new
     if greet_voice.save_from_xml(wx_mp_user, xml)
       Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '输入汉字"语音"+语音名称,如:语音新年快乐')
     else

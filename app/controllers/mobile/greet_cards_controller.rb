@@ -9,7 +9,7 @@ class Mobile::GreetCardsController < Mobile::BaseController
 
   def show
     @greet_card = GreetCard.find(params[:id])
-    @user_greet_card = GreetCardItem.new(greet_card_id: @greet_card.id, user_id: session[:user_id])
+    @greet_card_item = GreetCardItem.new(greet_card_id: @greet_card.id, user_id: session[:user_id])
   end
 
 end

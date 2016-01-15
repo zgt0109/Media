@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_one :wx_user
 
   has_one :broker, class_name: '::Brokerage::Broker'
+  has_many :greet_voices
   has_many :wx_wall_users
   has_many :shake_users
   has_many :wx_participates

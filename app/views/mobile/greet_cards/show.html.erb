@@ -1,7 +1,6 @@
 <% provide(:title, "编辑贺卡") %>
 <%= form_for @greet_card_item, 
   :url => mobile_greet_card_greet_card_items_url(@greet_card_item.greet_card), method: :post do |f| %>
-
   <%= f.hidden_field :greet_card_id, value: @greet_card_item.greet_card.id %>
   <%= f.hidden_field :user_id, value: session[:user_id] %>
 
@@ -24,7 +23,7 @@
       <div class="layout">
         <span>选择语音：</span>
         <label>
-          <%= f.select :user_voice_id, WxUser.find(session[:user_id]).user_voices.map{|user_voice|[user_voice.sound_name, user_voice.id]}, class: "select" %>
+          <%= f.select :user_voice_id, User.find(session[:user_id]).greet_voices.map{|greet_voice|[greet_voice.sound_name, greet_voice.id]}, class: "select" %>
         </label>
       </div>
       <% end %>
