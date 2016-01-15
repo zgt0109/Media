@@ -1,5 +1,5 @@
 class Huodong::WxWallUserPrizesController < ApplicationController
-  
+
   before_filter :get_wall
 
   def index
@@ -42,7 +42,7 @@ class Huodong::WxWallUserPrizesController < ApplicationController
   private
 
   def get_wall
-    @wx_wall = current_user.wx_walls.find(params[:id])
+    @wx_wall = current_site.wx_walls.find(params[:id])
     return redirect_to wx_walls_path, alert: '请先添加微信墙活动' unless @wx_wall
   end
 

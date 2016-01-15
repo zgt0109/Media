@@ -170,7 +170,7 @@
           </a>
         <% end %>
         <% if @wx_wall.shake_check == 'true' && @wx_wall.shake %>
-          <a href="<%= shake_sites_path(id: @wx_wall.shake.activityable_id, account_id: Des.encrypt(current_user.id.to_s)) %>" target="_blank">
+          <a href="<%= shake_sites_path(id: @wx_wall.shake.activityable_id, site_id: Des.encrypt(current_site.id.to_s)) %>" target="_blank">
             <i class="icon icon-13"></i>
             <span class="f-tip">
               微信“摇一摇”
