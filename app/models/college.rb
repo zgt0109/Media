@@ -14,7 +14,6 @@ class College < ActiveRecord::Base
 
   accepts_nested_attributes_for :activity
 
-
   def logo_url
     qiniu_image_url(logo_key).presence || logo
   end

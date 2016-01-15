@@ -37,7 +37,7 @@
   <div class="box box-form box-padding">
     <div class="hd college_title">在线报名</div>
     <%= form_for @college_enroll, :validate => true, :url => create_enroll_app_educations_path do |form| %>
-    <%= form.hidden_field :wx_user_id %>
+    <%= form.hidden_field :user_id %>
     <div class="bd">
       <label class="fl"><span>姓名</span><%= form.text_field :name  %></label>
       <label class="fr"><span>手机</span><%= form.text_field :mobile %></label>
@@ -51,7 +51,7 @@
 
 <div class="footer">
   <a href="tel:<%= @college.tel %>" class="ico-phone box-relative">点击拨打咨询电话 <b><%= @college.tel %></b><i class="arrow arr-small"></i></a>
-  <div class="box box-ad"><img src="<%= @college.try(:ad_pic).try(:large) %>" /></div>
+  <div class="box box-ad"><img src="<%= @college.try(:ad_pic_url) %>" /></div>
 </div>
 <%#= render :partial => "/app/weddings/alert" %>
 

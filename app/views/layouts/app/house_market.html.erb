@@ -23,19 +23,9 @@
     <%= yield %>
 </div><!-- html end -->
 <% unless params[:controller] == "app/house_layouts" && params[:action] == "show"%>
-  <% if @supplier && @account_footer && @supplier.try(:is_show_mark?) %>
-    <footer>
-      <%= @account_footer.is_show_link? ? link_to(@account_footer.footer_content, @account_footer.footer_link) : @account_footer.footer_content %>
-    </footer>
-  <%- else %>
-    <%- supplier = Account.find_by_nickname('winwemedia') %>
-    <%- account_footer = supplier.try(:app_footer) || AccountFooter.default_footer %>
-    <%- if supplier && account_footer && supplier.is_show_mark? %>
-      <footer>
-        <%= account_footer.is_show_link? ? link_to(account_footer.footer_content, account_footer.footer_link) : account_footer.footer_content %>
-      </footer>
-    <%- end %>
-  <% end %>
+  <footer>
+    <%= link_to(@account_footer.footer_content, @account_footer.footer_link) %>
+  </footer>
 <% end %>
 
 <%= render 'application/gb2big5' %>

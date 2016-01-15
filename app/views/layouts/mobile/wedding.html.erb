@@ -73,7 +73,7 @@
             //$("guest_form").submit();
             $.ajax({
                         type: "post",
-                        url:"<%= create_guest_mobile_weddings_path(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>",
+                        url:"<%= create_guest_mobile_weddings_path(site_id: @site.id, anchor: "mp.weixin.qq.com")%>",
                         data:$("#guest_form").serialize(),
                         success: function(data) {
                             alert("提交成功!");
@@ -102,7 +102,7 @@
             //$("guest_form").submit();
             $.ajax({
                         type: "post",
-                        url:"<%= create_wish_mobile_weddings_path(supplier_id: @supplier.id, anchor: "mp.weixin.qq.com")%>",
+                        url:"<%= create_wish_mobile_weddings_path(site_id: @site.id, anchor: "mp.weixin.qq.com")%>",
                         data:$("#wish_form").serialize(),
                         success: function(data) {
                           $(".box-list").prepend("<p> <span>"+data.content.replace("\n","<br/>")+"</span> <b>"+data.username+" "+data.created_at+"</b> </p>");
