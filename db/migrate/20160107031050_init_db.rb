@@ -5599,11 +5599,11 @@ class InitDb < ActiveRecord::Migration
   create_table "wx_users" do |t|
     t.integer  "wx_mp_user_id"
     t.integer  "user_id"
-    t.integer  "status",                  :limit => 1, :default => 1,     :null => false
-    t.string   "openid",                                                  :null => false
+    t.integer  "status",                  :default => 1,     :null => false
+    t.string   "openid",                                     :null => false
     t.string   "nickname"
     t.integer  "subscribe"
-    t.integer  "sex",                     :limit => 1, :default => 0
+    t.integer  "sex",                     :default => 0
     t.string   "language"
     t.string   "city"
     t.string   "province"
