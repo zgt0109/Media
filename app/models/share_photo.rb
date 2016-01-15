@@ -23,13 +23,14 @@ class SharePhoto < ActiveRecord::Base
   end
 
   def self.respond_share_photo(wx_user, wx_mp_user, keyword, activity)
+    photo_activity = activity.blank? ? Activity.new(site_id: wx_mp_user.site_id) : activity
     share_photo_setting = wx_mp_user.site.share_photo_setting
     share_photo = share_photo_setting.share_photos.where(user_id: wx_user.user_id).last
     return Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '请先上传照片') unless share_photo
 
     share_photo.update_attributes(title: keyword)
     wx_user.share_photos!
-    url           = mobile_share_photo_url(activity, share_photo.id, wx_user.openid)
+    url           = mobile_share_photo_url(photo_activity, share_photo.id, wx_user.openid)
     exit_keyword  = share_photo_setting.activities.exit_share_photo.first.try(:keyword).to_s
     other_keyword = share_photo_setting.activities.other_photos.first.try(:keyword).to_s
     my_keyword    = share_photo_setting.activities.my_photos.first.try(:keyword).to_s
@@ -73,6 +74,6 @@ class SharePhoto < ActiveRecord::Base
   end
 
   def self.mobile_share_photo_url(activity, share_photo_id, openid)
-    activity.return_mobile_share_photo_url({share_photo_id: share_photo_id, openid: openid})
+    activity.return_mobile_share_photo_url(share_photo_id: share_photo_id, openid: openid)
   end
 end
