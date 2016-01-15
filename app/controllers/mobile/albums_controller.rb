@@ -36,7 +36,7 @@ class Mobile::AlbumsController < Mobile::BaseController
   end
 
   def create_comment
-    @comment = @photo.comments.new(params[:comment].merge(commenter_id: session[:user_id], commenter_type: 'WxUser', site_id: @site.id))
+    @comment = @photo.comments.new(params[:comment].merge(commenter_id: session[:user_id], commenter_type: 'User', site_id: @site.id))
     #flag = Comment.where("commenter_id = ? and commentable_type =? and commenter_type = ? and commentable_id = ? and created_at >= ?", session[:user_id], "AlbumPhoto", "WxUser", @photo.id, Time.now.midnight).length > 0
     #if flag
     #  redirect_to :back, alert: "您今天已经发表过评论了！"

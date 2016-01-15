@@ -30,7 +30,7 @@ class WbbsReply < ActiveRecord::Base
 
   def visible_for?( user )
     return true  if user == replier
-    return !replier.user.leave_message_forbidden if replier.is_a?(User)
+    return !replier.user.try(:leave_message_forbidden) if replier.is_a?(User)
   end
 
   private

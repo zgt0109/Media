@@ -5,7 +5,7 @@
         <div class="pop-hd">
             <%= form_for(WbbsReply.new, url: form_url, remote: true, html: { class: 'mod-form form-ver' }) do |f| %>
                 <%= f.hidden_field :parent_id %>
-                <%= f.hidden_field :replier_type, value: 'WxUser' %>
+                <%= f.hidden_field :replier_type, value: 'User' %>
                 <%= f.hidden_field :replier_id, value: @user.try(:id) %>
                 <%= f.text_area :content, rows: 7, maxlength: WbbsReply::MAX_CONTENT_LENGTH, class: 'input', placeholder: "说两句吧..." %>
                 <div class="form-btn">

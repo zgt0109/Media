@@ -46,10 +46,10 @@ class WbbsTopic < ActiveRecord::Base
     end
   end
 
-  def create_reply( reply_attributes, wx_user )
+  def create_reply( reply_attributes, user )
     attrs = { wbbs_community_id: wbbs_community_id }
-    attrs[:replier_name] = wx_user.try(:nickname).presence
-    attrs[:replier_avatar] = wx_user.try(:headimgurl).presence
+    attrs[:replier_name] = user.try(:nickname).presence
+    attrs[:replier_avatar] = user.try(:headimgurl).presence
     wbbs_replies.create( reply_attributes.merge(attrs) )
   end
 
