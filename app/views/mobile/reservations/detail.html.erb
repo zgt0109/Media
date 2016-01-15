@@ -1,12 +1,12 @@
 <section id="sec-index">
     <div class="body">
         <div class="mod-des">
-            <img src="<%= @reservation.logo_url %>">
-            <p><%= @reservation.description %></p>
+            <img src="<%= @activity.logo_url %>">
+            <p><%= @activity.description %></p>
         </div>
         <div class="mod-form form-hor">
             <div class="bd">
-                <%- @reservation.custom_fields.normal.visible.order(:position).each do |field|%>
+                <%- @activity.custom_fields.normal.visible.order(:position).each do |field|%>
                     <%= render "field", field: field %>
                 <%- end %>
             </div>

@@ -34,6 +34,6 @@
 </html>
 <script type="text/javascript">
   function cancelSubmit() {
-    location.href='<%= mobile_reservations_path(activity_id: @reservation.id) %>';
+    location.href='<%= mobile_reservations_path(aid: @activity.id) %>';
   }
 </script>

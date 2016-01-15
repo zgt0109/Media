@@ -10,7 +10,7 @@
                     <i class="fa fa-check"></i>预定成功
                 </div>
                 <div class="bd mod-form form-hor">
-                    <%- @reservation.custom_fields.normal.visible.order(:position).each do |field|%>
+                    <%- @activity.custom_fields.normal.visible.order(:position).each do |field|%>
                       <div class="form-li">
                         <div class="li-l"><b><%= field.name %>：</b></div>
                          <%- value = @order.custom_values.where(custom_field_id: field.id).first.value rescue '' %>
@@ -19,7 +19,7 @@
                     <%- end %>
                 </div>
               <%- end %>
-            <a href="<%= mobile_reservations_url(aid: @reservation.id) %>" class="ft">返回</a>
+            <a href="<%= mobile_reservations_url(aid: @activity.id) %>" class="ft">返回</a>
         </div>
     </div>
 </section>

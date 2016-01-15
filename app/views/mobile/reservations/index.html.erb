@@ -7,7 +7,7 @@
      <%- else %>
         <%- @orders.each do |order| %>
           <div class="list">
-            <a href="<%= detail_mobile_reservation_url(id: order.id, aid: @reservation.id) %>" class="fa fa-angle-right">
+            <a href="<%= detail_mobile_reservation_url(id: order.id, aid: @activity.id) %>" class="fa fa-angle-right">
               <p><%= order.activity.try(:extend).try(:service) %></p>
               <p><span><%= order.nickname %></span><span><%= order.reservation_date %></span><span class="pull-right"><%= order.status_name %></span></p>
             </a>
@@ -16,11 +16,11 @@
       <%- end %>
     <div class="mod-btn" style="position: fixed; bottom: 0; left:0; width: 100%; z-index: 10;">
       <%- if @user.present? %>
-        <a class="btn btn-blue btn-big" href="<%= new_mobile_reservation_url(aid: @reservation.id) %>">我要预定</a>
+        <a class="btn btn-blue btn-big" href="<%= new_mobile_reservation_url(aid: @activity.id) %>">我要预定</a>
       <%- else %>
         <a class="btn btn-gray btn-big" href="#">关注微信账号预定</a>
       <%- end %>
-      <a class="btn btn-green btn-big" href="tel:<%= @reservation.extend.mobile %>"><i class="fa fa-phone"></i><%= @reservation.extend.mobile  %></a>
+      <a class="btn btn-green btn-big" href="tel:<%= @activity.extend.mobile %>"><i class="fa fa-phone"></i><%= @activity.extend.mobile  %></a>
     </div>
   </div>
 </section>

@@ -1,4 +1,4 @@
-<%- index = @reservation.custom_fields.order(:id).pluck(:id).index(field.id) %>
+<%- index = @activity.custom_fields.order(:id).pluck(:id).index(field.id) %>
 <%- value = @order.custom_values.where(custom_field_id: field.id).first.value rescue '' %>
 <%- if field.name == "姓名" %>
     <div class="form-li">
@@ -12,7 +12,7 @@
       <input <%= (@order&& @order.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="phone" name="custom_field[<%= field.id %>]" type="tel" placeholder="请输入您的电话" class="input field is_required" data-name='联系电话'/>
     </div>
 
-    <%- if @reservation.extend.captcha_required && action_name == 'new' %>
+    <%- if @activity.extend.captcha_required && action_name == 'new' %>
     <div class="form-li" style="position: relative;padding-right: 120px;margin-bottom: 5px;">
         <input <%= (@order&& @order.persisted?) ? 'readonly' : ''  %> value="<%= value %>" id="captcha" name="captcha" type="tel" data-name='验证码' placeholder="请输入验证码" class="input is_required">
       <a class="btn btn-code J-getCode" href="#" style="width: 115px; position: absolute; right: 0; top: 0;background: #7b93d6;margin: 0 0;top: 5px;height: 32px;">获取验证码</a> </div>

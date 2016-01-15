@@ -94,7 +94,7 @@ class App::HitEggsController < App::BaseController
     @activity_consume.auto_use_point_prize_consume!
     #redirect_to my_prize_app_hit_eggs_url
     flash[:notice] = "提交成功"
-    redirect_to app_hit_egg_url(@activity)
+    redirect_to app_hit_egg_url(@activity, aid: @activity.id)
   rescue
     redirect_to mobile_notice_url(msg: '数据错误')
   end
