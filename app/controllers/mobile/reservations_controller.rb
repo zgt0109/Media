@@ -74,9 +74,9 @@ class Mobile::ReservationsController < Mobile::BaseController
     end
 
     def find_reservation
-      @activity = Activity.reservation.find_by_id(session[:activity_id])
-      return render_404 unless @activity
       session[:activity_id] ||= params[:aid]
+      @activity = Activity.reservation.find(session[:activity_id])
+
       @share_title = @activity.name
       @share_desc = @activity.summary.try(:squish)
       @share_image = @activity.pic_url

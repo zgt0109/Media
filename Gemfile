@@ -86,7 +86,6 @@ gem 'faye'
 
 group :development do
   # gem 'rails_best_practices'
-  gem 'thin'
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
