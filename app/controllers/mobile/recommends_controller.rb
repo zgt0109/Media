@@ -79,7 +79,7 @@ class Mobile::RecommendsController < Mobile::BaseController
     end
 
     def find_participate
-      @participate = WxParticipate.normal.where( user_id: @user.id, activity_id: @activity.id).first_or_create
+      @participate = WxParticipate.normal.where(user_id: @user.id, activity_id: @activity.id).first_or_create
       @prizes = @user.consumes.includes(:activity_prize).where(consumable_type: 'Activity', consumable_id: @activity.id).where("activity_prize_id is not null").order("created_at DESC") rescue []
       @gift = @user.wx_prizes.where(activity_id: @activity.id).reached.first
       @invites = @participate.wx_invites.recommend.recommended

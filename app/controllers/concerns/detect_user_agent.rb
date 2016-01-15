@@ -113,7 +113,7 @@ module DetectUserAgent
           session[:user_id] = @wx_user.user_id
           session[:openid] = @wx_user.openid
 
-          return redirect_toauth_back
+          return redirect_oauth_back
         end
 
         if @wx_user.blank?
