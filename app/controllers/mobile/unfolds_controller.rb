@@ -5,7 +5,7 @@ class Mobile::UnfoldsController < Mobile::BaseController
 
   def index
     if params[:origin_openid].present? && params[:origin_openid] != @wx_user.openid
-      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first
+      from_wx_user = WxUser.where(openid: params[:origin_openid], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first.user
       @friend = true
       if from_wx_user.present?
         @from_wx_user_prize =  WxPrize.where(user_id: from_wx_user.id, activity_id: @activity.id).first
