@@ -54,7 +54,7 @@ $(function(){
           dataType: 'json',
           success: function (data) {
               if (data.status && data.status == 'ok'){
-                location.href="<%= mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>"
+                location.href="<%= mobile_unfolds_url(aid: @activity.id, openid: @wx_user.openid, origin_openid: params[:origin_openid]) %>"
               }
           }
       })
@@ -89,7 +89,7 @@ $(function(){
           dataType: 'json',
           success: function (data) {
               if (data.status && data.status == 'ok'){
-                location.href="<%= mobile_unfolds_url(activity_id: @activity.id, openid: @wx_user.openid) %>"
+                location.href="<%= mobile_unfolds_url(aid: @activity.id, openid: @wx_user.openid) %>"
               }
           }
       })

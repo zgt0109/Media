@@ -234,7 +234,7 @@
        }
 
        this.promise_ = $.ajax({
-         url: '<%= params[:owner_openid].present? ? aid_friends_mobile_aids_url(activity_id: @activity.id, owner_openid: params[:owner_openid]) : aid_friends_mobile_aids_url(activity_id: @activity.id) %>', 
+         url: '<%= params[:owner_openid].present? ? aid_friends_mobile_aids_url(aid: @activity.id, owner_openid: params[:owner_openid]) : aid_friends_mobile_aids_url(aid: @activity.id) %>', 
          type: 'get',
          dataType: 'json',
          success: function (data, textStatus, jqXhr) {
@@ -270,7 +270,7 @@
        }
 
        this.promise_ = $.ajax({
-         url: '<%= params[:owner_openid].present? ? rank_list_mobile_aids_url(activity_id: @activity.id, owner_openid: params[:owner_openid]) : rank_list_mobile_aids_url(activity_id: @activity.id) %>', 
+         url: '<%= params[:owner_openid].present? ? rank_list_mobile_aids_url(aid: @activity.id, owner_openid: params[:owner_openid]) : rank_list_mobile_aids_url(aid: @activity.id) %>', 
          type: 'get',
          dataType: 'json',
          success: function (data, textStatus, jqXhr) {
@@ -306,7 +306,7 @@
       // console.log("Weixin menu share successful");
 
       $.ajax({
-        url: "<%= params[:owner_openid].present? ? invite_friends_mobile_aids_url(activity_id: @activity.id, owner_openid: params[:owner_openid]) : invite_friends_mobile_aids_url(activity_id: @activity.id) %>", 
+        url: "<%= params[:owner_openid].present? ? invite_friends_mobile_aids_url(aid: @activity.id, owner_openid: params[:owner_openid]) : invite_friends_mobile_aids_url(aid: @activity.id) %>", 
         type: "post",
         dataType: "json",
         success: function(data, textStatus, jqXhr) {
