@@ -4,6 +4,7 @@ class SmsExpensesController < ApplicationController
   end
 
   def index
+    @operation_options = SmsExpense::operation_id_options
     @search = current_user.sms_expenses.succeed.search(params[:search])
 
     if params[:search] && @search.date_gte && @search.date_lte && @search.date_gte > @search.date_lte

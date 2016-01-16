@@ -152,40 +152,36 @@ class AccountsController < ApplicationController
     end
   end
 
+  # 参数 operation_id in (1:会员卡,2:电商,3:餐饮,4:酒店,5:小区)
   # 发送付费短信http接口,调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_message", {phone: '13262902619', content: '电商短信测试', operation: '电商', account_id: 10000})
+  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_message", {phone: '13262902619', content: '电商短信测试', operation_id: '2', account_id: 10000, userable_id: 10001, userable_type: 'User'})
   # 发送免费短信http接口调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_message", {phone: '13262902619', content: '电商短信测试', operation: '电商', account_id: 10000, is_free: 1})
+  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_message", {phone: '13262902619', content: '电商短信测试', operation_id: '2', account_id: 10000, userable_id: 10001, userable_type: 'User', is_free: 1})
   def send_message
     errors = []
     errors << "参数必须带有 wx_mp_user_open_id 或 account_id" if params[:wx_mp_user_open_id].blank? && params[:account_id].blank?
-    errors << "参数必须带有 phone, content 和 operation" if params[:phone].blank? || params[:content].blank? || params[:operation].blank?
-    errors << "短信通知功能未包含【#{params[:operation]}】模块" unless SmsExpense.operations.include?(params[:operation].to_s.strip)
+    errors << "参数必须带有 phone, content 和 operation_id" if params[:phone].blank? || params[:content].blank? || params[:operation_id].blank?
+    errors << "短信通知功能未包含【#{params[:operation_id]}】模块" unless SmsExpense.operations.include?(params[:operation_id].to_i)
 
     if errors.blank?
       if params[:wx_mp_user_open_id].present?
         @wx_mp_user = WxMpUser.where(openidid: params[:wx_mp_user_open_id]).first
-        @account = @wx_mp_user.try(:account)
-
+        @account = @wx_mp_user.site.try(:account)
       elsif params[:account_id].present?
         @account = Account.where(id: params[:account_id]).first
       end
 
       errors << "商户不存在" unless @account
 
-      result = @account.send_message(params[:phone], params[:content], params[:operation], !!params[:is_free]) if @account
+      result = @account.send_message(params[:phone], params[:content], !!params[:is_free], params) if @account
       errors = errors + result[:errors] if result.present? && result[:errors].present?
     end
 
-    if errors.present?
-      return render text: errors.join("\n")
-    else
-      return render text: '商户短信通知发送成功'
-    end
+    render text: errors.present? ? errors.join("\n") : '商户短信通知发送成功'
   end
 
   # 发送免费短信http接口,调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_text_message", {phone: '13262902619', content: '免费短信测试', userable_id: 10000, userable_type: 'User', source: 'winwemedia_ec', token: 'qwertyuiop[]asdfghjklzxcvbnm'})
+  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_text_message", {phone: '13262902619', content: '免费短信测试', userable_id: 10000, userable_type: 'User', source: 'ec', token: 'qwertyuiop[]asdfghjklzxcvbnm'})
   def send_text_message
     errors = []
     %i(phone content userable_id userable_type source token).each do |key|

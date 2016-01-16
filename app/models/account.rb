@@ -58,39 +58,47 @@ class Account < ActiveRecord::Base
     where("lower(nickname) LIKE ?", nickname.to_s.downcase).first.try(:authenticate, password)
   end
 
-  # 商户发送短信 account.send_message("13795288852", "Hello World", "电商")
-  # 参数 operation in (电商,餐饮, 酒店)
-  def send_message(mobiles, content, operation, is_free = false)
+  # 商户发送短信 account.send_message("13795288852", "Hello World", true)
+  # 参数 operation_id in (1:会员卡,2:电商,3:餐饮,4:酒店,5:小区)
+  def send_message(mobiles, content, is_free = false, options = {})
+    message_id = 0
+
     @errors = []
     @errors << "手机号码不能为空" if mobiles.blank?
-
-    phones = mobiles.split(',').map(&:to_s).map{|m| m.gsub(' ', '')}.compact.uniq
     unless is_free
-      @errors << "商户未开启短信通知服务" unless self.is_open_sms
+      @errors << "商户未开启短信通知服务" unless is_open_sms
     end
 
+    phones = mobiles.split(',').map(&:to_s).map{|m| m.gsub(' ', '')}.compact.uniq
     phones.map{|m| @errors << "手机号码格式不正确" unless m.to_s =~ /^\d+$/ }
     @errors << "短信内容不能为空" if content.blank?
 
     if @errors.blank?
+      _options = options.slice(:userable_id, :userable_type).merge(account_id: id, source: options[:operation_id])
       if is_free
-        mass_send_message(phones, content)
-      elsif free_sms_count > 0
-        message_id = mass_send_message(phones, content)
+        message_id = mass_send_message(phones, content, _options).to_i
+      elsif free_sms_count > 0 || pay_sms_count > 0
+        message_id = mass_send_message(phones, content, _options).to_i
         send_success = message_id > 1 || message_id < -10000000
         sms_status = send_success ? 1 : message_id
-        update_attribute(:free_sms_count, free_sms_count - phones.count) if send_success
-      elsif pay_sms_count > 0
-        message_id = mass_send_message(phones, content)
-        send_success = message_id > 1 || message_id < -10000000
-        sms_status = send_success ? 1 : message_id
-        update_attribute(:pay_sms, pay_sms_count - phones.count) if send_success
+
+        if send_success
+          if free_sms_count > 0
+            update_attribute(:free_sms_count, free_sms_count - phones.count)
+          else
+            update_attribute(:pay_sms, pay_sms_count - phones.count)
+          end
+        end
+
+        phones.each do |phone|
+          SmsExpense.create(
+            date: Date.today, account_id: id, phone: phone, content: content,
+            operation_id: options[:operation_id], status: sms_status
+          )
+        end unless is_free
       else
-        @errors << "商户 account_id #{self.id} 短信套餐余额不足"
-        sms_status = -99
+        @errors << "商户 account_id #{id} 短信套餐余额不足"
       end
-      operation_id = SmsExpense.get_operation_id_by_operation_name(operation)
-      phones.each{|phone| SmsExpense.create(date: Date.today, account_id: self.id, phone: phone, content: content, operation_id: operation_id, status: sms_status)} if !is_free
     end
     {errors: @errors, message_id: message_id}
   rescue => e
@@ -228,19 +236,9 @@ class Account < ActiveRecord::Base
 
   private
 
-  def do_send_message(phone, content)
+  def mass_send_message(phones, content, options = {})
     sms_service = SmsService.new
-    sms_service.singleSend(phone, content)
-    # result =  rand  > 0.3 && 101812252025653392 || -4
-
-    # 短信发送失败，添加错误信息
-    @errors << sms_service.error_message if sms_service.error?
-    sms_service.result
-  end
-
-  def mass_send_message(phones, content)
-    sms_service = SmsService.new
-    sms_service.batchSend(phones, content)
+    sms_service.batchSend(phones, content, options)
     # 短信发送失败，添加错误信息
     @errors << sms_service.error_message if sms_service.error?
     sms_service.result

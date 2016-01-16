@@ -27,19 +27,20 @@ class SmsService
 
   def provider
     # Settings.sms_service == 'zhilian' ? ZhilianSms : SmsApi
-    provider = $redis.get('settings:sms:provider')
-    case provider
-    when 'songren'
-      SongrenSms
-    when 'fanmeng'
-      FanmengSms
-    when 'smsapi'
-      SmsApi
-    when 'emay'
-      EmaySms
-    else
-      ZhilianSms
-    end
+    # provider = $redis.get('settings:sms:provider')
+    # case provider
+    # when 'songren'
+    #   SongrenSms
+    # when 'fanmeng'
+    #   FanmengSms
+    # when 'smsapi'
+    #   SmsApi
+    # when 'emay'
+    #   EmaySms
+    # else
+    #   ZhilianSms
+    # end
+    ZhilianSms
   end
 
   def min_success_key_length

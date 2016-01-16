@@ -32,9 +32,9 @@ class Mobile::ShopTableOrdersController < Mobile::BaseController
 
     if @shop_table_order.save
       shop_branch = @shop_table_order.shop_branch
-      if shop_branch.mobile.present?
-        @shop_table_order.site.send_message(shop_branch.mobile, "订座通知：用户#{@shop_table_order.wx_user.nickname}（手机号：#{@shop_table_order.mobile}）于 #{Time.now.to_s} 预定了#{shop_branch.name}分店的座位", "餐饮")
-      end
+      # if shop_branch.mobile.present?
+      #   @shop_table_order.site.account.send_message(shop_branch.mobile, "订座通知：用户#{@shop_table_order.wx_user.nickname}（手机号：#{@shop_table_order.mobile}）于 #{Time.now.to_s} 预定了#{shop_branch.name}分店的座位", false, operation_id: 3, account_id: @site.account_id, userable_id: @user.id, userable_type: 'User')
+      # end
       if @shop_table_order.shop_branch.book_table_rule.is_limit_money
         @shop_table_order.update_column("status", -9)
         # direct to book dinner

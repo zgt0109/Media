@@ -51,8 +51,9 @@ class WxPlotRepairComplain < ActiveRecord::Base
     def send_sms
       is_open_sms = repair? ? wx_plot.try(:is_open_repair_sms) : wx_plot.try(:is_open_complain_sms)
       return if wx_plot_category.nil? || wx_plot.try(:site).nil? || !is_open_sms
+      options = { operation_id: 5, account_id: site.account_id, userable_id: user_id, userable_type: 'User' }
       sms_settings = wx_plot_category.sms_settings.where(['wx_plot_sms_settings.start_at <= ? and wx_plot_sms_settings.end_at >= ?', created_at.strftime('%H:%M'), created_at.strftime('%H:%M')]).all
-      wx_plot.site.send_message(sms_settings.collect(&:phone).uniq.join(','), "#{created_at.strftime('%H:%M')}收到#{nickname}用户#{phone}的#{wx_plot_category.name}#{repair? ? '报修申请' : '投诉建议'}", '小区')
+      wx_plot.site.account.send_message(sms_settings.collect(&:phone).uniq.join(','), "#{created_at.strftime('%H:%M')}收到#{nickname}用户#{phone}的#{wx_plot_category.name}#{repair? ? '报修申请' : '投诉建议'}", false, options)
     end
 
     def igetui

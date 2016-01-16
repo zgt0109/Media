@@ -56,11 +56,11 @@ class EmaySms
   end
 
   def batchSend(mobiles, message, options={})
-    send_sms(mobiles, message, options = {})
+    send_sms(mobiles, message, options)
   end
 
   def singleSend(mobile, message, options={})
-    send_sms(mobile, message, options = {})
+    send_sms(mobile, message, options)
   end
 
   def parseResBody string

@@ -14,11 +14,11 @@ class FanmengSms
   end
 
   def batchSend(mobiles, content, options={})
-    send_sms(mobiles, content, options = {})
+    send_sms(mobiles, content, options)
   end
 
   def singleSend(mobile, content, options={})
-    send_sms(mobile, content, options = {})
+    send_sms(mobile, content, options)
   end
 
   def balance

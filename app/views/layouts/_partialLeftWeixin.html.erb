@@ -16,15 +16,4 @@
       </ul>
     </li>
   <% end %>
-
-  <% if current_site.has_privilege_for?(1000) %>
-    <li class="<%= controller_name.include?('materials') ? parent_class : ''%>">
-      <%= left_nav_dropdown 'fa fa-file-photo-o', '素材管理' %>
-      <ul class="submenu" style="display: <%= controller_name.include?('materials') ? 'block;' : 'none;'%>">
-        <%= link_to_left_nav( '单图文', materials_url, controller_name == 'materials' ) %>
-        <%= link_to_left_nav( '多图文', multiple_materials_url, controller_name == 'multiple_materials' ) %>
-        <%= link_to_left_nav( '语音素材', materials_audios_url, controller_name == 'materials_audios' ) %>
-      </ul>
-    </li>
-  <% end %>
 </ul>

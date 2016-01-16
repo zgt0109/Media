@@ -3651,15 +3651,6 @@ class InitDb < ActiveRecord::Migration
   add_index "shops", ["name"], :name => "index_shops_on_name"
   add_index "shops", ["site_id"], :name => "index_shops_on_site_id"
 
-  create_table "sms_codes" do |t|
-    t.integer  "user_id",                   :null => false
-    t.string   "code",                      :null => false
-    t.datetime "expired_at"
-    t.integer  "status",     :default => 1, :null => false
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-  end
-
   create_table "sms_expenses" do |t|
     t.integer  "account_id"
     t.date     "date"
@@ -3670,8 +3661,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "created_at"
   end
 
-  add_index "sms_expenses", ["date"], :name => "index_sms_expenses_on_date"
-  add_index "sms_expenses", ["account_id"], :name => "index_sms_expenses_on_account_id"
+  add_index "sms_expenses", ["account_id", "date"]
 
   create_table "sms_logs" do |t|
     t.date     "date"
@@ -3695,13 +3685,12 @@ class InitDb < ActiveRecord::Migration
     t.integer  "plan_sms",                :default => 0, :null => false
     t.integer  "plan_id",                                :null => false
     t.integer  "plan_cost"
-    t.text     "remark"
-    t.datetime "created_at"
     t.string   "order_no",                               :null => false
     t.integer  "status",                  :default => 0, :null => false
+    t.text     "remark"
+    t.datetime "created_at"
   end
 
-  add_index "sms_orders", ["date"], :name => "index_sms_orders_on_date"
   add_index "sms_orders", ["account_id"], :name => "index_sms_orders_on_account_id"
 
   create_table "sn_code_scan_logs" do |t|

@@ -137,7 +137,7 @@ class Mobile::AidsController < Mobile::BaseController
 
     return render json: {errcode: 40002, errmsg: "电话号码不存在"} unless mobile.present?
 
-    @site.send_message(mobile, code, "Micro-aid", true)
+    # @site.send_message(mobile, code, true, operation_id: 6, account_id: @site.account_id, userable_id: @user.id, userable_type: 'User')
 
     render json: {errcode: 0, code: code, errmsg: "短信验证码发送成功"}
   end

@@ -1,10 +1,5 @@
 class MaterialsAudiosController < ApplicationController
-  
   before_filter :upload_audio_to_qiniu, only: [:create]
-
-  before_filter do
-    @partialLeftNav = "/layouts/partialLeftWeixin"
-  end
 
   def index
     @material  = Material.new(material_type: Material::AUDIOS)

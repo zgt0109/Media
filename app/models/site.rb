@@ -1040,24 +1040,4 @@ START
     [default_attrs, full_attrs]
   end
 
-  private
-
-  def do_send_message(phone, content)
-    sms_service = SmsService.new
-    sms_service.singleSend(phone, content)
-    # result =  rand  > 0.3 && 101812252025653392 || -4
-
-    # 短信发送失败，添加错误信息
-    @errors << sms_service.error_message if sms_service.error?
-    sms_service.result
-  end
-
-  def mass_send_message(phones, content)
-    sms_service = SmsService.new
-    sms_service.batchSend(phones, content)
-    # 短信发送失败，添加错误信息
-    @errors << sms_service.error_message if sms_service.error?
-    sms_service.result
-  end
-
 end

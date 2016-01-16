@@ -57,12 +57,12 @@ class ZhilianSms
 
   # 批量发送 mobiles是个数组
   def batchSend(mobiles, content, options = {})
-    send_sms(mobiles, content)
+    send_sms(mobiles, content, options)
   end
 
-  # 单次发送(用户名，密码，接收方号码，内容), 例如：singleSend('13599992222', '晚上有空么，小哥？')
+  # 单次发送(用户名，密码，接收方号码，内容), 例如：singleSend('13599992222', '晚上有空么，小哥？', { userable_id: 1, userable_type: 'User', source: 'ec'})
   def singleSend(mobile, content, options = {})
-    send_sms(mobile, content, options = {})
+    send_sms(mobile, content, options)
   end
 
   def self.min_success_key_length

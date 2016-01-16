@@ -2,10 +2,6 @@ class MultipleMaterialsController < ApplicationController
   # skip_filter :required_sign_in, only: [:show]
   before_filter :find_material, only: [:show, :edit, :update, :destroy]
 
-  before_filter do
-    @partialLeftNav = "/layouts/partialLeftWeixin"
-  end
-
   def index
     @materials = current_site.materials.root.multiple_graphic.graphic_select.page(params[:page]).order("id desc")
   end
@@ -37,9 +33,6 @@ class MultipleMaterialsController < ApplicationController
     else
       render action: 'new'
     end
-  end
-
-  def edit
   end
 
   def update
