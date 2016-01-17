@@ -174,12 +174,12 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(1040) %>
-    <li class="<%= parent_class if %w(channel_qrcodes channel_types channel_statistics).include?(controller_name) %>">
+    <li class="<%= parent_class if %w(qrcode_channels qrcode_channel_types qrcode_channel_statistics).include?(controller_name) %>">
       <%= left_nav_dropdown 'icon-qrcode', '二维码推广' %>
-      <ul class="submenu" style="display: <%= %w(channel_qrcodes channel_types channel_statistics).include?(controller_name) ? 'block;' : 'none;'%>">
-        <li class="<%= sub_class if controller_name == "channel_qrcodes" %>"><a href="<%= channel_qrcodes_path %>"> <i class="icon-double-angle-right"></i>二维码管理</a></li>
-        <li class="<%= sub_class if controller_name == "channel_types" %>"><a href="<%= channel_types_path %>"> <i class="icon-double-angle-right"></i>二维码分类</a></li>
-        <li class="<%= sub_class if controller_name == "channel_statistics" %>"><a href="<%= channel_statistics_path %>"> <i class="icon-double-angle-right"></i>统计推广</a></li>
+      <ul class="submenu" style="display: <%= %w(qrcode_channels qrcode_channel_types qrcode_channel_statistics).include?(controller_name) ? 'block;' : 'none;'%>">
+        <li class="<%= sub_class if controller_name == "qrcode_channels" %>"><a href="<%= qrcode_channels_path %>"> <i class="icon-double-angle-right"></i>二维码管理</a></li>
+        <li class="<%= sub_class if controller_name == "qrcode_channel_types" %>"><a href="<%= qrcode_channel_types_path %>"> <i class="icon-double-angle-right"></i>二维码分类</a></li>
+        <li class="<%= sub_class if controller_name == "qrcode_channel_statistics" %>"><a href="<%= qrcode_channel_statistics_path %>"> <i class="icon-double-angle-right"></i>统计推广</a></li>
       </ul>
     </li>
   <% end %>

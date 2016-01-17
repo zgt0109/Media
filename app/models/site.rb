@@ -136,8 +136,8 @@ class Site < ActiveRecord::Base
   has_many :car_catenas, dependent: :destroy
   has_many :car_activity_notices, dependent: :destroy
   has_many :wx_walls, dependent: :destroy
-  has_many :channel_types, dependent: :destroy
-  has_many :channel_qrcodes, dependent: :destroy
+  has_many :qrcode_channel_types, dependent: :destroy
+  has_many :qrcode_channels, dependent: :destroy
   has_many :qrcode_logs, dependent: :destroy
   has_many :qrcode_users, dependent: :destroy
 

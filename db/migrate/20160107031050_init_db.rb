@@ -1123,9 +1123,9 @@ class InitDb < ActiveRecord::Migration
   add_index "car_types", ["car_shop_id"], :name => "index_car_types_on_car_shop_id"
   add_index "car_types", ["level"], :name => "index_car_types_on_level"
 
-  create_table "channel_qrcodes" do |t|
+  create_table "qrcode_channels" do |t|
     t.integer  "site_id",                                       :null => false
-    t.integer  "channel_type_id",                               :null => false
+    t.integer  "qrcode_channel_type_id",                               :null => false
     t.integer  "qrcode_id",                                     :null => false
     t.string   "name",                                          :null => false
     t.integer  "channel_way",     :limit => 1, :default => 1
@@ -1141,12 +1141,12 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                    :null => false
   end
 
-  add_index "channel_qrcodes", ["channel_type_id"], :name => "index_channel_qrcodes_on_channel_type_id"
-  add_index "channel_qrcodes", ["qrcode_id"], :name => "index_channel_qrcodes_on_qrcode_id"
-  add_index "channel_qrcodes", ["scene_id"], :name => "index_channel_qrcodes_on_scene_id"
-  add_index "channel_qrcodes", ["site_id"], :name => "index_channel_qrcodes_on_site_id"
+  add_index "qrcode_channels", ["qrcode_channel_type_id"], :name => "index_qrcode_channels_on_qrcode_channel_type_id"
+  add_index "qrcode_channels", ["qrcode_id"], :name => "index_qrcode_channels_on_qrcode_id"
+  add_index "qrcode_channels", ["scene_id"], :name => "index_qrcode_channels_on_scene_id"
+  add_index "qrcode_channels", ["site_id"], :name => "index_qrcode_channels_on_site_id"
 
-  create_table "channel_types" do |t|
+  create_table "qrcode_channel_types" do |t|
     t.integer  "site_id",                    :null => false
     t.string   "name",                       :null => false
     t.string   "description"
@@ -1155,7 +1155,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                 :null => false
   end
 
-  add_index "channel_types", ["site_id"], :name => "index_channel_types_on_site_id"
+  add_index "qrcode_channel_types", ["site_id"], :name => "index_qrcode_channel_types_on_site_id"
 
   create_table "cities" do |t|
     t.string   "name",                       :null => false

@@ -1,6 +1,6 @@
-class ChannelType < ActiveRecord::Base
+class QrcodeChannelType < ActiveRecord::Base
   belongs_to :site
-  has_many :channel_qrcodes
+  has_many :qrcode_channels
 
   enum_attr :status, :in => [
     ['normal', 1, '正常'],

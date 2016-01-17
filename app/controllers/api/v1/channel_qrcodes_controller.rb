@@ -1,8 +1,8 @@
-class Api::V1::ChannelQrcodesController < ActionController::Base
+class Api::V1::QrcodeChannelsController < ActionController::Base
 	before_filter :cors_set_access_control_headers
 	# 二维码推广接口，输入参数: wx_user_open_id, column_name, amount
   # 成功返回: { errcode: 0, errmsg: "ok" }
-  # demo: http://localhost:3000/v1/channel_qrcodes/qrcode_user_amount_api?wx_user_open_id=oZmj5jinqjCrKZJAUUI0fnJ7bcqU&column_name=hotel_amount&amount=1&payment_type="支付宝"
+  # demo: http://localhost:3000/v1/qrcode_channels/qrcode_user_amount_api?wx_user_open_id=oZmj5jinqjCrKZJAUUI0fnJ7bcqU&column_name=hotel_amount&amount=1&payment_type="支付宝"
 	def qrcode_user_amount_api
 		wx_user = WxUser.where(openid: params[:wx_user_open_id]).last
 		return render json: { errcode: 1, errmsg: "参数不正确，找不到公众账号" } unless wx_user

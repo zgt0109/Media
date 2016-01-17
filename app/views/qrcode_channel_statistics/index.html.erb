@@ -3,8 +3,8 @@
   <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <li><%= link_to '二维码推广', channel_qrcodes_path %></li>
-      <li><%= link_to '统计推广', channel_statistics_path %></li>
+      <li><%= link_to '二维码推广', qrcode_channels_path %></li>
+      <li><%= link_to '统计推广', qrcode_channel_statistics_path %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
@@ -13,11 +13,11 @@
       <div class="col-xs-12">
         <div class="col-md-4 row">
           <%{"最近7天" => "one_weeks", "最近一月" => "one_months", "最近半年" => "six_months", "最近一年" => "twelve_months"}.each do |key, value|%>
-            <a href="<%= channel_statistics_path(created_date: value) %>" class="btn btn-primary btn-sm btn-filter btn-filter-tab <%= "active" if @date == value %>"><%= key %></a>
+            <a href="<%= qrcode_channel_statistics_path(created_date: value) %>" class="btn btn-primary btn-sm btn-filter btn-filter-tab <%= "active" if @date == value %>"><%= key %></a>
           <%end%>
         </div>
         <div class="col-md-5">
-          <%= form_tag channel_statistics_path ,:method => :get do %>
+          <%= form_tag qrcode_channel_statistics_path ,:method => :get do %>
             <div class="input-group width-240px pull-left">
                <span class="input-group-addon">
                 <i class="icon-calendar"></i>
@@ -91,23 +91,23 @@
             </tr>
           </thead>
           <tbody>
-            <% if @channel_qrcodes.includes(:qrcode).each do |channel_qrcode| %>
-            <% qrcode_users = channel_qrcode.qrcode.qrcode_users.select_time(@start_time, @end_time) rescue QrcodeUser.none %>
+            <% if @qrcode_channels.includes(:qrcode).each do |qrcode_channel| %>
+            <% qrcode_users = qrcode_channel.qrcode.qrcode_users.select_time(@start_time, @end_time) rescue QrcodeUser.none %>
               <tr>
-                <td><%= channel_qrcode.name %></td>
+                <td><%= qrcode_channel.name %></td>
                 <td><%= qrcode_users.sum(&:vip_amount) %></td>
                 <td><%= qrcode_users.sum(&:ec_amount) %></td>
                 <td><%= qrcode_users.sum(&:restaurant_amount) %></td>
                 <td><%= qrcode_users.sum(&:take_out_amount) %></td>
                 <td><%= qrcode_users.sum(&:hotel_amount) %></td>
-                <td><%= channel_qrcode.qrcode_logs.normal.count %></td>
+                <td><%= qrcode_channel.qrcode_logs.normal.count %></td>
               </tr>
             <% end.blank? %>
               <tr><td colspan="7" class="green text-center">无记录</td></tr>
             <% end %>
           </tbody>
         </table>
-        <%= paginate @channel_qrcodes %>
+        <%= paginate @qrcode_channels %>
       </div>
     </div>
   </div>

@@ -208,12 +208,12 @@ Wp::Application.routes.draw do
     end
   end
 
-  resources :channel_statistics, only: :index
-  resources :channel_qrcodes, except: :show do
+  resources :qrcode_channel_statistics, only: :index
+  resources :qrcode_channels, except: :show do
     get :download, :qrcode_download, on: :member
     get :index_json, on: :collection
   end
-  resources :channel_types, except: :show  do
+  resources :qrcode_channel_types, except: :show  do
     get :index_json, on: :collection
   end
 

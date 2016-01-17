@@ -1,12 +1,12 @@
-class ChannelTypesController < ApplicationController
+class QrcodeChannelTypesController < ApplicationController
   before_filter :require_wx_mp_user#, :mp_user_is_sync
 
   def index
-    @channel_types = current_site.channel_types.normal.latest.page(params[:page])
+    @qrcode_channel_types = current_site.qrcode_channel_types.normal.latest.page(params[:page])
   end
 
   def index_json
-    # data = current_site.channel_types.normal.map do |type|
+    # data = current_site.qrcode_channel_types.normal.map do |type|
     #   [type.name, type.description, qrcode.id]
     # end
     data = [ ["分类1", "渠道的分类1", 1], 
@@ -15,19 +15,19 @@ class ChannelTypesController < ApplicationController
   end
 
   def new
-    @channel_type = current_site.channel_types.new
+    @qrcode_channel_type = current_site.qrcode_channel_types.new
     render :form, layout: 'application_pop'
   end
 
   def edit
-    @channel_type = current_site.channel_types.find(params[:id])
+    @qrcode_channel_type = current_site.qrcode_channel_types.find(params[:id])
     render :form, layout: 'application_pop'
   end
 
   def create
-    @channel_type = current_site.channel_types.new(params[:channel_type])
+    @qrcode_channel_type = current_site.qrcode_channel_types.new(params[:qrcode_channel_type])
 
-    if @channel_type.save
+    if @qrcode_channel_type.save
       flash[:notice] = "添加成功"
       render inline: "<script>window.parent.document.getElementById('weisiteModal').style.display='none';window.parent.location.reload();</script>"
     else
@@ -37,9 +37,9 @@ class ChannelTypesController < ApplicationController
   end
 
   def update
-    @channel_type = current_site.channel_types.find(params[:id])
+    @qrcode_channel_type = current_site.qrcode_channel_types.find(params[:id])
 
-    if @channel_type.update_attributes(params[:channel_type])
+    if @qrcode_channel_type.update_attributes(params[:qrcode_channel_type])
       flash[:notice] = "编辑成功"
       render inline: "<script>window.parent.document.getElementById('weisiteModal').style.display='none';window.parent.location.reload();</script>"
     else
@@ -49,11 +49,11 @@ class ChannelTypesController < ApplicationController
   end
 
   def destroy
-    @channel_type = current_site.channel_types.find(params[:id])
-    if @channel_type.channel_qrcodes.normal.count > 0
+    @qrcode_channel_type = current_site.qrcode_channel_types.find(params[:id])
+    if @qrcode_channel_type.qrcode_channels.normal.count > 0
       redirect_to :back, alert: '有渠道在当前分类，不可删除'
     else
-      if @channel_type.deleted!
+      if @qrcode_channel_type.deleted!
         redirect_to :back, notice: '删除成功'
       else
         redirect_to :back, alert: '删除失败'

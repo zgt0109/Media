@@ -4,7 +4,7 @@ class Qrcode < ActiveRecord::Base
   belongs_to :site
   has_many :qrcode_logs
   has_many :qrcode_users
-  has_one :channel_qrcode
+  has_one :qrcode_channel
 
   enum_attr :action_name, :in => [
     ['qr_scene', 1, '临时 '],
@@ -19,7 +19,7 @@ class Qrcode < ActiveRecord::Base
     if qrcode_log
       qrcode_log.normal! if qrcode_log.deleted?
     else
-      qrcode_logs.create(site_id: site_id, user_id: wx_user.user_id, qrcodeable: channel_qrcode, event: xml[:Event], event_key: xml[:EventKey])
+      qrcode_logs.create(site_id: site_id, user_id: wx_user.user_id, qrcodeable: qrcode_channel, event: xml[:Event], event_key: xml[:EventKey])
     end
   end
 end

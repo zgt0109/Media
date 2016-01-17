@@ -479,8 +479,8 @@
                     self.img_key_input.val(key);
                     $(self.target).css({"background-image":"url("+img+")","background-size": "100% 100%","background-repeat": "no-repeat","width":w,height:h});
                     // 二维码推广logo上传
-                    if($("#channel_qrcode_logo").length){
-                        $("#channel_qrcode_logo").val(key);
+                    if($("#qrcode_channel_logo").length){
+                        $("#qrcode_channel_logo").val(key);
                     }
                     break;
             default :

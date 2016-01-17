@@ -1,4 +1,4 @@
-<%= form_for @channel_qrcode, validate: true, html: { role: 'form' } do |f| %>
+<%= form_for @qrcode_channel, validate: true, html: { role: 'form' } do |f| %>
   <div class="modal-body">
     <div class="form-group">
       <label class="control-label">二维码名称<span class="required-star">*</span><small class="text-warning">不要和其它二维码重复</small></label>
@@ -9,8 +9,8 @@
     <div class="form-group">
       <label class="control-label">二维码分类<span class="required-star">*</span></label>
       <div class="clearfix">
-        <% options = current_site.channel_types.normal.pluck(:name, :id) %>
-        <%= f.select :channel_type_id, options_for_select(options.insert(0,["请选择",""]), @channel_qrcode.channel_type_id.presence || 1), {}, :class => "col-xs-6" %>
+        <% options = current_site.qrcode_channel_types.normal.pluck(:name, :id) %>
+        <%= f.select :qrcode_channel_type_id, options_for_select(options.insert(0,["请选择",""]), @qrcode_channel.qrcode_channel_type_id.presence || 1), {}, :class => "col-xs-6" %>
       </div>
     </div>
     <div class="form-group no-margin-bottom">
@@ -19,30 +19,30 @@
         <div>
           <div class="radioTab">
             <label class="control-label"> 
-              <%= f.radio_button :channel_way, 1, class: "ace", data: {toggle: "radioTab", target: "tab_1"}, checked: @channel_qrcode.new_record? ? true : @channel_qrcode.online? %> 
+              <%= f.radio_button :channel_way, 1, class: "ace", data: {toggle: "radioTab", target: "tab_1"}, checked: @qrcode_channel.new_record? ? true : @qrcode_channel.online? %> 
               <span class="lbl">线上</span>
             </label>
             <label class="control-label"> 
-              <%= f.radio_button :channel_way, 2, class: "ace", data: {toggle: "radioTab", target: "tab_2"}, checked: @channel_qrcode.offline? %> 
+              <%= f.radio_button :channel_way, 2, class: "ace", data: {toggle: "radioTab", target: "tab_2"}, checked: @qrcode_channel.offline? %> 
               <span class="lbl">线下</span> 
             </label>
             <label class="control-label"> 
-              <%= f.radio_button :channel_way, 3, class: "ace", data: {toggle: "radioTab", target: "tab_3"}, checked: @channel_qrcode.other? %> 
+              <%= f.radio_button :channel_way, 3, class: "ace", data: {toggle: "radioTab", target: "tab_3"}, checked: @qrcode_channel.other? %> 
               <span class="lbl">其它</span> 
             </label>
           </div>
           <div class="radio-tab-content">
             <div id="tab_2" class="radio-tab-pane">
               <div class="form-group">
-                <label id="label" style="display:<%= @channel_qrcode.other? ? 'none;' : 'block;' %>">
-                  <% if @channel_qrcode.online? %>
+                <label id="label" style="display:<%= @qrcode_channel.other? ? 'none;' : 'block;' %>">
+                  <% if @qrcode_channel.online? %>
                     URL
-                  <% elsif @channel_qrcode.offline? %>
+                  <% elsif @qrcode_channel.offline? %>
                     地址
                   <% end %>
                 </label>
-                <div class="clearfix" id="address" style="display:<%= @channel_qrcode.offline? ? 'block;' : 'none;' %>">
-                  <%= address_select(ChannelQrcode.new(province_id: @channel_qrcode.province_id, city_id: @channel_qrcode.city_id, district_id: @channel_qrcode.district_id)) %>
+                <div class="clearfix" id="address" style="display:<%= @qrcode_channel.offline? ? 'block;' : 'none;' %>">
+                  <%= address_select(QrcodeChannel.new(province_id: @qrcode_channel.province_id, city_id: @qrcode_channel.city_id, district_id: @qrcode_channel.district_id)) %>
                 </div>
                 <div class="clearfix margin-top-10">
                   <%= f.text_field :way_content, class: "col-xs-6" %>
@@ -57,7 +57,7 @@
       <%= f.hidden_field :logo, value: "" %>
       <label class="control-label">二维码</label>
       <div class="clearfix">
-        <div style="background:url(<%= @channel_qrcode.new_record? ? '/assets/qr.jpg' : @channel_qrcode.pic_url %>) no-repeat 0 0; background-size: 100% 100%; width:100px; height: 100px; float: left; margin-right: 10px; position: relative;">
+        <div style="background:url(<%= @qrcode_channel.new_record? ? '/assets/qr.jpg' : @qrcode_channel.pic_url %>) no-repeat 0 0; background-size: 100% 100%; width:100px; height: 100px; float: left; margin-right: 10px; position: relative;">
             <div id="img-qrcode" style="width: 20px; height: 20px; position: absolute; top:50%; left: 50%; margin: -10px 0 0 -10px;"></div>
         </div>
         <div style="float: left; margin-top: 66px; width: 60%;">

@@ -57,15 +57,15 @@ namespace :activity_property do
 
 end
 
-namespace :channel_qrcode do
+namespace :qrcode_channel do
   
   desc 'upload qrcode_img to qiniu'
   task :upload_qrcode_img_to_qiniu => :environment do
     puts 'Starting upload qiniu ******'
-    ChannelQrcode.find_each do |qrcode|
-      puts "**********channel_qrcode_id=#{qrcode.id}******"
+    QrcodeChannel.find_each do |qrcode|
+      puts "**********qrcode_channel_id=#{qrcode.id}******"
       qrcode.update_column(:pic_key, ImgUploadQiniu.upload_qiniu(qrcode.qrcode_img))
-      puts "**********channel_qrcode_id=#{qrcode.pic_key}******"
+      puts "**********qrcode_channel_id=#{qrcode.pic_key}******"
     end
     puts 'Done!'
   end

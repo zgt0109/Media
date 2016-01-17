@@ -3,8 +3,8 @@
   <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <li><%= link_to '二维码推广', channel_qrcodes_path %></li>
-      <li><%= link_to '二维码管理', channel_qrcodes_path %></li>
+      <li><%= link_to '二维码推广', qrcode_channels_path %></li>
+      <li><%= link_to '二维码管理', qrcode_channels_path %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
@@ -31,8 +31,8 @@
           <div class="col-md-3">
             <div class="input-group input-group-text">
               <span class="input-group-addon">二维码分类：</span>
-              <% options = current_site.channel_types.normal.pluck(:name, :id) %>
-              <%= f.select :channel_type_id_eq, options_for_select(options.insert(0,['全部','']), @type_id), {},class: "col-xs-12" %>
+              <% options = current_site.qrcode_channel_types.normal.pluck(:name, :id) %>
+              <%= f.select :qrcode_channel_type_id_eq, options_for_select(options.insert(0,['全部','']), @type_id), {},class: "col-xs-12" %>
             </div>
           </div>
           <div class="col-md-3">
@@ -46,7 +46,7 @@
             <input type="submit" class="btn btn-sm btn-primary btn-filter margin-right-5" value="查询">
           </div>
           <div class="col-md-2 pull-right row">
-            <a href="javascript:;" class="btn btn-sm btn-primary pull-right" data-toggle="modals" data-target="weisiteModal" data-title="新增二维码" data-width="" data-height="1000" data-iframe="<%= new_channel_qrcode_path %>">新增</a>
+            <a href="javascript:;" class="btn btn-sm btn-primary pull-right" data-toggle="modals" data-target="weisiteModal" data-title="新增二维码" data-width="" data-height="1000" data-iframe="<%= new_qrcode_channel_path %>">新增</a>
           </div>
         <% end %>
       </div>
@@ -62,16 +62,16 @@
           </thead>
           <tbody>
             <tr>
-              <% if @channel_qrcodes.each do |channel_qrcode| %>
+              <% if @qrcode_channels.each do |qrcode_channel| %>
                 <tr>
-                  <td><%= channel_qrcode.name %></td>
-                  <td><%= channel_qrcode.channel_type.try(:name) %></td>
-                  <td><%= channel_qrcode.channel_way_name %></td>
+                  <td><%= qrcode_channel.name %></td>
+                  <td><%= qrcode_channel.qrcode_channel_type.try(:name) %></td>
+                  <td><%= qrcode_channel.channel_way_name %></td>
                   <td>
-                    <a href="javascript:;" data-toggle="modals" data-target="weisiteModal" data-title="编辑二维码" data-width="" data-height="1000" data-iframe="<%= edit_channel_qrcode_path(channel_qrcode) %>">编辑</a>
-                    <a href="javascript:;" data-toggle="modals" data-target="weisiteModal" data-title="更多尺寸" data-width="" data-height="500" data-iframe="<%= qrcode_download_channel_qrcode_path(channel_qrcode) %>">下载二维码</a>
-                    <%#= link_to "下载二维码", download_channel_qrcode_path(channel_qrcode) %>
-                    <%= link_to '删除', channel_qrcode_path(channel_qrcode), method: 'delete', confirm: "确定要删除该二维码？", data: {height: 160, weight: 350} %>
+                    <a href="javascript:;" data-toggle="modals" data-target="weisiteModal" data-title="编辑二维码" data-width="" data-height="1000" data-iframe="<%= edit_qrcode_channel_path(qrcode_channel) %>">编辑</a>
+                    <a href="javascript:;" data-toggle="modals" data-target="weisiteModal" data-title="更多尺寸" data-width="" data-height="500" data-iframe="<%= qrcode_download_qrcode_channel_path(qrcode_channel) %>">下载二维码</a>
+                    <%#= link_to "下载二维码", download_qrcode_channel_path(qrcode_channel) %>
+                    <%= link_to '删除', qrcode_channel_path(qrcode_channel), method: 'delete', confirm: "确定要删除该二维码？", data: {height: 160, weight: 350} %>
                   </td>
                 </tr>
               <% end.blank? %>
@@ -80,7 +80,7 @@
             </tr>
           </tbody>
         </table>
-        <%= paginate @channel_qrcodes %>
+        <%= paginate @qrcode_channels %>
       </div>
     </div>
   </div>

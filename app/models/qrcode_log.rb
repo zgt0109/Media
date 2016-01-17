@@ -9,7 +9,7 @@ class QrcodeLog < ActiveRecord::Base
   scope :six_months, ->(today) { where("date(created_at) >= ? and date(created_at) <= ?", (today - 5.month), today) }
   scope :twelve_months, ->(today) { where("date(created_at) >= ? and date(created_at) <= ?", (today - 1.year), today) }
   scope :select_time, ->(start_time,end_time) { where("date(created_at) >= ? and date(created_at) <= ?", start_time, end_time) }
-  scope :channel_qrcode_normal, ->(ids) { where(qrcodeable_id: ids, qrcodeable_type: "ChannelQrcode") }
+  scope :qrcode_channel_normal, ->(ids) { where(qrcodeable_id: ids, qrcodeable_type: "QrcodeChannel") }
   scope :earliest, -> { order('id ASC') }
 
   enum_attr :status, :in => [

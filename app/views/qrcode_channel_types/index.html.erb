@@ -3,8 +3,8 @@
   <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <li><%= link_to '二维码推广', channel_qrcodes_path %></li>
-      <li><%= link_to '二维码分类', channel_types_path %></li>
+      <li><%= link_to '二维码推广', qrcode_channels_path %></li>
+      <li><%= link_to '二维码分类', qrcode_channel_types_path %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
@@ -20,7 +20,7 @@
       </div>
       <div class="col-sm-12">
         <button class="btn btn-primary btn-sm pull-right" data-toggle="modals" data-target="weisiteModal"
-                data-title="新增分类" data-width="" data-height="500" data-iframe="<%= new_channel_type_path %>">新增</button>
+                data-title="新增分类" data-width="" data-height="500" data-iframe="<%= new_qrcode_channel_type_path %>">新增</button>
       </div>
       <div class="col-sm-12 margin-top-10">
         <table class="table table-striped table-bordered table-hover dataTable ">
@@ -32,14 +32,14 @@
           </tr>
           </thead>
           <tbody>
-            <% if @channel_types.each do |channel_type| %>
+            <% if @qrcode_channel_types.each do |qrcode_channel_type| %>
               <tr>
-                <td><%= channel_type.name %></td>
-                <td><%= channel_type.description %></td>
+                <td><%= qrcode_channel_type.name %></td>
+                <td><%= qrcode_channel_type.description %></td>
                 <td>
                   <a href="javascript:;" data-toggle="modals" data-target="weisiteModal"
-                 data-title="编辑分类" data-width="" data-height="300" data-iframe="<%= edit_channel_type_path(channel_type) %>">编辑</a>
-                  <%= link_to '删除', channel_type_path(channel_type), method: 'delete', confirm: "确定要删除该分类？", data: {height: 160, weight: 350} %>
+                 data-title="编辑分类" data-width="" data-height="300" data-iframe="<%= edit_qrcode_channel_type_path(qrcode_channel_type) %>">编辑</a>
+                  <%= link_to '删除', qrcode_channel_type_path(qrcode_channel_type), method: 'delete', confirm: "确定要删除该分类？", data: {height: 160, weight: 350} %>
                 </td>
               </tr>
             <% end.blank? %>
@@ -47,7 +47,7 @@
             <% end %>
           </tbody>
         </table>
-        <%= paginate @channel_types %>
+        <%= paginate @qrcode_channel_types %>
       </div>
     </div>
   </div>

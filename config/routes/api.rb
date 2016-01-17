@@ -73,7 +73,7 @@ Wp::Application.routes.draw do
         get :get_vip_packages_api, :get_vip_packages_life_api, on: :collection
       end
 
-      resources(:channel_qrcodes, only: []) do
+      resources(:qrcode_channels, only: []) do
         get :qrcode_user_amount_api, on: :collection
       end
 
