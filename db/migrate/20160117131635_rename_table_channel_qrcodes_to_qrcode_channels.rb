@@ -1,4 +1,4 @@
-class RenameTableQrcodeChannelsToQrcodeChannels < ActiveRecord::Migration
+class RenameTableChannelQrcodesToQrcodeChannels < ActiveRecord::Migration
   def change
     rename_table :channel_qrcodes, :qrcode_channels
     rename_table :channel_types, :qrcode_channel_types
