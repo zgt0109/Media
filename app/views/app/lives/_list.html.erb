@@ -1,36 +1,36 @@
 <% if @website_menu.square? %>
-    <div class="box-list-arrow">
-      <% @website_menu.children.sorted.each do |child| %>
-        <a href="<%= child.has_children? ? page_app_life_url(child, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>" class="table">
-          <% if child.pic_key.present? %>
-            <span class="fl td">
-              <b><%= image_tag child.pic_url %></b>
-            </span>
-          <% end %>
-          <span class="<%= child.pic_key.present? ? "fr td" : "fw td" %>">
-            <b><%= child.name %></b>
-            <i><%= date_format_full_l(child.created_at) %></i>
-            <em class="arrow"></em>
-          </span>
-        </a>
-      <% end %>
-    </div>
+<div class="box-list-arrow">
+  <% @website_menu.children.sorted.each do |child| %>
+  <a href="<%= child.has_children? ? page_app_life_url(child, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>" class="table">
+    <% if child.pic_key.present? %>
+    <span class="fl td">
+      <b><%= image_tag child.pic_url %></b>
+    </span>
+    <% end %>
+    <span class="<%= child.pic_key.present? ? "fr td" : "fw td" %>">
+      <b><%= child.name %></b>
+      <i><%= date_format_full_l(child.created_at) %></i>
+      <em class="arrow"></em>
+    </span>
+  </a>
+  <% end %>
+</div>
 <% else %>
-  <div class="box box-index">
-    <div class="hd">
-      <a href="<%= app_life_url(@website_menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
-      <h2 class="ellipsis"><%= @website_menu.name %></h2>
-      <a class="ico icon-angle-right fr"></a>
-    </div>
-    <% if @website_menu.has_children? %>
-      <div class="bd box-circle">
-        <% @website_menu.children.sorted.each do |child| %>
-          <a href="<%= child.has_children? ? page_app_life_url(child, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>">
-            <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
-            <i><%= child.name %></i>
-          </a>
-        <% end %>
-      </div>
+<div class="box box-index">
+  <div class="hd">
+    <a href="<%= app_life_url(@website_menu, anchor: "mp.weixin.qq.com")  %>" class="box-block"></a>
+    <h2 class="ellipsis"><%= @website_menu.name %></h2>
+    <a class="ico icon-angle-right fr"></a>
+  </div>
+  <% if @website_menu.has_children? %>
+  <div class="bd box-circle">
+    <% @website_menu.children.sorted.each do |child| %>
+    <a href="<%= child.has_children? ? page_app_life_url(child, anchor: "mp.weixin.qq.com") : website_activity_link(child) %>">
+      <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
+      <i><%= child.name %></i>
+    </a>
     <% end %>
   </div>
+  <% end %>
+</div>
 <% end %>

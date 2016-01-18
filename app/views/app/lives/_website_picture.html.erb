@@ -21,8 +21,6 @@
 <script type="text/javascript">
     //var slider=new TouchSlider({id:'slider', speed:600, timeout:6000});
     <% if @website_pictures.present? %>
-
-
     $(function(){
         var texts=<%= @website_pictures.map(&:title).to_s.html_safe %>;
         new Swipe(document.getElementById('slider'), {

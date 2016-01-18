@@ -95,7 +95,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "name",                                                 :null => false
     t.string   "summary"
     t.string   "keyword",                                              :null => false
-    t.datetime "ready_at",                                             :null => false
+    t.datetime "ready_at"
     t.datetime "start_at"
     t.datetime "end_at"
     t.integer  "activityable_id"

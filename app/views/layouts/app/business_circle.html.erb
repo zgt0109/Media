@@ -28,7 +28,7 @@
     <div class="navPop-wrap" id="navPop-wrap">
       <b class="navPop-btn" id="navPop-btn"><i class="fa fa-plus" id="fa-btn" onclick="toggleToClass('#navPop-btn','active')"></i></b>
       <% @website_popup_menus.each do |popup_menu|  %>
-        <div><a style="background-image:url(<%= popup_menu.icon.thumb%>);" href="<%= website_activity_link(popup_menu) %>">&nbsp;</a></div>
+        <div><a style="background-image:url(<%= popup_menu.icon_url%>);" href="<%= website_activity_link(popup_menu) %>">&nbsp;</a></div>
       <% end %>
     </div>
   </div>

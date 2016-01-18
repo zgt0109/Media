@@ -338,6 +338,10 @@ class Website < ActiveRecord::Base
     end
   end
 
+  def home_cover_pic_url
+    qiniu_image_url(home_cover_pic_key)
+  end
+
   def logo_url
     qiniu_image_url(logo_key)
   end
@@ -349,5 +353,5 @@ class Website < ActiveRecord::Base
   def display_preview_pic_url
     [ WEBSITE_DOMAIN, (preview_pic.present? ? "/uploads/preview_pic/website_menu/#{id}/#{preview_pic}" : default_preview_pic_url) ].join
   end
-  
+
 end

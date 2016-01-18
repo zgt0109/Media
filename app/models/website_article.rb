@@ -76,4 +76,8 @@ class WebsiteArticle < ActiveRecord::Base
     end
   end
 
+  def pic_url
+    qiniu_image_url(pic_key)
+  end
+
 end

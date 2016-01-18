@@ -152,7 +152,7 @@ class WebsitePopupMenu < ActiveRecord::Base
     menus.each_with_index{|menu, index| menu.sort = index + 1}.each{|menu| menu.update_column('sort', menu.sort) if menu.sort_changed?}
   end
 
-  def icon_url(type = :thumb)
+  def icon_url
     qiniu_image_url(icon_key)
   end
 
