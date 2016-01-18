@@ -39,7 +39,7 @@ module App
     private
     def get_consume! activity
       sn = ''
-      group_user = activity.activity_groups.where(user_id session[:user_id]).first
+      group_user = activity.activity_groups.where(user_id: session[:user_id]).first
       if group_user
         activity_consume = activity.activity_consumes.where(site_id: activity.site_id, user_id: session[:user_id]).first_or_create(mobile: group_user.mobile, activity_group_id: group_user.id)
         sn = activity_consume.code if activity_consume
