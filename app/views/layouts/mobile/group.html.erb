@@ -27,7 +27,7 @@
     <div class="btn-up">
       <% if "#{params[:controller]}/#{params[:action]}".eql?('mobile/groups/index') %>
         <span class="fa-stack fa-2x">
-          <%= link_to mobile_group_orders_url(@supplier.id) do %>
+          <%= link_to mobile_group_orders_url(@site.id) do %>
             <i class="fa fa-circle fa-stack-2x red"></i>
             <i class="fa fa-tag fa-stack-1x fa-inverse "></i>
           <% end %>

@@ -2,16 +2,14 @@ class Mobile::GroupOrdersController < Mobile::BaseController
     
   layout "mobile/group"
   
-  before_filter :set_wx_user, only: [:index, :pay, :create, :new, :edit]
   before_filter :set_group_order, only: [:edit, :update, :destroy]
   before_filter :set_group_item, only: [:new, :edit]
   before_filter :set_payment_types, only: [:new, :edit]
 
   def index
-    #@group_orders = @wx_user.group_orders.order("created_at desc")
-    @pending_orders = @wx_user.group_orders.pending.order("created_at desc")
-    @paid_orders = @wx_user.group_orders.paid.order("created_at desc")
-    @consumed_no_comments_orders = @wx_user.group_orders.consumed.includes(:group_comments).consumed.where('not exists (select * FROM group_comments where group_orders.id=group_comments.group_order_id)').order("group_orders.created_at desc")
+    @pending_orders = @user.group_orders.pending.order("created_at desc")
+    @paid_orders = @user.group_orders.paid.order("created_at desc")
+    @consumed_no_comments_orders = @user.group_orders.consumed.includes(:group_comments).consumed.where('not exists (select * FROM group_comments where group_orders.id=group_comments.group_order_id)').order("group_orders.created_at desc")
   rescue
     render :text => "参数不正确"
   end
@@ -22,14 +20,14 @@ class Mobile::GroupOrdersController < Mobile::BaseController
   end
 
   def pay
-    @user = User.find(session[:user_id]) unless @wx_user
-    @order = @wx_user.group_orders.find params[:id]
+    @user = User.find(session[:user_id]) unless @user
+    @order = @user.group_orders.find params[:id]
 
     options = {
                 callback_url: callback_payments_url,
                 notify_url: notify_payments_url,
                 merchant_url: group_orders_url({site_id: session[:site_id]}),
-                open_id: @wx_user.openid
+                open_id: @user.wx_user.openid
               }
     @payment_request_params = @order.payment_request_params(options)
 
@@ -91,13 +89,9 @@ class Mobile::GroupOrdersController < Mobile::BaseController
     redirect_to mobile_group_orders_url(site_id: @site), alert: "订单不存在或已删除" unless @group_order
   end
 
-  def set_wx_user
-    @user = User.find(session[:user_id])
-  end
-
   def set_group_item
     @group_item   = GroupItem.find_by_id(params[:group_item_id])
-    @group_orders = @wx_user.group_orders.where(group_item_id: @group_item.id ).today
+    @group_orders = @user.group_orders.where(group_item_id: @group_item.id ).today
     redirect_to mobile_groups_url(site_id: @site), alert: "此商品不存在或已下架" unless @group_item.present?
     unless @group_item.limit_coupon_count == -1
       redirect_to mobile_group_item_url(site_id: @site.id, id: @group_item), alert: "此商品每人每天最多只能购买#{@group_item.limit_coupon_count}件" if @group_orders.sum(&:qty) >= @group_item.limit_coupon_count

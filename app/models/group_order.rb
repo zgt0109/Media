@@ -58,7 +58,7 @@ class GroupOrder < ActiveRecord::Base
 
     _order_params = {
       payment_type_id: payment_type_id,
-      site_id: site_id,
+      account_id: site.account_id,
       customer_id: user_id,
       customer_type: 'User',
       paymentable_id: id,
@@ -67,7 +67,7 @@ class GroupOrder < ActiveRecord::Base
       amount: total_amount,
       body: "订单 #{order_no}",
       subject: "订单 #{order_no}",
-      source: 'winwemedia_group_order'
+      source: 'group_order'
     }
 
     params.reverse_merge(_order_params)
