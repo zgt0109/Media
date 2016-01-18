@@ -8,6 +8,6 @@ class Pro::BookingBaseController < ApplicationController
   end
 
   def require_industry
-    redirect_to profile_path, alert: '你没有权限使用此功能' unless current_user.has_industry_for?(10012)
+    redirect_to profile_path, alert: '你没有权限使用此功能' unless current_site.has_industry_for?(10012)
   end
 end

@@ -172,24 +172,8 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def has_industry_for?(industry_id)
-    return true
-
-    (site_industry_ids + [site_industry_id]).compact.flatten.uniq.include?(industry_id)
-  end
-
-  def site_privileges
-    AccountPrivilege.where(id: privileges.to_s.split(','))
-  end
-
   def has_privilege_for?(id)
-    return true
-
-    ( privileges.to_s.split(',') + custom_privileges.to_s.split(',') ).uniq.include?(id.to_s)
-  end
-
-  def has_privilege_menu_for?(menu_id)
-    site_privileges.pluck(:menu_id).uniq.include?(menu_id)
+    privileges.to_s.split(',').uniq.include?(id.to_s)
   end
 
   def find_or_generate_auth_token(encrypt = true)

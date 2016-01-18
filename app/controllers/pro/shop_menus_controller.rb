@@ -83,7 +83,7 @@ class Pro::ShopMenusController < Pro::ShopBaseController
   private
   def authorize_shop_branch_account
     # render_404 && false if current_user.is_a?(SubAccount) && action_name !~ /categories/
-    authorize_shop_branch_account! 'manage_catering_menus' if current_user.has_industry_for?(10001)
-    authorize_shop_branch_account! 'manage_takeout_menus'  if current_user.has_industry_for?(10002)
+    authorize_shop_branch_account! 'manage_catering_menus' if current_site.has_privilege_for?(10001)
+    authorize_shop_branch_account! 'manage_takeout_menus'  if current_site.has_privilege_for?(10002)
   end
 end

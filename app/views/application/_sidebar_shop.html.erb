@@ -9,7 +9,7 @@
     <%= link_to shop_products_path do %><span>菜单管理</span> <i></i><% end %>
   </li>
 
-<% if current_user.has_industry_for?(10001) %>
+<% if current_site.has_privilege_for?(10001) %>
   <li class="<%= controller_name == 'shop_orders' and !['report', 'graphic'].include?(action_name) ? "current pagecurrent" : '' %>">
     <%= link_to shop_orders_path do %><span>订餐管理</span> <i></i><% end %>
   </li>
@@ -22,7 +22,7 @@
   </li>
 <% end %>
 
-<% if current_user.has_industry_for?(10002) %>
+<% if current_site.has_privilege_for?(10002) %>
   <li class="<%= current_page?(shop_orders_url) ? "current pagecurrent" : '' %>">
     <%= link_to shop_orders_path do %><span>外卖管理</span> <i></i><% end %>
   </li>

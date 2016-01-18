@@ -8,7 +8,7 @@ class Pro::ShopBaseController < ApplicationController
   private
     # def update_industry
     #   industry_id = params[:industry_id].to_i if params[:industry_id].present?
-    #   if industry_id && current_user.has_industry_for?(industry_id)
+    #   if industry_id && current_site.has_privilege_for?(industry_id)
     #     supplier = current_user.is_a?(Account) ? current_user : current_shop_account
     #     if supplier.supplier_industry_id != industry_id
     #       supplier.update_attributes(supplier_industry_id: industry_id)

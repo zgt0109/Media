@@ -12,6 +12,6 @@ class Pro::WeddingsBaseController < ApplicationController
   end
 
   def require_industry
-    redirect_to profile_path, alert: '你没有权限使用此功能' unless current_user.has_industry_for?(10010)
+    redirect_to profile_path, alert: '你没有权限使用此功能' unless current_site.has_privilege_for?(10010)
   end
 end
