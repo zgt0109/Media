@@ -18,7 +18,7 @@ class Pro::CarCatenasController < ApplicationController
 
   def create
     if params[:car_catena].present?
-      params[:car_catena] = params[:car_catena].merge(car_brand_id: @car_shop.car_brand.try(:id), site_id: current_site.id)
+      params[:car_catena] = params[:car_catena].merge(car_brand_id: @car_shop.car_brand.try(:id))
       @car_catena = @car_shop.car_catenas.new(params[:car_catena])
       if @car_catena.save
         flash[:notice] =  "保存信息成功"

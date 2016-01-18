@@ -39,13 +39,9 @@
             </div>
             <div class="col-xs-12 margin-top-20">
               <%= form_for @car_activity_notice, validate: true do |f| %>
-                <%= f.hidden_field :supplier_id %>
-                <%= f.hidden_field :wx_mp_user_id %>
                 <%= f.hidden_field :car_shop_id %>
                 <%= f.hidden_field :notice_type %>
                 <%= f.fields_for :activity do |activity| %>
-                  <%= activity.hidden_field :supplier_id %>
-                  <%= activity.hidden_field :wx_mp_user_id %>
                   <%= activity.hidden_field :activity_type_id %>
                   <%= activity.hidden_field :status %>
                   <%= activity.hidden_field :ready_at %>
@@ -79,7 +75,7 @@
                       <td><%= assistant.name %></td>
                       <td>
                         <label>
-                          <input data-id="<%= assistant.id %>" name="switch-field-<%= assistant.id %>" class="ace ace-switch ace-switch-4" type="checkbox" <%= 'checked' if @assistants_accounts.include?(assistant.id) %> >
+                          <input data-id="<%= assistant.id %>" name="switch-field-<%= assistant.id %>" class="ace ace-switch ace-switch-4" type="checkbox" <%= 'checked' if @assistants_sites.include?(assistant.id) %> >
                           <span class="lbl"></span>
                         </label>
                       </td>

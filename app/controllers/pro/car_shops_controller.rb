@@ -28,7 +28,7 @@ class Pro::CarShopsController < ApplicationController
         status: 1,
         name: @car_activity_notice.activity.name,
         keyword: @car_activity_notice.activity.keyword,
-        pic: @car_activity_notice.activity.pic,
+        pic_key: @car_activity_notice.activity.pic_key,
         description: @car_activity_notice.activity.description,
         ready_at: now,
         start_at: now,

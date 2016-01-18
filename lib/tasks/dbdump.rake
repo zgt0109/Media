@@ -58,7 +58,7 @@ task :dbdump => :environment do
   system "#{dump} agents --where=#{sql_agent} --no-create-info >> #{db}"
 
   system "#{dump} assistants --no-create-info >> #{db}"
-  system "#{dump} assistants_accounts --where=#{sql_supplier} --no-create-info >> #{db}"
+  system "#{dump} assistants_sites --where=#{sql_supplier} --no-create-info >> #{db}"
 
   system "#{dump} cities --no-create-info >> #{db}"
 

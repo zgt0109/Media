@@ -16,7 +16,8 @@ class Pro::CarBespeaksController < ApplicationController
     end
 
     # @total_car_bespeaks = current_site.car_bespeaks.includes(:car_brand).includes(:car_catena).where("car_brands.status = ? and car_catenas.status = ? and car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", CarBrand::NORMAL, CarCatena::NORMAL, bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
-    @total_car_bespeaks = current_site.car_bespeaks.includes(:car_brand).includes(:car_catena).where("car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
+    # @total_car_bespeaks = current_site.car_bespeaks.includes(:car_brand, :car_catena).where("car_bespeaks.bespeak_type = ? and car_bespeaks.status > ? ", bespeak_type, CarBespeak::DELETED ).order('car_bespeaks.created_at desc')
+    @total_car_bespeaks = CarBespeak.includes(:car_brand, :car_catena).where("bespeak_type = ? and status > ?", bespeak_type, CarBespeak::DELETED).order('created_at desc')
     if params[:query_type_value].present?
       case @query_type_key when 1
     		@total_car_bespeaks = @total_car_bespeaks.where("car_brands.name like ? ", "%#{params[:query_type_value]}%")
@@ -46,7 +47,7 @@ class Pro::CarBespeaksController < ApplicationController
       @page = "保养预约"
       @link = activity_notice_car_bespeaks_path(bespeak_type: 1)
     end
-		@car_activity_notice = current_site.car_activity_notices.where(notice_type: notice_type).first || current_site.car_activity_notices.new(site_id: current_site.id, notice_type: notice_type)
+		@car_activity_notice = current_site.car_shop.car_activity_notices.where(notice_type: notice_type).first || current_site.car_shop.car_activity_notices.new(notice_type: notice_type)
 		@car_activity_notice.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
 	end
 

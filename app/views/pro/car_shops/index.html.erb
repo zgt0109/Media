@@ -33,8 +33,6 @@
               </div>
             </div>
             <%= f.fields_for :car_brand do |car_brand| %>
-              <%= car_brand.hidden_field :supplier_id, value: current_user.id %>
-              <%= car_brand.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
               <%= car_brand.hidden_field :car_shop_id, value: @car_shop.id %>
               <div class="form-group">
                 <label class="control-label clearfix">品牌名称<span class="required-star">*</span></label>
@@ -51,8 +49,6 @@
             <%- end %>
             <%= f.fields_for :car_activity_notices do |car_activity_notice| %>
               <% if car_activity_notice.object.shop? %>
-                <%= car_activity_notice.hidden_field :supplier_id, value: current_user.id %>
-                <%= car_activity_notice.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
                 <%= car_activity_notice.hidden_field :car_shop_id, value: @car_shop.id %>
                 <%= car_activity_notice.hidden_field :notice_type, value: '1' %>
                 <%= car_activity_notice.fields_for :activity do |activity| %>

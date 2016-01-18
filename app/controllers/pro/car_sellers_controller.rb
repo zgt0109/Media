@@ -3,28 +3,28 @@ class Pro::CarSellersController < ApplicationController
 
   def index
   	# seller_type = (params[:seller_type].present? and params[:seller_type].to_i == CarSeller::SALES_CONSULTANT) ? CarSeller::SALES_CONSULTANT : CarSeller::SALES_REP
-    @total_car_sellers = current_site.car_sellers.normal#.where(seller_type: seller_type)
+    @total_car_sellers = current_site.car_shop.car_sellers.normal#.where(seller_type: seller_type)
     @search = @total_car_sellers.search(params[:search])
     @car_sellers = @search.page(params[:page])
 
-    @car_seller = @total_car_sellers.where("id = ?", params[:id]).first || @total_car_sellers.new(site_id: current_site.id, car_shop_id: current_site.car_shop.try(:id))
+    @car_seller = @total_car_sellers.where("id = ?", params[:id]).first || @total_car_sellers.new(car_shop_id: current_site.car_shop.try(:id))
 
   end
 
   def new
-    @total_car_sellers = current_site.car_sellers.normal
-    @car_seller = @total_car_sellers.new(site_id: current_site.id, car_shop_id: current_site.car_shop.try(:id))
+    @total_car_sellers = current_site.car_shop.car_sellers.normal
+    @car_seller = @total_car_sellers.new(car_shop_id: current_site.car_shop.try(:id))
     render layout: "application_pop"
   end
 
   def edit
-    @total_car_sellers = current_site.car_sellers.normal
+    @total_car_sellers = current_site.car_shop.car_sellers.normal
     @car_seller = @total_car_sellers.where("id = ?", params[:id]).first
     render layout: "application_pop"
   end
 
   def create
-    @car_seller = current_site.car_sellers.new(params[:car_seller])
+    @car_seller = current_site.car_shop.car_sellers.new(params[:car_seller])
     if @car_seller.save
       flash[:notice] = "保存成功"
       render inline: '<script>parent.document.location = parent.document.location;</script>';
@@ -35,7 +35,7 @@ class Pro::CarSellersController < ApplicationController
   end
 
   def update
-    @car_seller = current_site.car_sellers.find(params[:id])
+    @car_seller = current_site.car_shop.car_sellers.find(params[:id])
     if @car_seller.update_attributes(params[:car_seller])
       flash[:notice] = "保存成功"
       render inline: '<script>parent.document.location = parent.document.location;</script>';
@@ -46,7 +46,7 @@ class Pro::CarSellersController < ApplicationController
   end
 
   def destroy
-    @car_seller = current_site.car_sellers.find(params[:id])
+    @car_seller = current_site.car_shop.car_sellers.find(params[:id])
     respond_to do |format|
     	if @car_seller and @car_seller.delete!
     		format.html { redirect_to :back, notice: '删除成功' }
@@ -59,7 +59,7 @@ class Pro::CarSellersController < ApplicationController
 	def activity_notice
 		notice_type = (params[:seller_type].present? and params[:seller_type].to_i == CarSeller::SALES_CONSULTANT) ? CarActivityNotice::SALES_CONSULTANT : CarActivityNotice::SALES_REP
 		now = Time.now
-		@car_activity_notice = current_site.car_activity_notices.where(notice_type: notice_type).first || current_site.car_activity_notices.new(site_id: current_site.id, notice_type: notice_type)
+		@car_activity_notice = current_site.car_shop.car_activity_notices.where(notice_type: notice_type).first || current_site.car_shop.car_activity_notices.new(notice_type: notice_type)
 		@car_activity_notice.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
 	end
 

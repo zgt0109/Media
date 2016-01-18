@@ -13,7 +13,7 @@
     <div class="row">
       <div class="col-sm-12">
         <%= form_for @search, url: car_types_path, html: { method: :get } do |f| %>
-          <% options = current_user.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+          <% options = current_site.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
           <div class="col-md-3 row">
             <%= f.select :car_catena_id_eq, options_for_select(options.insert(0,["全部车系",""]), @car_catena_id), {}, :class => "col-xs-12" %>
           </div>

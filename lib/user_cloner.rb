@@ -7,7 +7,7 @@ class UserCloner
   end
 
   def run!
-    create_assistants_accounts
+    create_assistants_sites
     clone_materials
 
     clone_marketing_activities
@@ -58,7 +58,7 @@ class UserCloner
     run!
   end
 
-  def create_assistants_accounts
+  def create_assistants_sites
     return puts "assistant_suppliers existed" if AssistantsSite.where(supplier_id: user.id).exists?
     Assistant.pluck(:id).each do |assistant_id|
       next if cloned["AssistantsSite"][assistant_id]
@@ -478,7 +478,7 @@ class UserCloner
     @wx_mp_user && WxMpUser.find(@wx_mp_user.id)
   end
 
-  %w(init_activity_by_coupon init_activity_by_fans_game create_assistants_accounts clone_materials clone_marketing_activities clone_website clone_vip_card clone_shops clone_activity_forms clone_votes
+  %w(init_activity_by_coupon init_activity_by_fans_game create_assistants_sites clone_materials clone_marketing_activities clone_website clone_vip_card clone_shops clone_activity_forms clone_votes
     clone_surveys clone_groups clone_albums clone_replies clone_weddings clone_college clone_car_shop clone_hotel clone_house).each do |method_name|
     define_method "#{method_name}_with_puts" do
       puts "*********************************doing #{method_name}"

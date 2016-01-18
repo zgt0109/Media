@@ -1,6 +1,4 @@
 <%= form_for(@car_seller, validate: true) do |f| %>
-  <%= f.hidden_field :supplier_id %>
-  <%= f.hidden_field :wx_mp_user_id %>
   <%= f.hidden_field :seller_type, value: params[:seller_type] || 1 %>
   <div class="alert alert-block alert-info" style="margin-bottom: 0px;">
     <strong class="pull-left">提示：</strong>

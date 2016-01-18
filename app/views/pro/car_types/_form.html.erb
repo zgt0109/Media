@@ -19,8 +19,6 @@
         </div>
       </div>
       <%= form_for(@car_type, validate: true) do |f| %>
-        <%= f.hidden_field :supplier_id, value: current_user.id %>
-        <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.try(:id) %>
         <%= f.hidden_field :car_brand_id, value: @car_shop.car_brand.try(:id) %>
         <div class="col-md-5 col-lg-5">
           <div class="form-group">
@@ -32,7 +30,7 @@
           <div class="form-group">
             <label class="">选择车系<span class="required-star">*</span></label>
             <div class="clearfix">
-              <% options = current_user.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
+              <% options = current_site.car_shop.car_catenas.order(:sort).pluck(:name, :id) %>
               <%= f.select :car_catena_id, options_for_select(options, @car_type.try(:car_catena_id)), {}, class: 'form-control' %>
             </div>
           </div>

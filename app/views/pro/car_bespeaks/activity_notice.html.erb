@@ -42,13 +42,9 @@
                 </div>
                 <div class="col-xs-12 margin-top-20">
                   <%= form_for @car_activity_notice, validate: true do |f| %>
-                      <%= f.hidden_field :supplier_id %>
-                      <%= f.hidden_field :wx_mp_user_id %>
                       <%= f.hidden_field :car_shop_id %>
                       <%= f.hidden_field :notice_type %>
                       <%= f.fields_for :activity do |activity| %>
-                          <%= activity.hidden_field :supplier_id %>
-                          <%= activity.hidden_field :wx_mp_user_id %>
                           <%= activity.hidden_field :activity_type_id %>
                           <%= activity.hidden_field :status %>
                           <%= activity.hidden_field :ready_at %>
