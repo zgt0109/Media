@@ -1,5 +1,5 @@
 class Pro::CarBespeaksController < ApplicationController
-	# before_filter :check_car_shop
+	before_filter :get_car_shop
 
   def index
 		@query_type_options = [['车系',2],['电话',3],['预约时间',4]]
@@ -47,18 +47,18 @@ class Pro::CarBespeaksController < ApplicationController
       @page = "保养预约"
       @link = activity_notice_car_bespeaks_path(bespeak_type: 1)
     end
-		@car_activity_notice = current_site.car_shop.car_activity_notices.where(notice_type: notice_type).first || current_site.car_shop.car_activity_notices.new(notice_type: notice_type)
+		@car_activity_notice = @car_shop.car_activity_notices.where(notice_type: notice_type).first || current_site.car_shop.car_activity_notices.new(notice_type: notice_type)
 		@car_activity_notice.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::CAR, activityable: @car_activity_notice, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @car_activity_notice.activity
 	end
 
   def show
-    @car_bespeak = current_site.car_bespeaks.find(params[:id])
+    @car_bespeak = @car_shop.car_bespeaks.find(params[:id])
     params[:bespeak_type] = @car_bespeak.bespeak_type
     render layout: "application_pop"
   end
 
   def destroy
-    @car_bespeak = current_site.car_bespeaks.find(params[:id])
+    @car_bespeak = @car_shop.car_bespeaks.find(params[:id])
     respond_to do |format|
   		if @car_bespeak.delete!
 				format.html { redirect_to :back, notice: "删除成功" }
@@ -69,7 +69,7 @@ class Pro::CarBespeaksController < ApplicationController
   end
 
   def visit
-  	@car_bespeak = current_site.car_bespeaks.find(params[:id])
+  	@car_bespeak = @car_shop.car_bespeaks.find(params[:id])
   	respond_to do |format|
   		if @car_bespeak.visit!
 				format.html { redirect_to :back, notice: "操作成功" }
@@ -80,7 +80,7 @@ class Pro::CarBespeaksController < ApplicationController
   end
 
 	private
-	def check_car_shop
+	def get_car_shop
     @car_shop = current_site.car_shop
     return redirect_to car_shops_path, notice: '请先设置微汽车基本信息' unless @car_shop
 	end
