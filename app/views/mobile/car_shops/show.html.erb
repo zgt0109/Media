@@ -14,7 +14,7 @@
     <div class="mod-detail">
       <div class="detail-img">
         <a href="<%= photo_mobile_car_shops_url(site_id: @site.id, car_type_id: @car_type.id) %>">
-          <img src="<%= @generals.present? ? @generals.first.pic_url : '/assets/mobile/wcar/2.jpg' %>"/>
+          <img src="<%= @generals.present? ? @generals.first.pic_path_url : '/assets/mobile/wcar/2.jpg' %>"/>
         </a>
       </div>
       <div class="detail-text">

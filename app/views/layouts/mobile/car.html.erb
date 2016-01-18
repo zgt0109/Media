@@ -34,7 +34,7 @@
   <div class="loading fixed-top"></div>
   <%= render 'application/app_footer' %>
   <% if @panoramics.present? %>
-    <a class="btn-view" href="<%= panorama_mobile_car_shop_path(@car_type, supplier_id: @supplier.id) %>#mp.weixin.qq.com"><span>全景<br/>看车</span></a>
+    <a class="btn-view" href="<%= panorama_mobile_car_shop_path(@car_type, site_id: @site.id) %>#mp.weixin.qq.com"><span>全景<br/>看车</span></a>
   <% end %>
 
 </body>
