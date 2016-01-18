@@ -49,7 +49,7 @@ class Pro::BrochePhotosController < Pro::HousesBaseController
   private
 
   def find_broche
-    @broche = current_user.broche
+    @broche = current_site.broche
     return render text: "未初始化微楼书" unless @broche
   end
 

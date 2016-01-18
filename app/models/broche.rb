@@ -1,6 +1,6 @@
 class Broche < ActiveRecord::Base
   # attr_accessible :title, :body
-  belongs_to :broche
+  belongs_to :site
   has_one :activity, as: :activityable , dependent: :destroy
   has_many :broche_photos
 

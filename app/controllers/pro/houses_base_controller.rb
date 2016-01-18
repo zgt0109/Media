@@ -4,7 +4,7 @@ class Pro::HousesBaseController < ApplicationController
   private
   
   def require_house
-    return redirect_to houses_path, alert: "请先设置楼盘简介微信信息" unless current_user.house
+    return redirect_to houses_path, alert: "请先设置楼盘简介微信信息" unless current_site.house
   end
   
   def require_industry

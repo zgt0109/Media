@@ -1,9 +1,8 @@
 class Pro::HousePicturesController < Pro::HousesBaseController
+  before_filter :get_house
   before_filter :find_picture, only: [:destroy, :cover, :discover]
 
   def index
-    @house = current_user.house
-
     conds = { house_layout_id: params[:house_layout_id] }
     @house_layout   = @house.house_layouts.find params[:house_layout_id] if params[:house_layout_id].present?
     @house_pictures = @house.house_pictures.where(conds).order("is_cover desc, house_layout_id desc")#.page(params[:page]).per(9)
@@ -12,7 +11,7 @@ class Pro::HousePicturesController < Pro::HousesBaseController
   end
 
   def create
-    @house_picture = current_user.house.house_pictures.build(params[:house_picture])
+    @house_picture = @house.house_pictures.build(params[:house_picture])
     @house_picture.pic_key = params[:pic_key] if params[:pic_key].present?
     @house_picture.house_layout_id = params[:house_layout_id] if params[:house_layout_id].present?
 
@@ -32,7 +31,6 @@ class Pro::HousePicturesController < Pro::HousesBaseController
   end
 
   def cover
-    @house = current_user.house
     conds = { house_layout_id: params[:house_layout_id] }
     @house_pictures = @house.house_pictures.where(conds).order("is_cover desc, house_layout_id desc")#.page(params[:page]).per(9)
     @house_pictures.each do |p|
@@ -59,9 +57,12 @@ class Pro::HousePicturesController < Pro::HousesBaseController
   end
 
   private
+  def get_house
+    @house = current_site.house
+  end
 
   def find_picture
-    @house_picture = current_user.house.house_pictures.find(params[:id])
+    @house_picture = @house.house_pictures.find(params[:id])
   end
 
 end
