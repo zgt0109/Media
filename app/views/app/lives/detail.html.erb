@@ -14,7 +14,7 @@
         </div>
         <div class="bd">
           <div class="detail-row">
-            <p><%= image_tag @article.pic_url %></p>
+            <p><%= image_tag @article.pic_url if @article.pic_url %></p>
             <div class="ckeditor_content" style="text-align: left"><%= @article.content.to_s.html_safe %></div>
           </div>
           <div class="bd-share detail-row">

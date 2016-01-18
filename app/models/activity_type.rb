@@ -1,18 +1,3 @@
-# coding: utf-8
-# == Schema Information
-#
-# Table name: activity_types
-#
-#  id          :integer          not null, primary key
-#  name        :string(255)      not null
-#  sort        :integer          default(0), not null
-#  status      :integer          default(1), not null
-#  is_show     :boolean          default(FALSE), not null
-#  description :text
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#
-
 class ActivityType < ActiveRecord::Base
   validates :name, presence: true
 
