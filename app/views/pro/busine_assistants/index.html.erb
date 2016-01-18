@@ -23,9 +23,9 @@
             </div>
             <div class="pluin-ft">
               <% if a.open_status current_user.id %>
-                  <%= link_to " ", toggle_assistant_suppliers_path(id: a.id), method: :post, remote: true, class: "pluin-btn pluin-open btn-pluin", id:"toggle_#{a.id}" %>
+                  <%= link_to " ", toggle_assistants_path(id: a.id), method: :post, remote: true, class: "pluin-btn pluin-open btn-pluin", id:"toggle_#{a.id}" %>
               <% else %>
-                  <%= link_to " ", toggle_assistant_suppliers_path(id: a.id), method: :post, remote: true, class: "pluin-btn pluin-close btn-pluin", id:"toggle_#{a.id}" %>
+                  <%= link_to " ", toggle_assistants_path(id: a.id), method: :post, remote: true, class: "pluin-btn pluin-close btn-pluin", id:"toggle_#{a.id}" %>
               <% end %>
             </div>
           </li>

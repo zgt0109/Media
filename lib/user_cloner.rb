@@ -59,7 +59,7 @@ class UserCloner
   end
 
   def create_assistants_sites
-    return puts "assistant_suppliers existed" if AssistantsSite.where(supplier_id: user.id).exists?
+    return puts "assistant_sites existed" if AssistantsSite.where(supplier_id: user.id).exists?
     Assistant.pluck(:id).each do |assistant_id|
       next if cloned["AssistantsSite"][assistant_id]
       new_record = AssistantsSite.create! assistant_id: assistant_id, supplier_id: user.id

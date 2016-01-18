@@ -97,7 +97,7 @@
         $(function () {
           $('.ace-switch').on('change', function(){
             var id = $(this).data('id');
-            $.post('/assistant_suppliers/toggle?id=' + id);
+            $.post('/assistants/toggle?id=' + id);
           })
         });
     </script>
