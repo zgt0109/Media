@@ -46,6 +46,7 @@ class Site < ActiveRecord::Base
   has_one  :vip_card
   has_one  :trip
   has_many  :trip_ticket_categories
+  has_many :trip_tickets
   has_one  :share_photo_setting
   has_one  :wx_plot
   has_one :activity_wx_plot_bulletin, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_BULLETIN }

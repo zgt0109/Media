@@ -6,6 +6,7 @@ class TripTicket < ActiveRecord::Base
   scope :latest,  -> { order('id desc') }
 
   belongs_to :trip
+  belongs_to :site
   has_many :trip_orders
   belongs_to :trip_ticket_category
 
@@ -26,8 +27,6 @@ class TripTicket < ActiveRecord::Base
   def pic_url
     if pic_key.present?
       qiniu_image_url(pic_key)
-    else
-      super
     end
   end
 

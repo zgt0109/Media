@@ -10,8 +10,6 @@
     </div>
     <div class="col-xs-12 margin-top-20">
       <%= form_for @trip, validate: true, html: {id: "form-1", role: "form"} do |f| %>
-        <%= f.hidden_field :supplier_id %>
-        <%= f.hidden_field :wx_mp_user_id %>
         <div class="warpVMS">
           <div class="vMicroShow">
             <div class="vMSHead">
@@ -41,8 +39,6 @@
           </div>
 
           <%= f.fields_for :activity  do |activity| %>
-            <%= activity.hidden_field :supplier_id %>
-            <%= activity.hidden_field :wx_mp_user_id %>
             <%= activity.hidden_field :activity_type_id %>
             <%= activity.hidden_field :status %>
             <div class="form-group">

@@ -2,8 +2,6 @@
 <% ticket_form_url = save_ticket_trips_path(ticket_id: @trip_ticket.try(:id)) %>
 <% @category = @trip_ticket.trip_ticket_category %>
 <%= form_for @trip_ticket, url: ticket_form_url, html: {method: :post, class: "col-xs-12"} do |f| %>
-	<%= f.hidden_field :supplier_id, value: @wx_mp_user.supplier_id %>
-	<%= f.hidden_field :wx_mp_user_id, value: @wx_mp_user.id %>
   <%= f.hidden_field :trip_ticket_category_id %>
 
   <div class="form-group">
@@ -60,7 +58,7 @@
 <% content_for :custom_js do %>
   <script type="text/javascript">
     
-    var category_data = <%= raw JSON.pretty_generate(current_user.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, 
+    var category_data = <%= raw JSON.pretty_generate(current_site.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, 
         select_data = []
         series = <%= raw @category.try(:series) || 1 %>;
 
