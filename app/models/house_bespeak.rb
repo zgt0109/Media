@@ -3,7 +3,7 @@ class HouseBespeak < ActiveRecord::Base
   belongs_to :user
   belongs_to :house
   attr_accessor :order_for_time
-  after_create :send_igetui_app_message
+  # after_create :send_igetui_app_message
 
   enum_attr :status, :in => [
     ['checked',   1, '未看房'],
