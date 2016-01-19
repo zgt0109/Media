@@ -3,16 +3,16 @@ class Mobile::TripOrdersController < Mobile::BaseController
   before_filter :body_class, :require_wx_user
 
   def index
-    @orders = @wx_user.trip_orders.where(site_id: @site.id).order('created_at desc')
+    @orders = @user.trip_orders.where(site_id: @site.id).order('created_at desc')
   end
 
   def new
-    @trip_order = @wx_user.trip_orders.new(trip_ticket_id: params[:ticket_id])
+    @trip_order = @user.trip_orders.new(trip_ticket_id: params[:ticket_id])
     @ticket = @trip_order.trip_ticket
   end
 
   def create
-    @trip_order = @wx_user.trip_orders.new(params[:trip_order])
+    @trip_order = @user.trip_orders.new(params[:trip_order])
      @ticket = @trip_order.trip_ticket
     
     if @trip_order.save!

@@ -1,5 +1,7 @@
 class TripOrder < ActiveRecord::Base
   #status:状态（1:已预约、2:已取消、3:已过期）
+  belongs_to :site
+  belongs_to :user
   belongs_to :trip
   belongs_to :trip_ticket
 

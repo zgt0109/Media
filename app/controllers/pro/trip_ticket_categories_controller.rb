@@ -50,7 +50,7 @@ class Pro::TripTicketCategoriesController < Pro::TripBaseController
   private
 
   def set_trip_ticket_categories
-  	@categories = current_user.trip_ticket_categories
+  	@categories = current_site.trip_ticket_categories
   end
 
   def set_trip_ticket_category
