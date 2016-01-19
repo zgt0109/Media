@@ -1,7 +1,7 @@
 common: &common
   host: "testing.winwemedia.com"
   winwemedia_payment:
-    host: "http://m.wx.winwemedia.com"
+    host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   taobao:
     app_key: "21673788"
@@ -24,22 +24,22 @@ common: &common
 production:
   <<: *common
   winwemedia_payment:
-    host: "http://m.wx.winwemedia.com"
+    host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   taobao:
     app_key: "21674146"
     app_secret: "2fbbdb16405d640a11579856014a145c"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
-    callbackurl: "http://m.wx.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
-    fcallbackurl: 'http://m.wx.winwemedia.com/payment/yeepay/%{merchantaccount}/callback'
+    callbackurl: "http://m.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
+    fcallbackurl: 'http://m.winwemedia.com/payment/yeepay/%{merchantaccount}/callback'
   alipay:
-    callback_url: "http://m.wx.winwemedia.com/payment/alipay/callback"
-    notify_url: "http://m.wx.winwemedia.com/payment/alipay/notify"
+    callback_url: "http://m.winwemedia.com/payment/alipay/callback"
+    notify_url: "http://m.winwemedia.com/payment/alipay/notify"
   vip_user_pay:
-    pay_quest_url: "http://m.wx.winwemedia.com/app/vip_user_payments/payment"
-    callback_url: "http://m.wx.winwemedia.com/payment/vip_userpay/callback"
-    notify_url: "http://m.wx.winwemedia.com/payment/vip_userpay/notify"
+    pay_quest_url: "http://m.winwemedia.com/app/vip_user_payments/payment"
+    callback_url: "http://m.winwemedia.com/payment/vip_userpay/callback"
+    notify_url: "http://m.winwemedia.com/payment/vip_userpay/notify"
 
 staging:
   <<: *common
@@ -51,20 +51,20 @@ staging:
     app_secret: "2fbbdb16405d640a11579856014a145c"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
-    callbackurl: "http://staging.m.wx.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
-    fcallbackurl: 'http://staging.m.wx.winwemedia.com/payment/yeepay/%{merchantaccount}/callback'
+    callbackurl: "http://staging.m.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
+    fcallbackurl: 'http://staging.m.winwemedia.com/payment/yeepay/%{merchantaccount}/callback'
   alipay:
-    callback_url: "http://staging.m.wx.winwemedia.com/payment/alipay/callback"
-    notify_url: "http://staging.m.wx.winwemedia.com/payment/alipay/notify"
+    callback_url: "http://staging.m.winwemedia.com/payment/alipay/callback"
+    notify_url: "http://staging.m.winwemedia.com/payment/alipay/notify"
   vip_user_pay:
-    pay_quest_url: "http://staging.m.wx.winwemedia.com/app/vip_user_payments/payment"
-    callback_url: "http://staging.m.wx.winwemedia.com/payment/vip_userpay/callback"
-    notify_url: "http://staging.m.wx.winwemedia.com/payment/vip_userpay/notify"
+    pay_quest_url: "http://staging.m.winwemedia.com/app/vip_user_payments/payment"
+    callback_url: "http://staging.m.winwemedia.com/payment/vip_userpay/callback"
+    notify_url: "http://staging.m.winwemedia.com/payment/vip_userpay/notify"
 
 development:
   <<: *common
   winwemedia_payment:
-    host: "http://m.wx.winwemedia.com"
+    host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   host: "localhost:3000"
   yeepay:

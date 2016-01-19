@@ -1,7 +1,7 @@
 common: &common
   host: "testing.winwemedia.com"
   winwemedia_payment:
-    host: "http://m.wx.winwemedia.com"
+    host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   taobao:
     app_key: "21673788"
@@ -63,7 +63,7 @@ staging:
 development:
   <<: *common
   winwemedia_payment:
-    host: "http://m.wx.winwemedia.com"
+    host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   host: "localhost:3000"
   yeepay:

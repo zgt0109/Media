@@ -183,12 +183,6 @@ class WxMpUser < ActiveRecord::Base
     access_token
   end
 
-  def pingable?
-    result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"))
-    data = JSON(result)
-    data['errcode'].to_i == 0
-  end
-
   def enable!
     return false if wx_menus.root.count == 0 || !auth!
 

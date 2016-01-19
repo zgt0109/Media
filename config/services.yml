@@ -1,6 +1,6 @@
 common: &common
-  hostname: "wx.winwemedia.com"
-  mhostname: "m.wx.winwemedia.com"
+  hostname: "m.winwemedia.com"
+  mhostname: "m.winwemedia.com"
   hotelhostname: "hotel.winwemedia.com"
   sms_service: 'zhilian'
   zhilian_url: 'http://61.145.229.29:9003/MWGate/wmgw.asmx'
@@ -9,8 +9,8 @@ common: &common
   uploads_dir: <%= "#{Rails.root}/public/uploads" %>
   yeepay:
     yeepay_host: "http://ok.yeepay.com/"
-    callbackurl: "http://ui.m.wx.winwemedia.com/yeepay/callback"
-    fcallbackurl: 'http://ui.m.wx.winwemedia.com/yeepay/callback'
+    callbackurl: "http://ui.m.winwemedia.com/yeepay/callback"
+    fcallbackurl: 'http://ui.m.winwemedia.com/yeepay/callback'
   wx_plugin:
     token: 60a485936f65c1319fc5737fb6e000ad
     base64_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
@@ -20,23 +20,23 @@ common: &common
 
 production:
   <<: *common
-  hostname: "wx.winwemedia.com"
+  hostname: "m.winwemedia.com"
   mhostname: "m.winwemedia.com"
   hotelhostname: "hotel.winwemedia.com"
   uploads_dir: "/opt/apps/shared/winwemedia/uploads"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
-    callbackurl: "http://wx.winwemedia.com/yeepay/callback"
-    fcallbackurl: 'http://wx.winwemedia.com/yeepay/callback'
+    callbackurl: "http://m.winwemedia.com/yeepay/callback"
+    fcallbackurl: 'http://m.winwemedia.com/yeepay/callback'
 
 staging:
   <<: *common
   hostname: "staging.winwemedia.com"
-  mhostname: "staging.m.wx.winwemedia.com"
+  mhostname: "staging.m.winwemedia.com"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
-    callbackurl: "http://staging.m.wx.winwemedia.com/yeepay/callback"
-    fcallbackurl: 'http://staging.m.wx.winwemedia.com/yeepay/callback'
+    callbackurl: "http://staging.m.winwemedia.com/yeepay/callback"
+    fcallbackurl: 'http://staging.m.winwemedia.com/yeepay/callback'
 
 development:
   <<: *common
