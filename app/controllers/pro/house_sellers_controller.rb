@@ -6,11 +6,11 @@ class Pro::HouseSellersController < Pro::HousesBaseController
   end
 
   def activity
-    @activity = current_user.wx_mp_user.create_activity_for_house_seller
+    @activity = current_site.create_activity_for_house_seller
   end
 
   def update_activity
-    @activity = current_user.wx_mp_user.create_activity_for_house_seller
+    @activity = current_site.create_activity_for_house_seller
     if @activity.update_attributes(params[:activity])
       #redirect_to activity_house_sellers_path, notice: '保存成功'
       redirect_to house_sellers_path, notice: '保存成功'
@@ -20,7 +20,7 @@ class Pro::HouseSellersController < Pro::HousesBaseController
   end
 
   def create
-    @seller = current_user.house.sellers.build(params[:house_seller])
+    @seller = current_site.house.sellers.build(params[:house_seller])
     if @seller.save
     flash[:notice] = "保存成功"
     render inline: "<script>parent.location.reload();</script>"
@@ -56,11 +56,11 @@ class Pro::HouseSellersController < Pro::HousesBaseController
 
   private
   def load_sellers
-    @sellers = current_user.house.sellers.normal.order('created_at DESC').page(params[:page])
+    @sellers = current_site.house.sellers.normal.order('created_at DESC').page(params[:page])
   end
 
   def find_seller
-    @seller = current_user.house.sellers.normal.find params[:id]
+    @seller = current_site.house.sellers.normal.find params[:id]
   end
 
 end
