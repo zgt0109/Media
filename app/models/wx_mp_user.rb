@@ -232,9 +232,9 @@ class WxMpUser < ActiveRecord::Base
   end
 
   def generate_url
-    host = Rails.env.production? ? 'http://proxy.wx.winwemedia.com' : "http://#{Settings.hostname}"
+    host = Rails.env.production? ? 'http://api.wx.winwemedia.com' : "http://#{Settings.hostname}"
     user_code = code.blank? ? generate_code : code
-    update_attributes(url: "#{host}/server/#{user_code}")
+    update_attributes(url: "#{host}/service/#{user_code}")
   end
 
   def format_data

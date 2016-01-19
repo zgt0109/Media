@@ -4,7 +4,7 @@ Wp::Application.routes.draw do
     post  'ticket', to: 'wx_plugin#ticket'
     match 'wx_plugin/auth', to: 'wx_plugin#auth'
 
-    match '/server/:code' => 'weixin#service', via: [:post, :get]
+    match '/service/:code' => 'weixin#service', via: [:post, :get]
     match '/:app_id/callback' => 'weixin#service', via: [:post, :get]
   end
 
