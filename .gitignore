@@ -26,10 +26,6 @@
 /tmp/**/*
 /static_page
 
-# ignore about rvm
-.ruby-version
-.ruby-gemset
-
 # for mac
 .DS_Store
 
