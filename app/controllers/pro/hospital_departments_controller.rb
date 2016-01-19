@@ -60,7 +60,7 @@ class Pro::HospitalDepartmentsController < Pro::HospitalBaseController
 
   private
   def set_hospital
-    @hospital = current_user.hospital
+    @hospital = current_site.hospital
   end
 
   def set_hospital_department

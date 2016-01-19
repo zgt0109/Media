@@ -2,15 +2,15 @@
 class Pro::DoctorArrangesController < Pro::HospitalBaseController
 
   def index
-    @search = current_user.hospital.doctor_arranges.search(params[:search])
+    @search = current_site.hospital.doctor_arranges.search(params[:search])
     @doctor_arranges = @search.page(params[:page]).order("created_at desc")
   end
 
   def new
-    @doctor_arrange = current_user.hospital.doctor_arranges.new
-    @doctor_arranges = current_user.hospital.doctor_arranges
+    @doctor_arrange = current_site.hospital.doctor_arranges.new
+    @doctor_arranges = current_site.hospital.doctor_arranges
 
-    @second_level = current_user.hospital.hospital_departments.normal
+    @second_level = current_site.hospital.hospital_departments.normal
     to_remove = Array.new
     @second_level.each do |d|
       puts d.name
@@ -27,14 +27,14 @@ class Pro::DoctorArrangesController < Pro::HospitalBaseController
   end
 
   def edit
-    @doctor_arrange = current_user.hospital.doctor_arranges.find(params[:id])
+    @doctor_arrange = current_site.hospital.doctor_arranges.find(params[:id])
     respond_to do |format|
       format.js
     end
   end
 
   def destroy
-    @doctor_arrange = current_user.hospital.doctor_arranges.find(params[:id])
+    @doctor_arrange = current_site.hospital.doctor_arranges.find(params[:id])
     @doctor_arrange.destroy
     respond_to do |format|
       format.js
@@ -47,7 +47,7 @@ class Pro::DoctorArrangesController < Pro::HospitalBaseController
     weeks = params[:weeks].to_a
     if weeks.include?("-1") # select all
       for i in 0..6
-        doctor_arrange = current_user.hospital.doctor_arranges.new(params[:doctor_arrange])
+        doctor_arrange = current_site.hospital.doctor_arranges.new(params[:doctor_arrange])
         doctor_arrange.week = i
         doctor_arrange.save!
         @flash_arranges << doctor_arrange
@@ -59,7 +59,7 @@ class Pro::DoctorArrangesController < Pro::HospitalBaseController
       end
     else
       for i in weeks
-        doctor_arrange = current_user.hospital.doctor_arranges.new(params[:doctor_arrange])
+        doctor_arrange = current_site.hospital.doctor_arranges.new(params[:doctor_arrange])
         doctor_arrange.week = i
         doctor_arrange.save!
         @flash_arranges << doctor_arrange
@@ -88,7 +88,7 @@ class Pro::DoctorArrangesController < Pro::HospitalBaseController
     # 1. check doctor arrange has_multi (doctor_id week start time end time)
     # 2. if has direct back else go to update self method
     @is_s = true
-    @doctor_arrange = current_user.hospital.doctor_arranges.find(params[:id])
+    @doctor_arrange = current_site.hospital.doctor_arranges.find(params[:id])
     temp_doctor_arrange = DoctorArrange.new(params[:doctor_arrange])
     temp_doctor_arrange.hospital_doctor_id = @doctor_arrange.hospital_doctor_id
     temp_doctor_arrange.time_limit = @doctor_arrange.time_limit

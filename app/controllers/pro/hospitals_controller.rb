@@ -3,7 +3,7 @@ class Pro::HospitalsController < Pro::HospitalBaseController
   before_filter :set_hospital
 
   def index
-    return redirect_to wx_mp_users_path, alert: '请先添加微信公共帐号' unless current_user.wx_mp_user
+    return redirect_to wx_mp_users_path, alert: '请先添加微信公共帐号' unless current_site.wx_mp_user
     @activity = @hospital.activity
   end
 
@@ -52,8 +52,8 @@ class Pro::HospitalsController < Pro::HospitalBaseController
   private
 
   def set_hospital
-    @hospital = current_user.hospital
-    @hospital = current_user.wx_mp_user.create_hospital unless @hospital
+    @hospital = current_site.hospital
+    @hospital = current_site.create_hospital unless @hospital
   end
   
 end

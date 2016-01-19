@@ -17,19 +17,19 @@
           <div class="col-sm-3">
             <div class="input-group input-group-text">
               <span class="input-group-addon">医生姓名：</span>
-              <%= f.select :doctor_arrange_hospital_doctor_id_eq, current_user.hospital.hospital_doctors.pluck(:name, :id), { :include_blank => '全部'}, {class: "form-control" } %>
+              <%= f.select :doctor_arrange_hospital_doctor_id_eq, current_site.hospital.hospital_doctors.pluck(:name, :id), { :include_blank => '全部'}, {class: "form-control" } %>
             </div>
           </div>
           <div class="col-sm-3">
             <div class="input-group input-group-text">
               <span class="input-group-addon">所属科室：</span>
-              <%= f.select :doctor_arrange_hospital_department_id_eq, current_user.hospital_departments.pluck(:name, :id), { :include_blank => '全部'}, {class: "form-control" } %>
+              <%= f.select :doctor_arrange_hospital_department_id_eq, current_site.hospital_departments.pluck(:name, :id), { :include_blank => '全部'}, {class: "form-control" } %>
             </div>
           </div>
           <div class="col-sm-3">
             <div class="input-group input-group-text">
               <span class="input-group-addon">出诊医院：</span>
-              <%= f.select :shop_branch_id_eq, current_user.shop_branches.used.pluck(:name, :id), { :include_blank => '全部'}, {class: "form-control" } %>
+              <%= f.select :shop_branch_id_eq, current_site.shop_branches.used.pluck(:name, :id), { :include_blank => '全部'}, {class: "form-control" } %>
             </div>
           </div>
           <div class="col-sm-3 text-right">

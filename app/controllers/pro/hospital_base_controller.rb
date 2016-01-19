@@ -4,7 +4,7 @@ class Pro::HospitalBaseController < ApplicationController
 
   private
   def require_hospital
-    @hospital = current_user.hospital
+    @hospital = current_site.hospital
     redirect_to hospitals_path, notice: "请先设置微医疗" unless @hospital
   end
 

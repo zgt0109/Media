@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 class Pro::HospitalOrdersController < Pro::HospitalBaseController
+  before_filter :set_hospital
   before_filter :set_hospital_order, only: [:cancele, :complete, :show]
 
   def index
     #@search = current_user.hospital_orders.search(params[:search])
     #@hospital_orders = @search.page(params[:page]).order("created_at desc")
-    @search = current_user.hospital.doctor_arrange_items.search(params[:search])
+    @search = @hospital.doctor_arrange_items.search(params[:search])
     @doctor_arrange_items = @search.page(params[:page]).order("created_at desc")
   end
 
@@ -24,11 +25,15 @@ class Pro::HospitalOrdersController < Pro::HospitalBaseController
   end
 
   def history
-    @search = current_user.hospital_orders.search(params[:search])
+    @search = @hospital.hospital_orders.search(params[:search])
     @hospital_orders = @search.page(params[:page]).order("created_at desc")
   end
 
   private
+  def set_hospital
+    @hospital = current_site.hospital
+  end
+
   def set_hospital_order
     #@hospital_order = HospitalOrder.where(id: params[:id]).first
     @doctor_arrange_item = DoctorArrangeItem.where(id: params[:id]).first
