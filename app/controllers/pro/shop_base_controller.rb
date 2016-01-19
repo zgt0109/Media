@@ -18,7 +18,7 @@ class Pro::ShopBaseController < ApplicationController
     # end
 
     def require_industry
-      if current_site.has_industry_for?(10001) || current_site.has_industry_for?(10002) || current_site.has_industry_for?(10007)
+      if current_site.has_privilege_for?(10001) || current_site.has_privilege_for?(10002) || current_site.has_privilege_for?(10007)
         industry_id = params[:industry_id].to_i
         if [10001,10002,10007].include?(industry_id)
           session[:current_industry_id] = industry_id

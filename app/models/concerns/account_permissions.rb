@@ -14,15 +14,15 @@ module AccountPermissions
 
   def order_permissions
     permissions = []
-    permissions << 'manage_ec_orders'            if has_industry_for?(AccountIndustry::INDUSTRY_COMMERCE)
-    permissions << 'manage_hotel_orders'         if has_industry_for?(AccountIndustry::INDUSTRY_HOTEL)
-    permissions << 'manage_car_orders'           if has_industry_for?(AccountIndustry::INDUSTRY_CAR)
-    permissions << 'manage_house_orders'         if has_industry_for?(AccountIndustry::INDUSTRY_HOUSE)
-    permissions << 'manage_catering_book_dinner' if has_industry_for?(AccountIndustry::INDUSTRY_FOOD)
-    permissions << 'manage_takeout_orders'       if has_industry_for?(AccountIndustry::INDUSTRY_TAKEOUT)
-    permissions << 'manage_plot_orders'          if has_industry_for?(AccountIndustry::INDUSTRY_PLOT)
-    permissions << 'manage_reservation_orders'  #if has_industry_for?(AccountIndustry::INDUSTRY_PLOT)
-    # permissions << 'manage_reservation_orders'   if has_industry_for?(AccountIndustry::INDUSTRY_PLOT)
+    permissions << 'manage_ec_orders'            if has_privilege_for?(AccountIndustry::INDUSTRY_COMMERCE)
+    permissions << 'manage_hotel_orders'         if has_privilege_for?(AccountIndustry::INDUSTRY_HOTEL)
+    permissions << 'manage_car_orders'           if has_privilege_for?(AccountIndustry::INDUSTRY_CAR)
+    permissions << 'manage_house_orders'         if has_privilege_for?(AccountIndustry::INDUSTRY_HOUSE)
+    permissions << 'manage_catering_book_dinner' if has_privilege_for?(AccountIndustry::INDUSTRY_FOOD)
+    permissions << 'manage_takeout_orders'       if has_privilege_for?(AccountIndustry::INDUSTRY_TAKEOUT)
+    permissions << 'manage_plot_orders'          if has_privilege_for?(AccountIndustry::INDUSTRY_PLOT)
+    permissions << 'manage_reservation_orders'  #if has_privilege_for?(AccountIndustry::INDUSTRY_PLOT)
+    # permissions << 'manage_reservation_orders'   if has_privilege_for?(AccountIndustry::INDUSTRY_PLOT)
   end
 
   def vip_permissions

@@ -170,10 +170,6 @@ class Account < ActiveRecord::Base
     true
   end
 
-  def has_industry_for?(id)
-    true
-  end
-
   # TODO
   def industry_food?
     true
