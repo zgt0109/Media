@@ -1,7 +1,7 @@
 <%# @photos.each do |p| %>
 <div class="list-li">
-<a href="<%= p.try(:pic).try(:large) %>">
-  <b><%= image_tag p.try(:pic).try(:thumb), :alt => p.name %></b>
+<a href="<%= p.try(:pic_url) %>">
+  <b><%= image_tag p.try(:pic_url), :alt => p.name %></b>
   <span><%= p.name %></span>
 </a>
 </div>
