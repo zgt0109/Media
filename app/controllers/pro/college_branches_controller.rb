@@ -17,7 +17,7 @@ class Pro::CollegeBranchesController < Pro::CollegesBaseController
   end
 
   def save
-    @branch ||= @college.branches.new(supplier: current_user, wx_mp_user: current_user.wx_mp_user)
+    @branch ||= @college.branches.new(site: current_site)
     @branch.attributes = params[:college_branch]
     if @branch.save
       flash.notice = "保存成功"

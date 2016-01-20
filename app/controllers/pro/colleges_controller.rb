@@ -5,7 +5,7 @@ class Pro::CollegesController < Pro::CollegesBaseController
 
   def index
     @college = current_site.college || College.new
-    @college.activity ||= current_site.wx_mp_user.create_activity_for_college
+    @college.activity ||= current_site.create_activity_for_college
   end
 
   def create
