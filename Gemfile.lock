@@ -539,7 +539,7 @@ DEPENDENCIES
   meta_search
   mini_magick
   mongoid
-  mysql2
+  mysql2 (= 0.3.18)
   nokogiri
   omniauth
   omniauth-oauth2

@@ -1981,7 +1981,6 @@ class InitDb < ActiveRecord::Migration
     t.integer  "hospital_id",                             :null => false
     t.string   "name",                                    :null => false
     t.integer  "gender",               :default => 1,     :null => false
-    t.string   "avatar"
     t.string   "avatar_key"
     t.string   "work_time"
     t.boolean  "is_online",            :default => false, :null => false

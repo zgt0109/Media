@@ -1,7 +1,7 @@
 source 'https://ruby.taobao.org/'
 
 gem 'rails', '3.2.14'
-gem 'mysql2'
+gem 'mysql2', '0.3.18'
 gem 'jquery-rails', '2.2.1'
 gem 'jquery-ui-rails', '4.0.2'
 gem 'rails-i18n'
