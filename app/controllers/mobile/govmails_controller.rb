@@ -7,7 +7,7 @@ class Mobile::GovmailsController < Mobile::BaseController
   end
 
   def my
-    @mails = @wx_user.govmails.order("created_at DESC") rescue []
+    @mails = @user.govmails.order("created_at DESC") rescue []
   end
 
   def new
