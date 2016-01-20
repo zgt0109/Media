@@ -2,7 +2,7 @@ class Pro::WxPlotsController < Pro::WxPlotBaseController
   skip_before_filter :require_wx_plot, only: [:index, :create]
 
   def index
-    @wx_plot = current_user.wx_plot
+    @wx_plot = current_site.wx_plot
     @wx_plot = WxPlot.new(site_id: current_site.id) if @wx_plot.nil?
   end
 
