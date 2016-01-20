@@ -7,7 +7,7 @@ class Mobile::GovchatsController < Mobile::BaseController
   end
 
   def my
-    @chats = @wx_user.govchats.order("created_at DESC") rescue []
+    @chats = @user.govchats.order("created_at DESC") rescue []
   end
 
   def new
