@@ -20,7 +20,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
     attrs = {
         booking_item_id: params[:booking_item_id],
         username: @wx_user.try(:nickname),
-        tel: @wx_user.try(:mobile),
+        tel: @user.try(:mobile),
         qty: 1,
         site_id: @site.id
     }

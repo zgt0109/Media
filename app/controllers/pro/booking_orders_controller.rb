@@ -2,7 +2,7 @@ class Pro::BookingOrdersController < Pro::BookingBaseController
   before_filter :set_booking_order, only: [:show, :edit, :update, :destroy, :cancele, :complete]
 
   def index
-    @search    = current_user.booking_orders.latest.search(params[:search])
+    @search = current_site.booking_orders.latest.search(params[:search])
     @booking_orders = @search.page(params[:page])
     #@booking_orders = current_user.booking_orders.page(params[:page]).order("created_at desc")
   end

@@ -12,11 +12,11 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
   end
 
   def new
-    @booking_category = current_user.booking_categories.new(parent_id: params[:parent_id].to_i)
+    @booking_category = current_site.booking_categories.new(parent_id: params[:parent_id].to_i)
   end
 
   def create
-    @booking_category = BookingCategory.new(params[:booking_category])
+    @booking_category = current_site.booking_categories.new(params[:booking_category])
     respond_to do |format|
       if @booking_category.save
         format.html { redirect_to booking_categories_path, notice: '添加成功' }
@@ -67,7 +67,7 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
     if @booking_category.parent
       @booking_categories = @booking_category.parent.children.order(:sort)
     else
-      @booking_categories = current_user.booking_categories.root.order(:sort)
+      @booking_categories = current_site.booking_categories.root.order(:sort)
     end
 
     index = @booking_categories.to_a.index(@booking_category)
@@ -109,7 +109,7 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
   private
 
   def set_booking
-    @booking = current_user.booking
+    @booking = current_site.booking
   end
 
   def set_booking_category
@@ -118,7 +118,7 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
   end
 
   def set_booking_categories
-    @booking_categories = current_user.booking_categories
+    @booking_categories = current_site.booking_categories
   end
 
 end

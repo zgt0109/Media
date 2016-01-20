@@ -44,8 +44,8 @@ class Pro::BookingsController < Pro::BookingBaseController
     private
 
     def set_booking
-      @booking = current_user.booking
-      @booking = current_user.wx_mp_user.create_booking unless @booking
+      @booking = current_site.booking
+      @booking = current_site.create_booking unless @booking
     end
 
 end

@@ -21,6 +21,14 @@ class BookingOrder < ActiveRecord::Base
     update_attributes(status: CANCELED, canceled_at: Time.now)
   end
 
+  def is_flow_site
+    self.site.present?
+  end
+
+  def self.flow_sites
+    pluck(:site_id)
+  end
+
   private
 
   def add_default_attrs

@@ -5,8 +5,6 @@
   <div class="widget-body">
     <%= form_for @booking_category, validate: true, html: {id: 'booking_category_form'} do |f| %>
         <%= f.hidden_field :parent_id %>
-        <%= f.hidden_field :supplier_id %>
-        <%= f.hidden_field :wx_mp_user_id %>
         <%= f.hidden_field :id %>
 
         <div class="form-group margin-top-10">

@@ -3,7 +3,7 @@ class Pro::BookingBaseController < ApplicationController
 
   private
   def require_booking
-    @booking = current_user.booking
+    @booking = current_site.booking
     redirect_to bookings_path, notice: "请先设置微服务" unless @booking
   end
 

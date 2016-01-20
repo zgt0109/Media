@@ -17,7 +17,7 @@ class Pro::BookingItemsController < Pro::BookingBaseController
 
 
   def create
-    @booking_item = BookingItem.new(params[:booking_item])
+    @booking_item = current_site.booking_items.new(params[:booking_item])
     if @booking_item.save
       redirect_to booking_items_path, notice: '保存成功'
     else
@@ -60,8 +60,8 @@ class Pro::BookingItemsController < Pro::BookingBaseController
   private
 
   def set_booking
-    @booking = current_user.booking
-    @booking_categories = current_user.booking_categories
+    @booking = current_site.booking
+    @booking_categories = current_site.booking_categories
   end
 
   def set_booking_item

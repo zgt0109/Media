@@ -23,7 +23,7 @@
       <span><%= @booking_order.status_name %></span>
     </p>
 
-    <% if @booking_order.is_flow_supplier %>
+    <% if @booking_order.is_flow_site %>
         <p>
           <span>
               <b>地址：</b>
@@ -45,7 +45,7 @@
       <span><%= @booking_order.created_at %></span>
     </p>
 
-    <% unless @booking_order.is_flow_supplier %>
+    <% unless @booking_order.is_flow_site %>
         <p>
           <span>
               <b>数量：</b>
