@@ -53,7 +53,7 @@ class Pro::WxPlotTelephonesController < Pro::WxPlotBaseController
     end
 
     def set_activity_wx_plot_telephone
-      @activity_wx_plot_telephone = current_user.activity_wx_plot_telephone
+      @activity_wx_plot_telephone = current_site.activity_wx_plot_telephone
       return redirect_to wx_plots_path, alert: "请先设置【#{@wx_plot.telephone}】模块" unless @activity_wx_plot_telephone
       @categories = @wx_plot.telephone_categories
     end

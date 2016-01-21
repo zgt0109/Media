@@ -58,7 +58,7 @@ class Pro::WxPlotBulletinsController < Pro::WxPlotBaseController
     end
 
     def set_activity_wx_plot_bulletin
-      @activity_wx_plot_bulletin = current_user.activity_wx_plot_bulletin
+      @activity_wx_plot_bulletin = current_site.activity_wx_plot_bulletin
       return redirect_to wx_plots_path, alert: "请先设置【#{@wx_plot.bulletin}】模块" unless @activity_wx_plot_bulletin
     end
 

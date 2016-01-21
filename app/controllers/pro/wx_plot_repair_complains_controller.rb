@@ -40,7 +40,7 @@ class Pro::WxPlotRepairComplainsController < Pro::WxPlotBaseController
     end
 
     def set_activity_wx_plot_repair_complain
-      @activity_wx_plot_repair_complain = params[:type] == 'repair' ? current_user.activity_wx_plot_repair : current_user.activity_wx_plot_complain
+      @activity_wx_plot_repair_complain = params[:type] == 'repair' ? current_site.activity_wx_plot_repair : current_site.activity_wx_plot_complain
       return redirect_to wx_plots_path, alert: "请先设置【#{@wx_plot[params[:type]]}】模块" unless @activity_wx_plot_repair_complain
     end
 end
