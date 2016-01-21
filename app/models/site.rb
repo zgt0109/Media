@@ -49,12 +49,12 @@ class Site < ActiveRecord::Base
   has_many :trip_tickets
   has_one  :share_photo_setting
   has_one  :wx_plot
-  has_one :activity_wx_plot_bulletin, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_BULLETIN }
-  has_one :activity_wx_plot_repair, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_REPAIR }
-  has_one :activity_wx_plot_complain, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_COMPLAIN }
-  has_one :activity_wx_plot_owner, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_OWNER }
-  has_one :activity_wx_plot_life, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_LIFE }
-  has_one :activity_wx_plot_telephone, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_TELEPHONE }
+  # has_one :activity_wx_plot_bulletin, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_BULLETIN }
+  # has_one :activity_wx_plot_repair, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_REPAIR }
+  # has_one :activity_wx_plot_complain, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_COMPLAIN }
+  # has_one :activity_wx_plot_owner, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_OWNER }
+  # has_one :activity_wx_plot_life, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_LIFE }
+  # has_one :activity_wx_plot_telephone, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_TELEPHONE }
   has_many :wbbs_communities
   has_many :reservation_orders
   has_many :wbbs_topics

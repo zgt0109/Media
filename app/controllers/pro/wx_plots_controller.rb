@@ -7,8 +7,8 @@ class Pro::WxPlotsController < Pro::WxPlotBaseController
   end
 
   def show
-    @activity = current_site.activities.where(activity_type_id: params[:activity_type_id]).first
-    @activity = Activity.new(site_id: current_site.id, activity_type_id: params[:activity_type_id], status: Activity::SETTED) if @activity.nil?
+    @activity = @wx_plot.activities.where(activity_type_id: params[:activity_type_id]).first
+    @activity = @wx_plot.activities.new(site_id: current_site.id, activity_type_id: params[:activity_type_id], status: Activity::SETTED) if @activity.nil?
   end
 
   def create

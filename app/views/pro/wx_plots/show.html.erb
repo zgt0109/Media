@@ -14,34 +14,31 @@
 
             <%= render "weixin_preview", wx_title: @activity.try(:name), wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
 
-            <%= form_for @activity, validate: true, html: {role: 'form', class: 'form col-sm-7' } do |activity| %>
-              <%= activity.hidden_field :activity_type_id %>
-              <%= activity.hidden_field :status %>
+            <%= form_for @wx_plot, validate: true, html: {role: 'form', class: 'form col-sm-7' } do |f| %>
 
-              <%= activity.fields_for :site do |s| %>
-                <%= s.fields_for :wx_plot, @wx_plot do |w|%>
-                        <div class="form-group">
-                          <label class="control-label">模块名称<span class="required-star">*</span></label>
-                          <div class="clearfix">
-                            <%= w.text_field params[:type].to_sym, class: 'col-xs-6' %>
-                          </div>
-                        </div>
-                        <% if ['repair', 'complain'].include?(params[:type]) %>
-                            <div class="form-group">
-                              <label class="control-label">联系电话</label>
-                              <div class="clearfix">
-                                <%= w.text_field "#{params[:type].to_s}_phone".to_sym, class: 'col-xs-6' %>
-                              </div>
-                            </div>
-                        <% end %>
+                <div class="form-group">
+                  <label class="control-label">模块名称<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                    <%= f.text_field params[:type].to_sym, class: 'col-xs-6' %>
+                  </div>
+                </div>
+                <% if ['repair', 'complain'].include?(params[:type]) %>
+                    <div class="form-group">
+                      <label class="control-label">联系电话</label>
+                      <div class="clearfix">
+                        <%= f.text_field "#{params[:type].to_s}_phone".to_sym, class: 'col-xs-6' %>
+                      </div>
+                    </div>
                 <% end %>
+              <%= hidden_field_tag 'wx_plot[activities_attributes][0][activity_type_id]', params[:activity_type_id] %>
+              <%= hidden_field_tag 'wx_plot[activities_attributes][0][site_id]', current_site.id %>
+
+              <%= f.fields_for :activities, @activity do |activity| %>
+                <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url , pic_data_name: "wx_plot[activities_attributes][0][pic_key]", pic_data_key: @activity.pic_key %>
               <% end %>
 
-
-              <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url , pic_data_name: "activity[pic_key]", pic_data_key: @activity.pic_key %>
-
               <div class="form-group ">
-                <%= activity.submit '保存', class: 'btn btn-sm btn-primary' %>
+                <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
                 <input type="button" class="btn btn-sm btn-default" value="返回" onclick="javascript: window.location.href ='<%= wx_plots_path %>'">
               </div>
 
