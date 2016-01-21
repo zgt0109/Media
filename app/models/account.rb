@@ -109,9 +109,9 @@ class Account < ActiveRecord::Base
 
   def send_system_message(options = {}, smm = nil)
     smm = SystemMessageModule.where(module_id: options[:module_id]).first unless smm
-    sms = SystemMessageSetting.where(account_id: options[:account_id], system_message_module_id: smm.id).first_or_initialize(account_id: options[:account_id], system_message_module_id: smm.id)
+    sms = SystemMessageSetting.where(site_id: options[:site_id], system_message_module_id: smm.id).first_or_initialize(site_id: options[:site_id], system_message_module_id: smm.id)
     if sms.is_open
-      sms.system_messages << SystemMessage.new(account_id: options[:account_id], content: options[:content], system_message_module_id: smm.id)
+      sms.system_messages << SystemMessage.new(site_id: options[:site_id], content: options[:content], system_message_module_id: smm.id)
       sms.save!
     else
       sms.view_remind_music

@@ -38,7 +38,7 @@ class WxPlot < ActiveRecord::Base
   validates :complain_phone, format: { with: /^[0-9_\-]*$/, message: '联系电话格式不正确' }, allow_blank: true
 
 
-  def cover_pic
+  def cover_pic_url
     qiniu_image_url(read_attribute("cover_pic"))
   end
 end
