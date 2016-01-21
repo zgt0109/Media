@@ -9,12 +9,10 @@ class Pro::WxPlotsController < Pro::WxPlotBaseController
   def show
     @activity = @wx_plot.activities.where(activity_type_id: params[:activity_type_id]).first
     @activity = @wx_plot.activities.new(site_id: current_site.id, activity_type_id: params[:activity_type_id], status: Activity::SETTED) if @activity.nil?
-    @activities = []
-    @activities << @activity
   end
 
   def create
-    @wx_plot = WxPlot.new(params[:wx_plot])
+    @wx_plot = current_site.build_wx_plot(params[:wx_plot])
     if @wx_plot.save
       redirect_to :back, notice: '保存成功'
     else

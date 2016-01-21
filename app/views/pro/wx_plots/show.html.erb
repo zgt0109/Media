@@ -31,7 +31,7 @@
                     </div>
                 <% end %>
 
-              <%= f.fields_for :activities, @activities do |activity| %>
+              <%= f.fields_for :activities, [@activity] do |activity| %>
                 <%= activity.hidden_field :activity_type_id, value: params[:activity_type_id] %>
                 <%= activity.hidden_field :site_id, value: current_site.id %>
 
