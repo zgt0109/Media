@@ -3,7 +3,7 @@ class Pro::WxPlotBaseController < ApplicationController
 
   private
   def require_wx_plot
-    @wx_plot = current_user.wx_plot
+    @wx_plot = current_site.wx_plot
     redirect_to wx_plots_path, alert: "请先设置微小区名称" unless @wx_plot
   end
 

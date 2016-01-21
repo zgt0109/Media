@@ -18,7 +18,7 @@
               <%= activity.hidden_field :activity_type_id %>
               <%= activity.hidden_field :status %>
 
-              <%= activity.fields_for :supplier, current_user do |s| %>
+              <%= activity.fields_for :site do |s| %>
                 <%= s.fields_for :wx_plot, @wx_plot do |w|%>
                         <div class="form-group">
                           <label class="control-label">模块名称<span class="required-star">*</span></label>

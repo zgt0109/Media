@@ -12,7 +12,6 @@
         <div class="row">
 
           <%= form_for @wx_plot, validate: true do |f| %>
-              <%= f.hidden_field :supplier_id %>
               <div class="col-sm-3">
                 <div class="input-group input-group-sm input-group-text">
                   <%= f.text_field :name, placeholder: '请输入小区名称', class: 'col-xs-12', size: 30 %>
