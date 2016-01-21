@@ -7,6 +7,12 @@ class WxPlot < ActiveRecord::Base
   has_many :wx_plot_lives
   has_many :wx_plot_telephones
   has_many :activities, as: :activityable
+  has_one :activity_wx_plot_bulletin, class_name: 'Activity', as: :activityable, conditions: { activity_type_id: ActivityType::PLOT_BULLETIN }
+  has_one :activity_wx_plot_repair, class_name: 'Activity', as: :activityable, conditions: { activity_type_id: ActivityType::PLOT_REPAIR }
+  has_one :activity_wx_plot_complain, class_name: 'Activity', as: :activityable, conditions: { activity_type_id: ActivityType::PLOT_COMPLAIN }
+  has_one :activity_wx_plot_owner, class_name: 'Activity', as: :activityable, conditions: { activity_type_id: ActivityType::PLOT_OWNER }
+  has_one :activity_wx_plot_life, class_name: 'Activity', as: :activityable, conditions: { activity_type_id: ActivityType::PLOT_LIFE }
+  has_one :activity_wx_plot_telephone, class_name: 'Activity', as: :activityable, conditions: { activity_type_id: ActivityType::PLOT_TELEPHONE }
 
   has_many :wx_plot_repair_complains, order: 'wx_plot_repair_complains.created_at DESC'
   has_many :repairs, class_name: 'WxPlotRepairComplain', conditions: { category: WxPlotRepairComplain::REPAIR }, order: 'wx_plot_repair_complains.created_at DESC'

@@ -30,10 +30,11 @@
                       </div>
                     </div>
                 <% end %>
-              <%= hidden_field_tag 'wx_plot[activities_attributes][0][activity_type_id]', params[:activity_type_id] %>
-              <%= hidden_field_tag 'wx_plot[activities_attributes][0][site_id]', current_site.id %>
 
-              <%= f.fields_for :activities, @activity do |activity| %>
+              <%= f.fields_for :activities, @activities do |activity| %>
+                <%= activity.hidden_field :activity_type_id, value: params[:activity_type_id] %>
+                <%= activity.hidden_field :site_id, value: current_site.id %>
+
                 <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url , pic_data_name: "wx_plot[activities_attributes][0][pic_key]", pic_data_key: @activity.pic_key %>
               <% end %>
 

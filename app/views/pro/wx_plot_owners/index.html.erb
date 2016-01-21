@@ -19,7 +19,7 @@
                 设置一个社区<br>引导用户在社区进行交流
               </div>
             </div>
-            <%- current_user.wbbs_communities.setted.to_a.each do |community| %>
+            <%- current_site.wbbs_communities.setted.to_a.each do |community| %>
                 <div class="mod-panel">
                   <div class="panel-left">
                     <b><%= community.name || community.activity.name %></b>

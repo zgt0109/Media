@@ -1,6 +1,6 @@
 <%= form_for @wx_plot, validate: false do |f| %>
   <div class="modal-body">
-    <%= f.fields_for :supplier, @wx_plot.supplier do |s| %>
+    <%= f.fields_for :site, @wx_plot.site do |s| %>
         <%= s.fields_for :system_message_settings, @system_message_setting do |sms|%>
             <%= sms.hidden_field :system_message_module_id %>
             <div class="form-group">

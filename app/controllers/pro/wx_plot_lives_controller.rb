@@ -50,7 +50,7 @@ class Pro::WxPlotLivesController < Pro::WxPlotBaseController
     end
 
     def set_activity_wx_plot_life
-      @activity_wx_plot_life = current_site.activity_wx_plot_life
+      @activity_wx_plot_life = @wx_plot.activity_wx_plot_life
       return redirect_to wx_plots_path, alert: "请先设置【#{@wx_plot.life}】模块" unless @activity_wx_plot_life
       @categories = @wx_plot.life_categories
     end
