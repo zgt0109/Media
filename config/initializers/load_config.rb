@@ -8,6 +8,7 @@ HOST_CONFIG        = YAML.load_file("#{Rails.root}/config/host_config.yml")[Rail
 WSHOP_HOST         = HOST_CONFIG['wshop_host']
 WMALL_HOST         = HOST_CONFIG['wmall_host']
 WLIFE_HOST         = HOST_CONFIG['wlife_host']
+SHEQU_HOST         = HOST_CONFIG['shequ_host']
 PANORAMA_FAYE_HOST = HOST_CONFIG['faye_host']
 RECOMMEND_HOST     = HOST_CONFIG['recommend_host']
 HOTEL_HOST         = HOST_CONFIG['hotel_host']

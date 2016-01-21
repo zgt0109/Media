@@ -3,6 +3,7 @@
 require "wx_reply_message/wshop"
 require "wx_reply_message/wmall"
 require "wx_reply_message/wlife"
+require "wx_reply_message/shequ"
 
 def generate_sn_by_timestamp
   DateTime.now.strftime("%y%m%d%6N") + Random.rand(100...1000).to_s

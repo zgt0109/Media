@@ -211,6 +211,15 @@
     </li>
   <% end %>
 
+  <% if current_site.has_privilege_for?(20004) %>
+    <li>
+      <a href="<%= shequ_admin_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
+        <i class="icon-plus"></i>
+        <span class="menu-text">社区通</span>
+      </a>
+    </li>
+  <% end %>
+
   <% if current_site.has_privilege_for?(10004) %>
     <li class="<%= parent_class if cars_page? %>">
       <%= left_nav_dropdown 'icon-plus', '微汽车' %>
