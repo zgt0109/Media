@@ -53,7 +53,7 @@ class Biz::ShopsController < ApplicationController
   def activity_consumes
     activity_type_id  = params[:activity_type_id].to_i
     consumable_id     = params[:consumable_id].to_i
-    is_coupon         = (activity_type_id == 62)
+    is_coupon         = (activity_type_id == 3)
     is_unfold         = (activity_type_id == 71)
     has_activity_type = (activity_type_id > 0)
     has_consumable_id = (consumable_id > 0)
@@ -424,7 +424,7 @@ class Biz::ShopsController < ApplicationController
 
       activity_type_id = params[:activity_type_id].to_i
       collection = current_shop_account.activities.where(activity_type_id: activity_type_id)
-      collection = collection.first.coupons.normal rescue Coupon.none if activity_type_id == 62
+      collection = collection.first.coupons.normal rescue Coupon.none if activity_type_id == 3
       collection.pluck([:name, :id]).unshift(['全部', ''])
     end
 

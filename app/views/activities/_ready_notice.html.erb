@@ -68,27 +68,6 @@
               <i class="start-at-message red hide"></i>
             </div>
 
-            <% if @activity.activity_type.consume? %>
-              <%= f.fields_for :activity_property do |activity_property| %>
-                <div class="p">
-                  <span>优惠券发放总数<em>*</em></span>
-                  <%= activity_property.text_field :coupon_count, validate: true, class: 'remove-last-dot input-text' %>
-                </div>
-                <div class="p">
-                  <span>优惠券每天允许发放总数</span>
-                  <%= activity_property.text_field :consume_day_allow_count, class: 'remove-last-dot input-text' %>
-                </div>
-                <div class="p">
-                  <span>每人允许领取数<em>*</em></span>
-                  <%= activity_property.text_field :get_limit_count, validate: true, class: 'remove-last-dot input-text' %>
-                </div>
-                <div class="p">
-                  <span>重复抽奖时回复<em>*</em><span class="fgray">（超过允许领取数时，回复此内容）</span></span>
-                  <%= activity_property.text_field :repeat_draw_msg, validate: true, class: 'remove-last-dot input-text' %>
-                </div>
-              <% end %>
-            <% end %>
-
             <%= render 'form_submit' %>
           </div>
 

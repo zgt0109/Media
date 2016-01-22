@@ -9,8 +9,6 @@ class ActivityProperty < ActiveRecord::Base
   validates_numericality_of  :item_price, greater_than: 0, presence: true, on: :update, if: :groups?
   validates_numericality_of  :get_limit_count, greater_than: 0, presence: true, only_integer: true, on: :update, if: :groups?
   validates_numericality_of  :get_limit_count, greater_than: 0, presence: true, only_integer: true, if: :vote?
-  validates_numericality_of  :coupon_count, :get_limit_count, greater_than: 0, presence: true, on: :update, if: :consume?
-  validates  :repeat_draw_msg, presence: true, on: :update, if: :consume?
   validates :question_score, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1000, only_integer: true }, if: :fight?
 
   validates :partake_limit, :day_partake_limit, :prize_limit, :day_prize_limit, presence: true, numericality: { greater_than_or_equal_to: -1, only_integer: true }, if: :can_validate?

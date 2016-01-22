@@ -320,8 +320,6 @@ class Api::WeixinController < Api::BaseController
       message = ShakeUser.reply_or_create(@wx_user.user, activity)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
       respond_activity_directly(activity)
-    # elsif activity.enter_weixin_print?
-    #   Print.respond_text(@wx_user, @mp_user, '微打印', request.raw_post)
     elsif activity.website?
       return Weixin.respond_text(@from_user_name, @to_user_name, '微官网暂停使用') unless activity.setted?
       # activity_notice = ActivityNotice.website_notice(activity)

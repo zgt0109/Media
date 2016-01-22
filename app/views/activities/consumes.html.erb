@@ -55,7 +55,7 @@
                           <th>活动名称</th>
                           <th>SN码</th>
                           <th>状态</th>
-                          <% if @activity && !(@activity.consume? || @activity.groups?)%>
+                          <% if @activity && !@activity.groups?%>
                           <th width="100px">中奖奖品</th>
                           <th>中奖者手机</th>
                           <% end %>
@@ -64,7 +64,7 @@
                           <th>手机号码</th>
                           <th>数量</th>
                           <% end %>
-                          <th><%= (@activity && (@activity.consume? || @activity.fight? || @activity.groups?)) ? '领取时间' : '抽奖时间' %></th>
+                          <th><%= (@activity && (@activity.fight? || @activity.groups?)) ? '领取时间' : '抽奖时间' %></th>
                           <th>使用时间</th>
                           <th>门店</th>
                           <th>操作</th>
@@ -76,7 +76,7 @@
                           <td title="<%= activity_consume.activity.try(:name) %>"><%= truncate_u activity_consume.activity.try(:name), length: 8 %></td>
                           <td><%= activity_consume.code %></td>
                           <td><%= activity_consume.status_text %></td>
-                          <% unless @activity.consume? || @activity.groups? %>
+                          <% unless @activity.groups? %>
                             <td><%= "#{activity_consume.activity_prize.title rescue ''}-#{activity_consume.activity_prize.prize rescue ''}" %></td>
                             <td><%= activity_consume.mobile %></td>
                           <% end %>
@@ -95,7 +95,7 @@
                         </tr>
                       <% end.blank? %>
                         <tr>
-                          <td colspan="<%= (@activity && !@activity.consume?) ? 9 : 7 %>" class="green text-center">无记录</td>
+                          <td colspan="9" class="green text-center">无记录</td>
                         </tr>
                       <% end %>
                     </tbody>

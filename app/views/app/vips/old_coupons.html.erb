@@ -19,15 +19,7 @@
       <div class="box <%= 'active' if i==0 %>">
         <div class="hd" id="consume_<%= consume.id %>">
           <b>SN码：<%= consume.code %></b>
-          <span>有效期至：<%= consume.activity.try(:activity_type).try(:consume?) ? consume.activity.try(:end_at).try(:to_date) : ''%></span>
           <em class="arrow"></em>
-        </div>
-        <div class="bd">
-          <p><%= consume.activity.try(:activity_type).try(:consume?) ? raw(consume.activity.active_activity_notice.try(:description)) : '' %></p>
-          <br>
-          <% if (consume.activity.try(:activity_type).try(:consume?) and consume.used?)  %>
-          <b>已使用</b>
-          <%end%>
         </div>
       </div>
       <%end if @activity_consumes %>

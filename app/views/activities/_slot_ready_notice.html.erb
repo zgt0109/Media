@@ -41,7 +41,7 @@
 
     <div class="box-form form-row fl">
       <div class="p">
-        <span>活动预热微信消息摘要<span class="fgray">（不能超过255个字<%= '. "{}"中的内容为动态内容，去掉后将不显示.' if @activity.activity_type.consume? %>）</span></span>
+        <span>活动预热微信消息摘要<span class="fgray">（不能超过255个字）</span></span>
         <%= ran.text_area :summary, maxlength: 255, rows: 5, class: "activity_notice_summary", style: 'height: 80px;' %>
       </div>
       <div class="p">
@@ -73,24 +73,5 @@
       </div>
     </div>
 
-    <div class="box-form form-row fl">
-      <% if @activity.activity_type.consume? %>
-        <%= f.fields_for :activity_property do |activity_property| %>
-        <div class="p">
-          <i>优惠券发放总数 </i><%= activity_property.text_field :coupon_count, class: 'remove-last-dot input-text', style: "margin-left:12px;width:122px;" %>
-          <i>张<em>*</em>&ensp;</i> <i class="coupon-count-message red"></i>
-        </div>
-
-        <div class="p">
-          <i>每人允许领取数 </i><%= activity_property.text_field :get_limit_count, class: 'remove-last-dot input-text', style: "margin-left:12px;width:122px;" %>
-          <i>张<em>*</em>&ensp;</i> <i class="get-limit-count-message red"></i>
-        </div>
-        <div class="p">
-          <i>重复抽奖时回复 <em>*</em>超过允许领取数时，回复此内容</i><%= activity_property.text_field :repeat_draw_msg, class: 'input-text', style: "width:268px;" %>
-          <i class="repeat-draw-msg-message red"></i>
-        </div>
-        <% end %>
-      <% end %>
-    </div>
   </div>
 </div>

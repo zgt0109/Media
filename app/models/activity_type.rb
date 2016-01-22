@@ -4,7 +4,7 @@ class ActivityType < ActiveRecord::Base
   ENUM_ID_OPTIONS = [
     ['website',             1,  '微官网'],
     ['vip',                 2,  '微会员卡'],
-    ['consume',             3,  '电子优惠券(不再使用)'],
+    ['coupon',              3,  '优惠券'],
     ['gua',                 4,  '刮刮卡'],
     ['wheel',               5,  '大转盘'],
     ['book_dinner',         6,  '微订餐'],
@@ -23,7 +23,7 @@ class ActivityType < ActiveRecord::Base
     ['album',               19, '微相册'],
     ['educations',          20, '微教育'],
     ['life',                21, '微生活'],
-    ['ec',                  22, '微电商旧版(不再使用)'],
+    ['ktv_order',           22, 'KTV预定(不再使用)'],
     ['circle',              23, '微商圈'],
     ['message',             24, '微留言'],
     ['hit_egg',             25, '砸金蛋'],
@@ -41,7 +41,7 @@ class ActivityType < ActiveRecord::Base
     ['greet',               37, '微贺卡'],
     ['wx_wall',             38, '微信墙'],
     ['business_shop',       39, '微商圈店铺'],
-    ['quna',                40, '去哪儿吃(不再使用)'],
+    ['wx_red_packet',       40, '微红包' ],
     ['house_impression',    41, '房友印象'],
     ['house_live_photo',    42, '实景拍摄'],
     ['house_review',        43, '专家点评'],
@@ -49,7 +49,7 @@ class ActivityType < ActiveRecord::Base
     ['wshop',               45, '微电商'],
     ['wx_print',            46, '微信打印'],
     ['exit_wx_print',       47, '退出微信打印'],
-    ['ktv_order',           48, 'KTV预定(不再使用)'],
+    ['hanming_wifi',        48, '汉明wifi'],
     ['wbbs_community',      49, '微社区'],
     ['wifi',                51, 'wifi'],
     ['wmall',               52, '微客生活圈'],
@@ -62,7 +62,7 @@ class ActivityType < ActiveRecord::Base
     ['plot_telephone',      59, '微小区常用电话'],
     ['plot_owner',          60, '微小区业主中心'],
     ['plot_life',           61, '微小区周边生活'],
-    ['coupon',              62, '优惠券'],
+    ['micro_aid',           62, '微助力'],
     ['reservation',         63, '微预定'],
     ['wave',                64, '摇一摇抽奖'],
     ['broche',              65, '微楼书'],
@@ -79,37 +79,32 @@ class ActivityType < ActiveRecord::Base
     ['wx_card',             76, '微信卡包'],
     ['brokerage',           77, '全民经纪人'],
     ['red_packet',          78, '节日礼包'],
-    ['enter_weixin_print',  79, '微打印(不再使用)'],
-    ['exit_weixin_print',   80, '退出微打印(不再使用)'],
-    ['hanming_wifi',        81, '汉明wifi'],
-    ['micro_aid',           82, '微助力'],
-    ['wx_red_packet',       83, '微红包' ],
-    ['shequ',               84, '社区通'],
+    ['new_vote',            79, '投票'],
+    ['shequ',               80, '社区通'],
   ]
 
   enum_attr :id, in: ENUM_ID_OPTIONS
 
-  ACTIVITY_IDS = [4, 5, 8, 25, 28, 62, 64, 67] + [10, 12, 15]
+  ACTIVITY_IDS = [3, 4, 5, 8, 25, 28, 64, 67] + [10, 12, 15]
 
   #营销互动
   def self.markets
-    ids = [4, 5, 8, 25, 28, 62, 64, 67, 70, 71, 75, 76, 77, 78, 82]
+    ids = [3, 4, 5, 8, 25, 28, 62, 64, 67, 70, 71, 75, 76, 77, 78]
     id_options.select{|m| ids.include?(m.last)}#  + [['图片分享', '33, 34, 35, 36']]
   end
 
   def self.sn_markets
     [
-      ["电子优惠券", 3],
+      ["优惠券", 3],
       ["摇一摇抽奖", 64],
-      ["优惠券", 62],
       ["刮刮卡", 4],
       ["大转盘", 5],
       ["一战到底", 8],
       ["砸金蛋", 25],
       ["老虎机", 28],
+      ["微助力", 62],
       ["推荐有奖", 70],
-      ["拆包有奖", 71],
-      ["微助力", 82]
+      ["拆包有奖", 71]
     ]
   end
 
