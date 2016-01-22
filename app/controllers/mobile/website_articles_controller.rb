@@ -32,16 +32,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
   private
 
   def find_website
-    session[:site_id] = [params[:site_id], params[:ext_name]].compact.join(".") if params[:site_id]
-
-    # 微官网旧地址访问判断
-    if session[:site_id] == 'app' and params[:id]
-      @website = Website.micro_site.where(id: params[:id]).first
-    elsif session[:site_id].to_s =~ /^\d+$/
-      @website = Website.micro_site.where(:site_id => session[:site_id]).first
-    else
-      @website = Website.micro_site.where(:domain => session[:site_id]).first
-    end
+    @website = @site.micro_site
 
     @website_setting = @website.website_setting ||= @website.create_default_setting
     @site = @website.site
