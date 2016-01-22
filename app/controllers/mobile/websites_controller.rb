@@ -112,7 +112,7 @@ class Mobile::WebsitesController < ActionController::Base
   private
 
   def find_website
-    @website = @site.micro_site.first
+    @website = @site.website.first
 
     return render text: '微官网不存在' unless @website
     return render text: '商家正在升级网站内容，暂停访问' unless @website.active?

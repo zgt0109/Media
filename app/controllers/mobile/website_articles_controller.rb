@@ -32,7 +32,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
   private
 
   def find_website
-    @website = @site.micro_site
+    @website = @site.website
 
     @website_setting = @website.website_setting ||= @website.create_default_setting
     @site = @website.site
