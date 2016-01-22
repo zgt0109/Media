@@ -501,37 +501,6 @@ START
     update_attributes(privileges: new_privileges.uniq.join(','), custom_privileges: new_custom_privileges.uniq.join(','))
   end
 
-  def buy_sms_totality
-    self.sms_orders.buy.where(status: [SmsOrder::SUCCEED, SmsOrder::F_DELETE]).collect(&:plan_sms).sum
-  end
-
-  def giv_sms_totality
-    self.sms_orders.giv.collect(&:plan_sms).sum
-  end
-
-  def usable_sms
-    self.pay_sms.to_i + self.free_sms.to_i
-  end
-
-  def sms_expenses_count(date, operation_id = nil)
-    condtions = {date: date, status: 1}
-    condtions.merge!(operation_id: operation_id) if  operation_id
-    self.sms_expenses.where(condtions).count
-  end
-
-  def send_password_reset
-    generate_token(:password_reset_token)
-    self.password_reset_sent_at = Time.zone.now
-    save!
-    AccountMailer.password_reset(self).deliver
-  end
-
-  def generate_token(column)
-    begin
-      self[column] = SecureRandom.urlsafe_base64
-    end while Account.exists?(column => self[column])
-  end
-
   def send_kf_msg wx_user,content
     mp_user = self.wx_mp_user
     return '' unless mp_user
@@ -741,15 +710,15 @@ START
         activity_type_id: value[1]
       }
       full_attrs = {
-          activityable_id: print.id,
-          activityable_type: 'Print',
-          status:   Activity::SETTED,
-          name:     value[0],
-          keyword:  value[0],
-          summary:  value[2],
-          ready_at: now,
-          start_at: now,
-          end_at:   now + 100.years
+        activityable_id: print.id,
+        activityable_type: 'Print',
+        status:   Activity::SETTED,
+        name:     value[0],
+        keyword:  value[0],
+        summary:  value[2],
+        ready_at: now,
+        start_at: now,
+        end_at:   now + 100.years
       }.merge! attrs
       print.activities << Activity.new(full_attrs)
     end
@@ -781,11 +750,11 @@ START
     }
 
     full_attrs = {
-        name: '微贺卡',
-        keyword: '微贺卡',
-        ready_at: now,
-        start_at: now,
-        end_at:   now + 100.years
+      name: '微贺卡',
+      keyword: '微贺卡',
+      ready_at: now,
+      start_at: now,
+      end_at:   now + 100.years
     }.merge!(options)
     full_attrs[:pic_key] ||= 'FqBarADTwYkTW2EFVaA43PW_0rSu'
 
@@ -833,19 +802,19 @@ START
     now = Time.now
     attrs = {
       site_id: id,
-        activity_type_id: ActivityType::CIRCLE
+      activity_type_id: ActivityType::CIRCLE
     }
     full_attrs = {
-        activityable_id: circle.id,
-        activityable_type: 'Website',
-        status:   Activity::SETTED,
-        name:     circle.name,
-        keyword:  circle.name,
-        description:  circle.name,
-        pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
-        ready_at: now,
-        start_at: now,
-        end_at:   now + 100.years
+      activityable_id: circle.id,
+      activityable_type: 'Website',
+      status:   Activity::SETTED,
+      name:     circle.name,
+      keyword:  circle.name,
+      description:  circle.name,
+      pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+      ready_at: now,
+      start_at: now,
+      end_at:   now + 100.years
     }.merge! attrs
     activity = Activity.where(attrs).first || Activity.create!(full_attrs)
     circle.update_column(:activity_id, activity.id)
@@ -860,19 +829,19 @@ START
     now = Time.now
     attrs = {
       site_id: id,
-        activity_type_id: ActivityType::HOSPITAL
+      activity_type_id: ActivityType::HOSPITAL
     }
     full_attrs = {
-        activityable_id: hospital.id,
-        activityable_type: 'Hospital',
-        status:   Activity::SETTED,
-        name:     hospital.name,
-        keyword:  hospital.name,
-        description:  hospital.name,
-        pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
-        ready_at: now,
-        start_at: now,
-        end_at:   now + 100.years
+      activityable_id: hospital.id,
+      activityable_type: 'Hospital',
+      status:   Activity::SETTED,
+      name:     hospital.name,
+      keyword:  hospital.name,
+      description:  hospital.name,
+      pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+      ready_at: now,
+      start_at: now,
+      end_at:   now + 100.years
     }.merge! attrs
     Activity.where(attrs).first || create_activity_hospital_job_title(full_attrs, hospital)
 
