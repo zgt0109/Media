@@ -68,12 +68,12 @@ development:
   <<: *common
   hostname: "winwemedia.dev:3000"
   mhostname: "m.winwemedia.dev:3000"
-  wshop_host:    "http://127.0.0.1:3003"
-  wmall_host:    "http://127.0.0.1:3002"
-  wlife_host:    "http://127.0.0.1:3001"
-  shequ_host:    "http://127.0.0.1:3004"
-  recommend_host:"http://127.0.0.1:3005"
-  app_host:      "http://127.0.0.1:3006"
+  wshop_host:     "http://127.0.0.1:3003"
+  wmall_host:     "http://127.0.0.1:3002"
+  wlife_host:     "http://127.0.0.1:3001"
+  shequ_host:     "http://127.0.0.1:3004"
+  recommend_host: "http://127.0.0.1:3005"
+  app_host:       "http://127.0.0.1:3006"
 
 test:
   <<: *common
