@@ -11,7 +11,7 @@
             <% if child.pic_url || child.font_icon.present? %>
                 <div class="bd">
                   <% if child.pic_url.present? %>
-                      <%= image_tag child.pic %>
+                      <%= image_tag child.pic_url %>
                   <% else %>
                       <i class="<%= child.font_icon %>"></i>
                   <% end %>

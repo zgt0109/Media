@@ -28,7 +28,7 @@ class WxPlotBulletin < ActiveRecord::Base
     })
   end
 
-  def pic
+  def pic_url
     qiniu_image_url(read_attribute("pic_key"))
   end
 

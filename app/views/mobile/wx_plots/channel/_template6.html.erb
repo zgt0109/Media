@@ -4,7 +4,7 @@
     <% @bulletins.each do |child| %>
         <a href="<%= bulletin_mobile_wx_plot_url(site_id: @site.id, id: child.id, anchor: 'mp.weixin.qq.com') %>">
           <% if child.pic_url.present? %>
-              <%= image_tag child.pic %>
+              <%= image_tag child.pic_url %>
           <% else %>
               <i class="<%= child.font_icon %>"></i>
           <% end %>

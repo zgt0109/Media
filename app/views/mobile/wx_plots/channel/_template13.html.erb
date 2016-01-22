@@ -4,7 +4,7 @@
         <%= link_to bulletin_mobile_wx_plot_url(site_id: @site.id, id: child.id, anchor: 'mp.weixin.qq.com') do %>
             <p>
               <% if child.pic_url.present? %>
-                  <%= image_tag child.pic %>
+                  <%= image_tag child.pic_url %>
               <% else %>
                   <i class="<%= child.font_icon %>"></i>
               <% end %>

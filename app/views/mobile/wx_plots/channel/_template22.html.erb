@@ -4,7 +4,7 @@
         <% @bulletins.each_with_index do |bulletin, index| %>
             <li class="<%= 'play' if index == 0 %>">
               <%= link_to bulletin_mobile_wx_plot_url(site_id: @site.id, id: bulletin.id, anchor: 'mp.weixin.qq.com'), class: 'box mod-index' do %>
-                  <%= image_tag bulletin.pic if bulletin.pic_url %>
+                  <%= image_tag bulletin.pic_url if bulletin.pic_url %>
               <% end %>
             </li>
         <% end %>
