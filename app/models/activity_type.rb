@@ -83,7 +83,8 @@ class ActivityType < ActiveRecord::Base
     ['exit_weixin_print',   80, '退出微打印(不再使用)'],
     ['hanming_wifi',        81, '汉明wifi'],
     ['micro_aid',           82, '微助力'],
-    ['wx_red_packet', 83, '微红包' ]
+    ['wx_red_packet',       83, '微红包' ],
+    ['shequ',               84, '社区通'],
   ]
 
   enum_attr :id, in: ENUM_ID_OPTIONS
