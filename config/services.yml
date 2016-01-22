@@ -1,7 +1,16 @@
 common: &common
   hostname: "m.winwemedia.com"
   mhostname: "m.winwemedia.com"
-  hotelhostname: "hotel.winwemedia.com"
+  wshop_host:     "http://ec.winwemedia.com"
+  wmall_host:     "http://wmall.winwemedia.com"
+  wlife_host:     "http://wlife.winwemedia.com"
+  shequ_host:     "http://shequ.winwemedia.com"
+  hotel_host:     "http://hotel.winwemedia.com"
+  recommend_host: "http://recommend.winwemedia.com"
+  oa_host:        "http://oa.winwemedia.com"
+  faye_host:      "http://localhost:9393"
+  app_host: "http://api.winwemedia.com"
+  cas_url: "http://127.0.0.1:8001"
   sms_service: 'zhilian'
   zhilian_url: 'http://61.145.229.29:9003/MWGate/wmgw.asmx'
   zhilian_user_id: 'J02110'
@@ -22,8 +31,17 @@ production:
   <<: *common
   hostname: "m.winwemedia.com"
   mhostname: "m.winwemedia.com"
-  hotelhostname: "hotel.winwemedia.com"
-  uploads_dir: "/opt/apps/shared/winwemedia/uploads"
+  wshop_host:     "http://ec.winwemedia.com"
+  wmall_host:     "http://mall.winwemedia.com"
+  wlife_host:     "http://life.winwemedia.com"
+  shequ_host:     "http://shequ.winwemedia.com"
+  hotel_host:     "http://hotel.winwemedia.com"
+  oa_host:        "http://oa.winwemedia.com"
+  recommend_host: "http://lifeboat.winwemedia.com"
+  faye_host:      "http://faye.api.winwemedia.com:9393"
+  app_host:       "http://api.winwemedia.com"
+  cas_url:        "http://cas.winwemedia.com"
+  uploads_dir:    "/opt/apps/shared/winwemedia/uploads"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://m.winwemedia.com/yeepay/callback"
@@ -33,6 +51,14 @@ staging:
   <<: *common
   hostname: "staging.winwemedia.com"
   mhostname: "staging.m.winwemedia.com"
+  wshop_host:     "http://staging.ec.winwemedia.com"
+  wmall_host:     "http://staging.mall.winwemedia.com"
+  wlife_host:     "http://wlife.winwemedia.com"
+  shequ_host:     "http://staging.shequ.winwemedia.com"
+  hotel_host:     "http://staging.winwemedia.com"
+  oa_host:        "http://staging.winwemedia.com"
+  recommend_host: "http://staging.winwemedia.com"
+  app_host: "http://staging.winwemedia.com"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://staging.m.winwemedia.com/yeepay/callback"
@@ -42,6 +68,12 @@ development:
   <<: *common
   hostname: "winwemedia.dev:3000"
   mhostname: "m.winwemedia.dev:3000"
+  wshop_host:    "http://127.0.0.1:3003"
+  wmall_host:    "http://127.0.0.1:3002"
+  wlife_host:    "http://127.0.0.1:3001"
+  shequ_host:    "http://127.0.0.1:3004"
+  recommend_host:"http://127.0.0.1:3005"
+  app_host:      "http://127.0.0.1:3006"
 
 test:
   <<: *common

@@ -531,7 +531,7 @@ class WebsiteMenu < ActiveRecord::Base
   end
 
   def display_preview_pic_url
-    [ WEBSITE_DOMAIN, (preview_pic.present? ? "/uploads/preview_pic/website_menu/#{website_id}/#{preview_pic}" : default_preview_pic_url) ].join
+    [ WWW_HOST, (preview_pic.present? ? "/uploads/preview_pic/website_menu/#{website_id}/#{preview_pic}" : default_preview_pic_url) ].join
   end
 
   def generate_preview_pic

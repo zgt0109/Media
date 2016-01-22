@@ -52,7 +52,7 @@ class Weixin
     end
 
     def respond_music(from_user_name, to_user_name, material)
-      host = WEBSITE_DOMAIN
+      host = WWW_HOST
       msg = "<xml>
       <ToUserName><![CDATA[#{from_user_name}]]></ToUserName>
       <FromUserName><![CDATA[#{to_user_name}]]></FromUserName>
@@ -94,7 +94,7 @@ class Weixin
 
 
     def respond_album(from_user_name, to_user_name, album)
-      url = "#{MOBILE_DOMAIN}/#{album.supplier_id}/albums/#{album.id}/list?aid=#{album.activity_id}&openid=#{from_user_name}"
+      url = "#{M_HOST}/#{album.supplier_id}/albums/#{album.id}/list?aid=#{album.activity_id}&openid=#{from_user_name}"
       msg = "<xml>
       <ToUserName><![CDATA[#{from_user_name}]]></ToUserName>
       <FromUserName><![CDATA[#{to_user_name}]]></FromUserName>

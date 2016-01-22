@@ -2,7 +2,7 @@ class WeixinKefu
 
   def self.request(params, mp_user)
     params.merge!({token: mp_user.kefu_token})
-    host = WEBSITE_DOMAIN
+    host = WWW_HOST
 
     xml = params[:xml]
     wx_user = mp_user.wx_users.where(openid: xml[:FromUserName]).first

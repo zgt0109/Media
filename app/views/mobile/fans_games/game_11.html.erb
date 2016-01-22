@@ -492,51 +492,51 @@ function winORlose() {
 		if (eat_count <= 20) {
 			chat = eat_count + "个月饼不过瘾，必须得更牛逼些！！";
 			share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了5%的人，求填饱";
-			share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+			share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 		} else {
 			if (eat_count <= 35) {
 				chat = "我勒个去，你只吃了" + eat_count + "个月饼，太慢了吧！";
 				share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了15%的人，求填饱";
-				share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+				share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 			} else {
 				if (eat_count <= 50) {
 					chat = "胃口不错，一口气吃" + eat_count + "个，吃完月饼记得再喝点小酒";
 					share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了25%的人，求填饱";
-					share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+					share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 				} else {
 					if (eat_count <= 65) {
 						chat = "万万没有想到！你吃了" + eat_count + "个月饼！放开吃，吃完哥请你喝酒！";
 						share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了35%的人，求填饱";
-						share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+						share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 					} else {
 						if (eat_count <= 80) {
 							chat = "你吃了" + eat_count + "个月饼，看样子你根本停不下来，加油，再来一次更牛的！！";
 							share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了45%的人，求填饱";
-							share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+							share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 						} else {
 							if (eat_count <= 95) {
 								chat = "你吃了" + eat_count + "个月饼，这样的速度，标准的一吃货啊，有潜质 ！";
 								share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了55%的人，求填饱";
-								share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+								share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 							} else {
 								if (eat_count <= 110) {
 									chat = "你吃了" + eat_count + "个月饼，我看你天赋异禀、骨骼惊奇，想来是百年难得一见的吃货奇才！";
 									share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了65%的人，求填饱";
-									share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+									share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 								} else {
 									if (eat_count <= 125) {
 										chat = "我勒个去，你吃了" + eat_count + "个月饼…说点什么好？记得吃药…。";
 										share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了75%的人，求填饱";
-										share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+										share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 									} else {
 										if (eat_count <= 140) {
 											chat = "你吃了" + eat_count + "个月饼，这么快的速度，够神啊";
 											share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了85%的人，求填饱";
-											share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+											share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 										} else {
 											chat = "天啊，你竟然吃了" + eat_count + "个月饼，简直是神一般的存在，膜拜啦！";
 											share = "我在中秋吃月饼大赛中吃掉了" + eat_count + "个月饼，打败了95%的人，神一般的存在！";
-											share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/moon/c4.png"
+											share_imgUrl = "<%= M_HOST %>/images/fans_game/moon/c4.png"
 										}
 									}
 								}
@@ -554,7 +554,7 @@ function winORlose() {
 var shareUrl = "<%= mobile_fans_game_url(site_id: @site.id,id:11) %>",
 	shareTitle = "中秋吃月饼大赛，求超越！",
 	share = "中秋吃月饼大赛，求超越！",
-	share_imgUrl = "<%= MOBILE_DOMAIN %>/images/fans_game/game_11.jpg";
+	share_imgUrl = "<%= M_HOST %>/images/fans_game/game_11.jpg";
 var onBridgeReady = function() {
 	var a = "";
 	WeixinJSBridge.on("menu:share:appmessage", function(b) {

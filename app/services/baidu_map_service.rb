@@ -53,7 +53,7 @@ class BaiduMapService
     end
 
     def inline_map(lat, lng, name, address)
-      URI.encode("#{MOBILE_DOMAIN}/api/wx/map_url?lat=#{lat}&lng=#{lng}&name=#{name}&address=#{address}")
+      URI.encode("#{M_HOST}/api/wx/map_url?lat=#{lat}&lng=#{lng}&name=#{name}&address=#{address}")
     end
 
   end

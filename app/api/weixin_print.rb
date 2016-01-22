@@ -1,7 +1,7 @@
 class Weixin
 
   def self.print_request(xml)
-    host = WEBSITE_DOMAIN
+    host = WWW_HOST
 
     word = xml[:Content]
 

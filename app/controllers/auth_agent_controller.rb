@@ -1,18 +1,18 @@
 # def try_wechat_oauth
-#   if can_current_wx_mp_user_use_oauth?
+#   if can_use_oauth?
 #     return_to = Base64.strict_encode64(request.url)
-
+#
 #     uri = URI(M_winwemedia_BASE_URL)
 #     uri.path = '/auth_agent/wx_oauth'
-#     uri.query= {return_to: return_to, wx_mp_user_open_id: @current_wx_mp_user.origin.try(:uid)}.to_param
+#     uri.query= {return_to: return_to, mp_openid: @wx_mp_user.try(:openid)}.to_param
 #     redirect_to uri.to_s
 #   end
-# end 
+# end
 
 # 网页授权请求地址：
-# http://m.winwemedia.com/auth_agent/wx_oauth?return_to=base64_redirect_url&wx_mp_user_open_id=123
+# http://m.winwemedia.com/auth_agent/wx_oauth?return_to=base64_redirect_url&mp_openid=gh_xxx
 # 获取openid后跳转到：
-# http://redirect_url?wx_user_open_id=123
+# http://redirect_url?openid=123
 
 class AuthAgentController < ApplicationController
   skip_before_filter *ADMIN_FILTERS
@@ -63,7 +63,7 @@ class AuthAgentController < ApplicationController
 
     if should_return_to?
       return_to_uri = decode_return_to_uri
-      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(wx_user_open_id: @wx_user.openid).to_param
+      return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(openid: @wx_user.openid).to_param
 
       WinwemediaLog::Base.logger('wxoauth', "****** return_to_uri: #{return_to_uri.to_s}")
 
@@ -106,7 +106,7 @@ class AuthAgentController < ApplicationController
   end
 
   def detected_wx_mp_user
-    @wx_mp_user = WxMpUser.find_by_uid(params[:wx_mp_user_open_id]) if params.has_key? :wx_mp_user_open_id
+    @wx_mp_user = WxMpUser.find_by_uid(params[:mp_openid]) if params.has_key? :mp_openid
 
     session[:wx_mp_user_id] = @wx_mp_user.id if @wx_mp_user
 

@@ -320,7 +320,7 @@ class SmsOrder < ActiveRecord::Base
   def rqrcode(str = nil)
     #require 'RMagick'
 
-    url = "#{MOBILE_DOMAIN}/#{str}" if str.present?
+    url = "#{M_HOST}/#{str}" if str.present?
 
     rqrcode = nil
 

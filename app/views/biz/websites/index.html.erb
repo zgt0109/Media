@@ -139,11 +139,11 @@
                     <span class="lbl">百度直达号验证代码设置 <small class="help-inline text-warning">用于将微官网跟百度直达号对接，如无直达号则无需填充此项</small></span>
                   </label>
                   <%= w.text_area :baidu_app_js, rows: 6, class: 'form-control', placeholder: '请将百度直达号给出的验证代码复制到此，复制完成后点击保存' %>
-                  <span class="fontWarn">微官网网址：<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}" %></span>
-                  <a id="copy-button-2" data-clipboard-text="<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
+                  <span class="fontWarn">微官网网址：<%= "#{M_HOST}/#{@website.custom_domain}" %></span>
+                  <a id="copy-button-2" data-clipboard-text="<%= "#{M_HOST}/#{@website.custom_domain}" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
                   <br/>
-                  <span class="fontWarn">微官网Sitemap链接：<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}/sitemap.html" %></span>
-                  <a id="copy-button-3" data-clipboard-text="<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}/sitemap.html" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
+                  <span class="fontWarn">微官网Sitemap链接：<%= "#{M_HOST}/#{@website.custom_domain}/sitemap.html" %></span>
+                  <a id="copy-button-3" data-clipboard-text="<%= "#{M_HOST}/#{@website.custom_domain}/sitemap.html" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
                 </div>
 
                 <div class="form-group">
