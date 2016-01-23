@@ -362,7 +362,7 @@
 
   <% if current_site.has_privilege_for?(10012) %>
     <li class="<%= controller_name =~ /booking/ || controller_name =~ /ktv_order/ ? parent_class : '' %>">
-      <%= left_nav_dropdown 'icon-plus', '微服务' %>
+      <%= left_nav_dropdown 'icon-plus', '微预约' %>
       <ul class="submenu" style="<%= 'display: block' if controller_name =~ /booking/ || controller_name =~ /ktv_order/ %>">
         <%= link_to_left_nav( '基本信息', bookings_path, controller_name == 'bookings' ) %>
         <%= link_to_left_nav( '轮播图片', booking_ads_path, controller_name == 'booking_ads' ) %>

@@ -73,7 +73,7 @@ class Biz::WebsitePicturesController < ApplicationController
     @picture = @website.website_pictures.find(params[:id]) if params[:id].present?
     ids = params[:ids].split(',').to_a.map{|f| f.to_i}
 
-    #微服务中添加ktv预定
+    #微预约中添加ktv预定
     #ids = [29, 48] if ids == [29]
 
     @activities = current_site.activities.active.unexpired.where(activity_type_id: ids)

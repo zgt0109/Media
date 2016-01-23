@@ -5,4 +5,3 @@
 //= require v5.1/modernizr.custom.58376
 //= require v5.1/global
 //= require v5.1/member
-//= require v5.1/scrollPage
