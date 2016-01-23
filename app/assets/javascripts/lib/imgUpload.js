@@ -429,7 +429,7 @@
                             }
                         });
                     }else if(self.imgs_type == "booking_item_pictures"){
-                        // 微预约商品图片上传
+                        // 微服务商品图片上传
                         fileImg.after(html);
                         var uuid = Date.now();
                         fileImg.next().append('<input class="destroy" name="booking_item[booking_item_pictures_attributes]['+uuid+'][_destroy]" type="hidden">')

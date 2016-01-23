@@ -3,7 +3,7 @@
       <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
           <%= render 'partials/home' %>
-          <li><%= link_to '微预约', bookings_path %></li>
+          <li><%= link_to '微服务', bookings_path %></li>
           <li><%= link_to '商品管理', booking_items_path %></li>
         </ul>
         <%= render '/layouts/qrcode' %>
@@ -16,13 +16,13 @@
               <div class="col-sm-12">
                 <div class="col-md-3 row">
                   <div class="input-group input-group-text">
-                    <span class="input-group-addon">商品编号：</span>
+                    <span class="input-group-addon">编号：</span>
                     <%= text_field_tag :id, params[:id], class: 'col-xs-12' %>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="input-group input-group-text">
-                    <span class="input-group-addon">商品名称：</span>
+                    <span class="input-group-addon">名称：</span>
                     <%= text_field_tag :name, params[:name], class: 'col-xs-12' %>
                   </div>
                 </div>
@@ -30,7 +30,7 @@
               <div class="col-sm-12 margin-top-10">
                 <div class="col-md-6 row">
                   <div class="input-group input-group-text">
-                    <span class="input-group-addon">商品分类：</span>
+                    <span class="input-group-addon">分类：</span>
                     <div class="col-xs-12 row" id="selects">
                       <% @booking_categories_selects.each do |select|%>
                           <div class="col-xs-4">
@@ -56,7 +56,7 @@
               <tr>
                 <th>编号</th>
                 <th>分类</th>
-                <th>商品名</th>
+                <th>名称</th>
                 <th>价格</th>
                 <th>库存</th>
                 <th>操作</th>

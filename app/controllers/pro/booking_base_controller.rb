@@ -5,7 +5,7 @@ class Pro::BookingBaseController < ApplicationController
 
   def require_booking
     @booking = current_site.booking
-    redirect_to bookings_path, notice: "请先设置微预约" unless @booking
+    redirect_to bookings_path, notice: "请先设置微服务" unless @booking
   end
 
   def require_industry

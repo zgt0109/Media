@@ -87,7 +87,7 @@ class ActivityType < ActiveRecord::Base
     ['life',                21, '微生活'],
     ['circle',              23, '微商圈'],
     ['business_shop',       39, '微商圈店铺'],
-    ['booking',             29, '微预约'],
+    ['booking',             29, '微服务'],
     ['wshop',               45, '微电商'],
     ['wmall',               52, '微客生活圈'],
     ['wmall_shop',          54, '微客生活圈商铺'],
@@ -131,7 +131,7 @@ class ActivityType < ActiveRecord::Base
   #行业解决方案                           wxwx
   def self.industry
     ids = [9, 16, 18, 32, 45, 17, 20, 31, 21,52]
-    id_options.select{|m| ids.include?(m.last)} + [['微餐饮', '6, 7'], ['微房产', '13, 26, 65, 27, 41, 42, 44'], ['微商圈', '23, 39'], ['微预约', '29, 48'], ['微小区', '56, 57, 58, 59, 60, 61'], ['微政务', '68, 69']]
+    id_options.select{|m| ids.include?(m.last)} + [['微餐饮', '6, 7'], ['微房产', '13, 26, 65, 27, 41, 42, 44'], ['微商圈', '23, 39'], ['微服务', '29, 48'], ['微小区', '56, 57, 58, 59, 60, 61'], ['微政务', '68, 69']]
   end
 
   #存在活动开始和结束时间的活动
