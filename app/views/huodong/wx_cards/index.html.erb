@@ -4,7 +4,7 @@
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
       <li><%= link_to '微活动', activities_path %></li>
-      <li><%= link_to '微信卡包', card_admins_wx_cards_path %></li>
+      <li><%= link_to '微信卡券', card_admins_wx_cards_path %></li>
       <li><%= link_to '基础设置', wx_cards_path %></li>
     </ul>
     <%= render partial:'/layouts/qrcode' %>
@@ -33,7 +33,7 @@
                   <div class="form-group">
                     <label class="control-label">回复关键词<span class="required-star">*</span><small class="help-inline text-warning line-height-32">关键词不能和其他进行中的活动的关键词重复</small></label>
                     <div class="clearfix">
-                      <%= f.text_field :keyword, class: 'col-xs-6', validate: true, placeholder: '请输入微信卡包对应的关键字' %>
+                      <%= f.text_field :keyword, class: 'col-xs-6', validate: true, placeholder: '请输入微信卡券对应的关键字' %>
                     </div>
                   </div>
                   <div class="form-group">

@@ -17,10 +17,6 @@ class ActivitiesController < ApplicationController
     @activities = @search.page(params[:page])
   end
 
-  def old_coupons
-    search_activities_by_type(ActivityType::CONSUME, false)
-  end
-
   def guas
     search_activities_by_type(ActivityType::GUA, false)
     render :old_coupons

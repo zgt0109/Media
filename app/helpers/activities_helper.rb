@@ -1,6 +1,5 @@
 module ActivitiesHelper
   MARKETING_ACTIVITY_IDS = [
-    ActivityType::CONSUME,
     ActivityType::GUA,
     ActivityType::WHEEL,
     ActivityType::FIGHT,
@@ -35,7 +34,6 @@ module ActivitiesHelper
 
   def activities_path_by_type(activity_type_id)
     case activity_type_id.to_i
-    when ActivityType::CONSUME   then old_coupons_activities_path
     when ActivityType::GUA       then guas_activities_path
     when ActivityType::WHEEL     then wheels_activities_path
     when ActivityType::FIGHT     then fights_activities_path
@@ -54,7 +52,6 @@ module ActivitiesHelper
 
   def link_to_activities_by_type(activity_type_id, options = {})
     case activity_type_id.to_i
-    when ActivityType::CONSUME   then link_to('电子优惠券', old_coupons_activities_path,  options)
     when ActivityType::GUA       then link_to('刮刮卡', guas_activities_path,     options)
     when ActivityType::WHEEL     then link_to('大转盘', wheels_activities_path,   options)
     when ActivityType::FIGHT     then link_to('一战到底',  fights_activities_path,   options)
@@ -77,7 +74,6 @@ module ActivitiesHelper
 
   def link_to_activities_reports_by_type(activity_type_id, options = {})
     name = {
-      ActivityType::CONSUME => '优惠券报表',
       ActivityType::GUA     => '刮刮卡报表',
       ActivityType::WHEEL   => '大转盘报表',
       ActivityType::HIT_EGG => '砸金蛋报表',
@@ -130,7 +126,6 @@ module ActivitiesHelper
   def old_coupons_path?
     return true if controller_name =~ /old_coupons/
     return true if request.path == old_coupons_activities_path
-    return true if params.values_at(:activity_type, :activity_type_id).include?(ActivityType::CONSUME.to_s)
   end
 
   def activities_path?
@@ -246,7 +241,6 @@ module ActivitiesHelper
 
   def activity_type_name( activity_type_id )
     {
-      ActivityType::CONSUME => '电子优惠券',
       ActivityType::GUA     => '刮刮卡抽奖',
       ActivityType::WHEEL   => '幸运大转盘',
       ActivityType::FIGHT   => '一战到底',
@@ -256,7 +250,6 @@ module ActivitiesHelper
 
   def report_name( activity_type_id )
     {
-      ActivityType::CONSUME => '优惠券报表',
       ActivityType::GUA     => '刮刮卡报表',
       ActivityType::WHEEL   => '大转盘报表',
       ActivityType::FIGHT   => '一战到底报表',

@@ -23,7 +23,7 @@ include HasBarcode
     ['point_gift_exchange', 'PointGiftExchange',  '礼品券'],
     ['coupon',              'Coupon',             '优惠券'],
     ['activity',            'Activity',           '活动'],
-    ['wx_card',             'Wx::Card',           '微信卡包'],
+    ['wx_card',             'Wx::Card',           '微信卡券'],
     ['red_packet',          'RedPacket::Release', '节日礼包']
   ]
 
