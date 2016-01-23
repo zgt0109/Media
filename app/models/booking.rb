@@ -1,21 +1,23 @@
 class Booking < ActiveRecord::Base
 
-  belongs_to :site
-
-  has_one :activity, as: :activityable, dependent: :destroy
-
   validates :name, presence: true, length: { maximum: 64, message: '名称过长' }
-  validates :tel, presence: true, on: :update
+  # validates :tel, presence: true
+
+  belongs_to :booking
+  has_one :activity, as: :activityable, dependent: :destroy
+  has_many :booking_orders
+  has_many :booking_categories
+  has_many :booking_items
+  has_many :booking_ads
 
   accepts_nested_attributes_for :activity
 
   def clear_menus!
-    site.booking_categories.clear
+    booking_categories.clear
   end
 
   def multilevel_menu params
-    return [1, []] unless site
-    booking_categories, booking_categories_selects = site.booking_categories.root.order(:sort), []
+    booking_categories, booking_categories_selects = self.booking_categories.root.order(:sort), []
     index = 1
     booking_categories_selects.push([index, booking_categories])
     return booking_categories_selects if params["booking_category_id#{index}".to_sym].to_i <= 0 && params[:action] == 'index'
@@ -28,10 +30,8 @@ class Booking < ActiveRecord::Base
   end
 
   def show_items params
-
-    return [] unless site
     items = []
-    site.booking_categories.root.each do |category|
+    booking_categories.root.each do |category|
       if category.has_children?
         if category.id == params[:booking_category_id].to_i
           items << category.booking_items
@@ -45,16 +45,10 @@ class Booking < ActiveRecord::Base
       end
     end if params[:booking_category_id].present?
 
-    items = site.booking_items unless params[:booking_category_id].present?
-
+    items = booking_items unless params[:booking_category_id].present?
     items = items.flatten
-
     items = items.select{|item| item.id == params[:id].to_i} if params[:id].present?
-
     items = items.select{|item| item.name =~ /.*(#{params[:name].strip()}).*/} if params[:name].present?
-
     items.flatten.sort{|x, y| y.created_at <=> x.created_at }
   end
-
-
 end

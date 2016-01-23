@@ -176,7 +176,7 @@ div.ps-toolbar-comment div.ps-toolbar-content{
 div.ps-toolbar-comment div.ps-toolbar-content i{position:absolute; left: 0; padding: 12px 0 0 22px; font-style: normal;}
 /*add comment btn*/
 div.ps-tollbar-comment{display:table-cell;cursor:pointer;vertical-align:middle;}
-.ps-tollbar-comment i{display:inline-block;width:20px;height:20px;background:url(/mobile/img/icon/ico-comment.png);-webkit-background-size:100% 100%;background-size:100% 100%;vertical-align:middle;}
+.ps-tollbar-comment i{display:inline-block;width:20px;height:20px;background:url(/mobile/img/ico-comment.png);-webkit-background-size:100% 100%;background-size:100% 100%;vertical-align:middle;}
 .ps-tollbar-comment span{display:inline-block;margin-left:10px;font-size:14px;font-family:"SimHei";color:#fff;}
 /* Hi-res display */
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),

@@ -346,12 +346,4 @@ class Website < ActiveRecord::Base
     qiniu_image_url(logo_key)
   end
 
-  def default_preview_pic_url
-    "/assets/bqq/website_preview_pic.jpg"
-  end
-
-  def display_preview_pic_url
-    [ WWW_HOST, (preview_pic.present? ? "/uploads/preview_pic/website_menu/#{id}/#{preview_pic}" : default_preview_pic_url) ].join
-  end
-
 end

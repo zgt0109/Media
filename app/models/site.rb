@@ -885,7 +885,7 @@ START
   def create_booking
     attrs = { site_id: id }
 
-    booking = Booking.where(attrs).first_or_create(name: '微服务')
+    booking = Booking.where(attrs).first_or_create(name: '微预约')
 
     now = Time.now
     attrs = {

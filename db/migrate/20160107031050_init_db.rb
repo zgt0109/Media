@@ -612,7 +612,6 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "booking_ads", ["site_id"], :name => "index_booking_ads_on_site_id"
-  add_index "booking_ads", ["sort"], :name => "index_booking_ads_on_sort"
 
   create_table "booking_categories" do |t|
     t.integer  "site_id",                                 :null => false
@@ -628,7 +627,6 @@ class InitDb < ActiveRecord::Migration
   add_index "booking_categories", ["name"], :name => "index_booking_categories_on_name"
   add_index "booking_categories", ["parent_id"], :name => "index_booking_categories_on_parent_id"
   add_index "booking_categories", ["site_id"], :name => "index_booking_categories_on_site_id"
-  add_index "booking_categories", ["sort"], :name => "index_booking_categories_on_sort"
 
   create_table "booking_comments" do |t|
     t.integer  "booking_item_id"
@@ -651,7 +649,6 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "booking_item_pictures", ["booking_item_id"], :name => "index_booking_item_pictures_on_booking_item_id"
-  add_index "booking_item_pictures", ["sort"], :name => "index_booking_item_pictures_on_sort"
 
   create_table "booking_items" do |t|
     t.integer  "site_id"

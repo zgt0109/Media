@@ -1,22 +1,13 @@
 class Pro::BookingCategoriesController < Pro::BookingBaseController
-  before_filter :set_booking, only: [:index]
   before_filter :set_booking_category, only: [:show, :edit, :update, :destroy, :update_sorts]
   before_filter :set_booking_categories , only: [:index]
 
-  def index
-
-  end
-
-  def show
-
-  end
-
   def new
-    @booking_category = current_site.booking_categories.new(parent_id: params[:parent_id].to_i)
+    @booking_category = @booking.booking_categories.new(parent_id: params[:parent_id].to_i)
   end
 
   def create
-    @booking_category = current_site.booking_categories.new(params[:booking_category])
+    @booking_category = @booking.booking_categories.new(params[:booking_category])
     respond_to do |format|
       if @booking_category.save
         format.html { redirect_to booking_categories_path, notice: '添加成功' }
@@ -27,12 +18,6 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
       end
     end
   end
-
-
-  def edit
-
-  end
-
 
   def update
     respond_to do |format|
@@ -58,16 +43,14 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
         format.json { head :no_content }
       end
     end
-
   end
-
 
   def update_sorts
     #1:置顶， -1:置底
     if @booking_category.parent
       @booking_categories = @booking_category.parent.children.order(:sort)
     else
-      @booking_categories = current_site.booking_categories.root.order(:sort)
+      @booking_categories = @booking.booking_categories.root.order(:sort)
     end
 
     index = @booking_categories.to_a.index(@booking_category)
@@ -101,16 +84,9 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
       category.update_column('sort', category.sort)
     end
     render :partial=> "sub_menu", :collection => @booking_categories.sort{|x, y| x.sort<=>y.sort}, :as =>:sub_menu
-
   end
-
-
 
   private
-
-  def set_booking
-    @booking = current_site.booking
-  end
 
   def set_booking_category
     @booking_category = BookingCategory.where(id: params[:id]).first
@@ -118,7 +94,7 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
   end
 
   def set_booking_categories
-    @booking_categories = current_site.booking_categories
+    @booking_categories = @booking.booking_categories
   end
 
 end

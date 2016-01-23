@@ -526,14 +526,6 @@ class WebsiteMenu < ActiveRecord::Base
     qiniu_image_url(cover_pic_key)
   end
 
-  def default_preview_pic_url
-    "/assets/bqq/website_preview_pic.jpg"
-  end
-
-  def display_preview_pic_url
-    [ WWW_HOST, (preview_pic.present? ? "/uploads/preview_pic/website_menu/#{website_id}/#{preview_pic}" : default_preview_pic_url) ].join
-  end
-
   def generate_preview_pic
     WebsitePreviewPicWorker.perform_async(website_menu_id: parent.id) if parent
   end

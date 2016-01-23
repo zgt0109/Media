@@ -12,7 +12,7 @@
         <div class="row">
           <div class="col-sm-12">
 
-            <%= render "weixin_preview", wx_title: @activity.try(:name), wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
+            <%= render "weixin_preview", wx_title: @activity.try(:name), wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/assets/activity_pics/site.jpg") %>
 
             <%= form_for @wx_plot, validate: true, html: {role: 'form', class: 'form col-sm-7' } do |f| %>
 

@@ -23,7 +23,7 @@
         </div>
 
         <div class="col-sm-12">
-          <%= render "weixin_preview", wx_title: @activity.try(:name) || @website.try(:name) || '微官网', wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
+          <%= render "weixin_preview", wx_title: @activity.try(:name) || @website.try(:name) || '微官网', wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/assets/activity_pics/site.jpg") %>
 
           <%= form_for(@activity, validate: true, html: {class: 'form col-sm-7', id: 'edit_website_activity'}) do |f| %>
             <%= f.hidden_field :status, value: Activity::SETTED %>
@@ -53,7 +53,7 @@
               <div class="form-group">
                 <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                 <div class="clearfix">
-                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg"%>" data-key="<%= @activity.pic_key %>"></div>
+                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/assets/activity_pics/site.jpg"%>" data-key="<%= @activity.pic_key %>"></div>
                   <small class="text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
                 </div>
               </div>

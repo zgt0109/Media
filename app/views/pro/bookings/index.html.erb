@@ -3,7 +3,7 @@
       <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
           <%= render 'partials/home' %>
-          <li><%= link_to '微服务', bookings_path %></li>
+          <li><%= link_to '微预约', bookings_path %></li>
           <li><%= link_to '基本信息', bookings_path %></li>
         </ul>
         <%= render '/layouts/qrcode' %>
@@ -13,7 +13,7 @@
           <div class="col-sm-12">
             <div class="alert alert-block alert-info "> <strong class="pull-left">注意：</strong>
               <ul class="vwebsiteHeadAlert">
-                <li>设置微服务基础信息以及微信关键字回复内容。</li>
+                <li>设置微预约基础信息以及微信关键字回复内容。</li>
               </ul>
             </div>
           </div>
@@ -23,9 +23,9 @@
                     <%= render "weixin_preview", wx_title: activity.object.name, wx_summary: activity.object.summary,  wx_pic: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url) %>
                     <div class="col-xs-12 col-md-6 col-lg-7">
                       <div class="form-group">
-                        <label class="control-label">微服务名称<span class="required-star">*</span></label>
+                        <label class="control-label">预约名称<span class="required-star">*</span></label>
                         <div class="clearfix">
-                          <%= f.text_field :name, class: 'col-xs-6', placeholder: '请输入商家名称' %>
+                          <%= f.text_field :name, class: 'col-xs-6', maxlength: 64, placeholder: '请输入微预约名称' %>
                         </div>
                       </div>
 
@@ -54,12 +54,12 @@
                       <div class="form-group">
                         <label class="control-label">微信消息摘要<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息摘要"></span></label>
                         <div class="clearfix">
-                          <%= activity.text_area :summary, maxlength: 255, placeholder: "不能超过255个字", rows: 5, data: {maxlength: 255, error: '最好不要超过255个字', rule: 'length'}, class: 'form-control', id: 'wx_summary'  %>
+                          <%= activity.text_area :summary, maxlength: 255, placeholder: "不能超过255个字", rows: 3, data: {maxlength: 255, error: '最好不要超过255个字', rule: 'length'}, class: 'form-control', id: 'wx_summary'  %>
                         </div>
                       </div>
 
                       <div class="form-group ">
-                        <label class="control-label">预约电话<span class="icon-question-sign "data-rel="popover" data-trigger="hover"data-placement="right"data-content="用于手机端一键拨号"title="" data-original-title=""></span></label>
+                        <label class="control-label">预约电话<span class="icon-question-sign "data-rel="popover" data-trigger="hover" data-placement="right" data-content="用于手机端一键拨号" title="" data-original-title=""></span></label>
                         <div class="clearfix">
                           <%= f.text_field :tel, class: 'col-xs-6', placeholder: '如13988888888或021-66666666' %>
                         </div>

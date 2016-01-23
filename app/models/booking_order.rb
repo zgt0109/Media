@@ -1,7 +1,7 @@
 class BookingOrder < ActiveRecord::Base
-  belongs_to :site
-  belongs_to :user
+  belongs_to :booking
   belongs_to :booking_item
+  belongs_to :user
 
   acts_as_enum :status, :in => [
     ['pending', 1, '待处理'],
@@ -12,28 +12,20 @@ class BookingOrder < ActiveRecord::Base
   scope :latest, -> { order('created_at DESC') }
 
   before_create :add_default_attrs, :generate_order_no
-  
+
   def complete!
     update_attributes(status: COMPLETED, completed_at: Time.now)
   end
-  
+
   def cancele!
     update_attributes(status: CANCELED, canceled_at: Time.now)
-  end
-
-  def is_flow_site
-    self.site.present?
-  end
-
-  def self.flow_sites
-    pluck(:site_id)
   end
 
   private
 
   def add_default_attrs
     if booking_item
-      self.site_id = booking_item.site_id
+      self.booking_id = booking_item.booking_id
       self.price = booking_item.price
       self.total_amount = self.price * self.qty
     else
@@ -43,8 +35,7 @@ class BookingOrder < ActiveRecord::Base
   end
 
   def generate_order_no
-    now = Time.now
-    self.order_no = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
+    self.order_no = Concerns::OrderNoGenerator.generate
   end
 
 end

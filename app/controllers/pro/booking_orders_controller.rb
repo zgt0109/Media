@@ -2,7 +2,7 @@ class Pro::BookingOrdersController < Pro::BookingBaseController
   before_filter :set_booking_order, only: [:show, :edit, :update, :destroy, :cancele, :complete]
 
   def index
-    @search = current_site.booking_orders.latest.search(params[:search])
+    @search = @booking.booking_orders.latest.search(params[:search])
     @booking_orders = @search.page(params[:page])
     #@booking_orders = current_user.booking_orders.page(params[:page]).order("created_at desc")
   end
@@ -19,12 +19,12 @@ class Pro::BookingOrdersController < Pro::BookingBaseController
       format.json { head :no_content }
     end
   end
-  
+
   def complete
     @booking_order.complete!
     redirect_to booking_orders_url, notice: '已完成'
   end
-  
+
   def cancele
     @booking_order.cancele!
     redirect_to booking_orders_url, notice: '已取消'
@@ -32,7 +32,7 @@ class Pro::BookingOrdersController < Pro::BookingBaseController
 
   private
   def set_booking_order
-    @booking_order = BookingOrder.find(params[:id])
+    @booking_order = @booking.booking_orders.find(params[:id])
     @booking_item  = @booking_order.booking_item
   end
 end
