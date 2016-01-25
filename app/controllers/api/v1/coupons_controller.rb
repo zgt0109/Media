@@ -116,7 +116,7 @@ class Api::V1::CouponsController < Api::BaseController
       open_id, shop_branch_id, wx_mp_user_open_id, @coupon_token, code = params.values_at(:open_id, :shop_branch_id, :wx_mp_user_open_id, :coupon_token, :code)
 
       @wx_mp_user = WxMpUser.where(openid: wx_mp_user_open_id).first
-      @wx_user = @wx_mp_user.wx_users.find_by_uid(open_id)
+      @wx_user = @wx_mp_user.wx_users.find_by_openid(open_id)
       @shop_branch = ShopBranch.find_by_id(shop_branch_id)
     end
 

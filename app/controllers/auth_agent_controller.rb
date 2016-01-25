@@ -106,7 +106,7 @@ class AuthAgentController < ApplicationController
   end
 
   def detected_wx_mp_user
-    @wx_mp_user = WxMpUser.find_by_uid(params[:mp_openid]) if params.has_key? :mp_openid
+    @wx_mp_user = WxMpUser.find_by_openid(params[:mp_openid]) if params.has_key? :mp_openid
 
     session[:wx_mp_user_id] = @wx_mp_user.id if @wx_mp_user
 

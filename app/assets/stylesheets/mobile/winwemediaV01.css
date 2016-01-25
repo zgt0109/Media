@@ -201,11 +201,11 @@ textarea{ padding:2%; line-height:20px;}
     line-height: 30px;
     margin: 0 0 10px 0;
     padding:0 0 0 25px;
-    background:url(/assets/mobile/loading.png) no-repeat 0 center;
+    background:url(/assets/loading.png) no-repeat 0 center;
     background-size:20px 20px;
 }
 .isloading{
-    background:url(/assets/mobile/icon/loading.gif) no-repeat 0 center;
+    background:url(/assets/loading.gif) no-repeat 0 center;
 }
 .loading.fixed-top{left:0; margin:5px; display:none; z-index: 99999;}
 /*btn*/

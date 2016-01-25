@@ -22,7 +22,7 @@ class RedPacketWorker
   end
 
   def self.subscribe_red_packet from_user_name, to_user_name
-    wx_mp_user = WxMpUser.find_by_uid(from_user_name)
+    wx_mp_user = WxMpUser.find_by_openid(from_user_name)
     return unless wx_mp_user
     RedPacketWorker.perform_async((wx_mp_user.site.red_packets.follow.normal.last.id rescue ''), to_user_name)
   end
