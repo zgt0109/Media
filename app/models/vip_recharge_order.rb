@@ -42,7 +42,7 @@ class VipRechargeOrder < ActiveRecord::Base
         out_trade_no: order_no,
         amount: pay_amount,
         subject: "会员卡#{pay_type_name}充值 #{order_no} #{amount}",
-        source: 'winwemedia_vip_recharge'
+        source: 'vip_recharge'
         })
     end
     payment
@@ -61,7 +61,7 @@ class VipRechargeOrder < ActiveRecord::Base
       amount: pay_amount,
       body:  "会员卡#{pay_type_name}充值 #{order_no} #{amount}",
       subject:  "会员卡#{pay_type_name}充值",
-      source: 'winwemedia_vip_recharge'
+      source: 'vip_recharge'
     }
     params.reverse_merge(_order_params)
   end

@@ -184,14 +184,11 @@ class Payment < ActiveRecord::Base
 
   def self.source_hash
     {
-      winwemedia_group_order: '微团购',
-      winwemedia_vip_recharge: '会员充值',
-      winwemedia_shop_order: '微餐饮',
-      winwemedia_ec: '微电商',
-      winwemedia_hotel: '微酒店',
-      # winwemedia_yaic: '微枚迪永安雷锋无忧订单支付',
-      # winwemedia_ali: '微枚迪永安宝贝无忧订单支付',
-      # winwemedia_jinjiang: '微枚迪锦江在线旅游订单支付'
+      group_order: '微团购',
+      vip_recharge: '会员充值',
+      shop_order: '微餐饮',
+      ec: '微电商',
+      hotel: '微酒店',
     }
   end
 

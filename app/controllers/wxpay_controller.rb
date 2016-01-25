@@ -91,13 +91,13 @@ class WxpayController < ApplicationController
       payment_type_id: 10001,
       account_id: @account.id,
       customer_id: @order.user_id,
-      customer_type: 'WxUser',
+      customer_type: 'User',
       paymentable_id: @order.id,
       paymentable_type: @order.class.name,
       out_trade_no: @order.order_no,
       amount: @order.total_amount,
-      subject: "微枚迪内部微信支付测试",
-      source: 'winwemedia_test',
+      subject: "微信支付测试",
+      source: 'test',
       pay_params: params.to_json
     })
   end

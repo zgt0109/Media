@@ -1,7 +1,7 @@
 class Api::V1::VipsController < Api::BaseController
   before_filter :cors_set_access_control_headers
   before_filter :set_users, except: [:pay, :spm_points, :spm_vip]
-  EC_SOURCE, HOTEL_SOURCE, SPM_SOURCE = 'winwemedia_ec', 'winwemedia_hotel', 'winwemedia_spm'
+  EC_SOURCE, HOTEL_SOURCE, SPM_SOURCE = 'ec', 'hotel'
   # 会员卡余额支付接口 site_id, open_id, out_trade_no, amount, subject, body, source, trade_token
   def pay
     open_id, site_id, trade_token, out_trade_no, subject, body = params.values_at(:open_id, :site_id, :trade_token, :out_trade_no, :subject, :body)
@@ -23,26 +23,7 @@ class Api::V1::VipsController < Api::BaseController
     render json: { errcode: 1, errmsg: "支付错误：#{e.message}" }
   end
 
-  # 赚取积分接口，输入参数：open_id, mp_user_open_id, points（积分）, description, source(来源，商品码将该参数设置为`winwemedia_spm`)
-  # 赚取积分成功时，返回值 errcode为0
-  def spm_points
-    result = VipUser.increase_points_by_spm(params)
-    render json: result
-  end
-
-  def spm_vip
-    wx_mp_user = WxMpUser.where(openid: params[:mp_user_open_id]).first
-
-    if params[:mp_user_open_id].present? && wx_mp_user
-      redirect_to app_vips_url(site_id: wx_mp_user.site_id, openid: params[:open_id])
-    else
-      render json: { errcode: 40001, errmsg: "公众号不存在" }
-    end
-  end
-
-  
-
-  # 赚取积分接口，输入参数：open_id, mp_user_open_id, trade_token（会员表vip_users的字段）, amount（金额）, description, source(来源，电商将该参数设置为`winwemedia_ec`)
+  # 赚取积分接口，输入参数：open_id, mp_user_open_id, trade_token（会员表vip_users的字段）, amount（金额）, description, source(来源，电商将该参数设置为`ec`)
   # 赚取积分成功时，返回值 errcode为0
   def earn_points
     return render json: { errcode: 1, errmsg: "参数不正确，金额必须大于0" } if (amount = params[:amount].to_f) <= 0
@@ -66,7 +47,7 @@ class Api::V1::VipsController < Api::BaseController
     render json: { errcode: 0, points: @vip_user.usable_points }
   end
 
-  # 扣除积分接口，输入参数: open_id, mp_user_open_id, trade_token, points, description, source(来源，电商将该参数设置为`winwemedia_ec`)
+  # 扣除积分接口，输入参数: open_id, mp_user_open_id, trade_token, points, description, source(来源，电商将该参数设置为`ec`)
   # 积分扣除成功时，返回值 errcode为0
   def consume_points
     points = params[:points].to_i
@@ -77,7 +58,7 @@ class Api::V1::VipsController < Api::BaseController
     render json: { errcode: 0 }
   end
 
-  # 退还积分接口，输入参数: open_id, mp_user_open_id, trade_token, points, description, source(来源，电商将该参数设置为`winwemedia_ec`)
+  # 退还积分接口，输入参数: open_id, mp_user_open_id, trade_token, points, description, source(来源，电商将该参数设置为`ec`)
   # 积分退还成功时，返回值 errcode为0
   def return_points
     points = params[:points].to_i
@@ -104,7 +85,7 @@ class Api::V1::VipsController < Api::BaseController
     } }
   end
 
-  # 退还余额接口，输入参数: open_id, mp_user_open_id, trade_token, amount, description, source(来源，电商将该参数设置为`winwemedia_ec`)
+  # 退还余额接口，输入参数: open_id, mp_user_open_id, trade_token, amount, description, source(来源，电商将该参数设置为`ec`)
   # 积分退还成功时，返回值 errcode为0
   def return_amount
     amount = params[:amount].to_f.round(2)

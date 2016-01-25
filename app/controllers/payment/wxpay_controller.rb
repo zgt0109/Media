@@ -62,8 +62,8 @@ class Payment::WxpayController < ApplicationController
       out_trade_no: @order.order_no,
       amount: @order.total_amount,
       total_fee: @order.total_amount,
-      subject: "vcollinetestpay",
-      source: 'winwemedia_test',
+      subject: "Pay test",
+      source: 'test',
       pay_params: params.to_json
     })
   end   

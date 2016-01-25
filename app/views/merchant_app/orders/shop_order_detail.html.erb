@@ -58,7 +58,7 @@ function customersController($scope,$http) {
       console.log(response);
     });
 
-    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ShopOrder&source=winwemedia_shop_order&is_read=1" %>').success(function(response) {
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ShopOrder&source=shop_order&is_read=1" %>').success(function(response) {
       var a = $("#raw").text();
       $("#raw").html(a);
       console.log(response);

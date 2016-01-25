@@ -51,7 +51,7 @@ function customersController($scope,$http) {
       console.log(response);
     });
     
-    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=WxPlotRepairComplain&source=winwemedia_wx_plot&is_read=1" %>')
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=WxPlotRepairComplain&source=wx_plot&is_read=1" %>')
     .success(function(response) {
 	console.log(response);
     })

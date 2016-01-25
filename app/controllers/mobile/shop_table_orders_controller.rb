@@ -57,7 +57,7 @@ class Mobile::ShopTableOrdersController < Mobile::BaseController
   def success
     @shop_table_order = ShopTableOrder.find(params[:id])
     begin # 发送消息
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_table_order.site_id, token: @shop_table_order.site.try(:auth_token), messageable_id: @shop_table_order.id, messageable_type: 'ShopTableOrder', source: 'winwemedia_shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_table_order.site_id, token: @shop_table_order.site.try(:auth_token), messageable_id: @shop_table_order.id, messageable_type: 'ShopTableOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
     rescue => e
       Rails.logger.info "#{e}"
     end

@@ -102,18 +102,18 @@ class SmsOrder < ActiveRecord::Base
         payment = pending_payment
       else
         payment = Payment.setup({
-            payment_type_id: 10006,
-            account_id: account_id,
-            customer_id: account_id,
-            customer_type: 'Account',
-            paymentable_id: id,
-            paymentable_type: 'SmsOrder',
-            out_trade_no: order_no,
-            amount: plan_cost.to_f / 100,
-            subject: "充值 #{order_no}",
-            body: "充值 #{order_no}",
-            source: 'winwemedia_sms_order'
-          })
+          payment_type_id: 10006,
+          account_id: account_id,
+          customer_id: account_id,
+          customer_type: 'Account',
+          paymentable_id: id,
+          paymentable_type: 'SmsOrder',
+          out_trade_no: order_no,
+          amount: plan_cost.to_f / 100,
+          subject: "充值 #{order_no}",
+          body: "充值 #{order_no}",
+          source: 'sms_order'
+        })
       end
 
       payment

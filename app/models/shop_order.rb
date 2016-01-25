@@ -294,7 +294,7 @@ class ShopOrder < ActiveRecord::Base
       amount: total_amount,
       body:  "订单 #{order_no}",
       subject:  "订单 #{order_no}",
-      source: 'winwemedia_shop_order',
+      source: 'shop_order',
       open_id: user.wx_user.try(:openid)
     }
     params.reverse_merge(_order_params)
