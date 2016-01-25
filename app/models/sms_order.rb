@@ -135,8 +135,6 @@ class SmsOrder < ActiveRecord::Base
     raise '没有指定商家' unless account
     raise '请选择支付单' unless payment
 
-    domain_url = self.get_domain_url
-
     {
       :service => 'create_direct_pay_by_user',
       :return_url => "#{domain_url}/sms_orders/callback",
