@@ -120,9 +120,9 @@ class SmsOrder < ActiveRecord::Base
     end
   end
 
-  def get_domain_url
+  def domain_url
     if Rails.env.production? or Rails.env.staging?
-      url = 'http://m.winwemedia.com'
+      url = 'http://www.winwemedia.com'
     elsif Rails.env.testing?
       url = 'http://testing.winwemedia.com'
     elsif Rails.env.development?
@@ -156,9 +156,6 @@ class SmsOrder < ActiveRecord::Base
 
   def default_pay_options
     raise '没有指定商家' unless account
-
-    domain_url = self.get_domain_url
-
     {
         alipay_id: SmsOrder::ALIPAY_ID,
         alipay_key: SmsOrder::ALIPAY_KEY,
