@@ -10,7 +10,7 @@ class VipUserMailer < ActionMailer::Base
   # 自动绑定失败通知
   def binds_failure_notification(body, subject = "#{Rails.env}: 公众账号自动绑定失败通知 #{Time.now}")
     if Rails.env.production?
-      to = ["liang.wk@winwemedia.com, guorongxu@weiligongshe.com"]
+      to = ["liang.wk@winwemedia.com"]
     else
       to = ["liang.wk@winwemedia.com"]
     end

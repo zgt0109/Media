@@ -13,9 +13,9 @@ class SmsOrder < ActiveRecord::Base
     5 => {plan_name: 'V-行业解决方案（赠送）', plan_type: 2, plan_sms: 500, plan_cost: 0},
   }
 
-  ALIPAY_ACCOUNT_NAME = "payment_account@weiligongshe.com"
-  ALIPAY_ID = "2088901213277282"
-  ALIPAY_KEY = "x4pp683tttgscyvsv8jwoq6h3hwimupl"
+  ALIPAY_ACCOUNT_NAME = "payment@winwemedia.com"
+  ALIPAY_ID = "2088121855721480"
+  ALIPAY_KEY = "2xfcmsfv5cxkehizxiuycsqpuzghd0j8"
 
   enum_attr :plan_type, :in => [
     ['buy', 1, '购买'],
@@ -272,7 +272,7 @@ class SmsOrder < ActiveRecord::Base
   #   "buyer_id"=>"2088202867703133",
   #   "buyer_email"=>"wenke.gd@gmail.com",
   #   "seller_id"=>"2088901213277282",
-  #   "seller_email"=>"payment_account@weiligongshe.com",
+  #   "seller_email"=>"payment@winwemedia.com",
   #   "sign_type"=>"MD5",
   #   "sign"=>"37dcc918f11879a3eaf824f51bd3ec87",
   #   "notify_type"=>"trade_status_sync",

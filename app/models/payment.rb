@@ -327,7 +327,7 @@ class Payment < ActiveRecord::Base
   #   "buyer_id"=>"2088202867703133",
   #   "buyer_email"=>"wenke.gd@gmail.com",
   #   "seller_id"=>"2088901213277282",
-  #   "seller_email"=>"payment_account@weiligongshe.com",
+  #   "seller_email"=>"payment@winwemedia.com",
   #   "sign_type"=>"MD5",
   #   "sign"=>"37dcc918f11879a3eaf824f51bd3ec87",
   #   "notify_type"=>"trade_status_sync",
