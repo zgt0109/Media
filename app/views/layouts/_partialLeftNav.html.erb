@@ -142,7 +142,7 @@
  -->
   <% if current_site.has_privilege_for?(1020) %>
     <li class="<%= parent_class if (controller_name =~ /print|wifi/i) %>">
-      <%= left_nav_dropdown 'icon-camera', '微信硬件' %>
+      <%= left_nav_dropdown 'icon-camera', '微硬件' %>
       <ul class="submenu" style="display: <%= (controller_name =~ /print|wifi/i || action_name == 'pos' || action_name == "shop_branch_print_template") ? 'block;' : 'none;' %>">
         <%#= link_to_left_nav( '微WiFi', wifi_clients_path, current_page?(wifi_clients_path) ) %>
         <%= link_to_left_nav( '微打印机', prints_path, current_page?(activities_prints_path) || current_page?(prints_path) ) %>

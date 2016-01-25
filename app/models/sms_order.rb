@@ -23,10 +23,10 @@ class SmsOrder < ActiveRecord::Base
   ]
 
   enum_attr :payment_type, :in => [
-    #['wx', 1, '微信支付'],
-    #['yb', 2, '易宝支付'],
-    #['cft', 3, '财付通支付'],
-    ['zfb', 4, '支付宝支付'],
+    #['wxpay',  1, '微信支付'],
+    #['yeepay', 2, '易宝支付'],
+    #['tenpay', 3, '财付通支付'],
+    ['alipay', 4, '支付宝支付'],
   ]
 
   enum_attr :status, :in => [
@@ -55,7 +55,7 @@ class SmsOrder < ActiveRecord::Base
     end
 
      # 每月1日凌晨重置赠送短信套餐
-    def reset_free_sms_every_month(options = {})
+     def reset_free_sms_every_month(options = {})
       options[:clear_free_sms_orders] ||= false
       if options[:clear_free_sms_orders]
         # 清空历史赠送套餐数据
@@ -113,7 +113,7 @@ class SmsOrder < ActiveRecord::Base
           subject: "充值 #{order_no}",
           body: "充值 #{order_no}",
           source: 'sms_order'
-        })
+          })
       end
 
       payment
@@ -149,48 +149,48 @@ class SmsOrder < ActiveRecord::Base
       :subject => payment.subject,
       :body  => payment.body,
       :total_fee => payment.amount
-     }
+    }
   end
 
   def default_pay_options
     raise '没有指定商家' unless account
     {
-        alipay_id: SmsOrder::ALIPAY_ID,
-        alipay_key: SmsOrder::ALIPAY_KEY,
-        seller_account_name: SmsOrder::ALIPAY_ACCOUNT_NAME,
-        service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
-        callback_url: "#{domain_url}/sms_orders/callback",
-        notify_url: "#{domain_url}/sms_orders/notify",
-        merchant_url: "#{domain_url}/sms_orders/new"
+      alipay_id: SmsOrder::ALIPAY_ID,
+      alipay_key: SmsOrder::ALIPAY_KEY,
+      seller_account_name: SmsOrder::ALIPAY_ACCOUNT_NAME,
+      service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
+      callback_url: "#{domain_url}/sms_orders/callback",
+      notify_url: "#{domain_url}/sms_orders/notify",
+      merchant_url: "#{domain_url}/sms_orders/new"
     }
   end
 
   def direct_options(payment)
     raise '请选择支付单' unless payment
     req_data = [
-        "<direct_trade_create_req>",
-        "<subject>支付宝支付</subject>",
-        "<out_trade_no>#{payment.out_trade_no}</out_trade_no>",
-        "<total_fee>#{payment.amount}</total_fee>",
-        "<seller_account_name>#{self.default_pay_options[:seller_account_name]}</seller_account_name>",
-        "<call_back_url>#{self.default_pay_options[:callback_url]}</call_back_url>",
-        "<notify_url>#{self.default_pay_options[:notify_url]}</notify_url>",
-        "<merchant_url>#{self.default_pay_options[:merchant_url]}</merchant_url>",
-        "</direct_trade_create_req>"
+      "<direct_trade_create_req>",
+      "<subject>支付宝支付</subject>",
+      "<out_trade_no>#{payment.out_trade_no}</out_trade_no>",
+      "<total_fee>#{payment.amount}</total_fee>",
+      "<seller_account_name>#{self.default_pay_options[:seller_account_name]}</seller_account_name>",
+      "<call_back_url>#{self.default_pay_options[:callback_url]}</call_back_url>",
+      "<notify_url>#{self.default_pay_options[:notify_url]}</notify_url>",
+      "<merchant_url>#{self.default_pay_options[:merchant_url]}</merchant_url>",
+      "</direct_trade_create_req>"
     ]
 
     now = Time.now
     req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
 
     {
-        :service => 'alipay.wap.trade.create.direct',
-        :format  => 'xml',
-        :v => '2.0',
-        :partner => self.default_pay_options[:alipay_id],
-        :sec_id => 'MD5',
-        :req_id  => req_id,
-        :req_data  => req_data.join,
-        :_input_charset  => 'utf-8',
+      :service => 'alipay.wap.trade.create.direct',
+      :format  => 'xml',
+      :v => '2.0',
+      :partner => self.default_pay_options[:alipay_id],
+      :sec_id => 'MD5',
+      :req_id  => req_id,
+      :req_data  => req_data.join,
+      :_input_charset  => 'utf-8',
     }
   end
 
@@ -204,14 +204,14 @@ class SmsOrder < ActiveRecord::Base
     req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
 
     {
-        :service => 'alipay.wap.auth.authAndExecute',
-        :format  => 'xml',
-        :v => '2.0',
-        :partner => default_pay_options[:alipay_id],
-        :sec_id => 'MD5',
-        :req_id  => req_id,
-        :req_data  => req_data,
-        :_input_charset  => 'utf-8',
+      :service => 'alipay.wap.auth.authAndExecute',
+      :format  => 'xml',
+      :v => '2.0',
+      :partner => default_pay_options[:alipay_id],
+      :sec_id => 'MD5',
+      :req_id  => req_id,
+      :req_data  => req_data,
+      :_input_charset  => 'utf-8',
     }
   end
 
