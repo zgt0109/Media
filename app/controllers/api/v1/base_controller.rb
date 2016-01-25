@@ -22,8 +22,8 @@ class Api::V1::BaseController < ActionController::Base
       # return render_error('token不正确') if @login_user.auth_token != token
     end
 
-    def current_supplier_id
-      @login_user.is_a?(SubAccount) ? @login_user.user.supplier_id : @login_user.id
+    def current_account_id
+      @login_user.is_a?(SubAccount) ? @login_user.site.account_id : @login_user.id
     end
 
     def current_shop_branch_id

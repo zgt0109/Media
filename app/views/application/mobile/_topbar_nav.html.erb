@@ -1,9 +1,9 @@
 <header>
-  <a href="<%= mobile_ec_shops_path(supplier_id: @supplier.id) %>" class="ico-prev">
+  <a href="<%= mobile_ec_shops_path(site_id: @site.id) %>" class="ico-prev">
   	<%= image_tag 'mobile/wshop/ico-back.png' %>
   </a>
-	<%= link_to image_tag('mobile/wshop/ico-car-white.png'), mobile_ec_carts_path(supplier_id: @supplier.id) %>
-	<%= link_to image_tag('mobile/wshop/ico-member.png'), member_mobile_ec_shops_path(supplier_id: @supplier.id) %>
+	<%= link_to image_tag('mobile/wshop/ico-car-white.png'), mobile_ec_carts_path(site_id: @site.id) %>
+	<%= link_to image_tag('mobile/wshop/ico-member.png'), member_mobile_ec_shops_path(site_id: @site.id) %>
 	<%#= link_to image_tag('mobile/wshop/ico-list.png'), '', class: 'btn-list' %>
     <a class="btn-list"><%= image_tag 'mobile/wshop/ico-list.png' %></a>
 </header>

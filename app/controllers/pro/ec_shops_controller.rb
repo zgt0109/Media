@@ -3,17 +3,6 @@ class Pro::EcShopsController < Pro::EcBaseController
   before_filter :set_ec_shop
   layout "application_gm"
 
-  def index
-
-  end
-  
-  def alipay
-    if request.put?
-      current_user.update_attributes(params[:supplier])
-      redirect_to :back, notice: '更新成功'
-    end
-  end
-
   def show
     @ec_shop = EcShop.find(params[:id])
 
@@ -89,12 +78,9 @@ class Pro::EcShopsController < Pro::EcBaseController
     end
   end
 
-
   def  set_ec_shop
     @ec_shop = current_user.ec_shop
     @ec_shop = current_user.wx_mp_user.create_shop unless @ec_shop
   end
-
-
 
 end

@@ -145,11 +145,11 @@
             <TR>
                 <th>公众号ID</th>
                 <th>
-                    <INPUT value="<%= @supplier.payment_settings.wxpay.enabled.first.try(:app_id) || 'wx7224575773890d83' %>" name="appId" id="1"></th>
+                    <INPUT value="<%= @site.payment_settings.wxpay.enabled.first.try(:app_id) || 'wx7224575773890d83' %>" name="appId" id="1"></th>
                 <tr>
     <th>商户ID</th>
     <th>
-        <INPUT value="<%= @supplier.payment_settings.wxpay.enabled.first.try(:partner_id) || '1218314601' %>" name="partnerId" id="2"></th>
+        <INPUT value="<%= @site.payment_settings.wxpay.enabled.first.try(:partner_id) || '1218314601' %>" name="partnerId" id="2"></th>
     <TR>
         <th>总金额(分)</th>
         <th>

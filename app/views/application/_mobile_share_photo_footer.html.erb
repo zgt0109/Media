@@ -3,7 +3,7 @@ unless @mobile_footer_rendered
   @mobile_footer_rendered = true
 %>
 
-  <%= @supplier.try(:piwik_js_code) %>
+  <%= @site.try(:piwik_js_code) %>
 
   <script type="text/javascript">
     $(document).ready(function(){

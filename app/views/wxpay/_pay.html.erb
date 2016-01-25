@@ -1,5 +1,5 @@
 <%= form_tag  @payment.callback_url, :method => :get do  %>
-    <%= hidden_field_tag 'supplier_id', @payment.supplier_id %>
+    <%= hidden_field_tag 'site_id', @payment.site_id %>
     <%= hidden_field_tag 'out_trade_no', @payment.out_trade_no %>
     <%= hidden_field_tag 'trade_no', @payment.trade_no %>
     <%= hidden_field_tag 'status', @status %>
@@ -11,7 +11,7 @@
 <% end %>
 <script>
     $(function(){
-        $("a#supplier").click(function(){
+        $("a#site").click(function(){
             $("form").submit();
         })
     })

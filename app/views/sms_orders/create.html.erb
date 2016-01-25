@@ -1,4 +1,4 @@
 <%
-   data_uri = Base64.encode64(@sms_order.rqrcode(alipayapi_mobile_sms_order_path(supplier_id: current_user.id, id: @sms_order.id, payment_id: @payment.id)).to_blob).gsub(/\n/, "")
+   data_uri = Base64.encode64(@sms_order.rqrcode(alipayapi_mobile_sms_order_path(site_id: current_user.id, id: @sms_order.id, payment_id: @payment.id)).to_blob).gsub(/\n/, "")
 %>
 <img src="data:image/jpeg;base64,<%= data_uri %>">

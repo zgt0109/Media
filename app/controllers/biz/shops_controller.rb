@@ -4,7 +4,7 @@ class Biz::ShopsController < ApplicationController
   helper_method :current_shop_branch, :current_shop_account, :current_shop_vip_user, :hotel_branch_path
 
   skip_before_filter *ADMIN_FILTERS
-  before_filter :require_shop_supplier
+  before_filter :require_shop_site
   before_filter :require_shop_branch, :require_privilege, except: [ :sign_in, :sign_out ]
 
   def sign_in
@@ -17,7 +17,7 @@ class Biz::ShopsController < ApplicationController
   end
 
   def sign_out
-    session[:sub_account_id] = session[:shop_supplier_id] = nil
+    session[:sub_account_id] = session[:shop_account_id] = nil
     redirect_to shops_sign_in_path, notice: '退出成功'
   end
 
@@ -122,9 +122,9 @@ class Biz::ShopsController < ApplicationController
   def use_exchange
     @consume = current_shop_branch.exchanging_counsumes.where(code: params[:gift_code]).first
     if @consume.try(:use!, current_shop_branch )
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
     else
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), alert: '操作失败'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), alert: '操作失败'
     end
   end
 
@@ -139,13 +139,13 @@ class Biz::ShopsController < ApplicationController
     end
     respond_to do |format|
       format.js {render js: 'location.reload()'}
-      format.html {redirect_to shops_vip_deals_path(session[:shop_supplier_id])}
+      format.html {redirect_to shops_vip_deals_path(session[:shop_account_id])}
     end
   rescue => e
     flash.alert = "使用失败：#{e.message}"
     respond_to do |format|
       format.js {render js: 'location.reload()'}
-      format.html {redirect_to shops_vip_deals_path(session[:shop_supplier_id])}
+      format.html {redirect_to shops_vip_deals_path(session[:shop_account_id])}
     end
   end
 
@@ -231,14 +231,14 @@ class Biz::ShopsController < ApplicationController
 
     if params[:direction_type] == '1'
       if current_shop_vip_user.increase_points!(points)
-        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::ADJUST_IN, points: points, supplier_id: current_shop_account.id, shop_branch_id: current_shop_branch.id, description: params[:description]
+        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::ADJUST_IN, points: points, site_id: current_shop_account.site.id, shop_branch_id: current_shop_branch.id, description: params[:description]
         flash[:notice] = "增加成功"
       else
         return redirect_to :back, alert: '增加失败,积分最小值为0'
       end
     else
       if current_shop_vip_user.decrease_points!(points)
-        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::OUT, points: points, supplier_id: current_shop_account.id, shop_branch_id: current_shop_branch.id, description: params[:description]
+        current_shop_vip_user.point_transactions.create direction_type: PointTransaction::OUT, points: points, site_id: current_shop_account.site.id, shop_branch_id: current_shop_branch.id, description: params[:description]
         flash[:notice] = "减少成功"
       else
         return redirect_to :back, alert: '减少失败，积分最小值为0'
@@ -246,7 +246,7 @@ class Biz::ShopsController < ApplicationController
     end
 
     if params[:source] == 'branch'
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
     else
       render inline: '<script>parent.location.reload();</script>'
     end
@@ -267,7 +267,7 @@ class Biz::ShopsController < ApplicationController
     flash[:notice] = "#{direction_type}成功"
 
     if params[:source] == 'branch'
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
     else
       render inline: '<script>parent.location.reload();</script>'
     end
@@ -346,9 +346,9 @@ class Biz::ShopsController < ApplicationController
                                                                     package_item_name: vp.vip_package_item.name,
                                                                     package_item_price: vp.vip_package_item.price)}
         end
-        redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+        redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
       else
-        redirect_to shops_vip_deals_path(session[:shop_supplier_id]), alert: '操作失败'
+        redirect_to shops_vip_deals_path(session[:shop_account_id]), alert: '操作失败'
       end
     end
   end
@@ -358,9 +358,9 @@ class Biz::ShopsController < ApplicationController
     item_consume = current_shop_account.vip_package_item_consumes.where(sn_code: params[:sn_code]).first
     if item_consume.try(:can_use?)
       item_consume.update_attributes(status: VipPackageItemConsume::USED, shop_branch_id: current_shop_branch.id)
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
     else
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), alert: '操作失败'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), alert: '操作失败'
     end
   end
 
@@ -391,12 +391,12 @@ class Biz::ShopsController < ApplicationController
       search
     end
 
-    def require_shop_supplier
-      supplier = Account.find(params[:supplier_id])
-      session[:shop_supplier_id] = supplier.id
+    def require_shop_site
+      account = Account.find(params[:account_id])
+      session[:shop_account_id] = account.id
 
       sub_account_id = Des.decrypt(params[:said])
-      sign_in!(sub_account_id) if sub_account_id && supplier.shop_branch_sub_accounts.where(id: sub_account_id).exists?
+      sign_in!(sub_account_id) if sub_account_id && account.shop_branch_sub_accounts.where(id: sub_account_id).exists?
     end
 
     def require_shop_branch

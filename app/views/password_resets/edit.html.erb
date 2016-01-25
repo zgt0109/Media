@@ -7,7 +7,7 @@
         </div>
       </form>
     <%- else %>
-      <%= form_for @supplier, url: password_reset_path(params[:id]),  html: {id: "reset_form"}, remote: true do |f| %>
+      <%= form_for @account, url: password_reset_path(params[:id]),  html: {id: "reset_form"}, remote: true do |f| %>
         <div class="m-form">
           <div class="m-icon circle"><i class="fa fa-unlock-alt"></i></div>
           <div class="m-title">重置密码</div>

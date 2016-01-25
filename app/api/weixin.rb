@@ -94,7 +94,7 @@ class Weixin
 
 
     def respond_album(from_user_name, to_user_name, album)
-      url = "#{M_HOST}/#{album.supplier_id}/albums/#{album.id}/list?aid=#{album.activity_id}&openid=#{from_user_name}"
+      url = "#{M_HOST}/#{album.site_id}/albums/#{album.id}/list?aid=#{album.activity_id}&openid=#{from_user_name}"
       msg = "<xml>
       <ToUserName><![CDATA[#{from_user_name}]]></ToUserName>
       <FromUserName><![CDATA[#{to_user_name}]]></FromUserName>

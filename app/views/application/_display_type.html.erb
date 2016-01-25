@@ -227,7 +227,7 @@
         <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
         <div class="clearfix">
           <%= f.select :docking_type, options_for_select(WebsiteMenu.docking_type_options), {}, class: "form-control" if f.object.methods.include? :docking_type %>
-          <%#= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+          <%#= hidden_field_tag :site_ec_shop, @website.try(:site).try(:ec_shop).try(:id) %>
         </div>
       </div>
 

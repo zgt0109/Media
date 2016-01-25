@@ -3,7 +3,7 @@ class Biz::VipUsersController < Biz::VipController
   before_filter :find_vip_user, except: [:index, :pending, :rejected, :deleted, :freezed, :inactive]
 
   def index
-    @total_vip_users  = current_site.vip_users.sorted.normal.includes(:vip_grade, :supplier)
+    @total_vip_users  = current_site.vip_users.sorted.normal.includes(:vip_grade)
     @search           = @total_vip_users.search(params[:search])
     @vip_grade_select = params[:search][:vip_grade_id_eq] if params[:search]
     @vip_users        = @search.page(params[:page]).per(20)
@@ -182,7 +182,7 @@ class Biz::VipUsersController < Biz::VipController
     end
 
     if params[:source] == 'branch'
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
     else
       render inline: '<script>parent.document.location = parent.document.location;</script>';
     end
@@ -239,7 +239,7 @@ class Biz::VipUsersController < Biz::VipController
     flash[:notice] = "#{direction_type}成功"
 
     if params[:source] == 'branch'
-      redirect_to shops_vip_deals_path(session[:shop_supplier_id]), notice: '操作成功'
+      redirect_to shops_vip_deals_path(session[:shop_account_id]), notice: '操作成功'
     else
       render inline: '<script>parent.location.reload();</script>';
     end

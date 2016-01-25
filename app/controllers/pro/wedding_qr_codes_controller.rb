@@ -9,7 +9,7 @@ class Pro::WeddingQrCodesController < Pro::WeddingsBaseController
   end
 
   def create
-    # params[:qrcode][:content] = "http://m.winwemedia.com/#{@supplier.id}/weddings?wid=#{@wedding.id}?title=" + params[:qrcode][:content]
+    # params[:qrcode][:content] = "http://m.winwemedia.com/#{@site.id}/weddings?wid=#{@wedding.id}?title=" + params[:qrcode][:content]
     @wedding.qr_codes.create params[:qrcode]
     render json: {msg: 'success', code: 0}
     # render inline: "<script>parent.location.reload();</script>"

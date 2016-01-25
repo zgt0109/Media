@@ -153,7 +153,7 @@
 
   <% if current_site.has_privilege_for?(1030) %>
     <li class="<%= parent_class if ['helpers', 'games'].include?(params[:type]) %>">
-      <%= left_nav_dropdown 'icon-legal', '微服务' %>
+      <%= left_nav_dropdown 'icon-legal', '微插件' %>
 
       <ul class="submenu" style="display: <%= ['helpers', 'games'].include?(params[:type]) ? 'block;' : 'none;' %>">
         <%= link_to_left_nav( '生活助手', assistants_path(type: 'helpers'), current_page?(assistants_path(type: 'helpers')) ) %>

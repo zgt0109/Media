@@ -127,7 +127,7 @@
                 <% if @ahs.each do |ah| %>
                     <tr>
                       <td><%= ah.content %></td>
-                      <td><%= ActivityHit.where(['date >= ? and date<= ? and supplier_id = ? and content =?', Date.today - 1.month, Date.yesterday, @supplier.id, ah.content]).sum(:hit_count) %></td>
+                      <td><%= ActivityHit.where(['date >= ? and date<= ? and site_id = ? and content =?', Date.today - 1.month, Date.yesterday, @site.id, ah.content]).sum(:hit_count) %></td>
                     </tr>
                 <% end.blank? %>
                     <tr><td colspan="2" class="green text-center">无数据</td></tr>
@@ -153,7 +153,7 @@
             <% if @mhs.each do |mh| %>
                 <tr>
                   <td><%= mh.content %></td>
-                  <td><%= MessageHit.where(['date >= ? and date<= ? and supplier_id = ? and content =?', Date.today - 1.month, Date.yesterday, @supplier.id, mh.content]).sum(:hit_count) %></td>
+                  <td><%= MessageHit.where(['date >= ? and date<= ? and site_id = ? and content =?', Date.today - 1.month, Date.yesterday, @site.id, mh.content]).sum(:hit_count) %></td>
                 </tr>
             <% end.blank? %>
                 <tr><td colspan="2" class="green text-center">无数据</td></tr>

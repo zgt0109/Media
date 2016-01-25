@@ -13,8 +13,8 @@
                             <em>订单金额：<%= f @payment.amount %>元</em>
                         </span>
           </p>
-          <a href="<%= wxpay_pay_url(supplier_id: @payment.supplier_id, out_trade_no: @payment.out_trade_no,showwxpaytitle: 1) %>" class="btn btn-shopcar">重新支付</a>
-          <a href="javascript:void(0);" class="btn btn-buy" id="supplier">返回商家页面</a>
+          <a href="<%= wxpay_pay_url(site_id: @payment.site_id, out_trade_no: @payment.out_trade_no,showwxpaytitle: 1) %>" class="btn btn-shopcar">重新支付</a>
+          <a href="javascript:void(0);" class="btn btn-buy" id="site">返回商家页面</a>
         </div>
       </div>
     </section>

@@ -138,7 +138,6 @@ module ApplicationHelper
     if brand_id.blank?
       options_for_select([['', '']])
     else
-      # car_brands = (@supplier||current_user).car_brands.normal
       car_brands = [(@site||current_site).car_brand]
       options_for_select(car_brands.collect{ |b| [b.name, b.id] }, brand_id.to_i)
     end
@@ -254,15 +253,15 @@ module ApplicationHelper
     html.html_safe
   end
 
-  def supplier_categories_for_js
-    supplier_categories = ''
+  def account_categories_for_js
+    account_categories = ''
 
     AccountCategory.root.includes(:children).each do |category|
       children = category.children.collect {|child| "['#{child.name}', #{child.id.to_i}]"}
-      supplier_categories << "#{category.id.to_i}: [#{children.join(', ')}],"
+      account_categories << "#{category.id.to_i}: [#{children.join(', ')}],"
     end
 
-    html = content_tag(:script, "var supplier_categories = { #{supplier_categories.sub!(/,$/, "")} };")
+    html = content_tag(:script, "var account_categories = { #{account_categories.sub!(/,$/, "")} };")
     raw html.html_safe.gsub!(/&#x27;/, "'")
   end
 

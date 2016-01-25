@@ -2,10 +2,10 @@
   <div class="vcsection-header">
     <div class="vcsection-header-txt">会员卡商家信息</div>
     <div class="vcsection-header-btn">
-      <input type="button" class="btn btn-sm btn-primary" value="保存" id="supplier_info_save_btn"></div>
+      <input type="button" class="btn btn-sm btn-primary" value="保存" id="site_info_save_btn"></div>
   </div>
   <div class="vcsection-body clearfix">
-    <%= form_for @activity, validate: true, html:{id: 'supplier_info_form', class: 'form col-md-12'} do |f| %>
+    <%= form_for @activity, validate: true, html:{id: 'site_info_form', class: 'form col-md-12'} do |f| %>
     <%= f.fields_for :vip_card, @activity.vip_card do |card| %>
     <div class="vcindent-520">
       <div class="col-md-12 margin-top-30">
@@ -49,8 +49,8 @@
 <% content_for(:custom_js) do %>
 <script type="text/javascript" charset="utf-8">
     $(function() {
-        $('#supplier_info_save_btn').click(function() {
-            $('#supplier_info_form').submit();
+        $('#site_info_save_btn').click(function() {
+            $('#site_info_form').submit();
         });
     })
 </script>

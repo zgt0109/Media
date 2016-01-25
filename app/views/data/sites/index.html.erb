@@ -31,7 +31,7 @@
 
           <div class="data-widget">
             <div class="l-info">
-              <div class="number"><%= @supplier.try(:bounce_rate) || "0%" -%> %</div>
+              <div class="number"><%= @site.try(:bounce_rate) || "0%" -%> %</div>
               <div class="font-size16">跳出率</div>
             </div>
             <div class="r-info">
@@ -41,7 +41,7 @@
           </div>
           <div class="data-widget">
             <div class="l-info">
-              <div class="number"><%= @supplier.try(:avg_time_on_site) || 0 -%> s</div>
+              <div class="number"><%= @site.try(:avg_time_on_site) || 0 -%> s</div>
               <div class="font-size16">平均停留时间</div>
             </div>
             <div class="r-info">

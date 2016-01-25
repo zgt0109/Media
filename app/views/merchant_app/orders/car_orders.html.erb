@@ -13,16 +13,16 @@
     <div class="mod-bg"></div>
     <div class="mod-body">
       <ul>
-        <li class="<%= 'active' if params[:bespeak_type].blank? %>"><a href="/merchant_app/orders/car_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>">全部</a></li>
-        <li class="<%= 'active' if params[:bespeak_type] == CarBespeak::TEST_DRIVE %>"><a href="/merchant_app/orders/car_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>&bespeak_type=<%= CarBespeak::TEST_DRIVE %>">试驾预约</a></li>
-        <li class="<%= 'active' if params[:bespeak_type] == CarBespeak::REPAIR %>"><a href="/merchant_app/orders/car_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>&bespeak_type=<%= CarBespeak::REPAIR %>">保养预约</a></li>
+        <li class="<%= 'active' if params[:bespeak_type].blank? %>"><a href="/merchant_app/orders/car_orders?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>">全部</a></li>
+        <li class="<%= 'active' if params[:bespeak_type] == CarBespeak::TEST_DRIVE %>"><a href="/merchant_app/orders/car_orders?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>&bespeak_type=<%= CarBespeak::TEST_DRIVE %>">试驾预约</a></li>
+        <li class="<%= 'active' if params[:bespeak_type] == CarBespeak::REPAIR %>"><a href="/merchant_app/orders/car_orders?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>&bespeak_type=<%= CarBespeak::REPAIR %>">保养预约</a></li>
       </ul>
     </div>
   </div>
 <% end %>
 
 <%= form_tag car_orders_merchant_app_orders_url, method: :get do %>
-  <%= hidden_field_tag :role, 'supplier' %>
+  <%= hidden_field_tag :role, 'account' %>
   <%= hidden_field_tag :role_id, @login_user.id %>
   <%= hidden_field_tag :token, @login_user.auth_token %>
   <div class="search-box">
@@ -37,7 +37,7 @@
   <div class="mod-list" ng-repeat="order in demo.orders">
     <dl>
       <dt class="icon-right {{order.dt_class}}">
-        <a href='/merchant_app/orders/{{order.id}}/car_order_detail?role=supplier&&role_id=<%= @login_user.id %>&&token=<%= @login_user.auth_token %>'>{{order.title}}</a>
+        <a href='/merchant_app/orders/{{order.id}}/car_order_detail?role=account&&role_id=<%= @login_user.id %>&&token=<%= @login_user.auth_token %>'>{{order.title}}</a>
       </dt>
       <dd>
         <p>车系：{{order.car_catena}}</p>
@@ -71,7 +71,7 @@ var app = angular.module('app', ['infinite-scroll']);
      Demo.prototype.nextPage = function () {
          if (this.busy) return;
          this.busy = true;
-         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/cars?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&bespeak_type=#{params[:bespeak_type]}&search[mobile_or_name_cont]=#{params[:mobile_or_name_like]}&page=" %>'+ this.page;
+         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/cars?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&bespeak_type=#{params[:bespeak_type]}&search[mobile_or_name_cont]=#{params[:mobile_or_name_like]}&page=" %>'+ this.page;
          $http.get(url).success(function (response) {
      if(response.result == 'success'){
              var items = response.data;

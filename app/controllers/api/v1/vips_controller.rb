@@ -2,7 +2,7 @@ class Api::V1::VipsController < Api::BaseController
   before_filter :cors_set_access_control_headers
   before_filter :set_users, except: [:pay, :spm_points, :spm_vip]
   EC_SOURCE, HOTEL_SOURCE, SPM_SOURCE = 'winwemedia_ec', 'winwemedia_hotel', 'winwemedia_spm'
-  # 会员卡余额支付接口 site_id, supplier_id, open_id, out_trade_no, amount, subject, body, source, trade_token
+  # 会员卡余额支付接口 site_id, open_id, out_trade_no, amount, subject, body, source, trade_token
   def pay
     open_id, site_id, trade_token, out_trade_no, subject, body = params.values_at(:open_id, :site_id, :trade_token, :out_trade_no, :subject, :body)
     wx_mp_user = WxMpUser.where(site_id: site_id).first
@@ -47,7 +47,7 @@ class Api::V1::VipsController < Api::BaseController
   def earn_points
     return render json: { errcode: 1, errmsg: "参数不正确，金额必须大于0" } if (amount = params[:amount].to_f) <= 0
     options = { direction: PointTransaction::CONSUME_IN, description: params[:description], amount_source: get_amount_source }
-    points = @wx_mp_user.supplier.giving_points(amount, VipPrivilege::CONSUME, options, @vip_user)
+    points = @wx_mp_user.site.giving_points(amount, VipPrivilege::CONSUME, options, @vip_user)
     @vip_user.increase_points!(points)
     render json: { errcode: 0, points: points }
   end
@@ -56,7 +56,7 @@ class Api::V1::VipsController < Api::BaseController
   # 成功时，返回： { errcode: 0, points: points }
   def earnable_points
     return render json: { errcode: 1, errmsg: "参数不正确，金额必须大于0" } if (amount = params[:amount].to_f) <= 0
-    points          = @wx_mp_user.supplier.giving_points(amount, VipPrivilege::CONSUME, nil, @vip_user, pay: false)
+    points          = @wx_mp_user.site.giving_points(amount, VipPrivilege::CONSUME, nil, @vip_user, pay: false)
     discount_amount = @vip_user.get_discounted_amount!(amount, VipPrivilege::CONSUME, nil, pay: false)
     render json: { errcode: 0, points: points, discount_amount: discount_amount }
   end
@@ -73,7 +73,7 @@ class Api::V1::VipsController < Api::BaseController
     return render json: { errcode: 1, errmsg: "积分必须大于0" } if points <= 0
     return render json: { errcode: 1, errmsg: "积分不足" } unless @vip_user.decrease_points!(points)
     direction_type = {EC_SOURCE => PointTransaction::EC_PURCHASE, HOTEL_SOURCE => PointTransaction::HOTEL_PURCHASE}[params[:source]] || PointTransaction::OUT
-    @vip_user.point_transactions.create supplier: @wx_mp_user.supplier, direction_type: direction_type, points: points, description: params[:description]
+    @vip_user.point_transactions.create site: @wx_mp_user.site, direction_type: direction_type, points: points, description: params[:description]
     render json: { errcode: 0 }
   end
 
@@ -84,7 +84,7 @@ class Api::V1::VipsController < Api::BaseController
     return render json: { errcode: 1, errmsg: "积分必须大于0" } if points <= 0
     @vip_user.increase_points!(points)
     direction_type = {EC_SOURCE => PointTransaction::EC_RETURN, HOTEL_SOURCE => PointTransaction::HOTEL_RETURN}[params[:source]] || PointTransaction::ADJUST_IN
-    @vip_user.point_transactions.create supplier: @wx_mp_user.supplier, direction_type: direction_type, points: points, description: params[:description]
+    @vip_user.point_transactions.create site: @wx_mp_user.site, direction_type: direction_type, points: points, description: params[:description]
     render json: { errcode: 0 }
   end
 
@@ -117,12 +117,12 @@ class Api::V1::VipsController < Api::BaseController
   end
 
   private
-    # 该方法会设置适当的参数，包括：wx_mp_user、supplier、vip_user
+    # 该方法会设置适当的参数，包括：wx_mp_user、vip_user
     def set_users
       open_id, mp_user_open_id, trade_token = params.values_at(:open_id, :mp_user_open_id, :trade_token)
       @wx_mp_user = WxMpUser.where(openid: mp_user_open_id).last
-      @supplier   = @wx_mp_user.try(:supplier)
-      render json: { errcode: 1, errmsg: "参数不正确，找不到公众账号" } and return false unless @wx_mp_user && @supplier
+      @site   = @wx_mp_user.try(:site)
+      render json: { errcode: 1, errmsg: "参数不正确，找不到公众账号" } and return false unless @wx_mp_user && @site
       @vip_user   = @wx_mp_user.vip_users.visible.where(trade_token: params[:trade_token]).last
       vip_checker = VipUserChecker.new(@vip_user, open_id)
       render json: { errcode: 1, errmsg: vip_checker.error_message } and return false if vip_checker.error?

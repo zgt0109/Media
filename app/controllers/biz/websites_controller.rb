@@ -93,10 +93,10 @@ class Biz::WebsitesController < ApplicationController
   end
 
   def update_piwik_domain_status(website, domain)
-    supplier = website.supplier
-    if supplier
-      if supplier.piwik_domain_status == 0 &&  domain.present?
-        supplier.update_attribute(:piwik_domain_status, 1)
+    site = website.site
+    if site
+      if site.piwik_domain_status == 0 &&  domain.present?
+        site.update_attribute(:piwik_domain_status, 1)
       end
     end
   rescue Exception => e

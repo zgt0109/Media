@@ -48,13 +48,6 @@ class Biz::GroupsController < Biz::GroupBaseController
     end
   end
 
-  def alipay
-    if request.put?
-      current_site.update_attributes(params[:supplier])
-      redirect_to :back, notice: '更新成功'
-    end
-  end
-
   private
 
   def set_group

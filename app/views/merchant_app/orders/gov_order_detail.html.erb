@@ -2,7 +2,7 @@
 <% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="hide=true"<% end %>
 <% content_for :header do %>
   <header>
-    <%= link_to gov_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <%= link_to gov_orders_merchant_app_orders_url(role: 'account', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
     <span class="text">信箱留言</span>
     <a href="javascript:;"></a>
   </header>
@@ -37,7 +37,7 @@
 <script>
 var app = angular.module('app', []);
 function customersController($scope,$http) {
-    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders/#{params[:id]}?role=supplier&model=#{params[:model]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders/#{params[:id]}?role=account&model=#{params[:model]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
     .success(function(response) {
         if(response.result == 'success'){
  	  $scope.order = response.data;
@@ -54,7 +54,7 @@ function customersController($scope,$http) {
       console.log(response);
     });
 
-    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=#{params[:model]}&source=winwemedia_gov&is_read=1" %>')
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=#{params[:model]}&source=winwemedia_gov&is_read=1" %>')
     .success(function(response) {
 	console.log(response);
     })
@@ -63,7 +63,7 @@ function customersController($scope,$http) {
     });
 
     $scope.change_status = function(status) {
-      var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders/#{params[:id]}?role=supplier&model=#{params[:model]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status;
+      var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/gov_orders/#{params[:id]}?role=account&model=#{params[:model]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status;
       var reply_content = document.getElementById('reply_content').value;
       if(status == 3){
         // reply_content=
@@ -94,7 +94,7 @@ function customersController($scope,$http) {
 
     $scope.set_visable = function(status, flag) {
       if(flag){
-        window.location.href = '<%= raw gov_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) %>'
+        window.location.href = '<%= raw gov_orders_merchant_app_orders_url(role: 'account', role_id: @login_user.id, token: @login_user.auth_token) %>'
       }
       else{
         switch(status){

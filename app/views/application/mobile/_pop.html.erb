@@ -8,7 +8,7 @@
           <% next if category.products.count == 0 %>
           <dl class="active">
             <dt>
-              <%= link_to category.has_children? ? 'javascript:void(0);' : mobile_ec_category_path(supplier_id: @supplier.id, id: category), style: 'width: 100%;' do %>
+              <%= link_to category.has_children? ? 'javascript:void(0);' : mobile_ec_category_path(site_id: @site.id, id: category), style: 'width: 100%;' do %>
                   <%= category.name %>
                   <i class="arrow"></i>
               <% end %>
@@ -22,11 +22,11 @@
                       <p>
                         <% sub_category.children.normal.order(:sort_order).each do |child|%>
                             <% next if child.products.count == 0 %>
-                            <%= link_to mobile_ec_category_path(supplier_id: @supplier.id, id: child) do %><i></i><%= child.name %><% end %>
+                            <%= link_to mobile_ec_category_path(site_id: @site.id, id: child) do %><i></i><%= child.name %><% end %>
                         <% end %>
                       </p>
                   <% else %>
-                      <%= link_to mobile_ec_category_path(supplier_id: @supplier.id, id: sub_category) do %><i></i><%= sub_category.name %><% end %>
+                      <%= link_to mobile_ec_category_path(site_id: @site.id, id: sub_category) do %><i></i><%= sub_category.name %><% end %>
                   <% end %>
                 </dd>
             <% end if category.has_children? %>

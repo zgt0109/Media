@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_shop_account(force_reload = false)
-    @current_shop_account ||= Account.find(session[:shop_supplier_id])
+    @current_shop_account ||= Account.find(session[:shop_account_id])
     @current_shop_account.reload if force_reload
     @current_shop_account
   end

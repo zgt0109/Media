@@ -4,7 +4,7 @@ unless @mobile_footer_rendered
 %>
 <%- if !Rails.env.development? %>
   <%- wx_config = wx_config(@wx_mp_user, request.url) %>
-  <%= @supplier.try(:piwik_js_code) %>
+  <%= @site.try(:piwik_js_code) %>
   <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" language="JavaScript"></script>
   <script type="text/javascript">
     var WeixinCustomEvent = {};

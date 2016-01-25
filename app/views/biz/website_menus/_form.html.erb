@@ -322,7 +322,7 @@
           <label class="control-label">选择业务对接模块<span class="required-star">*</span></label>
           <div class="clearfix">
             <%= f.select :docking_type, options_for_select(WebsiteMenu.docking_type_options, selected: f.object.get_docking_type), {}, class: "col-xs-6" %>
-            <%#= hidden_field_tag :supplier_ec_shop, @website.try(:supplier).try(:ec_shop).try(:id) %>
+            <%#= hidden_field_tag :site_ec_shop, @website.try(:site).try(:ec_shop).try(:id) %>
           </div>
         </div>
 
@@ -661,7 +661,7 @@
                             }
                         }
                     }else if(menu_type == 17){
-                        // if(!$('#supplier_ec_shop').val()){
+                        // if(!$('#site_ec_shop').val()){
                         //     showTip('warning','微电商的相关活动还没有创建，请先创建');
                         //     return false;
                         // }

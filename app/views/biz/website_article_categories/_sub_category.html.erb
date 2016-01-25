@@ -27,7 +27,7 @@
             <%= link_to '', copy_website_article_category_url(id: sub_menu.id, category_type: params[:category_type]), class: 'fa fa-plus fa-copy', data: {method: :get, confirm: '确定要复制吗？'}, title: '复制' %>
           </div>
           <div>
-            <%= link_to '', 'javascript:;', class: 'fa fa-plus fa-link', title: '复制链接', data: {url: mobile_website_articles_url(supplier_id: @website.supplier_id, article_type: params[:category_type], category_id: sub_menu.id)} %>
+            <%= link_to '', 'javascript:;', class: 'fa fa-plus fa-link', title: '复制链接', data: {url: mobile_website_articles_url(site_id: @website.site_id, article_type: params[:category_type], category_id: sub_menu.id)} %>
           </div>
           <div>
             <%= link_to '',  website_article_category_url(sub_menu, category_type: params[:category_type]), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确定要删除吗？'}, title: '删除当前分类' %>
@@ -66,7 +66,7 @@
           <%= link_to '', copy_website_article_category_url(id: sub_menu.id, category_type: params[:category_type]), class: 'fa fa-plus fa-copy', data: {method: :get, confirm: '确定要复制吗？'}, title: '复制' %>
         </div>
         <div>
-          <%= link_to '', 'javascript:;', class: 'fa fa-plus fa-link', title: '复制链接', data: {url: mobile_website_articles_url(supplier_id: @website.supplier_id, article_type: params[:category_type], category_id: sub_menu.id)} %>
+          <%= link_to '', 'javascript:;', class: 'fa fa-plus fa-link', title: '复制链接', data: {url: mobile_website_articles_url(site_id: @website.site_id, article_type: params[:category_type], category_id: sub_menu.id)} %>
         </div>
         <div>
           <%= link_to '', website_article_category_url(sub_menu, category_type: params[:category_type]), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确定要删除吗？' }, title: '删除当前分类' %>

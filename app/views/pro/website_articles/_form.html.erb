@@ -16,7 +16,7 @@
 <% @website_article.can_validate = true if @website_article.new_record? %>
 <%= form_for [:pro, @website_article], validate: true, :html => {id: "website_article_form"} do |f| %>
   <div class="box-form fl">
-    <%= f.hidden_field :supplier_id, value: current_user.id %>
+    <%= f.hidden_field :site_id, value: current_user.id %>
     <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
     <%= f.hidden_field :website_id, value: @website.id %>
 

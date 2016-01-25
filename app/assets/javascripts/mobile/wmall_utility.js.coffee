@@ -1,4 +1,4 @@
-# fetch_wmall_data({path: "/api/wmall/slide_pictures.json"}, {supplier_id: "10001"}, options = {})
+# fetch_wmall_data({path: "/api/wmall/slide_pictures.json"}, {site_id: "10001"}, options = {})
 @fetch_wmall_data = (api = {}, data_params, options = {}) ->
   api = $.extend(api, {host: "http://192.168.1.162:3005"})# window.location.origin
   api_url = "#{api.host}#{api.path}"

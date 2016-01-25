@@ -79,7 +79,7 @@
 
         <%= f.fields_for :activity do |activity| %>
           <% if @business_shop.activity.new_record? %>
-            <%= activity.hidden_field :supplier_id %>
+            <%= activity.hidden_field :site_id %>
             <%= activity.hidden_field :wx_mp_user_id %>
             <%= activity.hidden_field :activity_type_id %>
             <%= activity.hidden_field :status %>
