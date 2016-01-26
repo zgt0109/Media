@@ -3,9 +3,6 @@ common: &common
   winwemedia_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
-  taobao:
-    app_key: "21673788"
-    app_secret: "abae122a11a8e8b39426ee2ee08a5c5f"
   yeepay:
     yeepay_host: "http://ok.yeepay.com/"
     callbackurl: "http://testing.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
@@ -26,9 +23,6 @@ production:
   winwemedia_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
-  taobao:
-    app_key: "21674146"
-    app_secret: "2fbbdb16405d640a11579856014a145c"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://m.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
@@ -46,9 +40,6 @@ staging:
   winwemedia_payment:
     host: "http://staging.winwemedia.com"
     payment_request: "/payments/request"
-  taobao:
-    app_key: "21674146"
-    app_secret: "2fbbdb16405d640a11579856014a145c"
   yeepay:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://staging.m.winwemedia.com/payment/yeepay/%{merchantaccount}/callback"
@@ -63,10 +54,10 @@ staging:
 
 development:
   <<: *common
+  host: "localhost:3000"
   winwemedia_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
-  host: "localhost:3000"
   yeepay:
     yeepay_host: "http://ok.yeepay.com/"
     callbackurl: "http://localhost:3000/payment/yeepay/%{merchantaccount}/callback"

@@ -13,14 +13,14 @@
     <div class="mod-bg"></div>
     <div class="mod-body">
       <ul>
-        <li ng-repeat="activity in activities" class="{{activity.id == <%= params[:activity_id].to_i %> ? 'active' : ''}}"><a href="/merchant_app/orders/reservation_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&value_like=<%= params[:value_like]%>&activity_id={{activity.id}}">{{activity.name}}</a></li>
+        <li ng-repeat="activity in activities" class="{{activity.id == <%= params[:activity_id].to_i %> ? 'active' : ''}}"><a href="/merchant_app/orders/reservation_orders?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&value_like=<%= params[:value_like]%>&activity_id={{activity.id}}">{{activity.name}}</a></li>
       </ul>
     </div>
   </div>
 <% end %>
 
 <%= form_tag reservation_orders_merchant_app_orders_url, method: :get do %>
-  <%= hidden_field_tag :role, 'supplier' %>
+  <%= hidden_field_tag :role, 'account' %>
   <%= hidden_field_tag :role_id, @login_user.id %>
   <%= hidden_field_tag :token, @login_user.auth_token %>
   <div class="search-box">
@@ -35,7 +35,7 @@
   <div class="mod-list" ng-repeat="order in demo.orders">
     <dl ng-show='order'>
       <dt class="icon-right {{order.dt_class}}">
-        <a href='/merchant_app/orders/{{order.id}}/reservation_order_detail?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>创建时间：{{order.created_at}}</a>
+        <a href='/merchant_app/orders/{{order.id}}/reservation_order_detail?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>创建时间：{{order.created_at}}</a>
       </dt>
       <dd>
         <p ng-repeat="(key,value) in order"><span ng-show="key != 'status' && key != 'id' && key != 'created_at' && key != 'dt_class' ">{{key == 'activity_name' ? '活动名称' : key}}：{{value}}<span></p>
@@ -68,7 +68,7 @@
    Demo.prototype.nextPage = function () {
      if (this.busy) return;
      this.busy = true;
-     var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/reservations?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&value_like=#{params[:value_like]}&activity_id=#{params[:activity_id]}&page=" %>'+ this.page;
+     var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/reservations?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&value_like=#{params[:value_like]}&activity_id=#{params[:activity_id]}&page=" %>'+ this.page;
      $http.get(url).success(function (response) {
        if(response.result == 'success'){
          this.activities = response.data['activities'];

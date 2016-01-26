@@ -52,11 +52,7 @@
                 <% if order.cancel? %>
                   <%= link_to '删除', sms_order_path(order), data:{confirm: '删除本记录后，该记录将不再显示了，确定删除本条记录吗？', method: 'delete', title: '短信套餐支付取消'}  %>
                 <% elsif order.pending? %>
-                  <% if Rails.env.production? || Rails.env.staging? %>
-                    <%= link_to '支付', alipayapi_sms_order_url(order, payment_id: order.payments.wait_buyer_pay.first.try(:id), host: 'm.weiligongshe.com'), target: '_blank' %>
-                  <% else %>
-                    <%= link_to '支付', alipayapi_sms_order_url(order, payment_id: order.payments.wait_buyer_pay.first.try(:id)), target: '_blank' %>
-                  <% end %>
+                  <%= link_to '支付', alipayapi_sms_order_url(order, payment_id: order.payments.wait_buyer_pay.first.try(:id)), target: '_blank' %>
 
                   <%= link_to '取消',cancel_sms_order_path(order), data:{confirm: '取消支付后，本条记录将不能再支付了，确定取消支付吗？', method: 'get', title: '短信套餐支付取消'} %>
                   <%#= link_to '删除', sms_order_path(order), data:{confirm: '删除本记录后，该记录将不再显示了，确定删除本条记录吗？', method: 'delete', title: '短信套餐支付取消'}  %>

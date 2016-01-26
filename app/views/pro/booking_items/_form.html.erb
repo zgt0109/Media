@@ -6,7 +6,7 @@
         <label class="control-label">分类<span class="required-star">*</span></label>
         <div class="col-xs-12 row" id="selects">
           <% @booking_categories_selects.each do |select|%>
-              <%= select_tag "booking_category_id#{select[0]}", options_for_select(select[1].collect{|t| [t.name, t.id]}, selected: params["booking_category_id#{select[0]}".to_sym]), class: "col-xs-2 margin-right-5 booking_category", rel: select[0]  %>
+            <%= select_tag "booking_category_id#{select[0]}", options_for_select(select[1].collect{|t| [t.name, t.id]}, selected: params["booking_category_id#{select[0]}".to_sym]), class: "col-xs-2 margin-right-5 booking_category", rel: select[0]  %>
           <% end %>
           <%= f.hidden_field :booking_category_id, class: 'hidden_booking_category_id' %>
         </div>

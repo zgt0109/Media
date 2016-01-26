@@ -47,7 +47,7 @@ class Api::V1::CouponsController < Api::BaseController
   # 查看微信用户获得的优惠券列表接口, 输入参数: open_id, mp_user_open_id, coupon_token
   def consume_list
     return render json: { errcode: 1, errmsg: "验证未通过" } unless @coupon_token == 'AxJKl390nbYhd'
-    return render json: { errcode: 1, errmsg: "参数不正确, 找不到公众账号" } unless @wx_mp_user && @wx_mp_user.supplier
+    return render json: { errcode: 1, errmsg: "参数不正确, 找不到公众账号" } unless @wx_mp_user && @wx_mp_user.site
 
     if @wx_user.is_a?(WxUser)
       consumes = @wx_user.consumes.coupon.unused.unexpired.coupon_use_start.joins("join coupons on coupons.id = consumes.consumable_id AND consumes.consumable_type = 'Coupon'").select("consumes.consumable_type, consumes.consumable_id, consumes.code, consumes.expired_at, coupons.use_start as use_start,  coupons.value_by as value_by, coupons.value as value, coupons.logo_key as logo_key, coupons.name as name")
@@ -92,7 +92,7 @@ class Api::V1::CouponsController < Api::BaseController
   # 查看公众号下面优惠券列表接口, 输入参数: open_id, mp_user_open_id, coupon_token
   def coupon_list
     return render json: { errcode: 1, errmsg: "验证未通过" } unless @coupon_token == 'AxJKl390nbYhd'
-    return render json: { errcode: 1, errmsg: "参数不正确, 找不到公众账号" } unless @wx_mp_user && @wx_mp_user.supplier
+    return render json: { errcode: 1, errmsg: "参数不正确, 找不到公众账号" } unless @wx_mp_user && @wx_mp_user.site
 
     activity = @wx_mp_user.activities.coupon.show.first
     return render json: { errcode: 1, errmsg: "该公众号下没有优惠券" } unless activity

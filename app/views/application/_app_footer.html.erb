@@ -49,12 +49,13 @@
   </div>
 </div>
 
-<%# if @supplier && @account_footer && @supplier.try(:is_show_mark?) %>
-  <%- unless @not_show_mark %>
+<%# if @site && @account_footer && @site.try(:is_show_mark?) %>
+  <%#- unless @not_show_mark %>
     <footer>
-      <%= @account_footer.footer_link.present? ? link_to(@account_footer.footer_content, @account_footer.footer_link) : @account_footer.footer_content %>
+      <%#= @account_footer.footer_link.present? ? link_to(@account_footer.footer_content, @account_footer.footer_link) : @account_footer.footer_content %>
+      <a href="http://10001.m.winwemedia.com/10001">技术支持：微枚迪</a>
     </footer>
-  <% end %>
+  <%# end %>
 <%#- end %>
 
 <%= render "application/mobile_footer" %>

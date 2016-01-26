@@ -30,7 +30,7 @@
       <%= link_to activity_greets_path do %><span>微贺卡</span><% end %>
     </li>
     <li class="<%= ['kf_settings', 'staffs'].include?(controller_name) ? "pagecurrent current" : '' %>"><%= link_to kf_settings_path do %><span>微信客服系统</span><% end %></li>
-    <li class="<%= ['prints', 'supplier_print_picutures', 'supplier_print_clients'].include?(controller_name) ? "pagecurrent current" : '' %>">
+    <li class="<%= ['prints'].include?(controller_name) ? "pagecurrent current" : '' %>">
       <%= link_to activities_prints_path do %><span>微信打印系统</span><% end %>
     </li>
 

@@ -6,7 +6,7 @@
       <div class="tab-content no-border padding-24">
         <div id="tab-4" class="tab-pane fade active in">
           <div class="row">
-            <%= form_tag shops_activity_consumes_path(supplier_id: current_shop_account.id), method: :get do %>
+            <%= form_tag shops_activity_consumes_path(account_id: current_shop_account.id), method: :get do %>
               <div class="col-sm-12">
                 <div class="col-md-3 row">
                   <div class="input-group input-group-text">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-4 row">
                   <input class="btn btn-primary btn-sm btn-filter" type="submit" value="查询">
-                  <%= link_to '导出EXCEL', shops_activity_consumes_path(supplier_id: current_shop_account.id, format: :xls), class: 'btn btn-primary btn-sm btn-filter', id: 'export-xls' %>
+                  <%= link_to '导出EXCEL', shops_activity_consumes_path(account_id: current_shop_account.id, format: :xls), class: 'btn btn-primary btn-sm btn-filter', id: 'export-xls' %>
                 <% end %>
             </div>
               </div>
@@ -80,7 +80,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title">核销优惠券</h4>
       </div>
-      <%= form_tag shops_use_consume_path(supplier_id: current_shop_account.id) do %>
+      <%= form_tag shops_use_consume_path(account_id: current_shop_account.id) do %>
       <%= hidden_field_tag :sn_code, "" %>
       <div class="modal-body">
         <div class="input-group input-group-text">
@@ -123,7 +123,7 @@
   }
 
   $("#activityTypeChooser").change(function(event) {
-    var activity_url = "<%= shops_find_activities_path(supplier_id: current_shop_account.id) %>"+"?activity_type_id="+$("#activityTypeChooser").val();
+    var activity_url = "<%= shops_find_activities_path(account_id: current_shop_account.id) %>"+"?activity_type_id="+$("#activityTypeChooser").val();
     $.get(activity_url, function(data) {
       $("#consumable_id").empty();
       $.each(data['collection'], function(i, v) {
@@ -134,7 +134,7 @@
   });
 
   $('body').on("click", '.btn-filter-search', function(){
-    var get_url = "<%= shops_find_consume_path(supplier_id: current_shop_account.id) %>" + "?sn_code=" + $("#search_sn_code").val();
+    var get_url = "<%= shops_find_consume_path(account_id: current_shop_account.id) %>" + "?sn_code=" + $("#search_sn_code").val();
     $.get(get_url, function(data) {
       if(data.consume_status == 1){
         $('#sn_code').val(data.sn_code);

@@ -88,8 +88,7 @@ module Wp
       wx_wall.css wx_wall.js shake.js vscene.js
       jscolor/jscolor.js msdropdown/jquery.dd.min.js msdropdown/dd.css
       ace.min.css jsinhead.js jquery-fileupload/basic.js lib/validators.js
-      button_apply_now.png
-      home.css  sessions.css yeahsite.css home.js sessions.js yeahsite.js
+      home.css  sessions.css home.js sessions.js
       vip/vcard.css vip/vcard.js lib/jquery-ui.js
       mobile/albums/jquery.water.min.js
     ]
@@ -98,8 +97,6 @@ module Wp
     config.assets.precompile += Dir['app/assets/stylesheets/shake_site/template-*.css'].map{ |x| x.sub('app/assets/stylesheets/', '') }
     config.assets.precompile += Dir['app/assets/javascripts/merchant_app/*.js'].map{ |x| x.sub('app/assets/javascripts/', '') }
     config.assets.precompile += Dir['app/assets/stylesheets/merchant_app/*.css'].map{ |x| x.sub('app/assets/stylesheets/', '') }
-    config.assets.precompile += Dir['app/assets/javascripts/v5/**/*.js'].map{ |x| x.sub('app/assets/javascripts/', '') }
-    config.assets.precompile += Dir['app/assets/stylesheets/v5/**/*.css'].map{ |x| x.sub('app/assets/stylesheets/', '') }
     config.assets.precompile += Dir['app/assets/javascripts/v5.1/**/*.js'].map{ |x| x.sub('app/assets/javascripts/', '') }
     config.assets.precompile += Dir['app/assets/stylesheets/v5.1/**/*.css'].map{ |x| x.sub('app/assets/stylesheets/', '') }
     config.assets.precompile += Dir['app/assets/images/mobile/wcard/*.*'].map{ |x| x.sub('app/assets/images/', '') }

@@ -49,21 +49,20 @@
         <% end %>
 
         <%= link_to_left_nav( '刮刮卡', guas_activities_path, guas_path? ) if current_site.has_privilege_for?(4) %>
-        <%= link_to_left_nav( '大转盘', wheels_activities_path, wheels_path? ) if current_site.has_privilege_for?(5) %>
+        <%= link_to_left_nav( '幸运大转盘', wheels_activities_path, wheels_path? ) if current_site.has_privilege_for?(5) %>
         <%= link_to_left_nav( '一战到底', fights_activities_path, fights_path? ) if current_site.has_privilege_for?(8) %>
         <%= link_to_left_nav( '砸金蛋', hit_eggs_activities_path, hit_eggs_path? ) if current_site.has_privilege_for?(25) %>
         <%= link_to_left_nav( '老虎机', slots_activities_path, slots_path? ) if current_site.has_privilege_for?(28) %>
         <%= link_to_left_nav( '微助力', aids_activities_path, aids_path? ) if current_site.has_privilege_for?(82) %>
         <%= link_to_left_nav( '摇一摇抽奖', waves_activities_path, waves_path? ) if current_site.has_privilege_for?(64) %>
-        <%= link_to_left_nav( '图片分享', share_photo_settings_path, controller_name =~ /share_photo/ ) if current_site.has_privilege_for?(33) %>
-        <%#= link_to_left_nav( '吸粉游戏', fans_games_path, controller_name =~ /fans_game/ ) if current_site.has_privilege_for?(67) %>
+        <%= link_to_left_nav( '美图猜猜', guesses_activities_path, guesses_path? ) if current_site.has_privilege_for?(75) %>
+        <%= link_to_left_nav( '吸粉游戏', fans_games_path, controller_name =~ /fans_game/ ) if current_site.has_privilege_for?(67) %>
         <%= link_to_left_nav( '拆包有奖', unfolds_activities_path, unfolds_path? ) if current_site.has_privilege_for?(71) %>
         <%= link_to_left_nav( '推荐有奖', recommends_activities_path, recommends_path? ) if current_site.has_privilege_for?(70) %>
-        <%= link_to_left_nav( '美图猜猜', guesses_activities_path, guesses_path? ) if current_site.has_privilege_for?(75) %>
-        <%= link_to_left_nav( '微信卡包', wx_cards_path, wx_cards_path? ) if current_site.has_privilege_for?(76) %>
-        <%= link_to_left_nav( '全民经纪人', brokerage_settings_path, brokerages_path? ) if current_site.has_privilege_for?(77) %>
         <%= link_to_left_nav( '节日礼包', red_packet_packets_path, red_packets_path? ) if current_site.has_privilege_for?(78) %>
+        <%= link_to_left_nav( '微信卡券', wx_cards_path, wx_cards_path? ) if current_site.has_privilege_for?(76) %>
         <%= link_to_left_nav( '微红包', settings_red_packets_path, controller_name == "red_packets" ) if current_site.has_privilege_for?(83) %>
+        <%= link_to_left_nav( '全民经纪人', brokerage_settings_path, brokerages_path? ) if current_site.has_privilege_for?(77) %>
       </ul>
     </li>
   <% end %>
@@ -90,6 +89,7 @@
         <%= link_to_left_nav( '微相册', '/albums/activity', albums_path? ) if current_site.has_privilege_for?(19) %>
         <%= link_to_left_nav( '微留言', '/leaving_messages/edit_activity', leaving_messages_path? ) if current_site.has_privilege_for?(24) %>
         <%= link_to_left_nav( '微贺卡', '/greets/activity', greet_cards_path? ) if current_site.has_privilege_for?(37) %>
+        <%= link_to_left_nav( '图片分享', share_photo_settings_path, controller_name =~ /share_photo/ ) if current_site.has_privilege_for?(33) %>
         <%= link_to_left_nav( "微社区", '/wbbs_communities', wbbs_path? && params[:type] != 'wx_plot' ) if current_site.has_privilege_for?(49) %>
         <%= link_to_left_nav( "微预定", reservations_path, reservations_path? ) if current_site.has_privilege_for?(63) %>
         <%= link_to_left_nav( "微场景", scenes_path, scenes_path? ) if current_site.has_privilege_for?(73) %>

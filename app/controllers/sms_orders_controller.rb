@@ -76,7 +76,7 @@ class SmsOrdersController < ApplicationController
     payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     paymentable =  payment.try(:paymentable)
 
-    # if request.host == 'm.weiligongshe.com'
+    # if request.host == 'www.winwemedia.com'
       redirect_url = 'http://www.winwemedia.com/sms_orders'
     # else
     #   redirect_url = sms_orders_url

@@ -10,7 +10,7 @@
 <%= form_for(@house_expert, validate: true) do |f| %>
 <div class="box-form fl">
   <%= f.hidden_field :house_id, value: @house_expert.try(:house_id) %>
-  <%= f.hidden_field :supplier_id, value: @house_expert.try(:supplier_id) %>
+  <%= f.hidden_field :site_id, value: @house_expert.try(:site_id) %>
   <%= f.hidden_field :wx_mp_user_id, value: @house_expert.try(:wx_mp_user_id) %>
 
   <p>
@@ -27,7 +27,7 @@
 
   <div class="box-upload">
     <div class="upload-img upload-preview-img">
-      <span><%= image_tag((@house_expert.pic_url || '/assets/house/img06.jpg'), id: 'preview_expert_pic') %></span>
+      <span><%= image_tag((@house_expert.pic_url), id: 'preview_expert_pic') %></span>
     </div>
     <div class="upload-btn">
       <div class="box-file">

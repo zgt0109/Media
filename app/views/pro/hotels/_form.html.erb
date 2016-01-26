@@ -11,7 +11,7 @@
 <div class="col-sm-12 ">
   <%= render "weixin_preview", wx_title: @hotel.activity.try(:name) || '标题', wx_summary: @hotel.activity.try(:summary),  wx_pic: (@hotel.activity.pic_url.present? ? @hotel.activity.pic_url : @hotel.activity.default_pic_url) %>
   <%= form_for @hotel, validate: true, html: {class: 'form col-sm-7', role: 'form'} do |f| %>
-      <%= f.hidden_field :supplier_id %>
+      <%= f.hidden_field :site_id %>
       <%= f.hidden_field :wx_mp_user_id %>
 
       <div class="form-group">
@@ -36,7 +36,7 @@
       </div>
 
       <%= f.fields_for :activity do |activity| %>
-          <%= activity.hidden_field :supplier_id %>
+          <%= activity.hidden_field :site_id %>
           <%= activity.hidden_field :wx_mp_user_id %>
           <%= activity.hidden_field :activity_type_id %>
           <%= activity.hidden_field :status %>

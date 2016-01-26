@@ -314,7 +314,7 @@
                         var id = $(self)[0].client;
                         $.ajax({
                             type: "POST",
-                            url: "/supplier_print_clients/"+id+"/update_pics",
+                            url: "/prints/"+id+"/update_pics",
                             data: { att: attr, key: key },
                             success: function(){
                                 //alert('upload success');
@@ -434,22 +434,6 @@
                         var uuid = Date.now();
                         fileImg.next().append('<input class="destroy" name="booking_item[booking_item_pictures_attributes]['+uuid+'][_destroy]" type="hidden">')
                         fileImg.next().append('<input class="pic_key" name="booking_item[booking_item_pictures_attributes]['+uuid+'][pic_key]" type="hidden" value="'+key+'">')
-                    }else if(self.imgs_type == "print"){
-                        fileImg.after(html);
-                        // 微汽车车型图片上传
-                        var car_type_id=$(input).parents(".cieldon-file").data('car_type_id'),
-                        pic_type=$(input).parents(".cieldon-file").data('pic_type');
-                     //   var attr = $(self)[0].location;
-                        var key = img;
-                        var id = $(self)[0].client;
-                        $.ajax({
-                            type: "POST",
-                            url: "/supplier_print_clients/"+id+"/update_pics",
-                            data: { att: "main_pic_ids", key: key },
-                            success: function(){
-                                //alert('upload success');
-                            }
-                        });
                     }else if(self.imgs_type == "panoramagram"){
                         // 360全景图片上传
                         if($(".file-del").length >= 6){

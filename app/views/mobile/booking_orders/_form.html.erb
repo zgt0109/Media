@@ -1,7 +1,7 @@
 <% content_for :booking_top_pic do %>
     <header>
-        <a href="<%= @booking_order.is_flow_site ? 'javascript:void(0);' : mobile_booking_item_url(id: params[:booking_item_id].to_i, site_id: @site.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev">
-            <% unless @booking_order.is_flow_site %><img src="/assets/mobile/wserver/ico-back.png"/><% end %>
+        <a href="<%= mobile_booking_item_url(id: params[:booking_item_id].to_i, site_id: @site.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev">
+          <img src="/assets/mobile/wserver/ico-back.png"/>
         </a>
       <h1>订单信息填写</h1>
     </header>
@@ -12,7 +12,6 @@
     <%= f.hidden_field :booking_item_id %>
     <%= f.hidden_field :price %>
     <%= f.hidden_field :status %>
-    <%= hidden_field_tag :is_flow_site, f.object.is_flow_site %>
     <!--<input name="booking_item_qty" id="booking_item_qty" value="<%#= @booking_item.qty %>" type="hidden">-->
     <div class="box-form">
       <p>
@@ -27,33 +26,32 @@
           <%= f.text_field :tel %>
         </span>
       </p>
-      <p style="<%= f.object.is_flow_site ? 'display:none;' : ''%>">
+      <p>
         <span class="fl">预订数量：</span>
         <span class="fr">
             <%= f.text_field :qty %>
         </span>
       </p>
-      <% if f.object.is_flow_site %>
-          <p>
-            <span class="fl">地址：</span>
-            <span class="fr">
-              <%= f.text_field :address %>
-            </span>
-          </p>
-      <% else %>
-          <p>
-            <span class="fl">预订日期：</span>
-            <span class="fr">
-              <input name="booking_order[booking_at]" id="booking_order_booking_at" placeholder="2013/1/1" class='input date' readonly/>
-            </span>
-          </p>
-          <p>
-            <span class="fl">备注：</span>
-            <span class="fr">
-              <%= f.text_area :description, rows: 5 %>
-            </span>
-          </p>
-      <% end %>
+
+      <p>
+        <span class="fl">地址：</span>
+        <span class="fr">
+          <%= f.text_field :address %>
+        </span>
+      </p>
+
+      <p>
+        <span class="fl">预订日期：</span>
+        <span class="fr">
+          <input name="booking_order[booking_at]" id="booking_order_booking_at" placeholder="2013/1/1" class='input date' readonly/>
+        </span>
+      </p>
+      <p>
+        <span class="fl">备注：</span>
+        <span class="fr">
+          <%= f.text_area :description, rows: 5 %>
+        </span>
+      </p>
 
       <p>
         <input class="btn" type="submit" value="提交"/>
@@ -118,22 +116,19 @@
 //                $('#booking_order_booking_at').focus();
 //                return false;
 //            }
-            if($('#is_flow_site').val() == 'true'){
-                if(!$('#booking_order_address').val()){
-                    alert("地址不能为空");
-                    $('#booking_order_address').focus();
-                    return false;
-                }
-            }else{
-                if(!$('#booking_order_booking_at').val()){
-                    alert("请选择预订日期");
-                    $('#booking_order_booking_at').focus();
-                    return false;
-                }else if($('#booking_order_booking_at').val() < now){
-                    alert("预订日期不能小于当前日期");
-                    $('#booking_order_booking_at').focus();
-                    return false;
-                }
+
+            if(!$('#booking_order_address').val()){
+                alert("地址不能为空");
+                $('#booking_order_address').focus();
+                return false;
+            }else if(!$('#booking_order_booking_at').val()){
+                alert("请选择预订日期");
+                $('#booking_order_booking_at').focus();
+                return false;
+            }else if($('#booking_order_booking_at').val() < now){
+                alert("预订日期不能小于当前日期");
+                $('#booking_order_booking_at').focus();
+                return false;
             }
         });
     });

@@ -39,7 +39,7 @@ Wp::Application.routes.draw do
           get :panorama, on: :member
         end
 
-        #微信卡包
+        #微信卡券
         resources :wx_cards, only: [:index]
 
         #全民经纪人

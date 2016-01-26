@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class HomeController < ApplicationController
   include Biz::HighchartHelper
 
@@ -17,8 +16,6 @@ class HomeController < ApplicationController
   end
 
   def console
-    # return redirect_to platforms_url unless current_site.try(:wx_mp_user)
-
     respond_to do |format|
       format.html do
         @activities = current_site.activities.active.unexpired.where(activity_type_id: ActivityType::ACTIVITY_IDS)
@@ -31,12 +28,6 @@ class HomeController < ApplicationController
 
         total_pv_count = @piwik_sites.sum(:nb_actions)
         total_uv_count = @piwik_sites.sum(:nb_visits)
-        if Rails.env.production?
-          total_piwik_sites_2014 = ActiveRecord::Base.connection.execute("select sum(nb_actions), sum(nb_visits) from piwik_sites_2014 where site_id=#{current_site.id}").first
-          total_piwik_sites_2015 = ActiveRecord::Base.connection.execute("select sum(nb_actions), sum(nb_visits) from piwik_sites_2015 where site_id=#{current_site.id}").first
-          total_pv_count = total_pv_count + total_piwik_sites_2014[0].to_i + total_piwik_sites_2015[0].to_i
-          total_uv_count = total_uv_count + total_piwik_sites_2014[1].to_i + total_piwik_sites_2015[1].to_i
-        end
         @total_pv_count = total_pv_count
         @total_uv_count = total_uv_count
 
@@ -47,11 +38,6 @@ class HomeController < ApplicationController
         @yesterday_vip_user_count = @total_vip_users.where("date(created_at) = ?", Date.yesterday).count
 
         total_subscribes = @all_wx_requests.sum(:increase)
-        if Rails.env.production?
-          total_subscribes_2014 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2014 where site_id=#{current_site.id}").first[0] || 0
-          total_subscribes_2015 = ActiveRecord::Base.connection.execute("select sum(increase) from wx_requests_2015 where site_id=#{current_site.id}").first[0] || 0
-          total_subscribes = total_subscribes + total_subscribes_2014 + total_subscribes_2015
-        end
         @total_subscribe_count = total_subscribes
 
         @yesterday_wx_request  = @all_wx_requests.where(date: Date.yesterday..Date.today).first
@@ -81,7 +67,7 @@ class HomeController < ApplicationController
   def help_menus
     # 假帐号登录
     session[:account_id] = TEST_USER_ID if session[:account_id].blank?
-    @help_menus = HelpMenu.winwemedia.order(:sort)
+    @help_menus = HelpMenu.order(:sort)
     render layout: 'application'
   end
 
@@ -92,13 +78,7 @@ class HomeController < ApplicationController
 
     return redirect_to root_url, alert: '页面不存在' unless @help_menu
 
-    if @help_menu.winwemedia?
-      @uzhe = false
-      render layout: 'application'
-    else
-      @uzhe = true
-      render 'uzhe_post', layout: false
-    end
+    render layout: 'application'
   end
 
   def verify_code

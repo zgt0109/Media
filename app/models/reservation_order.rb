@@ -39,7 +39,7 @@ class ReservationOrder < ActiveRecord::Base
 
   private
     def igetui
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site_id, token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'ReservationOrder', source: 'winwemedia_reservation', message: '您有一笔新的微预定订单，请及时处理。'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site_id, token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'ReservationOrder', source: 'reservation', message: '您有一笔新的微预定订单，请及时处理。'})
     rescue => e
       Rails.logger.info "#{e}"
     end

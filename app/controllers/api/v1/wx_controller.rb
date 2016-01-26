@@ -44,11 +44,11 @@ class Api::V1::WxController < Api::BaseController
       return render json: { errcode: 1, errmsg: "missing attributes: url" }, status: 400 unless @url.present?
 
       if params[:auth_token].present?
-        @supplier = Account.where(auth_token: params[:auth_token]).first
-        @wx_mp_user = @supplier.try(:wx_mp_user)
+        @account = Account.where(auth_token: params[:auth_token]).first
+        @wx_mp_user = @account.site.try(:wx_mp_user)
       elsif params[:app_id].present?
         @wx_mp_user = WxMpUser.where(app_id: params[:app_id]).first
-        @supplier = @wx_mp_user.try(:supplier)
+        @account = @wx_mp_user.try(:site).try(:account)
       end
 
       return render json: { errcode: 3, errmsg: "wx_mp_user not found" }, status: 404 unless @wx_mp_user.present?

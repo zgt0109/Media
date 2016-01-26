@@ -17,7 +17,7 @@ module Concerns::ActivityQiniuPicKeys
     ActivityType::ALBUM            => "FiXhM7sRU8Mu9Qf5Vc_OUauArbL9",
     ActivityType::EDUCATIONS       => "FnHKupgPSyWOtO3tgqCH75j0nUue",
     ActivityType::LIFE             => "FpYCG7QI2N5s0L2MJoebLs96pQV2",
-    ActivityType::EC               => "Fh0igUatVyi2TvekIIHaVRNnwJVD",
+    # ActivityType::EC               => "Fh0igUatVyi2TvekIIHaVRNnwJVD",
     ActivityType::CIRCLE           => "Fg7y_-6AMUi3vRFmtULpqE4s8D-w",
     ActivityType::MESSAGE          => "FgGJjMn1S0ew85Z2OnPqd2Z8W8jP",
     ActivityType::HOUSE_BESPEAK    => "FsGbyCS8yjRmbxWMkDduSdKAKsGi",

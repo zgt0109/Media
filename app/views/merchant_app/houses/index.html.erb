@@ -9,7 +9,7 @@
 <% end %>
 
 <%= form_tag merchant_app_houses_url, method: :get do %>
-  <%= hidden_field_tag :role, 'supplier' %>
+  <%= hidden_field_tag :role, 'account' %>
   <%= hidden_field_tag :role_id, @login_user.id %>
   <%= hidden_field_tag :token, @login_user.auth_token %>
   <div class="search-box">
@@ -24,7 +24,7 @@
     <div class="mod-list" ng-repeat="order in demo.orders">
       <dl>
         <dt class="icon-right {{order.dt_class}}">
-          <a href='/merchant_app/houses/{{order.id}}?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>{{order.name}}的预约看房</a>
+          <a href='/merchant_app/houses/{{order.id}}?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>{{order.name}}的预约看房</a>
         </dt>
         <dd>
           <p>手机号: {{order.mobile}}</p>
@@ -37,7 +37,7 @@
 
 <script>
 // function customersController($scope,$http) {
-//     $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[mobile_or_name_cont]=#{params[:mobile_or_name_like]}" %>')
+//     $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[mobile_or_name_cont]=#{params[:mobile_or_name_like]}" %>')
 //     .success(function(response) {
 //         if(response.result == 'success'){
 // 		  console.log(response);
@@ -77,7 +77,7 @@
          if (this.busy) return;
          if (this.is_last_page) return;
          this.busy = true;
-         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[mobile_or_name_cont]=#{params[:mobile_or_name_like]}&page=" %>'+ this.page;
+         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[mobile_or_name_cont]=#{params[:mobile_or_name_like]}&page=" %>'+ this.page;
          $http.get(url).success(function (response) {
              var items = response.data;
              if(items.length == 0){this.is_last_page = true;}

@@ -80,7 +80,6 @@ class Material < ActiveRecord::Base
     self.success = true
   end
 
-
   def menuable
     materialable
   end

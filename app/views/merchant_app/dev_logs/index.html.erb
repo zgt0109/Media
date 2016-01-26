@@ -5,7 +5,7 @@
   <div class="mod-list" ng-repeat="order in demo.orders">
     <dl>
       <dt class="icon-right {{order.is_new == '1' ? 'new' : 'fa-animate'}}">
-        <a href='/merchant_app/dev_logs/{{order.id}}?role=supplier&&role_id=<%= @login_user.id %>&&token=<%= @login_user.auth_token %>'>{{order.title}}<span>{{order.created_at}}</span></a>
+        <a href='/merchant_app/dev_logs/{{order.id}}?role=account&&role_id=<%= @login_user.id %>&&token=<%= @login_user.auth_token %>'>{{order.title}}<span>{{order.created_at}}</span></a>
       </dt>
       <dd>
         <p ng-bind-html="order.content"></p>
@@ -34,7 +34,7 @@ app.factory('Demo', function ($http) {
   Demo.prototype.nextPage = function () {
     if (this.busy) return;
     this.busy = true;
-    var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/dev_logs?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&page=" %>'+ this.page;
+    var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/dev_logs?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&page=" %>'+ this.page;
     $http.get(url).success(function (response) {
       if(response.result == 'success'){
         var items = response.data;

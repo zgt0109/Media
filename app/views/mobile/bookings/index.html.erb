@@ -26,7 +26,7 @@
     <div class="box-bg"></div>
   </div>
 </div>
-<% if @booking_categories.present? && @site.booking_items.count > 0  %>
+<% if @booking_categories.present? && @booking.booking_items.count > 0  %>
    <% @booking_categories.each do |booking_category| %>
         <% @items = booking_category.products.slice(0, 6) %>
         <% next unless @items.present? %>

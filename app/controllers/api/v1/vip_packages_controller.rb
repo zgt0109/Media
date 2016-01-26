@@ -6,9 +6,9 @@ class Api::V1::VipPackagesController < ActionController::Base
 	def get_vip_packages_api
 		wx_mp_user = WxMpUser.where(openid: params[:mp_user_open_id]).last
 		return render json: { error_code: 1, errmsg: "参数不正确，找不到公众账号" } unless wx_mp_user
-		vip_packages = wx_mp_user.supplier.vip_packages.active.latest
+		vip_packages = wx_mp_user.site.vip_packages.active.latest
 		packages = vip_packages.map do |package|
-			hash = package.attributes.slice('id', 'price', 'expiry_num', 'supplier_id')
+			hash = package.attributes.slice('id', 'price', 'expiry_num', 'site_id')
 			hash[:items_name] = package.vip_package_items.pluck(:name).join("+")
 			hash.merge!(old_price: package.old_price, wxmuid: wx_mp_user.id, package_name: package.name)
 		end
@@ -33,7 +33,7 @@ class Api::V1::VipPackagesController < ActionController::Base
 	  wx_mp_user_ids = WxMpUser.where(openid: industry_wx_mp_user_open_ids).pluck(:id)
 	  vip_packages = VipPackage.where(wx_mp_user_id: wx_mp_user_ids).active.latest.page(page).per(per)
 	  packages = vip_packages.map do |package|
-			hash = package.attributes.slice('id', 'price', 'expiry_num', 'supplier_id')
+			hash = package.attributes.slice('id', 'price', 'expiry_num', 'site_id')
 			hash[:items_name] = package.vip_package_items.pluck(:name).join("+")
 			hash.merge!(old_price: package.old_price, open_id: package.wx_mp_user.openid, package_name: package.name)
 		end

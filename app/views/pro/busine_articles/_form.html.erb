@@ -26,7 +26,7 @@
 <div class="">
     <%= form_for @website_article, url: @website_article.new_record? ? busine_articles_url :  busine_article_url(@website_article), validate: true, :html => {id: "website_article_form"} do |f| %>
         <div class="box-form fl">
-          <%= f.hidden_field :supplier_id, value: current_user.id %>
+          <%= f.hidden_field :site_id, value: current_user.id %>
           <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
           <%= f.hidden_field :website_id, value: @website.id %>
 

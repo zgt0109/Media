@@ -39,7 +39,7 @@ window.vcardData = {
             'tplId': 'tpl03',
             'cardLevelColor': '#eb5c87',
             'cardNumberColor': '#eb5c87',
-            'cardBg': '/assets/images/vcard/vcard_tpl_bg.jpg'
+            'cardBg': '/assets/vcard/vcard_tpl_bg.jpg'
         },
         {
             'level': '钻石卡',
@@ -47,7 +47,7 @@ window.vcardData = {
             'tplId': 'tpl04',
             'cardLevelColor': '#eb5c87',
             'cardNumberColor': '#eb5c87',
-            'cardBg': '/assets/images/vcard/vcard_tpl_bg.jpg'
+            'cardBg': '/assets/vcard/vcard_tpl_bg.jpg'
         },
         {
             'level': '钻石卡1',
@@ -55,7 +55,7 @@ window.vcardData = {
             'tplId': 'tpl05',
             'cardLevelColor': '#eb5c87',
             'cardNumberColor': '#eb5c87',
-            'cardBg': '/assets/images/vcard/vcard_tpl_bg.jpg'
+            'cardBg': '/assets/vcard/vcard_tpl_bg.jpg'
         },
         {
             'level': '钻石卡2',
@@ -63,7 +63,7 @@ window.vcardData = {
             'tplId': 'tpl06',
             'cardLevelColor': '#eb5c87',
             'cardNumberColor': '#eb5c87',
-            'cardBg': '/assets/images/vcard/vcard_tpl_bg.jpg'
+            'cardBg': '/assets/vcard/vcard_tpl_bg.jpg'
         }
     ]
 }

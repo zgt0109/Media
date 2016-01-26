@@ -47,7 +47,7 @@ class PaymentSync < ActiveRecord::Base
   def enqueue_to_mq
     $rabbitmq.start
     rabbitmq_channel = $rabbitmq.create_channel
-    rabbitmq_queue = rabbitmq_channel.queue("winwemedia_payment_sync")
+    rabbitmq_queue = rabbitmq_channel.queue("payment_sync")
     rabbitmq_queue.publish({payment_sync_id: self.id}.to_yaml)
     $rabbitmq.close
   end
@@ -56,7 +56,7 @@ class PaymentSync < ActiveRecord::Base
     def batch_enqueue_to_mq(payment_syncs)
       $rabbitmq_lazy.call {|conn|
         rabbitmq_channel = conn.create_channel
-        rabbitmq_queue = rabbitmq_channel.queue("winwemedia_payment_sync")
+        rabbitmq_queue = rabbitmq_channel.queue("payment_sync")
         payment_syncs.each {|payment_sync|  rabbitmq_queue.publish({payment_sync_id: payment_sync.id}.to_yaml)}
       }
     end

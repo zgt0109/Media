@@ -2,7 +2,7 @@ class WebsiteInitWorker
   include Sidekiq::Worker
   sidekiq_options :queue => 'standard', :retry => false, :backtrace => true
 
-  def perform(to_supplier_id)
+  def perform(to_site_id)
     logger.info "**********start"
     now = Time.now
 
@@ -16,7 +16,7 @@ class WebsiteInitWorker
       from_user = Account.where(id: from_account_id).first || Account.first
       return puts "from user not exists" unless from_user
       
-      to_user = Account.where(id: to_supplier_id).first
+      to_user = Account.where(id: to_site_id).first
       return puts "to user not exists" unless to_user
 
       return puts "to user have website and website_menus" if to_user.try(:website).try(:website_menus).to_a.count > 0

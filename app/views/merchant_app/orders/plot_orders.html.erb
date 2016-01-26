@@ -13,14 +13,14 @@
     <div class="mod-bg"></div>
     <div class="mod-body">
       <ul>
-        <li ng-repeat="category in demo.categories" class="{{category.id == <%= params[:wx_plot_category_id_eq].to_i %> ? 'active' : ''}}"><a href="/merchant_app/orders/plot_orders?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>&wx_plot_category_id_eq={{category.id}}">{{category.name}}</a></li>
+        <li ng-repeat="category in demo.categories" class="{{category.id == <%= params[:wx_plot_category_id_eq].to_i %> ? 'active' : ''}}"><a href="/merchant_app/orders/plot_orders?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>&phone_or_nickname_like=<%= params[:phone_or_nickname_like]%>&wx_plot_category_id_eq={{category.id}}">{{category.name}}</a></li>
       </ul>
     </div>
   </div>
 <% end %>
 
 <%= form_tag plot_orders_merchant_app_orders_url, method: :get do %>
-  <%= hidden_field_tag :role, 'supplier' %>
+  <%= hidden_field_tag :role, 'account' %>
   <%= hidden_field_tag :role_id, @login_user.id %>
   <%= hidden_field_tag :token, @login_user.auth_token %>
   <div class="search-box">
@@ -35,7 +35,7 @@
   <div class="mod-list" ng-repeat="order in demo.orders">
     <dl>
       <dt class="icon-right {{order.dt_class}}">
-        <a href='/merchant_app/orders/{{order.id}}/plot_order_detail?role=supplier&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>创建时间：{{order.created_at}}</a>
+        <a href='/merchant_app/orders/{{order.id}}/plot_order_detail?role=account&role_id=<%= @login_user.id %>&token=<%= @login_user.auth_token %>'>创建时间：{{order.created_at}}</a>
       </dt>
       <dd>
         <p ng-show="order.category == '1'">报修类别: {{order.wx_plot_category_name}}</p>
@@ -74,7 +74,7 @@
      Demo.prototype.nextPage = function () {
          if (this.busy) return;
          this.busy = true;
-         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/plots?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[phone_or_nickname_cont]=#{params[:phone_or_nickname_like]}&search[wx_plot_category_id_eq]=#{params[:wx_plot_category_id_eq]}&page=" %>'+ this.page;
+         var url = '<%= raw "#{MERCHANT_APP_HOST}/v1/orders/plots?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&search[phone_or_nickname_cont]=#{params[:phone_or_nickname_like]}&search[wx_plot_category_id_eq]=#{params[:wx_plot_category_id_eq]}&page=" %>'+ this.page;
          $http.get(url).success(function (response) {
 	   if(response.result == 'success'){
 	     this.categories = response.data['categories'];

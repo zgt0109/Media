@@ -23,21 +23,19 @@
       <span><%= @booking_order.status_name %></span>
     </p>
 
-    <% if @booking_order.is_flow_site %>
-        <p>
-          <span>
-              <b>地址：</b>
-          </span>
-          <span><%= @booking_order.address %></span>
-        </p>
-    <% else %>
-        <p>
-          <span>
-              <b>预定时间：</b>
-          </span>
-          <span><%= @booking_order.booking_at %></span>
-        </p>
-    <% end %>
+    <p>
+      <span>
+          <b>地址：</b>
+      </span>
+      <span><%= @booking_order.address %></span>
+    </p>
+    <p>
+      <span>
+          <b>预定时间：</b>
+      </span>
+      <span><%= @booking_order.booking_at %></span>
+    </p>
+
     <p>
       <span>
           <b>下单时间：</b>
@@ -45,20 +43,18 @@
       <span><%= @booking_order.created_at %></span>
     </p>
 
-    <% unless @booking_order.is_flow_site %>
-        <p>
-          <span>
-              <b>数量：</b>
-          </span>
-          <span><%= @booking_order.qty %></span>
-        </p>
-        <p>
-          <span>
-              <b>备注：</b>
-          </span>
-          <span><%= @booking_order.description %></span>
-        </p>
-    <% end %>
+    <p>
+      <span>
+          <b>数量：</b>
+      </span>
+      <span><%= @booking_order.qty %></span>
+    </p>
+    <p>
+      <span>
+          <b>备注：</b>
+      </span>
+      <span><%= @booking_order.description %></span>
+    </p>
   </div>
   <div class="clearfix"></div>
   <div class="modal-footer">

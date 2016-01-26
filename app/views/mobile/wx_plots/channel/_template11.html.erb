@@ -10,7 +10,7 @@
               <% if count % 2 == 1 && index == 0 %>
                   <img src="/assets/mobile/vweisiteV01/42/img-null.png"/>
               <% elsif child.pic_url.present? %>
-                  <%= image_tag child.pic %>
+                  <%= image_tag child.pic_url %>
               <% else %>
                   <i class="<%= child.font_icon %>"></i>
               <% end %>

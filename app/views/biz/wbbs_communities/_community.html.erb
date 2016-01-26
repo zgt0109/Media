@@ -5,7 +5,7 @@
       <%= render 'partials/home' %>
       <% if params[:type] == 'wx_plot' %>
           <li><%= link_to '微小区', wx_plots_path %></li>
-          <li><%= link_to current_user.wx_plot.try(:owner), wx_plot_owners_path %></li>
+          <li><%= link_to current_site.wx_plot.try(:owner), wx_plot_owners_path %></li>
           <li><%= link_to '微社区设置', action_name == 'new' ? new_wbbs_community_path(type: params[:type]) :  edit_wbbs_community_path(@wbbs_community, type: params[:type]) %></li>
       <% else %>
           <li><%= link_to '微社区', wbbs_communities_path(type: params[:type]) %></li>

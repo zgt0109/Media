@@ -4,7 +4,7 @@
   <div class="main">
     <div class="header">
       <div class="topline">
-        <%= link_to app_shops_url(anchor: "mp.weixin.qq.com") do %><img src="/assets/shop_table/bg_ico_back.png"><% end %>
+        <%= link_to app_shops_url(anchor: "mp.weixin.qq.com") do %><img src="/assets/shop/bg_ico_back.png"><% end %>
         我要预订座位
       </div>
     </div>
@@ -23,7 +23,7 @@
             <%= f.text_field :mobile, value: @user.try(:mobile), class: 'text', placeholder: "请输入您的手机号码" %>
             <input name="reset" type="button" class="reset" value="" />
           </p>
-          <p class="sub"><input type="image" src="/assets/shop_table/bg_but_ding.png" class="form-submit" /></p>
+          <p class="sub"><input type="image" src="/assets/shop/bg_but_table.png" class="form-submit" /></p>
         <% end %>
       </div>
     </div>

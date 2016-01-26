@@ -887,11 +887,6 @@ class Activity < ActiveRecord::Base
       activity_notice = ActivityNotice.ready_or_active_notice(self, [WARM_UP, HAS_ENDED])
     elsif wheel? && setted?
       activity_notice = ActivityNotice.ready_or_active_notice(self)
-    elsif consume?
-      activity_notice = activity_notices.first
-      wx_user = WxUser.where(openid: options[:openid]).first
-      activity_consume = activity_consumes.where(site_id: site_id, user_id: wx_user.user_id).first
-      option[:code] = activity_consume.try(:code)
     end
 
     _default_params = { subdomain: mobile_subdomain, site_id: site_id, aid: id, openid: options[:openid] }
@@ -900,7 +895,6 @@ class Activity < ActiveRecord::Base
       when website?            then mobile_root_url(_default_params)
       when vip?                then app_vips_url(_default_params)
       when coupon?             then mobile_coupons_url(_default_params)
-      when consume?            then app_consume_url(_default_params.merge(anid: activity_notice.id, code: option[:code]))
       when gua?                then app_gua_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
       when wheel?              then app_wheel_url(_default_params.merge(id: id, anid: activity_notice.id, source: 'notice'))
       when fight?              then app_fight_index_url(_default_params.merge(anid: activity_notice.id, m: 'index'))
@@ -970,7 +964,7 @@ class Activity < ActiveRecord::Base
       when donation?           then mobile_donations_url(stopped?.merge(wid: activityable_id))
       when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
-      when wshop? || ec?       then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_openid: options[:openid])
+      when wshop?              then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_openid: options[:openid])
       # when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
       when hotel?              then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}&openid=#{options[:openid]}"
       when wifi?               then "http://m.chaowifi.com/auth/wechat.do?guid=#{options[:openid]}"

@@ -17,9 +17,9 @@
               <% if child.pic_url.present? or child.font_icon.present? %>
                   <% if child.pic_url %>
                       <% if index == 1 || index == 2%>
-                          <i><%= image_tag child.pic %></i>
+                          <i><%= image_tag child.pic_url %></i>
                       <% else %>
-                          <%= image_tag child.pic %>
+                          <%= image_tag child.pic_url %>
                       <% end %>
                   <% else %>
                       <i class="<%= child.font_icon %>"></i>

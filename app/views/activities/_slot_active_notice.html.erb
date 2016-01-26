@@ -38,7 +38,7 @@
 
     <div class="box-form form-row fl">
       <div class="p">
-        <span>活动开始微信消息摘要 <span class="fgray">（不能超过255个字<%= '. "{}"中的内容为动态内容，去掉后将不显示.' if @activity.activity_type.consume? %>）</span></span>
+        <span>活动开始微信消息摘要 <span class="fgray">（不能超过255个字）</span></span>
         <%= aan.text_area :summary, maxlength: 255, rows: 5, class: "activity_notice_summary", style: 'height: 80px;' %>
       </div>
   

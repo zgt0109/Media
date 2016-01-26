@@ -138,8 +138,7 @@ module ApplicationHelper
     if brand_id.blank?
       options_for_select([['', '']])
     else
-      # car_brands = (@supplier||current_user).car_brands.normal
-      car_brands = [(@site||current_user).car_brand]
+      car_brands = [(@site||current_site).car_brand]
       options_for_select(car_brands.collect{ |b| [b.name, b.id] }, brand_id.to_i)
     end
   end
@@ -160,7 +159,7 @@ module ApplicationHelper
     if brand_id.blank?
       options_for_select([['', '']])
     else
-      car_catenas = (@site||current_user).car_brand.car_catenas.normal
+      car_catenas = (@site||current_site).car_brand.car_catenas.normal
       options_for_select(car_catenas.pluck(:name, :id), catena_id.to_i)
     end
   end
@@ -254,15 +253,15 @@ module ApplicationHelper
     html.html_safe
   end
 
-  def supplier_categories_for_js
-    supplier_categories = ''
+  def account_categories_for_js
+    account_categories = ''
 
     AccountCategory.root.includes(:children).each do |category|
       children = category.children.collect {|child| "['#{child.name}', #{child.id.to_i}]"}
-      supplier_categories << "#{category.id.to_i}: [#{children.join(', ')}],"
+      account_categories << "#{category.id.to_i}: [#{children.join(', ')}],"
     end
 
-    html = content_tag(:script, "var supplier_categories = { #{supplier_categories.sub!(/,$/, "")} };")
+    html = content_tag(:script, "var account_categories = { #{account_categories.sub!(/,$/, "")} };")
     raw html.html_safe.gsub!(/&#x27;/, "'")
   end
 
@@ -301,7 +300,7 @@ module ApplicationHelper
 
   def car_brands_for_js(options = {})
     car_brands = ''
-    [(@site||current_user).car_brand].each do |brand|
+    [(@site||current_site).car_brand].each do |brand|
       car_catenas = brand.car_catenas.normal.collect {|catena| "['#{catena.name}', #{catena.id.to_i}]"}
       car_catenas.unshift("['','']") if "mobile_car_type".eql?(options[:source])
       car_brands << "#{brand.id.to_i}: [#{car_catenas.join(', ')}],"
@@ -314,7 +313,7 @@ module ApplicationHelper
   def bespeak_car_brands_for_js
     car_brands = ''
 
-    [(@site||current_user).car_brand].each do |brand|
+    [(@site||current_site).car_brand].each do |brand|
       car_types = brand.car_types.normal.collect {|type| "['#{type.car_catena.try(:name)} - #{type.name}', #{type.id.to_i}]"}
       car_brands << "#{brand.id.to_i}: [#{car_types.join(', ')}],"
     end
@@ -617,7 +616,7 @@ module ApplicationHelper
       "会员卡套餐"   => "http://#{Settings.mhostname}/app/vips/vip_packages?site_id=#{current_site.id}",
       "会员消费记录"  => "http://#{Settings.mhostname}/app/vips/consumes?site_id=#{current_site.id}",
       "会员积分记录"  => "http://#{Settings.mhostname}/app/vips/points?type=out&site_id=#{current_site.id}",
-      "微酒店订单管理" => "#{HOTEL_HOST}/wehotel-all/#{current_user.id}/getOrderList"
+      "微酒店订单管理" => "#{HOTEL_HOST}/wehotel-all/#{current_site.id}/getOrderList"
     }
   end
 

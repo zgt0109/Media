@@ -18,7 +18,7 @@
                   <div class="list-img">
                     <b>
                       <% if child.pic_url.present? %>
-                          <%= image_tag child.pic %>
+                          <%= image_tag child.pic_url %>
                       <% else %>
                           <i class="<%= child.font_icon %>"></i>
                       <% end %>

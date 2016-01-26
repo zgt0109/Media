@@ -6,7 +6,7 @@ class TenpayController < ApplicationController
   def callback
     logger.info "----------- call back ====== #{params}------------------"
     @payment = Payment.where(:out_trade_no => params[:out_trade_no]).first
-    @tenpay  = @payment.supplier.payment_settings.tenpay.first
+    @tenpay  = @payment.site.payment_settings.tenpay.first
     # notify may reach earlier than callback
     if JaslTenpay::Sign.verify?(params.except(*request.path_parameters.keys), @tenpay.partner_id, @tenpay.partner_key)
       params[:status] = "1"
@@ -44,7 +44,7 @@ class TenpayController < ApplicationController
   def notify
     logger.info "----------- notify back #{params}------------------"
     payment = Payment.where(:out_trade_no => params[:out_trade_no]).first
-    tenpay  = payment.supplier.payment_settings.tenpay.first
+    tenpay  = payment.site.payment_settings.tenpay.first
     if JaslTenpay::Notify.verify?(params.except(*request.path_parameters.keys), tenpay.partner_id, tenpay.partner_key)
       return render :text => 'success' if payment.status == Payment::SUCCESS
 

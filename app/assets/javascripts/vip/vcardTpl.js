@@ -138,7 +138,7 @@ window.vcardTplHtml = '<div class="vcard-item">\
                             <div class="vcard-item-cardwp">\
                                 <div class="vcard-card vcard-item-card" style="background-image: url({{cardBg}});">\
                                     <div class="vcard-elem vcard-level">会员卡</div>\
-                                    <div class="vcard-elem vcard-logo"><img src="/assets/images/vcard/vcard_tpl_logo.png" alt="" /></div>\
+                                    <div class="vcard-elem vcard-logo"><img src="/assets/vcard/vcard_tpl_logo.png" alt="" /></div>\
                                     <div class="vcard-elem vcard-number">No. 2015236541</div>\
                                 </div>\
                             </div>\

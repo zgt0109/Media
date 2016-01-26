@@ -1,5 +1,4 @@
 class Pro::BookingItemsController < Pro::BookingBaseController
-  before_filter :set_booking
   before_filter :set_booking_item, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -9,15 +8,14 @@ class Pro::BookingItemsController < Pro::BookingBaseController
   end
 
   def new
-    @booking_item = current_site.booking_items.new
+    @booking_item = @booking.booking_items.new
     @booking_item_picture = @booking_item.booking_item_pictures.new
     @booking_categories_selects = @booking.multilevel_menu params
     @booking_categories_selects = [[1, []]] unless @booking_categories_selects.present?
   end
 
-
   def create
-    @booking_item = current_site.booking_items.new(params[:booking_item])
+    @booking_item = @booking.booking_items.new(params[:booking_item])
     if @booking_item.save
       redirect_to booking_items_path, notice: '保存成功'
     else
@@ -32,7 +30,6 @@ class Pro::BookingItemsController < Pro::BookingBaseController
     @booking_categories_selects = @booking_item.multilevel_menu params
     @booking_categories_selects = [[1, []]] unless @booking_categories_selects.present?
   end
-
 
   def update
     if @booking_item.update_attributes(params[:booking_item])
@@ -58,11 +55,6 @@ class Pro::BookingItemsController < Pro::BookingBaseController
   end
 
   private
-
-  def set_booking
-    @booking = current_site.booking
-    @booking_categories = current_site.booking_categories
-  end
 
   def set_booking_item
     @booking_item = BookingItem.where(id: params[:id]).first

@@ -27,7 +27,7 @@
             <!-- <form class="form width-800" role="form"> -->
             <%= form_for @donation, validate: true, :html =>  { class: 'form width-800' } do |f| %>
 
-              <%= f.hidden_field :supplier_id, value: current_user.id %>
+              <%= f.hidden_field :site_id, value: current_user.id %>
 
               <div class="form-group">
                 <label>项目名称<span class="required-star">*</span></label>

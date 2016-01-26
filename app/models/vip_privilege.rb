@@ -195,11 +195,7 @@ class VipPrivilege < ActiveRecord::Base
   def discount_unlimited?( vip_user )
     return true if limit_count == -1
 
-    if consume?
-      limit_count > vip_user_transactions.where(vip_user_id: vip_user.id).count
-    else
-      limit_count > vip_privilege_transactions.where(vip_user_id: vip_user.id).count
-    end
+    limit_count > vip_privilege_transactions.where(vip_user_id: vip_user.id).count
   end
 
   def validate_vip_grade

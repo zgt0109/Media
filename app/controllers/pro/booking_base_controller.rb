@@ -1,7 +1,8 @@
 class Pro::BookingBaseController < ApplicationController
-  before_filter :require_wx_mp_user,  :require_industry, :require_booking
+  before_filter :require_industry, :require_booking
 
   private
+
   def require_booking
     @booking = current_site.booking
     redirect_to bookings_path, notice: "请先设置微服务" unless @booking

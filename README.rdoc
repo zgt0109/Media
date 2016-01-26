@@ -7,11 +7,6 @@
   后台应用部署到： web1.winwemedia.com 和 web2.winwemedia.com 服务器的 /opt/apps/winwemedia/current 目录；
     部署命令： `cap production deploy`
 
-  手机端的应用部署到： m1.winwemedia.com, m2.winwemedia.com, m3.winwemedia.com, m4.winwemedia.com 服务器的 /opt/apps/winwemedia_m/current 目录下；
-    部署命令： `cap mobile deploy`
-
-  微信api接口的应用部署到： push1.winwemedia.com 和 push2.winwemedia.com 服务器的 /opt/apps/winwemedia_wx/current 目录。
-    部署命令： `cap weixin deploy`
   其它环境的部署请参照 config/deploy.rb 文件；
 
   注意： 如果部署到staging环境或生产环境， 并且 assets 文件有变动， 请先执行 cap {{stage}} precompile
@@ -23,16 +18,9 @@ faye部署：
   应用程序部署到 faye.service.winwemedia.com， 进入 /opt/apps/faye 目录，运行 `rackup faye.ru -E production -p 9393 -D`
 
 
-服务器配置：
-  腾讯云服务器挂载nfs共享目录： mount -t nfs 10.221.20.86:/opt/shared /opt/shared/
-
 短信报警：staging.winwemedia.com这台服务器每天10点07分会执行/opt/apps/scripts/sms.rb文件并检测系统短信是否小于2万条，如果是则会发送报警短信。
 
 
 注意事项：
 当生产服务器的IP地址发生变更时，需要在微信开放平台 https://open.weixin.qq.com 修改白名单IP地址列表：
 203.195.131.131;203.195.143.22;
-
-余额支付controller: app/controllers/api/v1/vips_controller.rb，文档： http://redmine.winwemedia.com/documents/2
-门店controller: app/controllers/biz/shops_controller.rb
-门店权限： app/models/concerns/shop_branch_permission.rb

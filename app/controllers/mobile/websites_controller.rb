@@ -24,8 +24,7 @@ class Mobile::WebsitesController < ActionController::Base
       @menu_template_id = 0
     end
     if @site && session[:user_id].to_i > 0
-      wx_mp_user = WxMpUser.where(site_id: @site.id).first
-      @current_user_is_fans = wx_mp_user && wx_mp_user.has_fans?(session[:user_id])
+      @current_user_is_fans = @wx_mp_user && @wx_mp_user.has_fans?(session[:user_id])
     end
 
     @home_template = @website_setting.home_template
@@ -105,33 +104,21 @@ class Mobile::WebsitesController < ActionController::Base
   end
 
   def unknown_identity
-    @wx_mp_user = WxMpUser.where(site_id: params[:site_id].to_i).first
-    @activity = Activity.where(id: params[:aid].to_i).first
+    @wx_mp_user = @site.wx_mp_user
+    @activity = Activity.where(id: session[:activity_id].to_i).first
     render layout: false
   end
 
   private
 
   def find_website
-    session[:site_id] = [params[:site_id], params[:ext_name]].compact.join(".") if params[:site_id]
-
-    # 微官网旧地址访问判断
-    if session[:site_id] == 'app' and params[:id]
-      @website = Website.micro_site.where(id: params[:id].to_i).first
-    elsif session[:site_id].to_s =~ /^\d+$/
-      @website = Website.micro_site.where(site_id: session[:site_id]).first
-    else
-      @website = Website.micro_site.where(domain: session[:site_id]).first
-    end
+    @website = @site.website
 
     return render text: '微官网不存在' unless @website
     return render text: '商家正在升级网站内容，暂停访问' unless @website.active?
-
-    @site = @website.site
     return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
-    @wx_mp_user = @site.try(:wx_mp_user)
-
+    @wx_mp_user = @site.wx_mp_user
     @account_footer = AccountFooter.default_footer
 
     @shortcut_menus =  @website.shortcut_menus.order(:sort)

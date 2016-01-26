@@ -236,20 +236,6 @@ class App::VipsController < App::BaseController
     @vip_grades  = @vip_card.vip_grades.normal.sorted
   end
 
-  def old_coupons
-    if request.get?
-      @status_options    = [['全部',0],['未使用',1],['已使用',2]]
-      @status            = params[:status].to_i
-      @activity_consumes = @vip_user.user.activity_consumes.includes(:activity)
-      @activity_consumes = @activity_consumes.where('activities.activity_type_id = ? ', ActivityType::CONSUME).order('activity_consumes.id desc, activities.end_at desc')
-      @activity_consumes = @activity_consumes.where(status: @status) if [1,2].include?(status)
-    else
-      @activity_consume = @vip_user.user.activity_consumes.where(id: params[:id], code: params[:sn]).first
-      status            = @activity_consume.use! ? 1 : 0
-      render json: { ajax_msg: { status: status } }
-    end
-  end
-
   def privileges
     @vip_privileges   = @vip_card.vip_privileges.active.order('created_at DESC')
   end

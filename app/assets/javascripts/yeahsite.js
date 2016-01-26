@@ -1,9 +1,0 @@
-//= require v5/modernizr.custom.58376
-//= require v5/lib_jq/jquery-1.11.2.min
-//= require v5/lib_jq/jquery.mousewheel.min
-//= require v5/lib_jq/jquery.easie
-//= require v5/lib/Zutils
-//= require v5/global
-//= require v5/scrollPage
-//= require v5/yeahsite-new
-//= require v5/tradition

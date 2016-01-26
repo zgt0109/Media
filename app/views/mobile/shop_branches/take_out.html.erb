@@ -4,7 +4,7 @@
   <div class="main">
   <div class="header">
     <div class="topline">
-      <%= link_to take_out_app_shops_url(anchor: "mp.weixin.qq.com") do %><img src="/assets/shop_order/bg_ico_back.png"><% end %>
+      <%= link_to take_out_app_shops_url(anchor: "mp.weixin.qq.com") do %><img src="/assets/shop/bg_ico_back.png"><% end %>
       <%= @shop_branch.name %>
     </div>
   </div>
@@ -30,7 +30,7 @@
           <%= f.text_field :mobile, value: @user.try(:mobile), class: 'text', placeholder: "请输入您的手机号码" %>
           <input name="reset" type="button" class="reset reset_mobile" value="" />
         </p>
-        <p class="sub"><input class="form-submit" type="image" src="/assets/shop_takeout/bg_but_take_out.png" /></p>
+        <p class="sub"><input class="form-submit" type="image" src="/assets/shop/bg_but_take_out.png" /></p>
       <% end %>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <div class="box-template fr" id="qcode">
   <span>扫描二维码预览</span>
   <div class="box-code" style="display: none;">
-    <img src="/assets/gm/loading.gif" alt="预览地址二维码" />
+    <img src="/assets/loading.gif" alt="预览地址二维码" />
   </div>
 </div>
 
@@ -16,7 +16,7 @@
         });
         $("#qcode").on("mouseleave","span",function(){
             $('#qcode .box-code').hide();
-            $('#qcode .box-code img').attr("src", "/assets/gm/loading.gif");
+            $('#qcode .box-code img').attr("src", "/assets/loading.gif");
         });
     });
 </script>

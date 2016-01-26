@@ -121,7 +121,7 @@ class PiwikSite < ActiveRecord::Base
     end
 
     def domain
-      MOBILE_DOMAIN + '/'
+      M_HOST + '/'
     end
 
   end

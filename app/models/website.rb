@@ -73,7 +73,7 @@ class Website < ActiveRecord::Base
   end
 
   def upload_qrcode_to_qiniu
-    url = "#{MOBILE_DOMAIN}/#{custom_domain}?id=#{id}&aid=#{activity_id}&anchor=mp.weixin.qq.com"
+    url = "#{M_HOST}/#{custom_domain}?id=#{id}&aid=#{activity_id}&anchor=mp.weixin.qq.com"
     rqrcode = nil
     1.upto(12) do |size|
       break rqrcode = RQRCode::QRCode.new(url, :size => size, :level => :h ).to_img.resize(258, 258) rescue next
@@ -154,7 +154,7 @@ class Website < ActiveRecord::Base
 
   def rqrcode(url = nil)
     #require 'RMagick'
-    url = "#{MOBILE_DOMAIN}/#{custom_domain}" if url.blank?
+    url = "#{M_HOST}/#{custom_domain}" if url.blank?
     rqrcode = nil
     1.upto(15) do |size|
       break rqrcode = RQRCode::QRCode.new(url, :size => size, :level => :h ).to_img.resize(258, 258) rescue next
@@ -344,14 +344,6 @@ class Website < ActiveRecord::Base
 
   def logo_url
     qiniu_image_url(logo_key)
-  end
-
-  def default_preview_pic_url
-    "/assets/bqq/website_preview_pic.jpg"
-  end
-
-  def display_preview_pic_url
-    [ WEBSITE_DOMAIN, (preview_pic.present? ? "/uploads/preview_pic/website_menu/#{id}/#{preview_pic}" : default_preview_pic_url) ].join
   end
 
 end

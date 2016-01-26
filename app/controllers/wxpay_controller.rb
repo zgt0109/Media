@@ -1,3 +1,8 @@
+# render text: 'success'
+# 微信后台通过 notify_url 通知商户，商户做业务处理后，需要以字符串的形式反馈处理结果，内容如下：
+# success 处理成功，微信系统收到此结果后丌再迚行后续通知
+# fail 戒其它字符 处理丌成功，微信收到此结果戒者没有收到仸何结果，系统通过补单机制再次通知
+
 class WxpayController < ApplicationController
   skip_before_filter *ADMIN_FILTERS
   before_filter :find_payment, :only => [:success, :fail]
@@ -72,21 +77,6 @@ class WxpayController < ApplicationController
     render text: 'fail'
   end
 
-  def notify_hongbao
-    WinwemediaLog::Weixinpay.add("notfiy params: #{params}")
-    #params =  {"xml"=>{"OpenId"=>"obsapt8YtkO2Y-qe39X0-ySxm4lA", "AppId"=>"wx7224575773890d83", "IsSubscribe"=>"1", "TimeStamp"=>"1394679393", "NonceStr"=>"pyiUUXcMey4B3tZZ", "AppSignature"=>"6516f4034a697fd85fbfe58a4f105cf984e5378a", "SignMethod"=>"sha1"}, "bank_billno"=>"201403137066024", "bank_type"=>"0", "discount"=>"0", "fee_type"=>"1", "input_charset"=>"GBK", "notify_id"=>"2Y9Ozj19yUXpb5Om3PTx23NU_ctGVMla8GC_B6MJtSMqdkHBL0r7US__cVdOWkpW1eq7AYMcamEVFBkte6qhyRsTAcMA8mOt", "out_trade_no"=>"20140325163052947525", "partner"=>"1218314601", "product_fee"=>"1", "sign_type"=>"MD5", "time_end"=>"20140313105617", "total_fee"=>"1", "trade_mode"=>"1", "trade_state"=>"0", "transaction_id"=>"1218314601201403138306604513", "transport_fee"=>"0", "sign"=>"078CB574F7382E019D18621F693651A6"}
-    kickback = Kickback.where(:order_no => params[:out_trade_no]).first
-    if kickback.payed?
-      render :text => 'success'
-    else 
-      kickback.update_attributes(status: 2)
-      render text: 'success'
-    end
-  rescue => e
-    WinwemediaLog::Weixinpay.add("weixin hongbao pay error -> #{e.backtrace}")
-    render text: 'fail'
-  end
-
   def index
     @account = Account.where(id: params[:account_id]).first
     return render text: "请传入商户ID" unless @account
@@ -101,13 +91,13 @@ class WxpayController < ApplicationController
       payment_type_id: 10001,
       account_id: @account.id,
       customer_id: @order.user_id,
-      customer_type: 'WxUser',
+      customer_type: 'User',
       paymentable_id: @order.id,
       paymentable_type: @order.class.name,
       out_trade_no: @order.order_no,
       amount: @order.total_amount,
-      subject: "微枚迪内部微信支付测试",
-      source: 'winwemedia_test',
+      subject: "微信支付测试",
+      source: 'test',
       pay_params: params.to_json
     })
   end
@@ -122,46 +112,6 @@ class WxpayController < ApplicationController
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     return render json: {errcode: 005, errmsg: "can't find payment"} unless @payment
     return render json: {errcode: 003, errmsg: "the order has been paid"} if @payment.success?
-  end
-
-  #用于永安的红包支付
-  def hongbao_pay
-    @account = Account.find(params[:account_id])
-    @kickback = Kickback.find(params[:id])
-    @wxpay = @account.payment_settings.wxpay.first
-    render :layout =>  false
-  rescue
-    render :text => "请求支付失败"
-  end
-
-  def yaic_pay
-    @account = Account.where(id: params[:account_id]).first
-    return redirect_to wxpay_yaic_faild_path,notice: "无效的商户" unless @account
-    @order = YonganOrder.find_by_order_no(params[:order_id])
-    return redirect_to wxpay_yaic_faild_path,notice: "无效的订单" unless @order
-    return redirect_to wxpay_yaic_faild_path,notice: @order.validate_policy if @order.amount == 2 && @order.validate_policy.present?
-    @payment = Payment.where(out_trade_no: @order.order_no).first
-    @wxpay = @account.payment_settings.wxpay.first
-    return redirect_to wxpay_yaic_faild_path,notice: "该商户没有开通微信支付" unless @wxpay
-
-    if @payment.blank?
-      @payment = Payment.setup({
-        payment_type: 10001,
-        account_id: @account.id,
-        customer_id: @order.wx_user_id,
-        customer_type: 'WxUser',
-        paymentable_id: @order.id,
-        paymentable_type: @order.class.name,
-        out_trade_no: @order.order_no,
-        amount: @order.amount,
-        subject: YonganPolicyOrder::PRODUCT_NAME,
-        source: 'winwemedia_yaic',
-        pay_params: params.to_json
-      })
-    end
-    render :layout =>  false
-  rescue
-    render :text => "请求支付失败"
   end
 
   def payfeedback
@@ -207,67 +157,10 @@ class WxpayController < ApplicationController
     redirect_to wxpay_success_url(payment_id: @payment.id) if @payment.success?
   end
 
-  def yaic_faild
-  end
-
-  def ali_pay
-    faild_url = ali_faild_wxpay_index_path
-    @account = Account.where(id: params[:account_id]).first
-    return redirect_to faild_url,notice: "无效的商户" unless @account
-    @order = YonganAliOrder.find_by_order_no(params[:order_no])
-    return redirect_to faild_url,notice: "无效的订单" unless @order
-    @policy = @order.yongan_ali_policy
-    return redirect_to faild_url,notice: "无效的订单" if @policy.present? && @policy.actual_amount >= 200
-    #return redirect_to faild_url,notice: @order.validate_policy if @order.amount == 2 && @order.validate_policy.present?
-    @payment = Payment.where(out_trade_no: @order.order_no).first
-    @wxpay = @account.payment_settings.wxpay.first
-    return redirect_to faild_url,notice: "该商户没有开通微信支付" unless @wxpay
-
-    if @payment.blank?
-      @payment = Payment.setup({
-        payment_type: 10001,
-        account_id: @account.id,
-        customer_id: @order.user_id,
-        customer_type: 'WxUser',
-        paymentable_id: @order.id,
-        paymentable_type: @order.class.name,
-        out_trade_no: @order.order_no,
-        amount: @order.amount,
-        subject: YonganAliPolicy::PRODUCT_NAME,
-        notify_url: @order.send(:ali_notify_url, 'wxpay/ali_notify'),
-        source: 'winwemedia_ali',
-        pay_params: params.to_json
-      })
-    end
-    render :layout =>  false
-  end
-
-  def ali_faild
-  end
-
   private
 
   def find_payment
     @payment = Payment.where(id: params[:payment_id]).first
     render :text => "支付单不存在" unless @payment
   end
-
-  def yaic_payment payment
-    order = payment.paymentable
-    policy = order.yongan_policy_order
-    policy.orders_count = policy.orders_count.to_i + 1
-    policy.amount += order.amount
-    policy.status = YonganPolicyOrder::PAID
-    policy.save!
-    url = "#{YonganPolicyOrder::CALLBACK_URL}/#{policy.account_id}/yongan/policies/#{policy.id}?order_id=#{order.id}"
-    content = "保险金额变更通知\n您的我要做雷锋的保单金额有变化\n产品名称：#{YonganPolicyOrder::PRODUCT_NAME}\n订单号：#{policy.order_no}\n最新保险金额：#{policy.policy_money}，点击<a href='#{url}'>查看详情</a>"
-    wx_user = WxUser.where(id: policy.wx_user_id).first_or_create
-    policy.send_payment_msg wx_user, content
-    order.paid!
-  end
 end
-
-# render text: 'success'
-# 微信后台通过 notify_url 通知商户，商户做业务处理后，需要以字符串的形式反馈处理结果，内容如下：
-# success 处理成功，微信系统收到此结果后丌再迚行后续通知
-# fail 戒其它字符 处理丌成功，微信收到此结果戒者没有收到仸何结果，系统通过补单机制再次通知

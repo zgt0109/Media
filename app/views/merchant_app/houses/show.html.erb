@@ -2,7 +2,7 @@
 <% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="visable1=true;visable2=true"<% end %>
 <% content_for :header do %>
   <header>
-    <%= link_to merchant_app_houses_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <%= link_to merchant_app_houses_url(role: 'account', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
     <span class="text">详情</span>
     <a href="javascript:;"></a>
   </header>
@@ -32,7 +32,7 @@
 <script>
 var app = angular.module('app', []);
 function customersController($scope,$http) {
-    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses/#{params[:id]}?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
     .success(function(response) {
         if(response.result == 'success'){
  	  $scope.order = response.data;
@@ -47,7 +47,7 @@ function customersController($scope,$http) {
       console.log(response);
     });
     
-    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=HouseBespeak&source=winwemedia_house&is_read=1" %>')
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=HouseBespeak&source=house&is_read=1" %>')
     .success(function(response) {
 	     console.log(response);
     })
@@ -57,11 +57,11 @@ function customersController($scope,$http) {
 
     $scope.change_status = function(status) {
         if(confirm('确认是否执行此操作？')){
-          $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+          $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/houses/#{params[:id]}?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
           .success(function(response) {
 	     if(response.result == 'success'){
                $scope.set_visable(status, true);
-               window.location.href = '<%= raw merchant_app_houses_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) %>';
+               window.location.href = '<%= raw merchant_app_houses_url(role: 'account', role_id: @login_user.id, token: @login_user.auth_token) %>';
              }
              else{
                console.log(response);

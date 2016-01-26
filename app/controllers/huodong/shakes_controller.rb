@@ -25,7 +25,7 @@ class Huodong::ShakesController < ApplicationController
 	def shake_round_show
 		@shake_round = current_site.shake_rounds.where(id: params[:id]).first
     # @total_shake_users = current_site.shake_users.shake_at.where(shake_id: @shake_round.shake_id)
-    @total_shake_users = current_site.shake_users.shake_at.joins("left join shake_prizes on shake_users.wx_user_id = shake_prizes.wx_user_id and shake_users.shake_id = shake_prizes.shake_id and shake_prizes.shake_round_id= #{@shake_round.id}").where(shake_id: @shake_round.shake_id).order('IFNULL(shake_prizes.user_rank, 1000000) asc')
+    @total_shake_users = current_site.shake_users.shake_at.joins("left join shake_prizes on shake_users.user_id = shake_prizes.user_id and shake_users.shake_id = shake_prizes.shake_id and shake_prizes.shake_round_id= #{@shake_round.id}").where(shake_id: @shake_round.shake_id).order('IFNULL(shake_prizes.user_rank, 1000000) asc')
 
 		@search = @total_shake_users.search(params[:search])
     @shake_users = @search.page(params[:page])

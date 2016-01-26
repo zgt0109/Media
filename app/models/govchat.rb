@@ -31,7 +31,7 @@ class Govchat < ActiveRecord::Base
 
   private
     def igetui
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site.try(:id), token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'Govchat', source: 'winwemedia_gov', message: '您有一个新的信箱留言，请及时处理。'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site.try(:id), token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'Govchat', source: 'gov', message: '您有一个新的信箱留言，请及时处理。'})
     rescue => e
       Rails.logger.info "#{e}"
     end

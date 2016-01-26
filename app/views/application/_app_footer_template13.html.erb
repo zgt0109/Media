@@ -1,6 +1,6 @@
 <div class="box-nav-ft">
   <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#"%>"><img src="/assets/website/template13/ico-call-black.png"/><span>联系电话</span></a>
-  <a href="<%= @website.address? ? mobile_map_url(supplier_id: @website.supplier_id, id: @website.id) : "" %>"><img src="/assets/website/template13/ico-address-black.png"/><span>地址导航</span></a>
+  <a href="<%= @website.address? ? mobile_map_url(site_id: @website.site_id, id: @website.id) : "" %>"><img src="/assets/website/template13/ico-address-black.png"/><span>地址导航</span></a>
   <a class="last btn-share"><img src="/assets/website/template13/ico-share-black.png"/><span>分享</span></a>
 </div>
 

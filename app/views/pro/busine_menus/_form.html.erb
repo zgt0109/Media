@@ -132,7 +132,7 @@
         </div>
 
           <!-- 会员卡 -->
-          <% if @website.supplier.vip_card %>
+          <% if @website.site.vip_card %>
           <%= hidden_field_tag 'card_branch[vip_card_id]', @card_branch.try(:vip_card_id) %>
           <div class="p card_branch">
             <span>会员卡名称<em>*</em>（必填，不能超过32个字）</span>

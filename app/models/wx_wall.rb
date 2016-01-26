@@ -139,7 +139,7 @@ class WxWall < ActiveRecord::Base
     {
       signin_check: "签到墙",
       prize_check: "抽奖",
-      picture_check: "现场图片",
+      picture_check: "照片墙",
       vote_check: "微投票",
       shake_check: "摇一摇",
       enroll_check: "微报名"

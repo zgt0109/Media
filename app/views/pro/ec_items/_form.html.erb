@@ -5,7 +5,7 @@
   <%= form_for @ec_item, validate: true, html: {id: 'pro_ec_item'} do |f| %>
       <div class="box-form form-row fl">
 
-        <%= f.hidden_field :supplier_id, value: current_user.id %>
+        <%= f.hidden_field :site_id, value: current_user.id %>
         <%= f.hidden_field :wx_mp_user_id, value: current_user.wx_mp_user.id %>
         <%= f.hidden_field :ec_shop_id, value: @ec_shop.id %>
         <%= f.hidden_field :seller_cid, class: 'hidden_ec_seller_cat_id' %>

@@ -1,19 +1,18 @@
 class Pro::BookingAdsController < Pro::BookingBaseController
-  before_filter :set_booking
   before_filter :set_booking_ad, only: [:edit, :update, :destroy]
 
   def index
-    @pictures = current_site.booking_ads
-    @picture = current_site.booking_ads.where(id: params[:id]).first || BookingAd.new(site_id: @booking.site_id)
+    @pictures = @booking.booking_ads
+    @picture = @booking.booking_ads.where(id: params[:id]).first || BookingAd.new(booking_id: @booking.id)
   end
 
   def new
-    @picture = current_site.booking_ads.new
+    @picture = @booking.booking_ads.new
     render layout: 'application_pop'
   end
 
   def create
-    @picture = current_site.booking_ads.new(params[:booking_ad])
+    @picture = @booking.booking_ads.new(params[:booking_ad])
     if @picture.save
       flash[:notice] = "添加成功"
       render inline: "<script>window.parent.location.href = '#{booking_ads_path}';</script>"
@@ -22,7 +21,6 @@ class Pro::BookingAdsController < Pro::BookingBaseController
       render action: 'new', layout: 'application_pop'
     end
   end
-
 
   def edit
     render layout: 'application_pop'
@@ -48,12 +46,8 @@ class Pro::BookingAdsController < Pro::BookingBaseController
 
   private
 
-  def set_booking
-    @booking = current_site.booking
-  end
-
   def set_booking_ad
-    @picture = current_site.booking_ads.where(id: params[:id]).first
+    @picture = @booking.booking_ads.where(id: params[:id]).first
     return redirect_to booking_ads_path, alert: '图片不存在或已删除' unless @picture
   end
 

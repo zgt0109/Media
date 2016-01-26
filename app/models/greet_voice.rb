@@ -15,7 +15,7 @@ class GreetVoice < ActiveRecord::Base
     greet_voice.update_attributes(name: keyword)
     greet_activity = wx_mp_user.site.greets.first.activity
     # url = mobile_greet_cards_url(subdomain: greet_activity.mobile_subdomain, site_id: wx_mp_user, aid: greet_activity.id, openid: wx_user.openid)
-    # url = "#{MOBILE_DOMAIN}/#{wx_mp_user.site_id}/greet_cards?aid=#{greet_activity.id}&openid=#{wx_user.uid}"
+    # url = "#{M_HOST}/#{wx_mp_user.site_id}/greet_cards?aid=#{greet_activity.id}&openid=#{wx_user.uid}"
     url = greet_activity.respond_mobile_url(nil, openid: wx_user.openid)
     pic_url = qiniu_image_url(greet_activity.pic_key)
 

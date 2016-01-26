@@ -13,9 +13,9 @@ class SmsOrder < ActiveRecord::Base
     5 => {plan_name: 'V-行业解决方案（赠送）', plan_type: 2, plan_sms: 500, plan_cost: 0},
   }
 
-  ALIPAY_ACCOUNT_NAME = "payment_account@weiligongshe.com"
-  ALIPAY_ID = "2088901213277282"
-  ALIPAY_KEY = "x4pp683tttgscyvsv8jwoq6h3hwimupl"
+  ALIPAY_ACCOUNT_NAME = "payment@winwemedia.com"
+  ALIPAY_ID = "2088121855721480"
+  ALIPAY_KEY = "2xfcmsfv5cxkehizxiuycsqpuzghd0j8"
 
   enum_attr :plan_type, :in => [
     ['buy', 1, '购买'],
@@ -23,10 +23,10 @@ class SmsOrder < ActiveRecord::Base
   ]
 
   enum_attr :payment_type, :in => [
-    #['wx', 1, '微信支付'],
-    #['yb', 2, '易宝支付'],
-    #['cft', 3, '财付通支付'],
-    ['zfb', 4, '支付宝支付'],
+    #['wxpay',  1, '微信支付'],
+    #['yeepay', 2, '易宝支付'],
+    #['tenpay', 3, '财付通支付'],
+    ['alipay', 4, '支付宝支付'],
   ]
 
   enum_attr :status, :in => [
@@ -55,7 +55,7 @@ class SmsOrder < ActiveRecord::Base
     end
 
      # 每月1日凌晨重置赠送短信套餐
-    def reset_free_sms_every_month(options = {})
+     def reset_free_sms_every_month(options = {})
       options[:clear_free_sms_orders] ||= false
       if options[:clear_free_sms_orders]
         # 清空历史赠送套餐数据
@@ -102,17 +102,17 @@ class SmsOrder < ActiveRecord::Base
         payment = pending_payment
       else
         payment = Payment.setup({
-            payment_type_id: 10006,
-            account_id: account_id,
-            customer_id: account_id,
-            customer_type: 'Account',
-            paymentable_id: id,
-            paymentable_type: 'SmsOrder',
-            out_trade_no: order_no,
-            amount: plan_cost.to_f / 100,
-            subject: "充值 #{order_no}",
-            body: "充值 #{order_no}",
-            source: 'winwemedia_sms_order'
+          payment_type_id: 10006,
+          account_id: account_id,
+          customer_id: account_id,
+          customer_type: 'Account',
+          paymentable_id: id,
+          paymentable_type: 'SmsOrder',
+          out_trade_no: order_no,
+          amount: plan_cost.to_f / 100,
+          subject: "充值 #{order_no}",
+          body: "充值 #{order_no}",
+          source: 'sms_order'
           })
       end
 
@@ -120,9 +120,9 @@ class SmsOrder < ActiveRecord::Base
     end
   end
 
-  def get_domain_url
+  def domain_url
     if Rails.env.production? or Rails.env.staging?
-      url = 'http://m.winwemedia.com'
+      url = 'http://www.winwemedia.com'
     elsif Rails.env.testing?
       url = 'http://testing.winwemedia.com'
     elsif Rails.env.development?
@@ -134,8 +134,6 @@ class SmsOrder < ActiveRecord::Base
   def options_pay_for(payment)
     raise '没有指定商家' unless account
     raise '请选择支付单' unless payment
-
-    domain_url = self.get_domain_url
 
     {
       :service => 'create_direct_pay_by_user',
@@ -151,51 +149,48 @@ class SmsOrder < ActiveRecord::Base
       :subject => payment.subject,
       :body  => payment.body,
       :total_fee => payment.amount
-     }
+    }
   end
 
   def default_pay_options
     raise '没有指定商家' unless account
-
-    domain_url = self.get_domain_url
-
     {
-        alipay_id: SmsOrder::ALIPAY_ID,
-        alipay_key: SmsOrder::ALIPAY_KEY,
-        seller_account_name: SmsOrder::ALIPAY_ACCOUNT_NAME,
-        service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
-        callback_url: "#{domain_url}/sms_orders/callback",
-        notify_url: "#{domain_url}/sms_orders/notify",
-        merchant_url: "#{domain_url}/sms_orders/new"
+      alipay_id: SmsOrder::ALIPAY_ID,
+      alipay_key: SmsOrder::ALIPAY_KEY,
+      seller_account_name: SmsOrder::ALIPAY_ACCOUNT_NAME,
+      service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
+      callback_url: "#{domain_url}/sms_orders/callback",
+      notify_url: "#{domain_url}/sms_orders/notify",
+      merchant_url: "#{domain_url}/sms_orders/new"
     }
   end
 
   def direct_options(payment)
     raise '请选择支付单' unless payment
     req_data = [
-        "<direct_trade_create_req>",
-        "<subject>支付宝支付</subject>",
-        "<out_trade_no>#{payment.out_trade_no}</out_trade_no>",
-        "<total_fee>#{payment.amount}</total_fee>",
-        "<seller_account_name>#{self.default_pay_options[:seller_account_name]}</seller_account_name>",
-        "<call_back_url>#{self.default_pay_options[:callback_url]}</call_back_url>",
-        "<notify_url>#{self.default_pay_options[:notify_url]}</notify_url>",
-        "<merchant_url>#{self.default_pay_options[:merchant_url]}</merchant_url>",
-        "</direct_trade_create_req>"
+      "<direct_trade_create_req>",
+      "<subject>支付宝支付</subject>",
+      "<out_trade_no>#{payment.out_trade_no}</out_trade_no>",
+      "<total_fee>#{payment.amount}</total_fee>",
+      "<seller_account_name>#{self.default_pay_options[:seller_account_name]}</seller_account_name>",
+      "<call_back_url>#{self.default_pay_options[:callback_url]}</call_back_url>",
+      "<notify_url>#{self.default_pay_options[:notify_url]}</notify_url>",
+      "<merchant_url>#{self.default_pay_options[:merchant_url]}</merchant_url>",
+      "</direct_trade_create_req>"
     ]
 
     now = Time.now
     req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
 
     {
-        :service => 'alipay.wap.trade.create.direct',
-        :format  => 'xml',
-        :v => '2.0',
-        :partner => self.default_pay_options[:alipay_id],
-        :sec_id => 'MD5',
-        :req_id  => req_id,
-        :req_data  => req_data.join,
-        :_input_charset  => 'utf-8',
+      :service => 'alipay.wap.trade.create.direct',
+      :format  => 'xml',
+      :v => '2.0',
+      :partner => self.default_pay_options[:alipay_id],
+      :sec_id => 'MD5',
+      :req_id  => req_id,
+      :req_data  => req_data.join,
+      :_input_charset  => 'utf-8',
     }
   end
 
@@ -209,14 +204,14 @@ class SmsOrder < ActiveRecord::Base
     req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
 
     {
-        :service => 'alipay.wap.auth.authAndExecute',
-        :format  => 'xml',
-        :v => '2.0',
-        :partner => default_pay_options[:alipay_id],
-        :sec_id => 'MD5',
-        :req_id  => req_id,
-        :req_data  => req_data,
-        :_input_charset  => 'utf-8',
+      :service => 'alipay.wap.auth.authAndExecute',
+      :format  => 'xml',
+      :v => '2.0',
+      :partner => default_pay_options[:alipay_id],
+      :sec_id => 'MD5',
+      :req_id  => req_id,
+      :req_data  => req_data,
+      :_input_charset  => 'utf-8',
     }
   end
 
@@ -272,7 +267,7 @@ class SmsOrder < ActiveRecord::Base
   #   "buyer_id"=>"2088202867703133",
   #   "buyer_email"=>"wenke.gd@gmail.com",
   #   "seller_id"=>"2088901213277282",
-  #   "seller_email"=>"payment_account@weiligongshe.com",
+  #   "seller_email"=>"payment@winwemedia.com",
   #   "sign_type"=>"MD5",
   #   "sign"=>"37dcc918f11879a3eaf824f51bd3ec87",
   #   "notify_type"=>"trade_status_sync",
@@ -320,7 +315,7 @@ class SmsOrder < ActiveRecord::Base
   def rqrcode(str = nil)
     #require 'RMagick'
 
-    url = "#{MOBILE_DOMAIN}/#{str}" if str.present?
+    url = "#{M_HOST}/#{str}" if str.present?
 
     rqrcode = nil
 

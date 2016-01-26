@@ -1,7 +1,7 @@
 class ActivityConsumesController < ApplicationController
 
   def index
-    @total_activity_consumes = current_user.activity_consumes.joins(:vip_privilege).order("activity_consumes.id desc")
+    @total_activity_consumes = current_site.activity_consumes.joins(:vip_privilege).order("activity_consumes.id desc")
     @search = @total_activity_consumes.search(params[:search])
     @activity_consumes = @search.page(params[:page])
   end
@@ -13,11 +13,11 @@ class ActivityConsumesController < ApplicationController
 
 
   def used
-    @activity_consume = current_user.activity_consumes.find(params[:id])
+    @activity_consume = current_site.activity_consumes.find(params[:id])
     
     if @activity_consume.vip_privilege && @activity_consume.wx_user
 
-      vip_user = @activity_consume.wx_mp_user.vip_users.visible.where(wx_user_id: @activity_consume.wx_user_id).first
+      vip_user = @activity_consume.site.vip_users.visible.where(wx_user_id: @activity_consume.wx_user_id).first
       return redirect_to :back, notice:'用户不存在，不可使用' unless vip_user
       return redirect_to :back, notice:'用户已被冻结，不可使用' if vip_user.freeze?
     

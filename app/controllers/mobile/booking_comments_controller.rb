@@ -17,7 +17,7 @@ class Mobile::BookingCommentsController < Mobile::BaseController
   end
 
   def set_booking_item
-    @booking_item = @site.booking_items.find(params[:booking_item_id])
+    @booking_item = @site.booking.booking_items.find(params[:booking_item_id])
     @booking_comments = @booking_item.booking_comments.order("created_at desc")
   rescue
     render :text => '商品不存在'

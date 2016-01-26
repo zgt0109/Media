@@ -2,7 +2,7 @@
 <% content_for :ng_app do %>ng-app="app" ng-controller="customersController"  ng-init="hide=true"<% end %>
 <% content_for :header do %>
   <header>
-    <%= link_to reservation_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
+    <%= link_to reservation_orders_merchant_app_orders_url(role: 'account', role_id: @login_user.id, token: @login_user.auth_token) do %><span class="back"></span><% end %>
     <span class="text">详情</span>
     <a href="javascript:;"></a>
   </header>
@@ -30,7 +30,7 @@
 <script>
 var app = angular.module('app', []);
 function customersController($scope,$http) {
-    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/reservations/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
+    $http.get('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/reservations/#{params[:id]}?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}" %>')
     .success(function(response) {
         if(response.result == 'success'){
  	  $scope.order = response.data;
@@ -47,7 +47,7 @@ function customersController($scope,$http) {
       console.log(response);
     });
 
-    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ReservationOrder&source=winwemedia_reservation&is_read=1" %>')
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ReservationOrder&source=reservation&is_read=1" %>')
     .success(function(response) {
 	console.log(response);
     })
@@ -57,7 +57,7 @@ function customersController($scope,$http) {
 
     $scope.change_status = function(status) {
         if(confirm('确认是否执行此操作？')){
-          $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/reservations/#{params[:id]}?role=supplier&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status)
+          $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/orders/reservations/#{params[:id]}?role=account&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&status=" %>'+status)
           .success(function(response) {
 	     if(response.result == 'success'){
                $scope.set_visable(status, true);
@@ -76,7 +76,7 @@ function customersController($scope,$http) {
 
     $scope.set_visable = function(status, flag) {
       if(flag){
-        window.location.href = '<%= raw reservation_orders_merchant_app_orders_url(role: 'supplier', role_id: @login_user.id, token: @login_user.auth_token) %>'
+        window.location.href = '<%= raw reservation_orders_merchant_app_orders_url(role: 'account', role_id: @login_user.id, token: @login_user.auth_token) %>'
       }
       else{
         switch(status){

@@ -23,7 +23,7 @@
         </div>
 
         <div class="col-sm-12">
-          <%= render "weixin_preview", wx_title: @activity.try(:name) || @website.try(:name) || '微官网', wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg") %>
+          <%= render "weixin_preview", wx_title: @activity.try(:name) || @website.try(:name) || '微官网', wx_summary: @activity.try(:summary),  wx_pic: (@activity.pic_url.present? ?  @activity.pic_url : "/assets/activity_pics/site.jpg") %>
 
           <%= form_for(@activity, validate: true, html: {class: 'form col-sm-7', id: 'edit_website_activity'}) do |f| %>
             <%= f.hidden_field :status, value: Activity::SETTED %>
@@ -53,7 +53,7 @@
               <div class="form-group">
                 <label class="control-label">微信消息图片<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="发送关键词后返回的微信消息图片"></span></label>
                 <div class="clearfix">
-                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/images/activity_pics/site.jpg"%>" data-key="<%= @activity.pic_key %>"></div>
+                  <div class="cieldon-file width-100px " data-type="1" data-div="#img-1" data-height="200" data-name="activity[pic_key]" data-img="<%= @activity.pic_url.present? ?  @activity.pic_url : "/assets/activity_pics/site.jpg"%>" data-key="<%= @activity.pic_key %>"></div>
                   <small class="text-warning line-height-30">图片建议尺寸：720像素*400像素</small>
                 </div>
               </div>
@@ -139,11 +139,11 @@
                     <span class="lbl">百度直达号验证代码设置 <small class="help-inline text-warning">用于将微官网跟百度直达号对接，如无直达号则无需填充此项</small></span>
                   </label>
                   <%= w.text_area :baidu_app_js, rows: 6, class: 'form-control', placeholder: '请将百度直达号给出的验证代码复制到此，复制完成后点击保存' %>
-                  <span class="fontWarn">微官网网址：<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}" %></span>
-                  <a id="copy-button-2" data-clipboard-text="<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
+                  <span class="fontWarn">微官网网址：<%= "#{M_HOST}/#{@website.custom_domain}" %></span>
+                  <a id="copy-button-2" data-clipboard-text="<%= "#{M_HOST}/#{@website.custom_domain}" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
                   <br/>
-                  <span class="fontWarn">微官网Sitemap链接：<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}/sitemap.html" %></span>
-                  <a id="copy-button-3" data-clipboard-text="<%= "#{MOBILE_DOMAIN}/#{@website.custom_domain}/sitemap.html" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
+                  <span class="fontWarn">微官网Sitemap链接：<%= "#{M_HOST}/#{@website.custom_domain}/sitemap.html" %></span>
+                  <a id="copy-button-3" data-clipboard-text="<%= "#{M_HOST}/#{@website.custom_domain}/sitemap.html" %>" class="btn btn-sm btn-primary margin-left-10 copy-button">复制链接</a>
                 </div>
 
                 <div class="form-group">

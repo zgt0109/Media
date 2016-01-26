@@ -74,7 +74,7 @@ class EcOrder < ActiveRecord::Base
           out_trade_no: order_no,
           amount: total_amount,
           subject: "微枚迪电商订单 #{order_no}",
-          source: 'winwemedia_ec_order'
+          source: 'ec'
         })
       end
 

@@ -24,17 +24,13 @@ set :keep_releases, 5
 # 主站的程序部署在 web1.winwemedia.com、 web2.winwemedia.com 上
 task :production do
   role :app, *%w[shequ.winwemedia.com]
+  role :db, 'shequ.winwemedia.com', primary: true
+
   config_deploy
 
   role :whenever, 'shequ.winwemedia.com'
   set :whenever_roles, 'whenever'
   deploy_whenever
-end
-
-# 手机端的程序部署在 m1.winwemedia.com、 m2.winwemedia.com、 m3.winwemedia.com 和 m4.winwemedia.com 上
-task :mobile do
-  role :app, *%w[shequ.winwemedia.com]
-  config_deploy(application: 'winwemedia_m')
 end
 
 task :staging do
@@ -45,6 +41,7 @@ end
 
 
 after 'deploy:restart', 'deploy:cleanup'
+after "deploy:update", 'deploy:migrate'
 after 'deploy:finalize_update', 'deploy:custom_symlinks'
 
 namespace :deploy do

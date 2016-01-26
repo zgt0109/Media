@@ -21,7 +21,7 @@
   <dl>
     <dd>
       <p>订单号：{{order.order_no}}</p>
-      <p>门店：{{order.branch_name}}</p>
+      <p>门店：{{order.branch_name}}</p>   
       <p>姓名：{{order.username}}</p>
       <p>手机号：{{order.mobile}}</p>
       <p>下单时间：{{order.created_at}}</p>
@@ -51,7 +51,7 @@ function customersController($scope,$http) {
       console.log(response);
     });
 
-    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ShopOrder&source=winwemedia_shop_order&is_read=1" %>')
+    $http.post('<%= raw "#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message?role=#{params[:role]}&role_id=#{@login_user.id}&token=#{@login_user.auth_token}&messageable_id=#{params[:id]}&messageable_type=ShopOrder&source=shop_order&is_read=1" %>')
     .success(function(response) {
   console.log(response);
     })
