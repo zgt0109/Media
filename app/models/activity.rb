@@ -34,6 +34,8 @@ class Activity < ActiveRecord::Base
     ['text_link', 4, '文字加超链接形式'],
   ]
 
+  enum_attr :activity_type_id, in: ActivityType::ENUM_ID_OPTIONS
+
   has_time_range
   alias date_range start_at_end_at
   alias date_range= start_at_end_at=
@@ -147,8 +149,6 @@ class Activity < ActiveRecord::Base
   scope :old_coupon, -> { where(activity_type_id: 3) }
   scope :coupon, -> { where(activity_type_id: 62) }
   scope :reservations, -> { where(activity_type_id: 63) }
-
-  enum_attr :activity_type_id, in: ActivityType::ENUM_ID_OPTIONS
 
   delegate :consume_day_allow_count, to: :activity_property, allow_nil: true
   delegate :consume_day_allow_count=, to: :activity_property, allow_nil: true
