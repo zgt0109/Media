@@ -56,10 +56,8 @@ Wp::Application.routes.draw do
   resources :sms_orders, except: [:edit, :show, :update] do
     get :alipayapi, :cancel, on: :member
     collection do
-      get :callback
-      post :notify
-      get :merchant
-      post :payment_request
+      get :callback, :merchant
+      post :notify, :payment_request
     end
   end
 
@@ -85,8 +83,6 @@ Wp::Application.routes.draw do
   match "/wxpay/test", :to => "wxpay#test"
   match "/wxpay/success", :to => "wxpay#success"
   match "/wxpay/fail", :to => "wxpay#fail"
-  match "/wxpay/hongbao_pay", :to => "wxpay#hongbao_pay"
-  match "/wxpay/hongbao_faild", :to => "wxpay#hongbao_faild"
 
   resources :wxpay, only: :index do
     collection do
@@ -233,8 +229,7 @@ Wp::Application.routes.draw do
   end
 
   namespace :site do
-    resources :dev_logs do
-    end
+    resources :dev_logs
   end
 
   namespace :pay do
