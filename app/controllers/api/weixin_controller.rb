@@ -320,13 +320,9 @@ class Api::WeixinController < Api::BaseController
       message = ShakeUser.reply_or_create(@wx_user.user, activity)
       return Weixin.respond_text(@from_user_name, @to_user_name, message) if message
       respond_activity_directly(activity)
-    elsif activity.website?
-      return Weixin.respond_text(@from_user_name, @to_user_name, '微官网暂停使用') unless activity.setted?
-      # activity_notice = ActivityNotice.website_notice(activity)
-      # respond_news_with_activity_notice(@from_user_name, @to_user_name, activity_notice)
-      respond_activity_directly(activity)
     elsif activity.vip?
       return Weixin.respond_text(@from_user_name, @to_user_name, '会员卡暂停使用') if !activity.setted?
+
       activity_notice = ActivityNotice.vip_notice(activity, @from_user_name)
       respond_news_with_activity_notice(@from_user_name, @to_user_name, activity_notice, cover_pic: activity.pic_display_url)
     # elsif activity.wifi?
@@ -343,7 +339,7 @@ class Api::WeixinController < Api::BaseController
       else
         Weixin.respond_text(@from_user_name, @to_user_name, '活动还未开始')
       end
-    elsif [1,3,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,29,30,31,32,33,34,35,36,37,39,41,42,43,44,45,48,49,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80].include?(activity.activity_type_id)
+    else
       respond_activity_directly(activity)
     end
   end
@@ -365,28 +361,28 @@ class Api::WeixinController < Api::BaseController
   def respond_activity_directly(activity)
     logger.info "---------------------#{activity.activity_type_id}-------------------goto response_activity_directly "
     url = case
-            when activity.greet?
-              @wx_user.greet! #进入语音贺卡模式
-              return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
-            when activity.share_photo? # 图片分享模式
-              @wx_user.share_photos!
-              return Weixin.respond_text(@from_user_name, @to_user_name, activity.summary)
-            when activity.exit_share_photo? # 退出分享模式
-              @wx_user.normal!
-              share = Activity.where(site_id: activity.site_id, activity_type_id: ActivityType::SHARE_PHOTO).first
-              message = activity.summary.to_s.gsub!('{share_keyword}', share.try(:keyword).to_s)
-              return Weixin.respond_text(@from_user_name, @to_user_name, message)
-            when activity.other_photos?          then return SharePhoto.respond_other_photo(@wx_user, @mp_user, activity)
-            when activity.my_photos?             then return SharePhoto.respond_my_photo(@wx_user, @mp_user, activity)
-            when activity.greet?
-              @wx_user.greet! #进入语音贺卡模式
-              return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
-            when activity.shake?
-              url = "#{mobile_shakes_url(subdomain: custom_subdomain(@mp_user.site_id), site_id: activity.site_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
-              items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: activity.pic_url, url: url}]
-              return Weixin.respond_news(@from_user_name, @to_user_name, items)
-            else activity.respond_mobile_url(nil, openid: @from_user_name)
-          end
+      when activity.greet?
+        @wx_user.greet! #进入语音贺卡模式
+        return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
+      when activity.share_photo? # 图片分享模式
+        @wx_user.share_photos!
+        return Weixin.respond_text(@from_user_name, @to_user_name, activity.summary)
+      when activity.exit_share_photo? # 退出分享模式
+        @wx_user.normal!
+        share = Activity.where(site_id: activity.site_id, activity_type_id: ActivityType::SHARE_PHOTO).first
+        message = activity.summary.to_s.gsub!('{share_keyword}', share.try(:keyword).to_s)
+        return Weixin.respond_text(@from_user_name, @to_user_name, message)
+      when activity.other_photos?          then return SharePhoto.respond_other_photo(@wx_user, @mp_user, activity)
+      when activity.my_photos?             then return SharePhoto.respond_my_photo(@wx_user, @mp_user, activity)
+      when activity.greet?
+        @wx_user.greet! #进入语音贺卡模式
+        return Weixin.respond_text(@from_user_name, @to_user_name, '您需要发送一条语音来激活你的信息哦！')
+      when activity.shake?
+        url = "#{mobile_shakes_url(subdomain: custom_subdomain(@mp_user.site_id), site_id: activity.site_id, aid: activity.id, openid: @wx_user.openid)}#mp.weixin.qq.com"
+        items = [{title: activity.name, description: "#{activity.summary}\n退出请回复数字“0”", pic_url: activity.pic_url, url: url}]
+        return Weixin.respond_news(@from_user_name, @to_user_name, items)
+      else activity.respond_mobile_url(nil, openid: @from_user_name)
+    end
     url << '#mp.weixin.qq.com' unless activity.hanming_wifi?
 
     items = [{title: activity.name, description: activity.summary, pic_url: activity.pic_url, url: url}]
