@@ -38,16 +38,21 @@ class Biz::WebsiteSettingsController < ApplicationController
   end
 
   def update_bg_pic
+
     respond_to do |format|
+
       if @website_setting.update_attributes(params[:website_setting])
-        format.html { redirect_to :back, notice: '保存成功' }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to :back, notice: '保存失败' }
-        format.json { render json: @website_setting.errors, status: :unprocessable_entity }
-      end
+              format.html { redirect_to :back, notice: '保存成功' }
+              format.json { head :no_content }
+       else
+             format.html { redirect_to :back, notice: '保存失败' }
+             format.json { render json: @website_setting.errors, status: :unprocessable_entity }
+       end
+
+
     end
-  end
+    end
+
 
   def change_article_sort
     if @website_setting.update_attributes(params[:column] => params[:value])

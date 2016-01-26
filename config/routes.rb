@@ -12,6 +12,8 @@ Wp::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   # end
 
+
+
   match "auth_agent/wx_oauth", to: "auth_agent#wx_oauth"
   match "auth_agent/wx_oauth_callback", to: "auth_agent#wx_oauth_callback"
 

@@ -13,6 +13,7 @@ class Biz::WebsitesController < ApplicationController
       if @website.update_attributes(params[:website])
         format.html { redirect_to :back, notice: '保存成功' }
         format.js {}
+
       else
         format.html { redirect_to :back, notice: '保存失败' }
         format.js {}
@@ -76,12 +77,12 @@ class Biz::WebsitesController < ApplicationController
         message[:info] = '个性化域名已存在!'
       else
         only_domain.chop! if only_domain.end_with?"/"
-        @website.update_attributes(:domain => only_domain);
-        self.update_piwik_domain_status(@website, only_domain)
-        message[:type] = 'success'
-        message[:info] = '个性化域名设置成功!'
-        message[:img] = @website.preview
-      end
+      @website.update_attributes(:domain => only_domain);
+      self.update_piwik_domain_status(@website, only_domain)
+      message[:type] = 'success'
+      message[:info] = '个性化域名设置成功!'
+      message[:img] = @website.preview
+    end
     else
       message[:info] = '个性化域名只能包含数字、字母、下划线和一个点（.）!'
     end

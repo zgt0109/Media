@@ -77,4 +77,5 @@ class WeixinAes
     "#{msg}#{pad * amount_to_pad}"
   end
 
+
 end

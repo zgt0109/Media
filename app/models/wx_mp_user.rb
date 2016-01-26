@@ -34,6 +34,13 @@ class WxMpUser < ActiveRecord::Base
 
   has_many :replies, as: :replier, dependent: :destroy
 
+  has_many :stat_wx_users ,:foreign_key => "openid",:primary_key => "openid"
+
+  has_many :stat_wx_articles ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stat_wx_hour_articles ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stat_wx_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stat_wx_hour_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
+
   has_many :wx_users, inverse_of: :wx_mp_user
   has_many :wx_menus
   has_many :cards, class_name: "Wx::Card"
@@ -182,6 +189,10 @@ class WxMpUser < ActiveRecord::Base
     auth!(true) if auth_expired?
     access_token
   end
+
+
+
+
 
   def enable!
     return false if wx_menus.root.count == 0 || !auth!
