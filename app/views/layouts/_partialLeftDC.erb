@@ -1,14 +1,22 @@
 <ul class="nav nav-list">
-  <li class="<%= ['operating_reports'].include?(controller_name) && ['subscribes'].include?(action_name) ? 'open active' : ''%>">
+  <li class="<%= ['operating_reports'].include?(controller_name) && ['subscribes','message','article','article_hour','message_hour'].include?(action_name) ? 'open active' : ''%>">
     <a href="javascript:;" class="dropdown-toggle">
       <i class="fa fa-weixin"></i>
-      <span class="menu-text"> 用户数据</span>
+      <span class="menu-text"> 数据分析</span>
       <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu" style="display: <%= ['wx_requests'].include?(controller_name) && ['subscribe'].include?(action_name) ? 'block' : 'none'%>;">
       <li class="<%= ['subscribe'].include?(action_name) ? 'open active' : ''%>">
-        <%= link_to subscribe_data_wx_requests_path do %><i class="icon-double-angle-right"></i>关注数<% end %>
+        <%= link_to subscribe_data_wx_requests_path do %><i class="icon-double-angle-right"></i>关注分析<% end %>
       </li>
+      <li class="<%= ['message','message_hour'].include?(action_name) ? 'open active' : ''%>">
+        <%= link_to message_data_wx_requests_path do %><i class="icon-double-angle-right"></i>消息分析<% end %>
+      </li>
+      <li class="<%= ['article','article_hour'].include?(action_name) ? 'open active' : ''%>">
+        <%= link_to article_data_wx_requests_path do %><i class="icon-double-angle-right"></i>图文消息分析<% end %>
+      </li>
+
+
       <!--<li><a href="/datacube/user_attr"> <i class="icon-double-angle-right"></i>用户属性</a></li>-->
     </ul>
   </li>

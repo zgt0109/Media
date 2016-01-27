@@ -270,7 +270,7 @@ Wp::Application.routes.draw do
       get :point, :amount, on: :collection
     end
     resources :wx_requests do
-      get :subscribe, :keyword, :hit, :not_hit, on: :collection
+      get :subscribe, :keyword,:message,:message_hour,:article,:article_hour, :hit, :not_hit, on: :collection
     end
   end
 

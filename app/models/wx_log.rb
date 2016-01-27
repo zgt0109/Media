@@ -140,6 +140,7 @@ class WxLog
         f.title({ text: title})
         f.credits({enabled: false})
         f.xAxis({
+
             categories: categories.count == 1 ? (0..23).map{|d| "#{d}h"} : categories.map{|d| "#{d.month}/#{d.day}"},
             minTickInterval: minTickInterval
           })
