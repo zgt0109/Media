@@ -7,7 +7,7 @@ class CreateStatWxUsers < ActiveRecord::Migration
       t.integer :cancel_user, null:false, default: 0
       t.integer :new_user, null:false, default: 0
       t.integer :user_source, null:false, default: 0
-      t.dateime :updated_at
+      t.datetime :updated_at
     end
   end
 end
