@@ -226,7 +226,7 @@ class Data::WxRequestsController < ApplicationController
 
     #昨日关注
     # @data['yesterday']['消息量区间'] = @yesterday_wx_msg_request.try(:msg_count).to_i
-    @data['yesterday']['消息数'] = @yesterday_wx_msg_request.try(:interval).to_i
+    @data['yesterday']['消息数'] = @yesterday_wx_msg_request.try(:msg_count).to_i
     @data['yesterday']['用户数'] = @yesterday_wx_msg_request.try(:msg_user).to_i
     # @data['month']['图文阅读次数'] = @yesterday_wx_msg_request.try(:page).to_i
     # @data['month']['原文页'] =@yesterday_wx_msg_request.try(:origin).to_i
