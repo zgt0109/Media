@@ -11,7 +11,7 @@
     <%= left_nav_dropdown 'icon-sitemap', '微官网' %>
 
     <ul class="submenu" style="display: <%= controller_name == "flow_reports" || controller_path =~ /biz\/website/ ? 'block;' : 'none;'%>">
-      <%= link_to_left_nav( '微官网设置', websites_path, current_page?(websites_path) ) %>
+      <%= link_to_left_nav( '基础设置', websites_path, current_page?(websites_path) ) %>
       <%= link_to_left_nav( '模板样式', website_settings_path, current_page?(website_settings_path) ) %>
       <%= link_to_left_nav( '站点内容', website_menus_path, controller_name == 'website_menus' ) %>
       <%= link_to_left_nav( '文章中心', website_articles_path(article_type: "as_article"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_article' || params[:category_type] == 'as_article') ) %>
