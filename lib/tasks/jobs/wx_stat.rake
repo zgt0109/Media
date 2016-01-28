@@ -7,9 +7,9 @@ namespace :stat do
 
 
 
-  begin_date =Date.yesterday
+  begin_date =(ENV['begin_date'].try(:to_date) rescue nil) || Date.yesterday
 
-  end_date =Date.today
+  end_date =(ENV['end_date'].try(:to_date) rescue nil) || Date.today
 
   task get_data:[
            :create_wx_user_data,
