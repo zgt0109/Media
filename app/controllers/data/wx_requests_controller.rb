@@ -116,7 +116,7 @@ class Data::WxRequestsController < ApplicationController
     month_request = @wx_mp_user.stat_wx_users.select('max(cumulate_user) total,sum(new_user) subscribe, sum(cancel_user) unsubscribe').first
     @data['month']['关注数'] = month_request.subscribe # + @data['today']['关注数']
     @data['month']['取消关注数'] = month_request.unsubscribe # + @data['today']['取消关注数']
-    @data['month']['净增长数'] = month_request.subscribe-month_request.unsubscribe # + @data['today']['净增长数']
+    @data['month']['净增长数'] = month_request.subscribe.nil? ? 0 :month_request.subscribe-month_request.unsubscribe # + @data['today']['净增长数']
 
     #周关注
     week_request = @seven_wx_requests.select('max(cumulate_user) total, sum(new_user) subscribe, sum(cancel_user) unsubscribe').first
