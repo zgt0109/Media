@@ -5,7 +5,7 @@
       <span class="menu-text"> 数据分析</span>
       <b class="arrow icon-angle-down"></b>
     </a>
-    <ul class="submenu" style="display: <%= ['wx_requests'].include?(controller_name) && ['subscribe'].include?(action_name) ? 'block' : 'none'%>;">
+    <ul class="submenu" style="display: <%= ['wx_requests'].include?(controller_name) && ['subscribe','message','article','article_hour','message_hour'].include?(action_name) ? 'block' : 'none'%>;">
       <li class="<%= ['subscribe'].include?(action_name) ? 'open active' : ''%>">
         <%= link_to subscribe_data_wx_requests_path do %><i class="icon-double-angle-right"></i>关注分析<% end %>
       </li>
