@@ -1,14 +1,6 @@
 namespace :stat do
 
-
-  # begin_date =Date.yesterday
-  #
-  # end_date =Date.today
-
-
-
   begin_date =(ENV['begin_date'].try(:to_date) rescue nil) || Date.yesterday
-
   end_date =(ENV['end_date'].try(:to_date) rescue nil) || Date.today
 
   task get_data:[
@@ -17,8 +9,6 @@ namespace :stat do
            :create_wx_articles_hour_data,
            :create_wx_msg_data,
            :create_wx_msg_hour_data,
-
-
   ]
 
   task :create_wx_user_data => :environment do
@@ -32,28 +22,17 @@ namespace :stat do
       puts options
 
       cumulate = WxUserData.getusercumulate(options)["list"]
-
       usersummary = WxUserData.getusersummary(options)["list"]
 
       usersummary.each do |d|
-
-        puts d
-
         stat = StatWxUser.where(:ref_date => d["ref_date"], :openid => w.openid, :user_source => d["user_source"]).first_or_create()
-
-
         stat.update_attributes(:cancel_user => d["cancel_user"], :ref_date => d["ref_date"], :new_user => d["new_user"])
-
       end
 
       cumulate.each do |c|
-        puts c
-
         stat = StatWxUser.where(:ref_date => c["ref_date"], :openid => w.openid, :user_source => c["user_source"]).first_or_create()
-
         stat.update_attributes(:cumulate_user => c["cumulate_user"], :ref_date => c["ref_date"])
       end
-
     end
 
     puts "finish!"
@@ -62,10 +41,7 @@ namespace :stat do
 
   task :create_wx_articles_data => :environment do
 
-    @wx_mp_user = WxMpUser.where(:openid => !nil)
-    @wx_mp_user.each_with_index do |w, index|
-
-
+    WxMpUser.where(:openid => !nil).each_with_index do |w, index|
 
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
       # 获取图文群发每日数据
@@ -82,21 +58,24 @@ namespace :stat do
 
         stat = StatWxArticle.where(:openid => w.openid, :ref_date => a["ref_date"],:user_source => a["user_source"], :msgid => a["msgid"], :title => a["title"]).first_or_create()
 
-        stat.update_attributes(:int_page_read_user => a["int_page_read_user"], :int_page_read_count => a["int_page_read_count"],
-                               :add_to_fav_user => a["add_to_fav_user"], :ori_page_read_user => a["ori_page_read_user"],
-                               :ori_page_read_count => a["ori_page_read_count"], :share_scene => a["share_scene"],
-                               :share_user => a["share_user"], :share_count => a["share_count"], :add_to_fav_count => a["add_to_fav_count"],
-                               :target_user => a["target_user"])
-
+        stat.update_attributes(
+          :int_page_read_user => a["int_page_read_user"], 
+          :int_page_read_count => a["int_page_read_count"],
+          :add_to_fav_user => a["add_to_fav_user"], 
+          :ori_page_read_user => a["ori_page_read_user"],
+          :ori_page_read_count => a["ori_page_read_count"], 
+          :share_scene => a["share_scene"],
+          :share_user => a["share_user"], 
+          :share_count => a["share_count"], 
+          :add_to_fav_count => a["add_to_fav_count"],
+          :target_user => a["target_user"]
+        )
       end
-
-
     end
 
   end
 
   task :create_wx_articles_hour_data => :environment do
-
 
     @wx_mp_user = WxMpUser.where(:openid => !nil)
     @wx_mp_user.each_with_index do |w, index|
@@ -109,14 +88,9 @@ namespace :stat do
       # # 获取图文分享转发分时数据
       # a_usershare_hour = WxUserData.getusersharehour(options)["list"]
       a_userread_hour.each do |a|
-
-        puts a
-
         @article = StatWxArticle.find_by_ref_date(a["ref_date"])
 
-
         stat = StatWxHourArticle.where(:openid => w.openid, :ref_hour => a["ref_hour"], :user_source => a["user_source"], :ref_date => a["ref_date"], :msgid => @article.msgid, :title => @article.title).first_or_create()
-
         stat.update_attributes(:int_page_read_user => a["int_page_read_user"], :int_page_read_count => a["int_page_read_count"],
                                :add_to_fav_user => a["add_to_fav_user"], :ori_page_read_user => a["ori_page_read_user"],
                                :ori_page_read_count => a["ori_page_read_count"], :share_scene => a["share_scene"],
@@ -162,17 +136,11 @@ namespace :stat do
         stat.update_attributes(:count_interval => m["count_interval"])
 
       end
-
-
     end
-
   end
+
   task :create_wx_msg_hour_data => :environment do
-
-    @wx_mp_user = WxMpUser.where(:openid => !nil)
-
-
-    @wx_mp_user.each_with_index do |w, index|
+    WxMpUser.where(:openid => !nil).each_with_index do |w, index|
 
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
       # 获取消息发送概况数据
@@ -199,18 +167,20 @@ namespace :stat do
       end
       #
       m_upstreammsgdist.each do |m|
+        attrs = {
+          :ref_date => m["ref_date"], 
+          :openid => w.openid, 
+          :msg_user => m["msg_user"], 
+          :user_source => m["user_source"]
+        }
 
-        stat = StatWxHourMsg.where(:ref_date => m["ref_date"], :openid => w.openid, :msg_user => m["msg_user"], :user_source => m["user_source"]).first_or_create()
+        stat = StatWxHourMsg.where(attrs).first_or_create
 
         stat.update_attributes(:count_interval => m["count_interval"])
 
       end
-
-
     end
-
   end
-
 
 end
 
