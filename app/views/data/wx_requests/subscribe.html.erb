@@ -1,9 +1,12 @@
 <% content_for :main_content do %>
+
+
     <div class="main-content ">
         <div class="breadcrumbs" id="breadcrumbs">
           <ul class="breadcrumb">
             <%= render 'partials/home' %>
             <li>
+
               <%= link_to '数据魔方', subscribe_data_wx_requests_path %>
             </li>
             <li><%= link_to '用户数据', subscribe_data_wx_requests_path %></li>

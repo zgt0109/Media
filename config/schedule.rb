@@ -58,3 +58,10 @@ every 1.days, :at => '02:07 am' do
   # VIP用户每天凌晨2点自动升级会员等级（仅限按使用时间的等级）
   rake "vip_user:upgrade_by_time"
 end
+
+
+every 1.days, :at => '12:01 am' do
+    #更新微信接口数据
+  rake "stat:get_data"
+
+end

@@ -12,6 +12,8 @@ Wp::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   # end
 
+
+
   match "auth_agent/wx_oauth", to: "auth_agent#wx_oauth"
   match "auth_agent/wx_oauth_callback", to: "auth_agent#wx_oauth_callback"
 
@@ -263,7 +265,7 @@ Wp::Application.routes.draw do
       get :point, :amount, on: :collection
     end
     resources :wx_requests do
-      get :subscribe, :keyword, :hit, :not_hit, on: :collection
+      get :subscribe, :keyword,:message,:message_hour,:article,:article_hour, :hit, :not_hit, on: :collection
     end
   end
 

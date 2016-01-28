@@ -117,7 +117,7 @@ class PiwikSite < ActiveRecord::Base
     end
 
     def token_auth
-      "5eacd7bee509e3fc4b444c2fdfc179c9"
+      "0167a4ab5421f48d410d133f4fd444ad"
     end
 
     def domain

@@ -1,0 +1,141 @@
+<% content_for :main_content do %>
+
+
+    <div class="main-content ">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li>
+
+            <%= link_to '数据魔方', subscribe_data_wx_requests_path %>
+          </li>
+          <li><%= link_to '用户数据', subscribe_data_wx_requests_path %></li>
+          <li><%= link_to '消息分析', message_data_wx_requests_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+      </div>
+      <div class="page-content">
+        <div class="col-xs-12">
+          <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+            <%= link_to_li '分时分析', message_hour_data_wx_requests_path %>
+            <%= link_to_li '日期分析', message_data_wx_requests_path %>
+
+          </ul>
+          <div class="tab-content no-border padding-24">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="data-widget">
+                  <div class="l-info">
+                    <div class="number"><%= @data['all']['累积消息'] %></div>
+                    <div class="font-size16">累积消息</div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div class="data-widget">
+                  <div class="l-info">
+                    <div class="number"><%= @data['week']['消息数'] %></div>
+                    <div class="font-size16">周数据</div>
+                  </div>
+                  <div class="r-info">
+                    <span>周消息：<%= @data['week']['消息数'] %></span><br>
+                    <span>周用户：<%= @data['week']['用户数'] %></span>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="data-widget">
+                  <div class="l-info">
+                    <div class="number"><%= @data['month']['消息数'] %></div>
+                    <div class="font-size16">月数据</div>
+                  </div>
+                  <div class="r-info">
+                    <span>月消息：<%= @data['month']['消息数'] %></span><br>
+                    <span>月用户：<%= @data['month']['用户数'] %></span>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+
+              </div>
+              <%= form_tag message_data_wx_requests_path, method: :get, id: 'subscribes' do %>
+                  <div class="col-sm-12 margin-top-20 data-filter">
+                    <div class="pull-left">
+                      <%{"最近七天" => "seven", "最近一月" => "month"}.each do |key, value|%>
+                          <a href="<%= message_data_wx_requests_path(type: value) %>" class="btn btn-primary btn-filter btn-filter-tab <%= "active" if params[:type] == value %>" data-range="<%= value %>"><%= key %></a>
+                      <%end%>
+                      <!--<a href="javascript:;" class="btn btn-primary  btn-filter btn-filter-tab <%#= 'active' if params[:type] == 'today'%>" data-range="today">今天</a>-->
+                      <!--<a href="javascript:;" class="btn btn-primary  btn-filter btn-filter-tab <%#= 'active' if params[:type] == 'yesterday'%>" data-range="yesterday">昨天</a>-->
+                      <!--<a href="javascript:;" class="btn btn-primary  btn-filter btn-filter-tab <%#= 'active' if params[:type] == 'seven'%>" data-range="seven">最近七天</a>-->
+                      <!--<a href="javascript:;" class="btn btn-primary  btn-filter btn-filter-tab <%#= 'active' if params[:type] == 'month'%>" data-range="month">最近一月</a>-->
+                    </div>
+                    <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="icon-calendar bigger-110"></i>
+                  </span>
+                      <%= text_field_tag :start_at_and_end_at, params[:start_at_and_end_at],  class: 'daterange' %>
+                    </div>
+                  </div>
+              <% end %>
+              <div class="col-sm-12 margin-top-20">
+                <div class="">
+                  <div id="chart-1"></div>
+                </div>
+              </div>
+              <div class="col-sm-12 margin-top-20">
+                <%= link_to '下载EXCEL', message_data_wx_requests_path(format: :xls, start_at_and_end_at: params[:start_at_and_end_at], field: params[:field], type: params[:type]) , class: 'icon- pull-right datacube-download-link' %>
+                <table id="" class="table table-striped table-bordered table-hover dataTable ">
+                  <thead>
+                  <tr>
+                    <th>
+                      时间
+                    </th>
+                    <th>
+                      消息数
+                    </th>
+
+                    <th>
+                      用户数
+                    </th>
+                    <!--<th>-->
+                    <!--图文阅读次数-->
+                    <!--</th>-->
+                    <!--<th>-->
+                    <!--原文页-->
+                    <!--</th>-->
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @date_arrays.each do |date| %>
+                      <tr>
+                        <td><%= date %></td>
+                        <td><%= @high_chart["消息数"][date.to_s] %></td>
+
+                        <td><%= @high_chart["用户数"][date.to_s] %></td>
+
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+                <%= paginate @date_arrays %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+<% content_for :custom_js do %>
+    <script type="text/javascript">
+        $(function(){
+            $('.daterangepicker').hide();
+
+            $('.daterange').on('apply.daterangepicker', function(ev, picker) {
+                $('form').submit();
+            });
+
+            $('#chart-1').append("<%= escape_javascript(high_chart('chart_basic_line1', @chart)) -%>");
+        });
+
+    </script>
+<% end %>

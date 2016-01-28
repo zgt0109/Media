@@ -15,8 +15,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="theme-<%= yield :main_series %>">
-<div class="bg"  style="<%= "background-image: url(#{@website_setting.bg_image})"%>"></div>
+
+<div class="bg"   style="<%="background-image: url( #{@website_setting.bg_image})" if !@website_setting.bg_pic_template_id.nil? %>"></div>
+
 <%= render 'application/gb2big5' %>
+
 <%= yield :begin_animation_section %>
 <div class="main">
   

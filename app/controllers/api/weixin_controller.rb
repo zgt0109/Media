@@ -15,6 +15,7 @@ class Api::WeixinController < Api::BaseController
   end
 
   def service
+
     @start_time = Time.now
     @is_success = @checked ? 1 : 0
     $encrypt_type  = params[:encrypt_type].to_s

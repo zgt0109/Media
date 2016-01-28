@@ -1,7 +1,7 @@
 <% current_class = (controller.send(:_layout) == "application_gm") ? 'pagecurrent current' : 'pagecurrent current' %>
 <ul class="box-nav box important">
   <li class="<%= current_page?(websites_path) ? current_class : '' %>">
-    <%= link_to websites_path do %><span>微官网设置</span><% end %>
+    <%= link_to websites_path do %><span>基础设置</span><% end %>
   </li>
   <li class="<%= current_page?(website_settings_path) || (controller_name == 'website_settings' && action_name == 'show') ? current_class : '' %>">
     <%= link_to  website_settings_path do %><span>模板样式</span><% end %>
