@@ -24,10 +24,10 @@ namespace :stat do
   task :create_wx_user_data => :environment do
 
     puts "update data now....."
-    @wx_mp_user = WxMpUser.all
+    @wx_mp_user = WxMpUser.where(:openid => !nil)
 
     @wx_mp_user.each_with_index do |w, index|
-      options={:openid => w.openid, :begin_date => (begin_date-1).to_s, :end_date => (end_date-1).to_s}
+      options={:openid => w.openid, :begin_date => (end_date-1).to_s, :end_date => (end_date-1).to_s}
 
       puts options
 
@@ -62,7 +62,7 @@ namespace :stat do
 
   task :create_wx_articles_data => :environment do
 
-    @wx_mp_user = WxMpUser.all
+    @wx_mp_user = WxMpUser.where(:openid => !nil)
     @wx_mp_user.each_with_index do |w, index|
 
 
@@ -98,7 +98,7 @@ namespace :stat do
   task :create_wx_articles_hour_data => :environment do
 
 
-    @wx_mp_user = WxMpUser.all
+    @wx_mp_user = WxMpUser.where(:openid => !nil)
     @wx_mp_user.each_with_index do |w, index|
 
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
@@ -129,11 +129,11 @@ namespace :stat do
 
   task :create_wx_msg_data => :environment do
 
-    @wx_mp_user = WxMpUser.all
+    @wx_mp_user = WxMpUser.where(:openid => !nil)
 
     @wx_mp_user.each_with_index do |w, index|
 
-      options={:openid => w.openid, :begin_date => (begin_date-1).to_s, :end_date => (end_date-1).to_s}
+      options={:openid => w.openid, :begin_date => (end_date-1).to_s, :end_date => (end_date-1).to_s}
       # 获取消息发送概况数据
       m_upstream = WxUserData.getupstreammsg(options)["list"]
       # 获取消息分送分时数据
@@ -169,7 +169,7 @@ namespace :stat do
   end
   task :create_wx_msg_hour_data => :environment do
 
-    @wx_mp_user = WxMpUser.all
+    @wx_mp_user = WxMpUser.where(:openid => !nil)
 
 
     @wx_mp_user.each_with_index do |w, index|
