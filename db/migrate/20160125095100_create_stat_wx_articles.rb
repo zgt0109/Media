@@ -16,7 +16,7 @@ class CreateStatWxArticles < ActiveRecord::Migration
       t.integer :add_to_fav_count,null: false, default: 0
       t.integer :target_user,null: false, default: 0
       t.integer :user_source,null: false, default: 0
-      t.timestamps
+      t.dateime :updated_at
     end
   end
 end
