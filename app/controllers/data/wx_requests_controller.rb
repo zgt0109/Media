@@ -19,11 +19,8 @@ class Data::WxRequestsController < ApplicationController
     #@data['today']['全部请求'] = @today_wx_logs.count
 
     #全部
-
-
     total_wx_requests = @all_wx_requests.sum(:total) # + @data['today']['全部请求']
     @data['all']['全部请求'] = total_wx_requests
-
     #月请求
     @data['month']['全部请求'] = @month_wx_requests.sum(:total) # + @data['today']['全部请求']
 
@@ -317,6 +314,7 @@ class Data::WxRequestsController < ApplicationController
     @data = {'today' => {}, 'yesterday' => {}, 'seven' => {}, 'month' => {}, 'all' => {}, "week" => {}}
 
     @data['all']['累积消息'] = @wx_mp_user.stat_wx_articles.sum("int_page_read_count")
+
 
     #月关注
     month_request = @wx_mp_user.stat_wx_articles.select('sum(int_page_read_user) int_page_read_user,sum(int_page_read_count),int_page_read_count ').first
