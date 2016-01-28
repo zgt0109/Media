@@ -21,11 +21,11 @@
     </ul>
   </li>
   <li class="<%= 'open active' if controller_name == 'wx_requests' && action_name == 'keyword' %>">
-    <a href="javascript:;" class="dropdown-toggle">
-      <i class="icon-sitemap"></i>
-      <span class="menu-text">关键词数据</span>
-      <b class="arrow icon-angle-down"></b>
-    </a>
+    <!--<a href="javascript:;" class="dropdown-toggle">-->
+      <!--<i class="icon-sitemap"></i>-->
+      <!--<span class="menu-text">关键词数据</span>-->
+      <!--<b class="arrow icon-angle-down"></b>-->
+    <!--</a>-->
     <ul class="submenu">
       <li class="<%= 'open active' if controller_name == 'wx_requests' && action_name == 'keyword' %>">
         <%= link_to keyword_data_wx_requests_path do %> <i class="icon-double-angle-right"></i>命中分析<% end %>

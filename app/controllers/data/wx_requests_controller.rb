@@ -433,90 +433,90 @@ class Data::WxRequestsController < ApplicationController
   end
 
   def keyword
-    @high_chart = {"消息发送人数" => {}, "消息发送次数" => {}, "人均发送次数" => {}, '关键词触发数' => {}, '关键词命中率' => {}}
-    @data = {'today' => {}, 'yesterday' => {}, 'seven' => {}, 'month' => {}, 'all' => {}}
-
-    @data['yesterday']['消息发送次数'] = @yesterday_wx_request.try(:message_nums).to_i
-    @data['yesterday']['消息发送人数'] = @yesterday_wx_request.try(:message_users).to_i
-    @data['yesterday']['关键词触发数'] = @yesterday_wx_request.try(:text_hit).to_i
-    @data['yesterday']['关键词命中率'] = @data['yesterday']['消息发送次数'] == 0 ? 0.0 : @data['yesterday']['关键词触发数'].to_f / @data['yesterday']['消息发送次数']
-
-    @data['seven']['消息发送次数'] = @seven_wx_requests.sum(:message_nums)
-    @data['seven']['消息发送人数'] = @seven_wx_requests.sum(:message_users)
-    @data['seven']['关键词触发数'] = @seven_wx_requests.sum(:text_hit)
-    @data['seven']['关键词命中率'] = @data['seven']['消息发送次数'] == 0 ? 0.0 : @data['seven']['关键词触发数'].to_f / @data['seven']['消息发送次数']
-
-    if @dates.count == 1
-
-      (0..23).each do |date|
-        @high_chart.keys.each do |key|
-          @high_chart[key][date.to_s] = 0
-        end
-      end
-
-      (0..23).each do |date|
-        st = Time.parse(@st.to_s + " #{date}:0:0")
-        ed = Time.parse(@st.to_s + " #{date + 1}:0:0")
-        @high_chart["消息发送人数"][date.to_s] = 0 #@wx_logs.where(:MsgType => 'event', :Event => 'subscribe', :CreateTime.gte => st, :CreateTime.lte => ed).count
-        @high_chart["消息发送次数"][date.to_s] = 0 #@wx_logs.where(:MsgType => 'event', :Event => 'unsubscribe', :CreateTime.gte => st, :CreateTime.lte => ed).count
-        @high_chart["人均发送次数"][date.to_s] = 0 #
-        @high_chart["关键词触发数"][date.to_s] = 0
-        @high_chart["关键词命中率"][date.to_s] = 0
-      end
-
-    else
-
-      @dates.each do |date|
-        @high_chart.keys.each do |key|
-          @high_chart[key][date.to_s] = 0
-        end
-      end
-
-      requests = @all_wx_requests.where(date: @st..@ed)
-      requests.each do |r|
-        @high_chart["消息发送人数"][r.date.to_s] = r.message_users
-        @high_chart["消息发送次数"][r.date.to_s] = r.message_nums
-        @high_chart["人均发送次数"][r.date.to_s] = r.message_user_mean
-        @high_chart["关键词触发数"][r.date.to_s] = r.text_hit
-        @high_chart["关键词命中率"][r.date.to_s] = r.keyword_per
-      end
-
-      if Date.today <= @ed && Date.today >= @st
-        @high_chart['消息发送人数'][Date.today.to_s] = @data['today']['消息发送人数']
-        @high_chart['消息发送次数'][Date.today.to_s] = @data['today']['消息发送次数']
-        @high_chart['人均发送次数'][Date.today.to_s] = @data['today']['人均发送次数']
-        @high_chart['关键词触发数'][Date.today.to_s] = @data['today']['关键词触发数']
-        @high_chart['关键词命中率'][Date.today.to_s] = @data['today']['关键词命中率']
-      end
-
-    end
-
-    if params[:VCFields] == 'message'
-      @chart = WxLog.multi_line(@dates.to_a, {'消息数' => @high_chart['消息发送次数']}, "#{@st.strftime("%Y-%m-%d")} 至 #{@ed.strftime("%Y-%m-%d")} 消息数报告", "消息数")
-    else
-      @chart = WxLog.multi_line(@dates.to_a, {'关键词触发' => @high_chart['关键词触发数']}, "#{@st.strftime("%Y-%m-%d")} 至 #{@ed.strftime("%Y-%m-%d")} 关键词触发数报告", "关键词触发数")
-    end
-
-    if @dates.count == 1
-      @high_chart['消息发送人数'][@ed.to_s] = 0
-      @high_chart['消息发送次数'][@ed.to_s] = 0
-      @high_chart['人均发送次数'][@ed.to_s] = 0
-      @high_chart['关键词触发数'][@ed.to_s] = 0
-      @high_chart['关键词命中率'][@ed.to_s] = 0
-    end
-    @ahs = WxRequestHit.where(is_hit: 1, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).select("content, id").group("content").order("date desc").limit(10)
-    @mhs = WxRequestHit.where(is_hit: 0, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).select("content, id").group("content").order("date desc").limit(10)
-
-    @date_arrays = Kaminari.paginate_array(@dates.to_a.sort { |x, y| y<=>x }).page(params[:page])
-
-    respond_to do |format|
-      format.html
-      format.xls {
-        send_data(xls_content_for(@dates.to_a, @data, @high_chart),
-                  :type => "text/excel;charset=utf-8; header=present",
-                  :filename => "#{params[:VCFields] == 'message' ? '消息数' : '关键词触发'}_#{Time.now.strftime("%Y%m%d")}.xls")
-      }
-    end
+    # @high_chart = {"消息发送人数" => {}, "消息发送次数" => {}, "人均发送次数" => {}, '关键词触发数' => {}, '关键词命中率' => {}}
+    # @data = {'today' => {}, 'yesterday' => {}, 'seven' => {}, 'month' => {}, 'all' => {}}
+    #
+    # @data['yesterday']['消息发送次数'] = @yesterday_wx_request.try(:message_nums).to_i
+    # @data['yesterday']['消息发送人数'] = @yesterday_wx_request.try(:message_users).to_i
+    # @data['yesterday']['关键词触发数'] = @yesterday_wx_request.try(:text_hit).to_i
+    # @data['yesterday']['关键词命中率'] = @data['yesterday']['消息发送次数'] == 0 ? 0.0 : @data['yesterday']['关键词触发数'].to_f / @data['yesterday']['消息发送次数']
+    #
+    # @data['seven']['消息发送次数'] = @seven_wx_requests.sum(:message_nums)
+    # @data['seven']['消息发送人数'] = @seven_wx_requests.sum(:message_users)
+    # @data['seven']['关键词触发数'] = @seven_wx_requests.sum(:text_hit)
+    # @data['seven']['关键词命中率'] = @data['seven']['消息发送次数'] == 0 ? 0.0 : @data['seven']['关键词触发数'].to_f / @data['seven']['消息发送次数']
+    #
+    # if @dates.count == 1
+    #
+    #   (0..23).each do |date|
+    #     @high_chart.keys.each do |key|
+    #       @high_chart[key][date.to_s] = 0
+    #     end
+    #   end
+    #
+    #   (0..23).each do |date|
+    #     st = Time.parse(@st.to_s + " #{date}:0:0")
+    #     ed = Time.parse(@st.to_s + " #{date + 1}:0:0")
+    #     @high_chart["消息发送人数"][date.to_s] = 0 #@wx_logs.where(:MsgType => 'event', :Event => 'subscribe', :CreateTime.gte => st, :CreateTime.lte => ed).count
+    #     @high_chart["消息发送次数"][date.to_s] = 0 #@wx_logs.where(:MsgType => 'event', :Event => 'unsubscribe', :CreateTime.gte => st, :CreateTime.lte => ed).count
+    #     @high_chart["人均发送次数"][date.to_s] = 0 #
+    #     @high_chart["关键词触发数"][date.to_s] = 0
+    #     @high_chart["关键词命中率"][date.to_s] = 0
+    #   end
+    #
+    # else
+    #
+    #   @dates.each do |date|
+    #     @high_chart.keys.each do |key|
+    #       @high_chart[key][date.to_s] = 0
+    #     end
+    #   end
+    #
+    #   requests = @all_wx_requests.where(date: @st..@ed)
+    #   requests.each do |r|
+    #     @high_chart["消息发送人数"][r.date.to_s] = r.message_users
+    #     @high_chart["消息发送次数"][r.date.to_s] = r.message_nums
+    #     @high_chart["人均发送次数"][r.date.to_s] = r.message_user_mean
+    #     @high_chart["关键词触发数"][r.date.to_s] = r.text_hit
+    #     @high_chart["关键词命中率"][r.date.to_s] = r.keyword_per
+    #   end
+    #
+    #   if Date.today <= @ed && Date.today >= @st
+    #     @high_chart['消息发送人数'][Date.today.to_s] = @data['today']['消息发送人数']
+    #     @high_chart['消息发送次数'][Date.today.to_s] = @data['today']['消息发送次数']
+    #     @high_chart['人均发送次数'][Date.today.to_s] = @data['today']['人均发送次数']
+    #     @high_chart['关键词触发数'][Date.today.to_s] = @data['today']['关键词触发数']
+    #     @high_chart['关键词命中率'][Date.today.to_s] = @data['today']['关键词命中率']
+    #   end
+    #
+    # end
+    #
+    # if params[:VCFields] == 'message'
+    #   @chart = WxLog.multi_line(@dates.to_a, {'消息数' => @high_chart['消息发送次数']}, "#{@st.strftime("%Y-%m-%d")} 至 #{@ed.strftime("%Y-%m-%d")} 消息数报告", "消息数")
+    # else
+    #   @chart = WxLog.multi_line(@dates.to_a, {'关键词触发' => @high_chart['关键词触发数']}, "#{@st.strftime("%Y-%m-%d")} 至 #{@ed.strftime("%Y-%m-%d")} 关键词触发数报告", "关键词触发数")
+    # end
+    #
+    # if @dates.count == 1
+    #   @high_chart['消息发送人数'][@ed.to_s] = 0
+    #   @high_chart['消息发送次数'][@ed.to_s] = 0
+    #   @high_chart['人均发送次数'][@ed.to_s] = 0
+    #   @high_chart['关键词触发数'][@ed.to_s] = 0
+    #   @high_chart['关键词命中率'][@ed.to_s] = 0
+    # end
+    # @ahs = WxRequestHit.where(is_hit: 1, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).select("content, id").group("content").order("date desc").limit(10)
+    # @mhs = WxRequestHit.where(is_hit: 0, date: 1.month.ago.to_date..Date.yesterday, wx_mp_user_id: @wx_mp_user.id).select("content, id").group("content").order("date desc").limit(10)
+    #
+    # @date_arrays = Kaminari.paginate_array(@dates.to_a.sort { |x, y| y<=>x }).page(params[:page])
+    #
+    # respond_to do |format|
+    #   format.html
+    #   format.xls {
+    #     send_data(xls_content_for(@dates.to_a, @data, @high_chart),
+    #               :type => "text/excel;charset=utf-8; header=present",
+    #               :filename => "#{params[:VCFields] == 'message' ? '消息数' : '关键词触发'}_#{Time.now.strftime("%Y%m%d")}.xls")
+    #   }
+    # end
   end
 
   def hit
