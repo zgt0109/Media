@@ -1,23 +1,3 @@
-# == Schema Information
-#
-# Table name: activity_prizes
-#
-#  id                     :integer          not null, primary key
-#  activity_id            :integer          not null
-#  status                 :integer          default(0), not null
-#  title                  :string(255)      not null
-#  prize                  :string(255)
-#  prize_count            :integer          default(0)
-#  prize_rate             :decimal(10, 6)   default(0.0), not null
-#  time_limit             :integer          default(0), not null
-#  limit_count            :integer          default(-1), not null
-#  day_limit_count        :integer          default(-1), not null
-#  people_limit_count     :integer          default(-1), not null
-#  people_day_limit_count :integer          default(-1), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#
-
 class ActivityPrize < ActiveRecord::Base
   #validates :title, :prize, :prize_count, :prize_rate, presence: true
   FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH = "一等奖", "二等奖", "三等奖", "四等奖", "五等奖", "六等奖"
