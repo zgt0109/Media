@@ -155,27 +155,6 @@ Wp::Application.routes.draw do
     resources :trips, only: :index
     resources :trip_orders, only: [:index, :new, :create]
 
-    resources :ec_items, :ec_categories, only: :show
-    resources :ec_comments, only: [:index, :new, :create]
-    resources :ec_shops, only: [:index, :show] do
-      get :member, on: :collection
-    end
-
-    resources :ec_addresses, except: :show do
-      post :set_default, on: :member
-    end
-
-    resources :ec_carts, only: [:index, :create] do
-      collection do
-        get :update_cart, :update_cart_with_qty
-        post :cart_total_price, :destroy_cart
-      end
-    end
-
-    resources :ec_orders, only: [:index, :new, :create, :show] do
-      get :pay, on: :member
-    end
-
     resources :bookings, only: :index
     resources :booking_comments, only: [:index, :new, :create]
     resources :booking_items, :booking_categories, only: :show
