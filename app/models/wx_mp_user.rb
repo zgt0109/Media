@@ -42,6 +42,8 @@ class WxMpUser < ActiveRecord::Base
   has_many :stat_wx_hour_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
 
   has_many :wx_users, inverse_of: :wx_mp_user
+  has_many :users, through: :wx_users
+  has_many :vip_users, through: :users
   has_many :wx_menus
   has_many :cards, class_name: "Wx::Card"
 
