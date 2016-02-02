@@ -4,13 +4,13 @@
 #
 #     uri = URI(M_winwemedia_BASE_URL)
 #     uri.path = '/auth_agent/wx_oauth'
-#     uri.query= {return_to: return_to, mp_openid: @wx_mp_user.try(:openid)}.to_param
+#     uri.query= {return_to: return_to, app_id: @wx_mp_user.try(:app_id)}.to_param
 #     redirect_to uri.to_s
 #   end
 # end
 
 # 网页授权请求地址：
-# http://m.winwemedia.com/auth_agent/wx_oauth?return_to=base64_redirect_url&mp_openid=gh_xxx
+# http://m.winwemedia.com/auth_agent/wx_oauth?return_to=base64_redirect_url&app_id=wx0d53f1234
 # 获取openid后跳转到：
 # http://redirect_url?openid=123
 
@@ -106,7 +106,7 @@ class AuthAgentController < ApplicationController
   end
 
   def detected_wx_mp_user
-    @wx_mp_user = WxMpUser.find_by_openid(params[:mp_openid]) if params.has_key? :mp_openid
+    @wx_mp_user = WxMpUser.find_by_openid(params[:app_id]) if params.has_key? :app_id
 
     session[:wx_mp_user_id] = @wx_mp_user.id if @wx_mp_user
 

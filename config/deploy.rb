@@ -2,7 +2,7 @@ require 'bundler/capistrano'
 require 'rvm/capistrano'
 # require 'capistrano/sidekiq'
 
-#set :rvm_ruby_string, '2.2.1' # Change to your ruby version
+#set :rvm_ruby_string, '2.1.5' # Change to your ruby version
 set :rvm_type, :user # :user if RVM installed in $HOME
 
 set :repository, 'git@shequ.winwemedia.com:/opt/repos/win.git'
