@@ -211,7 +211,7 @@
     </li>
   <% end %>
 
-  <% if current_user.has_privilege_for?(20003) %>
+  <% if current_site.has_privilege_for?(20003) %>
     <li>
       <a href="<%= wmall_admin_root_url(current_user.find_or_generate_auth_token, current_user.id) %>" target="_blank">
         <i class="icon-plus"></i>
