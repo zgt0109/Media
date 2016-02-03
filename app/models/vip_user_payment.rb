@@ -97,9 +97,9 @@ class VipUserPayment < ActiveRecord::Base
       vip_user_payment
     end
 
-    def detected_vip_user(site_id, open_id)
-      site = Site.where(id: site_id).first
-      wx_user = site.wx_users.where(openid: open_id).first
+    def detected_vip_user(account_id, openid)
+      site = Site.where(account_id: account_id).first
+      wx_user = site.wx_users.where(openid: openid).first
 
       return if site.nil? and wx_user.nil?
 

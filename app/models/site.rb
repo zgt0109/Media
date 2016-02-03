@@ -36,7 +36,7 @@ class Site < ActiveRecord::Base
   has_many :consumes
 
   has_many  :users, inverse_of: :site
-  has_many  :wx_users, through: :users
+  has_many  :wx_users, through: :wx_mp_user
   has_one  :house
   has_one  :car_shop
   has_one  :hotel
