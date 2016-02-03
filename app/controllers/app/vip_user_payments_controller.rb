@@ -4,12 +4,12 @@ class App::VipUserPaymentsController < ActionController::Base
 
   def payment
     result = {}
-    fields_allowed = %w(account_id open_id out_trade_no amount subject body source callback_url notify_url merchant_url)
+    fields_allowed = %w(site_id open_id out_trade_no amount subject body source callback_url notify_url merchant_url)
     @trade_data = HashWithIndifferentAccess.new(params.slice(*fields_allowed))
     @vip_user_payment = VipUserPayment.new(@trade_data)
 
     if trade_params_valid?(@trade_data)
-      if (vip_user = VipUserPayment.detected_vip_user(@trade_data[:account_id], @trade_data[:open_id])).present?
+      if (vip_user = VipUserPayment.detected_vip_user(@trade_data[:site_id], @trade_data[:open_id])).present?
         if vip_user.password_digest.present?
           @vip_user_payment = VipUserPayment.build_and_validate(vip_user, @trade_data)
 
