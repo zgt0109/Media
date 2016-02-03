@@ -59,9 +59,9 @@ class Mobile::ShopOrdersController < Mobile::BaseController
 
       begin # 发送消息
         if @shop_order.take_out?
-          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.try(:auth_token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_order', message: '您有一笔新的微外卖订单, 请尽快处理'})
+          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.account.try(:token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_order', message: '您有一笔新的微外卖订单, 请尽快处理'})
         else
-          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.try(:auth_token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
+          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.account.try(:token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
         end
       rescue => e
         Rails.logger.info "#{e}"

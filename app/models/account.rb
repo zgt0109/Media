@@ -129,6 +129,10 @@ class Account < ActiveRecord::Base
     encrypt ? Des.encrypt(token) : token
   end
 
+  def auth_token
+    token
+  end
+
   def app_footer
     # AccountFooter.find_by_id(account_footer_id) || AccountFooter.default_footer
     AccountFooter.default_footer

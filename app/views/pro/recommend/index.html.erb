@@ -89,7 +89,7 @@
 		}
 
     $.ajax({
-      url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/fetch_info?auth_token=#{current_user.auth_token}" %>',
+      url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/fetch_info?auth_token=#{current_user.token}" %>',
       data: {},
       crossDomain: true,
       dataType: "json",
@@ -128,7 +128,7 @@
 
 		$("form").on('silentSubmit', function(){
 			$.ajax({
-				url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_user.auth_token}" %>',
+				url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_user.token}" %>',
 				data: $("#recommend_wx_mp_user_form").serializeArray(),
 				crossDomain: true,
 				dataType: 'json',
@@ -192,7 +192,7 @@
 				  $("#showmess").show();
 				  $("#show_mess_box").hide();
 					$.ajax({
-						url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/disable?auth_token=#{current_user.auth_token}" %>',
+						url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/disable?auth_token=#{current_user.token}" %>',
 						data: {_method: 'put'},
 						crossDomain: true,
 						dataType: "json",

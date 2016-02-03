@@ -11,7 +11,7 @@ class WxPlotRepairComplain < ActiveRecord::Base
   accepts_nested_attributes_for :messages
 
   before_save :create_statuses
-  after_create :send_sms, :igetui
+  after_create :send_sms#, :igetui
 
   enum_attr :gender, :in => [
     ['sir', 1, '先生'],
@@ -57,7 +57,7 @@ class WxPlotRepairComplain < ActiveRecord::Base
     end
 
     def igetui
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: wx_plot.try(:site_id), token: wx_plot.try(:site).try(:auth_token), messageable_id: self.id, messageable_type: 'WxPlotRepairComplain', source: 'wx_plot', message: '您有一笔新订单，请尽快处理。'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: wx_plot.try(:site_id), token: wx_plot.try(:site).account.try(:token), messageable_id: self.id, messageable_type: 'WxPlotRepairComplain', source: 'wx_plot', message: '您有一笔新订单，请尽快处理。'})
     rescue => e
       Rails.logger.info "#{e}" 
     end

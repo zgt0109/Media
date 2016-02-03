@@ -10,7 +10,7 @@ class Govmail < ActiveRecord::Base
 	scope :roots, ->{where(parent_id: nil)}
   	scope :replies, ->{where("parent_id is not null")}
 
-	after_create :igetui
+	# after_create :igetui
 
 	def reply
 		Govmail.where(parent_id: id).first
@@ -26,7 +26,7 @@ class Govmail < ActiveRecord::Base
 
 	private
     def igetui
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site.try(:id), token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'Govmail', source: 'gov', message: '您有一个新的信箱留言，请及时处理。'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site.try(:id), token: site.account.try(:token), messageable_id: self.id, messageable_type: 'Govmail', source: 'gov', message: '您有一个新的信箱留言，请及时处理。'})
     rescue => e
       Rails.logger.info "#{e}"
     end

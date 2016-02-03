@@ -22,9 +22,8 @@ class ShopTableOrder < ActiveRecord::Base
   belongs_to :shop
   belongs_to :shop_branch
 
-  before_create :add_default_attrs
-  before_create :update_user_mobile
-  after_create :igetui
+  before_create :add_default_attrs, :update_user_mobile
+  # after_create :igetui
 
   def complete!
     update_attributes(status: COMPLETED)
@@ -104,7 +103,7 @@ class ShopTableOrder < ActiveRecord::Base
 
   def igetui
     begin
-      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site_id, token: site.try(:auth_token), messageable_id: self.id, messageable_type: 'ShopTableOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
+      RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: site_id, token: site.account.try(:token), messageable_id: self.id, messageable_type: 'ShopTableOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
     rescue => e
       Rails.logger.info "#{e}"
     end
