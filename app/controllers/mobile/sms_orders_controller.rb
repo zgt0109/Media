@@ -66,24 +66,24 @@ class Mobile::SmsOrdersController < Mobile::BaseController
       return render json: {errcode: 0, pay_url: @payment.get_pay_url}
     end
     @payment = Payment.setup({
-                                account_id: @site.account_id,
-                                payment_type_id: params[:payment_type_id],
-                                customer_id: params[:customer_id],
-                                customer_type: params[:customer_type],
-                                paymentable_id: params[:paymentable_id],
-                                paymentable_type: params[:paymentable_type].to_s,
-                                out_trade_no: params[:out_trade_no],
-                                amount: params[:amount],
-                                subject: params[:subject].to_s,
-                                body: params[:body].to_s,
-                                notify_url: params[:notify_url],
-                                callback_url: params[:callback_url],
-                                merchant_url: params[:merchant_url],
-                                state: params[:state],
-                                source: params[:source],
-                                open_id: params[:open_id],
-                                pay_params: params.to_json
-                             })
+      account_id: @site.account_id,
+      payment_type_id: params[:payment_type_id],
+      customer_id: params[:customer_id],
+      customer_type: params[:customer_type],
+      paymentable_id: params[:paymentable_id],
+      paymentable_type: params[:paymentable_type].to_s,
+      out_trade_no: params[:out_trade_no],
+      amount: params[:amount],
+      subject: params[:subject].to_s,
+      body: params[:body].to_s,
+      notify_url: params[:notify_url],
+      callback_url: params[:callback_url],
+      merchant_url: params[:merchant_url],
+      state: params[:state],
+      source: params[:source],
+      open_id: params[:open_id],
+      pay_params: params.to_json
+    })
     tenpay_hash = { tenpay_callback: tenpay_callback_url.to_s, tenpay_notify: tenpay_notify_url.to_s, ip: request.ip}
     render json: {errcode: 0, pay_url: @payment.get_pay_url(tenpay_hash)}
   end

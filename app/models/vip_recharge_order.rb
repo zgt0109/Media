@@ -34,7 +34,7 @@ class VipRechargeOrder < ActiveRecord::Base
     transaction do
       payment ||= Payment.setup({
         payment_type_id: 10006,
-        site_id: site_id,
+        account_id: account_id,
         customer_id: vip_user_id,
         customer_type: 'VipUser',
         paymentable_id: id,
@@ -52,7 +52,7 @@ class VipRechargeOrder < ActiveRecord::Base
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
       payment_type_id: wxpayv2? ? 10001 : 10004,
-      site_id: site_id,
+      account_id: account_id,
       customer_id: user_id,
       customer_type: 'User',
       paymentable_id: id,
