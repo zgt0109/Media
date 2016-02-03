@@ -23,8 +23,7 @@ class Account < ActiveRecord::Base
     ['froze',  -1, '已冻结']
   ]
 
-  belongs_to :account_footer
-
+  has_one :account_footer
   has_one :print
   has_one :account_password
   has_one :pay_account
