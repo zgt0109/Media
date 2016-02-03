@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-btn mt">
-      <%= f.submit "确认支付", class: "btn", id: "submit_confirm_trade_form", disable_with: "支付中..." %>
+      <%= f.submit "确认支付", class: "btn btn-small", id: "submit_confirm_trade_form", disable_with: "支付中..." %>
       <%= link_to "取消", @vip_user_payment.try(:callback_url_with_trade_result), class: "btn btn-small btn-gray"%>
     </div>
   <% end %>
