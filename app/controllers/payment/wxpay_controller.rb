@@ -74,7 +74,7 @@ class Payment::WxpayController < ApplicationController
     return render json: {errcode: 001, errmsg: "account not found"} unless @account
 
     if params[:openid].present?
-      @wx_user = @account.try(:wx_mp_user).try(:wx_users).where(openid: params[:openid]).first
+      @wx_user = @account.site.wx_mp_user.wx_users.where(openid: params[:openid]).first
       @wx_user = WxUser.follow(@account.site.wx_mp_user, wx_user_openid: params[:openid], wx_mp_user_openid: @account.site.wx_mp_user.try(:openid)) unless @wx_user
     else
       return render json: {errcode: 006, errmsg: "weixin user not found"}

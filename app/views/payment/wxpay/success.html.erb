@@ -1,22 +1,25 @@
 <% provide(:title, "支付成功") %>
+
 <div class="html" id="html">
   <div class="stage" id="stage">
     <section id="sec-index">
       <div class="body">
         <div class="mod-null mod-result tcenter">
           <p class="table">
-                        <span>
-                            <i class="fa fa-check-circle-o"></i>
-                        </span>
-                        <span>
-                            <b>购买成功!</b><br/>
-                            <em>订单金额：<%= f @payment.amount %>元</em>
-                        </span>
+            <span>
+              <i class="fa fa-check-circle-o"></i>
+            </span>
+            <span>
+              <b>购买成功!</b><br/>
+              <em>订单金额：<%= f @payment.amount %>元</em>
+            </span>
           </p>
+
           <a href="javascript:void(0);" class="btn btn-shopcar" id="site">确定</a>
         </div>
       </div>
     </section>
   </div>
 </div>
+
 <%= render 'pay' %>
