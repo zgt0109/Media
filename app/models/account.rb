@@ -85,7 +85,7 @@ class Account < ActiveRecord::Base
           if free_sms_count > 0
             update_attribute(:free_sms_count, free_sms_count - phones.count)
           else
-            update_attribute(:pay_sms, pay_sms_count - phones.count)
+            update_attribute(:pay_sms_count, pay_sms_count - phones.count)
           end
         end
 

@@ -363,7 +363,7 @@ class SmsOrder < ActiveRecord::Base
     if type
       transaction do
         update_attributes(status: SmsOrder::SUCCEED)
-        account.update_attributes(pay_sms: account.pay_sms.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
+        account.update_attributes(pay_sms_count: account.pay_sms_count.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
       end
     else
       update_attributes(status: SmsOrder::FAILURE)
