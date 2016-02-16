@@ -195,18 +195,18 @@
 
   <% if current_site.has_privilege_for?(20001) %>
     <li>
-      <a href="<%= wlife_admin_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
+      <a href="<%= wlife_website_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
         <i class="icon-plus"></i>
-        <span class="menu-text">微商圈</span>
+        <span class="menu-text">微生活</span>
       </a>
     </li>
   <% end %>
 
   <% if current_site.has_privilege_for?(20002) %>
     <li>
-      <a href="<%= wlife_website_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
+      <a href="<%= wlife_admin_root_url(current_user.find_or_generate_auth_token) %>" target="_blank">
         <i class="icon-plus"></i>
-        <span class="menu-text">微生活</span>
+        <span class="menu-text">微商圈</span>
       </a>
     </li>
   <% end %>
