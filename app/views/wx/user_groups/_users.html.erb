@@ -1,0 +1,14 @@
+<%- wx_users.each do |user|%>
+
+  <li  data-id='<%= user.id %>'>
+    <div class="vipcard-info">
+      <h1><%= user.nickname %></h1>
+
+      <p><%= user.id %></p>
+      <p><span><%= user.wx_user_group.name  %></span></p>
+    </div>
+    <i class="vipcard-checked fa fa-check"></i>
+    <span><a class="vip-detail left" data-toggle="modals" href="javascript:;" data-title="会员资料" data-height="1000" data-iframe="<%= wx_user_group_path(user) %>">会员详情</a></span>
+
+  </li>
+<%- end %>

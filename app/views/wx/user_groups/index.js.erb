@@ -1,0 +1,2 @@
+$(".vipcard-list").html('<%= j render "users", wx_users: @users %>');
+$(".pagination").html('<%= j(paginate(@users, :remote => true, :params => { :controller => "user_groups", :action => "index"}).to_s)%>');

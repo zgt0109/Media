@@ -1,0 +1,18 @@
+$('.vipcard-r #add_to_group').append("<option value='<%= @group.id %>'><%= @group.name %></option>");
+var new_record = $('.vipcard-l li.new'),
+  group_id = <%= @group.groupid %>,
+  group = new_record.find('.J-group-name'),
+  num = new_record.find('.num'),
+  edit_group = new_record.find('.J-editGroup'),
+  delete_group = new_record.find('.J-deleteGroup');
+num.text(0);
+new_record.removeClass('new').attr('id', 'group-'+ group_id);
+group.attr('data-group', group_id);
+edit_group.attr('data-id', group_id);
+delete_group.attr('data-id', group_id);
+
+var parent_object = window.parent || window;
+
+    parent_object.showTip("success","操作成功");
+
+  <% flash.clear %>

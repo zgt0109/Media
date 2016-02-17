@@ -2,10 +2,10 @@
 
 <ul class="nav nav-list">
   <% if current_site.has_privilege_for?(1010) %>
-    <li class=" <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies', 'platforms'].include?(controller_path) ? parent_class : '' %>">
+    <li class=" <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies', 'platforms','wx/user_groups'].include?(controller_path) ? parent_class : '' %>">
       <%= left_nav_dropdown 'icon-wrench', '微信设置' %>
 
-      <ul class="submenu" style="display: <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies', 'platforms'].include?(controller_path) ? 'block;' : 'none;'%>">
+      <ul class="submenu" style="display: <%= ['wx/menus', 'wx/mp_users', 'keywords', 'replies', 'platforms' ,'wx/user_groups' ].include?(controller_path) ? 'block;' : 'none;'%>">
 
         <%= link_to_left_nav( '首次关注', replies_path, current_page?(replies_path) ) %>
         <%= link_to_left_nav( '自动回复', autoreply_replies_path, current_page?(autoreply_replies_path) ) %>
@@ -13,6 +13,8 @@
         <%= link_to_left_nav( '自定义菜单', wx_menus_url, controller_path == 'wx/menus' ) %>
         <%#= link_to_left_nav( '网页授权', oauth_wx_mp_users_url, current_page?(oauth_wx_mp_users_url) ) %>
         <%= link_to_left_nav( '公众号设置', platforms_path, current_page?(platforms_path) ) %>
+
+        <%= link_to_left_nav( '用户管理', wx_user_groups_url, controller_path == 'wx/user_groups' ) %>
       </ul>
     </li>
   <% end %>

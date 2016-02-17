@@ -1,0 +1,9 @@
+$(".vipcard-list").html('<%= j render 'users', wx_users: @users %>');
+$("#add_to_group").val(<%= params[:group] %>);
+<%- if params[:group] != '-1' %>
+  $("#add_to_group option[value='-1']").attr('disabled', true);
+<%- else %>
+  $("#add_to_group option[value='-1']").attr('disabled', false);
+<%- end %>
+$(".vipcard-r .J-check").attr('checked', false);
+$(".pagination").html('<%= j(paginate(@users, remote: true, params: { controller: 'user_groups', action: 'index'}).to_s)%>');

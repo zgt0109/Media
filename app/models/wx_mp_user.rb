@@ -2,7 +2,7 @@ require 'uri'
 
 class WxMpUser < ActiveRecord::Base
   include Concerns::WxMpUserPlugin
-
+  include Concerns::WeixinApi
   validates :account_id, :site_id, :status, :nickname, presence: true
   # validates :nickname, presence: true, uniqueness: { case_sensitive: false }
   # validates :openid, presence: true, on: :create
@@ -40,6 +40,8 @@ class WxMpUser < ActiveRecord::Base
   has_many :stat_wx_hour_articles ,:foreign_key => "openid" ,:primary_key => "openid"
   has_many :stat_wx_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
   has_many :stat_wx_hour_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :wx_user_tags,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :wx_user_groups
 
   has_many :wx_users, inverse_of: :wx_mp_user
   has_many :wx_menus
@@ -51,6 +53,9 @@ class WxMpUser < ActiveRecord::Base
   after_create :generate_url
 
   class << self
+
+
+
     def generate_key
       'win'+SecureRandom.hex(20)
     end
@@ -255,5 +260,7 @@ class WxMpUser < ActiveRecord::Base
     self.encoding_aes_key      = encoding_aes_key.to_s.strip
     self.last_encoding_aes_key = encoding_aes_key_was if encoding_aes_key_changed?
   end
+
+
 
 end

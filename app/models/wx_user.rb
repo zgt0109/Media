@@ -34,6 +34,8 @@ class WxUser < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :wx_mp_user
+  belongs_to :wx_user_tag
+  belongs_to :wx_user_group ,:foreign_key => "groupid" ,:primary_key => "groupid"
 
   has_many :wx_wall_users
   has_many :wx_participates

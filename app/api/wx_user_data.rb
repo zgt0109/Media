@@ -1,9 +1,10 @@
 class WxUserData
 
+
   METHODS = ["getupstreammsgmonth", "getupstreammsg", "getupstreammsghour",
-             "getupstreammsgweek", "getupstreammsgdist", "getupstreammsgdistweek",
-             "getupstreammsgdistmonth", "getusersummary", "getusercumulate","getarticlesummary",
-             "getarticletotal","getuserread","getuserreadhour","getusershare","getusersharehour"]
+    "getupstreammsgweek", "getupstreammsgdist", "getupstreammsgdistweek",
+    "getupstreammsgdistmonth", "getusersummary", "getusercumulate","getarticlesummary",
+  "getarticletotal","getuserread","getuserreadhour","getusershare","getusersharehour"]
 
   class << self
     METHODS.each do |method_name|
@@ -22,6 +23,6 @@ class WxUserData
     end
 
 
-  end
+
 
 end

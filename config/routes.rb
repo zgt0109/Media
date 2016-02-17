@@ -9,7 +9,7 @@ Wp::Application.routes.draw do
 
   require 'sidekiq/web'
   # authenticate :account do
-    mount Sidekiq::Web => '/sidekiq'
+  mount Sidekiq::Web => '/sidekiq'
   # end
 
 
@@ -251,10 +251,14 @@ Wp::Application.routes.draw do
     resources :menus do
       get :up_menu, :down_menu, :menus, on: :collection
     end
-
     resources :mp_users, except: [:edit, :show, :destroy] do
       post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
       get :qrcode, :oauth, on: :collection
+    end
+
+    resources :user_groups  do
+      post :change_name,:remove_group,:choose , on: :member
+      post :add_to_group ,:add_group,on: :collection
     end
   end
 

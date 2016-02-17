@@ -1,0 +1,22 @@
+<% content_for :main_content do %>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <%= render 'partials/home' %>
+          <li><%= link_to '微信基础设置', replies_path %></li>
+          <li><%= link_to '用户管理', wx_user_groups_path %></li>
+        </ul>
+        <%= render '/layouts/qrcode' %>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-sm-12">
+
+                        <%= yield :tab %>
+                        </div>
+        </div>
+    </div>
+  </div>
+
+  <%= yield :modal if content_for? :modal %>
+<% end %>

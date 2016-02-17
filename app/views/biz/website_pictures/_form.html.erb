@@ -418,13 +418,13 @@
             if($('#website_picture_docking_type').val() == 1){
 		if($('#website_picture_docking_function').attr('data-initialize') == 'true'){
 			if(parseInt($('#website_picture_docking_function').attr('data-value')) == 4){
-				$('#website_picture_docking_function').append("<option value='1'>首页</option><option value='4' selected='selected'>商品分类</option>");			
+				$('#website_picture_docking_function').append("<option value='1'>首页</option><option value='4' selected='selected'>商品分类</option>");
 				$('#website_picture_goods_category_id').closest('.form-group').show();
 				$.each($('.ec_seller_cat'), function(){
 					$(this).val($(this).attr('rel'));
 				});
 			}else{
-				$('#website_picture_docking_function').append("<option value='1' selected='selected'>首页</option><option value='4'>商品分类</option>");			
+				$('#website_picture_docking_function').append("<option value='1' selected='selected'>首页</option><option value='4'>商品分类</option>");
 			}
 			$('#website_picture_docking_function').attr('data-initialize', false);
 		}else{
