@@ -10,7 +10,7 @@
             <div class="clearfix"><%= f.text_field :custom_user_no, class: 'col-xs-12' %></div>
         </div>
 
-        <% if current_user.vip_card.use_vip_avatar? %>
+        <% if current_site.vip_card.use_vip_avatar? %>
         <div class="form-group ">
             <label class="control-label">
                 会员照片
