@@ -9,15 +9,10 @@ class Wx::UserGroupsController < ApplicationController
   PAGE_SIZE = 24
 
   def index
-    @search = current_site.materials.search(params[:search])
     @groups = current_site.wx_mp_user.wx_user_groups
     @users = current_site.wx_mp_user.wx_users.page(params[:page]).per(PAGE_SIZE)
   end
 
-  def new
-    @materials = current_site.materials.new
-    render layout: 'application_pop'
-  end
 #修改名字
   def change_name
     if params[:id].to_i > 2
@@ -79,8 +74,14 @@ class Wx::UserGroupsController < ApplicationController
    @user = current_site.wx_mp_user.wx_users.find_by_id(params[:id])
 
    render layout: 'application_pop'
+ end
 
-
+ def search_user
+   if params[:group]!= "-1"
+   @users = current_site.wx_mp_user.wx_users.where(groupid:params[:group]).where('nickname like ?',params[:name]).page(params[:page]).per(PAGE_SIZE)
+    else
+   @users = current_site.wx_mp_user.wx_users.where('nickname like ?',params[:name]).page(params[:page]).per(PAGE_SIZE)
+  end
  end
 
 end

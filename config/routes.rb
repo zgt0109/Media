@@ -258,7 +258,7 @@ Wp::Application.routes.draw do
 
     resources :user_groups  do
       post :change_name,:remove_group,:choose , on: :member
-      post :add_to_group ,:add_group,on: :collection
+      post :add_to_group ,:add_group,:search_user,on: :collection
     end
   end
 

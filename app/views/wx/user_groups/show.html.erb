@@ -1,0 +1,38 @@
+<div class="modal-body" style="background:white">
+  <div class=form-horizontal>
+        <div class="form-group">
+            <label class="col-sm-3">头像<span class="required-star"></span></label>
+            <img  width="125px" height="100px" src="<%=@user.headimgurl%>" class="col-sm-9"></div>
+        </div>
+
+        <div class="form-group">
+            <label>会员姓名</label>
+            <div class="clearfix"><input class="col-xs-12"  value="<%=@user.nickname %>" size="30" type="text" data-validate="true" style="pointer-events: none; cursor: default;"></div>
+        </div>
+
+
+                <div class="form-group">
+                    <label>所在分组<span class="required-star"></span></label>
+                    <div class="clearfix">
+                        <input class="col-xs-12" value="<%=@user.wx_user_group.name %>" size="30" type="text" value="Mike" data-validate="true" style="pointer-events: none; cursor: default;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>备注<span class="required-star"></span></label>
+                    <div class="clearfix">
+                        <input class="col-xs-12" value="<%= @user.remark %>" size="30" type="text" value="Mike" data-validate="true" style="pointer-events: none; cursor: default;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>所在地点<span class="required-star"></span></label>
+                    <div class="clearfix">
+                        <input class="col-xs-12" value="<%= "#{@user.city}#{@user.province}#{@user.country}" %>" size="30" type="text" value="Mike" data-validate="true" style="pointer-events: none; cursor: default;">
+                    </div>
+                </div>
+
+
+</div>
+
+    </div>

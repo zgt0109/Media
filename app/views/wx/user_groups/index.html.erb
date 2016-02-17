@@ -74,26 +74,11 @@
             clearSearch({search_input: false});
             var name = $('#vipcard-search-input').val();
             var group = $('.vipcard-l .active .group').data('group');
-            $.post('/vip_groups/search_user', {name: name, group: group});
+            console.log(group)
+            $.post('/wx/user_groups/search_user', {name: name, group: group});
             $custom_selects.val('');
         });
-        // 按等级查询用户
-        $vip_grade_links.click(function () {
-            clearSearch({vip_grade: false});
-            $(this).addClass("active").siblings().removeClass('active');
-            var grade = $(this).data('grade');
-            var group = $('.vipcard-l .active .group').data('group');
-            $.get('/vip_groups/search_grade', {grade: grade, group: group});
-        });
-        // 按自定义字段查询用户
-        $custom_selects.change(function () {
-            clearSearch({custom_field: false});
-            $(this).siblings().val('');
-            var group = $('.vipcard-l .active .group').data('group');
-            var custom_field_id = $(this).data('id');
-            var custom_value = $(this).val();
-            $.post('/vip_groups/search_custom_value', {custom_field_id: custom_field_id, custom_value: custom_value, group: group});
-        });
+
 
         // 选择分组
         $(".vipcard-l").on("click", "div", function () {
@@ -217,9 +202,8 @@
                 $("#vipcard-list>li").removeClass('checked');
             }
         });
-    
 
-        // 会员详情
+// 会员详情
         $('.vip-detail').click(function(event) {
             event.stopPropogation();
 
