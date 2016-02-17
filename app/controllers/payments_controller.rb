@@ -38,14 +38,12 @@ class PaymentsController < ApplicationController
     paymentable =  payment.try(:paymentable)
 
     if paymentable.present?
-      if paymentable.is_a?(EcOrder)
-        redirect_to mobile_ec_order_path(paymentable.site_id, paymentable)
-      elsif paymentable.is_a?(GroupOrder)
+      if paymentable.is_a?(GroupOrder)
         if params['status'].present? && params['status'] == '1'
           paymentable.pay! if paymentable.pending?
           #商圈团购增加统计
           $redis.rpush("wmall:shop:#{paymentable.try(:group_item).try(:groupable_id)}:group:order", paymentable.id) if paymentable.try(:group_item).try(:groupable_type) == "Wmall::Shop"
-          
+
           #redirect_to mobile_group_order_path(paymentable.site_id, paymentable)
           redirect_to mobile_group_orders_url(paymentable.site_id)
         else

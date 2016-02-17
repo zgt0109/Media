@@ -23,8 +23,7 @@ class Account < ActiveRecord::Base
     ['froze',  -1, '已冻结']
   ]
 
-  belongs_to :account_footer
-
+  has_one :account_footer
   has_one :print
   has_one :account_password
   has_one :pay_account
@@ -86,7 +85,7 @@ class Account < ActiveRecord::Base
           if free_sms_count > 0
             update_attribute(:free_sms_count, free_sms_count - phones.count)
           else
-            update_attribute(:pay_sms, pay_sms_count - phones.count)
+            update_attribute(:pay_sms_count, pay_sms_count - phones.count)
           end
         end
 
@@ -128,6 +127,10 @@ class Account < ActiveRecord::Base
   def find_or_generate_auth_token(encrypt = true)
     update_attributes(token: SecureRandom.urlsafe_base64(60)) unless token.present?
     encrypt ? Des.encrypt(token) : token
+  end
+
+  def auth_token
+    token
   end
 
   def app_footer

@@ -7,12 +7,11 @@ class Biz::GroupItemsController < Biz::GroupBaseController
     @group_item = @group.group_items.new(group_type: 1)
   end
 
-
   def create
     @group_item = @group.group_items.new(params[:group_item])
     respond_to do |format|
       if @group_item.save
-        format.html { redirect_to groups_path(anchor: "tab-3"), notice: '添加成功' }
+        format.html { redirect_to items_groups_path, notice: '添加成功' }
         format.json { render json: @group_item, status: :created, location: @service }
       else
         format.html { render action: "new" }
@@ -21,13 +20,10 @@ class Biz::GroupItemsController < Biz::GroupBaseController
     end
   end
 
-  def edit
-  end
-
   def update
     respond_to do |format|
       if @group_item.update_attributes(params[:group_item])
-        format.html { redirect_to groups_path(anchor: "tab-3"), notice: '更新成功' }
+        format.html { redirect_to items_groups_path, notice: '更新成功' }
         format.json { head :no_content }
       else
         format.html { redirect_to :back, notice: '更新失败' }
@@ -39,11 +35,10 @@ class Biz::GroupItemsController < Biz::GroupBaseController
   def destroy
     respond_to do |format|
       if @group_item.delete!
-        msg = @group_item.deleted? ? "下架" : "上架"
-        format.html { redirect_to groups_path(anchor: "tab-3"), notice: "#{msg}成功" }
+        format.html { redirect_to :back, notice: "下架成功" }
         format.json { head :no_content }
       else
-        format.html { redirect_to groups_path(anchor: "tab-3"), notice: "#{msg}失败" }
+        format.html { redirect_to :back, notice: "下架失败" }
         format.json { render json: @group_item.errors, status: :unprocessable_entity }
       end
     end

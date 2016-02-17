@@ -31,7 +31,7 @@ class Biz::GroupsController < Biz::GroupBaseController
   def update
     respond_to do |format|
       if @group.update_attributes(params[:group])
-        format.html { redirect_to groups_path(anchor: "tab-1"), notice: '保存成功' }
+        format.html { redirect_to :back, notice: '保存成功' }
         format.json { head :no_content }
       else
         format.html { redirect_to :back, notice: '保存失败' }

@@ -9,8 +9,6 @@ class Biz::GroupCategoriesController < Biz::GroupBaseController
     @group_categories = @group.group_categories
   end
 
-
-
   def new
     @group_category = @group.group_categories.new(parent_id: params[:parent_id].to_i)
     render layout: 'application_pop'
@@ -25,15 +23,12 @@ class Biz::GroupCategoriesController < Biz::GroupBaseController
     end
   end
 
-
   def edit
     render layout: 'application_pop'
   end
 
-
   def update
     if @group_category.update_attributes(params[:group_category])
-      # redirect_to group_categories_url, notice: "更新成功"
       render action: 'edit_result', layout: 'application_pop'
     else
       render action: 'edit', layout: 'application_pop'
@@ -82,10 +77,7 @@ class Biz::GroupCategoriesController < Biz::GroupBaseController
         format.json { head :no_content }
       end
     end
-
   end
-
-
 
   private
 

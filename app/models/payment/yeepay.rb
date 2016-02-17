@@ -52,7 +52,7 @@ class Payment::Yeepay < Payment::Base
   end
 
   def customer_setting
-    YeepaySetting.where(status: 1, site_id: site_id, payment_type_id: payment_type_id).first
+    YeepaySetting.where(status: 1, site_id: account.site.id, payment_type_id: payment_type_id).first
   end
 
   delegate :crypto, to: :customer_setting

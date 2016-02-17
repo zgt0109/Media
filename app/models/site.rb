@@ -36,7 +36,7 @@ class Site < ActiveRecord::Base
   has_many :consumes
 
   has_many  :users, inverse_of: :site
-  has_many  :wx_users, through: :users
+  has_many  :wx_users, through: :wx_mp_user
   has_one  :house
   has_one  :car_shop
   has_one  :hotel
@@ -179,8 +179,8 @@ class Site < ActiveRecord::Base
   end
 
   def find_or_generate_auth_token(encrypt = true)
-    account.update_attributes(auth_token: SecureRandom.urlsafe_base64(60)) unless auth_token.present?
-    encrypt ? Des.encrypt(self.auth_token) : self.auth_token
+    update_attributes(token: SecureRandom.urlsafe_base64(60)) unless token.present?
+    encrypt ? Des.encrypt(self.token) : self.token
   end
 
   def uid

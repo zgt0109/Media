@@ -28,7 +28,6 @@ class User < ActiveRecord::Base
   has_many :leaving_messages, as: :replier
   has_many :addresses, class_name: 'WxUserAddress', dependent: :destroy
   has_many :ec_carts
-  has_many :orders, class_name: 'EcOrder'
   has_many :booking_orders
   has_many :group_orders
   has_many :hospital_orders

@@ -98,28 +98,6 @@ module WinwemediaLog
     end
   end
 
-  class BqqApi < Logger
-    def format_message(serverity, timestamp, progname, msg)
-      "[#{timestamp.to_formatted_s(:db)}] #{msg}"
-    end
-
-    def self.get_file
-      file_name = Time.now.strftime('%Y%m%d')
-      log_dir =  Rails.root.to_s + "/public/logs/biz_qq/"
-      FileUtils.mkdir_p log_dir unless Dir.exists? log_dir
-      file = log_dir + "#{file_name}.txt"
-      File.open(file, 'a')
-    end
-
-    def self.add(msg)
-      logfile = self.get_file
-      log = self.new(logfile)
-      log.info "#{msg}\n\n"
-      logfile.flush
-      logfile.close
-    end
-  end
-
   class Payment < Logger
     def self.logger
       logger_path = "#{Rails.root}/public/logs/error/payment"

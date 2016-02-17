@@ -5,15 +5,15 @@
       <div class="body">
         <div class="mod-null mod-result result-fail tcenter">
           <p class="table">
-                        <span>
-                            <i class="fa fa-exclamation-circle"></i>
-                        </span>
-                        <span>
-                            <b>支付失败!</b><br/>
-                            <em>订单金额：<%= f @payment.amount %>元</em>
-                        </span>
+            <span>
+              <i class="fa fa-exclamation-circle"></i>
+            </span>
+            <span>
+              <b>支付失败!</b><br/>
+              <em>订单金额：<%= f @payment.amount %>元</em>
+            </span>
           </p>
-          <a href="<%= payment_wxpay_pay_url(site_id: @payment.site_id, out_trade_no: @payment.out_trade_no, openid: params[:openid], showwxpaytitle: 1) %>" class="btn btn-shopcar">重新支付</a>
+          <a href="<%= payment_wxpay_pay_url(account_id: @payment.account_id, out_trade_no: @payment.out_trade_no, openid: params[:openid], showwxpaytitle: 1) %>" class="btn btn-shopcar">重新支付</a>
           <a href="javascript:void(0);" class="btn btn-buy" id="site">返回商家页面</a>
         </div>
       </div>
@@ -22,9 +22,10 @@
 </div>
 
 <%= render 'pay' %>
+
 <script>
   <% if flash[:notice] || flash[:alert] %>
-        alert("<%= flash[:notice] || flash[:alert] %>");
-        <% flash[:notice]= nil; flash[:alert] = nil %>
-    <% end %>
+    alert("<%= flash[:notice] || flash[:alert] %>");
+    <% flash[:notice]= nil; flash[:alert] = nil %>
+  <% end %>
 </script>

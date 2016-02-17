@@ -97,7 +97,7 @@ class SmsOrdersController < ApplicationController
 
     if notify_verify(params['notify_id'])
 
-      payment.update_attributes(trade_status: 'TRADE_SUCCESS', status: Payment::SUCCESS)
+      payment.update_attributes(trade_status: 'TRADE_SUCCESS', trade_no: params[:trade_no], status: Payment::SUCCESS, order_msg: params.to_s)
       paymentable.set_to_succeed(true) if paymentable
 
       render text: 'success'

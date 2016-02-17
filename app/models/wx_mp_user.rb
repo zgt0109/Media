@@ -44,6 +44,8 @@ class WxMpUser < ActiveRecord::Base
   has_many :wx_user_groups
 
   has_many :wx_users, inverse_of: :wx_mp_user
+  has_many :users, through: :wx_users
+  has_many :vip_users, through: :users
   has_many :wx_menus
   has_many :cards, class_name: "Wx::Card"
 

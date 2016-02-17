@@ -2,8 +2,8 @@
   <li  data-id='<%= user.id %>'>
     <div class="vipcard-info">
       <h1><%= user.name %></h1>
-      <% if current_user.vip_card.labeled_custom_field_ids.present? %>
-        <p><%= raw vip_labeled_values(current_user.vip_card, user) %></p>
+      <% if current_site.vip_card.labeled_custom_field_ids.present? %>
+        <p><%= raw vip_labeled_values(current_site.vip_card, user) %></p>
       <% end %>
       <p><%= user.vip_grade_name %></p>
       <p><span><%= user.vip_group.name rescue '未分组' %></span></p>
