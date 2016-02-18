@@ -257,8 +257,11 @@ Wp::Application.routes.draw do
     end
 
     resources :user_groups  do
-      post :change_name,:remove_group,:choose , on: :member
-      post :add_to_group ,:add_group,:search_user,on: :collection
+      post :choose , on: :member
+      post :add_to_group ,:search_user,on: :collection
+    end
+
+    resources :user_messages do
     end
   end
 

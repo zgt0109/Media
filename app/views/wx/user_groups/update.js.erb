@@ -1,1 +1,8 @@
 $('.vipcard-r #add_to_group option[value=<%= @group.id%>]').text('<%= @group.name %>')
+
+
+  var parent_object = window.parent || window;
+
+    parent_object.showTip("success","操作成功");
+
+  <% flash.clear %>

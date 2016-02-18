@@ -86,6 +86,13 @@
             $(this).parent().addClass("active").siblings().removeClass("active");
             var group = $(this).find(".group").data('group');
             console.log(group)
+            var select = $('#add_to_group').children('option')
+            for(i=0;i<select.length;i++){
+              if(select[i].value==group){
+              select[i].setAttribute("selected","true");
+              }
+              }
+
             $.post('/wx/user_groups/'+group+'/choose');
         });
         // 删除分组
@@ -93,8 +100,8 @@
             if (confirm("删除分组将会把该组已有成员全部移动至未分组里。是否确定删除？")) {
                 $(this).parent().remove();
                 $.ajax({
-                    type: "post",
-                  url: '/wx/user_groups/'+$(this).data('id')+'/remove_group'
+                    type: "delete",
+                    url: '/wx/user_groups/'+$(this).data('id')
                 });
             }
         });
@@ -139,8 +146,8 @@
                     var group_id = group.split('-')[1];
                     if(group_id>2){
                       $.ajax({
-                          type: "post",
-                          url: "/wx/user_groups/"+group_id+"/change_name",
+                          type: "put",
+                          url: "/wx/user_groups/"+group_id,
                           data: {"name": $val}
                       });
                     }else{
@@ -148,7 +155,7 @@
                     }
 
                 } else {
-                    $.post('/wx/user_groups/add_group', { name: $val });
+                    $.post('/wx/user_groups', { name: $val });
                 }
             } else {
                 alert("分组名称不能为空！");
