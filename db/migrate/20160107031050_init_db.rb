@@ -78,6 +78,7 @@ class InitDb < ActiveRecord::Migration
   create_table "sites", options: 'AUTO_INCREMENT = 10001' do |t|
     t.integer  "account_id"
     t.string   "name"
+    t.string   "token"
     t.integer  "status",                           :default => 0, :null => false
     t.text     "privileges"
     t.integer  "piwik_site_id"
@@ -105,6 +106,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "bg_pic_key"
     t.string   "logo_key"
     t.integer  "status",            :limit => 1,    :default => 0,     :null => false
+    t.integer  "pv_count",            :limit => 1,    :default => 0,     :null => false
     t.boolean  "require_wx_user",                   :default => false
     t.boolean  "audited",                           :default => false, :null => false
     t.boolean  "show_contact",                      :default => false
@@ -370,44 +372,6 @@ class InitDb < ActiveRecord::Migration
   add_index "activity_settings", ["activity_id"], :name => "index_activity_settings_on_activity_id"
   add_index "activity_settings", ["user_type"], :name => "index_activity_settings_on_user_type"
 
-  create_table "survey_answers" do |t|
-    t.integer  "activity_id"
-    t.integer  "activity_user_id"
-    t.integer  "survey_question_id"
-    t.integer  "user_id"
-    t.string   "answer"
-    t.string   "summary"
-    t.integer  "survey_question_choice_id"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
-  end
-
-  add_index "survey_answers", ["activity_id"], :name => "index_survey_answers_on_activity_id"
-  add_index "survey_answers", ["survey_question_id"], :name => "index_survey_answers_on_survey_question_id"
-  add_index "survey_answers", ["activity_user_id"], :name => "index_survey_answers_on_activity_user_id"
-  add_index "survey_answers", ["survey_question_choice_id"], :name => "index_survey_answers_on_survey_question_choice_id"
-  add_index "survey_answers", ["user_id"], :name => "index_survey_answers_on_user_id"
-
-  create_table "survey_questions" do |t|
-    t.integer  "activity_id"
-    t.string   "name"
-    t.integer  "limit_select",         :default => 1,     :null => false
-    t.string   "answer_a"
-    t.string   "answer_b"
-    t.string   "answer_c"
-    t.string   "answer_d"
-    t.string   "answer_e"
-    t.boolean  "answer_other",         :default => false
-    t.string   "answer_a_pic"
-    t.string   "answer_b_pic"
-    t.integer  "survey_question_type", :default => 1
-    t.integer  "position",             :default => 0
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
-  end
-
-  add_index "survey_questions", ["activity_id"], :name => "index_survey_questions_on_activity_id"
-
   create_table "activity_types" do |t|
     t.integer  "group_id"
     t.string   "name",                                    :null => false
@@ -601,7 +565,7 @@ class InitDb < ActiveRecord::Migration
   add_index "book_time_ranges", ["book_rule_id"], :name => "index_book_time_ranges_on_book_rule_id"
 
   create_table "booking_ads" do |t|
-    t.integer  "site_id"
+    t.integer  "booking_id"
     t.string   "title"
     t.string   "pic_key"
     t.string   "url"
@@ -611,10 +575,10 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                             :null => false
   end
 
-  add_index "booking_ads", ["site_id"], :name => "index_booking_ads_on_site_id"
+  add_index "booking_ads", :booking_id
 
   create_table "booking_categories" do |t|
-    t.integer  "site_id",                                 :null => false
+    t.integer  "booking_id",                                 :null => false
     t.integer  "parent_id"
     t.string   "name",                                    :null => false
     t.integer  "sort",                     :default => 1, :null => false
@@ -624,9 +588,9 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                              :null => false
   end
 
-  add_index "booking_categories", ["name"], :name => "index_booking_categories_on_name"
-  add_index "booking_categories", ["parent_id"], :name => "index_booking_categories_on_parent_id"
-  add_index "booking_categories", ["site_id"], :name => "index_booking_categories_on_site_id"
+  add_index "booking_categories", :name
+  add_index "booking_categories", :parent_id
+  add_index "booking_categories", :booking_id
 
   create_table "booking_comments" do |t|
     t.integer  "booking_item_id"
@@ -651,7 +615,7 @@ class InitDb < ActiveRecord::Migration
   add_index "booking_item_pictures", ["booking_item_id"], :name => "index_booking_item_pictures_on_booking_item_id"
 
   create_table "booking_items" do |t|
-    t.integer  "site_id"
+    t.integer  "booking_id"
     t.integer  "booking_category_id"
     t.string   "name"
     t.decimal  "price",                            :precision => 12, :scale => 2, :default => 0.0, :null => false
@@ -667,13 +631,13 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                                       :null => false
   end
 
-  add_index "booking_items", ["booking_category_id"], :name => "index_booking_items_on_booking_category_id"
-  add_index "booking_items", ["name"], :name => "index_booking_items_on_name"
-  add_index "booking_items", ["qty"], :name => "index_booking_items_on_qty"
-  add_index "booking_items", ["site_id"], :name => "index_booking_items_on_site_id"
+  add_index "booking_items", :booking_category_id
+  add_index "booking_items", :name
+  add_index "booking_items", :qty
+  add_index "booking_items", :booking_id
 
   create_table "booking_orders" do |t|
-    t.integer  "site_id"
+    t.integer  "booking_id"
     t.integer  "user_id"
     t.integer  "booking_item_id"
     t.string   "order_no"
@@ -692,13 +656,13 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                                   :null => false
   end
 
-  add_index "booking_orders", ["booking_item_id"], :name => "index_booking_orders_on_booking_item_id"
-  add_index "booking_orders", ["order_no"], :name => "index_booking_orders_on_order_no"
-  add_index "booking_orders", ["site_id"], :name => "index_booking_orders_on_site_id"
-  add_index "booking_orders", ["user_id"], :name => "index_booking_orders_on_user_id"
+  add_index "booking_orders", :booking_item_id
+  add_index "booking_orders", :order_no
+  add_index "booking_orders", :booking_id
+  add_index "booking_orders", :user_id
 
   create_table "bookings" do |t|
-    t.integer  "site_id",                                 :null => false
+    t.integer  "booking_id",                                 :null => false
     t.string   "name"
     t.string   "tel"
     t.integer  "status",      :limit => 1, :default => 1, :null => false
@@ -707,8 +671,8 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                              :null => false
   end
 
-  add_index "bookings", ["name"], :name => "index_bookings_on_name"
-  add_index "bookings", ["site_id"], :name => "index_bookings_on_site_id"
+  add_index "bookings", :name
+  add_index "bookings", :booking_id
 
   create_table "broche_photos" do |t|
     t.integer  "site_id",                    :null => false
@@ -2878,6 +2842,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "notify_time"
     t.boolean  "is_delivery",                                                     :default => false,               :null => false
     t.string   "callback_url"
+    t.string   "merchant_url"
     t.string   "notify_url"
     t.string   "account_url"
     t.text     "order_msg"
@@ -3660,6 +3625,7 @@ class InitDb < ActiveRecord::Migration
   add_index "sms_expenses", ["account_id", "date"]
 
   create_table "sms_logs" do |t|
+    t.integer  "account_id"
     t.date     "date"
     t.string   "phone"
     t.string   "content",       :limit => 512, :default => "1"
@@ -3671,7 +3637,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "created_at"
   end
 
-  add_index "sms_logs", ["date"], :name => "index_sms_logs_on_date"
+  add_index :sms_logs, [:account_id, :date]
 
   create_table "sms_orders" do |t|
     t.integer  "account_id"
@@ -3748,6 +3714,44 @@ class InitDb < ActiveRecord::Migration
 
   add_index "sub_accounts", ["user_id", "user_type"], :name => "index_sub_accounts_on_user_id_and_user_type"
   add_index "sub_accounts", ["username"], :name => "index_sub_accounts_on_username"
+
+  create_table "survey_answers" do |t|
+    t.integer  "activity_id"
+    t.integer  "activity_user_id"
+    t.integer  "survey_question_id"
+    t.integer  "user_id"
+    t.string   "answer"
+    t.string   "summary"
+    t.integer  "survey_question_choice_id"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "survey_answers", ["activity_id"], :name => "index_survey_answers_on_activity_id"
+  add_index "survey_answers", ["survey_question_id"], :name => "index_survey_answers_on_survey_question_id"
+  add_index "survey_answers", ["activity_user_id"], :name => "index_survey_answers_on_activity_user_id"
+  add_index "survey_answers", ["survey_question_choice_id"], :name => "index_survey_answers_on_survey_question_choice_id"
+  add_index "survey_answers", ["user_id"], :name => "index_survey_answers_on_user_id"
+
+  create_table "survey_questions" do |t|
+    t.integer  "activity_id"
+    t.string   "name"
+    t.integer  "limit_select",         :default => 1,     :null => false
+    t.string   "answer_a"
+    t.string   "answer_b"
+    t.string   "answer_c"
+    t.string   "answer_d"
+    t.string   "answer_e"
+    t.boolean  "answer_other",         :default => false
+    t.string   "answer_a_pic"
+    t.string   "answer_b_pic"
+    t.integer  "survey_question_type", :default => 1
+    t.integer  "position",             :default => 0
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
+  end
+
+  add_index "survey_questions", ["activity_id"], :name => "index_survey_questions_on_activity_id"
 
   create_table "survey_question_choices" do |t|
     t.integer  "survey_question_id"

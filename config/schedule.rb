@@ -62,6 +62,6 @@ end
 
 every 1.days, :at => '12:01 am' do
     #更新微信接口数据
-  rake "stat:get_data"
+  rake "wx_stats:all"
 
 end

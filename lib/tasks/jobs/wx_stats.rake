@@ -1,9 +1,9 @@
-namespace :stat do
+namespace :wx_stats do
 
   begin_date =(ENV['begin_date'].try(:to_date) rescue nil) || Date.yesterday
   end_date =(ENV['end_date'].try(:to_date) rescue nil) || Date.today
 
-  task get_data:[
+  task all:[
            :create_wx_user_data,
            :create_wx_articles_data,
            :create_wx_articles_hour_data,
@@ -25,12 +25,12 @@ namespace :stat do
       usersummary = WxUserData.getusersummary(options)["list"]
 
       usersummary.each do |d|
-        stat = StatWxUser.where(:ref_date => d["ref_date"], :openid => w.openid, :user_source => d["user_source"]).first_or_create()
+        stat = StatsWxUser.where(:ref_date => d["ref_date"], :openid => w.openid, :user_source => d["user_source"]).first_or_create()
         stat.update_attributes(:cancel_user => d["cancel_user"], :ref_date => d["ref_date"], :new_user => d["new_user"])
       end
 
       cumulate.each do |c|
-        stat = StatWxUser.where(:ref_date => c["ref_date"], :openid => w.openid, :user_source => c["user_source"]).first_or_create()
+        stat = StatsWxUser.where(:ref_date => c["ref_date"], :openid => w.openid, :user_source => c["user_source"]).first_or_create()
         stat.update_attributes(:cumulate_user => c["cumulate_user"], :ref_date => c["ref_date"])
       end
     end
@@ -56,7 +56,7 @@ namespace :stat do
 
         puts a
 
-        stat = StatWxArticle.where(:openid => w.openid, :ref_date => a["ref_date"],:user_source => a["user_source"], :msgid => a["msgid"], :title => a["title"]).first_or_create()
+        stat = StatsWxArticle.where(:openid => w.openid, :ref_date => a["ref_date"],:user_source => a["user_source"], :msgid => a["msgid"], :title => a["title"]).first_or_create()
 
         stat.update_attributes(
           :int_page_read_user => a["int_page_read_user"], 
@@ -88,9 +88,9 @@ namespace :stat do
       # # 获取图文分享转发分时数据
       # a_usershare_hour = WxUserData.getusersharehour(options)["list"]
       a_userread_hour.each do |a|
-        @article = StatWxArticle.find_by_ref_date(a["ref_date"])
+        @article = StatsWxArticle.find_by_ref_date(a["ref_date"])
 
-        stat = StatWxHourArticle.where(:openid => w.openid, :ref_hour => a["ref_hour"], :user_source => a["user_source"], :ref_date => a["ref_date"], :msgid => @article.msgid, :title => @article.title).first_or_create()
+        stat = StatsWxHourArticle.where(:openid => w.openid, :ref_hour => a["ref_hour"], :user_source => a["user_source"], :ref_date => a["ref_date"], :msgid => @article.msgid, :title => @article.title).first_or_create()
         stat.update_attributes(:int_page_read_user => a["int_page_read_user"], :int_page_read_count => a["int_page_read_count"],
                                :add_to_fav_user => a["add_to_fav_user"], :ori_page_read_user => a["ori_page_read_user"],
                                :ori_page_read_count => a["ori_page_read_count"], :share_scene => a["share_scene"],
@@ -124,14 +124,14 @@ namespace :stat do
       # puts m_upstreammsgdist_month = WxUserData.getupstreammsgdistmonth(options)
 
       m_upstream.each do |m|
-        stat = StatWxMsg.where(:ref_date => m["ref_date"], :openid => w.openid, :user_source => m["user_source"], :msg_type => m["msg_type"]).first_or_create()
+        stat = StatsWxMsg.where(:ref_date => m["ref_date"], :openid => w.openid, :user_source => m["user_source"], :msg_type => m["msg_type"]).first_or_create()
         #
         stat.update_attributes(:msg_user => m["msg_user"], :msg_count => m["msg_count"])
       end
 
       m_upstreammsgdist.each do |m|
 
-        stat = StatWxMsg.where(:ref_date => m["ref_date"], :openid => w.openid, :msg_user => m["msg_user"], :user_source => m["user_source"]).first_or_create()
+        stat = StatsWxMsg.where(:ref_date => m["ref_date"], :openid => w.openid, :msg_user => m["msg_user"], :user_source => m["user_source"]).first_or_create()
 
         stat.update_attributes(:count_interval => m["count_interval"])
 
@@ -161,7 +161,7 @@ namespace :stat do
 
       m_upstream_hour.each do |m|
 
-        stat = StatWxHourMsg.where(:ref_date => m["ref_date"], :ref_hour => m["ref_hour"], :openid => w.openid, :user_source => m["user_source"], :msg_type => m["msg_type"]).first_or_create()
+        stat = StatsWxHourMsg.where(:ref_date => m["ref_date"], :ref_hour => m["ref_hour"], :openid => w.openid, :user_source => m["user_source"], :msg_type => m["msg_type"]).first_or_create()
         #
         stat.update_attributes(:msg_user => m["msg_user"], :msg_count => m["msg_count"])
       end
@@ -174,7 +174,7 @@ namespace :stat do
           :user_source => m["user_source"]
         }
 
-        stat = StatWxHourMsg.where(attrs).first_or_create
+        stat = StatsWxHourMsg.where(attrs).first_or_create
 
         stat.update_attributes(:count_interval => m["count_interval"])
 

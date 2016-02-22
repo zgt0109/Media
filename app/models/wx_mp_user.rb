@@ -34,12 +34,12 @@ class WxMpUser < ActiveRecord::Base
 
   has_many :replies, as: :replier, dependent: :destroy
 
-  has_many :stat_wx_users ,:foreign_key => "openid",:primary_key => "openid"
+  has_many :stats_wx_users ,:foreign_key => "openid",:primary_key => "openid"
 
-  has_many :stat_wx_articles ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :stat_wx_hour_articles ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :stat_wx_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :stat_wx_hour_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stats_wx_articles ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stats_wx_hour_articles ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stats_wx_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stats_wx_hour_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
 
   has_many :wx_users, inverse_of: :wx_mp_user
   has_many :users, through: :wx_users
