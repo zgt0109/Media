@@ -19,21 +19,16 @@
                             <span class="nav-icon"><i class="fa fa-inbox"></i></span>
                             <strong class="nav-txt">客户案例</strong>
                         </a>
-                        <a class="nav-item <%= 'active' if action_name == 'mobile' %>" href="/mobile">
+<!--                         <a class="nav-item <%= 'active' if action_name == 'mobile' %>" href="/mobile">
                             <span class="nav-icon"><i class="fa fa-cloud-download"></i></span>
                             <strong class="nav-txt">APP下载</strong>
-                        </a>
+                        </a> -->
 <!--                         <a href="#" class="nav-item">
                             <span class="nav-icon"><i class="fa fa-pencil-square"></i></span>
                             <strong class="nav-txt">大客户定制</strong>
                         </a> -->
                     </div>
                 </li>
-                <!-- <li><a href="./oa.html">移动OA</a></li> -->
-                <li class="<%= 'active' if current_page?(yeahsite_path) %>"><%= link_to "移动建站", yeahsite_path %></li>
-                <li class="<%= 'active' if current_page?(fxt_path) || controller_name == 'fxt'%>"><%= link_to "移动广告", fxt_path %></li>
-                <li class="<%= 'active' if current_page?(wlife_path) %>"><%= link_to "移动商圈", wlife_path %></li>
-                <li class="<%= 'active' if current_page?(spread_path) %>"><%= link_to "代理商加盟", spread_path %></li>
             </ul>
         </nav>
         <div class="header-link">
