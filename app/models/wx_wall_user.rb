@@ -146,7 +146,7 @@ class WxWallUser < ActiveRecord::Base
   end
 
   def wx_wall_link
-    %Q(<a href="http://#{Settings.mhostname}/#{wx_wall.site_id}/wx_walls/#{wx_wall_id}">点击查看微信墙</a>)
+    %Q(<a href="http://#{wx_wall.site.id}.#{Settings.mhostname}/#{wx_wall.site_id}/wx_walls/#{wx_wall_id}">点击查看微信墙</a>)
   end
 
   def nickname
