@@ -685,7 +685,7 @@ class Activity < ActiveRecord::Base
   end
 
   def scene_url
-    "http://#{Settings.mhostname}/#{site_id}/scenes?aid=#{id}&version=#{scene_html.try(:version)}"
+    "http://#{site_id}.#{Settings.mhostname}/#{site_id}/scenes?aid=#{id}&version=#{scene_html.try(:version)}"
   end
 
   # 微投票状态相关属性 arrts[状态名称，是否允许开启，是否允许停止，是否允许删除]

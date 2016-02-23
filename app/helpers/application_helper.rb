@@ -609,13 +609,14 @@ module ApplicationHelper
 
 
   def quick_link_options
+    domain_url = "http://#{current_site}.#{Settings.mhostname}"
     {
       '请选择'     => '',
-      "积分换礼品"   => "http://#{Settings.mhostname}/app/vips/gifts?site_id=#{current_site.id}",
-      "会员签到"    => "http://#{Settings.mhostname}/app/vips/signin?site_id=#{current_site.id}",
-      "会员卡套餐"   => "http://#{Settings.mhostname}/app/vips/vip_packages?site_id=#{current_site.id}",
-      "会员消费记录"  => "http://#{Settings.mhostname}/app/vips/consumes?site_id=#{current_site.id}",
-      "会员积分记录"  => "http://#{Settings.mhostname}/app/vips/points?type=out&site_id=#{current_site.id}",
+      "积分换礼品"  => "#{domain_url}/app/vips/gifts?site_id=#{current_site.id}",
+      "会员签到"    => "#{domain_url}/app/vips/signin?site_id=#{current_site.id}",
+      "会员卡套餐"   => "#{domain_url}/app/vips/vip_packages?site_id=#{current_site.id}",
+      "会员消费记录"  => "#{domain_url}/app/vips/consumes?site_id=#{current_site.id}",
+      "会员积分记录"  => "#{domain_url}/app/vips/points?type=out&site_id=#{current_site.id}",
       "微酒店订单管理" => "#{HOTEL_HOST}/wehotel-all/#{current_site.id}/getOrderList"
     }
   end

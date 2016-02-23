@@ -39,7 +39,7 @@ class WbbsReply < ActiveRecord::Base
         notifier_name: wbbs_topic.poster_name,
         notifier_avatar: wbbs_topic.poster_avatar,
         notifiable_content: content,
-        content: "#{replier_name} 回复了您的帖子，点击<a href=\"http://#{Settings.mhostname}/#{wbbs_topic.site_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
+        content: "#{replier_name} 回复了您的帖子，点击<a href=\"http://#{wbbs_topic.site_id}.#{Settings.mhostname}/#{wbbs_topic.site_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
       ) if replier != wbbs_topic.poster
 
       wbbs_notifications.create(
@@ -48,7 +48,7 @@ class WbbsReply < ActiveRecord::Base
         notifier_name: parent.replier_name,
         notifier_avatar: parent.replier_avatar,
         notifiable_content: content,
-        content: "#{replier_name} 回复了您的评论，点击<a href=\"http://#{Settings.mhostname}/#{wbbs_topic.site_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
+        content: "#{replier_name} 回复了您的评论，点击<a href=\"http://#{wbbs_topic.site_id}.#{Settings.mhostname}/#{wbbs_topic.site_id}/wbbs_topics/#{wbbs_topic.id}\">查看详情</a>"
       ) if parent && parent.replier && parent.replier != replier
     end
 
