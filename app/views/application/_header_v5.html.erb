@@ -1,6 +1,10 @@
 <header class="header">
     <div class="center960">
-        <h1><a href="<%= root_path %>"><img src="/assets/v5/global_logo.png" alt="微枚迪" title="微枚迪"></a></h1>
+        <h1>
+          <a href="<%= root_path %>">
+            <!-- <img src="/assets/v5/global_logo.png" alt="微枚迪" title="微枚迪"> -->
+          </a>
+        </h1>
         <nav>
             <ul class="clearfix">
                 <li class="<%= 'active' if current_page?(root_path) %>"><%= link_to "首页", root_url %></li>
