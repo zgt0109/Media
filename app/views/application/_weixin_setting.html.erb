@@ -17,7 +17,7 @@ is_guess ||= false
     </div>
 
     <%- unless @activity.new_record? %>
-        <%- url = "http://#{Settings.mhostname}/#{current_user.id}/scenes?aid=#{@activity.try(:id)}" %>
+        <%- url = "http://#{current_site.id}.#{Settings.mhostname}/#{current_site.id}/scenes?aid=#{@activity.try(:id)}" %>
         <div class="form-group">
             <label class="control-label">分享连接<span class="required-star">*</span></label>
             <div class="clearfix">
