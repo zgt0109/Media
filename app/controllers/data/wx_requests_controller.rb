@@ -106,11 +106,11 @@ class Data::WxRequestsController < ApplicationController
     total_subscribes = @all_wx_requests.sum(:new_user) # + @data['today']['净增长数']
 
     # total_subscribes=300
-    @data['all']['累积关注'] = @wx_mp_user.stat_wx_users.maximum("cumulate_user")
+    @data['all']['累积关注'] = @wx_mp_user.stats_wx_users.maximum("cumulate_user")
 
     #月关注
 
-    month_request = @wx_mp_user.stat_wx_users.select('max(cumulate_user) total,sum(new_user) subscribe, sum(cancel_user) unsubscribe').first
+    month_request = @wx_mp_user.stats_wx_users.select('max(cumulate_user) total,sum(new_user) subscribe, sum(cancel_user) unsubscribe').first
     @data['month']['关注数'] = month_request.subscribe # + @data['today']['关注数']
     @data['month']['取消关注数'] = month_request.unsubscribe # + @data['today']['取消关注数']
     @data['month']['净增长数'] = month_request.subscribe.nil? ? 0 :month_request.subscribe-month_request.unsubscribe # + @data['today']['净增长数']
@@ -203,10 +203,10 @@ class Data::WxRequestsController < ApplicationController
 
     @data = {'today' => {}, 'yesterday' => {}, 'seven' => {}, 'month' => {}, 'all' => {}, "week" => {}}
 
-    @data['all']['累积消息'] = @wx_mp_user.stat_wx_msgs.sum("msg_count")
+    @data['all']['累积消息'] = @wx_mp_user.stats_wx_msgs.sum("msg_count")
 
     #月关注
-    month_request = @wx_mp_user.stat_wx_msgs.select('sum(msg_count) msg_count,sum(msg_user) msg_user,max(count_interval) count_interval,sum(int_page_read_count) page,sum(ori_page_read_user) origin').first
+    month_request = @wx_mp_user.stats_wx_msgs.select('sum(msg_count) msg_count,sum(msg_user) msg_user,max(count_interval) count_interval,sum(int_page_read_count) page,sum(ori_page_read_user) origin').first
     @data['month']['消息数'] = month_request.msg_count
     # @data['month']['消息量区间'] = month_request.count_interval
     @data['month']['用户数'] = month_request.msg_user
@@ -278,7 +278,7 @@ class Data::WxRequestsController < ApplicationController
 
     @wx_mp_user = current_site.wx_mp_user
 
-    @message_hour = @wx_mp_user.stat_wx_hour_msgs.where(:ref_date => date)
+    @message_hour = @wx_mp_user.stats_wx_hour_msgs.where(:ref_date => date)
 
     @data={}
 
@@ -313,11 +313,11 @@ class Data::WxRequestsController < ApplicationController
 
     @data = {'today' => {}, 'yesterday' => {}, 'seven' => {}, 'month' => {}, 'all' => {}, "week" => {}}
 
-    @data['all']['累积消息'] = @wx_mp_user.stat_wx_articles.sum("int_page_read_count")
+    @data['all']['累积消息'] = @wx_mp_user.stats_wx_articles.sum("int_page_read_count")
 
 
     #月关注
-    month_request = @wx_mp_user.stat_wx_articles.select('sum(int_page_read_user) int_page_read_user,sum(int_page_read_count),int_page_read_count ').first
+    month_request = @wx_mp_user.stats_wx_articles.select('sum(int_page_read_user) int_page_read_user,sum(int_page_read_count),int_page_read_count ').first
     @data['month']['阅读数'] = month_request.int_page_read_count
     # @data['month']['消息量区间'] = month_request.count_interval
     @data['month']['用户数'] = month_request.int_page_read_user
@@ -397,7 +397,7 @@ class Data::WxRequestsController < ApplicationController
 
     @wx_mp_user = current_site.wx_mp_user
 
-    @article_hour = @wx_mp_user.stat_wx_hour_articles.where(:ref_date => date)
+    @article_hour = @wx_mp_user.stats_wx_hour_articles.where(:ref_date => date)
 
     @data={}
 
@@ -586,9 +586,9 @@ class Data::WxRequestsController < ApplicationController
     #@today_wx_logs = WxLog.by_uid(@wx_mp_user.wx_mp_user.openid).by_date(Date.today)
     #全部
     @mp_user = current_site.wx_mp_user
-    @all_wx_requests = current_site.wx_mp_user.stat_wx_users
-    @all_wx_msg_requests = @mp_user.stat_wx_msgs
-    @all_wx_article_requests =@mp_user.stat_wx_articles
+    @all_wx_requests = current_site.wx_mp_user.stats_wx_users
+    @all_wx_msg_requests = @mp_user.stats_wx_msgs
+    @all_wx_article_requests =@mp_user.stats_wx_articles
     #月
     @month_wx_requests = @all_wx_requests.where(ref_date: 1.month.ago.to_date..Date.yesterday)
     @month_wx_msg_requests =@all_wx_msg_requests.where(ref_date: 1.month.ago.to_date..Date.yesterday)

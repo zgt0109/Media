@@ -34,13 +34,13 @@ class WxMpUser < ActiveRecord::Base
 
   has_many :replies, as: :replier, dependent: :destroy
 
-  has_many :stat_wx_users ,:foreign_key => "openid",:primary_key => "openid"
-
-  has_many :stat_wx_articles ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :stat_wx_hour_articles ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :stat_wx_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :stat_wx_hour_msgs ,:foreign_key => "openid" ,:primary_key => "openid"
-  has_many :wx_user_tags,:foreign_key => "openid" ,:primary_key => "openid"
+  has_many :stats_wx_users, foreign_key: "openid", primary_key: "openid"
+  has_many :stats_wx_articles, foreign_key: "openid", primary_key: "openid"
+  has_many :stats_wx_hour_articles, foreign_key: "openid", primary_key: "openid"
+  has_many :stats_wx_msgs, foreign_key: "openid", primary_key: "openid"
+  has_many :stats_wx_hour_msgs, foreign_key: "openid", primary_key: "openid"
+  has_many :stat_wx_hour_msgs, foreign_key: "openid", primary_key: "openid"
+  has_many :wx_user_tags, foreign_key: "openid", primary_key: "openid"
   has_many :wx_user_groups
 
   has_many :wx_users, inverse_of: :wx_mp_user
@@ -55,8 +55,6 @@ class WxMpUser < ActiveRecord::Base
   after_create :generate_url
 
   class << self
-
-
 
     def generate_key
       'win'+SecureRandom.hex(20)
@@ -262,7 +260,5 @@ class WxMpUser < ActiveRecord::Base
     self.encoding_aes_key      = encoding_aes_key.to_s.strip
     self.last_encoding_aes_key = encoding_aes_key_was if encoding_aes_key_changed?
   end
-
-
 
 end
