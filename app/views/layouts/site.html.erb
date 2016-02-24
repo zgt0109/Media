@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=1200" />
     <title><%= content_for?(:title) ? yield(:title) : "首页" %></title>
     <%= yield :custom_css if content_for?(:custom_css) %>
-    <%= stylesheet_link_tag "site", media: "all" %>
-    <%= javascript_include_tag "site" %>
+    <%= stylesheet_link_tag "sitev1", media: "all" %>
+    <%= javascript_include_tag "sitev1" %>
     <%= csrf_meta_tags %>
     <%#= render 'application/baidu_tongji' %>
   </head>
