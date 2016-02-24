@@ -412,7 +412,7 @@ START
 
       self.status = 1
       self.privileges = privileges.join(',')
-      self.expired_at = (created_at || Time.now) + 30.days #试用期30天
+      # self.expired_at = (created_at || Time.now) + 30.days #试用期30天
     # end
   end
 
