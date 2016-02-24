@@ -1,6 +1,5 @@
 class WxUserData
 
-
   METHODS = ["getupstreammsgmonth", "getupstreammsg", "getupstreammsghour",
     "getupstreammsgweek", "getupstreammsgdist", "getupstreammsgdistweek",
     "getupstreammsgdistmonth", "getusersummary", "getusercumulate","getarticlesummary",
@@ -21,8 +20,6 @@ class WxUserData
         JSON.parse(RestClient.post(url, parameters))
       end
     end
-
-
-
+  end
 
 end
