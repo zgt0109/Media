@@ -919,6 +919,7 @@ class Activity < ActiveRecord::Base
       when educations?         then app_educations_url(_default_params.merge(cid: activityable_id))
       when life?               then app_lives_url(_default_params.merge(id: activityable_id))
       when circle?             then app_business_circles_url(_default_params.merge(id: activityable_id))
+      when business_shop?      then mobile_business_shop_url(_default_params.merge(id: activityable_id))
       when message?            then app_leaving_messages_url(_default_params)
       when house_bespeak?      then new_app_house_market_url(_default_params)
       when house_seller?       then app_house_sellers_url(_default_params)
@@ -926,7 +927,6 @@ class Activity < ActiveRecord::Base
       when group?              then mobile_groups_url(_default_params.merge(id: id))
       when hospital?           then mobile_hospital_doctors_url(_default_params)
       when trip?               then mobile_trips_url(_default_params)
-      when business_shop?      then mobile_business_shop_url(site, activityable)
       when house_impression?   then app_house_impressions_url(_default_params)
       when house_live_photo?   then app_house_live_photos_url(_default_params)
       when house_intro?        then app_house_intros_url(_default_params)
@@ -942,7 +942,6 @@ class Activity < ActiveRecord::Base
       when govmail?            then mobile_govmails_url(_default_params)
       when govchat?            then mobile_govchats_url(_default_params)
       when unfold?             then mobile_unfolds_url(_default_params)
-      when wmall_coupon?       then wmall_coupon_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when scene?              then mobile_scenes_url(_default_params)
       when guess?              then mobile_guess_url(_default_params)
       when wx_card?            then mobile_wx_cards_url(_default_params.merge(wechat_card_js: 1))
@@ -964,6 +963,7 @@ class Activity < ActiveRecord::Base
       when donation?           then mobile_donations_url(stopped?.merge(wid: activityable_id))
       when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
+      when wmall_coupon?       then wmall_coupon_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wshop?              then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_openid: options[:openid])
       # when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
       when hotel?              then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}&openid=#{options[:openid]}"
