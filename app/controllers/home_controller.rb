@@ -2,7 +2,6 @@ class HomeController < ApplicationController
   include Biz::HighchartHelper
 
   skip_before_filter *ADMIN_FILTERS, except: [:console]
-
   skip_before_filter :check_account_expire, :check_auth_mobile#, only: [:index, :console]
 
   # caches_page :about
@@ -11,7 +10,8 @@ class HomeController < ApplicationController
     if current_user && current_user.is_a?(Account)
       redirect_to console_path
     else
-      redirect_to sign_in_path
+      @html_class = 'index'
+      # redirect_to sign_in_path
     end
   end
 

@@ -15,9 +15,9 @@
       <%= render 'application/baidu_tongji' %>
     </head>
     <body>
-    <%= render 'header_v5.1' %>
+    <%= render 'header' %>
     <%= content_for?(:content) ? yield(:content) : yield %>
-    <%= render 'footer_v5' unless @no_footer %>
+    <%= render 'footer' unless @no_footer %>
     <%= yield :custom_js if content_for?(:custom_js) %>
     </body>
   </html>

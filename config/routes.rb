@@ -12,8 +12,6 @@ Wp::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   # end
 
-
-
   match "auth_agent/wx_oauth", to: "auth_agent#wx_oauth"
   match "auth_agent/wx_oauth_callback", to: "auth_agent#wx_oauth_callback"
 
@@ -29,8 +27,9 @@ Wp::Application.routes.draw do
     post :resend_email, on: :member
   end
 
-  match :verify_code, :validate_image_code, controller: :home
-  match :helpers, :games, :help_menus, :console, controller: :home
+  match :verify_code, :validate_image_code, :helpers, :games, :help_menus, :console, controller: :home
+  match :about, :joins, :micro_channel, :h5_marketing, :large_customer, :optimal_code, :store, :electricity, :retail, :agents_inquiry, controller: 'site/pages'
+
 
   match 'account_footer' => 'accounts#account_footer', as: :account_footer
   post  'update_account_footer' => 'accounts#update_account_footer', as: :update_account_footer
