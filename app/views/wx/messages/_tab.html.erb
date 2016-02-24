@@ -1,0 +1,15 @@
+
+
+<div class="page-content">
+      <div class="row">
+          <div class="col-sm-12">
+              <div class="tabbable">
+                  <ul class="nav nav-tabs padding-24" id="myTab">
+                      <li class="<%='active' if params[:action]=="index" %>"><a href="/wx/messages/new">上传消息</a></li>
+                      <li class="<%='active' if params[:action]=="new_media" %>"><a href="/wx/messages/new_media">上传媒体文件</a></li>
+                      <li class="<%='active' if params[:action]=="create" %>"><a href="/wx/messages/orgnize">群发消息</a></li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+      </div>
