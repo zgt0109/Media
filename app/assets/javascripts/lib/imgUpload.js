@@ -434,7 +434,9 @@
                         var uuid = Date.now();
                         fileImg.next().append('<input class="destroy" name="booking_item[booking_item_pictures_attributes]['+uuid+'][_destroy]" type="hidden">')
                         fileImg.next().append('<input class="pic_key" name="booking_item[booking_item_pictures_attributes]['+uuid+'][pic_key]" type="hidden" value="'+key+'">')
-                    }else if(self.imgs_type == "panoramagram"){
+                    }
+                  
+                    else if(self.imgs_type == "panoramagram"){
                         // 360全景图片上传
                         if($(".file-del").length >= 6){
                             showTip('warning', '最多上传6张图片');

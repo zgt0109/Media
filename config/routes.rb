@@ -260,7 +260,8 @@ Wp::Application.routes.draw do
       post :add_to_group ,:search_user,on: :collection
     end
 
-    resources :user_messages do
+    resources :messages do
+      post :send_message ,on: :collection
     end
   end
 

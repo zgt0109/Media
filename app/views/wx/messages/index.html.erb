@@ -1,235 +1,39 @@
-<% content_for :tab do %>
-<div id="tab-4" class="tab-pane active">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="alert alert-block alert-success">
-        <strong class="pull-left">提示：</strong>
-        <ul class="vwebsiteHeadAlert">
-          <li> 没有将用户在原有的分组中进行删除又将其加入新的分组时，用户会被移入新的分组，在原有的分组中不会包含此用户。</li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-xs-12 row">
-      <div class="col-xs-3 vipcard-l">
-        <!-- vip card group start -->
-        <ul class="vipcard-group J-group">
-          <%= render 'groups', vip_groups: @vip_groups %>
-        </ul>
-        <!-- vip card group end -->
-        <!-- add vip group -->
-        <div class="addgroup">
-          <a class="vipcard-btn J-addGroup"><b>+</b>新建分组</a>
-        </div>
-      </div>
-      <div class="col-xs-9 vipcard-r">
-        <div class="vipcard-t">
-          <label>
-            <input type="checkbox" class="J-check" id="checkAll" />
-            全选
-          </label>
-          <label >添加到</label>
-          <select id='add_to_group'>
-            <option value="-1">全部用户</option>
-            <option value="-2">未分组</option>
-            <%= options_for_select(current_site.vip_card.vip_groups.pluck(:name, :id)) %>
-          </select>
-          <div class="vipcard-search">
-            <input type="text" class="vipcard-search-input" id="vipcard-search-input" placeholder="请输入用户姓名" />
-            <input type="button" class="vipcard-btn" id='search_user' value="查询">
-          </div>
-        </div>
-        <div class="vipcard-cont">
-          <div class="vipcard-attrs">
-            <span>筛选：</span>
-            <%- @vip_grades.each do |grade| %>
-              <a data-grade="<%= grade.id %>" class="vip-grade"><%= grade.name %></a>
-            <%- end %>
-            <% current_site.vip_card.labeled_custom_fields.each do |custom_field| %>
-                <select id="custom_field_<%= custom_field.id %>" data-id="<%= custom_field.id %>">
-                  <option value=""><%= custom_field.name %>选择</option>
-                  <%= options_for_select(CustomField.system_options[custom_field.name]['values']) %>
-                </select>
-            <% end %>
-          </div>
-          <ul class="vipcard-list" id="vipcard-list">
-            <%= render 'users', vip_users: @vip_users %>
-          </ul>
-        </div>
-        <%= paginate @vip_users, :remote => true,  :params => { :controller => 'vip_groups', :action => 'index'} %>
-      </div>
-    </div>
+<% content_for :main_content do %>
+
+<div class="main-content ">
+
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微信基础设置', replies_path %></li>
+      <li><%= link_to '消息设置', wx_messages_path %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
   </div>
+  <div class="page-content">
+        <div class="row">
+
+   <div class="col-sm-12">
+     <div class="alert alert-block alert-info">
+       <strong class="pull-left">注意：</strong>
+       <ul class="vwebsiteHeadAlert">
+         <li> 1、以下“ <span class="required-star">*</span> ”均为必填项。</li>
+       </ul>
+     </div>
+   </div>
+
+   <div class="col-sm-12">
+
+     <div class="col-xs-12 col-md-6 col-lg-7">
+       <%=form_tag("/wx/messages/send_message") do%>
+         <label>请填写你要发送的文本消息</label>
+         <textarea  style="height:200px" class="form-control" name="text_message"></textarea>
+          <button type="submit" class="btn btn-sm btn-primary">发送</button>
+      <%end%>
+     </div>
+   </div>
+ </div>
+ </div>
 </div>
+
 <% end %>
-
-<%= render 'biz/vip_grades/vip_grade_vip_privilege' %>
-
-<%= content_for :custom_js do %>
-<script>
-    $(function () {
-        var $search_input = $('#vipcard-search-input');
-        var $vip_grade_links = $('.vip-grade');
-        var $custom_selects = $('select[id^=custom_field_]');
-
-        function clearSearch(config) {
-            config = config || {};
-            if(config['search_input'] !== false) $search_input.val('');
-            if(config['vip_grade']    !== false) $vip_grade_links.removeClass('active');
-            if(config['custom_field'] !== false) $custom_selects.val('');
-        }
-        // 按姓名查询用户
-        $(".vipcard-r").on("click", "#search_user", function () {
-            clearSearch({search_input: false});
-            var name = $('#vipcard-search-input').val();
-            var group = $('.vipcard-l .active .group').data('group');
-            $.post('/vip_groups/search_user', {name: name, group: group});
-            $custom_selects.val('');
-        });
-        // 按等级查询用户
-        $vip_grade_links.click(function () {
-            clearSearch({vip_grade: false});
-            $(this).addClass("active").siblings().removeClass('active');
-            var grade = $(this).data('grade');
-            var group = $('.vipcard-l .active .group').data('group');
-            $.get('/vip_groups/search_grade', {grade: grade, group: group});
-        });
-        // 按自定义字段查询用户
-        $custom_selects.change(function () {
-            clearSearch({custom_field: false});
-            $(this).siblings().val('');
-            var group = $('.vipcard-l .active .group').data('group');
-            var custom_field_id = $(this).data('id');
-            var custom_value = $(this).val();
-            $.post('/vip_groups/search_custom_value', {custom_field_id: custom_field_id, custom_value: custom_value, group: group});
-        });
-
-        // 选择分组
-        $(".vipcard-l").on("click", "div", function () {
-            clearSearch();
-            $(this).parent().addClass("active").siblings().removeClass("active");
-            var group = $(this).find(".group").data('group');
-            $.post('/vip_groups/change_group', {group: group});
-        });
-        // 删除分组
-        $(".vipcard-l").on("click", ".J-deleteGroup", function () {
-            if (confirm("删除分组将会把该组已有成员全部移动至未分组里。是否确定删除？")) {
-                $(this).parent().remove();
-                $.ajax({
-                    type: "delete",
-                    url: "/vip_groups/" + $(this).data('id')
-                });
-            }
-        });
-        // 编辑分组
-        $(".vipcard-l").on("click", ".J-editGroup", function () {
-            var $editing = $(".J-group").find(".editing"),
-                    flag = $editing.length;
-            if (flag) {
-                if ($editing.hasClass("new")) {
-                    $editing.remove();
-                } else {
-                    var html = '<i class="vipcard-edit J-editGroup"></i><i class="vipcard-del J-deleteGroup"></i>'
-                    $editing.removeClass("editing").append(html).find("input").remove();
-                }
-            }
-            var $this = $(this).parent(),
-                    group = $this.find(".J-group-name").data('group'),
-                    $text = $this.find(".J-group-name").text(),
-                    html = '<input type="text" maxlength=10 class="vipcard-input J-groupName" value=' + $text + ' data-group=' + group + ' /> <input type="button" class="vipcard-btn J-saveGroup" value="确定" data-id= ' + group + '/>'
-            $this.addClass("editing").find("i").remove();
-            $this.append(html).find(".J-groupName").focus();
-        });
-        // 保存编辑
-        $(".vipcard-l").on("click", ".J-saveGroup", function () {
-            var $this = $(this).parent(),
-                    $val = $this.find(".J-groupName").val(),
-                    group = $this.find(".J-group-name").data('group'),
-                    num = $this.find("num").text(),
-                    html = '<i class="fa fa-edit vipcard-edit J-editGroup" data-id= ' + group + '></i> <i class="fa fa-times vipcard-del J-deleteGroup" data-id= ' + group + '></i>'
-            if ($val) {
-                $this.find("input").remove();
-                var $groupName = $this.removeClass("editing").find(".J-group-name");
-                if ($groupName.length) {
-                    $groupName.text($val);
-                } else {
-                    html = '<div><span class="J-group-name" data-group=' + group + '>' + $val + '</span><span class="num">' + num + '</span></div>' + html;
-                }
-                $this.append(html);
-                var group = $this.attr('id');
-                if (group) {
-                    var group_id = group.split('-')[1];
-                    $.ajax({
-                        type: "put",
-                        url: "/vip_groups/" + group_id,
-                        data: {name: $val}
-                    });
-                } else {
-                    $.post('/vip_groups', { name: $val });
-                }
-            } else {
-                alert("分组名称不能为空！");
-            }
-        });
-        // 新增
-        $(".vipcard-l").on("click", ".J-addGroup", function () {
-            var $editing = $(".J-group").find(".editing"),
-                    flag = $editing.length;
-            if (flag) {
-                if ($editing.hasClass("new")) {
-                    $editing.remove();
-                } else {
-                    var html = '<i class="vipcard-edit J-editGroup"></i><i class="vipcard-del J-deleteGroup"></i>'
-                    $editing.removeClass("editing").append(html).find("input").remove();
-                }
-            }
-            var html = '<li class="new editing"> <input type="text" class="vipcard-input J-groupName" maxlength=10 /> <input type="button" class="vipcard-btn J-saveGroup" value="确定" /> </li>'
-            $(".J-group").append(html).find(".J-groupName").focus();
-        })
-        //添加到新的分组
-        $(".vipcard-r").on("change", "#add_to_group", function () {
-            var origin_group = $('.vipcard-l .active .group').data('group');
-            var group = $(this).val();
-            if (group) {
-                var ids = $("#vipcard-list>.checked").map(function(i, x) {
-                    return $(x).data('id');
-                }).get();
-                if (ids.length) {
-                    $.post('/vip_groups/add_to_group', { group: group, ids: ids, origin_group: origin_group });
-                } else {
-                    alert('请选择会员后再选择添加到分组')
-                    $("#add_to_group").val(origin_group);
-                }
-            }
-        });
-        // 会员卡列表选择
-        $("#vipcard-list").on("click", "li", function(event) {
-            if(!$(event.target).hasClass('vip-detail')) {
-                $(this).toggleClass("checked");
-                var checkedAll = $("#vipcard-list>li.checked").length === $("#vipcard-list>li").length;
-                $("#checkAll").prop("checked", checkedAll);
-            }
-        });
-        // 全选
-        $("#checkAll").change(function () {
-            if($(this).is(':checked')) {
-                $("#vipcard-list>li").addClass('checked');
-            } else {
-                $("#vipcard-list>li").removeClass('checked');
-            }
-        });
-        // 删除
-        $(".vipcard-r").on("click", ".vipcard-list-del", function () {
-            $(this).parent().fadeOut(function () {
-                $(this).remove();
-            });
-            $.post('/vip_groups/remove_user_group_id', { id: $(this).data('id') });
-        });
-
-        // 会员详情
-        $('.vip-detail').click(function(event) {
-            event.stopPropogation();
-
-        });
-    });
-</script>
-<%- end %>
