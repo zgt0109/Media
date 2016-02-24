@@ -88,7 +88,7 @@ module Wp
       wx_wall.css wx_wall.js shake.js vscene.js
       jscolor/jscolor.js msdropdown/jquery.dd.min.js msdropdown/dd.css
       ace.min.css jsinhead.js jquery-fileupload/basic.js lib/validators.js
-      home.css  sessions.css home.js sessions.js
+      home.css  sessions.css home.js sessions.js site.css site.js
       vip/vcard.css vip/vcard.js lib/jquery-ui.js
       mobile/albums/jquery.water.min.js
     ]
