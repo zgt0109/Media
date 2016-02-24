@@ -5601,7 +5601,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "subscribe_time"
     t.string   "unionid"
     t.string   "remark"
-    t.string   "groupid"
+    t.integer  "groupid", :default => 0, :null => false
     t.string   "location_x"
     t.string   "location_y"
     t.string   "location_label"
