@@ -11,4 +11,8 @@ class BusinessItem < ActiveRecord::Base
     ['normal', 1, '正常'],
     ['deleted', -1, '已删除']
   ]
+
+  def pic_url
+    pic_key.present? ? "http://#{BUCKET_PICTURES}.#{QINIU_DOMAIN}/#{pic_key}" : nil
+  end
 end

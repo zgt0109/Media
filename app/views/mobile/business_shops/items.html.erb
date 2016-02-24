@@ -2,7 +2,7 @@
   <a class="mod-product" href="<%= item_mobile_business_shop_url(@site.id, @business_shop, item_id: item.id) %>
     ">
     <div class="list-img">
-      <%= image_tag item.pic, height: "100%" %></div>
+      <%= image_tag item.pic_url, height: "100%" %></div>
     <div class="list-text"> <b><%= item.name %></b>
       <% if item.price.to_f >  
       0 %>
