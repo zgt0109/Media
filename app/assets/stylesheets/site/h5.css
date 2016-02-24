@@ -1,0 +1,61 @@
+@charset "utf-8";
+/*section1*/
+.section1{ height: 780px; background: url(/assets/site/h5/sebg1.jpg) no-repeat center;}
+.section1_content{ height: 780px;}
+.section1 h1{ padding:74px 0 37px; font-size: 36px; color: #00708c;}
+.section1 p{ width: 620px; margin-bottom: 30px; font-size: 14px; color: #666; line-height: 1.6;}
+.section1_btn{ width: 257px; height: 40px; line-height: 40px;}
+.section1_btn a{ border-radius: 4px; display: inline-block; text-align: center; width: 120px; font-size: 16px; color:#fff;}
+.section1_btn .reg{ background-color: #037c9d;}
+.section1_btn .agent{ background-color: #767f93;}
+.app1{ left:147px; bottom: 119px;}
+.app2{ z-index: 1; left: 239px; bottom: 251px;}
+.app3{ z-index: 2; left: 291px; bottom: 81px;}
+.app4{ z-index: 3; left: 476px; bottom: 62px;}
+.app5{ z-index:2; left: 793px; bottom: 300px;}
+.app6{ left: 922px; bottom: 98px;}
+
+.item_title{ height: 214px;}
+.section3 .item_title{ height: 213px;}
+.item_title h1{ padding-top: 56px; height: 36px; line-height: 36px; font-size: 36px; color: #00708c;}
+.item_title h6{ margin: 17px 0 23px; font-size: 14px; height: 14px; line-height: 14px; color: #666;}
+.item_title .line{ width: 62px; height: 1px; background-color: #037c9d; margin: 0 auto 44px;}	
+.section2{ height: 755px; background: url(/assets/site/h5/sebg2.jpg) no-repeat center;}	
+.section3{ height: 752px; background: url(/assets/site/h5/sebg3.jpg) no-repeat center;}
+.h5_item{ width: 292px; margin-right: 10px; background-color: #fff; box-shadow: 3px 5px 5px #d8d7d7;}
+.h5_item.last{ margin-right: 0;}
+.h5_layer{  display: none; width: 292px; height: 239px; background-color: #000; opacity: 0.5; filter:alpha(opacity=50); }
+.h5_item:hover .h5_layer{ display: block;}
+.h5_code{ display: none; width: 140px; height: 140px; top:47px; left: 76px;}
+.h5_item:hover .h5_code{ display: block;}
+.h5_item .h5_title{ padding: 19px 14px 19px 16px;}
+.h5_title em{ font-style: normal; font-size: 18px; color:#00708c;}
+.h5_title .fa{ line-height: 24px; font-size:24px; color: #767f93;}
+.h5_item:hover .fa{ color: #ccc;}
+.h5_item .h5_text{ padding: 0 14px 20px 16px;}
+.h5_text p{ font-size:13px; color: #767f93; line-height: 1.5; height: 38px; overflow:hidden; /*white-space:nowrap; text-overflow:ellipsis;*/}
+.h5_item:hover .h5_text p{ height: 77px;}
+.h5_case{ height: 393px;}
+
+.h5_nav{ margin-top: 46px; height: 100px;}
+.h5_nav dl{ width: 200px; height: 100px; }
+.h5icon1 dt{ padding-top: 22px;}
+.h5icon1 .iconfont{ font-size: 32px; }			
+.h5icon2 dt{ padding-top: 18px;}
+.h5icon2 .iconfont{ font-size: 36px; }			
+.h5icon3 dt{ padding-top: 22px;}
+.h5icon3 .iconfont{ font-size: 32px; }			
+.h5icon4 dt{ padding-top: 26px;}
+.h5icon4 .iconfont{ font-size: 28px; }			
+.h5icon5 dt{ padding-top: 20px;}
+.h5icon5 .iconfont{ font-size: 34px; }			
+.h5icon6 dt{ padding-top: 20px;}
+.h5icon6 .iconfont{ font-size: 30px; }			
+.h5icon7 dt{ padding-top: 16px;}
+.h5icon7 .iconfont{ font-size: 38px; }			
+.h5_icon dd{ margin-top: 5px; font-size:14px; }
+.h5_icon .txt{ color: #333;}
+.h5_icon .txt_more{ display: none; font-size: 12px;}
+.h5_icon:hover .txt{ color: #00708c; font-size: 18px; padding-top:20px;}
+.h5_icon:hover .txt_more{ display: block; font-size: 12px; color: #999;}
+.h5_icon:hover dt{ display: none;}

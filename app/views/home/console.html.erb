@@ -34,7 +34,7 @@
 
       <div class="row">
         <div class="col-xs-12">
-          <% if current_user.try(:expired?) %>
+<!--           <% if current_user.try(:expired?) %>
             <div class="alert alert-block alert-warning margin-top-10">
               <button type="button" class="close margin-left-15" data-dismiss="alert">
                 <i class="icon-remove"></i>
@@ -43,7 +43,7 @@
               提示：您的账号使用期限已过，请联系平台客服人员进行续费。
             </div>
           <% end %>
-
+ -->
           <% unless current_site.try(:wx_mp_user).try(:active?) %>
             <div class="alert alert-block alert-warning margin-top-10">
               <button type="button" class="close margin-left-15" data-dismiss="alert">

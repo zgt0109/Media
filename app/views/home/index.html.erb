@@ -1,0 +1,352 @@
+<% content_for :title, "微枚迪--微信公众平台第三方开发商" %>
+<% content_for :keywords, "微信公众平台第三方开发商，微信公众平台" %>
+<%= stylesheet_link_tag 'site/index', 'site/iconfont' %>
+<%= javascript_include_tag "site/index" %>
+<div class="i-ban">
+  <div class="wrapp">
+    <ul class="clearfix">
+      <li class="item1">
+        <div class="w1200 bc">
+          <div class="ele1 fr">
+            <img width="435" height="116" src="/assets/site/index/banner1_ele1.png" alt="" title=""/>
+
+            <div class="banner_btn clearfix pr">
+              <a href="<%= register_path %>" class="register in_b fl">免费注册</a>
+      <!--         <div class="agrent_box fr pr">
+                <span class="agent in_b"></span>
+                <a href="/spread?#new_supplier_apply" class="pa btn_text">成为代理商</a>
+              </div> -->
+            </div>
+          </div>
+          <div class="ele2 fl">
+            <img width="502" height="636" src="/assets/site/index/banner1_ele3.png" alt="" title=""/>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+<!-- 
+  <div class="i-notice">
+    <div class="i-notice-bg"></div>
+    <div class="i-center i-notice-wrapp">
+      <div class="i-notice-icon"><i class="fa fa-bullhorn"></i></div>
+      <ul class="i-notice-scroll">
+        <%# @dev_logs.each do |log| %>
+          <li class="i-notice-item" class="i-notice-item">公告：<a class="i-notice-link" href="<%#= home_show_dev_log_path(id: log.id) %>"><%#= log.title %></a></li>
+        <%# end %>
+      </ul>
+    </div>
+  </div>
+ -->
+</div>
+<!--产品服务中心-->
+<div class="product_center">
+  <div class="internet_product">
+    <div class="w1200 bc">
+      <div class="tc item_title">
+        <h1>产品服务中心</h1>
+        <h6>我们提供最优质的互联网产品</h6>
+      </div>
+      <div class="clearfix product_list bc">
+        <div class="fl productImg pr">
+          <a href="<%= micro_channel_path %>">
+            <img src="/assets/site/index/product1.jpg">
+
+            <div class="platfotm pa">
+              <h2>微信平台</h2>
+              <h5>微信第三方应用开发</h5>
+            </div>
+          </a>
+        </div>
+        <div class="fl productImg pr">
+          <a href="<%= h5_marketing_path %>">
+            <img src="/assets/site/index/product2.jpg">
+
+            <div class="market pa">
+              <h2>H5营销工具</h2>
+              <h5>移动建站平台</h5>
+            </div>
+          </a>
+        </div>
+<!--         <div class="fl productImg pr">
+          <a href="<%= optimal_code_path %>">
+            <img src="/assets/site/index/product3.jpg">
+
+            <div class="pasword pa">
+              <h2>社区O2O</h2>
+              <h5>社区解决方案</h5>
+            </div>
+          </a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--解决方案-->
+<div class="koss-module">
+  <div class="koss-content">
+    <h1>行业解决方案</h1>
+    <h6>我们提供最优质的互联网产品</h6>
+
+    <div class="list-module">
+      <dl>
+        <dd>
+          <div class="list-content">
+            <div class="sign-ico">
+              <a class="kosslist-one"><i class="icon iconfont">&#xe616;</i></a>
+            </div>
+            <div class="sign-name">互联网+门店营销</div>
+            <div class="sign-hint"> 融合移动互联网和传统商业实体门店，触达用户，提升门店业绩转化
+            </div>
+          </div>
+          <a class="btn-module" href="<%= store_path %>">了解情况</a>
+        </dd>
+        <dd>
+          <div class="list-content">
+            <div class="sign-ico">
+              <a class="kosslist-two"><i class="icon iconfont">&#xe6d7;</i></a>
+            </div>
+            <div class="sign-name">电商社会化分销</div>
+            <div class="sign-hint"> 多渠道多终端开展分销业务，全方位展示商品
+            </div>
+          </div>
+          <a class="btn-module" href="<%= electricity_path %>">了解情况</a>
+        </dd>
+        <dd>
+          <div class="list-content">
+            <div class="sign-ico">
+              <a class="kosslist-three"><i class="icon iconfont">&#xe696;</i></a>
+            </div>
+            <div class="sign-name">传统快消转型</div>
+            <div class="sign-hint"> 快消零售行业“互联网+“转型，实现全渠道全方位全网战略转型
+            </div>
+          </div>
+          <a class="btn-module" href="<%= retail_path %>">了解情况</a>
+        </dd>
+        <dd class="last">
+          <div class="list-content">
+            <div class="sign-ico">
+              <a class="kosslist-four"><i class="icon iconfont">&#xe66f;</i></a>
+            </div>
+            <div class="sign-name">大客户定制</div>
+            <div class="sign-hint"> 微枚迪旗下定制业务首选品牌
+              专注微信公众账号定制应用开发
+            </div>
+          </div>
+          <a class="btn-module" href="<%= large_customer_path %>">了解情况</a>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div>
+<!--媒体报道-->
+<!--
+<div class="media_report">
+  <div class="w1200 bc">
+    <div class="tc item_title">
+      <h1>媒体报道</h1>
+      <h6>我们提供最优质的互联网产品</h6>
+    </div>
+    <div class="media_content bc">
+      <div class="media_left fl">
+        <div class="media_title pr">
+          <ul class="clearfix">
+            <li class="fl transition">公司新闻</li>
+            <li class="fl transition">微哥播报</li>
+            <li class="fl transition">行业资讯</li>
+          </ul>
+          <div class="case-hd-line pa"></div>
+        </div>
+        <div class="media_item">
+          <ul>
+            <li class="clearfix">
+              <% @company_news.to_a.each_with_index do |new, index| %>
+                  <div class="<%= index == 0 ? 'report_list transition' : 'report_list reportList transition' %>">
+                    <div class="fl pr report_left">
+                      <div class="report_date tc pa">
+                        <h5><%= new.created_at.strftime("%b") %></h5>
+                        <h1><%= new.created_at.day %></h1>
+                      </div>
+                      <img src="<%= new.pic_url %>" height="128" width="188">
+                    </div>
+                    <div class="fr report_right">
+                      <p class="title"><%= new.title %></p>
+
+                      <p class="detail"><%= new.short_content %></p>
+                      <%= link_to '详细内容', news_path(new) %>
+                    </div>
+                  </div>
+              <% end %>
+            </li>
+            <li>
+              <% @broadcast_news.to_a.each_with_index do |new, index| %>
+                  <div class="<%= index == 0 ? 'report_list transition' : 'report_list reportList transition' %>">
+                    <div class="fl pr report_left">
+                      <div class="report_date tc pa">
+                        <h5><%= new.created_at.strftime("%b") %></h5>
+                        <h1><%= new.created_at.day %></h1>
+                      </div>
+                      <img src="<%= new.pic_url %>" height="128" width="188">
+                    </div>
+                    <div class="fr report_right">
+                      <p class="title"><%= new.title %></p>
+
+                      <p class="detail"><%= new.short_content %></p>
+                      <%= link_to '详细内容', news_path(new) %>
+                    </div>
+                  </div>
+              <% end %>
+            </li>
+            <li>
+              <% @industry__news.to_a.each_with_index do |new, index| %>
+                  <div class="<%= index == 0 ? 'report_list transition' : 'report_list reportList transition' %>">
+                    <div class="fl pr report_left">
+                      <div class="report_date tc pa">
+                        <h5><%= new.created_at.strftime("%b") %></h5>
+                        <h1><%= new.created_at.day %></h1>
+                      </div>
+                      <img src="<%= new.pic_url %>" height="128" width="188">
+                    </div>
+                    <div class="fr report_right">
+                      <p class="title"><%= new.title %></p>
+
+                      <p class="detail"><%= new.short_content %></p>
+                      <%= link_to '详细内容', news_path(new) %>
+                    </div>
+                  </div>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="media_right fr pr">
+        <div class="play-button"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="pop_video" class="videopeak-dialog">
+  <span class="videopeak-close"></span>
+  <div class="videopeak-content" id="flash_player_box"></div>
+</div>
+<div id="cover_video" class="cover_video"></div>
+-->
+<!--经典案例-->
+<div class="classic_case">
+  <div class="w1200 bc">
+    <div class="tc item_title">
+      <h1>经典案例</h1>
+      <h6>我们提供最优质的互联网产品</h6>
+    </div>
+    <div class="w1200 bc clearfix case_box">
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case1.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh1.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code1.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case2.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh2.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code2.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case3.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh3.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code3.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case4.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh4.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code4.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case5.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh5.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code5.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case6.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh6.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code6.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case7.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh7.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code7.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case8.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh8.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code8.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case9.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh9.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code9.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case10.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh10.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code10.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case11.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh11.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code11.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+      <a class="fl case_item pr block" href="javascript:;">
+        <img class="baseImage block pa transition" src="/assets/site/index/case12.png" height="124" width="282"/>
+        <img class="overImage transition" src="/assets/site/index/caseh12.png" height="124" width="282"/>
+        <span class="pa in_b transition"><img src='/assets/site/index/code12.jpg' height="99" width="99"></span>
+        <em class="pa block"></em>
+      </a>
+    </div>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+    <script>
+        var pc_style = '';
+        var browser = {
+          versions: function () {
+            var u = navigator.userAgent, app = navigator.appVersion;
+            return {
+              trident: u.indexOf('Trident') > -1,
+              presto: u.indexOf('Presto') > -1,
+              webKit: u.indexOf('AppleWebKit') > -1,
+              gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,
+              mobile: !!u.match(/AppleWebKit.*Mobile.*/) || !!u.match(/AppleWebKit/) && u.indexOf('QIHU') && u.indexOf('QIHU') > -1 && u.indexOf('Chrome') < 0,
+              ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+              android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+              iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1,
+              iPad: u.indexOf('iPad') > -1,
+              webApp: u.indexOf('Safari') == -1,
+              ua: u
+            };
+          }(),
+          language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        }
+
+        if (browser.versions.mobile && !browser.versions.iPad && this.location.href != 'http://10001.m.winwemedia.com/10001') {
+          this.location = 'http://10001.m.winwemedia.com/10001';
+        }
+    </script>
+
+    <script type="text/javascript">
+        $(function(){
+            $(".i-ban .ele2").css({"opacity":"1"});
+        })
+    </script>
+<% end %>
