@@ -13,9 +13,10 @@
         <%= link_to_left_nav( '自定义菜单', wx_menus_url, controller_path == 'wx/menus' ) %>
         <%#= link_to_left_nav( '网页授权', oauth_wx_mp_users_url, current_page?(oauth_wx_mp_users_url) ) %>
         <%= link_to_left_nav( '公众号设置', platforms_path, current_page?(platforms_path) ) %>
-
-        <%= link_to_left_nav( '用户管理', wx_user_groups_url, controller_path == 'wx/user_groups' ) %>
-        <%= link_to_left_nav( '消息管理', wx_messages_url, controller_path == 'wx/messages' ) %>
+        <% if current_site.wx_mp_user.auth_service? %>
+          <%= link_to_left_nav( '用户管理', wx_user_groups_url, controller_path == 'wx/user_groups' ) %>
+          <%= link_to_left_nav( '消息管理', wx_messages_url, controller_path == 'wx/messages' ) %>
+        <% end %>
       </ul>
     </li>
   <% end %>
