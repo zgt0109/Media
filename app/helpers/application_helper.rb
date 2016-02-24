@@ -580,9 +580,9 @@ module ApplicationHelper
       end
     elsif @website.website_type == 3
       if @website_menu.present? && @website_menu.parent.present? && @website_menu.parent.parent_id != 0
-        page_app_business_circle_url(id:@website_menu.parent.id, anchor: "mp.weixin.qq.com")
+        page_app_business_circle_path(id:@website_menu.parent.id, anchor: "mp.weixin.qq.com")
       else
-        app_business_circles_url(id: @website.id, anchor: "mp.weixin.qq.com")
+        app_business_circles_path(id: @website.id, anchor: "mp.weixin.qq.com")
       end
     end
   end
