@@ -23,7 +23,7 @@
                 <% menu.children.sorted.each_slice(8).each do |children| %>
                   <div class="slider-li" style="height:auto;">
                     <% children.each do |child| %>
-                      <a href="<%= child.has_children? ?  page_app_business_circle_url(child.id, anchor: "mp.weixin.qq.com",) : website_activity_link(child) %>">
+                      <a href="<%= website_activity_link(child) %>">
                         <b style="background-image:url(<%= child.pic_url if child.pic_key.present? %>)"></b>
                         <% if child.menuable_type == 'Activity' %>
                           <% if child.menuable.try(:activityable_type) == 'BusinessShop' %>

@@ -89,7 +89,7 @@ class Wx::UserGroupsController < ApplicationController
   def fetch_groups
     @wx_mp_user.wx_user_group_list.each do |group|
       attrs = { wx_mp_user_id: @wx_mp_user.id, name: group[:name], count: group[:count] }
-      @wx_mp_user.wx_user_groups.where(groupid: group[:id]).find_or_create(attrs)
+      @wx_mp_user.wx_user_groups.where(groupid: group[:id]).first_or_create(attrs)
     end
   end
 
