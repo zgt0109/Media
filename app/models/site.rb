@@ -158,7 +158,7 @@ class Site < ActiveRecord::Base
 
   has_many :red_packets, class_name: 'RedPacket::RedPacket'
 
-  after_create :add_default_attrs
+  before_create :add_default_attrs
 
   def self.current
     Thread.current[:site]
@@ -413,7 +413,7 @@ START
       self.status = 1
       self.privileges = privileges.join(',')
       # self.expired_at = (created_at || Time.now) + 30.days #试用期30天
-    # end
+    end
   end
 
   def update_expired_privileges
