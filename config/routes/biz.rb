@@ -298,7 +298,7 @@ Wp::Application.routes.draw do
     match 'location_img/:id/img.png' => 'micro_shop_branches#location_img'
 
     namespace :shops do
-      scope path: ':supplier_id' do
+      scope path: ':account_id' do
         match :sign_in, via: [ :get, :post ]
         get :index, :sign_out, :vip_deals, :point_gift_exchanges, :vip_consumes, :highchart, :find_vip_user, :exchange_info, :transaction_check, :package_users, :item_consumes, :find_vip_package_item, :find_consume, :consume_reports, :activity_consumes, :use_consume, :find_activities, :use_usable_amount
         post :save_point, :save_money, :save_release, :update_consumes, :use_consume, :use_exchange

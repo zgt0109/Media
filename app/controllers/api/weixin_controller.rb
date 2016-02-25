@@ -351,7 +351,11 @@ class Api::WeixinController < Api::BaseController
 
     url = activity.respond_mobile_url(activity_notice, openid: from_user_name)
     url << '#mp.weixin.qq.com'
-    pic_url ||= qiniu_image_url(activity_notice.pic_key) || qiniu_image_url(option[:cover_pic])
+    if activity.vip?
+      pic_url ||= qiniu_image_url(activity.pic_key) || qiniu_image_url(option[:cover_pic])
+    else
+      pic_url ||= qiniu_image_url(activity_notice.pic_key) || qiniu_image_url(option[:cover_pic])
+    end
 
     items = [{title: activity_notice.title, description: activity_notice.summary, pic_url: pic_url, url: url}]
     Weixin.respond_news(from_user_name, to_user_name, items)
