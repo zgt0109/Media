@@ -60,6 +60,7 @@ module App
         else #创建虚拟wx_user
           #use session.id in Rails 4.
           @wx_user = @wx_mp_user.wx_users.where(openid: request.session_options[:id], wx_mp_user_id: @wx_mp_user.id).first_or_create
+          @user = @wx_user.user
         end
       end
     end
