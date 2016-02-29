@@ -64,7 +64,7 @@ class Mobile::ReservationsController < Mobile::BaseController
         else #创建虚拟wx_user
           #use session.id in Rails 4.
           @wx_user =  SessionUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
-          @user = @wx_user.user
+          @user = @wx_user
         end
       end
     end

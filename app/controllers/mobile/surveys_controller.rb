@@ -109,7 +109,7 @@ class Mobile::SurveysController < Mobile::BaseController
         #use session.id in Rails 4.
         # session[:request_session_id] ||= request.session_options[:id]
         @wx_user =  SessionUser.where(openid: session_options, site_id: @wx_mp_user.site_id).first_or_create
-        @user = @wx_user.user
+        @user = @wx_user
       end
     end
   end
