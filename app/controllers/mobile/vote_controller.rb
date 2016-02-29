@@ -58,7 +58,8 @@ class Mobile::VoteController < Mobile::BaseController
         return redirect_to mobile_unknown_identity_url(@activity.site_id, aid: @activity.id)
       else #创建虚拟wx_user
         #use session.id in Rails 4.
-        # @wx_user = SessionUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
+        @wx_user = SessionUser.where(openid: request.session_options[:id], site_id: @site.id).first_or_create
+        @user = @wx_user.user
       end
     end
   end
