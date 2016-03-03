@@ -108,7 +108,8 @@ class Mobile::SurveysController < Mobile::BaseController
       else #创建虚拟wx_user
         #use session.id in Rails 4.
         # session[:request_session_id] ||= request.session_options[:id]
-        # @wx_user =  WxUser.where(openid: session[:request_session_id], wx_mp_user_id: @wx_mp_user.id, site_id: @wx_mp_user.site_id).first_or_create
+        @wx_user =  SessionUser.where(openid: request.session_options[:id], site_id: @wx_mp_user.site_id).first_or_create
+        @user = @wx_user
       end
     end
   end

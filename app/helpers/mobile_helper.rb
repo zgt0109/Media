@@ -3,7 +3,7 @@ module MobileHelper
 
   def mobile_index
     if @website
-      mobile_root_url(id: @website.id, aid: session[:activity_id], openid: session[:openid], anchor: 'mp.weixin.qq.com')
+      mobile_root_url(site_id: @website.site_id, aid: session[:activity_id], openid: session[:openid], anchor: 'mp.weixin.qq.com')
     else
       ''
     end
