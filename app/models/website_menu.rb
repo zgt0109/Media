@@ -443,12 +443,12 @@ class WebsiteMenu < ActiveRecord::Base
     options[:not_show_li_if_blank] ||= false
     options[:show_picture_material] ||= :yes
 
-
-    if self.tempalte_id==104
+    if website.website_setting.home_template_id == 104
       img = "<img src='#{pic_url}' style='width:50px;height:50px'> </img>"
     else
       img = ""
     end
+
     if self.font_icon.blank? && options[:not_show_li_if_blank]
       result << ""
     elsif options[:show_picture_material].eql?(:yes)
