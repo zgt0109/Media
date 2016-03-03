@@ -443,7 +443,7 @@ class WebsiteMenu < ActiveRecord::Base
     options[:not_show_li_if_blank] ||= false
     options[:show_picture_material] ||= :yes
 
-    if website.website_setting.home_template_id == 104
+    if pic_key.present? && website.website_setting.home_template_id == 104
       img = "<img src='#{pic_url}' style='width:50px;height:50px'> </img>"
     else
       img = ""
