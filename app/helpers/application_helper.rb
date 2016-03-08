@@ -51,7 +51,6 @@ module ApplicationHelper
     session[:account_id] == TEST_USER_ID ? "style='display:none'".html_safe : ""
   end
 
-
   def options_for_date(options = {})
     dates = []
     start_date = (options[:start_date].present? ? Date.parse(options[:start_date]) : nil) || Date.today
