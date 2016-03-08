@@ -1,6 +1,6 @@
-class CreateStatWxUsers < ActiveRecord::Migration
+class CreateStatsWxUsers < ActiveRecord::Migration
   def change
-    create_table :stat_wx_users do |t|
+    create_table :stats_wx_users do |t|
       t.integer :openid, null:false
       t.date  :ref_date , null:false
       t.integer :cumulate_user, null:false, default:0

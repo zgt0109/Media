@@ -1,8 +1,9 @@
-class CreateStatWxMsgs < ActiveRecord::Migration
+class CreateStatsWxHourMsgs < ActiveRecord::Migration
   def change
-    create_table :stat_wx_msgs do |t|
-      t.integer :openid, null:false
+    create_table :stats_wx_hour_msgs do |t|
+      t.integer :openid,null:false
       t.date :ref_date,null:false
+      t.integer :ref_hour,null:false
       t.integer :msg_type,null:false ,default:0
       t.integer :msg_count,null:false ,default:0
       t.integer :count_interval,null:false ,default:0

@@ -1,6 +1,6 @@
-class CreateStatWxHourArticles < ActiveRecord::Migration
+class CreateStatsWxHourArticles < ActiveRecord::Migration
   def change
-    create_table :stat_wx_hour_articles do |t|
+    create_table :stats_wx_hour_articles do |t|
       t.string :openid, null: false
       t.date :ref_date, null: false, default: 0
       t.integer :ref_hour ,null:false ,default:0

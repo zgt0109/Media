@@ -1,6 +1,6 @@
-class CreateStatWxArticles < ActiveRecord::Migration
+class CreateStatsWxArticles < ActiveRecord::Migration
   def change
-    create_table :stat_wx_articles do |t|
+    create_table :stats_wx_articles do |t|
       t.date :ref_date, null: false, default: 0
       t.string :openid, null: false
       t.string :msgid ,null: false
