@@ -13,8 +13,6 @@ body{background: #fff;}
     text-shadow: none;
 }
 
-
-
 .icon{}
 .icon-map{background: url(/assets/wstore/bg_ico_near.png) no-repeat left center; background-size: contain; padding-left: 16px;}
 .icon-mobile{background: url(/assets/wstore/ico-phone.png) no-repeat left center; background-size: contain; padding-left: 16px;}
@@ -23,7 +21,7 @@ body{background: #fff;}
 .icon-wine{background: url(/assets/wstore/ico-wine.png) no-repeat left center; background-size: contain; padding-left: 16px;}
 .icon-desk{background: url(/assets/wstore/ico-wine.png) no-repeat left center; background-size: contain; padding-left: 16px;}
 .icon-image{background: url(/assets/wstore/ico-img.png) no-repeat left center; background-size: contain; padding-left: 24px;}
-.icon-food{background: url(/assets/wstore/bg_ico_order.png) no-repeat left center;); background-size: 15px auto; padding-left: 18px;}
+.icon-food{background: url(/assets/wstore/bg_ico_order.png) no-repeat left center; background-size: 15px auto; padding-left: 18px;}
 
 .mb10{margin-bottom: 10px;}
 
