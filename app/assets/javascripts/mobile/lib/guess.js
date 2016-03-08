@@ -1,7 +1,8 @@
 //= require jquery
 //= require jquery_ujs
-//= require mobile/winwemedia01.js
+//= require mobile/winwemedia01
 //= require lib/validators
+
 $(function () {
   //   //点击显示二维码
   //   $(document).on("click", ".page-list li.have>.title", function () {
