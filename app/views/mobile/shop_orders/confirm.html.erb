@@ -33,7 +33,7 @@
                   <% if ref_order %>
                     <input type="text" name="shop_order[username]" value="<%= ref_order.username %>", id="shop_order_username", readonly="true", class="input" >
                   <% else %>
-                    <%= f.text_field :username, placeholder: "如何称呼你", class: "input", value: @user.try(:nickname) %>
+                    <%= f.text_field :username, placeholder: "如何称呼你", class: "input", value: @user.try(:name) %>
                   <% end %>
                 </div>
               </div>
