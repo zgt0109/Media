@@ -706,7 +706,7 @@ function fileup() {
    //      token = tb[1],
    //      bucket = tb[0],
     var token = "iW__QVfOTEwmOLuRSe9FompemjFlg3fBtw3wUxiu:SWR93nV4H3nqWG-hgGQm-e1AiFw=:eyJzY29wZSI6InZjbC1waWN0dXJlcyIsImRlYWRsaW5lIjoxNzM1MDA4NjM3fQ==",
-    bucket = "vcl-pictures"
+    bucket = "img-asset"
     $(".cieldon-file").cieldonfileupload({
         token: token,
         bucket: bucket

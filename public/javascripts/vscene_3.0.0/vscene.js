@@ -1202,7 +1202,7 @@ function playAnimation(currScene){
                 imgupInput.qiniuUploadImg({
                     multiple: false,
                     token: "iW__QVfOTEwmOLuRSe9FompemjFlg3fBtw3wUxiu:SWR93nV4H3nqWG-hgGQm-e1AiFw=:eyJzY29wZSI6InZjbC1waWN0dXJlcyIsImRlYWRsaW5lIjoxNzM1MDA4NjM3fQ==",
-                    bucket: "vcl-pictures",
+                    bucket: "img-asset",
                     fnUploadInit: function(fileInput, fileCount, index, file){
                         imgupPercent.stop(true, false).fadeIn(400);
                     },
