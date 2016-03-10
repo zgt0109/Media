@@ -9,7 +9,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     return redirect_to mobile_notice_url(msg: '会员卡不存在') unless @vip_card
     @vip_user = @site.vip_users.where(user_id: session[:user_id]).first
     @privileges = @business_shop.business_privileges
-    @vip_card_pic = @vip_card_branch.pic_url || 'http://media-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
+    @vip_card_pic = @vip_card_branch.pic_url || 'http://img-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
     render "template_#{@template_id}"
   end
 
@@ -18,7 +18,7 @@ class Mobile::BusinessShopsController < Mobile::BaseController
     @vip_card = @vip_card_branch.vip_card
     @privileges = @business_shop.business_privileges
 
-    @vip_card_pic = @vip_card_branch.pic_url || 'http://media-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
+    @vip_card_pic = @vip_card_branch.pic_url || 'http://img-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F'
   rescue
     return render text: '请求页面不存在'
   end

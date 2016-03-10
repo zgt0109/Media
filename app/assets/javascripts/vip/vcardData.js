@@ -10,7 +10,7 @@ window.vcardData = {
         'top': 170,
     },
     'cardLogo': {
-        'src': 'http://media-asset.winwemedia.com/FlqJKk4yPU1jdnPQ2tiuNrd1Ketr',
+        'src': 'http://img-asset.winwemedia.com/FlqJKk4yPU1jdnPQ2tiuNrd1Ketr',
         'left': 225,
         'top': 113
     },
@@ -21,7 +21,7 @@ window.vcardData = {
             'tplId': 'tpl01',
             'cardLevelColor': '#eb5c87',
             'cardNumberColor': '#eb5c87',
-            'cardBg': 'http://media-asset.winwemedia.com/Flku4iCXcXKeO7GynEga3oXRxS1o'
+            'cardBg': 'http://img-asset.winwemedia.com/Flku4iCXcXKeO7GynEga3oXRxS1o'
         },
         {
             'level': '金卡',
@@ -29,7 +29,7 @@ window.vcardData = {
             'tplId': 'tpl02',
             'cardLevelColor': '#eb5c87',
             'cardNumberColor': '#eb5c87',
-            'cardBg': 'http://media-asset.winwemedia.com/FojmpIvtIiCLmrq6SbhvS_Ppv9LT'
+            'cardBg': 'http://img-asset.winwemedia.com/FojmpIvtIiCLmrq6SbhvS_Ppv9LT'
         },
         {
             'level': '白金卡',

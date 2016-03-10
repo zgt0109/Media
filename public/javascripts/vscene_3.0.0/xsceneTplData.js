@@ -23,7 +23,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p><span style=\"font-size: 30px; color: rgb(255, 255, 255);\">微枚迪易站</span></p>",
+                        "html": "<p><span style=\"font-size: 30px; color: rgb(255, 255, 255);\">移动网站</span></p>",
                         "width": 60,
                         "height": 60,
                         "left": 83,

@@ -38,7 +38,7 @@ class VipGrade < ActiveRecord::Base
       tplId: "tpl0#{index + 1}",
       cardLevelColor: '#eb5c87',
       cardNumberColor: '#eb5c87',
-      cardBg: 'http://media-asset.winwemedia.com/Flku4iCXcXKeO7GynEga3oXRxS1o'
+      cardBg: 'http://img-asset.winwemedia.com/Flku4iCXcXKeO7GynEga3oXRxS1o'
     }
   end
 
