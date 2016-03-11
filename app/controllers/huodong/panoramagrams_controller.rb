@@ -21,7 +21,7 @@ class Huodong::PanoramagramsController < ApplicationController
     end
 
     def show
-        FansGame.pluck(:id).each{|id| @activity.activities_fans_games.where(fans_game_id: id).first_or_create }
+        FansGame.normal.pluck(:id).each{|id| @activity.activities_fans_games.where(fans_game_id: id).first_or_create }
         @fans_games = FansGame.show.latest
         @ids = @activity.activities_fans_games.turn_up.pluck(:fans_game_id)
     end

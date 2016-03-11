@@ -604,7 +604,7 @@ START
       activity_type_id: 67,
     ).first_or_create(status: 1, name: "营销游戏", keyword: "营销游戏", summary: '')
 
-    FansGame.pluck(:id).each{|id| activity.activities_fans_games.where(fans_game_id: id).first_or_create }
+    FansGame.normal.pluck(:id).each{|id| activity.activities_fans_games.where(fans_game_id: id).first_or_create }
 
     activity
   end
