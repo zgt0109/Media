@@ -1201,7 +1201,7 @@ function playAnimation(currScene){
 
                 imgupInput.qiniuUploadImg({
                     multiple: false,
-                    token: "iW__QVfOTEwmOLuRSe9FompemjFlg3fBtw3wUxiu:SWR93nV4H3nqWG-hgGQm-e1AiFw=:eyJzY29wZSI6InZjbC1waWN0dXJlcyIsImRlYWRsaW5lIjoxNzM1MDA4NjM3fQ==",
+                    token: "rnSju14NS7v0hiwky1SMMJhGogoUkOme0lLERyQP:qstfzMgBGV7agkuDEtIonRcb338=:eyJzY29wZSI6ImltZy1hc3NldCIsImRlYWRsaW5lIjoxNDU3Njg4NDM4fQ==",
                     bucket: "img-asset",
                     fnUploadInit: function(fileInput, fileCount, index, file){
                         imgupPercent.stop(true, false).fadeIn(400);

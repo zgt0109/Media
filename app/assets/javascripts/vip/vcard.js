@@ -121,7 +121,7 @@ $(function(){
 
         fileInput.qiniuUploadImg({
             multiple: false,
-            token: window.qiniu_token || "iW__QVfOTEwmOLuRSe9FompemjFlg3fBtw3wUxiu:SWR93nV4H3nqWG-hgGQm-e1AiFw=:eyJzY29wZSI6InZjbC1waWN0dXJlcyIsImRlYWRsaW5lIjoxNzM1MDA4NjM3fQ==",
+            token: window.qiniu_token || "rnSju14NS7v0hiwky1SMMJhGogoUkOme0lLERyQP:qstfzMgBGV7agkuDEtIonRcb338=:eyJzY29wZSI6ImltZy1hc3NldCIsImRlYWRsaW5lIjoxNDU3Njg4NDM4fQ==",
             bucket: window.qiniu_bucket || "img-asset",
             fnUploadInit: function(fileInput, fileCount, index, file){
                 fileProgress.stop(true, false).fadeIn(400);

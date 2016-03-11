@@ -705,7 +705,7 @@ function fileup() {
    // var tb = getTokenBucket("http://notes18.com/notes/15/entries/443.json?ownership_token=4317af51-dfc6-470f-87b7-56fb38cb2eec"),
    //      token = tb[1],
    //      bucket = tb[0],
-    var token = "iW__QVfOTEwmOLuRSe9FompemjFlg3fBtw3wUxiu:SWR93nV4H3nqWG-hgGQm-e1AiFw=:eyJzY29wZSI6InZjbC1waWN0dXJlcyIsImRlYWRsaW5lIjoxNzM1MDA4NjM3fQ==",
+    var token = "rnSju14NS7v0hiwky1SMMJhGogoUkOme0lLERyQP:qstfzMgBGV7agkuDEtIonRcb338=:eyJzY29wZSI6ImltZy1hc3NldCIsImRlYWRsaW5lIjoxNDU3Njg4NDM4fQ==",
     bucket = "img-asset"
     $(".cieldon-file").cieldonfileupload({
         token: token,
