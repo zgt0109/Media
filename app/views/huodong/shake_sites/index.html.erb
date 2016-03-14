@@ -24,7 +24,7 @@
   <div class="bg-shine animate-twinkling" id="bg-shine"></div>
   <section id="game">
     <div class="game">
-      <a class="game-logo"><img src="<%= @shake.logo_url || '/assets/shake/logo.png' %>"/></a>
+      <a class="game-logo"><img src="<%= @shake.logo_url || '/site/img/logo_118.png' %>"/></a>
       <div class="game-number mod-number">
         第<span><i></i></span>轮
       </div>
@@ -36,7 +36,7 @@
               <small>并发送“<%= @shake.keyword %>”即可参与</small>
             </span>
           </p>
-          <p><span><img src="<%= shake_site.wx_mp_user.qrcode_url || '/assets/shake/qrd.jpg' %>" class="bottom-code"></span></p>
+          <p><span><img src="<%= shake_site.wx_mp_user.qrcode_url || '/site/img/qrcode_258.jpg' %>" class="bottom-code"></span></p>
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@
   <div class="bottom mod-code" id="start-bottom">
     <div>
       <p><span>
-      <img src="<%= shake_site.wx_mp_user.qrcode_url || '/assets/shake/qrd.jpg' %>" class="bottom-code">
+      <img src="<%= shake_site.wx_mp_user.qrcode_url || '/site/img/qrcode_258.jpg' %>" class="bottom-code">
     </span></p>
       <p><span>
       <b><%= @shake.name %></b>
@@ -112,7 +112,7 @@
   <a class="pop-close" href="javascript:;"></a>
   <div class="pop-code">
     <p>
-      <span><img src="<%= shake_site.wx_mp_user.qrcode_url || '/assets/shake/qrd.jpg' %>"></span>
+      <span><img src="<%= shake_site.wx_mp_user.qrcode_url || '/site/img/qrcode_258.jpg' %>"></span>
       <small>微信扫一扫，发送<b><%= @shake.keyword %></b>即可参与</small>
     </p>
   </div>
