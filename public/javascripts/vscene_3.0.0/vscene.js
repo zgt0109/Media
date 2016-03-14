@@ -1201,8 +1201,8 @@ function playAnimation(currScene){
 
                 imgupInput.qiniuUploadImg({
                     multiple: false,
-                    token: "rnSju14NS7v0hiwky1SMMJhGogoUkOme0lLERyQP:qstfzMgBGV7agkuDEtIonRcb338=:eyJzY29wZSI6ImltZy1hc3NldCIsImRlYWRsaW5lIjoxNDU3Njg4NDM4fQ==",
-                    bucket: "img-asset",
+                    token: window.qiniu_token,
+                    bucket: window.qiniu_bucket,
                     fnUploadInit: function(fileInput, fileCount, index, file){
                         imgupPercent.stop(true, false).fadeIn(400);
                     },
