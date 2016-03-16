@@ -2,7 +2,7 @@
 class Pro::ShopCategoriesController < Pro::ShopBaseController
 
   def index
-    @shop = current_user.shop
+    @shop = current_site.shop
     return redirect_to micro_shops_url, alert: '请先添加门店' unless @shop
     @shop_menu_id = params[:shop_menu_id]
     @shop_menu_id = current_shop_branch.shop_menu_id if current_shop_branch
@@ -39,12 +39,12 @@ class Pro::ShopCategoriesController < Pro::ShopBaseController
 
   def create
     @shop_category = ShopCategory.new(params[:shop_category])
-    @shop_category.shop_id = current_user.shop.id
+    @shop_category.shop_id = current_site.shop.id
     @shop_category.site_id = current_site.id
     @shop_category.shop_menu_id = current_shop_branch.shop_menu_id if current_shop_branch.try(:shop_menu_id)
     respond_to do |format|
       if @shop_category.save!
-        @shop_categories = current_user.shop.shop_categories.where(:shop_menu_id => @shop_category.shop_menu_id).order("sort")
+        @shop_categories = current_site.shop.shop_categories.where(:shop_menu_id => @shop_category.shop_menu_id).order("sort")
         format.js
       else
         format.html { render action: "new" }
@@ -59,7 +59,7 @@ class Pro::ShopCategoriesController < Pro::ShopBaseController
 
     respond_to do |format|
       if @shop_category.update_attributes!(params[:shop_category])
-        @shop_categories = current_user.shop.shop_categories.where(:shop_menu_id => @shop_category.shop_menu_id).order("sort")
+        @shop_categories = current_site.shop.shop_categories.where(:shop_menu_id => @shop_category.shop_menu_id).order("sort")
         format.js
       else
         format.html { render action: "edit" }
@@ -69,22 +69,22 @@ class Pro::ShopCategoriesController < Pro::ShopBaseController
   end
 
   def destroy
-    @shop_category = current_user.shop_categories.find(params[:id])
-    @shop_categories = current_user.shop.shop_categories.where(:shop_menu_id => @shop_category.shop_menu_id).order("sort")
+    @shop_category = current_site.shop_categories.find(params[:id])
+    @shop_categories = current_site.shop.shop_categories.where(:shop_menu_id => @shop_category.shop_menu_id).order("sort")
     respond_to do |format|
       format.js
     end
   end
 
   def second
-    @shop_categories = current_user.shop_categories.find(params[:id]).children
+    @shop_categories = current_site.shop_categories.find(params[:id]).children
     respond_to do |format|
       format.js
     end
   end
 
   def up
-     @shop_category = current_user.shop_categories.find(params[:id])
+     @shop_category = current_site.shop_categories.find(params[:id])
      @shop_category.resort
      @shop_category.reload
      up_sort = @shop_category.sort - 1
@@ -93,7 +93,7 @@ class Pro::ShopCategoriesController < Pro::ShopBaseController
   end
 
   def down
-    @shop_category = current_user.shop_categories.find(params[:id])
+    @shop_category = current_site.shop_categories.find(params[:id])
     @shop_category.resort
     @shop_category.reload
     down_sort = @shop_category.sort + 1

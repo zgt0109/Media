@@ -111,7 +111,7 @@
                     <%#= f.text_field :quantity, class: "col-xs-6" %>
                   </div>
                 </div> -->
-                
+
                 <div class="form-group">
                   <label class="control-label">详情</label>
                   <div class="">
@@ -134,9 +134,9 @@
   </div>
 </div>
 
-  <% content_for :custom_js do %>
+<% content_for :custom_js do %>
   <script>
-  $(function(){
+    $(function(){
       $("body").on("change","#shop_product_shop_menu_id", function(event){
         load_first_categories($(this).val());
       });
@@ -148,7 +148,6 @@
       var one_id = "<%= @shop_product.shop_menu_id %>";
       load_first_categories(one_id);
       load_second_categories(two_id);
-      
     });
 
     function load_first_categories(id){
@@ -162,8 +161,8 @@
       var url = "/shop_categories/"+id+"/second";
 
       $.get(url,function(html){
-$("#second_level_categories").val(<%= @shop_product.shop_category_id %>);
+        $("#second_level_categories").val(<%= @shop_product.shop_category_id %>);
       });
     }
   </script>
-  <% end %>
+<% end %>

@@ -1,8 +1,8 @@
 body {
   background:#cdcac7;
 }
-header .box-img{ height:235px;}
-header .box-img img{ min-height: 235px;}
+header .box-img{ height:177px;}
+header .box-img img{ min-height: 177px;}
 /*plug-menu*/
 .plug-menu{
   -moz-box-shadow:0 0 0 4px #fff, 0 2px 5px 4px rgba(0, 0, 0, 0.25);
