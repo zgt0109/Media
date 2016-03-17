@@ -10,7 +10,7 @@ common: &common
   oa_host:        "http://oa.winwemedia.com"
   faye_host:      "http://localhost:9393"
   app_host: "http://api.winwemedia.com"
-  wxapi_host: "http://api.weixin.winwemedia.com"
+  wxapi_host: "http://api.wx.winwemedia.com"
   cas_url: "http://127.0.0.1:8001"
   sms_service: 'zhilian'
   zhilian_url: 'http://61.145.229.29:9003/MWGate/wmgw.asmx'
@@ -41,7 +41,7 @@ production:
   recommend_host: "http://lifeboat.winwemedia.com"
   faye_host:      "http://faye.api.winwemedia.com:9393"
   app_host:       "http://api.winwemedia.com"
-  wxapi_host: "http://api.weixin.winwemedia.com"
+  wxapi_host: "http://api.wx.winwemedia.com"
   cas_url:        "http://cas.winwemedia.com"
   uploads_dir:    "/opt/apps/shared/winwemedia/uploads"
   yeepay:
