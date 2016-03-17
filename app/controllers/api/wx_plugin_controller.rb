@@ -23,7 +23,7 @@ class Api::WxPluginController < ApplicationController
     if params[:auth_code].present?
       wx_mp_user = WxPluginService.fetch_wx_mp_user_api_auth(params[:auth_code], current_user)
       if wx_mp_user.blank?
-        @error = '绑定失败！' 
+        @error = '绑定失败！'
       else
         session[:account_id] = wx_mp_user.site.account_id
       end
@@ -48,7 +48,7 @@ class Api::WxPluginController < ApplicationController
     def decrypt_string
       aes_key           = Base64.decode64(Settings.wx_plugin.encoding_aes_key + '=')
       aes_encoded_msg   = Base64.decode64(params[:xml][:Encrypt])
-      
+
       de_cipher         = OpenSSL::Cipher::Cipher.new('AES-256-CBC')
       de_cipher.decrypt
       de_cipher.padding = 7

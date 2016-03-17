@@ -22,11 +22,11 @@ common: &common
     callbackurl: "http://ui.m.winwemedia.com/yeepay/callback"
     fcallbackurl: 'http://ui.m.winwemedia.com/yeepay/callback'
   wx_plugin:
-    token: 60a485936f65c1319fc5737fb6e000ad
-    base64_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
-    component_app_id: wx0dd374bc7244fb86
-    component_app_secret: 0c79e1fa963cd80cc0be99b20a18faeb
-    encoding_aes_key: vcl68a4506e798ce30e2c36714f5d1bcae748b6f482
+    token: 44cb682582f069877356daee2de39a0a
+    base64_aes_key: winc44b9f22bcef72d2ea76b621b6f2c095160e81e6
+    encoding_aes_key: winc44b9f22bcef72d2ea76b621b6f2c095160e81e6
+    component_app_id: wx76b32f516a607539
+    component_app_secret: 6595b1727a7e4c1921a5f7c68919083b
 
 production:
   <<: *common
@@ -48,6 +48,12 @@ production:
     yeepay_host: "https://ok.yeepay.com/"
     callbackurl: "http://m.winwemedia.com/yeepay/callback"
     fcallbackurl: 'http://m.winwemedia.com/yeepay/callback'
+  wx_plugin:
+    token: 44cb682582f069877356daee2de39a0a
+    base64_aes_key: winc44b9f22bcef72d2ea76b621b6f2c095160e81e6
+    encoding_aes_key: winc44b9f22bcef72d2ea76b621b6f2c095160e81e6
+    component_app_id: wx76b32f516a607539
+    component_app_secret: 6595b1727a7e4c1921a5f7c68919083b
 
 staging:
   <<: *common

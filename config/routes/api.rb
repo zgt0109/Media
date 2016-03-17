@@ -5,7 +5,7 @@ Wp::Application.routes.draw do
     match 'wx_plugin/auth', to: 'wx_plugin#auth'
 
     match '/service/:code' => 'weixin#service', via: [:post, :get]
-    match '/:app_id/callback' => 'weixin#service', via: [:post, :get]
+    match '/message/:app_id/notify' => 'weixin#service', via: [:post, :get]
   end
 
   namespace :api do
