@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
 
   attr_accessor :current_password
 
-  validates :nickname, presence: true, uniqueness: { case_sensitive: false }, length: { within: 3..20, too_short: '太短了，最少3位', too_long: "太长了，最多20位" }
+  validates :nickname, presence: true, uniqueness: { case_sensitive: false }, length: { within: 2..20, too_short: '太短了，最少3位', too_long: "太长了，最多20位" }
   validates :email, email: true, presence: true#, uniqueness: { case_sensitive: false }
   validates :mobile, presence: true, format: { with: /^\d{11}$/, message: '手机格式不正确' }
   validates :password, presence: { message: '不能为空', on: :create }, length: { within: 6..20, too_short: '太短了，最少6位', too_long: "太长了，最多20位" }, allow_blank: true
