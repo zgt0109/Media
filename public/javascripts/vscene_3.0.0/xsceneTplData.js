@@ -395,7 +395,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p><span style=\"font-size: 26px;\">微枚迪易站</span></p>",
+                        "html": "<p><span style=\"font-size: 26px;\">微枚迪</span></p>",
                         "width": 45,
                         "height": 27,
                         "left": 89,
@@ -463,7 +463,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p style=\"text-align: center;\">上海浦东新区郭守敬路498弄22号3楼</p><p style=\"text-align: center;\">www.yeahsite.com<br/></p>",
+                        "html": "<p style=\"text-align: center;\">武汉市洪山区欢乐大道46号公务员小区三期29栋22楼</p><p style=\"text-align: center;\">www.winwemedia.com<br/></p>",
                         "width": 72,
                         "height": 10,
                         "left": 54,
@@ -877,7 +877,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p><span style=\"font-size: 14px;\">www.fxt.cn</span></p>",
+                        "html": "<p><span style=\"font-size: 14px;\">www.winwemedia.com</span></p>",
                         "width": 60,
                         "height": 10,
                         "left": 123,
@@ -885,9 +885,9 @@
                         "animationName": "slideDown",
                         "animationDelay": 2.3,
                         "animationDuration": 1,
-                        "data-href": "www.fxt.cn",
+                        "data-href": "www.winwemedia.com",
                         "data-href-sys": "",
-                        "data-href-http": "www.fxt.cn",
+                        "data-href-http": "www.winwemedia.com",
                         "data-href-tel": "",
                         "data-href-type": "http",
                         "backgroundColor": "rgba(255, 255, 255, 0)",
