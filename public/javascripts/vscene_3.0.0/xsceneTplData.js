@@ -395,7 +395,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p><span style=\"font-size: 26px;\">微枚迪</span></p>",
+                        "html": "<p><span style=\"font-size: 26px;\">微枚迪传媒</span></p>",
                         "width": 45,
                         "height": 27,
                         "left": 89,
@@ -463,7 +463,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p style=\"text-align: center;\">武汉市洪山区欢乐大道46号公务员小区三期29栋22楼</p><p style=\"text-align: center;\">www.winwemedia.com<br/></p>",
+                        "html": "<p style=\"text-align: center;\">湖北省武汉市洪山区欢乐大道46号公务员小区三期29栋一单元2201</p><p style=\"text-align: center;\">www.winwemedia.com<br/></p>",
                         "width": 72,
                         "height": 10,
                         "left": 54,
