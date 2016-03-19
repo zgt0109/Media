@@ -331,7 +331,7 @@ animation: pRotate 0.5s ease-out forwards;
         .media_right:hover .play-button{background-position:0 -56px}
 
 /*classic case*/
-.classic_case{ height: 689px; background-color: #f0f3f5;}
+.classic_case{ height: 803px; background-color: #f0f3f5;}
     .case_item{ display: block; width: 282px; height: 124px; margin:0 9px 16px 9px; overflow: hidden;}
     .case_item .baseImage{ top:0; left: 0; }
     .case_item:hover .overImage{ -webkit-transform:scale(1.2);-moz-transform:scale(1.2); -o-transform:scale(1.2); transform:scale(1.2);}
