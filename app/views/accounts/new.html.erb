@@ -26,6 +26,10 @@
         <%= f.text_field :company_name, class: "input-focus validate", validate: false, data: {tip: "请输入您公司名称"} %>
       </div>
 
+      <div class="clearfix m-select select-industry">
+        <%= collection_select(:account, :account_category_id, AccountCategory.all, :id, :name, { prompt: "请选择行业" }, { class: "m-select-real" }) %>
+      </div>
+
       <div class="clearfix m-select">
         <%= address_select(@account, class: "m-select-real m-select-prov") %>
       </div>
