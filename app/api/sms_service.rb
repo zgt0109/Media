@@ -40,7 +40,7 @@ class SmsService
     # else
     #   ZhilianSms
     # end
-    ZhilianSms
+    SmsAlidayu
   end
 
   def min_success_key_length

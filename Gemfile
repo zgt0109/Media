@@ -19,6 +19,7 @@ gem 'rmagick', '2.13.2', require: 'RMagick'
 gem 'mini_magick'
 
 gem 'rucaptcha'
+gem 'alidayu_sms'
 
 gem 'carrierwave'
 gem 'jquery-fileupload-rails'

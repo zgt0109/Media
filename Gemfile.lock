@@ -59,6 +59,8 @@ GEM
     akami (1.2.2)
       gyoku (>= 0.4.0)
       nokogiri
+    alidayu_sms (0.2.0)
+      i18n
     annotate (2.6.8)
       activerecord (>= 3.2, <= 4.3)
       rake (~> 10.4)
@@ -500,6 +502,7 @@ DEPENDENCIES
   acts_as_follower (~> 0.1.1)
   acts_as_list
   acts_as_tree (~> 1.5.0)
+  alidayu_sms
   annotate (>= 2.5.0)
   audited-activerecord (~> 3.0)
   bcrypt-ruby (~> 3.0.0)
