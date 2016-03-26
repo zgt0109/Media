@@ -91,7 +91,7 @@
                 </td>
                 <td><%= article.created_at.strftime("%Y-%m-%d") %></td>
                 <td><%= article.title %></td>
-                <td><img src="<%= article.pic_key %>" width="50" height="50" class="margin-right-10"><a data-target="weisiteModal" data-toggle="modals" data-title="标题图编辑" data-height="1000" data-iframe="<%= edit_pic_website_articles_path(id: article.id) %>" title="标题图编辑">编辑</a></td>
+                <td><img src="<%= article.pic_url %>" width="50" height="50" class="margin-right-10"><a data-target="weisiteModal" data-toggle="modals" data-title="标题图编辑" data-height="1000" data-iframe="<%= edit_pic_website_articles_path(id: article.id) %>" title="标题图编辑">编辑</a></td>
                 <td><%= "#{article.try(:website_article_category).to_s(' - ')}" if article.website_article_category.present? %></td>
                 <td><input type="text" class="sort" value="<%= article.sort %>" size="5"></td>
                 <td>
