@@ -109,7 +109,7 @@
                 <td>
                   <%= link_to '编辑', edit_website_article_path(article, article_type: params[:article_type]) %>
                   <%= link_to '复制', copy_article_website_articles_path(ids: article.id.to_s), method: :get, confirm: "你确定要复制吗?" %>
-                  <%= link_to '复制链接', 'javascript:;', class: 'copy-button', data: {clipboard_text: mobile_website_article_url(article, site_id: @website.site_id, article_type: params[:article_type])}, id: "copy-button_#{article.id}" %>
+                  <%= link_to '复制链接', 'javascript:;', class: 'copy-button', data: { clipboard_text: mobile_website_article_url(article, site_id: @website.site_id, article_type: params[:article_type], subdomain: mobile_subdomain) }, id: "copy-button_#{article.id}" %>
                   <%= link_to '删除', website_article_path(article), method: 'delete', confirm: "你确定要删除吗?" %>
                 </td>
               </tr>
