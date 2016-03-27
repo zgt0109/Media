@@ -965,7 +965,7 @@ class Activity < ActiveRecord::Base
       when wmall_coupon?       then wmall_coupon_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wshop?              then wshop_root_url(wx_mp_user_open_id: site.wx_mp_user.try(:openid), wx_user_open_id: options[:openid])
       when shequ?              then "http://#{site_id}.mshequ.winwemedia.com/qu?openid=#{options[:openid]}"
-      when new_vote?           then "http://#{site_id}.mshequ.winwemedia.com/m/activity/#{activity.id}?openid=#{options[:openid]}"
+      when new_vote?           then "http://#{site_id}.mshequ.winwemedia.com/activity/vote/#{id}?openid=#{options[:openid]}"
       # when oa?                 then "#{OA_HOST}/woa-all/wx/#{site_id}/index?openid=#{options[:openid]}"
       when hotel?              then "#{HOTEL_HOST}/wehotel-all/weixin/mobile/website.jsp?site_id=#{site_id}&openid=#{options[:openid]}"
       when wifi?               then "http://m.chaowifi.com/auth/wechat.do?guid=#{options[:openid]}"
