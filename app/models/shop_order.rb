@@ -57,7 +57,7 @@ class ShopOrder < ActiveRecord::Base
   accepts_nested_attributes_for :shop_order_items, allow_destroy: true, reject_if: proc { |attributes| attributes['qty'] == '0' }
 
   before_create :add_default_attrs
-  # before_save :update_wx_user_address
+  before_save :update_user_address
   after_save :update_expired
 
   def book_rule
@@ -424,7 +424,7 @@ class ShopOrder < ActiveRecord::Base
     self.update_column("pay_amount", self.total_amount) if self.status == 2
   end
 
-  def update_wx_user_address
+  def update_user_address
     if self.user
       self.user.name = self.username unless self.user.name
       self.user.address = self.address unless self.user.address
