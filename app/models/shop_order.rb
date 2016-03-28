@@ -399,7 +399,7 @@ class ShopOrder < ActiveRecord::Base
 
     # options = { operation_id: 3, account_id: site.account_id, userable_id: user_id, userable_type: 'User' }
     # if book_dinner?
-    #   site.account.account.send_message(shop_branch.mobile, "订餐通知：用户#{wx_user.nickname}（手机号：#{mobile}）于 #{Time.now.to_s} 预定了#{shop_branch.name}分店的餐品", false, options)
+    #   site.account.account.send_message(shop_branch.mobile, "订餐通知：用户#{user.name}（手机号：#{mobile}）于 #{Time.now.to_s} 预定了#{shop_branch.name}分店的餐品", false, options)
     # else
     #   site.account.send_message(shop_branch.mobile, "外卖通知：您有一笔新的订单 门店：#{shop_branch.name}； 总价：￥#{total_amount} 菜品：#{shop_order_items.collect{|t| "#{t.shop_product.name}×#{t.qty} ￥#{t.total_price}" }.join('，')}；#{pay_type_name}；收货信息：#{username}（手机号：#{mobile}）；#{address}", false, options)
     # end
