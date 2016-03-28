@@ -235,8 +235,9 @@ class Account < ActiveRecord::Base
 
   private
 
+  # TODO
   def mass_send_message(phones, content, options = {})
-    sms_service = SmsService.new
+    sms_service = SmsAlidayu.new
     sms_service.batchSend(phones, content, options)
     # 短信发送失败，添加错误信息
     @errors << sms_service.error_message if sms_service.error?

@@ -492,9 +492,10 @@ class VipUser < ActiveRecord::Base
       @can_upgrade_by_amount = usable_amount_changed?
     end
 
+    # TODO
     def send_sms_notification
-      message = "恭喜您已成功成为#{merchant_name}的会员，卡号为#{user_no}，即日起您即可享受我们的会员专有特权。"
-      SmsService.new.singleSend(mobile, message) if normal? && open_card_sms_notify?
+      # message = "恭喜您已成功成为#{merchant_name}的会员，卡号为#{user_no}，即日起您即可享受我们的会员专有特权。"
+      # SmsAlidayu.new.singleSend(mobile, message) if normal? && open_card_sms_notify?
     end
 
     def send_register_points

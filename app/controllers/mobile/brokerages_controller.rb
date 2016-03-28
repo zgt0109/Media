@@ -37,7 +37,7 @@ class Mobile::BrokeragesController < Mobile::BaseController
   def send_sms
     return render js: 'alert("该手机号已被使用!");' if @site.brokerage_brokers.where(mobile: params[:mobile]).exists?
     session[:captcha], session[:mobile] = rand(100000..999999).to_s, params[:mobile].to_s
-    SmsService.new.singleSend(session[:mobile], "验证码：#{session[:captcha]}")
+    SmsAlidayu.new.singleSend(session[:mobile], session[:captcha])
     render js: 'void(0);'
   end
 

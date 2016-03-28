@@ -43,7 +43,7 @@ class Mobile::ReservationsController < Mobile::BaseController
   def send_sms
     session[:captcha] = rand(999999)
     session[:mobile]  = params[:phone]
-    SmsService.new.singleSend("#{session[:mobile]}","验证码：#{session[:captcha]}")
+    SmsAlidayu.new.singleSend("#{session[:mobile]}", session[:captcha])
     render text: nil
   end
 
