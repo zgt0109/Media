@@ -13,7 +13,7 @@ class SmsAlidayu
   end
 
   def send_code_for_verify(mobiles, code, options = {})
-    sms_options = { mobiles: mobiles, template_code: 'SMS_6770657', params: { code: code } }
+    sms_options = { mobiles: mobiles, template_code: 'SMS_6770657', params: { code: code.to_s } }
     self.result = send_sms(sms_options, options)
   end
 
@@ -52,7 +52,8 @@ class SmsAlidayu
     else
       # Alidayu::Sms.send_code_for_sign_up(1314520, "18621632985")
       # response = Alidayu::Sms.send_code_for_sign_up(content, mobiles)
-      response = Alidayu::Sms.send(sms_options)
+      response = Alidayu::Sms.send(sms_options.merge!(mobiles: mobiles.to_s))
+      WinwemediaLog::Base.logger('smslog', "response：#{response}")
       return_code = response['alibaba_aliqin_fc_sms_num_send_response']['result']['model'] rescue -999
       SmsLog.create(options.merge!(date: Date.today, phone: mobiles, content: content, provider: 'Alidayu', return_code: return_code))
     end

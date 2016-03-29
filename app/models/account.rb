@@ -60,7 +60,7 @@ class Account < ActiveRecord::Base
   # 商户发送短信 account.send_message("13795288852", "Hello World", true)
   # 参数 operation_id in (1:会员卡,2:电商,3:餐饮,4:酒店,5:小区)
   def send_message(sms_options, is_free = false, options = {})
-    content = sms_options[:content]
+    content = sms_options[:template_code]
     mobiles = sms_options[:mobiles]
     message_id = 0
 
