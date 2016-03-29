@@ -405,7 +405,7 @@ class ShopOrder < ActiveRecord::Base
       # site.account.send_message(shop_branch.mobile, "外卖通知：您有一笔新的订单 门店：#{shop_branch.name}； 总价：￥#{total_amount} 菜品：#{shop_order_items.collect{|t| "#{t.shop_product.name}×#{t.qty} ￥#{t.total_price}" }.join('，')}；#{pay_type_name}；收货信息：#{username}（手机号：#{mobile}）；#{address}", false, options)
       sms_options = { mobiles: shop_branch.mobile, template_code: 'SMS_6735685', params: { username: user.name, mobile: mobile, total_amount: total_amount, address: address } }
     end
-    SmsAlidayu.new.singleSend(sms_options, false, options)
+    site.account.account.send_message(sms_options, false, options)
   end
 
   private
