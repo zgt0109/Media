@@ -494,8 +494,11 @@ class VipUser < ActiveRecord::Base
 
     # TODO
     def send_sms_notification
-      # message = "恭喜您已成功成为#{merchant_name}的会员，卡号为#{user_no}，即日起您即可享受我们的会员专有特权。"
-      # SmsAlidayu.new.singleSend(mobile, message) if normal? && open_card_sms_notify?
+      if normal? && open_card_sms_notify?
+        # message = "恭喜您已成功成为#{merchant_name}的会员，卡号为#{user_no}，即日起您即可享受我们的会员专有特权。"
+        sms_options = { mobiles: mobile, template_code: 'SMS_6721083', params: { merchant_name: merchant_name, user_no: user_no } }
+        SmsAlidayu.new.singleSend(sms_options)
+      end
     end
 
     def send_register_points

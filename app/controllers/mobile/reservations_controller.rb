@@ -43,7 +43,7 @@ class Mobile::ReservationsController < Mobile::BaseController
   def send_sms
     session[:captcha] = rand(999999)
     session[:mobile]  = params[:phone]
-    SmsAlidayu.new.singleSend("#{session[:mobile]}", session[:captcha])
+    SmsAlidayu.new.send_code_for_verify(session[:mobile], session[:captcha])
     render text: nil
   end
 

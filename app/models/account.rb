@@ -59,7 +59,9 @@ class Account < ActiveRecord::Base
 
   # 商户发送短信 account.send_message("13795288852", "Hello World", true)
   # 参数 operation_id in (1:会员卡,2:电商,3:餐饮,4:酒店,5:小区)
-  def send_message(mobiles, content, is_free = false, options = {})
+  def send_message(sms_options, is_free = false, options = {})
+    content = sms_options[:content]
+    mobiles = sms_options[:mobiles]
     message_id = 0
 
     @errors = []
@@ -75,9 +77,9 @@ class Account < ActiveRecord::Base
     if @errors.blank?
       _options = options.slice(:userable_id, :userable_type).merge(account_id: id, source: options[:operation_id])
       if is_free
-        message_id = mass_send_message(phones, content, _options).to_i
+        message_id = mass_send_message(sms_options, _options).to_i
       elsif free_sms_count > 0 || pay_sms_count > 0
-        message_id = mass_send_message(phones, content, _options).to_i
+        message_id = mass_send_message(sms_options, _options).to_i
         send_success = message_id > 1 || message_id < -10000000
         sms_status = send_success ? 1 : message_id
 
@@ -236,9 +238,9 @@ class Account < ActiveRecord::Base
   private
 
   # TODO
-  def mass_send_message(phones, content, options = {})
+  def mass_send_message(sms_options, options = {})
     sms_service = SmsAlidayu.new
-    sms_service.batchSend(phones, content, options)
+    sms_service.send_sms(sms_options, options)
     # 短信发送失败，添加错误信息
     @errors << sms_service.error_message if sms_service.error?
     sms_service.result

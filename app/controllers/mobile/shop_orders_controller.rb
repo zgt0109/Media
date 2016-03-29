@@ -207,7 +207,7 @@ class Mobile::ShopOrdersController < Mobile::BaseController
     @shop_order = ShopOrder.find(params[:id])
     @shop_order.update_column("captcha", @random_captcha)
 
-    SmsAlidayu.new.singleSend(mobile, @random_captcha)
+    SmsAlidayu.new.send_code_for_verify(mobile, @random_captcha)
 
     respond_to do |format|
       format.js {}

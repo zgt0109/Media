@@ -1,4 +1,4 @@
-source 'https://ruby.taobao.org/'
+source 'https://gems.ruby-china.org/'
 
 gem 'rails', '3.2.14'
 gem 'mysql2', '0.3.18'
@@ -19,7 +19,8 @@ gem 'rmagick', '2.13.2', require: 'RMagick'
 gem 'mini_magick'
 
 gem 'rucaptcha'
-gem 'alidayu_sms'
+# gem 'alidayu_sms'
+gem 'alidayu_api', require: "alidayu"
 
 gem 'carrierwave'
 gem 'jquery-fileupload-rails'

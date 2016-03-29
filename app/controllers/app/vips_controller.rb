@@ -266,7 +266,7 @@ class App::VipsController < App::BaseController
       return render json: { error: true, message: '该手机号已被使用' } if @site.vip_users.visible.where(mobile: params[:phone]).exists?
     end
     session[:captcha], session[:mobile] = rand(100000..999999).to_s, params[:phone].to_s
-    SmsAlidayu.new.singleSend(session[:mobile], session[:captcha])
+    SmsAlidayu.new.send_code_for_verify(session[:mobile], session[:captcha])
     render json: {}
   end
 
