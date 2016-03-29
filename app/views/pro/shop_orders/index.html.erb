@@ -128,16 +128,7 @@
                   <tr>
                     <td><%= shop_order.shop_branch.try(:name) %></td>
                     <td>
-                      <%= shop_order.order_no %> 
-                      <% if shop_order.ref_order %>
-                      <img title=" 订座订单号: <%= shop_order.ref_order.order_no %> " style="width:16px;height:16px" src="/images/dingxiang/dz.png"/>
-                      <% end %>
-                      <% if shop_order.current_price_item > 0 %>
-                      <img title=" 含<%= shop_order.current_price_number %>道时价菜 " style="width:16px;height:16px" src="/images/dingxiang/sj.png"/>
-                      <% end %>
-                      <% unless shop_order.description.blank? %>
-                      <img style="width:16px;height:16px" src="/images/dingxiang/note.png" title=" <%= shop_order.title %> "/>
-                      <% end %>
+                      <%= shop_order.order_no %>
                     </td>
                     <td><%= shop_order.username %></td>
                     <td><%= shop_order.mobile %></td>
