@@ -26,6 +26,14 @@
                 <div class="li-r"><span class="text-red"><%= @shop_order.order_no %></span></div>
               </div>
               <div class="form-li">
+                <div class="li-l"><b>订单状态：</b></div>
+                <div class="li-r"><span><%= @shop_order.status_name %></span></div>
+              </div>
+              <div class="form-li">
+                <div class="li-l"><b>支付状态：</b></div>
+                <div class="li-r"><span><%= @shop_order.pay_type_name %></span></div>
+              </div>
+              <div class="form-li">
                 <div class="li-l"><b>您的姓名：</b></div>
                 <div class="li-r">
                   <span><%= @shop_order.username %></span>
