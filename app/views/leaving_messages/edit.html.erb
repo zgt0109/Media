@@ -1,4 +1,4 @@
-<%= form_for current_user.leaving_messages.new, remote: true do |f| %>
+<%= form_for current_site.leaving_messages.new, remote: true do |f| %>
   <%= f.hidden_field :replier_id, value: current_user.id %>
   <%= f.hidden_field :replier_type, value: "Account" %>
   <%= f.hidden_field :parent_id, value: @message.id %>
