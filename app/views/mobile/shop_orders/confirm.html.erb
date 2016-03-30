@@ -211,15 +211,20 @@
               <% end %>
             <% end %>
 
-              <% if @shop_order.take_out? %>
+            <% if @shop_order.take_out? %>
               <a class="form-li last" href="javascript:void(0)">
                 <div class="li-l"><b>送餐地址：</b></div>
                 <div class="li-r">
                   <%= f.text_area :address, id: "your_address", value: @shop_order.user.try(:address), rows: 1, class: "input input-textarea"  %>
                 </div>
               </a>
-              <% end %>
-
+              <div class="form-li">
+                <div class="li-l"><b>配送时间：</b></div>
+                <div class="li-r">
+                  <%= rule.try(:delivery_time) %>
+                </div>
+              </div>
+            <% end %>
 
               <div class="form-li last">
                 <div class="li-l"><b>备注：</b></div>
