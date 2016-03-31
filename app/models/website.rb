@@ -73,7 +73,7 @@ class Website < ActiveRecord::Base
   end
 
   def upload_qrcode_to_qiniu
-    url = "#{M_HOST}/#{custom_domain}?id=#{id}&aid=#{activity_id}&anchor=mp.weixin.qq.com"
+    url = "http://#{site_id}.#{Settings.mhostname}/#{custom_domain}?id=#{id}&aid=#{activity_id}&anchor=mp.weixin.qq.com"
     rqrcode = nil
     1.upto(12) do |size|
       break rqrcode = RQRCode::QRCode.new(url, :size => size, :level => :h ).to_img.resize(258, 258) rescue next
