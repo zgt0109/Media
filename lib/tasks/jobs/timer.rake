@@ -9,7 +9,7 @@ namespace :timer do
 
     puts 'done .........'
   end
-  
+
   desc 'expire hospital orders'
   task :hospital_order_expire => :environment do
     puts 'Starting expire .........'

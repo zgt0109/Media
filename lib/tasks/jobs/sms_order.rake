@@ -8,7 +8,7 @@ namespace :sms_order do
       SmsOrder.reset_free_sms_every_month
       puts "重置赠送短信套餐成功！"
     rescue Exception => e
-      puts "重置赠送短信套餐失败：#{e}"      
+      puts "重置赠送短信套餐失败：#{e}"
     end
   end
 
