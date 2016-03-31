@@ -13,7 +13,7 @@ namespace :wx_stats do
 
   task :create_wx_user_data => :environment do
     puts "update data now....."
-    WxMpUser.where('openid is not null').each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (end_date-1).to_s, :end_date => (end_date-1).to_s}
 
       puts options
@@ -36,7 +36,7 @@ namespace :wx_stats do
   end
 
   task :create_wx_articles_data => :environment do
-    WxMpUser.where('openid is not null').each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
       # 获取图文群发每日数据
       a_sum = WxUserData.getarticlesummary(options)["list"] || {}
@@ -68,7 +68,7 @@ namespace :wx_stats do
   end
 
   task :create_wx_articles_hour_data => :environment do
-    WxMpUser.where('openid is not null').each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
 
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
 
@@ -92,7 +92,7 @@ namespace :wx_stats do
   end
 
   task :create_wx_msg_data => :environment do
-    WxMpUser.where('openid is not null').each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (end_date-1).to_s, :end_date => (end_date-1).to_s}
       # 获取消息发送概况数据
       m_upstream = WxUserData.getupstreammsg(options)["list"] || {}
@@ -124,7 +124,7 @@ namespace :wx_stats do
   end
 
   task :create_wx_msg_hour_data => :environment do
-    WxMpUser.where('openid is not null').each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
       # 获取消息发送概况数据
       m_upstream = WxUserData.getupstreammsg(options)["list"] || {}

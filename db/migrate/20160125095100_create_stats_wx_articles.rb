@@ -1,10 +1,10 @@
 class CreateStatsWxArticles < ActiveRecord::Migration
   def change
     create_table :stats_wx_articles do |t|
-      t.date :ref_date, null: false, default: 0
+      t.date :ref_date, null: false
       t.string :openid, null: false
-      t.string :msgid ,null: false
-      t.string :title,null: false
+      t.string :msgid, null: false
+      t.string :title, null: false
       t.integer :int_page_read_user,null: false, default: 0
       t.integer :int_page_read_count,null: false, default: 0
       t.integer :ori_page_read_user,null: false, default: 0

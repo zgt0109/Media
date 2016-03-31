@@ -2,10 +2,10 @@ class CreateStatsWxHourArticles < ActiveRecord::Migration
   def change
     create_table :stats_wx_hour_articles do |t|
       t.string :openid, null: false
-      t.date :ref_date, null: false, default: 0
-      t.integer :ref_hour ,null:false ,default:0
-      t.string :msgid ,null: false
-      t.string :title,null: false
+      t.date :ref_date, null: false
+      t.integer :ref_hour, null:false, default:0
+      t.string :msgid, null: false
+      t.string :title, null: false
       t.integer :int_page_read_user,null: false, default: 0
       t.integer :int_page_read_count,null: false, default: 0
       t.integer :ori_page_read_user,null: false, default: 0
