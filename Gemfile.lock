@@ -18,7 +18,7 @@ GIT
     jasl_tenpay (1.1.1)
 
 GEM
-  remote: https://ruby.taobao.org/
+  remote: https://gems.ruby-china.org/
   specs:
     actionmailer (3.2.14)
       actionpack (= 3.2.14)
@@ -59,6 +59,7 @@ GEM
     akami (1.2.2)
       gyoku (>= 0.4.0)
       nokogiri
+    alidayu_api (0.0.1)
     annotate (2.6.8)
       activerecord (>= 3.2, <= 4.3)
       rake (~> 10.4)
@@ -500,6 +501,7 @@ DEPENDENCIES
   acts_as_follower (~> 0.1.1)
   acts_as_list
   acts_as_tree (~> 1.5.0)
+  alidayu_api
   annotate (>= 2.5.0)
   audited-activerecord (~> 3.0)
   bcrypt-ruby (~> 3.0.0)

@@ -114,7 +114,7 @@ class AccountsController < ApplicationController
     # return render json: { errcode: -1 } if session[:image_code].blank? || params[:verify_code].blank? || session[:image_code] != params[:verify_code]
 
     session[:captcha], session[:mobile] = rand(100000..999999).to_s, params[:mobile].to_s
-    SmsService.new.singleSend(session[:mobile], "验证码：#{session[:captcha]}")
+    SmsAlidayu.new.send_code_for_verify(session[:mobile], session[:captcha])
     render json: { errcode: 0 }
   end
 
@@ -191,9 +191,10 @@ class AccountsController < ApplicationController
     errors << "token不存在" unless params[:token] == 'qwertyuiop[]asdfghjklzxcvbnm'
 
     if errors.blank?
-      sms_service = SmsService.new
+      sms_service = SmsAlidayu.new
       phones = params[:phone].split(',').map(&:to_s).map{|m| m.gsub(' ', '')}.compact.uniq
-      sms_service.batchSend(phones, params[:content], {userable_id: params[:userable_id], userable_type: params[:userable_type], source: params[:source]})
+      # TODO just for get code
+      sms_service.send_code_for_verify(phones, params[:content], {userable_id: params[:userable_id], userable_type: params[:userable_type], source: params[:source]})
       # 短信发送失败，添加错误信息
       errors << sms_service.error_message if sms_service.error?
     end

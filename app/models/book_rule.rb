@@ -1,9 +1,11 @@
 class BookRule < ActiveRecord::Base
+  store :metadata, accessors: [:delivery_time]
+
   belongs_to :shop_branch
   has_many :book_time_ranges
   attr_accessible :is_limit_money, :type, :rule_type, :shop_branch_id, :book_phone, :booked_minute, :cancel_rule, :created_minute, :description, 
   :is_in_branch, :is_in_normal, :is_in_queue, :is_pay_cash, :is_pay_online, :is_send_captcha, :min_money, :preview_day, :book_time_ranges_attributes, 
-  :is_limit_day, :is_limit_time, :is_open_hall, :is_open_loge, :hall_limit_money, :loge_limit_money, :is_pay_balance
+  :is_limit_day, :is_limit_time, :is_open_hall, :is_open_loge, :hall_limit_money, :loge_limit_money, :is_pay_balance, :delivery_time
 
   validates :shop_branch_id, presence: true
 
@@ -21,7 +23,7 @@ class BookRule < ActiveRecord::Base
     ['no_limit',         -1, '不限'],
     ['can_not_cancel',   -2, '不可取消'],
     ['by_created_at',    -3, '订单生成'],
-    ['by_booked_at',     -4, '订餐时间'] 
+    ['by_booked_at',     -4, '订餐时间']
   ]
 
 

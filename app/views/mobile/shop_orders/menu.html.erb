@@ -5,7 +5,8 @@
   <header>
     <a href="javascript:history.go(-1);" class="fa fa-angle-left fl"></a>
     <h1><%= @shop_branch.name %></h1>
-    <%= link_to "", toggle_is_show_product_pic_mobile_shop_orders_url(site_id: session[:site_id]), class: "icon icon-image fr #{@wx_user.is_show_product_pic? ? 'active' : ''}", id: "btn-image1", remote: true, method: :post %>
+    <%#= link_to "", toggle_is_show_product_pic_mobile_shop_orders_url(site_id: session[:site_id]), class: "icon icon-image fr #{@wx_user.is_show_product_pic? ? 'active' : ''}", id: "btn-image1", remote: true, method: :post %>
+    <%= link_to '餐厅详情', take_out_mobile_shops_url(site_id: session[:site_id]), class: "fr" %>
   </header>
 
   <section id="sec-index">

@@ -85,14 +85,8 @@
                       <%= shop_table_order.shop_branch.try(:name) %></td>
                     <td>
                       <%= shop_table_order.order_no %>
-                      <% if shop_table_order.ref_order %>
-                      <img title=" 订餐订单号: <%= shop_table_order.ref_order.order_no %> " style="width:16px;height:16px" src="/images/dingxiang/dc.png"/>
-                      <% end %>
-                      <% unless shop_table_order.description.blank? %>
-                      <img style="width: 16px; height: 16px;" src="/images/dingxiang/note.png" title=" <%= shop_table_order.title %> "/>
-                      <% end %>
-                      </td>
-                      <td><%= shop_table_order.username %></td>
+                    </td>
+                    <td><%= shop_table_order.username %></td>
                     <td>
                       <%= shop_table_order.mobile %>
                     </td>

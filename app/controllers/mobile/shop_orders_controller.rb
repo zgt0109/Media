@@ -57,15 +57,15 @@ class Mobile::ShopOrdersController < Mobile::BaseController
       # 对于已经完成的订单不允许修改
       @shop_order.save unless @shop_order.finish?
 
-      begin # 发送消息
-        if @shop_order.take_out?
-          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.account.try(:token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_order', message: '您有一笔新的微外卖订单, 请尽快处理'})
-        else
-          RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.account.try(:token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
-        end
-      rescue => e
-        Rails.logger.info "#{e}"
-      end
+      # begin # 发送消息
+      #   if @shop_order.take_out?
+      #     RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.account.try(:token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_order', message: '您有一笔新的微外卖订单, 请尽快处理'})
+      #   else
+      #     RestClient.post("#{MERCHANT_APP_HOST}/v1/igetuis/igetui_app_message", {role: 'site', role_id: @shop_order.site_id, token: @shop_order.site.account.try(:token), messageable_id: @shop_order.id, messageable_type: 'ShopOrder', source: 'shop_table_order', message: '您有一笔新的微餐饮订单, 请尽快处理'})
+      #   end
+      # rescue => e
+      #   Rails.logger.info "#{e}"
+      # end
     end
 
     # 如果是线上支付并且没有支付完成, 就会进入支付页面, 不会去打印小票
@@ -207,7 +207,7 @@ class Mobile::ShopOrdersController < Mobile::BaseController
     @shop_order = ShopOrder.find(params[:id])
     @shop_order.update_column("captcha", @random_captcha)
 
-    SmsService.new.singleSend(mobile, "验证码：#{@random_captcha}")
+    SmsAlidayu.new.send_code_for_verify(mobile, @random_captcha)
 
     respond_to do |format|
       format.js {}
