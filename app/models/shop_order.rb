@@ -24,11 +24,11 @@ class ShopOrder < ActiveRecord::Base
     ['vip_userpay', 10007,  '余额支付'],
     ['wxpayv2', 10001,  '微信支付'],
     ['wxpayv3', 10004,  '微信支付'],
-    ['tenpay',  10002,  '财付通支付'],
+    # ['tenpay',  10002,  '财付通支付'],
     ['alipay',  10006,  '支付宝支付'],
-    ['yeepay',  10003, '易宝'],
-    ['winwemedia_alipay', 20001, '微枚迪支付宝'],
-    ['winwemedia_yeepay', 20002, '微枚迪易宝'],
+    ['yeepay',  10003, '易宝支付'],
+    ['winwemedia_alipay', 20001, '支付宝支付'],
+    ['winwemedia_yeepay', 20002, '易宝支付'],
   ]
 
   enum_attr :order_type, :in => [
@@ -285,6 +285,7 @@ class ShopOrder < ActiveRecord::Base
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
       payment_type_id: pay_type,
+      account_id: site.account_id,
       site_id: site_id,
       customer_id: user_id,
       customer_type: 'User',
@@ -292,8 +293,8 @@ class ShopOrder < ActiveRecord::Base
       paymentable_type: 'ShopOrder',
       out_trade_no: order_no,
       amount: total_amount,
-      body:  "订单 #{order_no}",
-      subject:  "订单 #{order_no}",
+      body: "订单 #{order_no}",
+      subject: "订单 #{order_no}",
       source: 'shop_order',
       open_id: user.wx_user.try(:openid)
     }

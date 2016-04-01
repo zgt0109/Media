@@ -2,43 +2,6 @@
 
 class InitDb < ActiveRecord::Migration
 
-  create_table "account_footers" do |t|
-    t.integer  "account_id",                        :null => false
-    t.boolean  "is_default",     :default => false, :null => false
-    t.boolean  "is_show_link",   :default => false, :null => false
-    t.string   "footer_content",                    :null => false
-    t.string   "footer_link"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-  end
-
-  create_table "account_logs" do |t|
-    t.integer  "user_id"
-    t.string   "user_type"
-    t.string   "ip"
-    t.string   "referer"
-    t.string   "user_agent"
-    t.datetime "created_at"
-  end
-
-  add_index "account_logs", ["user_id", "user_type"], :name => "index_account_logs_on_user_id_and_user_type"
-
-  create_table "account_passwords" do |t|
-    t.integer  "account_id",                                         :null => false
-    t.string   "email"
-    t.integer  "password_type",                     :default => 1,   :null => false
-    t.string   "password_digest",                   :default => "1", :null => false
-    t.integer  "password_question_id",              :default => 1,   :null => false
-    t.string   "password_answer"
-    t.integer  "err_num",              :limit => 1, :default => 0
-    t.datetime "created_at",                                         :null => false
-    t.datetime "updated_at",                                         :null => false
-  end
-
-  add_index "account_passwords", ["account_id"], :name => "index_account_passwords_on_account_id"
-  add_index "account_passwords", ["email"], :name => "index_account_passwords_on_email"
-  add_index "account_passwords", ["password_question_id"], :name => "index_account_passwords_on_password_question_id"
-
   create_table "accounts", options: 'AUTO_INCREMENT = 10001' do |t|
     t.integer  "account_type",                 :default => 0,   :null => false
     t.string   "nickname"
@@ -74,6 +37,43 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "accounts", ["nickname"], :name => "index_accounts_on_nickname", :unique => true
+
+  create_table "account_passwords" do |t|
+    t.integer  "account_id",                                         :null => false
+    t.string   "email"
+    t.integer  "password_type",                     :default => 1,   :null => false
+    t.string   "password_digest",                   :default => "1", :null => false
+    t.integer  "password_question_id",              :default => 1,   :null => false
+    t.string   "password_answer"
+    t.integer  "err_num",              :limit => 1, :default => 0
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
+  end
+
+  add_index "account_passwords", ["account_id"], :name => "index_account_passwords_on_account_id"
+  add_index "account_passwords", ["email"], :name => "index_account_passwords_on_email"
+  add_index "account_passwords", ["password_question_id"], :name => "index_account_passwords_on_password_question_id"
+
+  create_table "account_footers" do |t|
+    t.integer  "account_id",                        :null => false
+    t.boolean  "is_default",     :default => false, :null => false
+    t.boolean  "is_show_link",   :default => false, :null => false
+    t.string   "footer_content",                    :null => false
+    t.string   "footer_link"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "account_logs" do |t|
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "ip"
+    t.string   "referer"
+    t.string   "user_agent"
+    t.datetime "created_at"
+  end
+
+  add_index "account_logs", ["user_id", "user_type"], :name => "index_account_logs_on_user_id_and_user_type"
 
   create_table "sites", options: 'AUTO_INCREMENT = 10001' do |t|
     t.integer  "account_id"
