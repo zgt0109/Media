@@ -106,10 +106,10 @@ class PaymentSetting < ActiveRecord::Base
       self.type = 'YeepaySetting'
     elsif self.weixinpay?
       self.type = 'WeixinPaySetting'
-    elsif self.billpay?
-      self.type = 'BillpaySetting'
+    elsif self.cashpay?
+      self.type = 'CashpaySetting'
     elsif self.wx_redpacket_pay?
-      self.type  = 'WxredpacketpaySetting'
+      self.type = 'WxredpacketpaySetting'
     end
   end
 
