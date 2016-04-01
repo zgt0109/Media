@@ -31,7 +31,6 @@ class Data::WxRequestsController < ApplicationController
     @data['yesterday']['全部请求'] = @yesterday_wx_request.try(:total).to_i
 
     if @dates.count == 1
-
       (0..23).each do |date|
         @high_chart.keys.each do |key|
           @high_chart[key][date.to_s] = 0
@@ -43,9 +42,7 @@ class Data::WxRequestsController < ApplicationController
         ed = Time.parse(@st.to_s + " #{date + 1}:0:0")
         @high_chart["全部请求"][date.to_s] = @wx_logs.where(:CreateTime.gte => st, :CreateTime.lte => ed).count
       end
-
     else
-
       @dates.each do |date|
         @high_chart.keys.each do |key|
           @high_chart[key][date.to_s] = 0
@@ -90,11 +87,8 @@ class Data::WxRequestsController < ApplicationController
   end
 
   def subscribe
-
     @wx_mp_user = current_site.wx_mp_user
-
     @high_chart = {"关注数" => {}, "取消关注数" => {}, "净增长数" => {}, '累积关注' => {}}
-
     @data = {'today' => {}, 'yesterday' => {}, 'seven' => {}, 'month' => {}, 'all' => {}}
 
     #今日关注
@@ -109,7 +103,6 @@ class Data::WxRequestsController < ApplicationController
     @data['all']['累积关注'] = @wx_mp_user.stats_wx_users.maximum("cumulate_user")
 
     #月关注
-
     month_request = @wx_mp_user.stats_wx_users.select('max(cumulate_user) total,sum(new_user) subscribe, sum(cancel_user) unsubscribe').first
     @data['month']['关注数'] = month_request.subscribe # + @data['today']['关注数']
     @data['month']['取消关注数'] = month_request.unsubscribe # + @data['today']['取消关注数']
@@ -245,7 +238,6 @@ class Data::WxRequestsController < ApplicationController
     end
     #
     if Date.today <= @ed && Date.today >= @st
-
     end
 
     @chart = WxLog.multi_line(@dates.to_a, @high_chart, "#{@st.strftime("%Y-%m-%d")} 至 #{@ed.strftime("%Y-%m-%d")} 用户关注报告", "关注次数")
@@ -271,7 +263,6 @@ class Data::WxRequestsController < ApplicationController
   end
 
   def message_hour
-
     date = params[:date].nil? ? Date.yesterday : params[:date]
 
     params[:date] = date
@@ -305,7 +296,6 @@ class Data::WxRequestsController < ApplicationController
   end
 
   def article
-
     @wx_mp_user = current_site.wx_mp_user
 
     @high_chart = {"文章标题" => {}, "阅读用户" => {}, "阅读次数" => {}, "分享次数" => {}, "分享用户" => {}, "原文页" => {},
