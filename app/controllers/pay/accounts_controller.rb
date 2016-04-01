@@ -46,7 +46,7 @@ class Pay::AccountsController < Pay::BaseController
 
   private
     def fetch_pay_account
-      @pay_account = current_site.pay_account
+      @pay_account = current_user.pay_account
     end
 
 end

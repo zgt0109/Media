@@ -27,7 +27,6 @@ class Site < ActiveRecord::Base
 
   has_one :wx_mp_user, inverse_of: :site
   has_one :shop, inverse_of: :site
-  has_one  :pay_account
 
   has_many :assistants_sites
   has_many :assistants, through: :assistants_sites
