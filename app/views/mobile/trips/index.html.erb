@@ -21,7 +21,6 @@
       </div>
       <div class="box-bg"></div>
     </div><!--box-text end-->
-
   </div><!--box-img end-->
 
   <!--nav开始-->
@@ -36,8 +35,6 @@
   </div>
   <!--nav结束-->
 
-
-
   <div class="box-list">
     <% if @trip_tickets.blank? %>
       <div class="box-null">
@@ -46,18 +43,19 @@
     <% else %>
       <% @trip_tickets.each do |ticket| %>
         <div class="list-li">
-          <a class="hd" href="<%= new_mobile_trip_order_url(ticket_id: ticket.id) %>">
+          <a class="hd" href="<%= mobile_trip_path(id: ticket.id) %>">
             <img src="<%= ticket.pic_url if ticket.pic_url.present? %>">
           </a>
           <div class="bd">
-            <a href="<%= new_mobile_trip_order_url(ticket_id: ticket.id) %>">
+            <a href="<%= mobile_trip_path(id: ticket.id) %>">
               <p class="li-name"><%= ticket.name.to_s[0..25] %></p>
               <p class="li-intro"><%= ticket.description.to_s[0..29] %></p>
             </a>
+            <a class="btn fr" href="<%= mobile_trip_path(id: ticket.id) %>">门票详情</a>
             <p class="li-sale">
               <span class="fl"><b class="fred"><%= f ticket.price %></b>元</span>
-              <a class="btn fr" href="<%= new_mobile_trip_order_url(ticket_id: ticket.id) %>">在线预定</a>
-              <!--a class="btn btn-gray fr">在线预定</a-->
+              <a class="btn fr" href="<%= new_mobile_trip_order_path(ticket_id: ticket.id) %>">在线预定</a>
+              <!-- <a class="btn btn-gray fr">在线预定</a> -->
             </p>
           </div><!-- bd end -->
         </div><!-- list-li end -->
@@ -65,30 +63,29 @@
     <% end %>
   </div>
 </section><!-- section end -->
+
 <script type="text/javascript">
-$(function(){
-    var texts=<%= raw @trip_ads.collect(&:title).to_json %>;
-    new Swipe(document.getElementById('slider'), {
-        speed:500,
-        auto:3000,
-        callback: function(){
-          var lis = $(this.element).next("div").find("#pagenavi").children();
-          lis.removeClass("active").eq(this.index).addClass("active");
-          $("#slider-span").html(texts[this.index]);
-        }
+    $(function(){
+        var texts=<%= raw @trip_ads.collect(&:title).to_json %>;
+        new Swipe(document.getElementById('slider'), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+              var lis = $(this.element).next("div").find("#pagenavi").children();
+              lis.removeClass("active").eq(this.index).addClass("active");
+              $("#slider-span").html(texts[this.index]);
+            }
+        });
+        $(".box-list .list-li").on({
+            touchstart:function(){
+                $(this).addClass("active");
+            },
+            touchend:function(){
+                $(this).removeClass("active");
+            }
+        });
     });
-    $(".box-list .list-li").on({
-        touchstart:function(){
-            $(this).addClass("active");
-        },
-        touchend:function(){
-            $(this).removeClass("active");
-        }
-    });
-});
-</script>
-<script type="text/javascript">
-    
+
     var category_data = <%= raw JSON.pretty_generate(@site.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, 
         select_data = []
         series = <%= raw @category.try(:series) || 1 %>;
@@ -109,13 +106,10 @@ $(function(){
         }
       });
 
-      
       if(data.categories.length > 0){
         data.categories = data.categories.sort(function(a, b){return a.position-b.position});
         select_data.unshift(data);
       }
-      
-      
 
       if(parent){
         select_categories(parent.id, parent.parent_id, level - 1);
@@ -161,4 +155,4 @@ $(function(){
     $(function(){
       select_categories(<%= @category.try(:id).to_i %>, <%= @category.try(:parent_id).to_i %>, series);
     });
-  </script>
+</script>
