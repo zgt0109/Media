@@ -48,8 +48,8 @@
           </a>
           <div class="bd">
             <a href="<%= mobile_trip_path(id: ticket.id) %>">
-              <p class="li-name"><%= ticket.name.to_s[0..25] %></p>
-              <p class="li-intro"><%= ticket.description.to_s[0..29] %></p>
+              <p class="li-name"><%= truncate_u(ticket.name.to_s, length: 15) %></p>
+              <p class="li-intro"><%= truncate_u(ticket.description.to_s, length: 18) %></p>
             </a>
             <!-- <a class="btn fr" href="<%= mobile_trip_path(id: ticket.id) %>">详情</a> -->
             <p class="li-sale">
