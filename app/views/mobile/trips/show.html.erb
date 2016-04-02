@@ -6,7 +6,10 @@
 
 <section>
   <div class="box box-order">
-    <% if @trip_ticket.pic_url.present? %><img src="<%= @trip_ticket.pic_url %>" style="max-width: 100%; vertical-align: top;"><% end %>
+    <% if @trip_ticket.pic_url.present? %>
+      <img src="<%= @trip_ticket.pic_url %>" style="max-width: 100%; vertical-align: top;">
+    <% end %>
+
     <dl>
       <dt>门票信息</dt>
       <dd>
