@@ -49,7 +49,7 @@
           <div class="bd">
             <a href="<%= mobile_trip_path(id: ticket.id) %>">
               <p class="li-name"><%= ticket.name.to_s[0..20] %></p>
-              <p class="li-intro"><%= ticket.description.to_s[0..20] %></p>
+              <!-- <p class="li-intro"><%= ticket.description.to_s[0..20] %></p> -->
             </a>
             <a class="btn fr" href="<%= mobile_trip_path(id: ticket.id) %>">详情</a>
             <p class="li-sale">
