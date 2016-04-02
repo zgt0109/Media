@@ -22,8 +22,8 @@
 <%= javascript_include_tag "/javascripts/vweisiteV01/index/102/jquery_easing", "/javascripts/vweisiteV01/index/102/yl3d", "/javascripts/vweisiteV01/index/102/50" %>
 
 <% content_for :document_ready_js do %>
-$('body').attr('ontouchmove', 'event.preventDefault()');
-$('body').attr('onselectstart', 'return true;');
-$('body').attr('ondragstart', 'return false;');
-$('footer').css('z-index', 10);
+  $('body').attr('ontouchmove', 'event.preventDefault()');
+  $('body').attr('onselectstart', 'return true;');
+  $('body').attr('ondragstart', 'return false;');
+  $('footer').css('z-index', 10);
 <% end %>
