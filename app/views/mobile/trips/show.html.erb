@@ -6,20 +6,21 @@
 
 <section>
   <div class="box box-order">
+    <% if @trip_ticket.pic_url.present? %><img src="<%= @trip_ticket.pic_url %>" style="max-width: 100%; vertical-align: top;"><% end %>
     <dl>
       <dt>门票信息</dt>
       <dd>
         <div class="order-row">
           <div class="fl">分类：</div>
-          <div class="fr"><span><%= @trip_ticket.trip_ticket_category %></span></div>
+          <div class="fl"><span><%= @trip_ticket.trip_ticket_category %></span></div>
         </div>
         <div class="order-row">
           <div class="fl">名称：</div>
-          <div class="fr"><span><%= @trip_ticket.name %></span></div>
+          <div class="fl"><span><%= @trip_ticket.name %></span></div>
         </div>
         <div class="order-row">
           <div class="fl">单价：</div>
-          <div class="fr fred"><span>￥<%= f @trip_ticket.price %></span></div>
+          <div class="fl fred"><span>￥<%= f @trip_ticket.price %></span></div>
         </div>
       </dd>
     </dl>
@@ -27,11 +28,11 @@
       <dt>门票描述</dt>
       <dd>
         <div class="order-row">
-          <% if @trip_ticket.pic_url.present? %><p class="fl"><img src="<%= @trip_ticket.pic_url %>"></p><% end %>
           <p class="fl"><%= @trip_ticket.description %></p>
         </div>
       </dd>
     </dl>
+
     <p class="tcenter">
       <a class="btn fr" href="<%= new_mobile_trip_order_path(ticket_id: @trip_ticket.id) %>">在线预定</a>
     </p>
