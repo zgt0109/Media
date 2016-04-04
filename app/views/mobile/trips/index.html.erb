@@ -51,10 +51,9 @@
               <p class="li-name"><%= truncate_u(ticket.name.to_s, length: 15) %></p>
               <p class="li-intro"><%= truncate_u(ticket.description.to_s, length: 18) %></p>
             </a>
-            <!-- <a class="btn fr" href="<%= mobile_trip_path(id: ticket.id) %>">详情</a> -->
             <p class="li-sale">
               <span class="fl"><b class="fred"><%= f ticket.price %></b>元</span>
-              <a class="btn fr" href="<%= mobile_trip_path(id: ticket.id) %>">详情</a>
+              <a class="btn fr" href="<%= mobile_trip_path(id: ticket.id) %>">查看详情</a>
               <!-- <a class="btn btn-gray fr">在线预定</a> -->
             </p>
           </div><!-- bd end -->
