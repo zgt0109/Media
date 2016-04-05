@@ -6,7 +6,7 @@ class WebsiteArticle < ActiveRecord::Base
 
   acts_as_enum :article_type, in: [
     ['as_default', 1, '默认'],
-    ['as_article', 2, '文章'],
+    ['as_article', 2, '资讯'],
     ['as_product', 3, '产品']
   ]
   acts_as_enum :status, in: [

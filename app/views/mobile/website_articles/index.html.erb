@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag '/stylesheets/website_articles/list' %>
-<%= render "#{params[:article_type]}_index" %>
 
+<%= render "#{params[:article_type]}_index" %>
 
 <script>
   var category_data = <%= raw JSON.pretty_generate(@categories.collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position, children_count: t.children_count.to_i, category_type: t.category_type}}) %>;

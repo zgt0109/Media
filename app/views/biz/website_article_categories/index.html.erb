@@ -4,7 +4,7 @@
         <ul class="breadcrumb">
           <%= render 'partials/home' %>
           <li><%= link_to '微官网', websites_path %></li>
-          <% options = {'as_article' => '文章中心', 'as_product' => '展示中心'} %>
+          <% options = {'as_article' => '资讯中心', 'as_product' => '展示中心'} %>
           <li><%= link_to options[params[:category_type]], website_article_categories_url(category_type: params[:category_type]) %></li>
         </ul>
         <!-- .breadcrumb -->

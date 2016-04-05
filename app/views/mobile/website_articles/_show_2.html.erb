@@ -1,4 +1,4 @@
-<% title '文章中心详情' %>
+<% title @wx_mp_user.try(:nickname) || '资讯详情' %>
 
 <div class="news-top">
   <div class="news-title"><%= @article.title %></div>

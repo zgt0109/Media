@@ -4,7 +4,7 @@
         <ul class="breadcrumb">
           <%= render 'partials/home' %>
           <li><%= link_to '微官网', websites_path %></li>
-          <% options = {'as_article' => '文章中心', 'as_product' => '展示中心'}%>
+          <% options = {'as_article' => '资讯中心', 'as_product' => '展示中心'}%>
           <li><%= link_to options[params[:article_type]], website_articles_path(acticle_type: params[:acticle_type]) %></li>
         </ul>
         <!-- .breadcrumb -->
@@ -39,7 +39,7 @@
               </div-->
 
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 search-title hide">
-                <%= f.text_field :title_like, class: 'form-control', placeholder: "#{params[:article_type] == "as_article" ? "文章标题" : "展示内容名称"}"%>
+                <%= f.text_field :title_like, class: 'form-control', placeholder: "#{params[:article_type] == "as_article" ? "标题" : "展示内容名称"}"%>
               </div>
               <div class="col-lg-1 col-md-1 col-sm-2 col-xs-4">
                 <input type="submit" value="查询" class="btn btn-info btn-sm">
@@ -63,7 +63,7 @@
 
               <a class="btn btn-info btn-sm" data-do="getdelete">删除</a>
               <%= link_to '删除', 'javascript:;', method: :get, confirm: "你确定要删除吗?", class: 'hide' %>
-              <%= link_to "#{params[:article_type] == 'as_article' ? '新增文章' : '新增展示内容'}", new_website_article_path(article_type: params[:article_type]), class: 'btn btn-success btn-sm margin-left-20' %>
+              <%= link_to "#{params[:article_type] == 'as_article' ? '新增资讯' : '新增展示内容'}", new_website_article_path(article_type: params[:article_type]), class: 'btn btn-success btn-sm margin-left-20' %>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
                 <!--input type="checkbox" role="checkbox"-->
               </th>
               <th width="100">创建时间</th>
-              <th>文章标题</th>
+              <th>标题</th>
               <th width="110">标题图</th>
               <th>分类</th>
               <th width="50">排序</th>
