@@ -12,6 +12,7 @@ class BookingOrder < ActiveRecord::Base
   scope :latest, -> { order('created_at DESC') }
 
   before_create :add_default_attrs, :generate_order_no
+  after_create :send_message
 
   def complete!
     update_attributes(status: COMPLETED, completed_at: Time.now)
@@ -21,7 +22,7 @@ class BookingOrder < ActiveRecord::Base
     update_attributes(status: CANCELED, canceled_at: Time.now)
   end
 
-  private
+  # private
 
   def add_default_attrs
     if booking_item
@@ -36,6 +37,15 @@ class BookingOrder < ActiveRecord::Base
 
   def generate_order_no
     self.order_no = Concerns::OrderNoGenerator.generate
+  end
+
+  def send_message
+    return if tel.blank?
+
+    options = { operation_id: 3, account_id: booking.site.account_id, userable_id: user_id, userable_type: 'User' }
+    sms_options = { mobiles: tel, template_code: 'SMS_7260929', params: { name: username, tel: tel, total_amount: total_amount, address: address, remark: description } }
+
+    booking.site.account.send_message(sms_options, false, options)
   end
 
 end

@@ -1256,6 +1256,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "commenter_type"
     t.string   "nickname"
     t.string   "email"
+    t.integer  "status",            :limit => 1, :default => 1, :null => false
     t.datetime "created_at",                                     :null => false
   end
 
