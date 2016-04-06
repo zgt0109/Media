@@ -46,22 +46,22 @@
               <thead>
               <tr>
                 <th>日期</th>
+                <th>总数</th>
                 <% @operation_options.each do |f| %>
                   <%# next if f[0] == "电商" %>
-                  <th><%= f[0] %>使用</th>
+                  <th><%= f[0] %></th>
                 <% end %>
-                <th>当日使用总数</th>
               </tr>
               </thead>
               <tbody>
               <% @dates.each do |d| %>
                 <tr>
                   <td><%= d.date %></td>
+                  <td><%= current_user.sms_expenses_count(d.date) %></td>
                   <% @operation_options.each do |f| %>
                     <%# next if f.first == "电商" %>
                     <td><%= current_user.sms_expenses_count(d.date, f.last) %></td>
                   <% end %>
-                  <td><%= current_user.sms_expenses_count(d.date) %></td>
                 </tr>
               <% end %>
               <% if @dates.blank? %>

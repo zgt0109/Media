@@ -42,7 +42,7 @@ class BookingOrder < ActiveRecord::Base
   def send_message
     return if tel.blank?
 
-    options = { operation_id: 3, account_id: booking.site.account_id, userable_id: user_id, userable_type: 'User' }
+    options = { operation_id: 7, account_id: booking.site.account_id, userable_id: user_id, userable_type: 'User' }
     sms_options = { mobiles: tel, template_code: 'SMS_7260929', params: { name: username, tel: tel, total_amount: total_amount, address: address, remark: description } }
 
     booking.site.account.send_message(sms_options, false, options)
