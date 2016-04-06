@@ -1256,8 +1256,8 @@ class InitDb < ActiveRecord::Migration
     t.string   "commenter_type"
     t.string   "nickname"
     t.string   "email"
+    t.integer  "status",            :limit => 1, :default => 1, :null => false
     t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
   end
 
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
@@ -2540,9 +2540,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "user_id",                                   :null => false
     t.integer  "likeable_id"
     t.string   "likeable_type"
-    t.integer  "status",        :limit => 2, :default => 1, :null => false
     t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
   end
 
   add_index "likes", ["site_id"], :name => "index_likes_on_site_id"

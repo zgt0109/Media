@@ -7,16 +7,6 @@ class Biz::VipCardsController < Biz::VipController
     @activity.ready_activity_notice || @activity.activity_notices.create({title: "申请微信会员卡", summary: "您尚未申请会员特权,快来点击申领吧!!", description: "申请微信会员卡", activity_status: 0})
   end
 
-  def settings
-  end
-
-  def marketing
-
-  end
-
-  def help
-  end
-
   def update
     @vip_card.attributes = params[:vip_card]
     @vip_card.save(validate: false)
@@ -49,7 +39,6 @@ class Biz::VipCardsController < Biz::VipController
   end
 
   def remove_logo
-    @vip_card.update_column(:logo, nil)
     @vip_card.update_column(:logo_key, nil)
 
     # remove logo url from settings_json

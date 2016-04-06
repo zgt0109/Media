@@ -1,9 +1,10 @@
 class Booking < ActiveRecord::Base
+  store :metadata, accessors: [:notify_merchant_mobiles]
 
   validates :name, presence: true, length: { maximum: 64, message: '名称过长' }
   # validates :tel, presence: true
 
-  belongs_to :booking
+  belongs_to :site
   has_one :activity, as: :activityable, dependent: :destroy
   has_many :booking_orders
   has_many :booking_categories

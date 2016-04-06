@@ -82,6 +82,7 @@ class Account < ActiveRecord::Base
         message_id = mass_send_message(sms_options, _options).to_i
         send_success = message_id > 1 || message_id < -10000000
         sms_status = send_success ? 1 : message_id
+        Rails.logger.info "sms message_id #{message_id}, send_success: #{send_success}, sms_status: #{sms_status}"
 
         if send_success
           if free_sms_count > 0

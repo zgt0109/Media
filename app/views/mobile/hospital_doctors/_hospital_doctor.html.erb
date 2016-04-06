@@ -5,8 +5,8 @@
 <div class="list-li box">
   <a class="fw" href="<%= mobile_hospital_doctor_url(id: doctor.id) %>">
     <div class="hd">
-      <% if doctor.avatar.present? %>
-      <%= image_tag doctor.try(:avatar) %>
+      <% if doctor.avatar_url.present? %>
+      <%= image_tag doctor.try(:avatar_url) %>
       <% else %>
       <% if doctor.gender == 1 %>
       <%= image_tag "/assets/mobile/whospital/doctor-male.jpg" %>
