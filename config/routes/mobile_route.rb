@@ -143,8 +143,9 @@ Wp::Application.routes.draw do
 
         resources :website_articles, only: [:index, :show] do
           get :tags, on: :collection
+          resources :likes, only: [:create, :destroy]
         end
-
+        
       end
     # end
   end
@@ -287,7 +288,7 @@ Wp::Application.routes.draw do
     resources :fans_games, only: [:index, :show]
 
     resources :aids, only: :index do
-      collection do 
+      collection do
         get  :verification, :award, :aid_friends, :rank_list
         post :friend_aid, :invite_friends, :receive, :acceptance
       end

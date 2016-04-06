@@ -158,6 +158,8 @@ class Site < ActiveRecord::Base
 
   has_many :red_packets, class_name: 'RedPacket::RedPacket'
 
+  has_many :likes, as: :likeable
+
   before_create :add_default_attrs
 
   def self.current
