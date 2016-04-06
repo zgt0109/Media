@@ -48,7 +48,7 @@ module ApplicationHelper
   end
 
   def hide_for_temp_user
-    session[:account_id] == TEST_USER_ID ? "style='display:none'".html_safe : ""
+    session[:account_id].blank? ? "style='display:none'".html_safe : ""
   end
 
   def options_for_date(options = {})
