@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   before_filter *ADMIN_FILTERS
   # before_filter :check_account_expire
   # before_filter :check_auth_mobile
+  before_filter :require_wx_mp_user
 
   helper_method :current_user, :services_config, :current_shop_account, :current_sub_account, :current_shop_branch
   helper_method :current_site, :mobile_subdomain, :mobile_domain
@@ -126,8 +127,8 @@ class ApplicationController < ActionController::Base
   end
 
   def require_wx_mp_user
-    @wx_mp_user = current_site.wx_mp_user
-    return redirect_to platforms_path, alert: '请先添加微信公共帐号' unless @wx_mp_user
+    @wx_mp_user = current_site.wx_mp_user || current_site.create_wx_mp_user!(account_id: current_user.id, nickname: current_user.nickname)
+    # return redirect_to platforms_path, alert: '请先添加微信公共帐号' unless @wx_mp_user
   end
 
   def filter_out_shop_branch_sub_account
