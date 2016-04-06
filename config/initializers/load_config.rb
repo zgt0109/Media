@@ -21,7 +21,7 @@ MOBILE_SUB_DOMAIN = Settings.mhostname.sub(/\.[com|dev].?/, '').split('.')[0..-2
 
 EXPORTING_COUNT = 2000
 
-TEST_USER_ID = Rails.env.production? ? 1 : nil
+TEST_USER_ID = Rails.env.production? ? 10023 : nil
 
 # kefu
 if Rails.env.production?
