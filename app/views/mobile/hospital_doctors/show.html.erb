@@ -11,8 +11,8 @@
 		<div class="box-detail">
 			<div class="detail-top">
 				<div class="hd">
-					<% if @hospital_doctor.avatar.present? %>
-					  <%= image_tag @hospital_doctor.try(:avatar) %>
+					<% if @hospital_doctor.avatar_url.present? %>
+					  <%= image_tag @hospital_doctor.try(:avatar_url) %>
 					<% else %>
 					  <%= image_tag "/assets/mobile/whospital/doctor-male.jpg" %>
 					<% end %>
