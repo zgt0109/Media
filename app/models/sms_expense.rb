@@ -16,7 +16,8 @@ class SmsExpense < ActiveRecord::Base
     ['hotel', 4, '酒店'],
     ['plot', 5, '小区'],
     ['activity', 6, '活动'],
-    ['other', 7, '其它']
+    ['booking', 7, '微服务'],
+    ['other', 0, '其它']
   ]
 
   # 微生活圈: 6

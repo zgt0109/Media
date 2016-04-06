@@ -30,8 +30,6 @@ class ApplicationController < ActionController::Base
 
     session[:expiry_time] = MAX_SESSION_TIME.seconds.from_now
 
-    # clear_sign_in_session if (session[:account_id] == TEST_USER_ID && session[:sub_account_id].nil? )
-
     return true
   end
 
