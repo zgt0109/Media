@@ -5,7 +5,7 @@ require 'rvm/capistrano'
 #set :rvm_ruby_string, '2.1.5' # Change to your ruby version
 set :rvm_type, :user # :user if RVM installed in $HOME
 
-set :repository, 'git@www.winwemedia.com:/opt/repos/win.git'
+set :repository, 'git@winwemedia.com:/opt/repos/win.git'
 set :scm, :git
 set :user, 'deployer'
 # set :admin_runner, 'root'
@@ -23,19 +23,19 @@ set :keep_releases, 5
 
 # 主站的程序部署在 web1.winwemedia.com、 web2.winwemedia.com 上
 task :production do
-  role :app, *%w[www.winwemedia.com]
-  role :db, 'www.winwemedia.com', primary: true
+  role :app, *%w[winwemedia.com]
+  role :db, 'winwemedia.com', primary: true
 
   config_deploy
 
-  role :whenever, 'www.winwemedia.com'
+  role :whenever, 'winwemedia.com'
   set :whenever_roles, 'whenever'
   deploy_whenever
 end
 
 task :staging do
   require 'rvm/capistrano'
-  server 'www.winwemedia.com', :app, :web, :db, primary: true
+  server 'winwemedia.com', :app, :web, :db, primary: true
   config_deploy application: 'winwemedia_staging', rails_env: 'staging', branch: 'staging'
 end
 
