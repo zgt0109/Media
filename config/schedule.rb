@@ -59,9 +59,7 @@ every 1.days, :at => '02:07 am' do
   rake "vip_user:upgrade_by_time"
 end
 
-
-every 1.days, :at => '12:01 am' do
-    #更新微信接口数据
+every 1.days, :at => '08:31 am' do
+  #更新微信接口数据
   rake "wx_stats:all"
-
 end

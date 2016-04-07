@@ -43,12 +43,12 @@ class PaymentSettingsController < ApplicationController
   def enable
     @payment_setting = current_site.payment_settings.find(params[:id])
     if @payment_setting.winwemedia_yeepay?
-      @payment_setting.enable! if current_site.pay_account.normal?
+      @payment_setting.enable! if current_user.pay_account.normal?
       yeepay =  current_site.payment_settings.yeepay.first
       yeepay.disable! if yeepay.present?
     elsif @payment_setting.winwemedia_alipay?
       alipay =  current_site.payment_settings.alipay.first
-      @payment_setting.enable! if current_site.pay_account.normal?
+      @payment_setting.enable! if current_user.pay_account.normal?
       alipay.disable! if alipay.present?
     elsif @payment_setting.yeepay?
       @payment_setting.enable!

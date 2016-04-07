@@ -11,7 +11,7 @@ class WebsiteArticleCategory < ActiveRecord::Base
   has_many :copys, class_name: 'WebsiteArticleCategory', foreign_key: 'copy_id'
 
   acts_as_enum :category_type, in: [
-    ['as_article', 1, '文章分类'],
+    ['as_article', 1, '资讯分类'],
     ['as_product', 2, '展示内容分类']
   ]
 
@@ -85,7 +85,7 @@ class WebsiteArticleCategory < ActiveRecord::Base
     def enum_category_type_options(category_type)
       {
       	1 => {
-               name: '文章分类',
+               name: '资讯分类',
                call_back_url: '/website_articles?article_type=as_article',
                article_type: 'as_article',
         },

@@ -1,49 +1,49 @@
 <% content_for :website_top_pic do %>
-    <header>
-        <a href="javascript:history.go(-1);" class="nav-1">
-          <img src="/assets/website/template11/nav1.png"/>
-        </a>
-        <a href="<%= mobile_root_url(site_id: @website.site_id, id: @website.id, aid: session[:activity_id], anchor: "mp.weixin.qq.com") %>" class="nav-2 fangzi">
-          <img src="/assets/website/template11/nav2.png"/>
-        </a>
-        <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#" %>" class="nav-3">
-          <img src="/assets/website/template11/nav3.png"/>
-        </a>
-        <a class="nav-4 last ico-list">
-          <img src="/assets/website/template11/nav4.png"/>
-        </a>
-    </header>
+  <header>
+    <a href="javascript:history.go(-1);" class="nav-1">
+      <img src="/assets/website/template11/nav1.png"/>
+    </a>
+    <a href="<%= mobile_root_url(site_id: @website.site_id, id: @website.id, aid: session[:activity_id], anchor: "mp.weixin.qq.com") %>" class="nav-2 fangzi">
+      <img src="/assets/website/template11/nav2.png"/>
+    </a>
+    <a href="<%= @website.tel? ? "tel:#{@website.tel}" : "#" %>" class="nav-3">
+      <img src="/assets/website/template11/nav3.png"/>
+    </a>
+    <a class="nav-4 last ico-list">
+      <img src="/assets/website/template11/nav4.png"/>
+    </a>
+  </header>
 <% end %>
 
-  <% website_menu.sub_menus.each do |child| %>
-      <div class="box box-list">
-        <a class="box-block" href="<%= menu_url(child) %>"></a>
-        <div class="hd">
-          <b><%= child.name %></b>
-          <!--<span><%#= date_format_full_l(child.created_at)  %></span>-->
-        </div>
-        <div class="bd">
-          <%= image_tag child.is_a?(Assistant) ? child.pic_url : child.pic_url if child.pic_url %>
-        </div>
-        <div class="ft">
-          查看全文 >
-        </div>
-      </div>
-  <% end %>
+<% website_menu.sub_menus.each do |child| %>
+  <div class="box box-list">
+    <a class="box-block" href="<%= menu_url(child) %>"></a>
+    <div class="hd">
+      <b><%= child.name %></b>
+      <!--<span><%#= date_format_full_l(child.created_at)  %></span>-->
+    </div>
+    <div class="bd">
+      <%= image_tag child.is_a?(Assistant) ? child.pic_url : child.pic_url if child.pic_url %>
+    </div>
+    <div class="ft">
+      查看全文 >
+    </div>
+  </div>
+<% end %>
 
 <% content_for :pop_pop_share do %>
-    <div class="pop-nav pop">
-      <div class="pop-bg"></div>
-      <div class="pop-bd">
-        <div class="hd"><span>取消</span></div>
-        <div class="bd">
-          <% @website.website_menus.root.order(:sort).each do |menu| %>
-              <dl>
-                <dt><a href="<%= menu_url(menu) %>"><span><%= menu.name %></span><i class="ico ico-angle-right fr"></i></a></dt>
-                <dd></dd>
-              </dl>
-          <% end %>
-        </div>
+  <div class="pop-nav pop">
+    <div class="pop-bg"></div>
+    <div class="pop-bd">
+      <div class="hd"><span>取消</span></div>
+      <div class="bd">
+        <% @website.website_menus.root.order(:sort).each do |menu| %>
+          <dl>
+            <dt><a href="<%= menu_url(menu) %>"><span><%= menu.name %></span><i class="ico ico-angle-right fr"></i></a></dt>
+            <dd></dd>
+          </dl>
+        <% end %>
       </div>
     </div>
+  </div>
 <% end %>

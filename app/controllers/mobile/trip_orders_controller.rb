@@ -14,7 +14,7 @@ class Mobile::TripOrdersController < Mobile::BaseController
   def create
     @trip_order = @user.trip_orders.new(params[:trip_order])
      @ticket = @trip_order.trip_ticket
-    
+
     if @trip_order.save!
       redirect_to mobile_trip_orders_url, notice:"提交成功！"
     else

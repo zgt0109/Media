@@ -1,31 +1,31 @@
 <% website_menus =  Kaminari.paginate_array(website_menu.sub_menus).page(params[:page]).per(4) %>
 <div class="box box-list">
   <% website_menus.each do |child| %>
-      <a href="<%= menu_url child %>" class="table">
-        <% if child.pic_url %>
-          <span class="fl td">
-            <%= image_tag child.is_a?(Assistant) ? child.pic_url : child.pic_url if child.pic_url %>
-          </span>
-        <% end %>
-        <span class="<%= child.pic_url ? "fr td" : "fw td" %>">
-            <b><%= child.name %></b>
-            <!--<i><%#= date_format_full_l(child.created_at)  %></i>-->
-            <em class="arrow"></em>
+    <a href="<%= menu_url child %>" class="table">
+      <% if child.pic_url %>
+        <span class="fl td">
+          <%= image_tag child.is_a?(Assistant) ? child.pic_url : child.pic_url if child.pic_url %>
         </span>
-      </a>
+      <% end %>
+      <span class="<%= child.pic_url ? "fr td" : "fw td" %>">
+        <b><%= child.name %></b>
+        <!--<i><%#= date_format_full_l(child.created_at)  %></i>-->
+        <em class="arrow"></em>
+      </span>
+    </a>
   <% end %>
 </div>
 
 <div class="box-page">
   <% if (link_to_previous_page website_menus, '上一页').present? %>
-      <%= link_to_previous_page website_menus, '上一页', class: "btn", :params => { :anchor => "mp.weixin.qq.com" }  %>
+    <%= link_to_previous_page website_menus, '上一页', class: "btn", :params => { :anchor => "mp.weixin.qq.com" }  %>
   <% else %>
-      <a class="btn active">上一页</a>
+    <a class="btn active">上一页</a>
   <% end %>
   <% if (link_to_next_page website_menus, '下一页').present? %>
-      <%= link_to_next_page website_menus, '下一页', class: "btn", :params => { :anchor => "mp.weixin.qq.com" }  %>
+    <%= link_to_next_page website_menus, '下一页', class: "btn", :params => { :anchor => "mp.weixin.qq.com" }  %>
   <% else %>
-      <a class="btn active">下一页</a>
+    <a class="btn active">下一页</a>
   <% end %>
 </div>
 
@@ -38,11 +38,11 @@
 </div>
 
 <% content_for :pop_pop_share do %>
-    <div class="pop pop-share">
-      <div class="pop-bg"></div>
-      <div class="pop-bd">
-        <p class="note-share"></p>
-      </div>
+  <div class="pop pop-share">
+    <div class="pop-bg"></div>
+    <div class="pop-bd">
+      <p class="note-share"></p>
     </div>
+  </div>
 <% end %>
 

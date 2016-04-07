@@ -264,7 +264,7 @@ class Api::WeixinController < Api::BaseController
       when 'LOCATION'
         #上报地理位置
         @wx_user.update_attributes(location_x: @xml[:Latitude], location_y: @xml[:Longitude], location_updated_at: Time.now)
-        WeixinKefu.location_request(params, @mp_user)
+        # WeixinKefu.location_request(params, @mp_user)
         ''
       when 'card_pass_check' then WeixinCard.card_pass_check(@mp_user, @xml)
       when 'user_get_card'   then WeixinCard.user_get_card(@wx_user, @mp_user, @xml)

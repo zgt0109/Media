@@ -152,7 +152,7 @@ Wp::Application.routes.draw do
   scope path: ':site_id', module: :mobile, constraints: {site_id: /\d+/ },  as: :mobile do
     resources :wx_walls, only: :show
     resources :shakes, only: [:index, :show]
-    resources :trips, only: :index
+    resources :trips, only: [:index, :show]
     resources :trip_orders, only: [:index, :new, :create]
 
     resources :bookings, only: :index

@@ -58,6 +58,8 @@ class SmsAlidayu
       SmsLog.create(options.merge!(date: Date.today, phone: mobiles, content: content, provider: 'Alidayu', return_code: return_code))
     end
 
+    self.result = return_code
+
     return_code
   end
 

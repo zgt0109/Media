@@ -68,12 +68,12 @@
     <% if @booking_item.is_able_booking %>
         <a href="<%= new_mobile_booking_order_url(site_id: @site.id, booking_item_id: @booking_item.id) %>"  class="btn btn-red">
           <img src="/assets/mobile/wserver/ico-car-add.png"/>
-          立即预定
+          立即预订
         </a>
     <% else %>
         <a onclick="javascript:not_booking_info();" class="btn btn-gray">
           <img src="/assets/mobile/wserver/ico-car-add.png"/>
-          立即预定
+          立即预订
         </a>
     <% end %>
   </div>
@@ -110,11 +110,11 @@
   });
   function not_booking_info(){
       if($("#booking_item_limit_type").val() == 1){
-        alert("商品已经预定完了");
+        alert("商品已经预订完了");
       }else if($("#booking_item_limit_type").val() == 2){
-        alert("商品预定期限已过，不能在预定了");
+        alert("商品预订期限已过，不能在预订了");
       }else if($("#booking_item_limit_type").val() == 3){
-        alert("今天商品预定量已经达到饱和，不能再预定了");
+        alert("今天商品预订量已经达到饱和，不能再预订了");
       }
       return false;
   }

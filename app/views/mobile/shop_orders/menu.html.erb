@@ -82,7 +82,23 @@
               <span class="mod-fa fa fa-caret-up">选择：<i id="js-total-number"><%= @shop_order.total_qty %></i></span>
               <b id="js-total-price">总价：￥<%= @shop_order.total_amount %></b>
             </a>
-            <a href="javascript:;" class="btn btn-small fr" onclick="showPop('#pop-more')">选好了</a>
+            <!-- <a href="javascript:;" class="btn btn-small fr" onclick="showPop('#pop-more')">选好了</a> -->
+            <% if @shop_order.take_out? %>
+              <%= link_to "选好了", confirm_mobile_shop_order_url(supllier_id: session[:site_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "btn btn-small fr" %>
+            <% end %>
+
+            <% if @shop_order.book_dinner? %>
+              <% book_dinner_rule =  @shop_order.shop_branch.book_dinner_rule %>
+              <% if book_dinner_rule.is_in_branch %>
+                <%= link_to "选好了", confirm_mobile_shop_order_url(supllier_id: session[:site_id], id: @shop_order, order_in_type: 1, anchor: "mp.weixin.qq.com"), class: "btn btn-small fr" unless @shop_order.ref_order %>
+              <% end %>
+              <% if book_dinner_rule.is_in_queue %>
+                <%= link_to "选好了", confirm_mobile_shop_order_url(supllier_id: session[:site_id], id: @shop_order, order_in_type: 2, anchor: "mp.weixin.qq.com"), class: "btn btn-small fr" unless @shop_order.ref_order %>
+              <% end %>
+              <% if book_dinner_rule.is_in_normal %>
+                <%= link_to "选好了", confirm_mobile_shop_order_url(supllier_id: session[:site_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "btn btn-small fr" %>
+              <% end %>
+            <% end %>
           </div>
           <div class="bd" id="shopcar-list">
             <dl>

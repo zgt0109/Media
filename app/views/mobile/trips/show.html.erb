@@ -1,0 +1,48 @@
+<header>
+  <a href="<%= mobile_trips_url(site_id: @site.id) %>" class="ico-prev tleft"><img src="/assets/mobile/wtrave/ico-back.png"></a>
+  <h1>门票详情</h1>
+  <a href="<%= mobile_trip_orders_url %>" class="tright">我的订单</a>
+</header>
+
+<section>
+  <div class="box box-order">
+    <% if @trip_ticket.pic_url.present? %>
+      <img src="<%= @trip_ticket.pic_url %>" style="max-width: 100%; vertical-align: top;">
+    <% end %>
+
+    <dl>
+      <dt>门票信息</dt>
+      <dd>
+        <div class="order-row">
+          <div class="fl">分类：</div>
+          <div class="fl"><span><%= @trip_ticket.trip_ticket_category %></span></div>
+        </div>
+        <div class="order-row">
+          <div class="fl">名称：</div>
+          <div class="fl"><span><%= @trip_ticket.name %></span></div>
+        </div>
+        <div class="order-row">
+          <div class="fl">单价：</div>
+          <div class="fl fred"><span>￥<%= f @trip_ticket.price %></span></div>
+        </div>
+      </dd>
+    </dl>
+    <dl>
+      <dt>门票描述</dt>
+      <dd>
+        <div class="order-row">
+          <p class="fl"><%= @trip_ticket.description %></p>
+        </div>
+      </dd>
+    </dl>
+
+    <p class="tcenter">
+      <a class="btn fr" href="<%= new_mobile_trip_order_path(ticket_id: @trip_ticket.id) %>">立即预订</a>
+    </p>
+  </div><!--box-order end -->
+
+  <div class="box-note">
+    <b>预定须知</b>
+    <p><%= @trip_ticket.content.to_s.html_safe %></p>
+  </div>
+</section>

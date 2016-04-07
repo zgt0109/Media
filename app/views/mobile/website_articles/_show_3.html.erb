@@ -1,4 +1,5 @@
-<% title '展示详情' %>
+<% title @wx_mp_user.try(:nickname) || '展示详情' %>
+
 <div class="product-top">
   <div class="product-title"><%= @article.title %></div>
   <div class="product-summary">	</div>
@@ -12,11 +13,13 @@
       <% end %>
    </div>
 </div>
+
 <div class="edit-box">
   <div class="edit">
     <%= raw @article.content %>
   </div>
 </div>
+
 <div class="page-nav">
   <% if @prev_article %>
     <%= link_to '<i class="fa fa-angle-left"></i>上一条'.html_safe, mobile_website_article_url(@prev_article, site_id: @website.site_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>

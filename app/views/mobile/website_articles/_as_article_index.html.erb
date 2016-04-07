@@ -1,4 +1,4 @@
-<% title '文章中心' %>
+<% title '资讯中心' %>
 <header>
   <%= form_for @search, url: mobile_website_articles_url(site_id: @website.site_id) do |f| %>
   <%= hidden_field_tag :article_type, params[:article_type] %>

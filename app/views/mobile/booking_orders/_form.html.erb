@@ -3,7 +3,7 @@
         <a href="<%= mobile_booking_item_url(id: params[:booking_item_id].to_i, site_id: @site.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev">
           <img src="/assets/mobile/wserver/ico-back.png"/>
         </a>
-      <h1>订单信息填写</h1>
+      <h1>填写订单信息</h1>
     </header>
 <% end %>
 
@@ -49,7 +49,7 @@
       <p>
         <span class="fl">备注：</span>
         <span class="fr">
-          <%= f.text_area :description, rows: 5 %>
+          <%= f.text_area :description, rows: 5, placeholder: '请填写快递名称+取货号（取件密码）' %>
         </span>
       </p>
 

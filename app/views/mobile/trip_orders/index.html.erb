@@ -1,13 +1,13 @@
 <header>
   <a href="<%= mobile_trips_url(site_id: @site.id) %>" class="ico-prev tleft"><img src="/assets/mobile/wtrave/ico-back.png"></a>
-  <h1>我的预约单</h1>
+  <h1>我的订单</h1>
 </header>
 
 <section>
   <div class="box-order box">
     <% if @orders.count == 0 %>
     <div class="order-null">
-      您还没有预订单，快去逛逛吧！
+      您还没有订单，快去逛逛吧！
     </div>
     <% else %>
       <% @orders.each do |order| %>

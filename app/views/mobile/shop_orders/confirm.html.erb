@@ -98,9 +98,9 @@
                      <% take_out_rule =  @shop_order.shop_branch.take_out_rule %>
                       <label class="mod-fa fa fa-caret-down">
                         <select class="input" name="book_date" id="select_date">
-                        <% if take_out_rule.include_time_now %>
-                        <option value="-1">立即送出</option>
-                        <% end %>
+                        <%# if take_out_rule.include_time_now %>
+                        <!-- <option value="-1">立即送出</option> -->
+                        <%# end %>
                         <%= take_out_rule.generate_date_range.html_safe %>
                         </select>
                       </label>
@@ -219,7 +219,7 @@
                 </div>
               </a>
               <div class="form-li">
-                <div class="li-l"><b>配送时间：</b></div>
+                <div class="li-l"><b>配送说明：</b></div>
                 <div class="li-r">
                   <%= rule.try(:delivery_time) %>
                 </div>

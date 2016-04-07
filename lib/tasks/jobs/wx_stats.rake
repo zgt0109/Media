@@ -4,25 +4,22 @@ namespace :wx_stats do
   end_date =(ENV['end_date'].try(:to_date) rescue nil) || Date.today
 
   task all:[
-           :create_wx_user_data,
-           :create_wx_articles_data,
-           :create_wx_articles_hour_data,
-           :create_wx_msg_data,
-           :create_wx_msg_hour_data,
+    :create_wx_user_data,
+    :create_wx_articles_data,
+    :create_wx_articles_hour_data,
+    :create_wx_msg_data,
+    :create_wx_msg_hour_data,
   ]
 
   task :create_wx_user_data => :environment do
-
     puts "update data now....."
-    @wx_mp_user = WxMpUser.where(:openid => !nil)
-
-    @wx_mp_user.each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (end_date-1).to_s, :end_date => (end_date-1).to_s}
 
       puts options
 
-      cumulate = WxUserData.getusercumulate(options)["list"]
-      usersummary = WxUserData.getusersummary(options)["list"]
+      cumulate = WxUserData.getusercumulate(options)["list"] || {}
+      usersummary = WxUserData.getusersummary(options)["list"] || {}
 
       usersummary.each do |d|
         stat = StatsWxUser.where(:ref_date => d["ref_date"], :openid => w.openid, :user_source => d["user_source"]).first_or_create()
@@ -38,14 +35,11 @@ namespace :wx_stats do
     puts "finish!"
   end
 
-
   task :create_wx_articles_data => :environment do
-
-    WxMpUser.where(:openid => !nil).each_with_index do |w, index|
-
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
       # 获取图文群发每日数据
-      a_sum = WxUserData.getarticlesummary(options)["list"]
+      a_sum = WxUserData.getarticlesummary(options)["list"] || {}
       # # # 获取图文群发总数据
       # puts a_total =WxUserData.getarticletotal(options)
       # # # 获取图文统计数据
@@ -53,7 +47,6 @@ namespace :wx_stats do
       # # 获取图文分享转发数据
       # puts a_usershare = WxUserData.getusershare(options)["list"]
       a_sum.each do |a|
-
         puts a
 
         stat = StatsWxArticle.where(:openid => w.openid, :ref_date => a["ref_date"],:user_source => a["user_source"], :msgid => a["msgid"], :title => a["title"]).first_or_create()
@@ -72,18 +65,15 @@ namespace :wx_stats do
         )
       end
     end
-
   end
 
   task :create_wx_articles_hour_data => :environment do
-
-    @wx_mp_user = WxMpUser.where(:openid => !nil)
-    @wx_mp_user.each_with_index do |w, index|
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
 
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
 
       # # 获取图文统计分时数据
-      a_userread_hour = WxUserData.getuserreadhour(options)["list"]
+      a_userread_hour = WxUserData.getuserreadhour(options)["list"] || {}
 
       # # 获取图文分享转发分时数据
       # a_usershare_hour = WxUserData.getusersharehour(options)["list"]
@@ -102,22 +92,18 @@ namespace :wx_stats do
   end
 
   task :create_wx_msg_data => :environment do
-
-    @wx_mp_user = WxMpUser.where(:openid => !nil)
-
-    @wx_mp_user.each_with_index do |w, index|
-
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (end_date-1).to_s, :end_date => (end_date-1).to_s}
       # 获取消息发送概况数据
-      m_upstream = WxUserData.getupstreammsg(options)["list"]
+      m_upstream = WxUserData.getupstreammsg(options)["list"] || {}
       # 获取消息分送分时数据
-      m_upstream_hour = WxUserData.getupstreammsghour(options)["list"]
+      m_upstream_hour = WxUserData.getupstreammsghour(options)["list"] || {}
       # 获取消息发送周数据
       # puts m_upstreammsg_week = WxUserData.getupstreammsgweek(options)
       # 获取消息发送月数据
       # puts m_upstreammsg_month = WxUserData.getupstreammsgmonth(options)
       # 获取消息发送分布数据
-       m_upstreammsgdist = WxUserData.getupstreammsgdist(options)["list"]
+       m_upstreammsgdist = WxUserData.getupstreammsgdist(options)["list"] || {}
       # 获取消息发送分布周数据
       # puts m_upstreammsgdist_week = WxUserData.getupstreammsgdistweek(options)
       # 获取消息发送分布月数据
@@ -130,29 +116,26 @@ namespace :wx_stats do
       end
 
       m_upstreammsgdist.each do |m|
-
         stat = StatsWxMsg.where(:ref_date => m["ref_date"], :openid => w.openid, :msg_user => m["msg_user"], :user_source => m["user_source"]).first_or_create()
 
         stat.update_attributes(:count_interval => m["count_interval"])
-
       end
     end
   end
 
   task :create_wx_msg_hour_data => :environment do
-    WxMpUser.where(:openid => !nil).each_with_index do |w, index|
-
+    WxMpUser.where('length(openid)>0').each_with_index do |w, index|
       options={:openid => w.openid, :begin_date => (begin_date).to_s, :end_date => (begin_date).to_s}
       # 获取消息发送概况数据
-      m_upstream = WxUserData.getupstreammsg(options)["list"]
+      m_upstream = WxUserData.getupstreammsg(options)["list"] || {}
       # 获取消息分送分时数据
-      puts m_upstream_hour = WxUserData.getupstreammsghour(options)["list"]
+      puts m_upstream_hour = WxUserData.getupstreammsghour(options)["list"] || {}
       # 获取消息发送周数据
       # puts m_upstreammsg_week = WxUserData.getupstreammsgweek(options)
       # 获取消息发送月数据
       # puts m_upstreammsg_month = WxUserData.getupstreammsgmonth(options)
       # 获取消息发送分布数据
-      m_upstreammsgdist = WxUserData.getupstreammsgdist(options)["list"]
+      m_upstreammsgdist = WxUserData.getupstreammsgdist(options)["list"] || {}
       # 获取消息发送分布周数据
       # puts m_upstreammsgdist_week = WxUserData.getupstreammsgdistweek(options)
       # 获取消息发送分布月数据
@@ -160,12 +143,11 @@ namespace :wx_stats do
       puts options
 
       m_upstream_hour.each do |m|
-
         stat = StatsWxHourMsg.where(:ref_date => m["ref_date"], :ref_hour => m["ref_hour"], :openid => w.openid, :user_source => m["user_source"], :msg_type => m["msg_type"]).first_or_create()
-        #
+
         stat.update_attributes(:msg_user => m["msg_user"], :msg_count => m["msg_count"])
       end
-      #
+
       m_upstreammsgdist.each do |m|
         attrs = {
           :ref_date => m["ref_date"], 
@@ -173,11 +155,9 @@ namespace :wx_stats do
           :msg_user => m["msg_user"], 
           :user_source => m["user_source"]
         }
-
         stat = StatsWxHourMsg.where(attrs).first_or_create
 
         stat.update_attributes(:count_interval => m["count_interval"])
-
       end
     end
   end

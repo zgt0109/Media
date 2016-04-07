@@ -65,17 +65,12 @@ class HomeController < ApplicationController
   end
 
   def help_menus
-    # 假帐号登录
-    session[:account_id] = TEST_USER_ID if session[:account_id].blank?
     @help_menus = HelpMenu.order(:sort)
     render layout: 'application'
   end
 
   def help_post
-    # 假帐号登录
-    session[:account_id] = TEST_USER_ID if session[:account_id].blank?
     @help_menu = HelpMenu.where(id: params[:id].to_i).first
-
     return redirect_to root_url, alert: '页面不存在' unless @help_menu
 
     render layout: 'application'

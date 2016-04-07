@@ -49,7 +49,7 @@ class WebsiteMenu < ActiveRecord::Base
     ['contact_by_qq', 18, '商家QQ'],
     ['business_shop', 19, '商铺'],
     ['albums', 21, '相册'],
-    ['as_article', 22, '文章中心'],
+    ['as_article', 22, '资讯中心'],
     ['as_product', 23, '展示中心'],
     ['panoramagram', 24, '360全景']
   ]

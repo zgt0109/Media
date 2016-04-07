@@ -1,7 +1,7 @@
 <header>
   <a href="<%= mobile_trips_url(site_id: @site.id) %>" class="ico-prev tleft"><img src="/assets/mobile/wtrave/ico-back.png"></a>
-  <h1>填写预订单</h1>
-  <a href="<%= mobile_trip_orders_url %>" class="tright"><img src="/assets/mobile/wtrave/ico-order.png"></a>
+  <h1>填写订单</h1>
+  <a href="<%= mobile_trip_orders_url %>" class="tright">我的订单</a>
 </header>
 
 <section>
@@ -27,7 +27,7 @@
             <div class="fr fred tright"><span>￥<%= f @ticket.price %></span></div>
           </div>
           <div class="order-row order-number">
-            <div class="fl">预定数量：</div>
+            <div class="fl">预订数量：</div>
             <div class="fr">
               <div class="box-number">
                 <i id="down">-</i><%= f.text_field :qty, value: 1, type: 'tel', minlength: 1 %><i id="up">+</i>
