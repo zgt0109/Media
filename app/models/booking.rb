@@ -35,18 +35,18 @@ class Booking < ActiveRecord::Base
     booking_categories.root.each do |category|
       if category.has_children?
         if category.id == params[:booking_category_id].to_i
-          items << category.booking_items
+          items << category.booking_items.normal
           category.items params, items, true
         else
           category.items params, items
         end
       else
         next unless category.id == params[:booking_category_id].to_i
-        items << category.booking_items
+        items << category.booking_items.normal
       end
     end if params[:booking_category_id].present?
 
-    items = booking_items unless params[:booking_category_id].present?
+    items = booking_items.normal unless params[:booking_category_id].present?
     items = items.flatten
     items = items.select{|item| item.id == params[:id].to_i} if params[:id].present?
     items = items.select{|item| item.name =~ /.*(#{params[:name].strip()}).*/} if params[:name].present?
