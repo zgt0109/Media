@@ -17,6 +17,11 @@ class BookingItem < ActiveRecord::Base
     ['qty_limit', 4, '限定全部总量'],
   ]
 
+  enum_attr :status, :in => [
+    ['normal', 1, '正常'],
+    ['deleted', -1, '已删除']
+  ]
+
   accepts_nested_attributes_for :booking_item_pictures, allow_destroy: true
   validates_associated :booking_item_pictures
 
