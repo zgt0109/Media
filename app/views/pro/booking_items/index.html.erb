@@ -54,22 +54,22 @@
             <table id="goodsTable" class="table table-striped table-bordered table-hover dataTable ">
               <thead>
               <tr>
-                <th>编号</th>
                 <th>分类</th>
                 <th>名称</th>
                 <th>价格</th>
                 <th>库存</th>
+                <th>时间</th>
                 <th>操作</th>
               </tr>
               </thead>
               <tbody id="colleges_body">
               <% @booking_items.each do |item| %>
                   <tr>
-                    <td><%= item.id %></td>
                     <td><%= item.booking_category.try(:com_str, [item.booking_category.try(:name)]) %></td>
                     <td><%= item.name %></td>
                     <td><%= f item.price %></td>
                     <td><%= item.qty %></td>
+                    <td><%= item.created_at %></td>
                     <td class="txt-left-align">
                       <%= link_to '编辑', edit_booking_item_path(item) %>
                       <%= link_to '删除', booking_item_path(item), data: {method: :delete, confirm: '确定要删除吗？'} %>
