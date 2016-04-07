@@ -1,6 +1,23 @@
 <form>
   <div class="modal-body">
     <p>
+      <span> <b>商品分类：</b>
+      </span>
+      <span>
+        <%= @booking_order.booking_item.booking_category.try(:com_str, [@booking_order.booking_item.booking_category.try(:name)]) %>
+      </span>
+    </p>
+    <p>
+      <span> <b>商品名称：</b>
+      </span>
+      <span><%= @booking_order.booking_item.try(:name) %></span>
+    </p>
+    <p>
+      <span> <b>商品价格：</b>
+      </span>
+      <span><%= @booking_order.price %></span>
+    </p>
+    <p>
       <span> <b>订单号：</b>
       </span>
       <span><%= @booking_order.order_no %></span>
