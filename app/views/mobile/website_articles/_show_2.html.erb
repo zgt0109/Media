@@ -13,15 +13,15 @@
   </div>
 </div>
 
-<button type="button" class="btn btn-primary btn-xs">
-  <span class="glyphicon glyphicon-star" aria-hidden="true">
-    <% if @like %>
-      0个赞
-    <% else %>
-      <%= @like %>个赞
-    <% end %>
-  </span>
-</button>
+<div class="article-likes">
+  <% if  %>
+    <%= render 'mobile/likes/like' %>
+    1个赞
+  <% else %>
+    <%= render 'mobile/likes/dislike' %>
+    0个赞
+  <% end %>
+</div>
 
 <div class="page-nav">
   <% if @prev_article %>

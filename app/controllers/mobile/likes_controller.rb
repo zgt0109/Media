@@ -1,13 +1,14 @@
 class LikesController < ApplicationController
+
   def create
-    @like = Like.create(like_params)
+    @like = Like.new(like_params)
     @like.save
     redirect_to mobile_website_article_likes_path
   end
 
   def destroy
     @like.destroy
-    redirect_to mobile_website_article_like_path
+    redirect_to mobile_website_article_likes_path
   end
 
   private

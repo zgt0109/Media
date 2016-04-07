@@ -143,9 +143,8 @@ Wp::Application.routes.draw do
 
         resources :website_articles, only: [:index, :show] do
           get :tags, on: :collection
-          resources :likes, only: [:create, :destroy]
         end
-        
+        resources :likes, only: [:create, :destroy]
       end
     # end
   end

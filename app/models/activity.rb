@@ -361,12 +361,12 @@ class Activity < ActiveRecord::Base
 
     case activity_status
     when WARM_UP
-      seconds = start_at - Time.now 
+      seconds = start_at - Time.now
     when UNDER_WAY
-      seconds = end_at - Time.now 
+      seconds = end_at - Time.now
     end
 
-    seconds 
+    seconds
   end
 
   def can_not_edit?
