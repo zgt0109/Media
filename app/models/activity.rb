@@ -499,7 +499,7 @@ class Activity < ActiveRecord::Base
 
   def create_default_properties!
     if website?
-      Website.where(activity_id: id).first_or_create(site_id: site_id, name: site.wx_mp_user.try(:nickname), template_id: 1)
+      Website.where(activity_id: id).first_or_create(site_id: site_id, name: site.account.nickname, template_id: 1)
     elsif vip?
       merchant_name = site.account.nickname || site.wx_mp_user.nickname.presence
       VipCard.where(activity_id: id).first_or_create(merchant_name: merchant_name, site_id: site_id, name: "会员卡", cover_pic_key: 'FudiRXyXaCchVosPYrv22Ws9do1F', limit_privilege_count: 8)

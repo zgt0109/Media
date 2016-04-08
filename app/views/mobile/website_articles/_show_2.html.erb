@@ -14,13 +14,12 @@
 </div>
 
 <div class="article-likes">
-  <% if  %>
+  <% if @like.new_record? %>
     <%= render 'mobile/likes/like' %>
-    1个赞
   <% else %>
     <%= render 'mobile/likes/dislike' %>
-    0个赞
   <% end %>
+  <%= @article.likes_count %>个赞
 </div>
 
 <div class="page-nav">

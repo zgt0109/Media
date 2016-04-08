@@ -37,8 +37,10 @@ class WebsiteArticle < ActiveRecord::Base
 
   has_one :website_article_content, dependent: :destroy
 
+  has_many :likes, as: :likeable
+
   accepts_nested_attributes_for :website_article_content
-  accepts_nested_attributes_for :taggings, allow_destroy: true 
+  accepts_nested_attributes_for :taggings, allow_destroy: true
 
   scope :latest, -> { order('created_at DESC') }
 
