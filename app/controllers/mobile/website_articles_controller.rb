@@ -21,7 +21,6 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     @prev_article = @articles[index - 1] if index - 1 >= 0
     @next_article = @articles[index + 1] if @articles[index + 1]
     @like = Like.where(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle").first
-    # puts @like.id
     unless @like
       @like = Like.new(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle")
     end

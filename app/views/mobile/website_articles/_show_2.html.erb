@@ -13,13 +13,22 @@
   </div>
 </div>
 
-<div class="article-likes">
+<div class="article-like">
   <% if @like.new_record? %>
-    <%= render 'mobile/likes/like' %>
+    <%= form_for([:mobile, @like]) do |f| %>
+      <%= f.hidden_field :site_id %>
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :likeable_id %>
+      <%= f.hidden_field :likeable_type %>
+      <span class="like-btn"></span>
+      <span><%= @article.likes_count %>个赞</span>
+    <% end %>
   <% else %>
-    <%= render 'mobile/likes/dislike' %>
+    <%= link_to mobile_like_path(site_id: @site.id, id: @like.id), method: :delete do %>
+      <span class="like-btn dislike"></span>
+    <% end %>
+    <span><%= @article.likes_count %>个赞</span>
   <% end %>
-  <%= @article.likes_count %>个赞
 </div>
 
 <div class="page-nav">
@@ -35,3 +44,25 @@
     <a href="javascript:;" class="disabled">下一条<i class="fa fa-angle-right"></i></a>
   <% end %>
 </div>
+
+<style type="text/css">
+  .like-btn {
+    background: transparent url(/assets/mobile/like.png) no-repeat 0 0;
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    -webkit-background-size: 100% auto;
+    background-size: 100% auto;
+  }
+  .dislike {
+    background-position: 0 -18px;
+  }
+</style>
+
+<script type="text/javascript">
+  $(function(){
+    $(".like-btn").click(function(){
+      $("form").submit();
+    });
+  });
+</script>
