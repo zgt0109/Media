@@ -3,7 +3,9 @@ class Mobile::WebsitesController < ActionController::Base
 
   helper_method :judge_andriod_version, :wx_browser?
 
-  before_filter :redirect_to_non_openid_url, :load_site, :find_website, :load_user_data, except: [:audio, :unknown_identity]
+  # before_filter :redirect_to_non_openid_url, :load_site, :find_website, :load_user_data, except: [:audio, :unknown_identity]
+  before_filter :redirect_to_non_openid_url, :load_site, :find_website, :load_user_data, except: [:audio]
+  skip_filter :redirect_to_non_openid_url, :find_website, :load_user_data, only: [:unknown_identity]
 
   before_filter :auth, if: -> { @wx_mp_user.try(:manual?) }
   before_filter :authorize, if: -> { @wx_mp_user.try(:plugin?) }
