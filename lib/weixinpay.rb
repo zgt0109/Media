@@ -41,11 +41,11 @@ def set_sign_params request_options = {}
 end
 
 def write_weixinv2_log result = ""
-  WinwemediaLog::Base.logger('wxpay', result)
+  CustomLog::Base.logger('wxpay', result)
 end
 
 def write_wxredpacket_log(info = '')
-  WinwemediaLog::Base.logger('wxredpacketpay', info)
+  CustomLog::Base.logger('wxredpacketpay', info)
 end
 
 def notify_result result = ''

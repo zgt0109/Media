@@ -26,7 +26,7 @@ class SmsService
   end
 
   def provider
-    # Settings.sms_service == 'zhilian' ? ZhilianSms : SmsApi
+    # Settings.sms_service == 'zhilian' ? SmsZhilian : SmsApi
     # provider = $redis.get('settings:sms:provider')
     # case provider
     # when 'songren'
@@ -38,7 +38,7 @@ class SmsService
     # when 'emay'
     #   EmaySms
     # else
-    #   ZhilianSms
+    #   SmsZhilian
     # end
     SmsAlidayu
   end

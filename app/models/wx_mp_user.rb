@@ -153,7 +153,7 @@ class WxMpUser < ActiveRecord::Base
     end
 
   rescue => error
-    WinwemediaLog::Base.logger('wxjsapi', "****** [Ticket] wx_mp_user #{id} get ticket error: #{error.message}")
+    CustomLog::Base.logger('wxjsapi', "****** [Ticket] wx_mp_user #{id} get ticket error: #{error.message}")
     return false
   end
 
@@ -180,13 +180,13 @@ class WxMpUser < ActiveRecord::Base
       return false if app_id.blank? || app_secret.blank?
       result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"))
       data = JSON(result)
-      WinwemediaLog::Base.logger('wxapi', "****** [Token] wx_mp_user #{id} get token response: #{data}")
+      CustomLog::Base.logger('wxapi', "****** [Token] wx_mp_user #{id} get token response: #{data}")
       return update_attributes(access_token: data['access_token'], expires_in: 1.8.hours.from_now) if data['access_token'].present?
     else
       refresh_access_token!
     end
   rescue => error
-    WinwemediaLog::Base.logger('wxapi', "****** [Token] wx_mp_user #{id} get token error: #{error.message}")
+    CustomLog::Base.logger('wxapi', "****** [Token] wx_mp_user #{id} get token error: #{error.message}")
     return false
   end
 
@@ -199,11 +199,11 @@ class WxMpUser < ActiveRecord::Base
     return false if wx_menus.root.count == 0 || !auth!
 
     menu_text = JSON.generate({button: wx_menus.root.order(:sort).map(&:wx_api_json)})
-    # WinwemediaLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} create menu access_token: #{access_token} data:#{menu_text}")
+    # CustomLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} create menu access_token: #{access_token} data:#{menu_text}")
 
     result = RestClient.post(URI::encode("https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{access_token}"), menu_text)
     data = JSON(result)
-    WinwemediaLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} create menu response: #{data}")
+    CustomLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} create menu response: #{data}")
 
     if data['errcode'].to_i == 0
       update_attributes(is_sync: true)
@@ -211,7 +211,7 @@ class WxMpUser < ActiveRecord::Base
       return false
     end
   rescue => error
-    WinwemediaLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} create menu error: #{error.message}")
+    CustomLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} create menu error: #{error.message}")
     return false
   end
 
@@ -220,7 +220,7 @@ class WxMpUser < ActiveRecord::Base
 
     result = RestClient.get(URI::encode("https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=#{access_token}"))
     data = JSON(result)
-    WinwemediaLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} delete meun response: #{data}")
+    CustomLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} delete meun response: #{data}")
 
     if data['errcode'].to_i == 0
       update_attributes(is_sync: false)
@@ -228,7 +228,7 @@ class WxMpUser < ActiveRecord::Base
       return false
     end
   rescue => error
-    WinwemediaLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} delete menu error: #{error.message}")
+    CustomLog::Base.logger('wxapi', "****** [Menu] wx_mp_user #{id} delete menu error: #{error.message}")
     return false
   end
 

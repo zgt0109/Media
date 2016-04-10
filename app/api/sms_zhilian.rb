@@ -1,7 +1,7 @@
 require 'savon'
 # 直连WEBSERVICE接口
 # string userId, string password, string pszMobis, string pszMsg, int iMobiCount, string pszSubPort
-class ZhilianSms
+class SmsZhilian
   MESSAGES = {
     -1 =>  '参数为空。信息、电话号码等有空指针，登陆失败',
     -2 =>  '电话号码个数超过100',
@@ -70,7 +70,7 @@ class ZhilianSms
   end
 
   def balance
-     response = ZhilianSms.client.call(:mongate_query_balance) do
+     response = SmsZhilian.client.call(:mongate_query_balance) do
       message userId: Settings.zhilian_user_id, password: Settings.zhilian_password
     end
     result = response.body[:mongate_query_balance_response]
@@ -89,11 +89,11 @@ class ZhilianSms
     today_send_count = SmsLog.where(date: Date.today, phone: mobiles).count
     if today_send_count > 20
       Rails.logger.info("手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
-      WinwemediaLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
+      CustomLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
 
       return_code = -999
     else
-      response = ZhilianSms.client.call(:mongate_cs_sp_send_sms_new) do
+      response = SmsZhilian.client.call(:mongate_cs_sp_send_sms_new) do
         message userId: Settings.zhilian_user_id, password: Settings.zhilian_password, pszMobis: mobiles,pszMsg: content,iMobiCount: mobiles_count, pszSubPort: '****'
       end
       return_code = response.body[:mongate_cs_sp_send_sms_new_response][:mongate_cs_sp_send_sms_new_result].to_i rescue -999

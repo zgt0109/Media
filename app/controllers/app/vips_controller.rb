@@ -106,7 +106,7 @@ class App::VipsController < App::BaseController
     end
   rescue => error
     # logger.warn "vips sign up error: #{error}."
-    WinwemediaLog::Base.logger('vip', "vips sign up error: #{([error.message] + error.backtrace).join("\n")}")
+    CustomLog::Base.logger('vip', "vips sign up error: #{([error.message] + error.backtrace).join("\n")}")
     render json: {ajax_msg: {status: -1} }
   end
 

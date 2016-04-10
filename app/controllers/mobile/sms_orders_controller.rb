@@ -17,12 +17,12 @@ class Mobile::SmsOrdersController < Mobile::BaseController
 
     render layout: false
   rescue => error
-    WinwemediaLog::Alipay.add("alipay request faied :#{error}")
+    CustomLog::Alipay.add("alipay request faied :#{error}")
     render text: "请求失败:#{error}"
   end
 
   def callback
-    WinwemediaLog::Alipay.add("alipay callback params:#{params}")
+    CustomLog::Alipay.add("alipay callback params:#{params}")
 
     if params['result'] == 'success'
       payment = Payment.where(out_trade_no: params[:out_trade_no]).first
@@ -43,7 +43,7 @@ class Mobile::SmsOrdersController < Mobile::BaseController
   end
 
   def notify
-    WinwemediaLog::Alipay.add("alipay notify params:#{params}")
+    CustomLog::Alipay.add("alipay notify params:#{params}")
 
     if Payment.notify(params[:notify_data])
       render text: 'success'
@@ -51,7 +51,7 @@ class Mobile::SmsOrdersController < Mobile::BaseController
       render text: 'fail'
     end
   rescue => error
-    WinwemediaLog::Alipay.add("alipay notify error:#{error}")
+    CustomLog::Alipay.add("alipay notify error:#{error}")
     #NotificationMailer.delay(queue: "alipayapi").job_failed("[Error] *** alipay notify error:#{error}")
     render text: 'fail'
   end

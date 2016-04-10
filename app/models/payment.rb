@@ -100,21 +100,21 @@ class Payment < ActiveRecord::Base
     }"
 
     result = RestClient.post(request_url, json)
-    # WinwemediaLog::Weixinpay.add("weixin delivery result: #{result}")
+    # CustomLog::Weixinpay.add("weixin delivery result: #{result}")
 
     data = JSON(result)
     # puts "result: #{data}"
 
     if data['errcode'] == 0
       update_attributes(is_delivery: true)
-      WinwemediaLog::Base.logger('wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
+      CustomLog::Base.logger('wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
     else
-      WinwemediaLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
+      CustomLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
     end
   rescue => error
     # puts "error: #{error.message} - #{error.backtrace}"
-    # WinwemediaLog::Weixinpay.add("weixin delivery error -> #{error.message} - #{error.backtrace}")
-    WinwemediaLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n error: #{error.message} - #{error.backtrace}")
+    # CustomLog::Weixinpay.add("weixin delivery error -> #{error.message} - #{error.backtrace}")
+    CustomLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n error: #{error.message} - #{error.backtrace}")
   end
 
   # TODO 已不再使用，详情请查看model/payment/目录

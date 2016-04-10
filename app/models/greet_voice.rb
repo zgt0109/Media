@@ -44,7 +44,7 @@ class GreetVoice < ActiveRecord::Base
     self.remote_sound_url = media_url
     save!
   rescue => e
-    WinwemediaLog::Base.logger('wxapi', "Voice receive fail: #{e.message} -> #{e.backtrace}")
+    CustomLog::Base.logger('wxapi', "Voice receive fail: #{e.message} -> #{e.backtrace}")
     false
   end
 end

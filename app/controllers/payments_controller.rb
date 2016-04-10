@@ -29,7 +29,7 @@ class PaymentsController < ApplicationController
 
     render layout: false
   rescue => error
-    WinwemediaLog::Alipay.add("alipay request faied :#{error}")
+    CustomLog::Alipay.add("alipay request faied :#{error}")
     render text: "请求失败:#{error}"
   end
 
@@ -132,7 +132,7 @@ class PaymentsController < ApplicationController
     begin
       render json: {errcode: 0, pay_url: @payment.get_pay_url(tenpay_hash, request)}
     rescue => error
-      WinwemediaLog::Payment.logger.error "handle payment_request failure: #{params.inspect} #{error.message} #{error.backtrace.inspect}"
+      CustomLog::Payment.logger.error "handle payment_request failure: #{params.inspect} #{error.message} #{error.backtrace.inspect}"
       render json: {errcode: 1, remark: "#{error.message}"}
     end
   end
