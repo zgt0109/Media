@@ -10,7 +10,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title><%= @title || @current_wmall_titles.present? ? @current_wmall_titles.join("－－－") : "微商圈"%></title>
 	<%#= stylesheet_link_tag( 'mobile/wmall' ) %>
-  <link type="text/css" rel="stylesheet" href="/mobile/css/winwemediaV02.css"/>
+  <link type="text/css" rel="stylesheet" href="/mobile/css/siteV02.css"/>
   <link type="text/css" rel="stylesheet" href="/mobile/css/font/font-awesome.min.css"/>
   <link type="text/css" rel="stylesheet" href="/mobile/css/wbusiness2.css"/>
   <%= javascript_include_tag( 'mobile/wmall' ) %>
@@ -23,7 +23,7 @@
 <body>
   <%= render 'application/gb2big5' %>
 <script src="/mobile/js/lib/swipe.js"></script>
-<script src="/mobile/js/winwemediaV02.js"></script>
+<script src="/mobile/js/siteV02.js"></script>
 
 <% unless content_for?(:html_div) %>
   <%= content_tag :div, class: "html", id: "html" do%>

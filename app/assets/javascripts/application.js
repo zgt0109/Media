@@ -42,7 +42,7 @@
 //= require map/jquery-jvectormap-1.2.2.min
 //= require map/jquery-jvectormap-cn-merc-cn
 
-//= require winwemedia_admin
+//= require site_admin
 //= require activity
 //= require zeroclipboard
 //= require lib/rails.validations

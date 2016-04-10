@@ -1,6 +1,6 @@
 //= require jquery
 //= require jquery_ujs
-//= require mobile/winwemediaV01
+//= require mobile/siteV01
 //= require mobile/lib/swipe
 //= require lib/validators
 

@@ -83,7 +83,7 @@
   }
   function submitMobile() {
     var mobile = $('#phone').val();
-    if (!(winwemedia_validators.mobile_reg.test(mobile))) {
+    if (!(site_validators.mobile_reg.test(mobile))) {
       alertMessage(1,"请输入正确的手机号码");
       return;
     }

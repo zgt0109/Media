@@ -1,6 +1,6 @@
 //= require jquery
 //= require jquery_ujs
-//= require mobile/winwemediaV01
+//= require mobile/siteV01
 //= require mobile/albums/scrollReveal
 //= require mobile/albums/idangerous.swiper.min
 //= require mobile/albums/swiper

@@ -16,9 +16,9 @@
   	<%= link_to payment_settings_path do %><i class="fa fa-rmb"></i><span class="menu-text">支付设置</span><% end %>
   </li>
 
-  <li class="<%= winwemedia_payments_path? ? parent_class : '' %>">
+  <li class="<%= proxy_payments_path? ? parent_class : '' %>">
     <%= left_nav_dropdown 'icon-plus', '微枚迪支付  ' %>
-    <ul class="submenu" style="<%= 'display: block' if winwemedia_payments_path? %>">
+    <ul class="submenu" style="<%= 'display: block' if proxy_payments_path? %>">
       <%= link_to_left_nav '账户查询', pay_transactions_path, pay_transactions_path? %>
       <%= link_to_left_nav '申请提现', apply_pay_withdraws_path, apply_pay_withdraws_path? %>
       <%= link_to_left_nav '提现记录', pay_withdraws_path, index_pay_withdraws_path? %>

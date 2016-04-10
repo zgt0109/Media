@@ -65,7 +65,7 @@ input[type=submit]{border:0;}
 .fade{opacity:0;-webkit-transition:opacity .15s linear;transition:opacity .15s linear;}
 .fade.active{opacity:1;}
 .noborder{border:0;}
-.icon-span{display:inline-block;position:relative;overflow:visible;background-image:url(../img/winwemedia.png);background-repeat:no-repeat;}
+.icon-span{display:inline-block;position:relative;overflow:visible;background-image:url(../img/logo.png);background-repeat:no-repeat;}
 .icon-new{background-position:right -1874px;padding-right:32px;}
 .icon-hot{background-position:right -1934px;padding-right:28px;}
 .btn{border-radius:4px;height:30px;line-height:30px;text-align:center;padding:0 20px;display:inline-block;text-decoration:none;}
@@ -131,7 +131,7 @@ input[type=submit]{border:0;}
 .spread-1 a{width:33.3333%;position:absolute;top:-70px;height:250px;display:block;text-align:center;}
 .spread-1 a > em{height:1px;background:#0083a1;display:block;position:absolute;top:50px;z-index:0;overflow:visible;}
 .spread-1 a > em > i{position:absolute;width:8px;height:8px;display:block;background:#0083a1;right:-4px;bottom:-4px;border-radius:1000px;}
-.spread-1 a > i{display:block;width:98px;height:98px;border-radius:10000px;margin:0 auto;border:1px solid #0083a1;background-image:url(../img/winwemedia.png);background-repeat:no-repeat;background-color:#fff;position:relative;z-index:1;}
+.spread-1 a > i{display:block;width:98px;height:98px;border-radius:10000px;margin:0 auto;border:1px solid #0083a1;background-image:url(../img/logo.png);background-repeat:no-repeat;background-color:#fff;position:relative;z-index:1;}
 .spread-1 a:hover > i{background-color:#0083a1;}
 .spread-1 a > span{display:block;font-size:18px;margin:20px;color:#333;}
 .spread-1 a:hover > span,.spread-1 a:hover > p{color:#0083a1;}
@@ -192,18 +192,18 @@ input[type=submit]{border:0;}
 .page-index a span{width:120px;border-radius:2px;position:absolute;font-size:12px;left:7px;top:0px;height:27px;line-height:27px;background:rgba(0,0,0,.1);color:#666;text-indent:25px;z-index:-1;display:none;}
 .page-index a:hover i,.page-index li.active i{margin:0;background-color:#97c13c;border:2px solid #fff;}
 .page-index a:hover span,.page-index li.active a span{display:block;}
-.page-index li:first-child a{width:40px;height:40px;margin-top:0;background-image:url(../img/winwemedia.png);background-repeat:no-repeat;background-position:right -1010px;background-color:transparent;}
+.page-index li:first-child a{width:40px;height:40px;margin-top:0;background-image:url(../img/logo.png);background-repeat:no-repeat;background-position:right -1010px;background-color:transparent;}
 .page-index li:first-child.active a,.page-index li:first-child a:hover{background-position:0 -1010px;background-color:rgba(0,0,0,0.2);}
 .mod-page{text-align:center;line-height:30px;padding:20px 0;}
 .mod-page > *{display:inline-block;padding:0 10px;color:#999;border-radius:5px;}
 .mod-page > *:hover,
 .mod-page > *.active{background:#97c13c;color:#fff;}
-.mod-share > *{border-radius:1000px;display:inline-block;width:32px;height:32px;line-height:30px;text-align:center;margin:10px 0 0 10px;background-image:url(../img/winwemedia.png);background-repeat:no-repeat;opacity:0.3;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity:0.3;}
+.mod-share > *{border-radius:1000px;display:inline-block;width:32px;height:32px;line-height:30px;text-align:center;margin:10px 0 0 10px;background-image:url(../img/logo.png);background-repeat:no-repeat;opacity:0.3;filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity:0.3;}
 .mod-share > *:hover{opacity:0.6;filter:alpha(opacity=60);-moz-opacity:0.6;-khtml-opacity:0.6;}
 .mod-share .icon-weibo{background-position:0 -2114px;}
 .mod-share .icon-tencent{background-position:-66px -2114px;}
 .mod-tools{position:fixed;right:0;top:200px;width:41px;overflow:visible;z-index:4;}
-.mod-tools > *{height:38px;color:#fff;line-height:38px;padding:0 0 0 8px;background-image:url(../img/winwemedia.png);background-repeat:no-repeat;background-color:rgba(0,0,0,.25);border-left:3px solid rgba(0,0,0,.5);display:block;margin-top:1px;width:0;padding-left:38px;overflow:hidden;float:right;cursor:pointer;}
+.mod-tools > *{height:38px;color:#fff;line-height:38px;padding:0 0 0 8px;background-image:url(../img/logo.png);background-repeat:no-repeat;background-color:rgba(0,0,0,.25);border-left:3px solid rgba(0,0,0,.5);display:block;margin-top:1px;width:0;padding-left:38px;overflow:hidden;float:right;cursor:pointer;}
 .mod-form{background:#fff;border-radius:5px;position:relative;box-shadow:0 0 5px rgba(0,0,0,0.25);}
 .mod-form .btn{border-radius:2px;box-shadow:0 5px 5px rgba(0,0,0,0.1);}
 .login-body{min-height:100%;height:auto;}
@@ -215,9 +215,9 @@ input[type=submit]{border:0;}
 .form-hor .form-li > *{float:left;}
 .form-hor .li-lable{line-height:40px;color:#666;text-align:right;width:60px;padding:0 10px 0 0;}
 .form-hor .li-error{width:115px;height:40px;line-height:40px;padding:0 10px 0 34px;font-size:12px;color:#ff3b30;position:relative;overflow:hidden;  float: left;}
-.form-hor .li-error:before{display:inline-block;content:"";width:20px;height:20px;left:8px;top:10px;background:url(../img/winwemedia.png) -30px -2210px;position:absolute;}
+.form-hor .li-error:before{display:inline-block;content:"";width:20px;height:20px;left:8px;top:10px;background:url(../img/logo.png) -30px -2210px;position:absolute;}
 .form-hor .li-succness{line-height:40px;padding:0 10px 0 34px;position:relative;float: left;}
-.form-hor .li-succness:before{display:inline-block;content:"";width:20px;height:20px;left:8px;top:10px;background:url(../img/winwemedia.png) 0px -2210px;position:absolute;}
+.form-hor .li-succness:before{display:inline-block;content:"";width:20px;height:20px;left:8px;top:10px;background:url(../img/logo.png) 0px -2210px;position:absolute;}
 .form-hor .li-foreget{ float: right; padding: 0 30px 0 0;height:40px;line-height:40px;font-size:12px;color:#ff3b30;position:relative;overflow:hidden;}
 .form-hor .li-foreget a{ color: #333;}
 .form-hor .w100{width:100px;}
@@ -249,9 +249,9 @@ input[type=submit]{border:0;}
 .form-register .form-li .input{width:306px;}
 .form-register .form-li select.input{width:100px;}
 .form-register .w100{width:120px;}
-.list-arrow-square dd{background:url(../img/winwemedia.png) no-repeat 0 -1694px;line-height:30px;padding:0 0 0 20px;margin:0;color:#ccc;}
+.list-arrow-square dd{background:url(../img/logo.png) no-repeat 0 -1694px;line-height:30px;padding:0 0 0 20px;margin:0;color:#ccc;}
 .list-icon{}
-.list-icon dd{background-image:url(../img/winwemedia.png);background-repeat:no-repeat;line-height:30px;padding:0 0 0 26px;margin:0;}
+.list-icon dd{background-image:url(../img/logo.png);background-repeat:no-repeat;line-height:30px;padding:0 0 0 26px;margin:0;}
 .icon-address{background-position:0 -1090px;}
 .icon-phone{background-position:0 -1150px;}
 .icon-mail{background-position:0 -1210px;}
@@ -299,7 +299,7 @@ box-shadow:0 0 5px rgba(0,0,0,0.25);height:341px;overflow:hidden;}
 .mod-nav li{margin:4px auto;}
 .mod-nav li > a{display:inline-block;width:100%;height:100%;position:relative;color:#666;text-decoration:none;}
 .mod-nav li > a.active,.mod-nav li > a:hover{color:#fff;}
-.mod-nav li > a.active:before,.mod-nav li > a:hover:before{position:absolute;content:" ";background:url(../img/winwemedia.png) no-repeat 0 -182px;width:127px;height:100%;display:block;left:2px;z-index:-1;}
+.mod-nav li > a.active:before,.mod-nav li > a:hover:before{position:absolute;content:" ";background:url(../img/logo.png) no-repeat 0 -182px;width:127px;height:100%;display:block;left:2px;z-index:-1;}
 .mod-menu{position:absolute;top:100px;left:50%;bottom:300px;width:160px;margin-left:-660px;z-index:2;}
 @media (max-width:1380px){
   .mod-menu{left:30px;margin:0;}
@@ -342,7 +342,7 @@ button.close{padding:0;cursor:pointer;background:0 0;border:0;-webkit-appearance
 .modal-body h4{color:#000;font-size:24px;line-height:30px;padding:0;margin:0;font-weight:normal;}
 .modal-body small{font-size:12px;color:#999;line-height:20px;display:block;}
 .modal-body p{color:#333;line-height:20px;}
-.modal-close{position:absolute;top:10px;right:10px;width:30px;height:30px;display:block;background:url(../img/winwemedia.png) no-repeat 0 -1754px;cursor:pointer;z-index:2;}
+.modal-close{position:absolute;top:10px;right:10px;width:30px;height:30px;display:block;background:url(../img/logo.png) no-repeat 0 -1754px;cursor:pointer;z-index:2;}
 .modal-close:hover{background-position:0 -1814px;}
 .modal-footer{margin-top:15px;padding:19px 20px 20px;text-align:right;border-top:1px solid #e5e5e5;padding-top:12px;padding-bottom:14px;border-top-color:#e4e9ee;-webkit-box-shadow:none;box-shadow:none;background-color:#eff3f8;}
 .modal-qq{padding-left:50%;background:url("../img/kefu.png") no-repeat 0 0;background-size:auto 100%;}
@@ -371,7 +371,7 @@ button.close{padding:0;cursor:pointer;background:0 0;border:0;-webkit-appearance
 .news-list li a:hover{color:#97c13c;text-decoration:underline;}
 .more{display:block;width:104px;height:28px;margin-top:10px;line-height:28px;text-decoration:none;text-align:center;border-radius:2px;border:1px solid #59b7b9;color:#59b7b9;}
 .more-2{color:#fff;background:#59b7b9;}
-.more-right{display:inline-block;width:13px;height:11px;margin-left:10px;background:url(../img/winwemedia.png);background-position:0 -2250px;}
+.more-right{display:inline-block;width:13px;height:11px;margin-left:10px;background:url(../img/logo.png);background-position:0 -2250px;}
 .more-right-o{background-position:-30px -2250px;}
 
 .speed{height:205px;margin-top:20px;position:relative;}

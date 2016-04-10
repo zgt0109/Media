@@ -7,7 +7,7 @@ module PaymentAlipayable
     end
 
     delegate :alipay_send_goods_url, :alipay_url, to: :customer_setting
-    attr_accessor :winwemedia_url
+    attr_accessor :pay_request_url
   end
 
   def pay_options(params = {})
@@ -40,20 +40,20 @@ module PaymentAlipayable
     }
   end
 
-  def alipay_merchant_url(real_merchant_url, winwemedia_url)
+  def alipay_merchant_url(real_merchant_url, pay_request_url)
     real_merchant_url ||= merchant_url
-    if real_merchant_url and winwemedia_url
-      winwemedia_uri = URI.parse(winwemedia_url)
+    if real_merchant_url and pay_request_url
+      pay_request_uri = URI.parse(pay_request_url)
 
-      winwemedia_uri.query = {real_merchant_url: Base64.encode64(real_merchant_url)}.to_param
-      "#{winwemedia_uri}"
+      pay_request_uri.query = {real_merchant_url: Base64.encode64(real_merchant_url)}.to_param
+      "#{pay_request_uri}"
     end
   end
 
   def pay_url(params = {})
     params = HashWithIndifferentAccess.new(params)
 
-    _alipay_merchant_url = alipay_merchant_url(params.delete(:merchant_url), params.delete(:winwemedia_url))
+    _alipay_merchant_url = alipay_merchant_url(params.delete(:merchant_url), params.delete(:pay_request_url))
     params[:merchant_url] = _alipay_merchant_url if _alipay_merchant_url.present?
     params.reverse_merge!(pay_options(params))
 

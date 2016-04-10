@@ -27,8 +27,8 @@ class ShopOrder < ActiveRecord::Base
     # ['tenpay',  10002,  '财付通支付'],
     ['alipay',  10006,  '支付宝支付'],
     ['yeepay',  10003, '易宝支付'],
-    ['winwemedia_alipay', 20001, '支付宝支付'],
-    ['winwemedia_yeepay', 20002, '易宝支付'],
+    ['proxy_alipay', 20001, '支付宝支付'],
+    ['proxy_yeepay', 20002, '易宝支付'],
   ]
 
   enum_attr :order_type, :in => [

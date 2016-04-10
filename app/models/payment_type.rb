@@ -14,8 +14,8 @@ class PaymentType < ActiveRecord::Base
     ['alipay', 10006, '支付宝'],
     ['vip_userpay', 10007, '余额支付'],
     ['wx_redpacket_pay', 10008, '微信红包'],
-    ['winwemedia_alipay', 20001, '微枚迪支付宝'],
-    ['winwemedia_yeepay', 20002, '微枚迪易宝'],
+    ['proxy_alipay', 20001, '微枚迪支付宝'],
+    ['proxy_yeepay', 20002, '微枚迪易宝'],
   ]
 
   enum_attr :id, in: ENUM_ID_OPTIONS

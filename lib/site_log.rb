@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
-module CustomLog
+module SiteLog
 
-  # CustomLog::Base.logger('dir_name', 'testing message')
+  # SiteLog::Base.logger('dir_name', 'testing message')
   class Base < Logger
     def format_message(serverity, timestamp, progname, msg)
       "[#{timestamp.to_formatted_s(:db)}] #{msg}"

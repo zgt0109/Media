@@ -33,20 +33,4 @@ namespace :dev do
     puts 'Done!'
   end
 
-  desc 'copy template css'
-  task :css => :environment do
-    rails_assets_gm_path = Rails.root.join('app','assets','stylesheets','main.css')
-    svn_target_path = "/tmp/winwemedia_template"
-    command = "svn co --username teddy --password ertdfg --depth=infinity svn://winwemedia.com/opt/apps/winwemedia/html/后台/模板 #{svn_target_path}"
-    system command
-    main_css_path = svn_target_path + '/css' + '/main.css'
-    contents = File.read(main_css_path)
-    contents = contents.gsub("../img","/assets/gm")
-    local_main_css = File.new(rails_assets_gm_path, 'w')
-    local_main_css.puts contents
-    local_main_css.close
-    require 'fileutils'
-    FileUtils.cp_r(Dir.glob(svn_target_path + '/img/*'), Rails.root.join('app','assets','images','gm'))
-  end
-
 end

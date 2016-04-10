@@ -1,6 +1,6 @@
 common: &common
   host: "testing.winwemedia.com"
-  winwemedia_payment:
+  proxy_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   taobao:
@@ -22,7 +22,7 @@ common: &common
 
 production:
   <<: *common
-  winwemedia_payment:
+  proxy_payment:
     host: "http://yongan.winwemedia.com"
     payment_request: "/payments/request"
   taobao:
@@ -42,7 +42,7 @@ production:
 
 staging:
   <<: *common
-  winwemedia_payment:
+  proxy_payment:
     host: "http://staging.winwemedia.com"
     payment_request: "/payments/request"
   taobao:
@@ -62,7 +62,7 @@ staging:
 
 development:
   <<: *common
-  winwemedia_payment:
+  proxy_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   host: "localhost:3000"

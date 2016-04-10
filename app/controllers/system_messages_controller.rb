@@ -38,7 +38,7 @@ class SystemMessagesController < ApplicationController
   end
 
   # 系统提醒信息http接口,调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/system_messages/api", {account_id: 10117, content: '电商短信测试', module_id: '1'})
+  # RestClient.post("http://dev.site.local:3000/system_messages/api", {account_id: 10117, content: '电商短信测试', module_id: '1'})
   def api
 
     errors = []

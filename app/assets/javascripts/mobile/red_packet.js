@@ -1,3 +1,3 @@
 //= require jquery
 //= require jquery_ujs
-//= require mobile/winwemedia01
+//= require mobile/site01

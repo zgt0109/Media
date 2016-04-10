@@ -89,7 +89,7 @@ class SmsZhilian
     today_send_count = SmsLog.where(date: Date.today, phone: mobiles).count
     if today_send_count > 20
       Rails.logger.info("手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
-      CustomLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
+      SiteLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
 
       return_code = -999
     else

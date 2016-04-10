@@ -1,6 +1,6 @@
 //= require jquery
 //= require_self
-//= require mobile/winwemedia01
+//= require mobile/site01
 
 /*
  *

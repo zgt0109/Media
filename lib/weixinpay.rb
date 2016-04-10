@@ -1,5 +1,5 @@
 def generate_noce_str
-  str = "winwemedia0123456789"
+  str = "site0123456789"
   (0...32).map { str[rand(str.length)] }.join
 end
 
@@ -41,11 +41,11 @@ def set_sign_params request_options = {}
 end
 
 def write_weixinv2_log result = ""
-  CustomLog::Base.logger('wxpay', result)
+  SiteLog::Base.logger('wxpay', result)
 end
 
 def write_wxredpacket_log(info = '')
-  CustomLog::Base.logger('wxredpacketpay', info)
+  SiteLog::Base.logger('wxredpacketpay', info)
 end
 
 def notify_result result = ''

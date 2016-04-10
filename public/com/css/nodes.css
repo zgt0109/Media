@@ -34,7 +34,7 @@ Author's custom styles
 ========================================================================== */
 body{background:#f8f8f8;}
 .header{height:70px;background:#97c13c;overflow:hidden;}
-.logo{height:60px;width:270px;display:block;margin:5px auto;background:url(../img/winwemedia.png) no-repeat 0 -60px;}
+.logo{height:60px;width:270px;display:block;margin:5px auto;background:url(../img/logo.png) no-repeat 0 -60px;}
 .notes{position:relative;top:0;left:50%;width:50px;margin:20px 0 10px -25px;overflow:visible;background:url(../img/bg-line.png) repeat-y center 0;}
 .notes-year{width:50px;height:50px;border-radius:1000px;background:url(../img/arrow-down.png) no-repeat center bottom #97c13c;color:#fff;display:block;text-align:center;line-height:40px;margin-bottom:40px;}
 .notes-circle{width:6px;height:6px;margin:0 auto 140px;border-radius:1000px;background:#97c13c;border:5px solid #fff;box-shadow:0 3px 5px rgba(0,0,0,0.1);position:relative;overflow:visible;}
@@ -62,7 +62,7 @@ body{background:#f8f8f8;}
 .btn-goback{position:absolute;width:40px;height:40px;padding:5px;line-height:20px;text-align:center;display:block;border-radius:1000px;background:#97c13c;color:#fff;text-decoration:none;left:50%;margin:0 0 0 -25px;}
 .note-top{top:-25px;}
 .note-bottom{bottom:-25px;}
-.note-page{background-image:url("../img/winwemedia.png");background-repeat:no-repeat;height:40px;line-height:20px;position:fixed;top:50%;margin:-15px 0 0 0;padding:0 30px;text-decoration:none;display:block;}
+.note-page{background-image:url("../img/logo.png");background-repeat:no-repeat;height:40px;line-height:20px;position:fixed;top:50%;margin:-15px 0 0 0;padding:0 30px;text-decoration:none;display:block;}
 .note-page>*{display:block;color:#999999;}
 .note-page:hover>*{color:#519000;}
 .note-page b{font-size:18px;font-weight:normal;}

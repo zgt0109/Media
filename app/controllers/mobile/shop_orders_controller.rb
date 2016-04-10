@@ -27,7 +27,7 @@ class Mobile::ShopOrdersController < Mobile::BaseController
 
   # 点击确认下单按钮
   def success
-    CustomLog::Base.logger('print_logs', "shop order success: #{params}")
+    SiteLog::Base.logger('print_logs', "shop order success: #{params}")
 
     @shop_order = ShopOrder.find(params[:id])
 

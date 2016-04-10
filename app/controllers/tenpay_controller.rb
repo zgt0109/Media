@@ -60,7 +60,7 @@ class TenpayController < ApplicationController
       payment.save!
 
       payment.notify_push
-      # CustomLog::Weixinpay.add("请求失败:#{e.message}\n#{e.backtrace}")
+      # SiteLog::Weixinpay.add("请求失败:#{e.message}\n#{e.backtrace}")
       return render text: 'success'
     else
       params["status"] = "-1"

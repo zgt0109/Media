@@ -57,7 +57,7 @@ class Print < ActiveRecord::Base
       if result.start_with?('<xml>')
         result
       else
-        CustomLog::Base.logger('wxapi', "image_request response: #{result}")
+        SiteLog::Base.logger('wxapi', "image_request response: #{result}")
         Weixin.respond_text(wx_user.openid, wx_mp_user.openid, '打印失败，请重新上传图片')
       end
     end

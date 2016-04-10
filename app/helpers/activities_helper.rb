@@ -211,7 +211,7 @@ module ActivitiesHelper
     request.original_url =~ /fight/i || @activity.try(:activity_type_id)==ActivityType::FIGHT || @activity_type_id.to_i==ActivityType::FIGHT
   end
 
-  def winwemedia_payments_path?
+  def proxy_payments_path?
      pay_accounts_path? || pay_withdraws_path?  || pay_transactions_path? || balance_pay_transactions_path?
   end
 

@@ -10,7 +10,7 @@ class Payment::YeepayController < ApplicationController
 
   def callback
     merchantaccount = params[:merchantaccount]
-    CustomLog::Payment.logger.error "yeepay callback received: #{params.inspect}"
+    SiteLog::Payment.logger.error "yeepay callback received: #{params.inspect}"
 
     if merchantaccount.present? and (yeepay_setting = YeepaySetting.where(partner_id: merchantaccount).first)
       data = yeepay_setting.crypto.decypt_data({ data: params[:data], encryptkey: params[:encryptkey] })

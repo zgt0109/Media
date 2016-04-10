@@ -2,8 +2,7 @@ module WxReplyMessage
   def wshop_api_categories(options={})
     category_id = options[:category_id]
     wx_mp_user_open_id = options[:wx_mp_user_open_id]
-    HTTParty.get "#{WSHOP_HOST}/api/categories/winwemedia_selects.json?wx_mp_user_id=#{wx_mp_user_open_id}&category_id=#{category_id}"
-    #HTTParty.get "http://ec.testing.winwemedia.com/api/categories/winwemedia_selects.json?wx_mp_user_id=gh_d4e97b5b5921&category_id=#{category_id}"
+    HTTParty.get "#{WSHOP_HOST}/api/categories/selects.json?wx_mp_user_id=#{wx_mp_user_open_id}&category_id=#{category_id}"
 
     #[
     #    [22, [{id: 11,name: "x"},{id: 22,name: 'xx'}]],

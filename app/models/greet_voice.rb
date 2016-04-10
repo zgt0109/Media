@@ -44,7 +44,7 @@ class GreetVoice < ActiveRecord::Base
     self.remote_sound_url = media_url
     save!
   rescue => e
-    CustomLog::Base.logger('wxapi', "Voice receive fail: #{e.message} -> #{e.backtrace}")
+    SiteLog::Base.logger('wxapi', "Voice receive fail: #{e.message} -> #{e.backtrace}")
     false
   end
 end

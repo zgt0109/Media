@@ -122,7 +122,7 @@ module DetectUserAgent
         end
       end
     rescue => error
-      CustomLog::Base.logger('weixin_oauth', "weixin_oauth error: #{error.message} > #{error.backtrace}")
+      SiteLog::Base.logger('weixin_oauth', "weixin_oauth error: #{error.message} > #{error.backtrace}")
       require_wx_user
     end
 
@@ -172,7 +172,7 @@ module DetectUserAgent
         redirect_to oauth_url
       end
     rescue => e
-      CustomLog::Base.logger('weixin_oauth', "weixin_oauth with user info  error: #{e.message} > #{e.backtrace}")
+      SiteLog::Base.logger('weixin_oauth', "weixin_oauth with user info  error: #{e.message} > #{e.backtrace}")
       require_wx_user
     end
 
@@ -212,7 +212,7 @@ module DetectUserAgent
         end
       end
     rescue => error
-      CustomLog::Base.logger('weixin_plugin_oauth', "weixin_plugin_oauth error: #{error.message} > #{error.backtrace}")
+      SiteLog::Base.logger('weixin_plugin_oauth', "weixin_plugin_oauth error: #{error.message} > #{error.backtrace}")
     end
 
     # third authorize with scope snsapi_userinfo
@@ -259,7 +259,7 @@ module DetectUserAgent
         return redirect_to oauth_url
       end
     rescue => e
-      CustomLog::Base.logger('weixin_plugin_oauth', "weixin_plugin_oauth error: #{e.message} > #{e.backtrace}")
+      SiteLog::Base.logger('weixin_plugin_oauth', "weixin_plugin_oauth error: #{e.message} > #{e.backtrace}")
     end
 
     def auth_back
