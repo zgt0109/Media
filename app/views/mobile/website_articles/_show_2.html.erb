@@ -15,21 +15,9 @@
 
 <div class="article-like">
   <% if @like.new_record? %>
-    <%= form_for([:mobile, @like]) do |f| %>
-      <%= f.hidden_field :site_id %>
-      <%= f.hidden_field :user_id %>
-      <%= f.hidden_field :likeable_id %>
-      <%= f.hidden_field :likeable_type %>
-      <span>阅读数<%= @article.view_count %></span>
-      <span class="like-btn"></span>
-      <span><%= @article.likes_count %>个赞</span>
-    <% end %>
+    <%= render "mobile/likes/like" %>
   <% else %>
-    <span>阅读数<%= @article.view_count %></span>
-    <%= link_to mobile_like_path(site_id: @site.id, id: @like.id), method: :delete do %>
-      <span class="like-btn dislike"></span>
-    <% end %>
-    <span><%= @article.likes_count %>个赞</span>
+    <%= render "mobile/likes/dislike" %>
   <% end %>
 </div>
 
@@ -60,11 +48,3 @@
     background-position: 0 -18px;
   }
 </style>
-
-<script type="text/javascript">
-  $(function(){
-    $(".like-btn").click(function(){
-      $("form").submit();
-    });
-  });
-</script>
