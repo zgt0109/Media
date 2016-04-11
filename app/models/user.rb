@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   has_many :wx_invites, foreign_key: :from_user_id
 
   delegate :leave_message_forbidden, to: :wx_user, allow_nil: true
-  # delegate :nickname, :headimgurl, to: :wx_user, allow_nil: true
+  delegate :headimgurl, to: :wx_user, allow_nil: true
 
   #TODO
   # scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
