@@ -24,6 +24,9 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     unless @like
       @like = Like.new(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle")
     end
+    # @article.increment(:view_count)
+    @article.view_count += 1
+    @article.save
   end
 
   def tags

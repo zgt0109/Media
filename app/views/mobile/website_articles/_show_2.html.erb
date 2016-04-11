@@ -20,10 +20,12 @@
       <%= f.hidden_field :user_id %>
       <%= f.hidden_field :likeable_id %>
       <%= f.hidden_field :likeable_type %>
+      <span>阅读数<%= @article.view_count %></span>
       <span class="like-btn"></span>
       <span><%= @article.likes_count %>个赞</span>
     <% end %>
   <% else %>
+    <span>阅读数<%= @article.view_count %></span>
     <%= link_to mobile_like_path(site_id: @site.id, id: @like.id), method: :delete do %>
       <span class="like-btn dislike"></span>
     <% end %>
