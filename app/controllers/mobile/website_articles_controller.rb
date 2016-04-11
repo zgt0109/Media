@@ -6,7 +6,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
   before_filter :set_articles
 
   layout 'mobile/website_articles'
-  
+
   def index
     #@website.website_articles.send('as_article').order('sort DESC').includes(:taggings).where('taggings.tag_id = 46 and website_articles.website_article_category_id = 5')
     #@website.website_articles.send('as_article').order('sort DESC').search({website_article_category_id_eq: 5, taggings_tag_id_eq: 46}).page(1)
@@ -20,6 +20,13 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     index = @articles.to_a.index(@article)
     @prev_article = @articles[index - 1] if index - 1 >= 0
     @next_article = @articles[index + 1] if @articles[index + 1]
+
+    # @like = Like.new()
+    @like = Like.where(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle").first
+    unless @like
+      @like = Like.new(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle")
+    end
+    @article.increment!(:view_count)
   end
 
   def tags
@@ -42,12 +49,12 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
   end
 
   def set_categories
-    @categories = @website.categories.send(params[:article_type].presence || "as_article") 
+    @categories = @website.categories.send(params[:article_type].presence || "as_article")
     @category = @categories.where(id: params[:category_id]).first
   end
 
   def set_articles
     @search = @website.website_articles.categorized(@category).visible.send(params[:article_type]).order("is_top DESC, sort #{@website_setting.send("#{params[:article_type].presence || 'as_article'}_sort")}").search(params[:search]) rescue WebsiteArticle.none.search
-  end  
+  end
 
 end

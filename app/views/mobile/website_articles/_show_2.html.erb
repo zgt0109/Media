@@ -12,11 +12,20 @@
     <%= raw @article.content %>
   </div>
 </div>
+
+<div class="article-like">
+  <% if @like.new_record? %>
+    <%= render "mobile/likes/like" %>
+  <% else %>
+    <%= render "mobile/likes/dislike" %>
+  <% end %>
+</div>
+
 <div class="page-nav">
   <% if @prev_article %>
     <%= link_to '<i class="fa fa-angle-left"></i>上一条'.html_safe, mobile_website_article_url(@prev_article, site_id: @website.site_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
   <% else %>
-    <a href="javascript:;" class="disabled"><i class="fa fa-angle-left"></i>上一条</a>  
+    <a href="javascript:;" class="disabled"><i class="fa fa-angle-left"></i>上一条</a>
   <% end %>
   <%= link_to '返回列表', mobile_website_articles_url(site_id: @website.site_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
   <% if @next_article %>
@@ -26,3 +35,26 @@
   <% end %>
 </div>
 
+<style type="text/css">
+  .article-like {
+    padding-top: 20px;
+  }
+
+  #article-view-count {
+    padding-left: 5px;
+    padding-right: 30px;
+  }
+
+  .like-btn {
+    background: transparent url(/assets/mobile/like.png) no-repeat 0 0;
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    -webkit-background-size: 100% auto;
+    background-size: 100% auto;
+  }
+
+  .dislike {
+    background-position: 0 -18px;
+  }
+</style>

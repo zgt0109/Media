@@ -31,6 +31,7 @@ class WebsiteArticle < ActiveRecord::Base
   has_many :website_comments
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
+  has_many :likes, as: :likeable
 
   belongs_to :copy, class_name: 'WebsiteArticle', foreign_key: 'copy_id', counter_cache: 'copy_count'
   has_many :copys, class_name: 'WebsiteArticle', foreign_key: 'copy_id'
@@ -38,7 +39,7 @@ class WebsiteArticle < ActiveRecord::Base
   has_one :website_article_content, dependent: :destroy
 
   accepts_nested_attributes_for :website_article_content
-  accepts_nested_attributes_for :taggings, allow_destroy: true 
+  accepts_nested_attributes_for :taggings, allow_destroy: true
 
   scope :latest, -> { order('created_at DESC') }
 

@@ -135,7 +135,7 @@ GEM
     em-socksify (0.3.1)
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
-    eventmachine (1.0.7)
+    eventmachine (1.2.0.1)
     exception_notification (4.0.1)
       actionmailer (>= 3.0.4)
       activesupport (>= 3.0.4)

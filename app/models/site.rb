@@ -149,6 +149,7 @@ class Site < ActiveRecord::Base
   has_many :system_messages, order: 'created_at DESC'
   has_many :system_message_settings
   has_one  :broche
+  has_many :likes, as: :likeable
 
   accepts_nested_attributes_for :car_activity_notices, :wx_plot, :system_message_settings
 
