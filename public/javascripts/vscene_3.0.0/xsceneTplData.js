@@ -395,7 +395,7 @@
                 }, {
                     "type": "txt",
                     "props": {
-                        "html": "<p><span style=\"font-size: 26px;\">微枚迪传媒</span></p>",
+                        "html": "<p><span style=\"font-size: 26px;\">微枚迪</span></p>",
                         "width": 45,
                         "height": 27,
                         "left": 89,

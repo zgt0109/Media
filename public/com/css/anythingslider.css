@@ -355,7 +355,7 @@
     position: absolute;
     width: 24px;
     height: 40px;
-    background-image: url(../img/winwemedia.png);
+    background-image: url(../img/logo.png);
     background-repeat: no-repeat;
     top: 50%;
     margin: -20px 0 0 0;
@@ -388,7 +388,7 @@
     position: absolute;
     width: 30px;
     height: 30px;
-    background-image: url(../img/winwemedia.png);
+    background-image: url(../img/logo.png);
     background-repeat: no-repeat;
     bottom: 40px;
     z-index: 1;

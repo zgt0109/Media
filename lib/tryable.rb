@@ -5,7 +5,7 @@ class Tryable
         return yield
       rescue => e
         Rails.logger.error "-- [#{Time.now}]: #{([e.message] + e.backtrace).join("\n")}"
-        WinwemediaLog::Base.logger('tryable', "Tryable error: #{([e.message] + e.backtrace).join("\n")}")
+        SiteLog::Base.logger('tryable', "Tryable error: #{([e.message] + e.backtrace).join("\n")}")
         sleep sleep_seconds if sleep_seconds > 0
       end
     end

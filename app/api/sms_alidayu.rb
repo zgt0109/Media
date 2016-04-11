@@ -46,14 +46,14 @@ class SmsAlidayu
     today_send_count = SmsLog.where(date: Date.today, phone: mobiles).count
     if today_send_count > 20
       Rails.logger.info("手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
-      WinwemediaLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
+      SiteLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
 
       return_code = -999
     else
       # Alidayu::Sms.send_code_for_sign_up(1314520, "18621632985")
       # response = Alidayu::Sms.send_code_for_sign_up(content, mobiles)
       response = Alidayu::Sms.send(sms_options.merge!(mobiles: mobiles.to_s))
-      WinwemediaLog::Base.logger('smslog', "response：#{response}")
+      SiteLog::Base.logger('smslog', "response：#{response}")
       return_code = response['alibaba_aliqin_fc_sms_num_send_response']['result']['model'] rescue -999
       SmsLog.create(options.merge!(date: Date.today, phone: mobiles, content: content, provider: 'Alidayu', return_code: return_code))
     end

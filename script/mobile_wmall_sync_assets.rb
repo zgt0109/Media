@@ -26,7 +26,7 @@ FileUtils::mkdir_p File.join(rails_assets_path, "images")
 FileUtils::mkdir_p File.join(rails_assets_path, "img")
 
 puts "copy css and js ..."
-files = [ "css/winwemediaV02.css", "css/wbusiness2.css", "css/font/font-awesome.min.css", "js/lib/swipe.js", "js/winwemediaV02.js" ]
+files = [ "css/siteV02.css", "css/wbusiness2.css", "css/font/font-awesome.min.css", "js/lib/swipe.js", "js/siteV02.js" ]
 files.each do |f|
   FileUtils.cp File.join(html_assets_path, f), File.join(rails_assets_path, f)
 end

@@ -4,7 +4,7 @@
 
 //= require mobile/lib/jquery
 //= require mobile/lib/jquery.slimscroll
-//= require mobile/winwemedia01
+//= require mobile/site01
 //= require mobile/game/main
 //= require lib/validators
 //= require_self

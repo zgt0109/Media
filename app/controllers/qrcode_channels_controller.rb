@@ -71,7 +71,7 @@ class QrcodeChannelsController < ApplicationController
 
   def download
     @qrcode_channel = current_site.qrcode_channels.find(params[:id])
-    send_data @qrcode_channel.download(params[:type]), :disposition => 'attachment', :filename=>"winwemedia_#{@qrcode_channel.id}_#{params[:type]}.jpg"
+    send_data @qrcode_channel.download(params[:type]), :disposition => 'attachment', :filename=>"site_#{@qrcode_channel.id}_#{params[:type]}.jpg"
   end
 
   def load_logo(file)

@@ -44,13 +44,9 @@ class Pro::BookingItemsController < Pro::BookingBaseController
 
   def destroy
     respond_to do |format|
-      if @booking_item.destroy
-        format.html { redirect_to :back, notice: '删除成功' }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to :back, alert: '删除失败' }
-        format.json { render json: @booking_item.errors, status: :unprocessable_entity }
-      end
+      @booking_item.deleted!
+      format.html { redirect_to :back, notice: '删除成功' }
+      format.json { head :no_content }
     end
   end
 

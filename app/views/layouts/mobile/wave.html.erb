@@ -39,7 +39,7 @@
    function submitMobile() {
     var mobile = $('#phone').val();
     var acid  =$('#acid').val();
-    if (!window.winwemedia_validators.mobile_reg.test(mobile)) {
+    if (!window.site_validators.mobile_reg.test(mobile)) {
       alert("请输入正确的手机号码");
       return;
     }

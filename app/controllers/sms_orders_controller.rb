@@ -66,12 +66,12 @@ class SmsOrdersController < ApplicationController
 
     render layout: false
   rescue => error
-    WinwemediaLog::Alipay.add("alipay request faied :#{error}")
+    SiteLog::Alipay.add("alipay request faied :#{error}")
     render text: "请求失败:#{error}"
   end
 
   def callback
-    WinwemediaLog::Alipay.add("alipay callback params:#{params}")
+    SiteLog::Alipay.add("alipay callback params:#{params}")
 
     payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     paymentable =  payment.try(:paymentable)
@@ -90,7 +90,7 @@ class SmsOrdersController < ApplicationController
   end
 
   def notify
-    WinwemediaLog::Alipay.add("alipay notify params:#{params}")
+    SiteLog::Alipay.add("alipay notify params:#{params}")
 
     payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     paymentable =  payment.try(:paymentable)
@@ -109,7 +109,7 @@ class SmsOrdersController < ApplicationController
     end
   rescue => error
 
-    WinwemediaLog::Alipay.add("alipay notify error:#{error}")
+    SiteLog::Alipay.add("alipay notify error:#{error}")
     render text: 'fail'
   end
 
@@ -122,7 +122,7 @@ class SmsOrdersController < ApplicationController
   end
 
   def error_notify
-    WinwemediaLog::Alipay.add("alipay error_notify params:#{params}")
+    SiteLog::Alipay.add("alipay error_notify params:#{params}")
     render text: 'error'
   end
 

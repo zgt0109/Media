@@ -42,22 +42,22 @@ class PaymentSettingsController < ApplicationController
 
   def enable
     @payment_setting = current_site.payment_settings.find(params[:id])
-    if @payment_setting.winwemedia_yeepay?
+    if @payment_setting.proxy_yeepay?
       @payment_setting.enable! if current_user.pay_account.normal?
       yeepay =  current_site.payment_settings.yeepay.first
       yeepay.disable! if yeepay.present?
-    elsif @payment_setting.winwemedia_alipay?
+    elsif @payment_setting.proxy_alipay?
       alipay =  current_site.payment_settings.alipay.first
       @payment_setting.enable! if current_user.pay_account.normal?
       alipay.disable! if alipay.present?
     elsif @payment_setting.yeepay?
       @payment_setting.enable!
-      winwemedia_yeepay =  current_site.payment_settings.winwemedia_yeepay.first
-      winwemedia_yeepay.disable! if winwemedia_yeepay.present?
+      proxy_yeepay =  current_site.payment_settings.proxy_yeepay.first
+      proxy_yeepay.disable! if proxy_yeepay.present?
     elsif @payment_setting.alipay?
       @payment_setting.enable!
-      winwemedia_alipay =  current_site.payment_settings.winwemedia_alipay.first
-      winwemedia_alipay.disable! if winwemedia_alipay.present?
+      proxy_alipay =  current_site.payment_settings.proxy_alipay.first
+      proxy_alipay.disable! if proxy_alipay.present?
     elsif @payment_setting.wxpay?
       @payment_setting.enable!
       weixinpay =  current_site.payment_settings.weixinpay.first
@@ -101,8 +101,8 @@ class PaymentSettingsController < ApplicationController
         @payment_settings.alipay.first || @payment_settings.new(payment_type_id: 10006),
         # @payment_settings.tenpay.first || @payment_settings.new(payment_type_id: 10002),
         @payment_settings.tenpay.first,
-        @payment_settings.winwemedia_yeepay.first,
-        @payment_settings.winwemedia_alipay.first
+        @payment_settings.proxy_yeepay.first,
+        @payment_settings.proxy_alipay.first
       ].compact
     end
 

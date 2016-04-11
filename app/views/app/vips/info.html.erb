@@ -155,7 +155,7 @@ $('.info_validate').click(function(e){
     }
   });
 
-  if (mobile && editable && mobile_required && !(winwemedia_validators.mobile_reg.test(mobile))) {
+  if (mobile && editable && mobile_required && !(site_validators.mobile_reg.test(mobile))) {
     alert('请输入正确的手机号码');
     required_done = 0;
     return false;

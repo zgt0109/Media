@@ -1,6 +1,6 @@
 common: &common
   host: "testing.winwemedia.com"
-  winwemedia_payment:
+  proxy_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   yeepay:
@@ -20,7 +20,7 @@ common: &common
 
 production:
   <<: *common
-  winwemedia_payment:
+  proxy_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   yeepay:
@@ -37,7 +37,7 @@ production:
 
 staging:
   <<: *common
-  winwemedia_payment:
+  proxy_payment:
     host: "http://staging.winwemedia.com"
     payment_request: "/payments/request"
   yeepay:
@@ -55,7 +55,7 @@ staging:
 development:
   <<: *common
   host: "localhost:3000"
-  winwemedia_payment:
+  proxy_payment:
     host: "http://m.winwemedia.com"
     payment_request: "/payments/request"
   yeepay:

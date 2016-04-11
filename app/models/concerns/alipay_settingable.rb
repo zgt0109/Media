@@ -41,7 +41,7 @@ module AlipaySettingable
       res_data = Hash.from_xml raw_res_data
 
       # PAYMENT_LOGGER.error "alipay alipay_auth failure: #{res_data}" if res_data["err"].present?
-      WinwemediaLog::Payment.logger.error "alipay alipay_auth failure: #{res_data}" if res_data["err"].present?
+      SiteLog::Payment.logger.error "alipay alipay_auth failure: #{res_data}" if res_data["err"].present?
       request_token = res_data["direct_trade_create_res"]["request_token"]
     end
 

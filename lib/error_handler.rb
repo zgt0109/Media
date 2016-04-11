@@ -4,13 +4,13 @@ module ErrorHandler
     base_class.instance_eval do
       unless Rails.env.development?
         include ExceptionLogger::ExceptionLoggable
-        rescue_from Exception, with: :winwemedia_log_exception_handler
+        rescue_from Exception, with: :site_log_exception_handler
       end
     end
   end
 
   protected
-    def winwemedia_log_exception_handler(exception)
+    def site_log_exception_handler(exception)
       case exception
         when ActiveRecord::RecordNotFound then render_404
         when ActionView::MissingTemplate  then render_404

@@ -55,7 +55,7 @@
         can_submit = false;
       }
       if (input.id == 'mobile'){
-        if(!winwemedia_validators.mobile_reg.test(input.value)){
+        if(!site_validators.mobile_reg.test(input.value)){
           $(input).parent().find('.error_tip').show();
           setTimeout(function(){
             $(input).parent().find('.error_tip').hide();
@@ -64,7 +64,7 @@
         }
       }
       if (input.id == 'email'){
-        if(!winwemedia_validators.email_reg.test(input.value)){
+        if(!site_validators.email_reg.test(input.value)){
           $(input).parent().find('.error_tip').show();
           setTimeout(function(){
             $(input).parent().find('.error_tip').hide();

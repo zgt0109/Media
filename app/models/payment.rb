@@ -43,8 +43,8 @@ class Payment < ActiveRecord::Base
   ]
 
   scope :active, where(trade_status: [TRADE_SUCCESS, TRADE_FINISHED])
-  scope :winwemedia_pay, where(payment_type_id: [20001, 20002])
-  scope :can_settle, ->{winwemedia_pay.success.not_settled.where(gmt_payment: Time.now - 100.years .. Time.now - 5.days)}
+  scope :proxy_pay, where(payment_type_id: [20001, 20002])
+  scope :can_settle, ->{proxy_pay.success.not_settled.where(gmt_payment: Time.now - 100.years .. Time.now - 5.days)}
 
   def self.setup(options = {})
     transaction do
@@ -100,21 +100,21 @@ class Payment < ActiveRecord::Base
     }"
 
     result = RestClient.post(request_url, json)
-    # WinwemediaLog::Weixinpay.add("weixin delivery result: #{result}")
+    # SiteLog::Weixinpay.add("weixin delivery result: #{result}")
 
     data = JSON(result)
     # puts "result: #{data}"
 
     if data['errcode'] == 0
       update_attributes(is_delivery: true)
-      WinwemediaLog::Base.logger('wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
+      SiteLog::Base.logger('wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
     else
-      WinwemediaLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
+      SiteLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
     end
   rescue => error
     # puts "error: #{error.message} - #{error.backtrace}"
-    # WinwemediaLog::Weixinpay.add("weixin delivery error -> #{error.message} - #{error.backtrace}")
-    WinwemediaLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n error: #{error.message} - #{error.backtrace}")
+    # SiteLog::Weixinpay.add("weixin delivery error -> #{error.message} - #{error.backtrace}")
+    SiteLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n error: #{error.message} - #{error.backtrace}")
   end
 
   # TODO 已不再使用，详情请查看model/payment/目录
@@ -168,13 +168,13 @@ class Payment < ActiveRecord::Base
       else
         raise "Account have no tenpay settings"
       end
-    when yeepay? || winwemedia_yeepay?
+    when yeepay? || proxy_yeepay?
       request = args[0]
       _options = {userua: request.user_agent, userip: options[:user_ip]}
       Payment::Yeepay.find(self.id).pay_url(_options)
-    when alipay? || winwemedia_alipay?
+    when alipay? || proxy_alipay?
       request = args[0]
-      Payment::Alipay.find(self.id).pay_url({winwemedia_url: request.base_url})
+      Payment::Alipay.find(self.id).pay_url({pay_request_url: request.base_url})
     when vip_userpay?
       Payment::VipUserpay.find(self.id).pay_url
     else

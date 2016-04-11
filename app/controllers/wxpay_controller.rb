@@ -15,7 +15,7 @@ class WxpayController < ApplicationController
 
   #付款后的通知会触发这个 action (post)
   def notify
-    WinwemediaLog::Weixinpay.add("notfiy params: #{params}")
+    SiteLog::Weixinpay.add("notfiy params: #{params}")
     # params =  {
     #   "xml"=>{
     #     "OpenId"=>"obsapt8YtkO2Y-qe39X0-ySxm4lA", 
@@ -73,7 +73,7 @@ class WxpayController < ApplicationController
       render text: 'fail'
     end
   rescue => e
-    WinwemediaLog::Weixinpay.add("weixin test pay error -> #{e.backtrace}")
+    SiteLog::Weixinpay.add("weixin test pay error -> #{e.backtrace}")
     render text: 'fail'
   end
 
@@ -115,7 +115,7 @@ class WxpayController < ApplicationController
   end
 
   def payfeedback
-    WinwemediaLog::Weixinpay.add("payfeedback params: #{params}")
+    SiteLog::Weixinpay.add("payfeedback params: #{params}")
     xml = params[:xml]
     #xml = {"OpenId"=>"obsaptzAbROOwY7pn4oZI7lXhtLc", "AppId"=>"wx7224575773890d83", "TimeStamp"=>"1395728008", "MsgType"=>"request", "FeedBackId"=>"13234327155953740587", "TransId"=>"1218314601201403218341624917", "Reason"=>"娴嬭瘯", "Solution"=>"娴嬭瘯", "ExtInfo"=>"娴嬭瘯娴嬭瘯娴嬭瘯娴嬭瘯 12052360607", "AppSignature"=>"40d5864372a50000fca64c2acc29f99efe202cd4", "SignMethod"=>"sha1"}
     #xml = {"OpenId"=>"obsapt8YtkO2Y-qe39X0-ySxm4lA", "AppId"=>"wx7224575773890d83", "TimeStamp"=>"1395729382", "MsgType"=>"reject", "FeedBackId"=>"13234327155953740587", "Reason"=>"", "AppSignature"=>"05b4a520b085a0615b39d08c6885daea2ec06bb7", "SignMethod"=>"sha1"}
@@ -138,12 +138,12 @@ class WxpayController < ApplicationController
       render text: 'faild'
     end
   rescue => e
-    WinwemediaLog::Weixinpay.add("feedback error -> #{e.message} #{e.backtrace}")
+    SiteLog::Weixinpay.add("feedback error -> #{e.message} #{e.backtrace}")
     render :text => e
   end
 
   def warning
-    WinwemediaLog::Weixinpay.add("warning params: #{params}")
+    SiteLog::Weixinpay.add("warning params: #{params}")
     render text: 'success'
   end
 

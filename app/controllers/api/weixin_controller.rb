@@ -39,7 +39,7 @@ class Api::WeixinController < Api::BaseController
   ensure
     attrs = @xml.is_a?(Hash) ? params.merge(xml: @xml) : params
     attrs = attrs.merge(ReplyMsg: @echostr, IsSuccess: @is_success, ConnectTime: Time.now - @start_time)
-    WinwemediaLog::Base.logger('weixin_logs', attrs.to_json)
+    SiteLog::Base.logger('weixin_logs', attrs.to_json)
     render text: @echostr
 
     send_kf_text_message
@@ -98,7 +98,7 @@ class Api::WeixinController < Api::BaseController
 
   def log_and_respond_error(error_msg, log_msg, plain_text: true)
     @is_success = 0
-    WinwemediaLog::Base.logger('wxapi', log_msg)
+    SiteLog::Base.logger('wxapi', log_msg)
     @echostr = plain_text ? error_msg : Weixin.respond_text(@from_user_name, @to_user_name, error_msg)
   end
 
@@ -141,7 +141,7 @@ class Api::WeixinController < Api::BaseController
       when 'image'    then image_request()
       when 'voice'    then voice_request()
       else
-        WinwemediaLog::Base.logger('wxapi', "request msg_type: #{@msg_type} params: #{params}")
+        SiteLog::Base.logger('wxapi', "request msg_type: #{@msg_type} params: #{params}")
         respond_default_reply()
     end
   end
@@ -198,7 +198,7 @@ class Api::WeixinController < Api::BaseController
       else respond_default_reply()
     end
   rescue => error
-    WinwemediaLog::Base.logger('wxapi', "image_request error: #{error.message} => #{error.backtrace}")
+    SiteLog::Base.logger('wxapi', "image_request error: #{error.message} => #{error.backtrace}")
     Weixin.respond_text(@from_user_name, @to_user_name, '发送失败，请重新上传图片')
   end
 

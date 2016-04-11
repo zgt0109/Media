@@ -222,7 +222,7 @@ input[type=submit] {
     display: inline-block;
     position: relative;
     overflow: visible;
-    background-image: url(/assets/home/winwemedia.png);
+    background-image: url(/assets/home/logo.png);
     background-repeat: no-repeat;
 }
 
@@ -345,7 +345,7 @@ input[type=submit] {
     display: block;
     height: 30px;
     width: 140px;
-    background: url(/assets/home/winwemedia.png) no-repeat 0 0;
+    background: url(/assets/home/logo.png) no-repeat 0 0;
     margin: 20px 0;
 }
 
@@ -584,7 +584,7 @@ input[type=submit] {
     border-radius: 10000px;
     margin: 0 auto;
     border: 1px solid #0083a1;
-    background-image: url(/assets/home/winwemedia.png);
+    background-image: url(/assets/home/logo.png);
     background-repeat: no-repeat;
     background-color: #fff;
     position: relative;
@@ -882,7 +882,7 @@ input[type=submit] {
     width: 40px;
     height: 40px;
     margin-top: 0;
-    background-image: url(/assets/home/winwemedia.png);
+    background-image: url(/assets/home/logo.png);
     background-repeat: no-repeat;
     background-position: right -1010px;
     background-color: transparent;
@@ -925,7 +925,7 @@ input[type=submit] {
     line-height: 30px;
     text-align: center;
     margin: 10px 0 0 10px;
-    background-image: url(/assets/home/winwemedia.png);
+    background-image: url(/assets/home/logo.png);
     background-repeat: no-repeat;
     opacity: 0.3;
     filter: alpha(opacity=30);
@@ -961,7 +961,7 @@ input[type=submit] {
     color: #fff;
     line-height: 38px;
     padding: 0 0 0 8px;
-    background-image: url(/assets/home/winwemedia.png);
+    background-image: url(/assets/home/logo.png);
     background-repeat: no-repeat;
     background-color: #8e8e87;
     border-left: 3px solid #c6c6c2;
@@ -1075,7 +1075,7 @@ input[type=submit] {
     width: 120px;
 }
 .list-arrow-square dd {
-    background: url(/assets/home/winwemedia.png) no-repeat 0 -1694px;
+    background: url(/assets/home/logo.png) no-repeat 0 -1694px;
     line-height: 30px;
     padding: 0 0 0 20px;
     margin: 0;
@@ -1086,7 +1086,7 @@ input[type=submit] {
 }
 
 .list-icon dd {
-    background-image: url(/assets/home/winwemedia.png);
+    background-image: url(/assets/home/logo.png);
     background-repeat: no-repeat;
     line-height: 30px;
     padding: 0 0 0 26px;
@@ -1339,7 +1339,7 @@ input[type=submit] {
 .mod-nav li > a:hover:before {
     position: absolute;
     content: " ";
-    background: url(/assets/home/winwemedia.png) no-repeat 0 -182px;
+    background: url(/assets/home/logo.png) no-repeat 0 -182px;
     width: 127px;
     height: 100%;
     display: block;
@@ -1575,7 +1575,7 @@ button.close {
     width: 30px;
     height: 30px;
     display: block;
-    background: url(/assets/home/winwemedia.png) no-repeat 0 -1754px;
+    background: url(/assets/home/logo.png) no-repeat 0 -1754px;
     cursor: pointer;
 }
 

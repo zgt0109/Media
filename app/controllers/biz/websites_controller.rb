@@ -90,7 +90,7 @@ class Biz::WebsitesController < ApplicationController
   end
 
   def download
-    send_data @website.download, :disposition => 'attachment', :filename=>"winwemedia-#{@website.custom_domain}.jpg"
+    send_data @website.download, :disposition => 'attachment', :filename=>"site-#{@website.custom_domain}.jpg"
   end
 
   def update_piwik_domain_status(website, domain)

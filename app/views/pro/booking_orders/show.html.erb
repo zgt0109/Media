@@ -4,7 +4,7 @@
       <span> <b>商品分类：</b>
       </span>
       <span>
-        <%= @booking_order.booking_item.booking_category.try(:com_str, [@booking_order.booking_item.booking_category.try(:name)]) %>
+        <%= @booking_order.booking_item.try(:booking_category).try(:com_str, [@booking_order.booking_item.try(:booking_category).try(:name)]) %>
       </span>
     </p>
     <p>

@@ -2,7 +2,7 @@
 #   if can_use_oauth?
 #     return_to = Base64.strict_encode64(request.url)
 #
-#     uri = URI(M_winwemedia_BASE_URL)
+#     uri = URI(M_SITE_BASE_URL)
 #     uri.path = '/auth_agent/wx_oauth'
 #     uri.query= {return_to: return_to, app_id: @wx_mp_user.try(:app_id)}.to_param
 #     redirect_to uri.to_s
@@ -65,7 +65,7 @@ class AuthAgentController < ApplicationController
       return_to_uri = decode_return_to_uri
       return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(openid: @wx_user.openid).to_param
 
-      WinwemediaLog::Base.logger('wxoauth', "****** return_to_uri: #{return_to_uri.to_s}")
+      SiteLog::Base.logger('wxoauth', "****** return_to_uri: #{return_to_uri.to_s}")
 
       redirect_to return_to_uri.to_s
     else
@@ -73,14 +73,14 @@ class AuthAgentController < ApplicationController
     end
 
   rescue Exception => error
-    WinwemediaLog::Base.logger('wxoauth', "wx_oauth_callback error: #{error.message} > #{error.backtrace}")
+    SiteLog::Base.logger('wxoauth', "wx_oauth_callback error: #{error.message} > #{error.backtrace}")
     render json: {error_code: '-1', remark: "wx_user oauth failure, #{error.message}"}
   end
 
   private
 
   def generate_oauth_uri(wx_mp_user, auth_params = {})
-    WinwemediaLog::Base.logger('wxoauth', "****** request params: #{params}")
+    SiteLog::Base.logger('wxoauth', "****** request params: #{params}")
 
     app_id = wx_mp_user.try(:app_id)
     app_secret = wx_mp_user.try(:app_secret)
@@ -130,7 +130,7 @@ class AuthAgentController < ApplicationController
     # $redis.hdel(OAUTH_STATE, key)
     WxOauthDelKeyWorker.perform_at(3.minutes.from_now, OAUTH_STATE, key)
 
-    WinwemediaLog::Base.logger('wxoauth', "base64_encoded_uri: #{base64_encoded_uri}, params: #{params}")
+    SiteLog::Base.logger('wxoauth', "base64_encoded_uri: #{base64_encoded_uri}, params: #{params}")
 
     URI(Base64.decode64(base64_encoded_uri))
   end

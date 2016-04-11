@@ -13,7 +13,7 @@ class BookingCategory < ActiveRecord::Base
   scope :root, -> { where(parent_id: 0) }
 
   def products items = []
-    items << booking_items
+    items << booking_items.normal
     children.each do |child|
       child.products items if has_children?
     end if has_children?
@@ -97,7 +97,7 @@ class BookingCategory < ActiveRecord::Base
   end
 
   def update_items_booking_category_id
-    parent.booking_items.update_all(booking_category_id: id) if parent && parent.try(:children).count == 1
+    parent.booking_items.normal.update_all(booking_category_id: id) if parent && parent.try(:children).count == 1
   end
 
   private

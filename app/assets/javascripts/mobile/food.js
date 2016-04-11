@@ -3,6 +3,6 @@
 //= require jquery_ujs
 //= require mobile/lib/swipe
 //= require mobile/main
-//= require mobile/winwemedia01
+//= require mobile/site01
 //= require lib/jquery.slimscroll
 //= require lib/validators

@@ -46,7 +46,7 @@ class WeixinHardware
 
     # welomo
     def respond_printer(wx_user, mp_user, activity, raw_post, options={})
-      # WinwemediaLog::Base.logger('wxprint', "welomo print raw_post: #{raw_post}, params: #{options}")
+      # SiteLog::Base.logger('wxprint', "welomo print raw_post: #{raw_post}, params: #{options}")
       return unless mp_user.site.account.print
 
       from_user_name, to_user_name = wx_user.openid, mp_user.openid
@@ -83,7 +83,7 @@ class WeixinHardware
             post_uri.query = Rack::Utils.parse_query(post_uri.query).merge(signature: signature, timestamp: options[:timestamp], nonce: options[:nonce]).to_param
             result = RestClient.post(post_uri.to_s, raw_post, content_type: :xml, accept: :xml)
 
-            WinwemediaLog::Base.logger('wxprint', "welomo print result: #{result}")
+            SiteLog::Base.logger('wxprint', "welomo print result: #{result}")
 
             if result.start_with?('<xml>')
               result
@@ -91,7 +91,7 @@ class WeixinHardware
               Weixin.respond_text(from_user_name, to_user_name, '请上传一张图片试试看，如有问题请联系商家。')
             end
           rescue => error
-            WinwemediaLog::Base.logger('wxprint', "welomo print error: #{error.message} => #{error.backtrace}")
+            SiteLog::Base.logger('wxprint', "welomo print error: #{error.message} => #{error.backtrace}")
 
             Weixin.respond_text(from_user_name, to_user_name, '打印图片失败，请重新上传图片')
           end

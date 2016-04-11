@@ -1,7 +1,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require mobile/lib/swipe
-//= require mobile/winwemedia01
+//= require mobile/site01
 //= require lib/validators
 $(function(){
   $(".list").on("click","li",function(){

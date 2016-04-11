@@ -62,14 +62,14 @@ class Payment::Yeepay < Payment::Base
     data = crypto.encypt_pay_credit_data(_params)
 
     if data.blank? or data.has_key?(:error)
-      WinwemediaLog::Payment.logger.error "yeepay encypt_data failure: #{data}"
+      SiteLog::Payment.logger.error "yeepay encypt_data failure: #{data}"
       raise "DataEncyptFailure"
     end
 
     uri = crypto.yeepay_uri(YeepaySetting.api_path("pay_quest"))
     uri.query = data.to_param
       
-    WinwemediaLog::Payment.logger.error "*********************yeepay request uri: #{uri}"
+    SiteLog::Payment.logger.error "*********************yeepay request uri: #{uri}"
 
     uri.to_s
   end

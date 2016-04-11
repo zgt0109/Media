@@ -1,4 +1,4 @@
 //= require jquery
 //= require jquery_ujs
 //= require mobile/lib/swipe
-//= require mobile/winwemedia01
+//= require mobile/site01

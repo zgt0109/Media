@@ -46,7 +46,7 @@
     }
     function submitMobile(sn,id) {
       var tel = $('#phone').val();
-      if (!(winwemedia_validators.mobile_reg.test(tel))) {
+      if (!(site_validators.mobile_reg.test(tel))) {
         alertMessage(1,"请输入正确的手机号码");
         return;
       }
