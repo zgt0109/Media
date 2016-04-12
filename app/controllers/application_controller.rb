@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   before_filter *ADMIN_FILTERS
   # before_filter :check_account_expire
   # before_filter :check_auth_mobile
-  before_filter :require_wx_mp_user
+  # before_filter :require_wx_mp_user
 
   helper_method :current_user, :services_config, :current_shop_account, :current_sub_account, :current_shop_branch
   helper_method :current_site, :mobile_subdomain, :mobile_domain
