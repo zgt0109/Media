@@ -3,9 +3,9 @@
   <%= f.hidden_field :user_id %>
   <%= f.hidden_field :likeable_id %>
   <%= f.hidden_field :likeable_type %>
-  <span id="article-view-count">阅读 <%= @article.view_count %></span>
+  <span id="article-view-count">阅读 <%= @like.likeable.view_count %></span>
   <span class="like-btn"></span>
-  <span><%= @article.likes_count %></span>
+  <span><%= @like.likeable.likes_count %></span>
 <% end %>
 
 <script type="text/javascript">

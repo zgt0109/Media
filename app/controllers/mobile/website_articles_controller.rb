@@ -20,11 +20,10 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     index = @articles.to_a.index(@article)
     @prev_article = @articles[index - 1] if index - 1 >= 0
     @next_article = @articles[index + 1] if @articles[index + 1]
-
-    # @like = Like.new()
-    @like = Like.where(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle").first
+    @likeable = @article
+    @like = Like.where(site_id: @site.id, user_id: @user.id, likeable_id: @likeable.id, likeable_type: "WebsiteArticle").first
     unless @like
-      @like = Like.new(site_id: @site.id, user_id: @user.id, likeable_id: @article.id, likeable_type: "WebsiteArticle")
+      @like = Like.new(site_id: @site.id, user_id: @user.id, likeable_id: @likeable.id, likeable_type: "WebsiteArticle")
     end
     @article.increment!(:view_count)
   end
