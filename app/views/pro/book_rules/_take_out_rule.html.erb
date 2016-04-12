@@ -16,6 +16,7 @@
       <%= f.text_field :book_phone, class: "col-xs-3" %>
     </div>
   </div>
+
   <div class="form-group">
     <label>可提前预定天数：</label>
     <div class="clearfix">
@@ -35,6 +36,7 @@
       </div>
     </div>
   </div>
+
   <div class="form-group">
     <label>可预定时间段：</label>
     <div class="clearfix">
@@ -47,26 +49,24 @@
         <span class="lbl">时间段</span>
       </label>
       <br>
+
       <div class="radio-form mod-add-cancel" id="rule_time_range_2">
         <a href="javascript:;" class="fa fa-plus text-primary btn-add-i">添加时间段</a>
-        
         <%= f.fields_for :book_time_ranges do |range| %>
-        
-
-        <div class="input-group input-group-text input-group-sm margin-b-10" id="item-<%= range.object.id %>">
-          <%= range.check_box '_destroy', style:'display:none', class: "hidden_delete", id: "delete-#{range.object.id}" %>
-          <%= range.text_field :start_time, class: "timepicker", readonly: true %>
-          <span class="input-group-btn">　~　</span>
-          <%= range.text_field :end_time, class: "timepicker", readonly: true %>
-          <span class="input-group-btn">
-            <button class="btn btn-cancel" type="button" onclick="ddd(<%= range.object.id %>)">删除</button>
-          </span>
-        </div>
+          <div class="input-group input-group-text input-group-sm margin-b-10" id="item-<%= range.object.id %>">
+            <%= range.check_box '_destroy', style:'display:none', class: "hidden_delete", id: "delete-#{range.object.id}" %>
+            <%= range.text_field :start_time, class: "timepicker", readonly: true %>
+            <span class="input-group-btn">　~　</span>
+            <%= range.text_field :end_time, class: "timepicker", readonly: true %>
+            <span class="input-group-btn">
+              <button class="btn btn-cancel" type="button" onclick="ddd(<%= range.object.id %>)">删除</button>
+            </span>
+          </div>
         <% end %>
-
       </div>
     </div>
   </div>
+
   <div class="form-group">
     <label>用户手机验证：</label>
     <div class="clearfix">
@@ -170,16 +170,12 @@
 <script>
 $(function(){
   $(".btn-add-i").click(function(){
-
-
     var html = '<div class="input-group input-group-text input-group-sm margin-b-10"><input class="hidden_delete" id="delete-'+Date.now()+'" name="book_rule[book_time_ranges_attributes]['+Date.now()+'][_destroy]" style="display:none" type="checkbox" value="1"><input size="30" class="timepicker timeFrom t123" size="30" id="book_rule_book_time_ranges_attributes_'+Date.now()+'_start_time" name="book_rule[book_time_ranges_attributes]['+Date.now()+'][start_time]" readonly="readonly"  type="text"><span class="input-group-btn">　~　</span><input size="30" class="timepicker timeTo t333" id="book_rule_book_time_ranges_attributes_'+Date.now()+'_end_time" name="book_rule[book_time_ranges_attributes]['+Date.now()+'][end_time]" readonly="readonly"  type="text"><span class="input-group-btn"><button class="btn btn-cancel" type="button">删除</button></span></div>'
 
     $("#rule_time_range_2").append(html);
     $('.timepicker').attr('readonly', 'readonly').clockpicker({
         autoclose: true
     });
-
-
   });
 
   render_hidden_div();
