@@ -24,7 +24,7 @@
               <%= f.text_field :title, class: 'col-xs-6' %>
             </div>
           </div>
-          <% 
+          <%
             if @article.website_article_category.try(:parent_id).to_i == 0
               options_2 = [['请先选择一级分类', '']]
               options_3 = [['请先选择二级分类', '']]
@@ -107,7 +107,7 @@
                     <span class="input-group-addon">
                       链接：
                     </span>
-                    <%= f.text_field :link, class: 'form-control' %>
+                    <%= f.text_field :link, class: 'form-control', placeholder:"http://www.baidu.com" %>
                   </div>
                 </div>
               </div>
@@ -195,7 +195,7 @@
                         $('#category_tags').addClass('hide');
                         $('#tags').html('');
                     }
-                    
+
                   }
                 });
             }
@@ -219,7 +219,7 @@
                         $('#category_tags').addClass('hide');
                         $('#tags').html('');
                     }
-                    
+
                   }
                 });
             }
