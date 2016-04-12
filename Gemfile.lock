@@ -18,7 +18,7 @@ GIT
     jasl_tenpay (1.1.1)
 
 GEM
-  remote: https://gems.ruby-china.org/
+  remote: http://gems.ruby-china.org/
   specs:
     actionmailer (3.2.14)
       actionpack (= 3.2.14)

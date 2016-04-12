@@ -1,4 +1,3 @@
-<span id="article-view-count">阅读 <%= @like.likeable.view_count %></span>
 <%= link_to mobile_like_path(site_id: @like.site_id, id: @like.id), remote: true, method: :delete do %>
   <span class="like-btn dislike"></span>
 <% end %>
