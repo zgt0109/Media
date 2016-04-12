@@ -21,6 +21,15 @@
   <% end %>
 </div>
 
+<div class="bd-share">
+  <a class="btn-share first"><span class="ico-share">发送给朋友</span></a>
+  <a class="btn-share last"><span class="ico-pyq">分享到朋友圈</span></a>
+</div>
+
+<div class="pop-share">
+  <p class="note-share"></p>
+</div>
+
 <div class="page-nav">
   <% if @prev_article %>
     <%= link_to '<i class="fa fa-angle-left"></i>上一条'.html_safe, mobile_website_article_url(@prev_article, site_id: @website.site_id, article_type: params[:article_type], category_id: params[:category_id], search: params[:search]) %>
@@ -41,7 +50,7 @@
   }
 
   #article-view-count {
-    padding-left: 5px;
+    padding-left: 12px;
     padding-right: 30px;
   }
 
@@ -57,4 +66,70 @@
   .dislike {
     background-position: 0 -18px;
   }
+
+  .bd-share {
+    padding: 10px 2%;
+    width: 96%;
+    overflow: hidden;
+  }
+  .btn-share {
+    width: 48%;
+    color: #444;
+    float: left;
+    border-radius: 5px;
+    background: #d6d6d6;
+    height: 30px;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 30px;
+  }
+  .first {
+    margin: 0 2.5% 0 0;
+  }
+  .last {
+    margin: 0;
+  }
+  .ico-share {
+    display: inline-block;
+    background: url(/assets/mobile/ico-share.png) no-repeat 0 center;
+    background-size: 20px 19px;
+    padding: 0 0 0 25px;
+  }
+  .ico-pyq {
+    display: inline-block;
+    background: url(/assets/mobile/ico-pyq.png) no-repeat 0 center;
+    background-size: 20px 19px;
+    padding: 0 0 0 25px;
+  }
+  .pop-share{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+    top:0; left:0;
+    display: none;
+  }
+  .note-share {
+    background: url(/assets/mobile/text.png) no-repeat right center;
+    width: 100%;
+    height: 155px;
+    background-size: contain;
+    top: 0;
+  }
 </style>
+
+<script type="text/javascript">
+  //发送给朋友 & 分享到朋友圈
+  $(function(){
+    $(".btn-share").click(function(){
+      var h = $(document).height();
+      var pop = $(".pop-share");
+      pop.height(h).show();
+    });
+    $(".pop-share").click(function(){
+      var pop = $(".pop-share");
+      pop.hide();
+    });
+  });
+</script>
