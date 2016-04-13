@@ -1488,7 +1488,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "qualification"
     t.string   "video_url"
     t.text     "feedback"
-    t.integer  "status"
+    t.integer  "status", limit: 1, :default => 0, :null => false
     t.datetime "created_at",
     t.datetime "updated_at",
   end

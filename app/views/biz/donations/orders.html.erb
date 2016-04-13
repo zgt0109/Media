@@ -71,7 +71,7 @@
                   <td><%= order.created_at.to_s %></td>
                   <td><%= order.trade_no %></td>
                   <td><%= order.address %></td>
-                  <td><%= order.state_name %></td>
+                  <td><%= order.status_name %></td>
                   <td>
                     <%= link_to "确认收款", pay_donation_donation_order_path(donation_id: order.donation.id, id: order.id), method: :post %>
                     <%= link_to "未收款", unpay_donation_donation_order_path(donation_id: order.donation.id, id: order.id), method: :post %>

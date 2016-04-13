@@ -1,23 +1,23 @@
 class DonationOrder < ActiveRecord::Base
   belongs_to :user
   belongs_to :donation
-  # attr_accessible :body, :fee, :paid_at, :pay_info, :state, :subject, :trade_no, :trade_state, :transaction_id
+
   validates :fee, :numericality => {:greater_than => 0}
 
-  enum_attr :state, :in => [
-    ['pending',   1, '未付款'],
-    ['paid',      2, '已付款'],
-    ['confirmed', 3, '已确认']
+  enum_attr :status, :in => [
+    ['pending',   0, '未付款'],
+    ['paid',      1, '已付款'],
+    ['confirmed', 2, '已确认']
   ]
 
   before_create :add_default_attrs
 
   def pay!
-    update_column("state", 2)
+    update_column("status", 1)
   end
 
   def cancel!
-    update_column("state", 1)
+    update_column("status", 2)
   end
 
   def donation_name
