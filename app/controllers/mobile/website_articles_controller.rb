@@ -29,7 +29,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     @commentable = @article
     @commenter = @user
     @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: "WebsiteArticle", commenter_id: @commenter.id, commenter_type: "User")
-    @comments = Comment.all
+    @comments = @article.comments
   end
 
   def tags

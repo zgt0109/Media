@@ -1,16 +1,32 @@
-<%= form_for([:mobile, @comment], remote: true) do |f| %>
-  <%= f.hidden_field :site_id %>
-  <%= f.hidden_field :commentable_id %>
-  <%= f.hidden_field :commentable_type %>
-  <%= f.hidden_field :commenter_id %>
-  <%= f.hidden_field :commenter_type %>
-  <div class="bd-comment">
-    <%= f.text_area :comment, placeholder: "请输入您的评论", cols: 40, rows: 3, maxlength: 200 %>
-    <div class="bd-face">
-      <span class="fr">字数限制在200以内</span>
-    </div>
+<div class="bd">
+  <div class="fr">
+    <%= form_for([:mobile, @comment], remote: true) do |f| %>
+      <%= f.hidden_field :site_id %>
+      <%= f.hidden_field :commentable_id %>
+      <%= f.hidden_field :commentable_type %>
+      <%= f.hidden_field :commenter_id %>
+      <%= f.hidden_field :commenter_type %>
+      <div class="bd-comment">
+        <%= f.text_area :comment, placeholder: "请输入您的评论", cols: 40, rows: 3, maxlength: 200 %>
+        <div class="bd-face">
+          <span class="fr">字数限制在200以内</span>
+        </div>
+      </div>
+      <label>
+        <%= f.submit "发布", class: "btn form-submit" %>
+      </label>
+    <% end %>
   </div>
-  <label>
-    <%= f.submit "发布", class: "btn form-submit" %>
-  </label>
-<% end %>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    $(".btn").click(function(){
+      if($("#comment_comment").val() == ''){
+          alert("评论不能为空！");
+          $("#comment_comment").focus();
+          return false;
+      }
+    });
+  });
+</script>

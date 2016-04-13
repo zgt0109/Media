@@ -1,12 +1,9 @@
 class Mobile::CommentsController < Mobile::BaseController
-  def index
-    @comments = Comment.all
-  end
-
   def create
     @comment = Comment.new(params[:comment])
     respond_to do |format|
       if @comment.save
+        @comments = @comment.commentable.comments
         format.html { redirect_to :back }
         format.js
       else
@@ -14,5 +11,5 @@ class Mobile::CommentsController < Mobile::BaseController
       end
     end
   end
-  
+
 end
