@@ -36,6 +36,16 @@
                                     <%= f.hidden_field :fee %>
                                 </div>
                             </div>
+
+                            <div class="form-li">
+                                <div class="li-l"> <b>支付方式</b>
+                                </div>
+                                <div class="li-r">
+                                  <% payment_settings = @donation_order.site.payment_settings.enabled.where('payment_settings.payment_type_id not in (10007,10008)') %>
+                                  <%= f.select :pay_type, payment_settings.map{|p| [p.payment_type.name, p.id]} %>
+                                </div>
+                            </div>
+
                             <div class="form-li">
                                 <div class="li-l">
                                     <b>手机号码</b>

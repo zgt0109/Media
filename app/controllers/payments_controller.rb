@@ -39,7 +39,7 @@ class PaymentsController < ApplicationController
         if params['status'].present? && params['status'] == "1"
           #标记为支付成功!
           paymentable.pay!
-          redirect_to success_mobile_donation_order_url(site_id: paymentable.site_id, aid: paymentable.donation.activity_id)
+          redirect_to success_mobile_donation_orders_url(site_id: paymentable.site_id, aid: paymentable.donation.activity_id)
         else
           # paymentable.unpay!
           redirect_to mobile_donation_order_url(site_id: paymentable.site_id, aid: paymentable.donation.id)

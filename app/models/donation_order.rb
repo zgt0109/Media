@@ -28,7 +28,7 @@ class DonationOrder < ActiveRecord::Base
   def payment_request_params(params = {})
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
-      payment_type_id: 10003,
+      payment_type_id: pay_type,
       account_id: site.account_id,
       site_id: site_id,
       customer_id: user_id,
