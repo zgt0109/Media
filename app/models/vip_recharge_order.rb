@@ -1,6 +1,7 @@
 class VipRechargeOrder < ActiveRecord::Base
 
   belongs_to :vip_user
+  belongs_to :site
 
   has_one :payment, as: :paymentable
 
@@ -34,9 +35,10 @@ class VipRechargeOrder < ActiveRecord::Base
     transaction do
       payment ||= Payment.setup({
         payment_type_id: 10006,
-        account_id: account_id,
+        account_id: site.account_id,
         customer_id: vip_user_id,
         customer_type: 'VipUser',
+        open_id: vip_user.user.wx_user.try(:openid),
         paymentable_id: id,
         paymentable_type: 'VipRechargeOrder',
         out_trade_no: order_no,
@@ -52,9 +54,10 @@ class VipRechargeOrder < ActiveRecord::Base
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
       payment_type_id: wxpayv2? ? 10001 : 10004,
-      account_id: account_id,
-      customer_id: user_id,
-      customer_type: 'User',
+      account_id: site.account_id,
+      customer_id: vip_user_id,
+      customer_type: 'VipUser',
+      open_id: vip_user.user.wx_user.try(:openid),
       paymentable_id: id,
       paymentable_type: 'VipRechargeOrder',
       out_trade_no: order_no,
