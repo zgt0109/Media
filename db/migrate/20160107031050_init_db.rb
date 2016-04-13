@@ -1460,7 +1460,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "trade_state"
     t.string   "paid_at"
     t.string   "pay_info"
-    t.integer  "state",                                         :default => 1
+    t.integer  "status", limit: 1, :default => 0, :null => false
     t.datetime "created_at",                                                       :null => false
     t.datetime "updated_at",                                                       :null => false
     t.integer  "donation_id"
