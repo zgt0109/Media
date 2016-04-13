@@ -1,14 +1,14 @@
 class Mobile::DonationOrdersController < Mobile::BaseController
   layout false
 
-  def new
+  def show
     @donation_order = DonationOrder.find(params[:id])
   end
 
   def create
     @donation_order = DonationOrder.new(params[:donation_order])
     if @donation_order.save
-      redirect_to new_mobile_donation_order_url(site_id: session[:site_id],id: @donation_order.id)
+      redirect_to mobile_donation_order_url(site_id: session[:site_id], id: @donation_order.id)
     end
   end
 
