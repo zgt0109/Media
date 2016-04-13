@@ -1473,8 +1473,12 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "donations" do |t|
+    t.integer  "site_id"
+    t.integer  "activity_id"
     t.string   "name"
     t.integer  "order"
+    t.decimal  "init_fee",      :precision => 12, :scale => 2, :default => 0.0, :null => false
+    t.integer  "init_number",                                  :default => 0
     t.string   "target_money"
     t.string   "default_money"
     t.text     "summary"
@@ -1485,12 +1489,8 @@ class InitDb < ActiveRecord::Migration
     t.string   "video_url"
     t.text     "feedback"
     t.integer  "status"
-    t.integer  "site_id"
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
-    t.decimal  "init_fee",      :precision => 12, :scale => 2, :default => 0.0, :null => false
-    t.integer  "init_number",                                  :default => 0
-    t.integer  "activity_id"
+    t.datetime "created_at",
+    t.datetime "updated_at",
   end
 
   create_table "fans_games" do |t|

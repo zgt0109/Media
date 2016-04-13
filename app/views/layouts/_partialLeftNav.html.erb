@@ -126,7 +126,7 @@
       </ul>
     <% end %>
   <% end %>
-<!-- 
+
   <% if current_site.has_privilege_for?(53) %>
     <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
       <%= left_nav_dropdown 'icon-camera', '微捐款' %>
@@ -139,7 +139,7 @@
       </ul>
     </li>
   <% end %>
- -->
+
   <% if current_site.has_privilege_for?(1020) %>
     <li class="<%= parent_class if (controller_name =~ /print|wifi/i) %>">
       <%= left_nav_dropdown 'icon-camera', '微硬件' %>

@@ -1,6 +1,4 @@
 class Mobile::DonationsController < Mobile::BaseController
-  # before_filter :find_photo, only: [:show, :comments, :create_comment]
-  # layout "mobile/albums"
 
   def index
     @activity = Activity.find(params[:aid])

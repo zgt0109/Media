@@ -12,5 +12,4 @@ class Biz::DonationOrdersController < ApplicationController
 		return redirect_to :back, notice: "操作成功"
 	end
 
-
 end

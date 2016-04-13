@@ -8,7 +8,7 @@ class Donation < ActiveRecord::Base
   validates :name, presence: true
   validates :target_money, presence: true
   validates :summary, presence: true
-  validates :pic, presence: true, on: :create
+  # validates :pic, presence: true, on: :create
   validates :detail, presence: true
   validates :group_name, presence: true
   validates :order, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

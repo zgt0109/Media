@@ -20,7 +20,7 @@
             <div class="col-md-3 row">
               <div class="input-group input-group-text">
                 <span class="input-group-addon">选择活动：</span>
-                <%= f.select :donation_id_eq, current_user.donations.pluck(:name, :id),:include_blank => "全部", class: "form-control" %>
+                <%= f.select :donation_id_eq, current_site.donations.pluck(:name, :id),:include_blank => "全部", class: "form-control" %>
               </div>
             </div>
             <div class="col-md-3 row">

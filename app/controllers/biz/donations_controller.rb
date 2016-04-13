@@ -6,7 +6,6 @@ class Biz::DonationsController < ApplicationController
     @donations = @search.page(params[:page])
   end
 
-  #new activity
   def activity
     @activity = current_site.activities.new(activity_type_id: ActivityType::DONATION)
   end
@@ -63,7 +62,7 @@ class Biz::DonationsController < ApplicationController
   end
 
   def orders
-    @search = @current_site.donation_orders.order("donation_orders.created_at DESC").search(params[:search])
+    @search = current_site.donation_orders.order("donation_orders.created_at DESC").search(params[:search])
     @donation_orders = @search.page(params[:page])
     respond_to do |format|
       format.html
