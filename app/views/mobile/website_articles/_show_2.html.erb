@@ -4,7 +4,7 @@
   <div class="news-title"><%= @article.title %></div>
   <div class="news-attr">
     <span class="news-time"><%= @article.subtitle_content %></span>
-    <%= link_to @article.author, @article.link.present? ? @article.link : 'javascript:;'  if @article.show_author %>
+    <%= link_to_if @article.link.present?, @article.author, @article.link if @article.show_author %>
   </div>
 </div>
 <div class="edit-box">
@@ -24,6 +24,21 @@
 <div class="bd-share">
   <a class="btn-share first"><span class="ico-share">发送给朋友</span></a>
   <a class="btn-share last"><span class="ico-pyq">分享到朋友圈</span></a>
+</div>
+
+<div class="box box-index box-comment">
+  <div class="hd">
+    <h2 class="ellipsis">发表评论</h2>
+  </div>
+  <div class="bd">
+    <div class="fr">
+      <%= render "mobile/comments/form" %>
+    </div>
+  </div>
+  <div class="ft ft-comment">
+    <h3>评论  <%= @comment.commentable.comments_count %></h3>
+    <%= render "mobile/comments/comment" %>
+  </div>
 </div>
 
 <div class="pop-share">
@@ -69,7 +84,7 @@
 
   .bd-share {
     padding: 10px 2%;
-    width: 96%;
+    width: 100%;
     overflow: hidden;
   }
   .btn-share {
@@ -116,6 +131,119 @@
     height: 155px;
     background-size: contain;
     top: 0;
+  }
+
+  /* 评论功能样式 */
+  .box-index {
+    background: #fff;
+    padding: 0 0 10px 0;
+  }
+  .box {
+      width: 96%;
+      margin: 10px 2%;
+      border-radius: 5px;
+      float: left;
+  }
+  .box-index .hd {
+    border-top: 2px solid #ff6600;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 2% 0 5%;
+    width: 100%;
+    position: relative;
+  }
+  .box-comment .hd h2 {
+    width: 60%;
+  }
+  .box-index .hd h2 {
+    float: left;
+    line-height: 30px;
+    width: 70%;
+  }
+  .box-comment .bd {
+    padding: 10px 0;
+  }
+  .box-comment .bd {
+    border-bottom: 0;
+  }
+  .box-index .bd {
+    background: #f9f7f5;
+    border-top: 1px solid #d5d4d2;
+  }
+  .box-comment .bd .fr {
+    width: 80%;
+  }
+  .bd-comment {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 125%;
+  }
+  .box-comment .bd label .btn {
+    width: 125%;
+  }
+  .btn {
+    background: #ed7525;
+    border: 1px solid #ff6600;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    -webkit-appearance: none;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+  }
+  .ft-comment h3 {
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 2px solid #ff6600;
+    width: 100%;
+    padding: 0 5%;
+  }
+  .bd-comment textarea {
+    border: 0;
+    width: 98%;
+    line-height: 15px;
+    padding: 5px 2%;
+    margin: 5px 1%;
+  }
+  .bd-comment .bd-face {
+    border-top: 1px dashed #ccc;
+    height: 30px;
+    line-height: 30px;
+    color: #ccc;
+    padding: 0 2%;
+    width: 100%;
+  }
+  .bd-comment .bd-face .fr {
+    width: 80%;
+    text-align: right;
+    width: auto;
+  }
+  .ft-list {
+    width: 100%;
+    border-bottom: 1px dashed #ccc;
+    padding: 10px 0;
+    float: left;
+    overflow: hidden;
+  }
+  .ft-list .fr b, .ft-list .fr a, .ft-list .fr .ico {
+    color: #ff6600;
+  }
+  .ft-list .fr b, .ft-list .fr span, .ft-list .fr p {
+    width: 100%;
+    overflow: hidden;
+    float: left;
+  }
+  .ft-list .fr i.fl {
+    width: 100%;
+  }
+  .ft-list .fr i {
+    font-size: 12px;
+    color: #ccc;
+    text-align: left;
   }
 </style>
 

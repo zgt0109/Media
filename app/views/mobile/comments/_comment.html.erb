@@ -1,0 +1,13 @@
+<% if @comments.any? %>
+  <% @comments.each do |comment| %>
+    <div class="ft-list">
+      <div class="fr">
+        <b><%= comment.commenter.name %></b>
+        <span>
+          <i class="fl"><%= comment.created_at %></i>
+        </span>
+        <p><%= comment.comment %></p>
+      </div>
+    </div>
+  <% end %>
+<% end %>
