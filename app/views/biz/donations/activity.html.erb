@@ -20,6 +20,7 @@
       </div>
       <div class="col-sm-12">
         <%= form_for @activity, url: update_activity_donations_url, validate: true, class: "form" do |f| %>
+        <%= f.hidden_field :status, value: 1 %>
         <%= f.hidden_field 'activity_type_id' %>
         <%= hidden_field_tag 'aid', @activity.id %>
         <%= render "weixin_preview", wx_title: f.object.page_title || '标题', wx_summary: f.object.try(:summary) || '描述', wx_pic: (f.object.pic_key.blank? ? '/assets/activity_pics/11.jpg' : f.object.qiniu_pic_url) %>
