@@ -13,7 +13,8 @@
   </div>
 </div>
 
-<div class="article-like">
+<div id="article-view-count" style="display: inline;">阅读 <%= @article.view_count %></div>
+<div class="article-like" style="display: inline;">
   <% if @like.new_record? %>
     <%= render "mobile/likes/like" %>
   <% else %>
@@ -50,8 +51,8 @@
   }
 
   #article-view-count {
-    padding-left: 12px;
-    padding-right: 30px;
+    padding-left: 5px;
+    padding-right: 10px;
   }
 
   .like-btn {

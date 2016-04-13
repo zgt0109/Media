@@ -15,7 +15,7 @@ class Mobile::LikesController < Mobile::BaseController
     @like = Like.find(params[:id])
     @likeable = @like.likeable
     @like.destroy
-    @like = Like.new(site_id: @site.id, user_id: @user.id, likeable_id: @likeable.id, likeable_type: "WebsiteArticle")
+    @like = Like.new(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: "WebsiteArticle")
     respond_to do |format|
       format.html { redirect_to :back }
       format.js
