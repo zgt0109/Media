@@ -48,12 +48,12 @@
               <tr>
                 <th>活动名称</th>
                 <th>所属类别</th>
-                <th>姓名</th>
+                <th>用户姓名</th>
                 <th>手机号码</th>
                 <th>捐赠金额</th>
                 <th>捐赠时间</th>
                 <th>支付订单号</th>
-                <th>地址</th>
+                <th>发票地址</th>
                 <th>状态</th>
                 <th>操作</th>
               </tr>
@@ -73,8 +73,8 @@
                   <td><%= order.address %></td>
                   <td><%= order.status_name %></td>
                   <td>
-                    <%= link_to "确认收款", pay_donation_donation_order_path(donation_id: order.donation.id, id: order.id), method: :post %>
-                    <%= link_to "未收款", unpay_donation_donation_order_path(donation_id: order.donation.id, id: order.id), method: :post %>
+                    <%= link_to "确认收款", pay_donation_donation_order_path(donation_id: order.donation.id, id: order.id), method: :post if order.paid? %>
+                    <%#= link_to "未收款", unpay_donation_donation_order_path(donation_id: order.donation.id, id: order.id), method: :post if order.paid? %>
                   </td>
                 </tr>
                 <% end.blank? %>

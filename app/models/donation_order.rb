@@ -8,17 +8,18 @@ class DonationOrder < ActiveRecord::Base
   enum_attr :status, :in => [
     ['pending',   0, '未付款'],
     ['paid',      1, '已付款'],
-    ['confirmed', 2, '已确认']
+    ['confirmed', 2, '已确认'],
+    # ['cancel', -1, '未收款']
   ]
 
   before_create :add_default_attrs
 
-  def pay!
-    update_column("status", 1)
+  def confirmed!
+    update_column("status", 2)
   end
 
   def cancel!
-    update_column("status", 2)
+    update_column("status", -1)
   end
 
   def donation_name
