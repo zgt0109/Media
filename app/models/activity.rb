@@ -959,7 +959,7 @@ class Activity < ActiveRecord::Base
         else
           mobile_panoramagrams_url(_default_params)
         end
-      when donation?           then mobile_donations_url(stopped?.merge(aid: activityable_id))
+      when donation?           then mobile_donations_url(_default_params)
       when wmall?              then wmall_root_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wmall_shop?         then wmall_shop_url(shop_id: activityable_id, wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)
       when wmall_coupon?       then wmall_coupon_url(wx_user_open_id: options[:openid], wx_mp_user_open_id: site.wx_mp_user.try(:openid), site_id: site_id)

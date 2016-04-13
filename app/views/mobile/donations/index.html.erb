@@ -183,7 +183,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <% total_num = @activity.total_donation_orders_count %>
 
     <% total_num.to_s.split('').each do |n| %>
-    <img src="http://mat1.gtimg.com/gongyi/m/wx/icon_num_<%=n%>.jpg">
+      <img src="http://mat1.gtimg.com/gongyi/m/wx/icon_num_<%=n%>.jpg">
     <% end %>
    
       <span>份爱心</span> 
@@ -196,9 +196,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       </a> 
     </div>
 
-
     <% first_donation = @donations.first %>
-
 
     <% if first_donation %>
       <%= link_to mobile_donation_url(site_id: session[:site_id], id: first_donation.id), class: "btn" do %>

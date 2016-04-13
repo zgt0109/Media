@@ -3,7 +3,7 @@ class Mobile::DonationsController < Mobile::BaseController
   def index
     @activity = Activity.find(params[:aid])
     @user = User.find(session[:user_id])
-    @donations = @site.donations.normal.where(activity_id: @activity.id).order("donations.order ASC")
+    @donations = @activity.donations.normal.order("donations.order ASC")
   end
 
   # 显示详细 并且新建捐款订单

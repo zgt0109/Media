@@ -1,4 +1,5 @@
 class DonationOrder < ActiveRecord::Base
+  belongs_to :site
   belongs_to :user
   belongs_to :donation
 
@@ -23,6 +24,28 @@ class DonationOrder < ActiveRecord::Base
   def donation_name
     self.donation.name
   end
+
+  def payment_request_params(params = {})
+    params = HashWithIndifferentAccess.new(params)
+    _order_params = {
+      payment_type_id: 10003,
+      account_id: site.account_id,
+      site_id: site_id,
+      customer_id: user_id,
+      customer_type: 'User',
+      paymentable_id: id,
+      paymentable_type: 'DonationOrder',
+      out_trade_no: order_no,
+      amount: fee,
+      body: "订单 #{order_no}",
+      subject: "订单 #{order_no}",
+      source: 'donation_order',
+      open_id: user.wx_user.try(:openid)
+    }
+    params.reverse_merge(_order_params)
+  end
+
+  private
 
   def add_default_attrs
     now = Time.now

@@ -45,7 +45,6 @@ class ActivityType < ActiveRecord::Base
     ['groups',              14, '微团购'],
     ['group',               30, '微团购支付版'],
     ['ktv_order',           22, 'KTV预定(不再使用)'],
-    ['donation',            53, '微捐款'],
 
     ['wx_print',            46, '微信打印'],
     ['exit_wx_print',       47, '退出微信打印'],
@@ -81,14 +80,20 @@ class ActivityType < ActiveRecord::Base
     ['plot_life',           61, '微小区周边生活'],
 
     ['oa',                  66, '微OA(不再使用)'],
+
     ['govmail',             68, '微政务信访大厅'],
     ['govchat',             69, '微政务微信互动'],
+
+    ['donation',            53, '微捐款'],
+
+    ['booking',             29, '微服务'],
 
     ['life',                21, '微生活'],
     ['circle',              23, '微商圈'],
     ['business_shop',       39, '微商圈店铺'],
-    ['booking',             29, '微服务'],
+
     ['wshop',               45, '微电商'],
+
     ['wmall',               52, '微客生活圈'],
     ['wmall_shop',          54, '微客生活圈商铺'],
     ['wmall_coupon',        72, '微商圈优惠券'],

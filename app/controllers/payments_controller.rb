@@ -5,34 +5,6 @@ class PaymentsController < ApplicationController
   # skip_before_filter :verify_authenticity_token, :except => [:create]
   layout 'application_gm'
 
-  def new
-    @payment = Payment.new(subject: '支付宝测试', amount: nil)
-  end
-
-  def create
-    @payment = current_user.payments.new(params[:payment])
-
-    if @payment.save
-      redirect_to alipayapi_payment_url(@payment)
-    else
-      redirect_to :back, alert: "请求失败: #{@payment.full_error_messages.join('; ')}"
-    end
-  end
-
-  def alipayapi    
-    return redirect_to :back, alert: '您没有权限访问' unless session[:user_id]
-
-    @payment = Payment.find(params[:id])
-    @token = @payment.get_request_token
-    @data = @payment.auth_options(@token)
-    @sign = @payment.generate_md5(@payment.sort_str(@data))
-
-    render layout: false
-  rescue => error
-    SiteLog::Alipay.add("alipay request faied :#{error}")
-    render text: "请求失败:#{error}"
-  end
-
   def callback
     payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     paymentable =  payment.try(:paymentable)
@@ -63,6 +35,15 @@ class PaymentsController < ApplicationController
           # paymentable.unpay!
           redirect_to mobile_shop_order_url(site_id: paymentable.site_id, id: paymentable.id)
         end
+      elsif paymentable.is_a?(DonationOrder)
+        if params['status'].present? && params['status'] == "1"
+          #标记为支付成功!
+          paymentable.pay!
+          redirect_to success_mobile_donation_order_url(site_id: paymentable.site_id, aid: paymentable.donation.activity_id)
+        else
+          # paymentable.unpay!
+          redirect_to mobile_donation_order_url(site_id: paymentable.site_id, aid: paymentable.donation.id)
+        end
       end
     else
       render text: '支付成功'
@@ -82,7 +63,11 @@ class PaymentsController < ApplicationController
         paymentable = payment.try(:paymentable)
         if paymentable.present?
           paymentable.pay! if paymentable.is_a?(GroupOrder) and paymentable.pending? and payment.success?
+
           paymentable.recharge! if paymentable.is_a?(VipRechargeOrder) and paymentable.pending?
+
+          paymentable.pay! if paymentable.is_a?(DonationOrder) and paymentable.pending?
+
           if paymentable.is_a?(ShopOrder)
             #标记为支付成功!
             paymentable.pay!
