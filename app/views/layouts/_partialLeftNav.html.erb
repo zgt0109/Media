@@ -127,19 +127,6 @@
     <% end %>
   <% end %>
 
-  <% if current_site.has_privilege_for?(53) %>
-    <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
-      <%= left_nav_dropdown 'icon-camera', '微捐款' %>
-      <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
-        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
-        <%= link_to_left_nav( '项目管理', donations_path, current_page?(donations_path) ) %>
-        <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
-          <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
-        </li>
-      </ul>
-    </li>
-  <% end %>
-
   <% if current_site.has_privilege_for?(1020) %>
     <li class="<%= parent_class if (controller_name =~ /print|wifi/i) %>">
       <%= left_nav_dropdown 'icon-camera', '微硬件' %>
@@ -386,6 +373,19 @@
       <ul class="submenu" style="<%= 'display: block' if govs_path? %>">
         <%= link_to_left_nav  '信访大厅', govmails_path, govmails_path?  %>
         <%= link_to_left_nav  '微信互动', govchats_path, govchats_path?  %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_site.has_privilege_for?(53) %>
+    <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
+      <%= left_nav_dropdown 'icon-camera', '微捐款' %>
+      <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
+        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
+        <%= link_to_left_nav( '项目管理', donations_path, current_page?(donations_path) ) %>
+        <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
+          <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
+        </li>
       </ul>
     </li>
   <% end %>
