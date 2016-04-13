@@ -19,7 +19,7 @@
         <div class="stage" id="stage">
             <section id="sec-index">
                 <div class="body">
-                    <%= form_for @donation_order, url: pay_mobile_donation_order_url(site_id: session[:site_id], id: @donation_order.id), :html => { class: "mod-form form-hor" } do |f| %>
+                    <%= form_for @donation_order, url: pay_mobile_donation_order_url(site_id: session[:site_id], id: @donation_order.id), method: :post, :html => { class: "mod-form form-hor" } do |f| %>
                         <div class="bd">
                             <div class="form-li">
                                 <div class="li-l"> <b>您的姓名</b>

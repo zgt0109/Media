@@ -23,8 +23,9 @@ class Mobile::DonationOrdersController < Mobile::BaseController
       }
       @payment_request_params = @donation_order.payment_request_params(options)
 
-      #跳转到微信支付页面
-      return render "app/vips/pay"
+      # render "app/vips/pay"
+    else
+      redirect_to my_orders_mobile_donations_url(site_id: paymentable.site_id)
     end
   end
 
