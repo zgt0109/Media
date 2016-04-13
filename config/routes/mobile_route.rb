@@ -61,6 +61,7 @@ Wp::Application.routes.draw do
         end
 
         resources :donation_orders, only: [:new, :create, :update] do
+          post :pay, on: :member
           match :callback, :print, :notify, :success, on: :collection
         end
 

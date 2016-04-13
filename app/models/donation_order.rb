@@ -35,10 +35,10 @@ class DonationOrder < ActiveRecord::Base
       customer_type: 'User',
       paymentable_id: id,
       paymentable_type: 'DonationOrder',
-      out_trade_no: order_no,
+      out_trade_no: trade_no,
       amount: fee,
-      body: "订单 #{order_no}",
-      subject: "订单 #{order_no}",
+      body: "订单 #{trade_no}",
+      subject: "订单 #{trade_no}",
       source: 'donation_order',
       open_id: user.wx_user.try(:openid)
     }

@@ -12,10 +12,10 @@ class Mobile::DonationOrdersController < Mobile::BaseController
     end
   end
 
-  def update
+  def pay
     @donation_order = DonationOrder.find(params[:id])
 
-    if @donation_order.pending?
+    if @donation_order.update_attributes(params[:donation_order]) && @donation_order.pending?
       options = {
         callback_url: callback_payments_url,
         notify_url: notify_payments_url,
@@ -26,16 +26,20 @@ class Mobile::DonationOrdersController < Mobile::BaseController
       #跳转到微信支付页面
       return render "app/vips/pay"
     end
+  end
 
-    # # 跳到财付通的界面
-    # if @donation_order.update_attributes(params[:donation_order])
-    #   url = generate_tenpay_url :order_id => @donation_order.id,
-    #                             :subject => "捐款",
-    #                             :body => "我要捐款",
-    #                             :total_fee => (@donation_order.fee * 100).to_i,
-    #                             :out_trade_no => @donation_order.trade_no
-    #   return redirect_to url
-    # end
+  def update
+    @donation_order = DonationOrder.find(params[:id])
+
+    # 跳到财付通的界面
+    if @donation_order.update_attributes(params[:donation_order])
+      url = generate_tenpay_url :order_id => @donation_order.id,
+                                :subject => "捐款",
+                                :body => "我要捐款",
+                                :total_fee => (@donation_order.fee * 100).to_i,
+                                :out_trade_no => @donation_order.trade_no
+      return redirect_to url
+    end
   end
 
   # 财付通回调 验证签名 
