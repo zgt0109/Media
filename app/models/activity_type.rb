@@ -84,7 +84,7 @@ class ActivityType < ActiveRecord::Base
     ['govmail',             68, '微政务信访大厅'],
     ['govchat',             69, '微政务微信互动'],
 
-    ['donation',            53, '微捐款'],
+    ['donation',            53, '微公益'],
 
     ['booking',             29, '微服务'],
 

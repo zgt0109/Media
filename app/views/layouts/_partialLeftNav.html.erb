@@ -379,7 +379,7 @@
 
   <% if current_site.has_privilege_for?(53) %>
     <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
-      <%= left_nav_dropdown 'icon-camera', '微捐款' %>
+      <%= left_nav_dropdown 'icon-camera', '微公益' %>
       <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
         <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
         <%= link_to_left_nav( '项目管理', donations_path, current_page?(donations_path) ) %>
