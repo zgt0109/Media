@@ -3475,7 +3475,6 @@ class InitDb < ActiveRecord::Migration
     t.integer  "shop_id",                                                          :null => false
     t.integer  "shop_branch_id",                                                   :null => false
     t.integer  "order_type",                                    :default => 1,     :null => false
-    t.integer  "integer",                                       :default => 1,     :null => false
     t.string   "order_no",                                                         :null => false
     t.decimal  "total_amount",   :precision => 12, :scale => 2, :default => 0.0,   :null => false
     t.decimal  "pay_amount",     :precision => 12, :scale => 2, :default => 0.0,   :null => false

@@ -372,6 +372,7 @@ class ShopOrder < ActiveRecord::Base
   def clone_order
     new_order = self.dup
     new_order.status = 0
+    new_order.pay_status = 1
     new_order.save!
 
     self.shop_order_items.each do |item|
