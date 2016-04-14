@@ -28,7 +28,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     @article.increment!(:view_count)
     @commentable = @article
     @commenter = @user
-    @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: "WebsiteArticle", commenter_id: @commenter.id, commenter_type: "User")
+    @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: "WebsiteArticle", commenter_id: @commenter.try(:id), commenter_type: "User")
     @comments = @article.comments
   end
 

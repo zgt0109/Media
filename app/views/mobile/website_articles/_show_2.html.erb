@@ -14,13 +14,15 @@
 </div>
 
 <div id="article-view-count" style="display: inline;">阅读 <%= @article.view_count %></div>
-<div class="article-like" style="display: inline;">
-  <% if @like.new_record? %>
-    <%= render "mobile/likes/like" %>
-  <% else %>
-    <%= render "mobile/likes/dislike" %>
-  <% end %>
-</div>
+<% if @user %>
+  <div class="article-like" style="display: inline;">
+    <% if @like.new_record? %>
+      <%= render "mobile/likes/like" %>
+    <% else %>
+      <%= render "mobile/likes/dislike" %>
+    <% end %>
+  </div>
+<% end %>
 
 <div class="bd-share">
   <a class="btn-share first"><span class="ico-share">发送给朋友</span></a>
@@ -31,7 +33,7 @@
   <div class="hd">
     <h2 class="ellipsis">发表评论</h2>
   </div>
-  <%= render "mobile/comments/form" %>
+  <%= render "mobile/comments/form" if @user %>
   <%= render "mobile/comments/comment" %>
 </div>
 

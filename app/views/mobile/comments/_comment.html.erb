@@ -1,5 +1,5 @@
 <div class="ft ft-comment">
-  <h3>评论  <%= @comment.commentable.reload.comments_count %></h3>
+  <h3>评论 <%= @comment.commentable.reload.comments.count %></h3>
   <% if @comments.count > 0 %>
     <% @comments.each do |comment| %>
       <div class="ft-list">
