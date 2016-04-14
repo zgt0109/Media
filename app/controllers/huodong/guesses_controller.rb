@@ -13,7 +13,7 @@ class Huodong::GuessesController < ApplicationController
   def consumes
     sql = "join guess_participations as participation on participation.consume_id = consumes.id join activities as activity on participation.activity_id = activity.id"
     activity_ids = current_site.activities.guess.pluck(:id)
-    @total_consumes = current_site.wx_mp_user.consumes.joins(sql).where("activity.id in (?)", activity_ids)
+    @total_consumes = current_site.consumes.joins(sql).where("activity.id in (?)", activity_ids)
     if params[:activity_id].present?
       activity_ids =  [params[:activity_id]]
       @consumes = @total_consumes.where("activity.id in (?)", activity_ids)
