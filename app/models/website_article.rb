@@ -32,6 +32,7 @@ class WebsiteArticle < ActiveRecord::Base
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :likes, as: :likeable
+  has_many :comments, as: :commentable
 
   belongs_to :copy, class_name: 'WebsiteArticle', foreign_key: 'copy_id', counter_cache: 'copy_count'
   has_many :copys, class_name: 'WebsiteArticle', foreign_key: 'copy_id'

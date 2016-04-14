@@ -26,6 +26,10 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
       @like = Like.new(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: "WebsiteArticle")
     end
     @article.increment!(:view_count)
+    @commentable = @article
+    @commenter = @user
+    @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: "WebsiteArticle", commenter_id: @commenter.id, commenter_type: "User")
+    @comments = @article.comments
   end
 
   def tags
