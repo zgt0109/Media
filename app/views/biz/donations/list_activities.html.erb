@@ -1,56 +1,51 @@
 <% content_for :main_content do %>
-<div class="main-content ">
-  <div class="breadcrumbs" id="breadcrumbs">
-    <ul class="breadcrumb">
-      <li> 
-        <i class="icon-home home-icon"></i>
-        <%= link_to "首页", root_path %> 
-      </li>
-      <li>微公益</li>
-      <li>类别设置</li>
-    </ul>
-    <%= render partial:'/layouts/qrcode' %>
-  </div>
+  <div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <ul class="breadcrumb">
+        <li>
+          <i class="icon-home home-icon"></i>
+          <%= link_to "首页", root_path %> 
+        </li>
+        <li>微公益</li>
+        <li>类别设置</li>
+      </ul>
+      <%= render partial:'/layouts/qrcode' %>
+    </div>
 
-  <div class="page-content">
-    <div class="row">
+    <div class="page-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <%= link_to "新增", activity_donations_path, class: "btn btn-primary btn-sm pull-right"  %>
+        </div>
 
-      <div class="col-sm-12">
+        <div class="col-md-12 margin-top-20">
+          <table id="vweddingTable" class="table table-striped table-bordered table-hover dataTable">
+            <thead>
+              <tr>
+                <th>类别名称</th>
+                <th>关键词</th>
+                <th>创建时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @activities.each do |activity| %>
+                <tr>
+                  <td><%= activity.name %></td>
+                  <td><%= activity.keyword %></td>
+                  <td><%= activity.created_at %></td>
+                  <td>
+                    <%= link_to "编辑", edit_activity_donations_path(aid: activity.id) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= paginate @activities %>
+        </div>
 
-	<%= link_to "新增", activity_donations_path, class: "btn btn-primary btn-sm pull-right"  %>
-
-
-      </div>
-      <div class="col-md-12 margin-top-20">
-	<table id="vweddingTable"
-	       class="table table-striped table-bordered table-hover dataTable ">
-	  <thead>
-	    <tr>
-	      <th>类别名称</th>
-	      <th>关键词</th>
-	      <th>操作</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <% @activities.each do |activity| %>
-	    <tr>
-	      <td><%= activity.name %></td>
-              <td><%= activity.keyword %></td>
-              <td>
-                <%#= activity.keyword %>
-                <%#= link_to "", edit_wedding_path(wedding)  %>
-                <%= link_to "编辑", edit_activity_donations_path(aid: activity.id) %>
-              </td>
-	    </tr>
-	    <% end %>
-	  </tbody>
-
-	</table>
-	<%= paginate @activities %>
       </div>
     </div>
+
   </div>
-</div>
-<% end %>
-<% content_for :custom_js do %>
 <% end %>
