@@ -58,8 +58,8 @@
               <td><%= donation.name %></td>
               <td><%= donation.activity.try(:name) %></td>
               <td><%= donation.target_money %></td>
-              <td><%= donation.donation_orders.paid.count + donation.donation_orders.confirmed.count + donation.init_number %></td>
-              <td><%= donation.donation_orders.paid.sum(:fee) + donation.donation_orders.confirmed.sum(:fee) + donation.init_fee %></td>
+              <td><%= donation.donation_orders.active.count + donation.init_number %></td>
+              <td><%= donation.donation_orders.active.sum(:fee) + donation.init_fee %></td>
               <td><%= donation.status_name %></td>
               <td>
 		<%= link_to "查看项目", edit_donation_path(donation) %>

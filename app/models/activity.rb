@@ -568,7 +568,7 @@ class Activity < ActiveRecord::Base
   end
 
   def total_donation_orders_count
-    donation_orders.paid.count
+    donation_orders.active.count
   end
 
   def get_slot_prize(element_ids)

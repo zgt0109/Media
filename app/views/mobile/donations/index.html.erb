@@ -206,7 +206,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
           <div class="c1" style="color:#ffffff;"><%= first_donation.name %></div>   
           <div class="c1 c2" style="color:#ffffff;">共
             <span class="r">
-              <%= first_donation.donation_orders.paid.count + first_donation.donation_orders.confirmed.count + first_donation.init_number %>
+              <%= first_donation.donation_orders.active.count + first_donation.init_number %>
             </span>人捐助
           </div> 
         </div>
@@ -229,7 +229,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
                 <img src="http://mat1.gtimg.com/gongyi/m/wx/icon_1.png">
                 共
                 <span class="r">
-                  <%= donation.donation_orders.paid.count + donation.donation_orders.confirmed.count + donation.init_number %>
+                  <%= donation.donation_orders.active.count + donation.init_number %>
                 </span>
                 人捐助
               </div>  

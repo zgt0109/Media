@@ -12,6 +12,8 @@ class DonationOrder < ActiveRecord::Base
     # ['cancel', -1, '未收款']
   ]
 
+  scope :active, -> { where(status: [1,2]) }
+
   before_create :add_default_attrs
 
   def confirmed!

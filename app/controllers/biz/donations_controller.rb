@@ -62,7 +62,7 @@ class Biz::DonationsController < ApplicationController
   end
 
   def orders
-    @search = current_site.donation_orders.paid.order("donation_orders.created_at DESC").search(params[:search])
+    @search = current_site.donation_orders.active.order("donation_orders.created_at DESC").search(params[:search])
     @donation_orders = @search.page(params[:page])
     respond_to do |format|
       format.html

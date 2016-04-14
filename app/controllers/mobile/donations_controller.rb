@@ -14,7 +14,7 @@ class Mobile::DonationsController < Mobile::BaseController
 
   def my_orders
     @user = User.find(session[:user_id])
-    @donation_orders = @user.donation_orders.paid
+    @donation_orders = @user.donation_orders.active
   end
 
 end

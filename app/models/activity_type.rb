@@ -133,9 +133,9 @@ class ActivityType < ActiveRecord::Base
     id_options.select{|m| ids.include?(m.last)}
   end
 
-  #行业解决方案                           wxwx
+  #行业解决方案
   def self.industry
-    ids = [9, 16, 18, 32, 45, 17, 20, 31, 21,52]
+    ids = [9, 16, 18, 32, 45, 17, 20, 31, 21, 52, 53]
     id_options.select{|m| ids.include?(m.last)} + [['微餐饮', '6, 7'], ['微房产', '13, 26, 65, 27, 41, 42, 44'], ['微商圈', '23, 39'], ['微服务', '29, 48'], ['微小区', '56, 57, 58, 59, 60, 61'], ['微政务', '68, 69']]
   end
 

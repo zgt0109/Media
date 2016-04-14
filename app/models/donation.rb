@@ -9,7 +9,7 @@ class Donation < ActiveRecord::Base
 
   belongs_to :site
   belongs_to :activity
-  has_many :donation_orders
+  has_many :donation_orders, dependent: :destroy
 
   def pic_url
     pic_key.present? ? qiniu_image_url(pic_key) : "http://www.winwemedia.com/assets/bg_fm.jpg"
