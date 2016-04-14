@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   # 用户登录后24小时内不做任何操作将自动退出
   MAX_SESSION_TIME = 60 * 60 * 24
 
-  ADMIN_FILTERS = [:required_sign_in, :filter_out_shop_branch_sub_account]
+  ADMIN_FILTERS = [:required_sign_in, :filter_out_shop_branch_sub_account, :require_wx_mp_user]
 
   before_filter :prepare_session, :set_current_user
   before_filter *ADMIN_FILTERS

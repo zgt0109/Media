@@ -62,13 +62,13 @@ class Biz::DonationsController < ApplicationController
   end
 
   def orders
-    @search = current_site.donation_orders.order("donation_orders.created_at DESC").search(params[:search])
+    @search = current_site.donation_orders.paid.order("donation_orders.created_at DESC").search(params[:search])
     @donation_orders = @search.page(params[:page])
     respond_to do |format|
       format.html
       format.xls {
         options = {
-          header_columns: ['活动名称', '姓名', '手机号码', '捐赠金额', '捐赠时间', '支付订单号', '地址'],
+          header_columns: ['活动名称', '用户姓名', '手机号码', '捐赠金额', '捐赠时间', '支付订单号', '发票地址'],
           only:     [:donation_name, :name, :mobile, :fee, :created_at, :trade_no, :address]
         }
         send_data(@search.all.to_xls(options)) }
