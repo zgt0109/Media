@@ -1,6 +1,6 @@
 # ::Comment = Class.new(ActiveRecord::Base) do
 class Comment < ActiveRecord::Base
-  belongs_to :commentable, polymorphic: true, counter_cache: true
+  belongs_to :commentable, polymorphic: true#, counter_cache: true
   belongs_to :commenter,   polymorphic: true
   has_one :business_shop_impression
   accepts_nested_attributes_for :business_shop_impression
