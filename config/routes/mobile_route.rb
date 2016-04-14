@@ -147,6 +147,7 @@ Wp::Application.routes.draw do
         end
 
         resources :likes, only: [:create, :destroy]
+        resources :comments, only: [:index, :new, :create]
       end
     # end
   end
