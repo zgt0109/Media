@@ -34,8 +34,11 @@
   <%= render "mobile/comments/comment" %>
 </div>
 
-<div class="pop-share">
-  <p class="note-share"></p>
+<div class="pop pop-share">
+  <div class="pop-bg"></div>
+  <div class="pop-bd">
+    <p class="note-share"></p>
+  </div>
 </div>
 
 <div class="page-nav">
@@ -109,6 +112,8 @@
     background-size: 20px 19px;
     padding: 0 0 0 25px;
   }
+
+  /* 分享图标样式 */
   .pop-share{
     width: 100%;
     height: 100%;
@@ -117,6 +122,16 @@
     background: rgba(0,0,0,0.5);
     top:0; left:0;
     display: none;
+  }
+  .pop-bd {
+    width:100%;
+    height:100%;
+    padding: 0;
+    border-radius: 0;
+    top:0;
+    right: 312px;
+    position: fixed;
+    background: none;
   }
   .note-share {
     background: url(/assets/mobile/text.png) no-repeat right center;
@@ -244,13 +259,13 @@
   //发送给朋友 & 分享到朋友圈
   $(function(){
     $(".btn-share").click(function(){
-      var h = $(document).height();
-      var pop = $(".pop-share");
-      pop.height(h).show();
+      var h=$(document).height();
+      $(".pop-share").height(h);
+      $(".pop-bg").height(h);
+      $(".pop-share").show();
     });
     $(".pop-share").click(function(){
-      var pop = $(".pop-share");
-      pop.hide();
+      $(".pop-share").hide();
     });
   });
 </script>

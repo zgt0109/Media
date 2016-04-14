@@ -23,9 +23,11 @@
   $(function(){
     $(".btn").click(function(){
       if($("#comment_comment").val() == ''){
-          alert("评论不能为空！");
-          $("#comment_comment").focus();
-          return false;
+        alert("评论不能为空！");
+        $("#comment_comment").focus();
+        return false;
+      }else {
+        alert("评论成功！");
       }
     });
   });
