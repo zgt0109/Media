@@ -1,0 +1,33 @@
+<% if @user %>
+  <div class="article-like" style="display: inline;">
+    <% if @like.new_record? %>
+      <%= render "mobile/likes/like", like: @like %>
+    <% else %>
+      <%= render "mobile/likes/dislike", like: @like %>
+    <% end %>
+  </div>
+<% end %>
+
+<style type="text/css">
+  .article-like {
+    padding-top: 20px;
+  }
+
+  #article-view-count {
+    padding-left: 5px;
+    padding-right: 10px;
+  }
+
+  .like-btn {
+    background: transparent url(/assets/mobile/like.png) no-repeat 0 0;
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    -webkit-background-size: 100% auto;
+    background-size: 100% auto;
+  }
+
+  .dislike {
+    background-position: 0 -18px;
+  }
+</style>

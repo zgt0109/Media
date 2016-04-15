@@ -1,6 +1,9 @@
+<div class="hd">
+  <h2 class="ellipsis">发表评论</h2>
+</div>
 <div class="bd">
   <div class="fr">
-    <%= form_for([:mobile, @comment], remote: true) do |f| %>
+    <%= form_for([:mobile, comment], remote: true) do |f| %>
       <%= f.hidden_field :site_id %>
       <%= f.hidden_field :commentable_id %>
       <%= f.hidden_field :commentable_type %>

@@ -1,11 +1,11 @@
-<%= form_for([:mobile, @like], remote: true, html: { style: "display: inline;" }) do |f| %>
+<%= form_for([:mobile, like], remote: true, html: { style: "display: inline;" }) do |f| %>
   <%= f.hidden_field :site_id %>
   <%= f.hidden_field :user_id %>
   <%= f.hidden_field :likeable_id %>
   <%= f.hidden_field :likeable_type %>
 
   <span class="like-btn"></span>
-  <span><%= @like.likeable.likes_count %></span>
+  <span><%= like.likeable.likes_count %></span>
 <% end %>
 
 <script type="text/javascript">
