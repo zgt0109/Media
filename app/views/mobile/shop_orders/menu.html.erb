@@ -84,7 +84,12 @@
             </a>
             <!-- <a href="javascript:;" class="btn btn-small fr" onclick="showPop('#pop-more')">选好了</a> -->
             <% if @shop_order.take_out? %>
-              <%= link_to "选好了", confirm_mobile_shop_order_url(supllier_id: session[:site_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "btn btn-small fr" %>
+              <% if take_out_rule.include_time_now %>
+                <%= link_to "选好了", confirm_mobile_shop_order_url(supllier_id: session[:site_id], id: @shop_order, order_in_type: 3, anchor: "mp.weixin.qq.com"), class: "btn btn-small fr" %>
+              <% else %>
+                <% book_times = take_out_rule.book_time_ranges.map{|range| "#{range.start_time}~#{range.end_time}" }.join('; ') %>
+                <%= link_to "选好了", '#', class: "btn btn-small fr", onclick: "javascript:alert('请在可预定时间段下单：#{book_times}');" %>
+              <% end %>
             <% end %>
 
             <% if @shop_order.book_dinner? %>
