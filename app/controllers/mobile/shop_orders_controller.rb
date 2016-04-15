@@ -84,7 +84,6 @@ class Mobile::ShopOrdersController < Mobile::BaseController
     else
       #货到付款直接算付款成功
       @shop_order.pay!
-      @shop_order.send_message
     end
 
     @shop_order.ref_order.update_column("status", 1) if @shop_order.ref_order

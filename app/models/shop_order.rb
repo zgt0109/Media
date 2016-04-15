@@ -237,6 +237,9 @@ class ShopOrder < ActiveRecord::Base
 
   def pay!
     update_attributes(pay_status: 2)
+
+    send_message
+
     #自动打印
     template = self.shop_branch.get_templates self
     if template.print_type == 1 && template.is_auto_print
