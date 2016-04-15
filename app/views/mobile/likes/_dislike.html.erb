@@ -1,4 +1,4 @@
-<%= link_to mobile_like_path(site_id: @like.site_id, id: @like.id), remote: true, method: :delete do %>
+<%= link_to mobile_like_path(site_id: like.site_id, id: like.id), remote: true, method: :delete do %>
   <span class="like-btn dislike"></span>
 <% end %>
-<span><%= @like.likeable.reload.likes_count %></span>
+<span><%= like.likeable.reload.likes_count %></span>
