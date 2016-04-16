@@ -111,10 +111,10 @@
                     <%= link_to cancel_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id), method: :post, data: { confirm: '确定要取消订单？' }, class: "btn btn-blue" do %>
                     取消订单
                     <% end if @shop_order.pending? %>
-                    <% if @shop_order.pay_type && !@shop_order.cashpay? && @shop_order.unfinish? %>
-                    <%= link_to "立即支付",  success_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id, again: true), class: "btn" %>
+                    <% if @shop_order.pending? && !@shop_order.cashpay? && @shop_order.unfinish? %>
+                      <%= link_to "立即支付",  success_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id, again: true), class: "btn" %>
                     <% else %>
-                    <%= link_to "再次下单", clone_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id), class: "btn" %>
+                      <%= link_to "再次下单", clone_mobile_shop_order_url(site_id: session[:site_id], id: @shop_order.id), class: "btn" %>
                     <% end %>
                   </div>
                 </div>

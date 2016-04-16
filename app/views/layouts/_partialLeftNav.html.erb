@@ -15,7 +15,7 @@
       <%= link_to_left_nav( '模板样式', website_settings_path, current_page?(website_settings_path) ) %>
       <%= link_to_left_nav( '站点内容', website_menus_path, controller_name == 'website_menus' ) %>
       <%= link_to_left_nav( '资讯中心', website_articles_path(article_type: "as_article"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_article' || params[:category_type] == 'as_article') ) %>
-      <%#= link_to_left_nav( '展示中心', website_articles_path(article_type: "as_product"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_product' || params[:category_type] == 'as_product') ) %>
+      <%= link_to_left_nav( '展示中心', website_articles_path(article_type: "as_product"), controller_path =~ /biz\/website_article/ && (params[:article_type] == 'as_product' || params[:category_type] == 'as_product') ) %>
       <%= link_to_left_nav( '首页幻灯片', website_pictures_path, controller_name == 'website_pictures' ) %>
       <%= link_to_left_nav( '首页背景图', bg_pic_website_settings_path, controller_name == 'website_settings' && action_name == 'bg_pic' ) %>
       <%= link_to_left_nav( '导航菜单', website_popup_menus_path, controller_name == 'website_popup_menus' && @nav_type.is_a?(Array) ) %>

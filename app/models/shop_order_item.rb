@@ -60,7 +60,7 @@ class ShopOrderItem < ActiveRecord::Base
     self.qty = 1
     self.price = self.shop_product.try(:price)
     self.discount = self.shop_product.try(:discount)
-    if self.shop_product.is_current_price
+    if self.shop_product.try(:is_current_price)
       self.total_price = 0
     else
       self.total_price = price * qty 
@@ -74,14 +74,14 @@ class ShopOrderItem < ActiveRecord::Base
   end
 
    def cal_item_price
+    return unless self.shop_product
+
     if self.shop_product.is_current_price
       self.total_price = 0
     else
       self.total_price = price * qty
     end
   end
-
-
 
   def print_f(float)
     num = format("%0.1f", float)

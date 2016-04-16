@@ -379,10 +379,16 @@ class ShopOrder < ActiveRecord::Base
     new_order.save!
 
     self.shop_order_items.each do |item|
+      next unless item.shop_product
       new_item = item.dup
       new_item.shop_order_id = new_order.id
       new_item.save!
     end
+
+    new_order.total_amount = new_order.shop_order_items.sum(:total_price)
+    new_order.pay_amount = new_order.shop_order_items.sum(:total_pay_price)
+    new_order.save
+
     return new_order
   end
 
