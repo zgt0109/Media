@@ -49,6 +49,14 @@
           <hr>
           <%= form_for @wx_mp_user, validate: true, :html => { :class => 'form-table  margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
             <div class="row">
+              <div class="col-md-3 text-right">公众号名称：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.text_field :nickname, class: "form-control", size: 60 %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-md-3 text-right">AppID(应用ID)：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">

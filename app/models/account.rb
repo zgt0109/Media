@@ -23,7 +23,6 @@ class Account < ActiveRecord::Base
     ['froze',  -1, '已冻结']
   ]
 
-  has_one :account_footer
   has_one :print
   has_one :account_password
   has_one :pay_account
@@ -43,6 +42,8 @@ class Account < ActiveRecord::Base
   has_many :shop_categories
   has_many :shop_table_settings
   has_many :shop_order_reports
+
+  after_create :init_site
 
   def self.current
     Thread.current[:account]
@@ -134,11 +135,6 @@ class Account < ActiveRecord::Base
 
   def auth_token
     token
-  end
-
-  def app_footer
-    # AccountFooter.find_by_id(account_footer_id) || AccountFooter.default_footer
-    AccountFooter.default_footer
   end
 
   def update_sign_in_attrs_with(sign_in_ip)
@@ -237,6 +233,10 @@ class Account < ActiveRecord::Base
   end
 
   private
+
+  def init_site
+    sites.create(name: nickname)
+  end
 
   # TODO
   def mass_send_message(sms_options, options = {})

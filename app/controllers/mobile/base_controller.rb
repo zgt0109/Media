@@ -24,7 +24,7 @@ class Mobile::BaseController < ActionController::Base
     # @wx_mp_user = @site.wx_mp_user
     require_wx_mp_user
 
-    @account_footer = AccountFooter.default_footer
+    @site_copyright = @site.copyright
   rescue => error
     logger.info "*********** mobile load_data error: #{error.message} > #{error.backtrace}"
     # render :text => "请求页面参数不正确"

@@ -18,7 +18,7 @@ class App::BaseController < ActionController::Base
 
     return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
-    @account_footer = AccountFooter.default_footer
+    @site_copyright = @site.copyright
   rescue => error
     logger.info "*********** app load_data error: #{error.message} > #{error.backtrace}"
     # render :text => "请求页面参数不正确"

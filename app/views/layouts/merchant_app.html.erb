@@ -24,16 +24,15 @@
 
 <%= yield :mod_pop %>
 
-<% if @login_user.class.eql?(Account) %>
-  <% @account_footer = @login_user.account_footer %>
-  <% #if @login_user && @account_footer && @login_user.try(:is_show_mark?) %>
-    <%- unless @not_show_mark %>
+<% if @login_user.class.eql?(Site) %>
+  <% @site_copyright = @login_user.site_copyright %>
+  <% if @login_user && @site_copyright && @login_user.try(:show_copyright?) %>
+    <%- unless @not_show_copyroght %>
       <footer>
-        <%= @account_footer.footer_link.present? ? link_to(@account_footer.footer_content, @account_footer.footer_link) : @account_footer.footer_content %>
+        <%= @site_copyright.footer_link.present? ? link_to(@site_copyright.footer_content, @site_copyright.footer_link) : @site_copyright.footer_content %>
       </footer>
     <% end %>
-  <%#- end %>
-
+  <%- end %>
 <% end %>
 
 <script>

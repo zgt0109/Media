@@ -121,7 +121,7 @@ class Mobile::WebsitesController < ActionController::Base
     return render text: '该公众号服务已到期，暂不提供服务！' if @site.froze?
 
     @wx_mp_user = @site.wx_mp_user
-    @account_footer = AccountFooter.default_footer
+    @site_copyright = @site.copyright
 
     @shortcut_menus =  @website.shortcut_menus.order(:sort)
     @website_menus = @website.website_menus.root.limit_columns.order(:sort)

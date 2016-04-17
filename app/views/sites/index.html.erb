@@ -1,0 +1,55 @@
+<% content_for :main_content do %>
+<div class="main-content">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '项目管理', sites_url %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
+
+  <div class="page-content">
+    <div class="row">
+
+      <div class="col-sm-12">
+        <div class="col-md-3 pull-right no-padding">
+          <% if current_user.limit_sites_count > current_user.sites.count %>
+            <a href="javascript:;" data-toggle="modals" data-height="300" data-iframe="<%= new_site_path %>" data-title="项目信息" class='btn btn-primary btn-sm pull-right'>新增</a>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-sm-12 margin-top-20">
+        <table id="" class="table table-striped table-bordered table-hover dataTable">
+          <tbody>
+            <tr>
+              <th colspan="2" class="">
+                <h5 class="text-info">
+                  当前项目：<%= current_site.name %>
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <td>名称</td>
+              <!-- <td>绑定公众号</td> -->
+              <!-- <td width="10%">状态</td> -->
+              <td width="15%">操作</td>
+            </tr>
+            <% @sites.each do |site| %>
+            <tr>
+              <td><%= link_to site.name, switch_sites_path(site_id: site.id) %></td>
+              <!-- <td><%#= site.wx_mp_user.try(:nickname) %></td> -->
+              <!-- <td><span class="blue"><%= site.status_name %></span></td> -->
+              <td>
+                <a href="javascript:;" data-toggle="modals" data-height="300" data-iframe="<%= site_url(site) %>" data-title="项目信息">编辑</a>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+<% end %>

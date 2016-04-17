@@ -4,6 +4,7 @@ class InitDb < ActiveRecord::Migration
 
   create_table "accounts", options: 'AUTO_INCREMENT = 10001' do |t|
     t.integer  "account_type",                 :default => 0,   :null => false
+    t.integer  "account_category_id"
     t.string   "nickname"
     t.string   "company_name"
     t.string   "contact"
@@ -38,6 +39,17 @@ class InitDb < ActiveRecord::Migration
 
   add_index "accounts", ["nickname"], :name => "index_accounts_on_nickname", :unique => true
 
+  def change
+    create_table "account_categories" do |t|
+      t.integer  "parent_id",               :default => 0, :null => false
+      t.string   "name",                                   :null => false
+      t.integer  "sort",                    :default => 0, :null => false
+      t.integer  "status",     :limit => 1, :default => 1, :null => false
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+  end
+
   create_table "account_passwords" do |t|
     t.integer  "account_id",                                         :null => false
     t.string   "email"
@@ -55,7 +67,7 @@ class InitDb < ActiveRecord::Migration
   add_index "account_passwords", ["password_question_id"], :name => "index_account_passwords_on_password_question_id"
 
   create_table "account_footers" do |t|
-    t.integer  "account_id",                        :null => false
+    t.integer  "account_id", default: 0,            :null => false
     t.boolean  "is_default",     :default => false, :null => false
     t.boolean  "is_show_link",   :default => false, :null => false
     t.string   "footer_content",                    :null => false
@@ -547,6 +559,7 @@ class InitDb < ActiveRecord::Migration
     t.decimal  "hall_limit_money", :precision => 12, :scale => 2
     t.decimal  "loge_limit_money", :precision => 12, :scale => 2
     t.boolean  "is_pay_balance",                                  :default => false
+    t.text     "metadata"
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
   end
@@ -666,6 +679,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "name"
     t.string   "tel"
     t.integer  "status",      :limit => 1, :default => 1, :null => false
+    t.text     "metadata"
     t.text     "description"
     t.datetime "created_at",                              :null => false
     t.datetime "updated_at",                              :null => false
@@ -3946,6 +3960,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "name"
     t.string   "mobile"
     t.integer  "gender",     :default => 1, :null => false
+    t.string   "address"
     t.integer  "status",     :default => 0, :null => false
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
@@ -5002,7 +5017,9 @@ class InitDb < ActiveRecord::Migration
   add_index "wmall_coupons", ["status"], :name => "index_wmall_coupons_on_status"
 
   create_table "wmall_malls" do |t|
+    t.integer  "account_id"
     t.integer  "site_id"
+    t.integer  "wx_mp_user_id"
     t.string   "wx_mp_user_open_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false

@@ -41,7 +41,7 @@ class Mobile::WbbsTopicsController < Mobile::BaseController
 
   def display_photo
     @body_class = 'body-photo'
-    @not_show_mark = true
+    @not_show_copyroght = true
   end
 
   def new

@@ -22,8 +22,9 @@ class Site < ActiveRecord::Base
   ]
 
   belongs_to  :account
-  belongs_to  :account_footer
   belongs_to  :piwik_site
+  belongs_to  :site_copyright
+  has_many :site_copyrights
 
   has_one :wx_mp_user, inverse_of: :site
   has_one :shop, inverse_of: :site
@@ -167,6 +168,10 @@ class Site < ActiveRecord::Base
 
   def self.current=(site)
     Thread.current[:site] = site
+  end
+
+  def copyright
+    site_copyright || SiteCopyright.default_footer
   end
 
   def update_all_system_messages

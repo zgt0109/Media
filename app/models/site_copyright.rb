@@ -1,5 +1,5 @@
-class AccountFooter < ActiveRecord::Base
-  belongs_to :account
+class SiteCopyright < ActiveRecord::Base
+  belongs_to :site
 
   def self.default_footer
     where(is_default: true).first

@@ -2,18 +2,19 @@
 
 <ul class="nav nav-list">
   <li class="<%= current_page?(profile_path) ? "active" : '' %>">
-  	<%= link_to profile_path do %><i class="fa fa-user"></i><span class="menu-text">我的账号</span><% end %>
+    <%= link_to profile_path do %><i class="fa fa-user"></i><span class="menu-text">我的账号</span><% end %>
   </li>
   <li class="<%= current_page?(new_password_path) ? "active" : '' %>">
-  	<%= link_to new_password_path do %><i class="fa fa-key"></i><span class="menu-text">修改密码</span><% end %>
+    <%= link_to new_password_path do %><i class="fa fa-key"></i><span class="menu-text">修改密码</span><% end %>
   </li>
-<!--
-  <li class="<%= current_page?(account_footer_path) ? "active" : '' %>">
-  	<%= link_to account_footer_path do %><i class="fa fa-lock"></i><span class="menu-text">版权设置</span><% end %>
+  <li class="<%= current_page?(sites_path) ? "active" : '' %>">
+    <%= link_to sites_path do %><i class="fa fa-cog"></i><span class="menu-text">项目管理</span><% end %>
   </li>
- -->
+  <li class="<%= current_page?(copyright_path) ? "active" : '' %>">
+    <%= link_to copyright_path do %><i class="fa fa-lock"></i><span class="menu-text">版权设置</span><% end %>
+  </li>
   <li class="<%= current_page?(payment_settings_path) ? "active" : '' %>">
-  	<%= link_to payment_settings_path do %><i class="fa fa-rmb"></i><span class="menu-text">支付设置</span><% end %>
+    <%= link_to payment_settings_path do %><i class="fa fa-rmb"></i><span class="menu-text">支付设置</span><% end %>
   </li>
 
   <li class="<%= proxy_payments_path? ? parent_class : '' %>">
@@ -27,6 +28,6 @@
   </li>
 
   <li class="<%= controller_name =~ /sms_expenses|sms_orders/i || ['sms_switch'].include?(action_name) ? 'active' : '' %>">
-  	<%= link_to sms_expenses_path do %><i class="fa fa-file-text"></i><span class="menu-text">短消息管理</span><% end %>
+    <%= link_to sms_expenses_path do %><i class="fa fa-file-text"></i><span class="menu-text">短消息管理</span><% end %>
   </li>
 </ul>

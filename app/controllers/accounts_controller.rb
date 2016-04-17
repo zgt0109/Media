@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class AccountsController < ApplicationController
   skip_before_filter *ADMIN_FILTERS, only: [:new, :create, :send_message, :send_remind_message, :send_text_message]
-  before_filter :set_account, only: [:edit, :update_mobile, :update, :update_account_footer, :account_footer, :open_sms, :close_sms]
+  before_filter :set_account, only: [:edit, :update_mobile, :update, :open_sms, :close_sms]
   skip_before_filter :check_auth_mobile, only: [:send_sms, :update_mobile]
 
   def index
@@ -63,51 +63,6 @@ class AccountsController < ApplicationController
   def edit
     @partialLeftNav = "/layouts/partialLeftSys"
     render layout: 'application'
-  end
-
-  def account_footer
-    # @ret = 1 #默认 2. 自定义 3. 不显示
-    account_footer = @account.app_footer
-    @ret = 1
-    # account_footer = AccountFooter.find_by_id(@account.account_footer)
-    # if !@account.is_show_mark
-    #   @ret = 3
-    # elsif account_footer && !account_footer.is_default?
-    #   @ret = 2
-    # else
-    #   @ret = 1
-    # end
-    @partialLeftNav = "/layouts/partialLeftSys"
-  end
-
-  def update_account_footer
-    ret = params[:status].to_i
-    account_footer = @account.account_footer
-    if ret == 1 #默认
-      @account.account_footer_id = AccountFooter.default_footer.id #使用默认 footer
-      @account.is_show_mark = true
-    elsif ret == 2
-      content = params[:content]
-      link = params[:link]
-      account_footer = current_user.account_footers.where(is_default: false).first
-      if account_footer && !account_footer.is_default? #不用新建
-        account_footer.footer_content = content
-        account_footer.footer_link = link
-      else #要新建
-        account_footer = AccountFooter.create(footer_content: content, footer_link: link, account_id: @account.id)
-      end
-      @account.is_show_mark = true
-      @account.account_footer_id = account_footer.id
-    elsif ret == 3
-      @account.is_show_mark = false
-      @account.account_footer_id = account_footer.id if account_footer
-    end
-
-    if @account && account_footer && account_footer.save! && @account.save!
-      redirect_to :back, notice: '更新成功'
-    else
-      redirect_to :back, alert: '更新失败'
-    end
   end
 
   def send_sms

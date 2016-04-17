@@ -21,7 +21,7 @@ class Mobile::ScenesController < Mobile::BaseController
     @share_image = @activity.share_setting_pic_url || @activity.pic_url
     @share_title = @activity.share_setting_title || @activity.name
     @share_desc = @activity.share_setting_summary || @activity.summary.try(:squish)
-    @not_show_mark = true
+    @not_show_copyroght = true
     @scene_html = @activity.scene_html
   end
 end

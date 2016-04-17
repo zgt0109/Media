@@ -31,9 +31,6 @@ Wp::Application.routes.draw do
   match :about, :joins, :micro_channel, :h5_marketing, :large_customer, :optimal_code, :store, :electricity, :retail, :agents_inquiry, controller: 'site/pages'
 
 
-  match 'account_footer' => 'accounts#account_footer', as: :account_footer
-  post  'update_account_footer' => 'accounts#update_account_footer', as: :update_account_footer
-
   match '/recepit/print',  :to => "pro::shop_branch_print_templates#recepit"
   match '/printlog',       :to => "pro::shop_branch_print_templates#printlog"
   match '/recepit/export', :to => "pro::shop_branch_print_templates#export_print_data"
@@ -150,6 +147,12 @@ Wp::Application.routes.draw do
       post :open_sms, :close_sms, :send_message, :send_text_message, :update_mobile
     end
   end
+
+  resources :sites do
+    get :switch, on: :collection
+  end
+  match 'copyright' => 'sites#copyright', as: :copyright
+  post  'update_copyright' => 'sites#update_copyright', as: :update_copyright
 
   resources :prints do
     get :activities, on: :collection
