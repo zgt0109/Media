@@ -27,7 +27,7 @@
         </header>
 
         <section>
-          <div class="box box-ck"><%= raw @shop_product.description %></div>
+          <% if @shop_product.description.present? %><div class="box box-ck"><%= raw @shop_product.description %></div><% end %>
 
           <div class="box">
             <%= form_for @shop_product_comment, url: mobile_shop_product_comments_url(site_id: session[:site_id]), remote: true do |f| %>

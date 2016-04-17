@@ -59,6 +59,7 @@ class User < ActiveRecord::Base
   #TODO
   # scope :message_forbidden, ->{ where(leave_message_forbidden: 1)}
   # scope :message_normal, ->{ where(leave_message_forbidden: 0)}
+
   def self.message_forbidden
     joins(:wx_user).where(wx_user: { leave_message_forbidden: 1 })
   end
