@@ -7,7 +7,7 @@ set :rvm_type, :user # :user if RVM installed in $HOME
 
 set :repository, 'git@winwemedia.com:/opt/repos/win.git'
 set :scm, :git
-set :user, 'deployer'
+set :user, 'deploy'
 # set :admin_runner, 'root'
 set :use_sudo, false
 # set :group_writable, false
@@ -89,8 +89,8 @@ task :precompile do
     run_locally 'bundle exec rake assets:clean_expired; RAILS_ENV=production bundle exec rake assets:precompile;'
 
     run "mkdir -p #{shared_assets_dir}"
-    # run_locally %Q(rsync -avz -e "ssh -p #{port}" ./public/assets/ deployer@#{find_servers.first}:#{shared_assets_dir};)
-    run_locally %Q(rsync -avz ./public/assets/ deployer@#{find_servers.first}:#{shared_assets_dir};)
+    # run_locally %Q(rsync -avz -e "ssh -p #{port}" ./public/assets/ deploy@#{find_servers.first}:#{shared_assets_dir};)
+    run_locally %Q(rsync -avz ./public/assets/ deploy@#{find_servers.first}:#{shared_assets_dir};)
     run_locally "mv public/assets public/#{tmp_assets_dir}"
   else
     puts '****** Nothing'
