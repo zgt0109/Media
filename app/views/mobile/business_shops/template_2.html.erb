@@ -4,8 +4,8 @@
         <div class="card-box">
           <%= image_tag @vip_card_pic %>
           <div class="card-icon">
-            <% if @vip_card.logo? %>
-              <img src="<%= @vip_card.logo %>"/>
+            <% if @vip_card.logo_key.present? %>
+              <img src="<%= @vip_card.logo_url %>"/>
             <% end %>
           </div>
           <div class="card-name">

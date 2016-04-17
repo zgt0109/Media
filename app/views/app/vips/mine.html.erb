@@ -7,8 +7,8 @@
         <div class="img-bg">
           <img src="<%= @vip_card.cover_pic_url || 'http://img-asset.winwemedia.com/FudiRXyXaCchVosPYrv22Ws9do1F' %>">
           <div class="card-logo">
-            <% if @vip_card.logo? %>
-              <img src="<%= @vip_card.logo %>"/>
+            <% if @vip_card.logo_key.present? %>
+              <img src="<%= @vip_card.logo_url %>"/>
             <% end %>
           </div>
           <div class="card-vip" style="color:#<%= @vip_card.name_bg_color.presence %>;"><%= @vip_card.try(:name) %></div>

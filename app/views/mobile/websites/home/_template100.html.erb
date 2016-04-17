@@ -4,7 +4,7 @@
   </div>
   <div class="logo">
     <div class="logo-img">
-      <%= image_tag website.logo if website.logo? %>
+      <%= image_tag website.logo_url if website.logo_key.present? %>
     </div>
     <h1><%= website.name %></h1>
   </div>

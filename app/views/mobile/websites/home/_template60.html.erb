@@ -14,7 +14,7 @@
   <div class="logo">
     <a href="#" class="box">
       <!--<img src="/assets/mobile/vweisiteV01/60/logo.png" alt="">-->
-      <%= image_tag @website.logo? ? @website.logo : '/assets/mobile/vweisiteV01/60/logo.png'%>
+      <%= image_tag @website.logo_key.present? ? @website.logo_url : '/assets/mobile/vweisiteV01/60/logo.png'%>
     </a>
   </div>
 </div>

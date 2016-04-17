@@ -18,7 +18,7 @@ class BusinessShop < ActiveRecord::Base
   after_create :save_vip_card_branch_to_db
 
   validates :name, :tel, :address, :description, presence: true
-  validates :logo, presence: true, on: :create
+  # validates :logo_key, presence: true, on: :create
   validates :sort, numericality: { only_integer: true, greater_than: 0 }
 
   accepts_nested_attributes_for :activity
@@ -45,6 +45,10 @@ class BusinessShop < ActiveRecord::Base
   def delete!
     update_attributes!(status: DELETED)
     activity.deleted!
+  end
+
+  def logo_url
+    qiniu_image_url(logo_key)
   end
 
   private

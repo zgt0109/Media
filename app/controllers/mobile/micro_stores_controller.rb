@@ -62,6 +62,7 @@ class Mobile::MicroStoresController < Mobile::BaseController
         info = JSON(result)
         @wx_user = OpenStruct.new(location_x: info["content"]["point"]["y"], location_y: info["content"]["point"]["x"], location_updated_at: Time.now)
       end
+    rescue
     end
   
 end

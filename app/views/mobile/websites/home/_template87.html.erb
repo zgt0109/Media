@@ -1,5 +1,5 @@
 <div class="mod-logo">
-  <i><%= image_tag website.logo.big if website.logo? %></i>
+  <i><%= image_tag website.logo_url if website.logo_key.present? %></i>
 </div>
 <div class="index" id="index">
   <% website_menus.each do |menu| %>

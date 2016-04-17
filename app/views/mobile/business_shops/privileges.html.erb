@@ -6,8 +6,8 @@
         <%= image_tag @vip_card_pic, id: :pic %>
         <p class="card-logo">
           <span class="tleft">
-            <% if @business_shop.logo? %>
-            <img src="<%= @business_shop.try(:logo).presence %>"/>
+            <% if @business_shop.logo_key.present? %>
+            <img src="<%= @business_shop.logo_url %>"/>
             <% end %>
           </span>
           <span class="tright" style="color: #<%= @vip_card_branch.try(:name_bg_color) %>"><%= @vip_card_branch.try(:name) %></span>
@@ -42,8 +42,8 @@
         <%= image_tag @vip_card_pic, id: :pic %>
         <p class="card-logo">
           <span class="tleft">
-            <% if @business_shop.logo? %>
-            <img src="<%= @business_shop.try(:logo).presence %>"/>
+            <% if @business_shop.logo_key.present? %>
+            <img src="<%= @business_shop.logo_url %>"/>
             <% end %>
           </span>
           <span class="tright"><%= @vip_card_branch.try(:name) %></span>

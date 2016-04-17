@@ -16,7 +16,7 @@ module ApiWeixinControllerHelper
     elsif material.link?
       material.source_url
     else
-      "#{app_material_url(material, subdomain: mobile_subdomain(material.site_id))}#mp.weixin.qq.com"
+      "#{app_material_url(material, subdomain: custom_subdomain(material.site_id))}#mp.weixin.qq.com"
     end
   end
 

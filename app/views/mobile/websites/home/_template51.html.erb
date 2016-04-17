@@ -29,8 +29,8 @@
 
   <% if address.present? || tel.present? %>
       <!--ft的背景图采用微官网的logo-->
-      <div class="ft" style="background-image: url(<%= website.logo? ? website.logo.big : ''%>)">
-        <p style="<%= website.logo? ? '' : 'border-left:none;'%>">
+      <div class="ft" style="background-image: url(<%= website.logo_key.present? ? website.logo_url : ''%>)">
+        <p style="<%= website.logo_key.present? ? '' : 'border-left:none;'%>">
           <% if address.present? %>
         <span>
           地址：<%= address %>

@@ -8,7 +8,7 @@
                   <%= link_to menu_url(menu), class: 'box mod-index' do %><%= menu.pic_or_icon has_title: false, pic_type: "thumb" %><% end %>
               <% end %>
             </div>
-            <a href="javascript:;" class="box mod-logo"><i><%= image_tag website.logo if website.logo? %></i></a>
+            <a href="javascript:;" class="box mod-logo"><i><%= image_tag website.logo_url if website.logo_key.present? %></i></a>
           </div>
           <%= image_tag @website_pictures[0].pic_url if @website_pictures[0].present? && @website_pictures[0].pic_url %>
         </li>

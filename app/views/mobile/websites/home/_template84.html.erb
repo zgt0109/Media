@@ -6,7 +6,7 @@
   <% end %>
   <a class="mod-logo">
     <i>
-      <%= image_tag website.logo.big if website.logo? %>
+      <%= image_tag website.logo_url if website.logo_key.present? %>
     </i>
   </a>
 </div>

@@ -21,8 +21,8 @@
       <div cover="cover box-img" class="img vip_card_bg" style="position:relative">
         <div style="position:absolute;top:5px;right:5px;"><b id="preview_vip_card_name"><%= @vip_card_branch.name rescue nil%></b></div>
         <div style="position:absolute;top:5px;left:5px;">
-          <% if @business_shop.logo? %>
-            <%= image_tag  @business_shop.logo.presence, id: 'preview_business_shop_logo' %>
+          <% if @business_shop.logo_key.present? %>
+            <%= image_tag @business_shop.logo_url, id: 'preview_business_shop_logo' %>
           <%- else %>
             <img id="preview_business_shop_logo">
           <%- end %>

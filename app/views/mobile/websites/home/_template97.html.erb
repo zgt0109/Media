@@ -1,5 +1,5 @@
 <div class="mod-logo">
-  <%= image_tag website.logo if website.logo? %>
+  <%= image_tag website.logo_url if website.logo_key.present? %>
 </div>
 
 <%= render "slider" %>
