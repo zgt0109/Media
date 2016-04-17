@@ -47,12 +47,9 @@
         <span class="lbl">时间段</span>
       </label>
       <br>
-      <div class="radio-form mod-add-cancel" id="rule_time_range_2">
+      <div class="radio-form" id="rule_time_range_2">
         <a href="javascript:;" class="fa fa-plus text-primary btn-add-i">添加时间段</a>
-
         <%= f.fields_for :book_time_ranges do |range| %>
-        
-
           <div class="input-group input-group-text input-group-sm margin-b-10" id="item-<%= range.object.id %>">
             <%= range.check_box '_destroy', style:'display:none', class: "hidden_delete", id: "delete-#{range.object.id}" %>
             <%= range.text_field :start_time, class: "timepicker", readonly: true %>
