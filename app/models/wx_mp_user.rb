@@ -30,7 +30,7 @@ class WxMpUser < ActiveRecord::Base
     ['plugin', 2, '插件'],
   ]
 
-  belongs_to :site, inverse_of: :wx_mp_user
+  belongs_to :site#, inverse_of: :wx_mp_user
 
   has_many :replies, as: :replier, dependent: :destroy
 
