@@ -382,7 +382,7 @@
       <%= left_nav_dropdown 'icon-camera', '微公益' %>
       <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
         <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
-        <%= link_to_left_nav( '项目管理', donations_path, current_page?(donations_path) ) %>
+        <%= link_to_left_nav( '店铺管理', donations_path, current_page?(donations_path) ) %>
         <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
           <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
         </li>

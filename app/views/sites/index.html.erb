@@ -3,7 +3,7 @@
   <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <li><%= link_to '项目管理', sites_url %></li>
+      <li><%= link_to '店铺管理', sites_url %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
@@ -14,7 +14,7 @@
       <div class="col-sm-12">
         <div class="col-md-3 pull-right no-padding">
           <% if current_user.limit_sites_count > current_user.sites.count %>
-            <a href="javascript:;" data-toggle="modals" data-height="300" data-iframe="<%= new_site_path %>" data-title="项目信息" class='btn btn-primary btn-sm pull-right'>新增</a>
+            <a href="javascript:;" data-toggle="modals" data-height="300" data-iframe="<%= new_site_path %>" data-title="店铺信息" class='btn btn-primary btn-sm pull-right'>新增</a>
           <% end %>
         </div>
       </div>
@@ -25,7 +25,7 @@
             <tr>
               <th colspan="2" class="">
                 <h5 class="text-info">
-                  当前项目：<%= current_site.name %>
+                  当前店铺：<%= current_site.name %>
                 </h5>
               </th>
             </tr>
@@ -41,7 +41,7 @@
               <!-- <td><%#= site.wx_mp_user.try(:nickname) %></td> -->
               <!-- <td><span class="blue"><%= site.status_name %></span></td> -->
               <td>
-                <a href="javascript:;" data-toggle="modals" data-height="300" data-iframe="<%= site_url(site) %>" data-title="项目信息">编辑</a>
+                <a href="javascript:;" data-toggle="modals" data-height="300" data-iframe="<%= site_url(site) %>" data-title="店铺信息">编辑</a>
               </td>
             </tr>
             <% end %>
