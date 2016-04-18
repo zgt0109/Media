@@ -58,6 +58,8 @@ class Website < ActiveRecord::Base
   has_many :website_article_categories, dependent: :destroy
   has_many :business_shops, dependent: :destroy
   has_many :categories, class_name: 'WebsiteArticleCategory'
+  has_many :likes, as: :likeable
+  has_many :comments, as: :commentable
 
   accepts_nested_attributes_for :life_activity
   accepts_nested_attributes_for :circle_activity
