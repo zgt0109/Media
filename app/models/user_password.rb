@@ -1,6 +1,10 @@
-class AccountPassword < ActiveRecord::Base
+class UserPassword < ActiveRecord::Base
 
-  validates :password_digest, presence: { message: '密码不能为空' }, confirmation: { message: '' }, length: { within: 6..6, too_short: '密码长度只能为6位数', too_long: "密码长度只能为6位数" }, allow_blank: true
+  validates :password_digest,
+    presence: { message: '密码不能为空' },
+    confirmation: { message: '' },
+    length: { within: 6..6, too_short: '密码长度只能为6位数', too_long: "密码长度只能为6位数" },
+    allow_blank: true
 
   belongs_to :site
 

@@ -28,6 +28,7 @@ class Site < ActiveRecord::Base
   belongs_to  :site_copyright
   has_many :site_copyrights
 
+  has_one :user_password
   has_one :shop, inverse_of: :site
   # has_one :wx_mp_user, inverse_of: :site
   # has_many  :wx_users, through: :wx_mp_user
@@ -191,6 +192,10 @@ class Site < ActiveRecord::Base
   def has_privilege_for?(id)
     return true unless Rails.env.production?
     privileges.to_s.split(',').uniq.include?(id.to_s)
+  end
+
+  def user_password_correct?( password )
+    password.present? && password == user_password.try(:password_digest)
   end
 
   def find_or_generate_auth_token(encrypt = true)

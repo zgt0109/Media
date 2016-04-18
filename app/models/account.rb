@@ -24,7 +24,6 @@ class Account < ActiveRecord::Base
   ]
 
   has_one :print
-  has_one :account_password
   has_one :pay_account
   has_many :payments
 
@@ -195,10 +194,6 @@ class Account < ActiveRecord::Base
 
   def enabled_payment_setting_types
     @enabled_payment_setting_types ||= enabled_payment_settings.pluck(:type)
-  end
-
-  def account_password_correct?( password )
-    password.present? && password == account_password.try(:password_digest)
   end
 
   def buy_sms_totality

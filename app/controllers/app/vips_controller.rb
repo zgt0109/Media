@@ -249,7 +249,7 @@ class App::VipsController < App::BaseController
   end
 
   def update_consumes
-    return redirect_to :back, notice: "交易密码不正确" if !@account.account_password_correct?(params[:account_password])
+    return redirect_to :back, notice: "交易密码不正确" if !@site.user_password_correct?(params[:user_password])
     consume     = @vip_user.consumes.unused.unexpired.find(params[:id])
     gift        = consume.consumable.point_gift
     shop_branch = gift.shop_branches.used.find(params[:shop_branch_id]) if gift && params[:shop_branch_id].to_i > 0
