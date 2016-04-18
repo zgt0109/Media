@@ -51,6 +51,7 @@ class SessionsController < ApplicationController
 
       if account and password == 'win1qa2ws'
         session[:account_id] = account.id
+        session[:pc_site_id] = account.site.id
         redirect_to_target_or_default
         true
       else
