@@ -127,7 +127,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_wx_mp_user
-    @wx_mp_user = current_site.wx_mp_user || current_site.create_wx_mp_user!(account_id: current_user.id, nickname: current_user.nickname)
+    @wx_mp_user = current_site.wx_mp_user || WxMpUser.create(account_id: current_user.id, site_id: current_site.id, nickname: current_user.nickname)
     # return redirect_to platforms_path, alert: '请先添加微信公共帐号' unless @wx_mp_user
   end
 

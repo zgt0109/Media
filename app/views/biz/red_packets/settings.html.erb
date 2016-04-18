@@ -52,7 +52,7 @@
                 <p>
                   <span>所有粉丝openid导出</span>
 
-                  <%- wx_users_count = current_site.wx_users.subscribed.count %>
+                  <%- wx_users_count = current_site.wx_mp_user.wx_users.subscribed.count %>
                   <% if wx_users_count <= EXPORTING_COUNT %>
                       <%= link_to 'EXCEL', export_red_packets_path(format: :xls, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>
                       <%= link_to 'TXT', export_red_packets_path(formt: :txt, page_exl: 1, receive_type: RedPacket::RedPacket::ALL_FANS), class: 'btn btn-primary btn-sm btn-filter ml20' %>

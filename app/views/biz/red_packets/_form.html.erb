@@ -29,7 +29,7 @@
       <div class="radioTab fl">
         <label>
           <%= f.radio_button :receive_type, RedPacket::RedPacket::ALL_FANS, class: 'ace', data: {toggle: 'radioTab', target: 'usualField', id: 'fans_count'} %>
-          <span class="lbl">所有粉丝（<i id="fans_count"><%= current_site.wx_users.subscribed.count.to_i %></i>人）</span>
+          <span class="lbl">所有粉丝（<i id="fans_count"><%= current_site.wx_mp_user.wx_users.subscribed.count.to_i %></i>人）</span>
         </label>
         <label>
           <%= f.radio_button :receive_type, RedPacket::RedPacket::ALL_VIPS, class: 'ace', data: {toggle: 'radioTab', target: 'customField', id: 'vips_count'} %>

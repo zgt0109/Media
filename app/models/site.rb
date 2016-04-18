@@ -3,6 +3,8 @@ class Site < ActiveRecord::Base
   include Concerns::Brokerages
   include Concerns::RedPackets
 
+  store :metadata, accessors: [:use_share_wx_mp_user]
+
   SHARE_PHOTO = [
     ["晒图", ActivityType::SHARE_PHOTO, "上传一张图片，试着根据提示操作创建自己的图片分享。"],
     ["退出晒图", ActivityType::EXIT_SHARE_PHOTO, "您已退出“图片分享”功能；\n重新进入请回复“{share_keyword}”。"],
@@ -26,8 +28,9 @@ class Site < ActiveRecord::Base
   belongs_to  :site_copyright
   has_many :site_copyrights
 
-  has_one :wx_mp_user, inverse_of: :site
   has_one :shop, inverse_of: :site
+  # has_one :wx_mp_user, inverse_of: :site
+  # has_many  :wx_users, through: :wx_mp_user
 
   has_many :assistants_sites
   has_many :assistants, through: :assistants_sites
@@ -37,7 +40,6 @@ class Site < ActiveRecord::Base
   has_many :consumes
 
   has_many  :users, inverse_of: :site
-  has_many  :wx_users, through: :wx_mp_user
   has_one  :house
   has_one  :car_shop
   has_one  :hotel
@@ -168,6 +170,11 @@ class Site < ActiveRecord::Base
 
   def self.current=(site)
     Thread.current[:site] = site
+  end
+
+  def wx_mp_user
+    attrs = use_share_wx_mp_user.to_i == 1 ? {site_id: account.site.id} : {site_id: id}
+    WxMpUser.where(attrs).first
   end
 
   def copyright

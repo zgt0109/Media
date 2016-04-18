@@ -145,7 +145,7 @@ class Biz::RedPacketsController < ApplicationController
 
   def export
     if params[:receive_type].to_i == RedPacket::RedPacket::ALL_FANS
-      @users = current_site.wx_users.subscribed.page(params[:page_exl]).per(EXPORTING_COUNT)
+      @users = current_site.wx_mp_user.wx_users.subscribed.page(params[:page_exl]).per(EXPORTING_COUNT)
     else
       @users = current_site.vip_users.normal.page(params[:page_exl]).per(EXPORTING_COUNT).map{|vip_user| vip_user.wx_user if vip_user.wx_user.present?}.compact
     end
@@ -186,7 +186,7 @@ class Biz::RedPacketsController < ApplicationController
     if @red_packet.errors.blank?
       re_attr = {
           site_id: current_site.id,
-          user_id: current_site.wx_users.where(openid: params[:test_openid]).first.try(:user_id),
+          user_id: current_site.wx_mp_user.wx_users.where(openid: params[:test_openid]).first.try(:user_id),
           red_packet_id: @red_packet.id,
           openid: params[:test_openid],
           total_amount: @red_packet.total_amount,
