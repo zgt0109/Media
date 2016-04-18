@@ -12,7 +12,7 @@
         <div>
           <%
             sort = @vip_user.vip_grade.try(:sort).presence || 0
-            options = current_user.vip_card.vip_grades.visible.sorted.sort_greater_than(sort).pluck(:name, :id)
+            options = current_site.vip_card.vip_grades.visible.sorted.sort_greater_than(sort).pluck(:name, :id)
           %>
           <%= select_tag :vip_grade_id, options_for_select(options,@vip_user.vip_grade_id) %>
         </div>
