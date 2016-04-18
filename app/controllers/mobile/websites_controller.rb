@@ -77,6 +77,17 @@ class Mobile::WebsitesController < ActionController::Base
     @material = Material.where(id: params[:material_id].to_i).first
     @share_image = @material.present? ? @material.pic_url :  @website_menu.try(:pic_key)
 
+    @likeable = @website
+    @like = Like.where(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: "Website").first
+    unless @like
+      @like = Like.new(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: "Website")
+    end
+    @website.increment!(:view_count)
+    @commentable = @website
+    @commenter = @user
+    @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: "Website", commenter_id: @commenter.try(:id), commenter_type: "User")
+    @comments = @website.comments
+
     return redirect_to four_o_four_url if @website_menu.blank? && @material.blank?
   end
 

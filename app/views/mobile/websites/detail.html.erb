@@ -42,7 +42,7 @@
     </a>
     <!-- <iframe name="hideiframe" width='10' height='10' style='display: none;'></iframe> -->
   </div>
-  
+
 <% elsif @website_menu.mobile_qq? %>
   <div class="hd">
     <h1><%= @website_menu.try(:name) %></h1>
@@ -52,12 +52,12 @@
   <div class="bd tcenter">
     <script charset='utf-8' src='http://wpa.b.qq.com/cgi/wpa.php'></script>
     <script>
-      BizQQWPA.add({ 
-         aty: '1', //接入到指定工号 
-         a: '1001', //指定工号1001接入 
-         type: '1', //使用按钮类型 WPA 
-         nameAccount: '<%= @website_menu.qq %>', //营销 QQ 号码 
-         parent: 'biz_qq' //将 WPA 放置在 ID 为 testAdd 的元素里 
+      BizQQWPA.add({
+         aty: '1', //接入到指定工号
+         a: '1001', //指定工号1001接入
+         type: '1', //使用按钮类型 WPA
+         nameAccount: '<%= @website_menu.qq %>', //营销 QQ 号码
+         parent: 'biz_qq' //将 WPA 放置在 ID 为 testAdd 的元素里
        });
     </script>
   </div>
@@ -86,6 +86,18 @@
 <%= render "mobile/websites/navs/nav#{@nav_template_id}", {:website_menus => @website_menus} if @nav_template_id > 0 %>
 
 <%= render "iscroll", {:selector => "#article"} if @detail_template_id == 7 %>
+
+<!-- 阅读数与点赞数 -->
+<div style="padding-top: 10px;">
+  <div id="article-view-count" style="display: inline;">阅读 <%= @website.view_count %></div>
+  <%= render "mobile/likes/index" %>
+</div>
+
+<!-- 分享朋友圈 -->
+<%= render "shared/share_pyq" %>
+
+<!-- 评论 -->
+<%= render "mobile/comments/index" %>
 
 <% content_for :share_section do %>
   <% unless @detail_template_id == 7 %>
