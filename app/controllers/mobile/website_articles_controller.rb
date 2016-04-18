@@ -1,5 +1,5 @@
 class Mobile::WebsiteArticlesController < Mobile::BaseController
-  skip_filter :load_data#, :auth
+  # skip_filter :load_data#, :auth
 
   before_filter :find_website
   before_filter :set_categories, only: [:index, :show, :tags]

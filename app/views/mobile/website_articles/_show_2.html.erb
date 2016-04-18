@@ -14,11 +14,13 @@
 </div>
 
 <!-- 阅读数与点赞数 -->
-<div id="article-view-count" style="display: inline;">阅读 <%= @article.view_count %></div>
-<%= render "mobile/likes/index" %>
+<div style="padding-top: 10px;">
+  <div id="article-view-count" style="display: inline;">阅读 <%= @article.view_count %></div>
+  <%= render "mobile/likes/index" %>
+</div>
 
 <!-- 分享朋友圈 -->
-<%= render "mobile/likes/share" %>
+<%= render "shared/share_pyq" %>
 
 <!-- 评论 -->
 <%= render "mobile/comments/index" %>
