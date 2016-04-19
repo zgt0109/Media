@@ -88,7 +88,7 @@
 <%= render "iscroll", {:selector => "#article"} if @detail_template_id == 7 %>
 
 <!-- 阅读数与点赞数 -->
-<%= render "mobile/likes/index", material: @material, user: @user %>
+<%= render "mobile/likes/index", resource: @material, user: @user %>
 
 <!-- 分享朋友圈 -->
 <%= render "shared/share_pyq" %>

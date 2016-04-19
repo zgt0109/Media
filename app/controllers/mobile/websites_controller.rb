@@ -1,5 +1,5 @@
 class Mobile::WebsitesController < ActionController::Base
-  include ErrorHandler, DetectUserAgent
+  include ErrorHandler, DetectUserAgent, WebsiteControllerHelper
 
   helper_method :judge_andriod_version, :wx_browser?
 
@@ -76,18 +76,7 @@ class Mobile::WebsitesController < ActionController::Base
     @website_menu = @website.website_menus.where(id: params[:website_menu_id].to_i).first
     @material = Material.where(id: params[:material_id].to_i).first
     @share_image = @material.present? ? @material.pic_url :  @website_menu.try(:pic_key)
-
-    @likeable = @material
-    @like = Like.where(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: @likeable.class.to_s).first
-    unless @like
-      @like = Like.new(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: @likeable.class.to_s)
-    end
-    @material.increment!(:view_count)
-    @commentable = @material
-    @commenter = @user
-    @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: @commentable.class.to_s, commenter_id: @commenter.try(:id), commenter_type: "User")
-    @comments = @material.comments
-
+    likes_comments_partial(@material)
     return redirect_to four_o_four_url if @website_menu.blank? && @material.blank?
   end
 

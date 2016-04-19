@@ -1,6 +1,6 @@
 class Mobile::WebsiteArticlesController < Mobile::BaseController
   # skip_filter :load_data#, :auth
-
+  include WebsiteControllerHelper
   before_filter :find_website
   before_filter :set_categories, only: [:index, :show, :tags]
   before_filter :set_articles
@@ -20,16 +20,7 @@ class Mobile::WebsiteArticlesController < Mobile::BaseController
     index = @articles.to_a.index(@article)
     @prev_article = @articles[index - 1] if index - 1 >= 0
     @next_article = @articles[index + 1] if @articles[index + 1]
-    @likeable = @article
-    @like = Like.where(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: "WebsiteArticle").first
-    unless @like
-      @like = Like.new(site_id: @site.id, user_id: @user.try(:id), likeable_id: @likeable.id, likeable_type: "WebsiteArticle")
-    end
-    @article.increment!(:view_count)
-    @commentable = @article
-    @commenter = @user
-    @comment = Comment.new(site_id: @site.id, commentable_id: @commentable.id, commentable_type: "WebsiteArticle", commenter_id: @commenter.try(:id), commenter_type: "User")
-    @comments = @article.comments
+    likes_comments_partial(@article)
   end
 
   def tags
