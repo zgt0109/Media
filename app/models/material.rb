@@ -27,6 +27,8 @@ class Material < ActiveRecord::Base
   belongs_to :parent,   class_name: 'Material', foreign_key: :parent_id
   has_many   :children, class_name: 'Material', foreign_key: :parent_id, dependent: :destroy
   has_one    :material_content
+  has_many   :likes, as: :likeable
+  has_many   :comments, as: :commentable
 
   accepts_nested_attributes_for :children, allow_destroy: true
   validates_associated :children
