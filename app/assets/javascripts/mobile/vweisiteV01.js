@@ -1,5 +1,8 @@
 //= require mobile/lib/jquery
 //= require mobile/lib/swipe
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui
 
 $(function() {
     $("a, .btn, .box").on({

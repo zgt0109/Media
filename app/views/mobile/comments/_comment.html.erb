@@ -3,7 +3,7 @@
   <% if comments.count > 0 %>
     <% comments.each do |comment| %>
       <div class="ft-list">
-        <div class="fr">
+        <div class="frb">
           <b><%= comment.commenter.name %></b>
           <span>
             <i class="fl"><%= date_format_full comment.created_at %></i>

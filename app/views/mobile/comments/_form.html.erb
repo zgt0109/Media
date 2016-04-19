@@ -2,7 +2,7 @@
   <h2 class="ellipsis">发表评论</h2>
 </div>
 <div class="bd">
-  <div class="fr">
+  <div class="frb">
     <%= form_for([:mobile, comment], remote: true) do |f| %>
       <%= f.hidden_field :site_id %>
       <%= f.hidden_field :commentable_id %>
@@ -12,7 +12,7 @@
       <div class="bd-comment">
         <%= f.text_area :comment, placeholder: "请输入您的评论", cols: 40, rows: 3, maxlength: 200 %>
         <div class="bd-face">
-          <span class="fr">字数限制在200以内</span>
+          <span class="frb">字数限制在200以内</span>
         </div>
       </div>
       <label>

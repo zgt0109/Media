@@ -14,10 +14,7 @@
 </div>
 
 <!-- 阅读数与点赞数 -->
-<div style="padding-top: 10px;">
-  <div id="article-view-count" style="display: inline;">阅读 <%= @article.view_count %></div>
-  <%= render "mobile/likes/index" %>
-</div>
+<%= render "mobile/likes/index", material: @article, user: @user %>
 
 <!-- 分享朋友圈 -->
 <%= render "shared/share_pyq" %>
