@@ -60,6 +60,7 @@ class Mobile::WebsitesController < ActionController::Base
         @main_material = @website_menu.menuable
       elsif @website_menu.single_graphic? || @website_menu.text?
         @material = @website_menu.menuable if @website_menu.single_graphic?
+        likes_comments_partial(@website_menu, @user)
         return render 'detail'
       elsif @website_menu.url?
         redirect_to @website_menu.url

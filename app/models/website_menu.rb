@@ -20,6 +20,8 @@ class WebsiteMenu < ActiveRecord::Base
   has_many :children, class_name: 'WebsiteMenu', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent#, order: ["updated_at desc"]
   has_many :website_articles, dependent: :destroy
   has_one :website_menu_content, dependent: :destroy
+  has_many :likes, as: :likeable
+  has_many :comments, as: :commentable
 
   accepts_nested_attributes_for :website_menu_content
 
