@@ -65,15 +65,15 @@
 
         <li class="split-right">
           <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-            <span><%= current_user.try(:nickname) %> - <%= current_site.try(:name) %></span><i class="icon-caret-down"></i>
+            <span><%= current_user.try(:nickname) %> <%#= current_site.try(:name) %></span><i class="icon-caret-down"></i>
           </a>
           <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-            <li>
+<!--             <li>
               <a href="<%= sites_path %>">
                 <i class="icon-cog"></i>
                 切换店铺
               </a>
-            </li>
+            </li> -->
 <!--             <li>
               <a href="javascript:;">
                 <i class="icon-user"></i>
