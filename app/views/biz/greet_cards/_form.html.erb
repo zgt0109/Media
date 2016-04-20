@@ -107,7 +107,7 @@
 
   <div id="back_audio" class="p <%= f.object.has_audio? ? "":"hidden" %>">
     <span>贺卡背景音乐</span>
-    <%= f.select :material_id, current_user.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: f.object.try(:material_id) } %>
+    <%= f.select :material_id, current_site.materials.audios.select([:id,:audio]).map!{|m| [truncate_u(m.audio.try(:file).try(:filename)), m.id] }, { selected: f.object.try(:material_id) } %>
   </div>
 
   <br/>

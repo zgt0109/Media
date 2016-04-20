@@ -2,7 +2,7 @@ class Pro::HouseExpertsController < ApplicationController
   layout 'application_gm'
 
   def index
-    @house = current_user.house
+    @house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
 
     @total_house_experts = @house.house_experts.normal
@@ -47,9 +47,9 @@ class Pro::HouseExpertsController < ApplicationController
   end
 
   def update
-  	@house = current_user.house
+  	@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
-    @house_expert = current_user.house.house_experts.find(params[:id])
+    @house_expert = current_site.house.house_experts.find(params[:id])
 
     respond_to do |format|
       if @house_expert.update_attributes(params[:house_expert])
@@ -61,9 +61,9 @@ class Pro::HouseExpertsController < ApplicationController
   end
 
   def destroy
-  	@house = current_user.house
+  	@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
-    @house_expert = current_user.house.house_experts.find(params[:id])
+    @house_expert = current_site.house.house_experts.find(params[:id])
     respond_to do |format|
     	if @house_expert and @house_expert.delete!
     		format.html { redirect_to :back, notice: '删除成功' }

@@ -7,7 +7,7 @@ class ActivityConsumesController < ApplicationController
   end
 
   def show
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
     render layout: 'application_pop'
   end
 

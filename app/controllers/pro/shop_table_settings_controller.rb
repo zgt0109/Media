@@ -2,23 +2,23 @@
 class Pro::ShopTableSettingsController < Pro::ShopBaseController
 
   def index
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
     @shop_branch = @shop_branches.first
     return redirect_to shops_url, alert: '请先添加分店' unless @shop_branch
 
-    @search = current_user.shop_table_settings.search(params[:search])
+    @search = current_site.shop_table_settings.search(params[:search])
 
     if params[:search].blank?
       @search.shop_branch_id_eq = @shop_branch.id
     else
-      @shop_branch = current_user.shop_branches.where(id: @search.shop_branch_id_eq).first
+      @shop_branch = current_site.shop_branches.where(id: @search.shop_branch_id_eq).first
     end
 
     @shop_table_settings = @search.page(params[:page]).order("date desc")
   end
 
   def edit
-    @shop_branches = current_user.shop_branches.used
+    @shop_branches = current_site.shop_branches.used
     @shop_branch = @shop_branches.first
     @shop_table_setting = ShopTableSetting.find(params[:id])
     render layout: "application_pop"
@@ -26,7 +26,7 @@ class Pro::ShopTableSettingsController < Pro::ShopBaseController
 
   def show
     @shop_branch = ShopBranch.find(params[:id])
-    @shop_branches = current_user.shop_branches
+    @shop_branches = current_site.shop_branches
   end
 
   def update

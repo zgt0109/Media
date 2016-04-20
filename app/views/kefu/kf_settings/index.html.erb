@@ -40,8 +40,8 @@
 
               <%= form_tag kf_settings_path, method: 'PUT', class: "form col-xs-12", role: "form", id: "form-1" do -%>
                 <div class="form-group">
-                  客服开始指令：<%= text_field_tag :kefu_enter, current_user.wx_mp_user.try(:kefu_enter), class: 'inputSmall', placeholder: "00" %><br>
-                  客服结束指令：<%= text_field_tag :kefu_quit, current_user.wx_mp_user.try(:kefu_quit), class: 'inputSmall', placeholder: "退出" %>
+                  客服开始指令：<%= text_field_tag :kefu_enter, current_site.wx_mp_user.try(:kefu_enter), class: 'inputSmall', placeholder: "00" %><br>
+                  客服结束指令：<%= text_field_tag :kefu_quit, current_site.wx_mp_user.try(:kefu_quit), class: 'inputSmall', placeholder: "退出" %>
                 </div>
                 <div class="form-group">
                   <input type="submit" value="保存" class="btn btn-primary btn-sm">

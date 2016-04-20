@@ -27,7 +27,7 @@
             <div class="col-sm-3">
               <div class="input-group input-group-text">
                 <span class="input-group-addon">就诊医院：</span>
-                <%= f.select :shop_branch_id_eq, current_user.shop_branches.pluck(:name, :id), {include_blank: '请选择就诊医院'},class:"col-sm-12" %>
+                <%= f.select :shop_branch_id_eq, current_site.shop_branches.pluck(:name, :id), {include_blank: '请选择就诊医院'},class:"col-sm-12" %>
               </div>
             </div>
             <div class="col-sm-3">

@@ -4,7 +4,7 @@ class Pro::BookingOrdersController < Pro::BookingBaseController
   def index
     @search = @booking.booking_orders.latest.search(params[:search])
     @booking_orders = @search.page(params[:page])
-    #@booking_orders = current_user.booking_orders.page(params[:page]).order("created_at desc")
+    #@booking_orders = current_site.booking_orders.page(params[:page]).order("created_at desc")
   end
 
   def show

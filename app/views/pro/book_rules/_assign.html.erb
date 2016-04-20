@@ -10,11 +10,11 @@
       <div class="form-group">
         <label for="" class="">将一个门店的权限复制给其他门店：</label>
         <div class="clearfix">
-          <%= select_tag "shop_branch_id", options_for_select( current_user.shop.shop_branches.used.pluck(:name, :id), :selected=> book_rule.shop_branch.id ), {:class =>"col-xs-6",:onchange=>""} %>
+          <%= select_tag "shop_branch_id", options_for_select( current_site.shop.shop_branches.used.pluck(:name, :id), :selected=> book_rule.shop_branch.id ), {:class =>"col-xs-6",:onchange=>""} %>
         </div>
       </div>
       <div class="clearfix margin-top-10">
-        <% current_user.shop_branches.used.each do |branch| %>
+        <% current_site.shop_branches.used.each do |branch| %>
         <label class="inline-block">
         	<input type="checkbox" name="branch_ids[]" value="<%= branch.id %>" class="ace">
         	<span class="lbl"><%= branch.name %></span>

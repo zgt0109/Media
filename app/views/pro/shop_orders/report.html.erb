@@ -28,7 +28,7 @@
                 <div class="col-md-3 row margin-right-20">
                   <div class="input-group input-group-text">
                     <span class="input-group-addon">选择门店：</span>
-                    <%= f.select :shop_branch_id_eq, current_user.shop_branches.used.pluck(:name, :id), {include_blank: '全部'}, class: "col-xs-12" %>
+                    <%= f.select :shop_branch_id_eq, current_site.shop_branches.used.pluck(:name, :id), {include_blank: '全部'}, class: "col-xs-12" %>
                   </div>
                 </div>
                 <% end %>

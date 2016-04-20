@@ -2,7 +2,7 @@ class Pro::HouseCommentsController < ApplicationController
   layout "application_gm"
 
   def index
-  	@house = current_user.house
+  	@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
 
     @total_house_comments = @house.house_comments.where("status > ?", -1).order("created_at desc")
@@ -12,7 +12,7 @@ class Pro::HouseCommentsController < ApplicationController
   end
 
   def show
-		@house = current_user.house
+		@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
     @house_comment = @house.house_comments.find(params[:id])
   end
@@ -45,7 +45,7 @@ class Pro::HouseCommentsController < ApplicationController
   end
 
   def update
-  	@house = current_user.house
+  	@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
     @house_comment = @house.house_comments.find(params[:id])
 
@@ -59,7 +59,7 @@ class Pro::HouseCommentsController < ApplicationController
   end
 
   def destroy
-  	@house = current_user.house
+  	@house = current_site.house
   	if @house
     	@house_comment = @house.house_comments.find(params[:id])
     	@house_comment.destroy

@@ -41,28 +41,28 @@
                       <div class="col-md-3 no-padding">
                         <div class="input-group input-group-text">
                           <span class="input-group-addon">菜单编号:</span>
-                          <%= f.select :shop_menu_id_eq, current_user.shop.shop_menus.pluck(:menu_no, :id), {}, class: 'col-xs-12' %>
+                          <%= f.select :shop_menu_id_eq, current_site.shop.shop_menus.pluck(:menu_no, :id), {}, class: 'col-xs-12' %>
                         </div>
                       </div>
                       <% end %>
                       <div class="col-md-3 ">
                         <div class="input-group input-group-text">
                           <span class="input-group-addon">一级分类</span>
-                          <%= f.select :category_parent_id_eq, current_user.shop.shop_categories.root.where(shop_menu_id: @shop_menu_id_eq).pluck(:name, :id), {}, class: 'col-xs-12' %>
+                          <%= f.select :category_parent_id_eq, current_site.shop.shop_categories.root.where(shop_menu_id: @shop_menu_id_eq).pluck(:name, :id), {}, class: 'col-xs-12' %>
                         </div>
                       </div>
                  
                       <div class="col-md-3">
                         <div class="input-group input-group-text">
                           <span class="input-group-addon">二级分类</span>
-                          <%= f.select :shop_category_id_eq, current_user.shop.shop_categories.second_scope.where(parent_id: @category_parent_id_eq).pluck(:name, :id), {}, class: 'col-xs-12' %>
+                          <%= f.select :shop_category_id_eq, current_site.shop.shop_categories.second_scope.where(parent_id: @category_parent_id_eq).pluck(:name, :id), {}, class: 'col-xs-12' %>
                        
                         </div>
                       </div>
               
                       <div class="col-md-3 no-padding-right">
                         <button type="submit"  class="btn btn-primary btn-sm btn-filter margin-left-5">查询</button>
-                        <%= link_to "新增", new_shop_shop_product_url(shop_id: current_user.shop.id, industry_id: session[:current_industry_id]), class: "btn  btn-primary btn-sm pull-right" %>
+                        <%= link_to "新增", new_shop_shop_product_url(shop_id: current_site.shop.id, industry_id: session[:current_industry_id]), class: "btn  btn-primary btn-sm pull-right" %>
                       </div>
                       
                    <% end %>    
@@ -107,12 +107,12 @@
                             <td><%= shop_product.is_hot_name %></td>
                             <td><%= shop_product.sort %></td>
                             <td>
-                              <%= link_to "编辑", edit_shop_shop_product_url(current_user.shop, shop_product) %>
+                              <%= link_to "编辑", edit_shop_shop_product_url(current_site.shop, shop_product) %>
                               <%= link_to "删除", shop_product, method: :delete, confirm:"确认删除?" %>
                               <%= link_to "排序", sort_shop_product_path(shop_product), remote: true %>
                               <%= link_to "置顶", top_shop_product_path(shop_product), method: :post, confirm: "确定将该菜品在分类中置顶么？" %>
-                              <%= link_to "上架", change_shelve_status_shop_shop_products_url(current_user.shop, id: shop_product.id, shelve_status: 1), method: :post, confirm: "确定将该菜品上架么？" if shop_product.not_shelve? %>
-                              <%= link_to "下架", change_shelve_status_shop_shop_products_url(current_user.shop, id: shop_product.id, shelve_status: 0), method: :post, confirm: "确定将该菜品下架么？" if shop_product.shelve? %>
+                              <%= link_to "上架", change_shelve_status_shop_shop_products_url(current_site.shop, id: shop_product.id, shelve_status: 1), method: :post, confirm: "确定将该菜品上架么？" if shop_product.not_shelve? %>
+                              <%= link_to "下架", change_shelve_status_shop_shop_products_url(current_site.shop, id: shop_product.id, shelve_status: 0), method: :post, confirm: "确定将该菜品下架么？" if shop_product.shelve? %>
                             </td>
                           </tr>
                       <% end %>
@@ -173,10 +173,10 @@
       //     self.focus();
       //     return false;
       //   }else{
-      //     //current_user.shop
+      //     //current_site.shop
       //     $.ajax({
       //       type: "POST",
-      //       url: "/shops/<%= current_user.shop.id %>/shop_products/change_quantity?id=" + td.data('id') + "&quantity=" + quantity,
+      //       url: "/shops/<%= current_site.shop.id %>/shop_products/change_quantity?id=" + td.data('id') + "&quantity=" + quantity,
       //       success: function(data) {
       //         span.text(quantity ? quantity : '无限制');
       //         span.removeClass('hide');

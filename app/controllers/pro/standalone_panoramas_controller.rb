@@ -55,7 +55,7 @@ class Pro::StandalonePanoramasController < Pro::HousesBaseController
 
   private
   def find_house
-    @house = current_user.house
+    @house = current_site.house
   end
 
   def notify_standalone_panorama

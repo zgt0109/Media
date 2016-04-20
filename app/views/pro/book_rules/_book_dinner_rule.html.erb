@@ -3,7 +3,7 @@
   <div class="form-group">
     <label>门店：</label>
     <div class="clearfix">
-      <%= f.select :shop_branch_id, current_user.shop_branches.used.pluck(:name, :id),{}, class: "col-xs-3 js-branch-id" %>
+      <%= f.select :shop_branch_id, current_site.shop_branches.used.pluck(:name, :id),{}, class: "col-xs-3 js-branch-id" %>
 
       <%= link_to "复制规则", assign_book_rule_path(book_rule), remote: true, class: "btn btn-primary btn-sm margin-left-10" %>
 

@@ -3,8 +3,8 @@ class SystemMessagesController < ApplicationController
   before_filter :set_message, only: [:update, :show, :destroy, :read, :ajax_update]
 
   def index
-    current_user.update_all_system_messages
-    @search = current_user.system_messages.search(params[:search])
+    current_site.update_all_system_messages
+    @search = current_site.system_messages.search(params[:search])
     @messages = @search.page(params[:page])
   end
 
@@ -33,7 +33,7 @@ class SystemMessagesController < ApplicationController
   end
 
   def read_all
-    current_user.update_all_system_messages
+    current_site.update_all_system_messages
     redirect_to system_messages_path
   end
 
@@ -56,7 +56,7 @@ class SystemMessagesController < ApplicationController
   private
 
     def set_message
-      @message = current_user.system_messages.where(id: params[:id]).first
+      @message = current_site.system_messages.where(id: params[:id]).first
       redirect_to :back, alert: '提醒消息不存在或已删除' unless @message
     end
 

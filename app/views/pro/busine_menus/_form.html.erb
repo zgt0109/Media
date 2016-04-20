@@ -107,12 +107,12 @@
 
         <div class="p">
           <span>选择素材<em>*</em></span>
-          <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id), include_blank: true } %>
+          <%= f.select :single_material_id, current_site.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id), include_blank: true } %>
         </div>
 
         <div class="p">
           <span>选择素材<em>*</em></span>
-          <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id), include_blank: true } %>
+          <%= f.select :multiple_material_id, current_site.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @website_menu.try(:menuable_id), include_blank: true } %>
         </div>
 
 
@@ -157,7 +157,7 @@
           <% end %>
           <div class="p">
             <span>选择服务：<em>*</em></span>
-            <%= f.select :life_assistant_id, (current_user.assistants.circles.map{|m| [m.try(:name), m.try(:id)]}) , { selected: @website_menu.try(:menuable_id) }  %>
+            <%= f.select :life_assistant_id, (current_site.assistants.circles.map{|m| [m.try(:name), m.try(:id)]}) , { selected: @website_menu.try(:menuable_id) }  %>
           </div>
 
 

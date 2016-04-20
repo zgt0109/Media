@@ -1,5 +1,5 @@
 <% current_name = @hospital_job_title.name %>
-<% if current_user.hospital.hospital_job_titles.where(name: current_name).count > 0 %>
+<% if current_site.hospital.hospital_job_titles.where(name: current_name).count > 0 %>
 	showTip('warning', '已存在相同的职称，无法新增');
 <% elsif @hospital_job_title.save %>
   $("#title_lable").append("<%= escape_javascript(render('job_title', hospital_job_title: @hospital_job_title)) %>");

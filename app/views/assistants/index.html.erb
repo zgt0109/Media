@@ -52,7 +52,7 @@
                                 <label>
                                     <input name="switch-field-1" class="ace ace-switch ace-switch-7" type="checkbox"
                                     onclick="javascript:toggle_hidden_link(<%= assistant.id %>)"
-                                    <% if assistant.open_status current_user.id %>
+                                    <% if assistant.open_status current_site.id %>
                                     checked="checked"
                                     <% end %>
                                     >

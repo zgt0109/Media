@@ -11,7 +11,7 @@ class Pro::BusinessShopsController < WebsiteShared::WebsiteBaseController
 
   def new
     @business_shop = @website.business_shops.build
-    @business_shop.build_activity(site: current_user, wx_mp_user: current_user.wx_mp_user, activity_type_id: ActivityType::BUSINESS_SHOP, status: Activity::SETTED)
+    @business_shop.build_activity(site: current_site, wx_mp_user: current_site.wx_mp_user, activity_type_id: ActivityType::BUSINESS_SHOP, status: Activity::SETTED)
     render :form
   end
 

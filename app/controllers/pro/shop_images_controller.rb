@@ -2,7 +2,7 @@ class Pro::ShopImagesController < Pro::ShopBaseController
   # GET /shop_images
   # GET /shop_images.json
   def index
-    @shop_branch = current_user.shop_branches.find(params[:shop_branch_id])
+    @shop_branch = current_site.shop_branches.find(params[:shop_branch_id])
     @shop_images = @shop_branch.shop_images
 
     respond_to do |format|

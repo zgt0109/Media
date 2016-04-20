@@ -131,7 +131,7 @@ class Pro::ShopBranchPrintTemplatesController < Pro::ShopBaseController
   def export_print_data
     respond_to do |format|
       format.xls {
-        send_data(PrintOrder.export_excel(current_user.id),
+        send_data(PrintOrder.export_excel(current_site.id),
         :type => "text/excel;charset=utf-8; header=present", 
         :filename => Time.now.to_s(:db).to_s.gsub(/[\s|\t|\:]/,'_') + rand(99999).to_s + ".xls")
       }

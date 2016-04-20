@@ -18,7 +18,7 @@
 
       <p class="form-address">
         <span>选择专家发言</span>
-        <%= f.select :house_expert_id, options_for_select(current_user.house.house_experts.normal.map{|e| [truncate_u(e.name),e.id]}, @house_expert_comment.house_expert.try(:id)) %>
+        <%= f.select :house_expert_id, options_for_select(current_site.house.house_experts.normal.map{|e| [truncate_u(e.name),e.id]}, @house_expert_comment.house_expert.try(:id)) %>
       </p>
 
       <p class="search" style="margin-left: 83px;">

@@ -2,9 +2,9 @@
 class Pro::ShopBranchesController < Pro::ShopBaseController
 
   def index
-    @search = current_user.shop_branches.used.search(params[:search])
+    @search = current_site.shop_branches.used.search(params[:search])
     @shop_branches = @search.page(params[:page])
-    @shop = current_user.shop
+    @shop = current_site.shop
     return redirect_to shops_url, alert: '请先添加门店' unless @shop
     @shop_branch = ShopBranch.where(:id => params[:id]).first || ShopBranch.new(shop_id: @shop.id)
   end
@@ -19,11 +19,11 @@ class Pro::ShopBranchesController < Pro::ShopBaseController
   end
 
   def new
-    @shop_branch = current_user.shop.shop_branches.used.new
+    @shop_branch = current_site.shop.shop_branches.used.new
   end
 
   def edit
-    @shop_branch = current_user.shop.shop_branches.used.find(params[:id])
+    @shop_branch = current_site.shop.shop_branches.used.find(params[:id])
   end
 
   def update
@@ -61,6 +61,6 @@ class Pro::ShopBranchesController < Pro::ShopBaseController
 
   private
     def find_shop
-      @shop = current_user.shop
+      @shop = current_site.shop
     end
 end

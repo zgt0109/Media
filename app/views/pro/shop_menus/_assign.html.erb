@@ -11,11 +11,11 @@
      <!--    <label for="" class="col-sm-3 control-label">请选择一个菜单</label> -->
 
         <div>
-          <%= f.collection_select :id, current_user.shop.shop_menus , :id, :menu_no, {include_blank: "请选择菜单"} ,  {:class => ''} %>
+          <%= f.collection_select :id, current_site.shop.shop_menus , :id, :menu_no, {include_blank: "请选择菜单"} ,  {:class => ''} %>
         </div>
       </div>
       <div class="checkbox-inline no-padding-left checkbox-list">
-        <% current_user.shop_branches.used.includes(:shop_menu).each do |branch| %>
+        <% current_site.shop_branches.used.includes(:shop_menu).each do |branch| %>
         <label>
           <input value="<%= branch.id %>" name="shop_branch_ids[]" type="checkbox" class="ace" <%= branch.shop_menu_id == shop_menu.id ? "checked='checked'" : "" %>
           <%= branch.shop_menu && branch.shop_menu != shop_menu ? "disabled='true'" : "" %> >

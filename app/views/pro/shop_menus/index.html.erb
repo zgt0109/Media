@@ -45,7 +45,7 @@
         <div class="tab-content no-border padding-24">
           <div id="tab-3" class="tab-pane fade active in">
             <div class="col-sm-12 no-padding-right">
-              <% shop_menu = current_user.shop.shop_menus.new %>
+              <% shop_menu = current_site.shop.shop_menus.new %>
               <%= link_to "新增", shop_menu, method: :post, class: "btn btn-primary btn-sm pull-right", remote: true, confirm: "确定新增一个菜单么？" %>
             </div>
             <div class="clearfix"></div>

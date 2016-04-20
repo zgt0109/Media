@@ -3,7 +3,7 @@ class Pro::HouseExpertCommentsController < ApplicationController
   layout 'application_gm'
 
   def index
-    @house = current_user.house
+    @house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
 
     @total_house_expert_comments = @house.house_expert_comments.normal
@@ -38,9 +38,9 @@ class Pro::HouseExpertCommentsController < ApplicationController
   end
 
   def update
-  	@house = current_user.house
+  	@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
-    @house_expert_comment = current_user.house.house_expert_comments.find(params[:id])
+    @house_expert_comment = current_site.house.house_expert_comments.find(params[:id])
 
     respond_to do |format|
       if @house_expert_comment.update_attributes(params[:house_expert_comment])
@@ -52,9 +52,9 @@ class Pro::HouseExpertCommentsController < ApplicationController
   end
 
   def destroy
-  	@house = current_user.house
+  	@house = current_site.house
     return redirect_to houses_path, alert: '请先添加楼盘信息' unless @house
-    @house_expert_comment = current_user.house.house_expert_comments.normal.find(params[:id])
+    @house_expert_comment = current_site.house.house_expert_comments.normal.find(params[:id])
     respond_to do |format|
     	if @house_expert_comment and  @house_expert_comment.delete!
       	format.html { redirect_to :back, notice: '删除成功' }

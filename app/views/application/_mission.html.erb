@@ -1,4 +1,4 @@
-<% website = current_user.website || current_user.wx_mp_user.create_activity_for_website.website %>
+<% website = current_site.website || current_site.wx_mp_user.create_activity_for_website.website %>
 
 <% if params[:task_menu_id] && website_menu = WebsiteMenu.where(id: params[:task_menu_id]).first %>
   <% data_uri = Base64.encode64(website.rqrcode(menu_url(website_menu)).to_blob).gsub(/\n/, "") rescue nil %>

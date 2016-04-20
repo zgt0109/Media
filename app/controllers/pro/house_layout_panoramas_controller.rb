@@ -94,6 +94,6 @@ class Pro::HouseLayoutPanoramasController < Pro::HousesBaseController
 
   private
     def find_house
-      @house = current_user.house
+      @house = current_site.house
     end
 end

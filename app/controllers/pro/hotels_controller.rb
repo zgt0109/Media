@@ -1,10 +1,10 @@
 class Pro::HotelsController < Pro::HotelsBaseController
   skip_before_filter :check_hotel, only: [:index, :create]
   def index
-    @wx_mp_user = current_user.wx_mp_user
+    @wx_mp_user = current_site.wx_mp_user
     return redirect_to wx_mp_users_path, alert: '请先添加微信公共帐号' unless @wx_mp_user
 
-    @hotel = current_user.hotel || Hotel.create(site_id: current_site.id, name: '微酒店')
+    @hotel = current_site.hotel || Hotel.create(site_id: current_site.id, name: '微酒店')
     now = Time.now
     @hotel.activity = Activity.create(site_id: current_site.id, activity_type_id: ActivityType::HOTEL, activityable: @hotel, status: 1,ready_at: now, start_at: now, end_at: now+100.years ) unless @hotel.activity
   end
@@ -28,7 +28,7 @@ class Pro::HotelsController < Pro::HotelsBaseController
   end
 
   def update
-    @hotel = current_user.hotel
+    @hotel = current_site.hotel
     if @hotel.update_attributes(params[:hotel])
       redirect_to :back, notice: '保存成功'
     else

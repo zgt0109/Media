@@ -3,7 +3,7 @@ class Pro::HotelsBaseController < ApplicationController
 
   private
   def check_hotel
-    @hotel = current_user.hotel
+    @hotel = current_site.hotel
     return redirect_to hotels_path, notice: '请先设置门店信息' unless @hotel
   end
 

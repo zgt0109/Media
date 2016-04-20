@@ -32,7 +32,7 @@
                   <div class="col-md-3">
                     <div class="input-group input-group-text">
                       <span class="input-group-addon">选择门店：</span>
-                      <%= f.select :applicable_id_eq, current_user.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), class: "col-xs-12" %>
+                      <%= f.select :applicable_id_eq, current_site.shop_branches.used.pluck(:name, :id).unshift(['全部', '']), class: "col-xs-12" %>
                     </div>
                   </div>
                 <% end %>

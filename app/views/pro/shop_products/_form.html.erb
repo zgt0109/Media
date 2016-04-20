@@ -34,7 +34,7 @@
                 <div class="form-group">
                   <label>选择菜单</label>
                   <div class="clearfix">
-                    <%= f.select :shop_menu_id, current_user.shop.shop_menus.pluck(:menu_no, :id), {include_blank: '请选择菜单' }, class: "col-xs-6" %>
+                    <%= f.select :shop_menu_id, current_site.shop.shop_menus.pluck(:menu_no, :id), {include_blank: '请选择菜单' }, class: "col-xs-6" %>
                   </div>
                 </div>
                 <% end %>

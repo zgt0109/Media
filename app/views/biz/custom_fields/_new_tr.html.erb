@@ -16,7 +16,7 @@
       <label><%= check_box_tag 'is_required', @new_field.is_required, @new_field.is_required, data: {url: toggle_is_required_custom_field_path(@new_field)}, class: 'ace' %><span class="lbl">领卡时必填</span></label>
       <% if VipCard::LABELED_CUSTOM_FIELD_NAMES.include?(@new_field.name) %>
         <label>
-          <%= check_box_tag :label_custom_field, 1, current_user.vip_card.labeled_custom_field_ids.include?(@new_field.id), class: 'ace label_custom_field', data: {url: toggle_label_custom_field_vip_cards_path(custom_field_id: @new_field.id)} %>
+          <%= check_box_tag :label_custom_field, 1, current_site.vip_card.labeled_custom_field_ids.include?(@new_field.id), class: 'ace label_custom_field', data: {url: toggle_label_custom_field_vip_cards_path(custom_field_id: @new_field.id)} %>
           <span class="lbl">设为标签</span>
         </label>
       <% end %>

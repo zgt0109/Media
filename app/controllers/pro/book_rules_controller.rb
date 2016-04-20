@@ -2,12 +2,12 @@ class Pro::BookRulesController < Pro::ShopBaseController
   # before_filter :set_booking_order, only: [:show, :edit, :update, :destroy, :cancele, :complete]
 
   def index
-    if current_user.shop_branches.used.count == 0
+    if current_site.shop_branches.used.count == 0
       return redirect_to :back, alert: '请先添加门店'
     end 
     if params[:rule_type]
-      shop_branch_id = params[:shop_branch_id] ||= (current_shop_branch || current_user.shop_branches.used.first)
-      @shop_branch = current_user.shop_branches.used.find(shop_branch_id)
+      shop_branch_id = params[:shop_branch_id] ||= (current_shop_branch || current_site.shop_branches.used.first)
+      @shop_branch = current_site.shop_branches.used.find(shop_branch_id)
 
       @book_rule = case params[:rule_type]
         when '1' then @shop_branch.book_dinner_rule

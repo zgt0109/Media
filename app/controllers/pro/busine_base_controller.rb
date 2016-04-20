@@ -3,7 +3,7 @@ class Pro::BusineBaseController < ApplicationController
 
   private
   def require_website
-    @website = current_user.circle
+    @website = current_site.circle
     redirect_to business_path, notice: "请先设置微生活" unless @website
   end
 

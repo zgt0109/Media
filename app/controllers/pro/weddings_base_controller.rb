@@ -8,7 +8,7 @@ class Pro::WeddingsBaseController < ApplicationController
   end
 
   def require_wedding
-    redirect_to(weddings_path, alert: '请先填写婚礼基础信息') unless current_user.wedding
+    redirect_to(weddings_path, alert: '请先填写婚礼基础信息') unless current_site.wedding
   end
 
   def require_industry

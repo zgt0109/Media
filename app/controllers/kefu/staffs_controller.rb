@@ -3,7 +3,7 @@ module Kefu
     before_filter :load_staffs, only: [:index, :edit, :update, :destroy]
 
     def index
-      # @staffs = current_user.staffs
+      # @staffs = current_site.staffs
     end
 
     def new
@@ -13,8 +13,8 @@ module Kefu
     def create
       @staff = Kf::Staff.new(params[:kf_staff].merge({
         site_id: current_site.id,
-        wx_mp_user_id: current_user.wx_mp_user.id,
-        account_id: current_user.wx_mp_user.try(:kf_account).try(:id)
+        wx_mp_user_id: current_site.wx_mp_user.id,
+        account_id: current_site.wx_mp_user.try(:kf_account).try(:id)
       }))
 
       if @staff.save
@@ -68,7 +68,7 @@ module Kefu
     private
 
     def load_staffs
-      @staffs = current_user.wx_mp_user.kf_account.try(:staffs) || []
+      @staffs = current_site.wx_mp_user.kf_account.try(:staffs) || []
     end
 
   end

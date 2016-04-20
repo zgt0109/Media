@@ -55,14 +55,14 @@
 
       <div class="p form-address">
         <span>图文资源</span>
-        <%= f.select :single_material_id, current_user.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id), include_blank: true }, validate: true %>
+        <%= f.select :single_material_id, current_site.materials.root.single_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id), include_blank: true }, validate: true %>
         <em>*</em>
         <%= link_to "管理图文资源", materials_url, class: 'gl', target: '_blank' %>
       </div>
 
       <div class="p form-address">
         <span>图文资源</span>
-        <%= f.select :multiple_material_id, current_user.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id), include_blank: true }, validate: true %>
+        <%= f.select :multiple_material_id, current_site.materials.root.multiple_graphic.pluck(:title,:id).map!{|m| [truncate_u(m.first), m.last] }, { selected: @menu.try(:menuable_id), include_blank: true }, validate: true %>
         <em>*</em>
         <%= link_to "管理图文资源", materials_url, class: 'gl', target: '_blank' %>
       </div>

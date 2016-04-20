@@ -3,11 +3,11 @@ class WebsiteShared::WebsiteBaseController < ApplicationController
 
   private
     def set_life_website
-      @website = current_user.life
+      @website = current_site.life
     end
 
     def require_business_website
-      @website = current_user.circle
+      @website = current_site.circle
       redirect_to business_path, notice: "请先设置微生活" unless @website
     end
 

@@ -4,7 +4,7 @@ class Pro::WebsitesController < WebsiteShared::WebsitesController
 
   private
     def set_life_website
-      @website = current_user.life || current_user.wx_mp_user.create_life
+      @website = current_site.life || current_site.wx_mp_user.create_life
     end
     
     def require_industry

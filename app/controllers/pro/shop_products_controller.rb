@@ -2,9 +2,9 @@
 class Pro::ShopProductsController < Pro::ShopBaseController
 
   def index
-    @shop_branch = current_user.shop_branches.where(id: params[:shop_branch_id]).first || current_user.shop_branches.used.first
+    @shop_branch = current_site.shop_branches.where(id: params[:shop_branch_id]).first || current_site.shop_branches.used.first
     return redirect_to micro_shop_branches_url, alert: '请先添加分店' unless @shop_branch
-    if current_user.shop.shop_categories.count == 0
+    if current_site.shop.shop_categories.count == 0
       return redirect_to :back, notice: "请先添加分类"
     end
 
@@ -12,12 +12,12 @@ class Pro::ShopProductsController < Pro::ShopBaseController
     if params[:shop_menu_id]
       params[:search][:shop_menu_id_eq] = params[:shop_menu_id]
     else
-      if current_user.shop.shop_menus.count == 0
-        new_menu = current_user.shop.shop_menus.new
+      if current_site.shop.shop_menus.count == 0
+        new_menu = current_site.shop.shop_menus.new
         new_menu.save
         params[:search][:shop_menu_id_eq] = new_menu.id
       else
-        params[:search][:shop_menu_id_eq] ||= current_user.shop.shop_menus.first.id
+        params[:search][:shop_menu_id_eq] ||= current_site.shop.shop_menus.first.id
       end
     end
 
@@ -43,7 +43,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
     end
 
     conditions = params[:search_shelve_status].present? ? ['shelve_status = ?', params[:search_shelve_status]] : []
-    @search = current_user.shop.shop_products.where(conditions).order('sort asc').search(params[:search])
+    @search = current_site.shop.shop_products.where(conditions).order('sort asc').search(params[:search])
     @shop_products = @search.page(params[:page]).per(50)
   end
 
@@ -51,7 +51,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
     xlsfile = params[:file]
     if xlsfile
       begin
-        ShopProduct.import_from_excel(open(xlsfile), current_user)
+        ShopProduct.import_from_excel(open(xlsfile), current_site)
         redirect_to :back, notice: '上传成功.'
       rescue => error
         logger.error "import_excel error:#{error}"
@@ -86,19 +86,19 @@ class Pro::ShopProductsController < Pro::ShopBaseController
   end
 
   def new
-    @shop = current_user.shop
+    @shop = current_site.shop
     return redirect_to shops_url, alert: '请先添加门店' unless @shop
 
     @shop_product = @shop.shop_products.new
     @shop_product.shop_menu_id = current_shop_branch.shop_menu_id if current_shop_branch
 
-    sort = current_user.shop.shop_products.maximum("sort") || 0
+    sort = current_site.shop.shop_products.maximum("sort") || 0
     @shop_product.sort = sort + 1
   end
 
   def edit
     @shop_product = ShopProduct.find(params[:id])
-    @shop = current_user.shop
+    @shop = current_site.shop
     @shop_product.shop = @shop
     @shop_categories = @shop.shop_categories
   end
@@ -181,7 +181,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
 
   def root_categories
     menu_id = params[:menu_id]
-    @shop_categories = current_user.shop.shop_categories.root.where(:shop_menu_id => menu_id)
+    @shop_categories = current_site.shop.shop_categories.root.where(:shop_menu_id => menu_id)
     respond_to do |format|
       format.js
     end
@@ -189,7 +189,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
 
   def child_categories
     parent_id = params[:parent_id]
-    @shop_categories = current_user.shop.shop_categories.where(:parent_id => parent_id)
+    @shop_categories = current_site.shop.shop_categories.where(:parent_id => parent_id)
     respond_to do |format|
       format.js
     end

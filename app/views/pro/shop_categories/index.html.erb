@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="col-sm-12 <%= 'hide' if current_user.is_a?(SubAccount) %>">
-            <%= select_tag "shop_menu_id", options_from_collection_for_select(current_user.shop.shop_menus, "id", "menu_no"), prompt: "请选择菜单编号" %>
+            <%= select_tag "shop_menu_id", options_from_collection_for_select(current_site.shop.shop_menus, "id", "menu_no"), prompt: "请选择菜单编号" %>
           </div>
 
           <div class="col-sm-12">
@@ -61,7 +61,7 @@
               </div>
               <div class="widget-body">
                <div id="tree1" class="tree tree-selectable">
-                <%#= render :partial=> "sub_menu", :collection => current_user.shop.shop_categories.root.order(:sort), :as =>:sub_menu %>
+                <%#= render :partial=> "sub_menu", :collection => current_site.shop.shop_categories.root.order(:sort), :as =>:sub_menu %>
               </div>
             </div>
           </div>

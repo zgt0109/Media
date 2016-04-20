@@ -8,8 +8,8 @@ class Pro::BusinessController < WebsiteShared::WebsitesController
 
   private
     def set_website
-      @website = current_user.circle || current_user.wx_mp_user.create_circle
-      @website = current_user.wx_mp_user.create_circle unless @website.circle_activity
+      @website = current_site.circle || current_site.wx_mp_user.create_circle
+      @website = current_site.wx_mp_user.create_circle unless @website.circle_activity
     end
 
 end

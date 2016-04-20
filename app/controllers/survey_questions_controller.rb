@@ -53,7 +53,7 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def user_data
-    @search = current_user.activity_users.survey_finish.joins(:activity).includes(:activity_feedback).where("activities.activity_type_id = 15 AND activities.status > -2").order('activity_users.id DESC').search(params[:search])
+    @search = current_site.activity_users.survey_finish.joins(:activity).includes(:activity_feedback).where("activities.activity_type_id = 15 AND activities.status > -2").order('activity_users.id DESC').search(params[:search])
     @activity_users = @search.page(params[:page])
     @total_count = @search.count
 

@@ -36,7 +36,7 @@
     $(function(){
         system_message_detail();
         var faye = new Faye.Client('http://<%= FAYE_HOST %>/faye');
-        faye.subscribe("/system_messages/change/<%= current_user.id %>", function(data){
+        faye.subscribe("/system_messages/change/<%= current_site.id %>", function(data){
             var ul = $('.system_message_ul'),
                 ul_count = $('.system_message_ul .system_message_count'),
                 ui_li = $('.system_message_ul .system_message_ui_li'),

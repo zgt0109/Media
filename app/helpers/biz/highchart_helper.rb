@@ -169,9 +169,9 @@ module Biz::HighchartHelper
   end
 
   #消费记录
-  def chart_transaction_data_for_vip_record(current_user,date,today)
-    total_money = current_user.vip_user_transactions.by_pay.send(date, today)
-    hash_money,start_time_money,count_money = get_date_for_vip_record(current_user,date,today,total_money)
+  def chart_transaction_data_for_vip_record(current_site,date,today)
+    total_money = current_site.vip_user_transactions.by_pay.send(date, today)
+    hash_money,start_time_money,count_money = get_date_for_vip_record(current_site,date,today,total_money)
     categories_money = []
     data_money = []
     hash_money.each do |key,value|
@@ -179,8 +179,8 @@ module Biz::HighchartHelper
       data_money << value
     end
 
-    total_point = current_user.point_transactions.send(date, today)
-    hash_point,start_time_point,count_point = get_date_for_vip_record(current_user,date,today,total_point)
+    total_point = current_site.point_transactions.send(date, today)
+    hash_point,start_time_point,count_point = get_date_for_vip_record(current_site,date,today,total_point)
     data_point = []
     hash_point.each do |key,value|
       data_point << value
@@ -189,12 +189,12 @@ module Biz::HighchartHelper
     [categories_money, data_money, data_point, start_time_money, count_money]
   end
 
-  def get_date_for_vip_record(current_user,date,today,total)
+  def get_date_for_vip_record(current_site,date,today,total)
     h = {}
     transactions = []
     hash = {}
     start_time = ""
-    # total = current_user.vip_users.normal_and_freeze.send(date, today)
+    # total = current_site.vip_users.normal_and_freeze.send(date, today)
     if date == "one_weeks"
       transactions = total.select('date(created_at) as created_date, count(*) as count').group('date(created_at)').order("created_at asc")
       start_time = today - 6.day
@@ -271,8 +271,8 @@ module Biz::HighchartHelper
   end
 
   #会员卡统计
-  def chart_data_for_vip_card(current_user,date,today)
-    hash,start_time,count = get_date_for_vip_card(current_user,date,today)
+  def chart_data_for_vip_card(current_site,date,today)
+    hash,start_time,count = get_date_for_vip_card(current_site,date,today)
     categories = []
     data = []
     hash.each do |key,value|
@@ -282,12 +282,12 @@ module Biz::HighchartHelper
     [categories, data, start_time, count]
   end
 
-  def get_date_for_vip_card(current_user,date,today)
+  def get_date_for_vip_card(current_site,date,today)
     h = {}
     vip_users = []
     hash = {}
     start_time = ""
-    total = current_user.vip_users.normal_and_freeze.send(date, today)
+    total = current_site.vip_users.normal_and_freeze.send(date, today)
     if date == "one_weeks"
       vip_users = total.select('date(created_at) as created_date, count(*) as count').group('date(created_at)').order("created_at asc")
       start_time = today - 6.day
