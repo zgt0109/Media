@@ -1,4 +1,5 @@
 class SitesController < ApplicationController
+  before_filter :check_role
   before_filter :load_site, only: [:show, :update]
 
   def index
@@ -92,5 +93,9 @@ class SitesController < ApplicationController
   private
     def load_site
       @site = current_user.sites.find(params[:id])
+    end
+
+    def check_role
+      deny_access unless admin?
     end
 end

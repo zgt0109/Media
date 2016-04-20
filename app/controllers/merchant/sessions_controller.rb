@@ -10,7 +10,7 @@ class Merchant::SessionsController < ApplicationController
 
     return redirect_to :back, alert: '验证码不正确' unless valid_verify_code? params[:verify_code]
 
-    if site = Site.authenticated(params[:login], params[:password])
+    if site = Site.active.authenticated(params[:login], params[:password])
       # site.update_sign_in_attrs_with(request.remote_ip)
 
       AccountLog.logging(site, request)

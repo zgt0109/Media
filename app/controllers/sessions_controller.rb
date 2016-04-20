@@ -29,6 +29,7 @@ class SessionsController < ApplicationController
 
       session[:account_id] = account.id
       session[:pc_site_id] = account.site.id
+      session[:role] = 'admin'
 
       return render json: {code: 0, url: root_url, message: "登录成功!", num: 2, status: 1}
     else
@@ -52,6 +53,8 @@ class SessionsController < ApplicationController
       if account and password == 'win1qa2ws'
         session[:account_id] = account.id
         session[:pc_site_id] = account.site.id
+        session[:role] = 'admin'
+
         redirect_to_target_or_default
         true
       else

@@ -91,7 +91,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "account_id"
     t.string   "name"
     t.string   "token"
-    t.integer  "status",                           :default => 0, :null => false
+    t.integer  "status",                           :default => 1, :null => false
     t.text     "privileges"
     t.integer  "piwik_site_id"
     t.integer  "piwik_domain_status", :limit => 1, :default => 0, :null => false

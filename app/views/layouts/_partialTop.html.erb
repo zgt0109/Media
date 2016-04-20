@@ -68,12 +68,14 @@
             <span><%= current_user.try(:nickname) %> <%#= current_site.try(:name) %></span><i class="icon-caret-down"></i>
           </a>
           <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-<!--             <li>
+            <% if admin? %>
+            <li>
               <a href="<%= sites_path %>">
                 <i class="icon-cog"></i>
-                切换店铺
+                切换站点
               </a>
-            </li> -->
+            </li>
+            <% end %>
 <!--             <li>
               <a href="javascript:;">
                 <i class="icon-user"></i>

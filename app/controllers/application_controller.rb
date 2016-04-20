@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   # before_filter :require_wx_mp_user
 
   helper_method :current_user, :services_config, :current_shop_account, :current_sub_account, :current_shop_branch
-  helper_method :current_site, :mobile_subdomain, :mobile_domain
+  helper_method :current_site, :mobile_subdomain, :mobile_domain, :admin?
 
   private
 
@@ -125,6 +125,10 @@ class ApplicationController < ActionController::Base
   def deny_access
     flash[:alert] = "您没有权限进行此操作！如有问题请与技术部联系."
     redirect_to_target_or_default
+  end
+
+  def admin?
+    session[:role] == 'admin'
   end
 
   def require_wx_mp_user
