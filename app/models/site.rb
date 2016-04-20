@@ -29,7 +29,6 @@ class Site < ActiveRecord::Base
   has_many :site_copyrights
 
   has_one :user_password
-  has_one :shop, inverse_of: :site
   # has_one :wx_mp_user, inverse_of: :site
   # has_many  :wx_users, through: :wx_mp_user
 
@@ -74,7 +73,7 @@ class Site < ActiveRecord::Base
   has_many :activity_users
   has_many :questions
   has_many :answers
-  has_one  :shop
+  has_one  :shop, inverse_of: :site
   has_many :shop_branches
   has_many :shop_branch_sub_accounts, through: :shop_branches, source: :sub_account, conditions: "shop_branches.status = #{ShopBranch::USED}"
   has_many :shop_orders
@@ -873,33 +872,6 @@ START
     %w(教授 博士 导师 主任).each do |job_title|
       HospitalJobTitle.create!(name: job_title , hospital_id: hospital.id, description: job_title, site_id: full_attrs[:site_id])
     end
-  end
-
-  def create_shop
-    attrs = { site_id: id }
-
-    ec_shop = EcShop.where(attrs).first_or_create(name: '微电商')
-
-    now = Time.now
-    attrs = {
-      site_id: id,
-        activity_type_id: ActivityType::EC
-    }
-    full_attrs = {
-        activityable_id: ec_shop.id,
-        activityable_type: 'EcShop',
-        status:   Activity::SETTED,
-        name:     ec_shop.name,
-        keyword:  ec_shop.name,
-        description:  ec_shop.name,
-        pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
-        ready_at: now,
-        start_at: now,
-        end_at:   now + 100.years
-    }.merge! attrs
-    Activity.where(attrs).first || Activity.create!(full_attrs)
-
-    ec_shop
   end
 
   def create_booking
