@@ -279,4 +279,10 @@ Wp::Application.routes.draw do
     end
   end
 
+  namespace :merchant do
+    resources :sessions, only: :create
+    match 'login'  => 'sessions#new',     as: :login
+    match 'secret' => 'sessions#secret'
+  end
+
 end

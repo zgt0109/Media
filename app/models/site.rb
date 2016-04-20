@@ -3,6 +3,8 @@ class Site < ActiveRecord::Base
   include Concerns::Brokerages
   include Concerns::RedPackets
 
+  has_secure_password
+
   store :metadata, accessors: [:use_share_wx_mp_user]
 
   SHARE_PHOTO = [
@@ -170,6 +172,10 @@ class Site < ActiveRecord::Base
 
   def self.current=(site)
     Thread.current[:site] = site
+  end
+
+  def self.authenticated(login, password)
+    where("lower(login) LIKE ?", login.to_s.downcase).first.try(:authenticate, password)
   end
 
   def wx_mp_user

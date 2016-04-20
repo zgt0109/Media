@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10"> <![endif]-->
+<!--[if IE 10]>         <html class="no-js ie10"> <![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <% if content_for?(:head) %>
+      <%= yield :head %>
+    <% else %>
+      <title>登录_商户管理系统</title>
+    <% end %>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/com/css/normalize.css">
+    <link rel="stylesheet" href="/com/css/main.css">
+    <link rel="stylesheet" href="/com/css/anythingslider.css">
+    <%= javascript_include_tag "com" %>
+    <script src="/com/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body class="bg-blue login-body">
+  <!--[if lt IE 7]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div class="login-main">
+    <div class="mod-form form-login">
+      <div class="clearfix">
+        <p class="logo1">
+          <a href="javascript:history.go(0);"></a>
+        </p>
+      </div>
+      <%= form_tag merchant_sessions_path, :class => "form-hor clearfix" do %>
+        <div class="form-li">
+          <div class="li-lable">账号</div>
+          <div class="li-input">
+            <%= text_field_tag :login, params[:login] , class: "input", id: "account-place", placeholder: '请输入账号' %>
+          </div>
+        </div>
+        <div class="form-li">
+          <div class="li-lable">密码</div>
+          <div class="li-input">
+            <%= password_field_tag :password, nil, class: "input", id: "password-place", placeholder: '请输入密码' %>
+          </div>
+        </div>
+        <div class="form-li">
+          <div class="li-lable">验证码</div>
+          <div class="li-input">
+            <div class="input input-verify">
+              <%= text_field_tag "verify_code", nil, class: "", id: "check-place", placeholder: '请输入验证码' %>
+              <img id="image_code" src="/verify_code?<%= rand %>" style=""><a id="change_verify_code" href="javascript:void(0)">换一张</a>
+            </div>
+          </div>
+        </div>
+        <div class="login-tips">
+        </div>
+        <div class="form-li">
+          <div class="li-lable w100">
+            <label class='checkbox'>
+              <input type="checkbox"/>自动登录
+            </label>
+          </div>
+          <div class="li-input li-login">
+            <%= submit_tag "登录", class: "btn btn-green btn-submit", disable_with: "提交中..."%>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="bg-form">
+    <span>微信营销解决方案领导品牌</span>
+    <small>Micro-channel marketing solutions for leading brands</small>
+  </div>
+
+  <script src="/com/js/vendor/jquery.anythingslider.min.js"></script>
+  <script src="/com/js/vendor/affix.js"></script>
+  <script src="/com/js/vendor/scrollspy.js"></script>
+  <script src="/com/js/plugins.js"></script>
+  <script src="/com/js/main.js"></script>
+  <script>
+    $("#change_verify_code").click(function() {
+      $image_code = $('#image_code');
+      $image_code.attr("src", $image_code.attr("src") + Math.random());
+      $('#verify_code').val('').focus();
+      return false;
+    });
+  </script>
+
+  <% if flash[:notice] || flash[:alert] %>
+    <script type="text/javascript">
+      <% if flash[:notice] %>
+        alert("<%= flash[:notice] %>");
+      <% elsif flash[:alert] %>
+        alert("<%= flash[:alert] %>");
+      <% end %>
+      <% flash.clear %>
+    </script>
+  <% end %>
+</body>
+</html>

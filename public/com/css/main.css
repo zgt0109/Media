@@ -277,7 +277,7 @@ input[type=submit]{border:0;}
 .form-login .li-lable.w100{width:100px;}
 .form-login .form-li .input{width:230px;}
 .form-login .form-li .input-verify{padding-right:10px;width:240px;}
-.form-login .form-li .input-verify input{width:80px;}
+.form-login .form-li .input-verify input{width:100px;}
 .login-tips{padding-left:60px;float:left;margin:-10px 0;width:290px;}
 .mod-form .logo{width:80%;height:30px;padding:15px 20px;margin:0; position: relative;}
 .mod-form .logo span.ints{ position: absolute; top: 27px; left: 170px; color: #333;}
