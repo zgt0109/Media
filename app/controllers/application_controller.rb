@@ -101,6 +101,7 @@ class ApplicationController < ActionController::Base
   def clear_sign_in_session
     session[:account_id] = nil
     session[:sub_account_id] = nil
+    session[:role] = nil
   end
 
   def add_login_wrong_count
