@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
   def current_site
     return unless current_user
     # @current_site ||= Site.find_by_id(session[:site_id]) || current_user.sites.create
-    @current_site ||= current_user.sites.where(id: session[:pc_site_id]).first || current_user.sites.create(name: current_user.nickname)
+    @current_site ||= current_user.sites.where(id: session[:pc_site_id]).first || current_user.sites.create(name: current_user.nickname, password: 'mUc3m00RsqyRf', password_confirmation: 'mUc3m00RsqyRf')
     # @current_site ||= current_user.site || current_user.sites.create(name: current_user.nickname)
     # session[:pc_site_id] = @current_site.id
     # @current_site

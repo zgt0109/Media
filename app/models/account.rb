@@ -230,7 +230,7 @@ class Account < ActiveRecord::Base
   private
 
   def init_site
-    sites.create(name: nickname)
+    sites.create(name: nickname, password: 'mUc3m00RsqyRf', password_confirmation: 'mUc3m00RsqyRf')
   end
 
   # TODO
