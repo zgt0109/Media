@@ -606,9 +606,8 @@ module ApplicationHelper
     return "/busine_articles/#{website_article.id}/toggle_recommend" if website_article.website.micro_circle?
   end
 
-
   def quick_link_options
-    domain_url = "http://#{current_site}.#{Settings.mhostname}"
+    domain_url = "http://#{current_site.id}.#{Settings.mhostname}"
     {
       '请选择'     => '',
       "积分换礼品"  => "#{domain_url}/app/vips/gifts?site_id=#{current_site.id}",
