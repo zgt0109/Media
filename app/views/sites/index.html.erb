@@ -12,6 +12,34 @@
     <div class="row">
 
       <div class="col-sm-12">
+        <div class="alert alert-block alert-info">
+          <strong class="pull-left">提示：</strong>
+          <ul class="vwebsiteHeadAlert">
+            <li>1、请根据你的线下实体门店新增你的站点信息；</li>
+            <li>2、我们会为这里的站点生成一个登录地址，通过此地址可登录到每个站点后台管理系统。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-md-5 row">
+          <div class="input-group input-group-sm input-group-text">
+          <input type="text" class="col-xs-12" value="<%= merchant_login %>">
+            <span class="input-group-addon">
+              <a href="javascript:void(0);" class="btn btn-primary btn-sm btn-filter" id="J-copy" data-clipboard-text="<%= merchant_login %>">复制地址</a>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group input-group-sm input-group-text">
+            <span class="input-group-addon">
+              <a href="<%= merchant_login %>" class="btn btn-success btn-sm btn-filter margin-left-10" target="_blank">登录站点管理系统</a>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
         <div class="col-md-3 pull-right no-padding">
           <% if current_user.limit_sites_count > current_user.sites.count %>
             <a href="javascript:;" data-toggle="modals" data-height="380" data-iframe="<%= new_site_path %>" data-title="站点信息" class='btn btn-primary btn-sm pull-right'>新增</a>
