@@ -138,7 +138,8 @@ class Payment < ActiveRecord::Base
     {
       group_order: '微团购',
       vip_recharge: '会员充值',
-      shop_order: '微餐饮',
+      shop_order: '微餐饮/外卖',
+      donation_order: '微公益',
       ec: '微电商',
       hotel: '微酒店',
     }
