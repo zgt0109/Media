@@ -3662,6 +3662,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "status",                  :default => 0, :null => false
     t.text     "remark"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "sms_orders", ["account_id"], :name => "index_sms_orders_on_account_id"
