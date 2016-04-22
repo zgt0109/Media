@@ -158,7 +158,7 @@
 </style>
 
 <!-- 左右滚动js -->
-<%= javascript_include_tag "lib/iscroll" %>
+<%= javascript_include_tag "mobile/lib/iscroll" %>
 
 <script type="text/javascript">
   var category_data = <%= raw JSON.pretty_generate(@website.website_article_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>,
