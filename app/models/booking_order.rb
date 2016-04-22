@@ -12,7 +12,7 @@ class BookingOrder < ActiveRecord::Base
   scope :latest, -> { order('created_at DESC') }
 
   before_create :add_default_attrs, :generate_order_no
-  after_create :send_message
+  after_create :update_user_address, :send_message
 
   def complete!
     update_attributes(status: COMPLETED, completed_at: Time.now)
@@ -22,7 +22,7 @@ class BookingOrder < ActiveRecord::Base
     update_attributes(status: CANCELED, canceled_at: Time.now)
   end
 
-  # private
+  private
 
   def add_default_attrs
     if booking_item
@@ -46,6 +46,15 @@ class BookingOrder < ActiveRecord::Base
     sms_options = { mobiles: booking.notify_merchant_mobiles, template_code: 'SMS_7260929', params: { name: [booking_item.try(:name), username].compact.join(', '), tel: tel, total_amount: total_amount, address: address, remark: description } }
 
     booking.site.account.send_message(sms_options, false, options)
+  end
+
+  def update_user_address
+    if self.user
+      self.user.name = self.username unless self.user.name
+      self.user.address = self.address# unless self.user.address
+      self.user.mobile = self.tel unless self.user.mobile
+      self.user.save
+    end
   end
 
 end

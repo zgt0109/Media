@@ -21,6 +21,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
       booking_item_id: params[:booking_item_id],
       username: @wx_user.try(:nickname),
       tel: @user.try(:mobile),
+      address: @user.try(:address),
       qty: 1,
       booking_id: @site.booking.id
     }
