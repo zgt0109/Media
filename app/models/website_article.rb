@@ -57,7 +57,7 @@ class WebsiteArticle < ActiveRecord::Base
 
   def self.categorized(category = nil)
     if category
-      joins(:website_article_category).where("website_article_categories.id" => category.self_and_descendants.to_a.map(&:id)).uniq
+      joins(:website_article_category).where("website_article_categories.id" => category.self_and_descendants.to_a.map(&:id)).uniq.readonly(false)
     else
       includes(:website_article_category)
     end
