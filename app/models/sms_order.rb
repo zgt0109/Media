@@ -104,8 +104,9 @@ class SmsOrder < ActiveRecord::Base
         payment = Payment.setup({
           payment_type_id: 10006,
           account_id: account_id,
-          customer_id: account_id,
-          customer_type: 'Account',
+          account_id: site_id,
+          customer_id: site_id,
+          customer_type: 'Site',
           paymentable_id: id,
           paymentable_type: 'SmsOrder',
           out_trade_no: order_no,
@@ -113,7 +114,7 @@ class SmsOrder < ActiveRecord::Base
           subject: "充值 #{order_no}",
           body: "充值 #{order_no}",
           source: 'sms_order'
-          })
+        })
       end
 
       payment

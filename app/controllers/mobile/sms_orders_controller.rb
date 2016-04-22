@@ -57,7 +57,7 @@ class Mobile::SmsOrdersController < Mobile::BaseController
   end
 
   def payment_request
-    @site = Account.where(id: params[:site_id]).first
+    @site = Site.where(id: params[:site_id]).first
     return render json: {errcode: 001, errmsg: "site not found"} unless @site
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
@@ -67,6 +67,7 @@ class Mobile::SmsOrdersController < Mobile::BaseController
     end
     @payment = Payment.setup({
       account_id: @site.account_id,
+      site_id: @site.id,
       payment_type_id: params[:payment_type_id],
       customer_id: params[:customer_id],
       customer_type: params[:customer_type],

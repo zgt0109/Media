@@ -93,13 +93,13 @@ class PaymentSettingsController < ApplicationController
       @payment_settings = current_site.payment_settings
       @payment_settings = [
         @payment_settings.weixinpay.first || @payment_settings.new(payment_type_id: 10004),
-        @payment_settings.wxpay.first || @payment_settings.new(payment_type_id: 10001),
+        # @payment_settings.wxpay.first || @payment_settings.new(payment_type_id: 10001),
         @payment_settings.yeepay.first || @payment_settings.new(payment_type_id: 10003),
-        @payment_settings.alipay.first || @payment_settings.new(payment_type_id: 10006),
+        # @payment_settings.alipay.first || @payment_settings.new(payment_type_id: 10006),
         # @payment_settings.tenpay.first || @payment_settings.new(payment_type_id: 10002),
-        @payment_settings.tenpay.first,
-        @payment_settings.proxy_yeepay.first,
-        @payment_settings.proxy_alipay.first
+        # @payment_settings.tenpay.first,
+        @payment_settings.proxy_yeepay.first
+        # @payment_settings.proxy_alipay.first
       ].compact
     end
 

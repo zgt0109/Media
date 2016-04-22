@@ -68,7 +68,7 @@ class Payment::Yeepay < Payment::Base
 
     uri = crypto.yeepay_uri(YeepaySetting.api_path("pay_quest"))
     uri.query = data.to_param
-      
+
     SiteLog::Payment.logger.error "*********************yeepay request uri: #{uri}"
 
     uri.to_s
@@ -81,5 +81,5 @@ class Payment::Yeepay < Payment::Base
     # API_Merchant_Base_Url = 'https://ok.yeepay.com/merchant/';
     # https://ok.yeepay.com/payapi/mobile/pay/bankcard/debit/request
   end
-  
+
 end

@@ -2,12 +2,6 @@ class Payment::YeepayController < ApplicationController
   skip_before_filter *ADMIN_FILTERS
   skip_before_filter :verify_authenticity_token, only: [:pay, :callback, :notify]
 
-  def pay
-  end
-
-  def new
-  end
-
   def callback
     merchantaccount = params[:merchantaccount]
     SiteLog::Payment.logger.error "yeepay callback received: #{params.inspect}"
@@ -40,4 +34,5 @@ class Payment::YeepayController < ApplicationController
   def notify
     render json: {result: "success"}
   end
+
 end

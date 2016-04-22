@@ -90,6 +90,7 @@ class WxpayController < ApplicationController
     payment = Payment.setup({
       payment_type_id: 10001,
       account_id: @account.id,
+      site_id: @order.site_id,
       customer_id: @order.user_id,
       customer_type: 'User',
       paymentable_id: @order.id,

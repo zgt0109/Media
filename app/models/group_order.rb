@@ -59,6 +59,7 @@ class GroupOrder < ActiveRecord::Base
     _order_params = {
       payment_type_id: payment_type_id,
       account_id: site.account_id,
+      site_id: site_id,
       customer_id: user_id,
       customer_type: 'User',
       paymentable_id: id,

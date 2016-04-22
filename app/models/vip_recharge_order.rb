@@ -36,6 +36,7 @@ class VipRechargeOrder < ActiveRecord::Base
       payment ||= Payment.setup({
         payment_type_id: 10006,
         account_id: site.account_id,
+        site_id: site.id,
         customer_id: vip_user_id,
         customer_type: 'VipUser',
         open_id: vip_user.user.wx_user.try(:openid),
@@ -45,7 +46,7 @@ class VipRechargeOrder < ActiveRecord::Base
         amount: pay_amount,
         subject: "会员卡#{pay_type_name}充值 #{order_no} #{amount}",
         source: 'vip_recharge'
-        })
+      })
     end
     payment
   end
@@ -55,6 +56,7 @@ class VipRechargeOrder < ActiveRecord::Base
     _order_params = {
       payment_type_id: wxpayv2? ? 10001 : 10004,
       account_id: site.account_id,
+      site_id: site_id,
       customer_id: vip_user_id,
       customer_type: 'VipUser',
       open_id: vip_user.user.wx_user.try(:openid),

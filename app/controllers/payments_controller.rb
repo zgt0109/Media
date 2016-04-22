@@ -92,6 +92,7 @@ class PaymentsController < ApplicationController
 
     @payment ||= Payment.setup({
       account_id: @account.id,
+      site_id: params[:site_id],
       payment_type_id: params[:payment_type_id],
       customer_id: params[:customer_id],
       customer_type: params[:customer_type],
