@@ -212,7 +212,7 @@ module ActivitiesHelper
   end
 
   def proxy_payments_path?
-     pay_accounts_path? || pay_withdraws_path?  || pay_transactions_path? || balance_pay_transactions_path?
+    pay_accounts_path? || pay_withdraws_path?  || pay_transactions_path? || balance_pay_transactions_path?
   end
 
   def apply_pay_withdraws_path?
@@ -224,11 +224,11 @@ module ActivitiesHelper
   end
 
   def pay_accounts_path?
-    return true if controller_name =~ /pay_accounts/
+    return true if controller_path == "pay/accounts"
   end
 
   def pay_withdraws_path?
-    return true if controller_name =~ /pay_withdraws/
+    return true if controller_path == "pay/withdraws"
   end
 
   def pay_transactions_path?

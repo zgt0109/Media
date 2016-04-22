@@ -1,5 +1,6 @@
 class PayAccount < ActiveRecord::Base
   belongs_to :account
+  belongs_to :site
   belongs_to :city
   belongs_to :province
   has_many :pay_withdraws
@@ -8,14 +9,14 @@ class PayAccount < ActiveRecord::Base
   enum_attr :status, :in => [
     ['progressing',  -3, '申请中'],
     ['pending',  0, '待审核'],
-    ['normal',    1, '开通'],
+    ['normal',   1, '开通'],
     ['freeze',   -1, '已冻结'],
-    ['denied',    -2, '未通过']
+    ['denied',   -2, '未通过']
   ]
 
   attr_accessor :step1, :step2, :step3
 
-  validates :account_id, :company_name, :business_lisence, :business_address, :business_affilicated_to, :business_scope, :organization_code,
+  validates :account_id, :site_id, :company_name, :business_lisence, :business_address, :business_affilicated_to, :business_scope, :organization_code,
             :business_lisence_pic_key, presence: true, if: :step1
   validates :contact, :identity_type, :identity_number, :email, :identity_avaliable_to, :identity_pic_key, :tel, presence: true, if: :step2
   validates  :bank_name, :bank_account, :bank_branch, :username, :province_id, :city_id, presence: true, if: :step3

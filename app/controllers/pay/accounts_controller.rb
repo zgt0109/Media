@@ -1,19 +1,22 @@
 class Pay::AccountsController < Pay::BaseController
+
+  def index
+    if @pay_account.blank? || @pay_account.progressing?
+      redirect_to apply_pay_accounts_path
+    end
+  end
+
   def create
     return redirect_to identity_pay_accounts_path if @pay_account.present?
     @pay_account = PayAccount.new(params[:pay_account])
     @pay_account.status = -3
     @pay_account.account_id = current_user.id
+    @pay_account.site_id = current_site.id
+
     if @pay_account.save
       redirect_to identity_pay_accounts_path
     else
       render_with_alert :apply, "保存失败: #{@pay_account.errors.full_messages.join('，')}"
-    end
-  end
-
-  def index
-    if @pay_account.blank? || @pay_account.progressing?
-      redirect_to apply_pay_accounts_path
     end
   end
 
@@ -45,8 +48,9 @@ class Pay::AccountsController < Pay::BaseController
   end
 
   private
-    def fetch_pay_account
-      @pay_account = current_user.pay_account
-    end
+
+  def fetch_pay_account
+    @pay_account = current_site.pay_account
+  end
 
 end

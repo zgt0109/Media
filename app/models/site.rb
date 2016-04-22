@@ -136,7 +136,10 @@ class Site < ActiveRecord::Base
   has_many :share_photo_likes
   has_many :share_photos
   has_one  :share_photo_setting
+
   has_many :payment_settings
+  has_many :payments
+  has_one :pay_account
 
   has_one :car_brand, dependent: :destroy
   has_many :car_bespeaks, dependent: :destroy
@@ -160,8 +163,6 @@ class Site < ActiveRecord::Base
   has_many :likes, as: :likeable
 
   accepts_nested_attributes_for :car_activity_notices, :wx_plot, :system_message_settings
-
-  has_many :payments#, as: :customer
 
   has_many :panoramagrams
 

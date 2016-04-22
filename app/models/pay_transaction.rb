@@ -1,5 +1,4 @@
 class PayTransaction < ActiveRecord::Base
-  belongs_to :account
   belongs_to :pay_account
   belongs_to :transactionable, polymorphic: true
 

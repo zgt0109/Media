@@ -9,7 +9,7 @@ class Pay::BaseController < ApplicationController
   private
 
   def fetch_pay_account
-    @pay_account = current_user.pay_account
+    @pay_account = current_site.pay_account
     redirect_to pay_accounts_path unless @pay_account# && (current_user.normal? || current_user.freeze?)
   end
 

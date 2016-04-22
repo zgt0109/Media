@@ -1,5 +1,4 @@
 class PayWithdraw < ActiveRecord::Base
-  belongs_to :account
   belongs_to :pay_account
 
   before_create :generate_trade_no, :generate_default_attributes
@@ -30,7 +29,6 @@ class PayWithdraw < ActiveRecord::Base
 
   private
     def generate_default_attributes
-      self.account_id = pay_account.account_id
       self.bank_name = pay_account.bank_name
       self.bank_branch = pay_account.bank_branch
       self.bank_name = pay_account.bank_name
