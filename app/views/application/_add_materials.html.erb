@@ -13,6 +13,11 @@
       <%= f.text_field :title, id: 'wx_title', class: 'col-xs-6 material_title', placeholder: "不能超过64个字" %>
     </div>
 
+    <label class="author-label" style="margin-top:10px;">作者</label>
+    <div class="clearfix">
+      <%= f.text_field :author, id: 'wx_author', class: 'col-xs-6 material_author', placeholder: "不能超过50个字" %>
+    </div>
+
     <div class="form-group">
       <label class="control-label">封面<span class="required-star">*</span><small class="help-inline text-warning line-height-32">图片建议尺寸：720像素*400像素</small></label>
       <div class="clearfix">
@@ -38,18 +43,23 @@
 <%= f.fields_for :children do |child| %>
   <%= child.hidden_field :material_type %>
   <%= child.hidden_field :site_id %>
-  
+
   <% if child.object.new_record? %>
     <% default_child_pic_url = qiniu_image_url('FlL1C_QEO1l-6TwumUieLdO8kjKN'); default_child_pic_key = 'FlL1C_QEO1l-6TwumUieLdO8kjKN' %>
   <% else %>
     <% default_child_pic_url = child.object.pic_url; default_child_pic_key = child.object.pic_key %>
   <% end %>
-  
+
   <div class="form-wrap" id="form-<%= index+1 %>" style="display:none;">
     <div class="form-group">
       <label class="control-label">标题<span class="required-star">*</span></label>
       <div class="clearfix">
         <%= child.text_field :title, class: 'col-xs-6', placeholder: "不能超过64个字", data: { title: "#title-#{index+2}" } %>
+      </div>
+
+      <label class="author-label" style="margin-top:10px;">作者</label>
+      <div class="clearfix">
+        <%= child.text_field :author, class: 'col-xs-6', placeholder: "不能超过50个字", data: { author: "#author-#{index+2}" } %>
       </div>
 
       <div class="form-group">
@@ -86,7 +96,7 @@ $(function(){
   $(document).on('change', 'select[id*=_reply_type]', function () {
     select_material_type($(this));
   });
-  
+
   $("select[id*=_reply_type]").each(function() {
     select_material_type($(this));
   });
@@ -110,7 +120,7 @@ $(function(){
     if ( $form.find("select[id*=_reply_type]").val() == '3' ) {
       var material_source_url = $form.find('input[id*=source_url]');
       var source_url_rep = /^(http|https):\/\/[a-zA-Z0-9].+$/i;
-      
+
       if ( !material_source_url.val() ) {
         addErrorMessage(material_source_url, '请填写链接地址');
         material_source_url.focus();
@@ -121,7 +131,7 @@ $(function(){
         return false;
       }
     }
-    
+
     var blank_title = false;
     $('.form-mater-multi .form-wrap .material_title').each(function(event) {
       if ( !$(this).val() ) {
@@ -129,18 +139,18 @@ $(function(){
         //    top = self.attr("data-top");
         //var mater = $(".form-mater");
         //mater.css({"margin-top": top + "px"});
-        
+
         blank_title = true;
         $('.form-wrap').hide();
         $(this).closest('.form-wrap').show();
         $(this).focus();
       }
     });
-    
+
     if ( blank_title ) {
       event.preventDefault();
     }
-    
+
   });
 
 });

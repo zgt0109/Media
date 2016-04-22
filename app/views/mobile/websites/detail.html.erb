@@ -11,7 +11,10 @@
 <% if @material %>
   <div class="hd">
     <h1><%= @material.title %></h1>
-    <small><%= @material.try(:summary).present? ? @material.try(:summary) : @material.created_at %></small>
+    <small>
+      <%= @material.try(:summary).present? ? @material.try(:summary) : @material.created_at %>
+      <%= @material.author %>
+    </small>
   </div>
 
   <div class="bd">
