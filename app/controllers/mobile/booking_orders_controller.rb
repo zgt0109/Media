@@ -22,6 +22,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
       username: @wx_user.try(:nickname),
       tel: @user.try(:mobile),
       address: @user.try(:address),
+      booking_at: Date.today,
       qty: 1,
       booking_id: @site.booking.id
     }
