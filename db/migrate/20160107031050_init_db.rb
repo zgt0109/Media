@@ -675,7 +675,7 @@ class InitDb < ActiveRecord::Migration
   add_index "booking_orders", :user_id
 
   create_table "bookings" do |t|
-    t.integer  "booking_id",                                 :null => false
+    t.integer  "site_id",                                 :null => false
     t.string   "name"
     t.string   "tel"
     t.integer  "status",      :limit => 1, :default => 1, :null => false
@@ -686,7 +686,7 @@ class InitDb < ActiveRecord::Migration
   end
 
   add_index "bookings", :name
-  add_index "bookings", :booking_id
+  add_index "bookings", :site_id
 
   create_table "broche_photos" do |t|
     t.integer  "site_id",                    :null => false
