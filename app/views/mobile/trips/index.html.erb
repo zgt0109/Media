@@ -49,7 +49,7 @@
           <div class="bd">
             <a href="<%= mobile_trip_path(id: ticket.id) %>">
               <p class="li-name"><%= truncate_u(ticket.name.to_s, length: 15) %></p>
-              <p class="li-intro"><%= truncate_u(ticket.description.to_s, length: 18) %></p>
+              <p class="li-intro"><%= truncate_u(ticket.description.to_s, length: 15) %></p>
             </a>
             <p class="li-sale">
               <span class="fl"><b class="fred"><%= f ticket.price %></b>元</span>

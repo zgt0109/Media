@@ -5,9 +5,6 @@ class PaymentSettingsController < ApplicationController
 
   before_filter :fetch_payment_settings, only: [:index, :enable, :disable]
 
-  def index
-  end
-
   def edit
     @payment_setting = current_site.payment_settings.find(params[:id])
     render layout: 'application_pop'
