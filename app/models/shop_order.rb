@@ -20,13 +20,12 @@ class ShopOrder < ActiveRecord::Base
   ]
 
   enum_attr :pay_type, :in => [
-    ['cashpay', 0,  '现金支付'],
-    ['vip_userpay', 10007,  '余额支付'],
-    ['wxpayv2', 10001,  '微信支付'],
-    ['wxpayv3', 10004,  '微信支付'],
-    # ['tenpay',  10002,  '财付通支付'],
-    ['alipay',  10006,  '支付宝支付'],
-    ['yeepay',  10003, '易宝支付'],
+    ['cashpay', 10000,  '现金支付'],
+    ['vip_userpay', 10005, '余额支付'],
+    ['wxpay', 10001,  '微信支付'],
+    ['yeepay',  10002, '易宝支付'],
+    ['alipay',  10003,  '支付宝支付'],
+    # ['tenpay',  10004,  '财付通支付'],
     ['proxy_alipay', 20001, '支付宝支付'],
     ['proxy_yeepay', 20002, '易宝支付'],
   ]

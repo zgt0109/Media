@@ -208,15 +208,15 @@ class Biz::RedPacketsController < ApplicationController
   private
 
   def find_payment_setting
-    weixinpay = current_site.payment_settings.where(payment_type_id: PaymentType::WEIXINPAY).first
+    wxpay = current_site.payment_settings.where(payment_type_id: PaymentType::WXPAY).first
     #@wxredpacketpay = current_site.payment_settings.where(payment_type_id: PaymentType::WX_REDPACKET_PAY).first ||
     @wxredpacketpay = WxredpacketpaySetting.where(site_id: current_site.id, payment_type_id: PaymentType::WX_REDPACKET_PAY).first ||
         WxredpacketpaySetting.new(
             site_id: current_site.id,
             payment_type_id: PaymentType::WX_REDPACKET_PAY,
-            partner_id: weixinpay.try(:partner_id) || '',
-            partner_key: weixinpay.try(:partner_key) || '',
-            app_id: weixinpay.try(:app_id) || '',
+            partner_id: wxpay.try(:partner_id) || '',
+            partner_key: wxpay.try(:partner_key) || '',
+            app_id: wxpay.try(:app_id) || '',
             api_client_cert: '',
             api_client_key: '')
   end

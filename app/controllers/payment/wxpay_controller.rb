@@ -42,33 +42,6 @@ class Payment::WxpayController < ApplicationController
      return render text: notify_result("FAIL") 
   end
 
-  def test
-    @account = Account.where(id: params[:account_id]).first
-    return render text: "请传入商户ID" unless @account
-
-    @wxpay = @account.site.payment_settings.weixinpay.first
-    return render text: "请先设置微信支付信息" unless @wxpay
-
-    attrs = {account_id: @account.id, user_id: 10025, ec_shop_id: (@account.site.ec_shop.id rescue 2),total_amount: 0.01}
-    @order = EcOrder.create(attrs)#.first_or_create
-
-    @payment = Payment.setup({
-      payment_type_id: 10001,
-      account_id: @account.id,
-      site_id: @order.site_id,
-      customer_id: @order.user_id,
-      customer_type: 'User',
-      paymentable_id: @order.id,
-      paymentable_type: @order.class.name,
-      out_trade_no: @order.order_no,
-      amount: @order.total_amount,
-      total_fee: @order.total_amount,
-      subject: "Pay test",
-      source: 'test',
-      pay_params: params.to_json
-    })
-  end   
-
   # TODO 需要用网页授权获取openid
   def pay
     @account = Account.where(id: params[:account_id]).first
@@ -81,13 +54,13 @@ class Payment::WxpayController < ApplicationController
       return render json: {errcode: 006, errmsg: "weixin user not found"}
     end
 
-    @wxpay = @account.site.payment_settings.weixinpay.first
-    return render json: {errcode: 002, errmsg: "please set weixinpay info first"} unless @wxpay
+    @wxpay = @account.site.payment_settings.wxpay.first
+    return render json: {errcode: 002, errmsg: "please set wxpay info first"} unless @wxpay
 
     @payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     return render json: {errcode: 005, errmsg: "can't find payment"} unless @payment
     return render json: {errcode: 003, errmsg: "the order has been paid"} if @payment.success?
-    
+
     #@payment.has_prepay_id? ? set_pay_sign_params : unifiedorder
     unifiedorder
   end
@@ -150,7 +123,7 @@ class Payment::WxpayController < ApplicationController
     support_version = "5.0"
     current_version = request.user_agent.split('MicroMessenger').last.to_s.split(' ').first.to_s.gsub('/', '')
     return render text: "您的微信版本过低,无法发起支付" if current_version < support_version
-  end   
+  end
 
   def unifiedorder
     @nonce_str = generate_noce_str

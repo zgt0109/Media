@@ -51,7 +51,7 @@
                                 <div class="li-l"> <b>支付方式</b>
                                 </div>
                                 <div class="li-r">
-                                  <% payment_settings = @donation_order.site.payment_settings.enabled.where('payment_settings.payment_type_id not in (10007,10008)') %>
+                                  <% payment_settings = @donation_order.site.payment_settings.enabled.where('payment_settings.payment_type_id not in (10005,10006)') %>
                                   <%= f.select :pay_type, payment_settings.map{|p| [p.payment_type.name, p.payment_type_id]} %>
                                 </div>
                             </div>

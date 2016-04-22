@@ -21,20 +21,21 @@ class VipRechargeOrder < ActiveRecord::Base
   ]
 
   enum_attr :pay_type, :in => [
-    ['alipay',  1,  '支付宝'],
-    ['wxpayv2', 2,  '微信'],
-    ['wxpayv3', 4,  '微信'],
-    ['tenpay',  3,  '财付通']
+    ['wxpay', 10001, '微信'],
+    # ['yeepay', 10002, '易宝'],
+    ['alipay', 10003, '支付宝'],
+    ['tenpay', 10004, '财付通']
   ]
 
   def wx_user_id
     vip_user.user.wx_user_id
   end
 
+  # just for alipay
   def payment!
     transaction do
       payment ||= Payment.setup({
-        payment_type_id: 10006,
+        payment_type_id: pay_type,
         account_id: site.account_id,
         site_id: site.id,
         customer_id: vip_user_id,
@@ -54,7 +55,7 @@ class VipRechargeOrder < ActiveRecord::Base
   def payment_request_params(params = {})
     params = HashWithIndifferentAccess.new(params)
     _order_params = {
-      payment_type_id: wxpayv2? ? 10001 : 10004,
+      payment_type_id: pay_type,
       account_id: site.account_id,
       site_id: site_id,
       customer_id: vip_user_id,
@@ -77,7 +78,7 @@ class VipRechargeOrder < ActiveRecord::Base
 
   def recharge!
     if pending?
-      vip_user.increase_amount!(amount, '充值', {payment_type: (pay_type+2).to_s, direction: '3', description: "#{pay_type_name}充值", amount_source: VipUserTransaction::WEB_PAY_UP})
+      vip_user.increase_amount!(amount, '充值', {payment_type: pay_type.to_s, direction: '3', description: "#{pay_type_name}充值", amount_source: VipUserTransaction::WEB_PAY_UP})
       pay!
     end
   end

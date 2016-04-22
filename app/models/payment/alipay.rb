@@ -29,7 +29,7 @@ class Payment::Alipay < Payment::Base
   def self.setup(options = {})
     transaction do
       create!({
-        payment_type: 10006,
+        payment_type: 10003,
         customer_id: options[:customer_id],
         customer_type: options[:customer_type],
         paymentable_id: options[:paymentable_id],
@@ -189,8 +189,8 @@ class Payment::Alipay < Payment::Base
       payment.update_attributes!(alipay_params)
 
       unless [TRADE_SUCCESS, TRADE_FINISHED].include?(before_update_status)
-        payment.update_attributes!(payment_type_id: 10006, status: 1)
-        
+        payment.update_attributes!(payment_type_id: 10003, status: 1)
+
         order = payment.paymentable
         if order
           account = order.pay!

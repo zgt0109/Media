@@ -39,7 +39,7 @@ class App::VipsController < App::BaseController
     if @order.alipay?
       payment             = @order.payment!
       redirect_to alipayapi_payment_url(payment)
-    elsif @order.wxpayv2? || @order.wxpayv3?
+    elsif @order.wxpay?
       options = {
         callback_url: callback_payments_url,
         notify_url: notify_payments_url,

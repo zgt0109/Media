@@ -23,7 +23,7 @@ class GroupOrder < ActiveRecord::Base
   before_create :add_default_attrs, :generate_order_no, :generate_sn_code, :count_total_amount
 
   after_find do |user|
-    self.payment_type_id ||= 10006
+    self.payment_type_id ||= 10003
   end
 
   def self.export_excel(search)

@@ -42,16 +42,13 @@ class PaymentSetting < ActiveRecord::Base
     ['product_catalog6400', '6400', '6400 汽车销售'],
   ]
 
-  WXNOTICE =  "#{M_HOST}/wxpay/notify"
-  WXPAYURL =  "#{M_HOST}/wxpay/pay"
   WEIXIN_NOTICE_URL =  "#{M_HOST}/payment/wxpay/notify"
   WEIXIN_PAY_URL =  "#{M_HOST}/payment/wxpay/pay"
 
   validates :payment_type_id, :partner_id, :partner_key, presence: true
   validates :partner_account, presence: true, if: :alipay?
   validates :pay_public_key, :pay_private_key, presence: true, if: :yeepay?
-  validates :pay_sign_key, :app_id, :app_secret, presence: true, if: :wxpay?
-  validates :app_id, :app_secret, presence: true, if: :weixinpay?
+  validates :app_id, presence: true, if: :wxpay?
   validates :app_id, :api_client_cert, :api_client_key, presence: true, if: :wx_redpacket_pay?
 
   belongs_to :site
@@ -104,8 +101,6 @@ class PaymentSetting < ActiveRecord::Base
       self.type = 'TenpaySetting'
     elsif self.yeepay?
       self.type = 'YeepaySetting'
-    elsif self.weixinpay?
-      self.type = 'WeixinPaySetting'
     elsif self.cashpay?
       self.type = 'CashpaySetting'
     elsif self.wx_redpacket_pay?
@@ -114,7 +109,7 @@ class PaymentSetting < ActiveRecord::Base
   end
 
   def update_wx_mp_user_info
-    return unless wxpay? || weixinpay?
+    return unless wxpay?
     return if app_id.blank? || app_secret.blank?
 
     wx_mp_user = site.try(:wx_mp_user)

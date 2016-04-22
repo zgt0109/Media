@@ -2,7 +2,7 @@
   <%= f.hidden_field :payment_type_id %>
 
   <div class="modal-body">
-    <% if @payment_setting.weixinpay? %>
+    <% if @payment_setting.wxpay? %>
       <div class="form-group">
         <label>微信支付商户号MCHID<span class="required-star">*</span></label>
 
@@ -22,49 +22,6 @@
 
         <div class="clearfix">
           <%= f.text_field :app_id, class: 'form-control', placeholder: 'AppId', validate: true %>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>微信公众平台公众号AppSecret<span class="required-star">*</span></label>
-
-        <div class="clearfix">
-          <%= f.text_field :app_secret, class: 'form-control', placeholder: 'AppSecret', validate: true %>
-        </div>
-      </div>
-    <% elsif @payment_setting.wxpay? %>
-      <div class="form-group">
-        <label>财付通商户号PartnerID<span class="required-star">*</span></label>
-
-        <div class="clearfix">
-          <%= f.text_field :partner_id, class: 'form-control', placeholder: 'PartnerID' %>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>财付通初始密钥PartnerKey<span class="required-star">*</span></label>
-
-        <div class="clearfix">
-          <%= f.text_field :partner_key, class: 'form-control', placeholder: 'PartnerKey' %>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>微信支付密钥PaySignKey<span class="required-star">*</span></label>
-
-        <div class="clearfix">
-          <%= f.text_field :pay_sign_key, class: 'form-control', placeholder: 'PaySignKey', validate: true %>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>微信公众平台公众号AppID<span class="required-star">*</span></label>
-
-        <div class="clearfix">
-          <%= f.text_field :app_id, class: 'form-control', placeholder: 'AppId', validate: true %>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>微信公众平台公众号AppSecret<span class="required-star">*</span></label>
-
-        <div class="clearfix">
-          <%= f.text_field :app_secret, class: 'form-control', placeholder: 'AppSecret', validate: true %>
         </div>
       </div>
     <% elsif @payment_setting.tenpay? %>

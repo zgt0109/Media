@@ -4,7 +4,7 @@
   <tr>
     <td>
       <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-        <%- if payment_setting.wxpay? || payment_setting.weixinpay? || payment_setting.yeepay? || payment_setting.alipay? %>
+        <%- if payment_setting.wxpay? || payment_setting.yeepay? || payment_setting.alipay? %>
           <a href="javascript:;" data-toggle="modals" data-height="500" data-iframe="<%= payment_setting.new_record? ? new_payment_setting_url(payment_type_id: payment_setting.payment_type_id) : edit_payment_setting_url(payment_setting) %>" data-title="<%= payment_type_name %>设置">编辑</a>
         <%- end %>
 

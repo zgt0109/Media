@@ -36,16 +36,13 @@
                 <select class="input" name="vip_recharge_order[pay_type]">
                   <%- payment_settings = @site.enabled_payment_types %>
                   <%- if payment_settings.include?('支付宝') %>
-                    <option value="1">充值方式：支付宝支付</option>
+                    <option value="10003">充值方式：支付宝支付</option>
                   <%- end %>
-                  <%- if payment_settings.include?('微信支付V2')  %>
-                    <option value="2">充值方式：微信支付</option>
-                  <%- end %>
-                  <%- if payment_settings.include?('微信支付V3') %>
-                    <option value="4">充值方式：微信支付</option>
+                  <%- if payment_settings.include?('微信支付')  %>
+                    <option value="10001">充值方式：微信支付</option>
                   <%- end %>
                   <%- if payment_settings.include?('财付通') %>
-                    <option value="3">充值方式：财付通支付</option>
+                    <option value="10004">充值方式：财付通支付</option>
                   <%- end %>
                 </select>
               </dd>

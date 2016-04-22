@@ -71,52 +71,6 @@ class Payment < ActiveRecord::Base
     (amount * 100).to_i
   end
 
-  def wxpay_delivery
-    return unless wxpay?# || weixinpay?
-
-    wxpay_setting = account.site.payment_settings.wxpay.first
-
-    wx_mp_user = account.site.wx_mp_user
-    wx_mp_user.auth!
-
-    timestamp = Time.now.to_i
-    deliver_status = 1
-    deliver_msg = 'ok'
-    appkey = wxpay_setting.pay_sign_key
-
-    sign = Digest::SHA1.hexdigest "appid=#{wxpay_setting.app_id}&appkey=#{appkey}&deliver_msg=#{deliver_msg}&deliver_status=#{deliver_status}&deliver_timestamp=#{timestamp}&openid=#{buyer_id}&out_trade_no=#{out_trade_no}&transid=#{trade_no}"
-
-    request_url = "https://api.weixin.qq.com/pay/delivernotify?access_token=#{wx_mp_user.access_token}"
-    json = "{
-      \"appid\" : \"#{wxpay_setting.app_id}\",
-      \"openid\" : \"#{buyer_id}\",
-      \"transid\" : \"#{trade_no}\",
-      \"out_trade_no\" : \"#{out_trade_no}\",
-      \"deliver_timestamp\" : \"#{timestamp}\",
-      \"deliver_status\" : \"#{deliver_status}\",
-      \"deliver_msg\" : \"#{deliver_msg}\",
-      \"app_signature\" : \"#{sign}\",
-      \"sign_method\" : \"sha1\"
-    }"
-
-    result = RestClient.post(request_url, json)
-    # SiteLog::Weixinpay.add("weixin delivery result: #{result}")
-
-    data = JSON(result)
-    # puts "result: #{data}"
-
-    if data['errcode'] == 0
-      update_attributes(is_delivery: true)
-      SiteLog::Base.logger('wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
-    else
-      SiteLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n result: #{data}")
-    end
-  rescue => error
-    # puts "error: #{error.message} - #{error.backtrace}"
-    # SiteLog::Weixinpay.add("weixin delivery error -> #{error.message} - #{error.backtrace}")
-    SiteLog::Base.logger('error/wxpay_delivery', "WxPay delivery request: #{request_url} -> #{json} \n error: #{error.message} - #{error.backtrace}")
-  end
-
   # TODO 已不再使用，详情请查看model/payment/目录
   # start for yeepay
   def pay_options(params)
@@ -151,14 +105,12 @@ class Payment < ActiveRecord::Base
 
   def get_pay_url(options={}, *args)
     case
-    when self.weixinpay?
-      "#{PaymentSetting::WEIXIN_PAY_URL}?out_trade_no=#{self.out_trade_no}&account_id=#{self.account_id}&openid=#{self.open_id.presence}&showwxpaytitle=1"
     when self.wxpay?
-      "#{PaymentSetting::WXPAYURL}?out_trade_no=#{self.out_trade_no}&account_id=#{self.account_id}&showwxpaytitle=1"
+      "#{PaymentSetting::WEIXIN_PAY_URL}?out_trade_no=#{self.out_trade_no}&account_id=#{self.account_id}&openid=#{self.open_id.presence}&showwxpaytitle=1"
     when self.tenpay?
       tenpay  = self.site.payment_settings.tenpay.first
       if tenpay.partner_key && tenpay.partner_key
-        _options = { 
+        _options = {
           :subject => self.subject,
           :body => self.body,
           :total_fee => (self.amount * 100).to_i,
@@ -356,7 +308,7 @@ class Payment < ActiveRecord::Base
       payment.update_attributes!(alipay_params)
 
       unless [TRADE_SUCCESS, TRADE_FINISHED].include?(before_update_status)
-        payment.update_attributes!(payment_type_id: 10006, status: 1)
+        payment.update_attributes!(payment_type_id: 10003, status: 1)
 
         order = payment.paymentable
         order.recharge! if order && order.is_a?(VipRechargeOrder)

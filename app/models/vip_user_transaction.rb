@@ -34,11 +34,11 @@ class VipUserTransaction < ActiveRecord::Base
   ]
 
   enum_attr :payment_type, in: [
-    ['by_balance', 1, '会员卡余额支付'],
-    ['by_cash',    2, '现金支付'],
-    ['zhifubao',   3, '支付宝充值'],
-    ['weixizhifu', 4, '微信支付充值'],
-    ['caifutong',  5, '财付通充值']
+    ['by_balance', 10005, '会员卡余额支付'],
+    ['by_cash',    10000, '现金支付'],
+    ['weixizhifu', 10001, '微信支付充值'],
+    ['zhifubao',   10003, '支付宝充值'],
+    ['caifutong',  10004, '财付通充值']
   ]
 
   scope :by_pay, -> { where(direction_type: [PAY_UP,PAY_DOWN]) }

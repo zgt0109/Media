@@ -6,14 +6,13 @@ class PaymentType < ActiveRecord::Base
   ]
 
   ENUM_ID_OPTIONS = [
-    ['wxpay', 10001, '微信支付V2'],
-    ['tenpay', 10002, '财付通'],
-    ['yeepay', 10003, '易宝'],
-    ['weixinpay', 10004, '微信支付V3'],
-    ['cashpay', 10005, '现金支付'],
-    ['alipay', 10006, '支付宝'],
-    ['vip_userpay', 10007, '余额支付'],
-    ['wx_redpacket_pay', 10008, '微信红包'],
+    ['cashpay', 10000, '现金支付'],
+    ['wxpay', 10001, '微信支付'],
+    ['yeepay', 10002, '易宝支付'],
+    ['alipay', 10003, '支付宝支付'],
+    ['tenpay', 10004, '财付通支付'],
+    ['vip_userpay', 10005, '余额支付'],
+    ['wx_redpacket_pay', 10006, '微信红包'],
     ['proxy_alipay', 20001, '微枚迪支付宝'],
     ['proxy_yeepay', 20002, '微枚迪易宝'],
   ]

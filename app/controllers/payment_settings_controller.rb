@@ -55,17 +55,10 @@ class PaymentSettingsController < ApplicationController
       @payment_setting.enable!
       proxy_alipay =  current_site.payment_settings.proxy_alipay.first
       proxy_alipay.disable! if proxy_alipay.present?
-    elsif @payment_setting.wxpay?
-      @payment_setting.enable!
-      weixinpay =  current_site.payment_settings.weixinpay.first
-      weixinpay.disable! if weixinpay.present?
-    elsif @payment_setting.weixinpay?
-      @payment_setting.enable!
-      wxpay =  current_site.payment_settings.wxpay.first
-      wxpay.disable! if wxpay.present?
     else
       @payment_setting.enable!
     end
+
     if @payment_setting.enabled?
       @type, @notice = "info",  '操作成功'
     else
@@ -92,11 +85,10 @@ class PaymentSettingsController < ApplicationController
     def fetch_payment_settings
       @payment_settings = current_site.payment_settings
       @payment_settings = [
-        @payment_settings.weixinpay.first || @payment_settings.new(payment_type_id: 10004),
-        # @payment_settings.wxpay.first || @payment_settings.new(payment_type_id: 10001),
-        @payment_settings.yeepay.first || @payment_settings.new(payment_type_id: 10003),
-        # @payment_settings.alipay.first || @payment_settings.new(payment_type_id: 10006),
-        # @payment_settings.tenpay.first || @payment_settings.new(payment_type_id: 10002),
+        @payment_settings.wxpay.first || @payment_settings.new(payment_type_id: 10001),
+        @payment_settings.yeepay.first || @payment_settings.new(payment_type_id: 10002),
+        @payment_settings.alipay.first || @payment_settings.new(payment_type_id: 10003),
+        # @payment_settings.tenpay.first || @payment_settings.new(payment_type_id: 10004),
         # @payment_settings.tenpay.first,
         @payment_settings.proxy_yeepay.first
         # @payment_settings.proxy_alipay.first

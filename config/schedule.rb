@@ -25,10 +25,6 @@ every 30.minutes do
   rake "timer:vote"
 end
 
-every 1.hours do
-  rake "wxpay:delivery"
-end
-
 # every 1.days, :at => '00:01 am' do
 #   rake "hotel:hotel_room_settings"
 # end

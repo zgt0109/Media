@@ -58,7 +58,7 @@ module SiteLog
 
     def self.get_file
       file_name = Time.now.strftime('%Y%m%d')
-      log_dir =  Rails.root.to_s + "/public/logs/weixinpay/"
+      log_dir =  Rails.root.to_s + "/public/logs/wxpay/"
       FileUtils.mkdir_p log_dir unless Dir.exists? log_dir
       file = log_dir + "#{file_name}.txt"
       File.open(file, 'a')

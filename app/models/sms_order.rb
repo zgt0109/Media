@@ -23,10 +23,10 @@ class SmsOrder < ActiveRecord::Base
   ]
 
   enum_attr :payment_type, :in => [
-    #['wxpay',  1, '微信支付'],
-    #['yeepay', 2, '易宝支付'],
-    #['tenpay', 3, '财付通支付'],
-    ['alipay', 4, '支付宝支付'],
+    #['wxpay',  10001, '微信支付'],
+    #['yeepay', 10002, '易宝支付'],
+    ['alipay', 10003, '支付宝支付'],
+    #['tenpay', 10004, '财付通支付'],
   ]
 
   enum_attr :status, :in => [
@@ -102,7 +102,7 @@ class SmsOrder < ActiveRecord::Base
         payment = pending_payment
       else
         payment = Payment.setup({
-          payment_type_id: 10006,
+          payment_type_id: 10003,
           account_id: account_id,
           account_id: site_id,
           customer_id: site_id,

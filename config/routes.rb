@@ -72,22 +72,6 @@ Wp::Application.routes.draw do
     end
   end
 
-  post "/wxpay/notify", :to => "wxpay#notify", as: :wxpay_notify
-  post "/wxpay/notify_hongbao", :to => "wxpay#notify_hongbao"
-  match "/wxpay/index", :to => "wxpay#index"
-  match "/wxpay/warning" => "wxpay#warning"
-  match "/wxpay/payfeedback" => "wxpay#payfeedback"
-  match "/wxpay/pay", :to => "wxpay#pay"
-  match "/wxpay/test", :to => "wxpay#test"
-  match "/wxpay/success", :to => "wxpay#success"
-  match "/wxpay/fail", :to => "wxpay#fail"
-
-  resources :wxpay, only: :index do
-    collection do
-      get :ali_pay, :ali_faild
-    end
-  end
-
   resources :yeepay, only: :new do
     get :pay, :callback, on: :collection
   end
