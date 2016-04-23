@@ -440,8 +440,8 @@ class ShopOrder < ActiveRecord::Base
   def update_user_address
     if self.user
       self.user.name = self.username unless self.user.name
-      self.user.address = self.address unless self.user.address
       self.user.mobile = self.mobile unless self.user.mobile
+      self.user.address = self.address# unless self.user.address
     # else
       # self.build_user(address: self.address, mobile: self.mobile, name: self.username)
     end
