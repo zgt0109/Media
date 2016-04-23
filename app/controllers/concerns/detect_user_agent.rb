@@ -94,9 +94,7 @@ module DetectUserAgent
       if can_use_wx_oauth?
         return_to = Base64.strict_encode64(request.url)
 
-        # url = @wx_mp_user.account_id == 10002 ? M_HOST : "http://#{@wx_mp_user.site_id}.#{Settings.mhostname}"
-        url = "http://#{@wx_mp_user.site_id}.#{Settings.mhostname}"
-        uri = URI(url)
+        uri = URI("http://#{@wx_mp_user.site_id}.#{Settings.mhostname}")
         uri.path = '/auth_agent/wx_oauth'
         uri.query= {return_to: return_to, app_id: @wx_mp_user.app_id}.to_param
         redirect_to uri.to_s
