@@ -7,8 +7,8 @@ class Print < ActiveRecord::Base
   has_many :activities, as: :activityable
   accepts_nested_attributes_for :activities
 
-  def printers
-    activities.select { |a| [46,47].include? a.activity_type_id }
+  def printers_for(site_id)
+    activities.where(site_id: site_id).select { |a| [46,47].include? a.activity_type_id }
   end
 
   enum_attr :status, :in=>[

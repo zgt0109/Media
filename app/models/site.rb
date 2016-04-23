@@ -18,8 +18,8 @@ class Site < ActiveRecord::Base
   ]
 
   WX_PRINT = [
-    ["", ActivityType::WX_PRINT, "您已进入打印图片模式，请发送图片给我；退出打印图片模式请回复：{退出打印}。"],
-    ["", ActivityType::EXIT_WX_PRINT, "您已经退出打印图片模式。"]
+    ["打印", ActivityType::WX_PRINT, "您已进入打印图片模式，请发送图片给我；退出打印图片模式请回复：{退出打印}。"],
+    ["退出打印", ActivityType::EXIT_WX_PRINT, "您已经退出打印图片模式。"]
   ]
 
   enum_attr :status, :in => [
@@ -44,18 +44,14 @@ class Site < ActiveRecord::Base
   has_many :activity_consumes
   has_many :consumes
 
-  has_many  :users, inverse_of: :site
-  has_one  :house
-  has_one  :car_shop
-  has_one  :hotel
+  has_many :users, inverse_of: :site
+
   has_one  :website, conditions: { website_type: Website::MICRO_SITE }
   has_one  :life, class_name: 'Website', conditions: { website_type: Website::MICRO_LIFE }
   has_one  :circle, class_name: 'Website', conditions: { website_type: Website::MICRO_CIRCLE }
-  has_one  :vip_card
-  has_one  :trip
-  has_many  :trip_ticket_categories
-  has_many :trip_tickets
-  has_one  :share_photo_setting
+
+  has_many :wx_menus
+  has_many :wx_walls, dependent: :destroy
   has_one  :wx_plot
   # has_one :activity_wx_plot_bulletin, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_BULLETIN }
   # has_one :activity_wx_plot_repair, class_name: 'Activity', conditions: { activity_type_id: ActivityType::PLOT_REPAIR }
@@ -67,17 +63,14 @@ class Site < ActiveRecord::Base
   has_many :reservation_orders
   has_many :wbbs_topics
   has_many :share_photos
-  has_many :vip_groups, through: :vip_card
-  has_many :vip_grades, through: :vip_card
-  has_many :vip_message_plans, through: :vip_card
-  has_many :vip_users, inverse_of: :site
-  has_many :vip_privileges, through: :vip_card
-  has_many :wx_menus
+  has_one  :share_photo_setting
+
   has_many :materials
   has_many :activities
   has_many :activity_users
   has_many :questions
   has_many :answers
+
   has_one  :shop, inverse_of: :site
   has_many :shop_branches
   has_many :shop_branch_sub_accounts, through: :shop_branches, source: :sub_account, conditions: "shop_branches.status = #{ShopBranch::USED}"
@@ -86,42 +79,48 @@ class Site < ActiveRecord::Base
   has_many :shop_categories
   has_many :shop_table_settings
   has_many :shop_order_reports
+
   has_many :fight_questions
   has_many :guess_questions, class_name: 'Guess::Question'
   has_many :fight_papers
   has_many :fight_report_cards
   has_many :feedbacks, as: :user
+
+  has_one  :house
+  has_one  :hotel
   has_many :weddings
+  has_one  :college
   has_many :albums
+  has_many :greets
+
+  has_one  :trip
+  has_many :trip_ticket_categories
+  has_many :trip_tickets
+
   has_many :donations
   has_many :donation_orders, :through => :donations
-  has_many :greets
+
   has_one  :hospital
   has_many :hospital_orders
   has_many :hospital_departments
   has_many :hospital_job_titles
   has_many :hospital_doctors
   has_many :hospital_comments
-  has_one  :college
-  has_one  :ec_shop
-  has_many :ec_seller_cats
-  has_many :ec_items
+
   has_one  :booking
   has_many :booking_ads
   has_many :booking_categories
   has_many :booking_items
   has_many :booking_orders
+
   has_many :ktv_orders
+
   has_one  :group
   has_many :group_categories
   has_many :group_items
   has_many :group_orders
-  has_one  :api_user
 
-  has_many :point_gifts, dependent: :destroy
-  has_many :point_gift_exchanges, dependent: :destroy
-  has_many :point_transactions, dependent: :destroy
-  has_many :point_types, dependent: :destroy
+  has_one  :vip_card
   has_many :vip_user_messages, dependent: :destroy
   has_many :vip_user_transactions, dependent: :destroy
   has_many :vip_packages
@@ -129,9 +128,20 @@ class Site < ActiveRecord::Base
   has_many :vip_packages_vip_users
   has_many :vip_external_http_apis
   has_many :vip_importings
+  has_many :vip_groups, through: :vip_card
+  has_many :vip_grades, through: :vip_card
+  has_many :vip_message_plans, through: :vip_card
+  has_many :vip_users, inverse_of: :site
+  has_many :vip_privileges, through: :vip_card
+
+  has_many :point_gifts, dependent: :destroy
+  has_many :point_gift_exchanges, dependent: :destroy
+  has_many :point_transactions, dependent: :destroy
+  has_many :point_types, dependent: :destroy
 
   has_many :leaving_messages, dependent: :destroy
   has_many :leaved_messages,  dependent: :destroy, class_name: 'LeavingMessage', as: :replier
+
   has_many :share_photo_comments
   has_many :share_photo_likes
   has_many :share_photos
@@ -141,13 +151,14 @@ class Site < ActiveRecord::Base
   has_many :payments
   has_one :pay_account
 
-  has_one :car_brand, dependent: :destroy
+  has_one  :car_shop
+  has_one  :car_brand, dependent: :destroy
   has_many :car_bespeaks, dependent: :destroy
   has_many :car_sellers, dependent: :destroy
   has_many :car_brands, dependent: :destroy
   has_many :car_catenas, dependent: :destroy
   has_many :car_activity_notices, dependent: :destroy
-  has_many :wx_walls, dependent: :destroy
+
   has_many :qrcode_channel_types, dependent: :destroy
   has_many :qrcode_channels, dependent: :destroy
   has_many :qrcode_logs, dependent: :destroy
@@ -162,11 +173,11 @@ class Site < ActiveRecord::Base
   has_one  :broche
   has_many :likes, as: :likeable
 
-  accepts_nested_attributes_for :car_activity_notices, :wx_plot, :system_message_settings
-
   has_many :panoramagrams
 
   has_many :red_packets, class_name: 'RedPacket::RedPacket'
+
+  accepts_nested_attributes_for :car_activity_notices, :wx_plot, :system_message_settings
 
   before_create :add_default_attrs
 
@@ -729,7 +740,7 @@ START
     end
   end
 
-  def build_activity_for_print
+  def build_activities_for_print
     print = Print.where(account_id: account_id).first_or_create
 
     WX_PRINT.each do |value|
@@ -751,14 +762,12 @@ START
       }.merge! attrs
       print.activities << Activity.new(full_attrs)
     end
-    print.activities = print.printers
     print
   end
 
   def create_share_photo_setting
     share_photo_setting = SharePhotoSetting.where({ site_id: id }).first_or_create(name: '晒图')
   end
-
 
   def build_album_activity(attrs = {})
     attrs = {

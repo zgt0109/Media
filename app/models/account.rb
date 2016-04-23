@@ -31,7 +31,6 @@ class Account < ActiveRecord::Base
   has_many :sites
   has_many :sms_expenses
   has_many :sms_orders
-  has_many :feedbacks
 
   has_one  :shop, through: :site
   has_many :shop_branches, through: :shop

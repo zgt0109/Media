@@ -3,6 +3,9 @@ class PrintsController < ApplicationController
 
   def index
     @print = current_user.print || current_user.build_print
+    if @print.new_record? || @print.printers_for(current_site.id).count == 0
+      @print = current_site.build_activities_for_print
+    end
   end
 
   def create
@@ -11,14 +14,6 @@ class PrintsController < ApplicationController
       redirect_to :back, notice: '创建成功!'
     else
       render "index"
-    end
-  end
-
-  def activities
-    @print = current_user.print
-    if @print && @print.activities.count == 2
-    else
-      @print = current_site.build_activity_for_print
     end
   end
 

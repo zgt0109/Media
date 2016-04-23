@@ -48,6 +48,7 @@ class ActivityType < ActiveRecord::Base
 
     ['wx_print',            46, '微信打印'],
     ['exit_wx_print',       47, '退出微信打印'],
+
     ['hanming_wifi',        48, '汉明wifi'],
     ['wifi',                51, 'wifi'],
 
