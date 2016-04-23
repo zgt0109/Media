@@ -87,7 +87,7 @@ module DetectUserAgent
     end
 
     def can_use_wx_oauth?
-      @wx_mp_user && @wx_mp_user.is_oauth? && @wx_mp_user.app_id.present? && @wx_mp_user.app_secret.present?
+      @wx_user.blank? && @wx_mp_user && @wx_mp_user.is_oauth? && @wx_mp_user.app_id.present? && @wx_mp_user.app_secret.present?
     end
 
     def auth
