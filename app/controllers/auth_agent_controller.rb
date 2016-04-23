@@ -57,6 +57,8 @@ class AuthAgentController < ApplicationController
     if access_token_data['openid'].present?
       @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: access_token_data['openid'], wx_mp_user_openid: @wx_mp_user.openid)
       session[:wx_user_id] = @wx_user.id
+      session[:user_id] = @wx_user.user_id
+      session[:openid] = @wx_user.openid
     else
       return render json: {error_code: '-1', remark: "fetch openid failure, raw data is #{raw_data}"}
     end
