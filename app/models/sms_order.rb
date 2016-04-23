@@ -180,16 +180,13 @@ class SmsOrder < ActiveRecord::Base
       "</direct_trade_create_req>"
     ]
 
-    now = Time.now
-    req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
-
     {
       :service => 'alipay.wap.trade.create.direct',
       :format  => 'xml',
       :v => '2.0',
       :partner => self.default_pay_options[:alipay_id],
       :sec_id => 'MD5',
-      :req_id  => req_id,
+      :req_id  => Concerns::OrderNoGenerator.generate,
       :req_data  => req_data.join,
       :_input_charset  => 'utf-8',
     }
@@ -201,16 +198,13 @@ class SmsOrder < ActiveRecord::Base
 
     req_data = "<auth_and_execute_req><request_token>#{request_token}</request_token></auth_and_execute_req>"
 
-    now = Time.now
-    req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
-
     {
       :service => 'alipay.wap.auth.authAndExecute',
       :format  => 'xml',
       :v => '2.0',
       :partner => default_pay_options[:alipay_id],
       :sec_id => 'MD5',
-      :req_id  => req_id,
+      :req_id  => Concerns::OrderNoGenerator.generate,
       :req_data  => req_data,
       :_input_charset  => 'utf-8',
     }
@@ -342,7 +336,7 @@ class SmsOrder < ActiveRecord::Base
     raise "account_id cannot be nil" unless account
 
     self.date = Date.today
-    self.order_no = self.create_order_no
+    self.order_no = Concerns::OrderNoGenerator.generate
     SmsOrder::PLANS[self.plan_id].each{|key, value| self[key] = value} if self.plan_id
     if self.buy?
 
@@ -351,11 +345,6 @@ class SmsOrder < ActiveRecord::Base
       account.update_attributes(free_sms: SmsOrder::PLANS[self.plan_id][:plan_sms])
     end
     self.plan_cost = 1 unless Rails.env.production? || Rails.env.staging?
-  end
-
-  def create_order_no
-    return nil unless self.account_id.to_i > 0
-    "#{self.account_id}#{Time.now.to_i}"
   end
 
   def set_to_succeed(type)

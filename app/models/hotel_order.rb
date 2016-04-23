@@ -34,19 +34,12 @@ class HotelOrder < ActiveRecord::Base
     update_attributes(status: EXPIRED) if (( created_at < expired_at and Time.now > expired_at ) or ( created_at >= expired_at and Date.today > expired_at.to_date )) and incomplete?
   end
 
-
   def real_status_name
-    if expired?
-      '已过期'
-    else
-      status_name
-    end
+    expired? ? '已过期' : status_name
   end
 
   def add_default_attrs
-    now = Time.now
-    self.order_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
-
+    self.order_no = Concerns::OrderNoGenerator.generate
     self.expired_at = "#{self.check_in_date} #{self.hotel.obligate_time}"
     self.price = hotel_room_type.room_price
     self.total_amount = (self.price * self.qty * ((self.check_out_date - self.check_in_date).to_i))

@@ -56,14 +56,7 @@
                 </span></div>
               </div>
               <a class="form-li" href="http://api.map.baidu.com/marker?location=<%= @shop_order.shop_branch.location_y%>,<%= @shop_order.shop_branch.location_x%>&title=<%=@shop_order.shop_branch.address%>&content=<%= @shop_order.shop_branch.address%>&output=html">
-                <div class="li-l"><b>
-                    <% if @shop_order.take_out? %>
-                    送餐地址：
-                    <% else %>
-                    预定门店：
-                    <% end %>
-                    
-                </b></div>
+                <div class="li-l"><b><% if @shop_order.take_out? %>送餐地址：<% else %>预定门店：<% end %></b></div>
                 <div class="li-r mod-fa fa fa-location-arrow">
                   <% if @shop_order.take_out? %>
                   <span><%= @shop_order.address %></span>
@@ -89,7 +82,6 @@
                 <div class="li-r"><span><%= @shop_order.desk_no %></span></div>
               </div>
               <% end %>
-              
             </div>
             <div class="ft">
               <div class="food-shopcar">

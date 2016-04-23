@@ -12,8 +12,7 @@ class TripOrder < ActiveRecord::Base
   private
 
   def set_default_attrs
-    now = Time.now
-    self.order_no = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
+    self.order_no = Concerns::OrderNoGenerator.generate
     self.total_amount = self.qty * self.price
 
     return unless self.trip

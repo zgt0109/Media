@@ -422,7 +422,7 @@ class ShopOrder < ActiveRecord::Base
 
   def add_default_attrs
     now = Time.now
-    self.order_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
+    self.order_no = Concerns::OrderNoGenerator.generate
     self.expired_at = now + 2.days
 
     return unless self.shop_branch

@@ -43,8 +43,7 @@ class ShopMenu < ActiveRecord::Base
   private
 
   def add_default_attrs
-    now = Time.now
-    self.menu_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
+    self.menu_no = Concerns::OrderNoGenerator.generate
   end
 
 end

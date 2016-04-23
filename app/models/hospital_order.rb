@@ -36,8 +36,7 @@ class HospitalOrder < ActiveRecord::Base
   #end
 
   def generate_order_no
-    now = Time.now
-    self.order_no = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
+    self.order_no = Concerns::OrderNoGenerator.generate
   end
 
 end

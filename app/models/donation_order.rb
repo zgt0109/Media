@@ -51,8 +51,7 @@ class DonationOrder < ActiveRecord::Base
   private
 
   def add_default_attrs
-    now = Time.now
-    self.trade_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
+    self.trade_no = Concerns::OrderNoGenerator.generate
     self.site_id = self.donation.try(:site_id)
   end
 end

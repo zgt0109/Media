@@ -91,16 +91,13 @@ class Payment::Alipay < Payment::Base
       "</direct_trade_create_req>"
     ]
 
-    now = Time.now
-    req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
-
     {
       :service => 'alipay.wap.trade.create.direct',
       :format  => 'xml',
       :v => '2.0',
       :partner => default_pay_options[:alipay_id],
       :sec_id => 'MD5',
-      :req_id  => req_id,
+      :req_id  => Concerns::OrderNoGenerator.generate,
       :req_data  => req_data.join,
       :_input_charset  => 'utf-8',
     }
@@ -111,16 +108,13 @@ class Payment::Alipay < Payment::Base
 
     req_data = "<auth_and_execute_req><request_token>#{request_token}</request_token></auth_and_execute_req>"
 
-    now = Time.now
-    req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
-
     {
       :service => 'alipay.wap.auth.authAndExecute',
       :format  => 'xml',
       :v => '2.0',
       :partner => default_pay_options[:alipay_id],
       :sec_id => 'MD5',
-      :req_id  => req_id,
+      :req_id  => Concerns::OrderNoGenerator.generate,
       :req_data  => req_data,
       :_input_charset  => 'utf-8',
     }
@@ -209,8 +203,7 @@ class Payment::Alipay < Payment::Base
   # just for testing
   def generate_out_trade_no
     if self.out_trade_no.blank?
-      now = Time.now
-      self.out_trade_no = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
+      self.out_trade_no = Concerns::OrderNoGenerator.generate
     end
   end
 end

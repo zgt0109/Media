@@ -27,8 +27,7 @@ class DoctorArrangeItem < ActiveRecord::Base
   private
 
   def add_default_attrs
-    now = Time.now
-    self.order_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
+    self.order_no = Concerns::OrderNoGenerator.generate
     self.hospital_doctor_id = self.doctor_watch.doctor_arrange.hospital_doctor_id
     self.hospital_department_id = self.doctor_watch.doctor_arrange.hospital_department_id
     self.shop_branch_id = self.doctor_watch.shop_branch_id

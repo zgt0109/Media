@@ -199,9 +199,6 @@ class Payment < ActiveRecord::Base
   end
 
   def direct_options
-    now = Time.now
-    req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
-
     req_data = [
       "<direct_trade_create_req>",
       "<subject>支付宝支付</subject>",
@@ -220,7 +217,7 @@ class Payment < ActiveRecord::Base
       :v => '2.0',
       :partner => default_pay_options[:alipay_id],
       :sec_id => 'MD5',
-      :req_id  => req_id,
+      :req_id  => Concerns::OrderNoGenerator.generate,
       :req_data  => req_data.join,
       :_input_charset  => 'utf-8',
     }
@@ -228,9 +225,6 @@ class Payment < ActiveRecord::Base
 
   def auth_options(request_token)
     raise 'request_token不存在' unless request_token
-
-    now = Time.now
-    req_id = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
 
     req_data = "<auth_and_execute_req><request_token>#{request_token}</request_token></auth_and_execute_req>"
 
@@ -240,7 +234,7 @@ class Payment < ActiveRecord::Base
       :v => '2.0',
       :partner => default_pay_options[:alipay_id],
       :sec_id => 'MD5',
-      :req_id  => req_id,
+      :req_id  => Concerns::OrderNoGenerator.generate,
       :req_data  => req_data,
       :_input_charset  => 'utf-8',
     }
@@ -324,8 +318,7 @@ class Payment < ActiveRecord::Base
     # just for testing
     def generate_out_trade_no
       if self.out_trade_no.blank?
-        now = Time.now
-        self.out_trade_no = [now.to_s(:number), now.usec.to_s.ljust(6, '0')].join
+        self.out_trade_no = Concerns::OrderNoGenerator.generate
       end
     end
 

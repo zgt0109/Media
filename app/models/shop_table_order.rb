@@ -81,19 +81,18 @@ class ShopTableOrder < ActiveRecord::Base
   private
 
   def add_default_attrs
-    now = Time.now
-    self.order_no = [now.strftime('%Y%m%d'), now.usec.to_s.ljust(6, '0')].join
-
-    return unless self.shop_branch
-
-    self.site_id = self.shop_branch.site_id
-    self.shop_id = self.shop_branch.shop_id
+    self.order_no = Concerns::OrderNoGenerator.generate
 
     ref_order = ShopOrder.where(id: self.ref_order_id).first
     if ref_order
       self.mobile = ref_order.mobile
       self.username = ref_order.username
     end
+
+    return unless self.shop_branch
+
+    self.site_id = self.shop_branch.site_id
+    self.shop_id = self.shop_branch.shop_id
   end
 
   def update_user_mobile
