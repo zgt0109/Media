@@ -90,7 +90,7 @@ class Site < ActiveRecord::Base
   has_many :guess_questions, class_name: 'Guess::Question'
   has_many :fight_papers
   has_many :fight_report_cards
-  has_many :feedbacks
+  has_many :feedbacks, as: :user
   has_many :weddings
   has_many :albums
   has_many :donations

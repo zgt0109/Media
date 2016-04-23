@@ -2,12 +2,12 @@
 class FeedbacksController < ApplicationController
 
   def index
-    @feedbacks = current_user.feedbacks.order('created_at desc').page(params[:page])
-    @feedback = current_user.feedbacks.new
+    @feedbacks = current_site.feedbacks.order('created_at desc').page(params[:page])
+    @feedback = current_site.feedbacks.new
   end
 
   def create
-    @feedback = current_user.feedbacks.new(params[:feedback])
+    @feedback = current_site.feedbacks.new(params[:feedback])
 
     if @feedback.save
       redirect_to feedbacks_url, notice: '提交成功'
@@ -17,7 +17,7 @@ class FeedbacksController < ApplicationController
   end
 
   def show
-    @feedback = current_user.feedbacks.find(params[:id])
+    @feedback = current_site.feedbacks.find(params[:id])
   end
 
 end

@@ -1516,8 +1516,6 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "feedbacks" do |t|
-    t.integer  "account_id",                           :null => false
-    t.integer  "sub_account_id"
     t.string   "user_id"
     t.string   "user_type"
     t.string   "source_type"
@@ -1530,13 +1528,11 @@ class InitDb < ActiveRecord::Migration
     t.datetime "reply_at"
     t.boolean  "is_read",        :default => false
     t.integer  "status",         :default => 1,     :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "feedbacks", ["admin_user_id"], :name => "index_feedbacks_on_admin_user_id"
-  add_index "feedbacks", ["account_id"], :name => "index_feedbacks_on_account_id"
-  add_index "feedbacks", ["sub_account_id"], :name => "index_feedbacks_on_sub_account_id"
   add_index "feedbacks", ["user_id", "user_type"], :name => "index_feedbacks_on_user_id_and_user_type"
 
   create_table "fight_answers" do |t|
@@ -2728,7 +2724,6 @@ class InitDb < ActiveRecord::Migration
   end
 
   create_table "pay_transactions" do |t|
-    t.integer  "account_id",                                                                        :null => false
     t.integer  "pay_account_id",                                                                    :null => false
     t.integer  "transactionable_id"
     t.string   "transactionable_type"
@@ -2745,7 +2740,6 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                                        :null => false
   end
 
-  add_index "pay_transactions", ["account_id"], :name => "index_pay_transactions_on_account_id"
   add_index "pay_transactions", ["direction"], :name => "index_pay_transactions_on_direction"
   add_index "pay_transactions", ["direction_type"], :name => "index_pay_transactions_on_direction_type"
   add_index "pay_transactions", ["pay_account_id"], :name => "index_pay_transactions_on_pay_account_id"
@@ -2753,7 +2747,6 @@ class InitDb < ActiveRecord::Migration
   add_index "pay_transactions", ["transactionable_id", "transactionable_type"], :name => "index_pay_transactionable"
 
   create_table "pay_withdraws" do |t|
-    t.integer  "account_id",                                                                  :null => false
     t.integer  "pay_account_id"
     t.string   "trade_no"
     t.decimal  "amount",                      :precision => 12, :scale => 2, :default => 0.0, :null => false
@@ -2770,7 +2763,6 @@ class InitDb < ActiveRecord::Migration
     t.datetime "updated_at",                                                                  :null => false
   end
 
-  add_index "pay_withdraws", ["account_id"], :name => "index_pay_withdraws_on_account_id"
   add_index "pay_withdraws", ["admin_user_id"], :name => "index_pay_withdraws_on_admin_user_id"
   add_index "pay_withdraws", ["pay_account_id"], :name => "index_pay_withdraws_on_pay_account_id"
   add_index "pay_withdraws", ["trade_no"], :name => "index_pay_withdraws_on_trade_no"
