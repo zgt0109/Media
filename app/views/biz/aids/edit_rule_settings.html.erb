@@ -21,6 +21,8 @@
         <label>
           <%= r.radio_button :model, @rule.class.const_get(:MODEL_RANDOM), checked: true, class: "radio-model" %>随机基数，基数最多不超过
           <%= r.text_field   :base_points, class: "radio-model-random", placeholder: '请输入最大助力基数, 最大为1000' %>
+        </label>
+        <label>
           <%= r.radio_button :model, @rule.class.const_get(:MODEL_FIXED), class: "radio-model" %>固定基数，基数
           <%= r.text_field   :base_points, class: "radio-model-fixed", placeholder: '请输入固定阻力基数, 最大为1000' %>
         </label>

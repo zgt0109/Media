@@ -282,12 +282,6 @@ class Mobile::AidsController < Mobile::BaseController
 
     return render_404 unless @activity.present? && @activity.setted?
 
-    @notice = if @activity.activity_status == Activity::WARM_UP
-                @activity.activity_notices.ready.first
-              else
-                @activity.activity_notices.active.first
-              end
-
     @owner_user =  @wx_mp_user.wx_users.where(openid: params[:owner_openid]).first  if params[:owner_openid].present?
     @origin_user = @wx_mp_user.wx_users.where(openid: params[:origin_openid]).first if params[:origin_openid].present?
 

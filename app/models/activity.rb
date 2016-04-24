@@ -234,7 +234,7 @@ class Activity < ActiveRecord::Base
   end
 
   def ready_at_litter_than_start_at
-    unless (unfold? || [10, 12, 75, 82].include?(activity_type_id))
+    unless (unfold? || [10, 12, 75, 62].include?(activity_type_id))
       self.errors.add(:ready_at, "不能大于于活动开始时间") if self.start_at && self.ready_at && self.ready_at > self.start_at
     end
   end
