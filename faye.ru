@@ -12,7 +12,7 @@ end
 =end
 
 # development
-Redis.new(host: 'localhost', port: 6379, password: 'hj1yxgRCOiBYcUzEH46IulbhxT21uCP72YIAQZ4wOYE0R521a48zP5wc2dd7ovLk8u6bpPK3prWVWtcHGnCCb2ZWZJvgoMKwWnx9')
+Redis.new(host: 'localhost', port: 6379)
 
 # staging or production
 #Redis.new(host: '10.221.20.140', port: 6379)
