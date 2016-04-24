@@ -5275,7 +5275,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "alias"
     t.string   "qrcode_key"
     t.string   "qrcode_url"
-    t.integer  "user_type",             :limit => 1,   :default => 0,     :null => false
+    t.integer  "user_type",             :limit => 1,   :default => 1,     :null => false
     t.integer  "bind_type",                            :default => 1
     t.boolean  "is_sync",                              :default => false, :null => false
     t.boolean  "is_oauth",                             :default => false, :null => false

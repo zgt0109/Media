@@ -2,53 +2,25 @@
 .bgf9f9f9{background:#f9f9f9 !important;}
 .pd10{padding:10px !important;}
 </style>
+
 <% content_for :main_content do %>
 <div class="main-content">
   <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <li><%= link_to '公众平台绑定', platforms_url %></li>
+      <li><%= link_to '公众号管理', platforms_url %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
+
   <div class="page-content">
     <div class="row">
       <div class="col-sm-12">
-        <table id="" class="table table-striped table-bordered table-hover dataTable">
-          <tbody>
-            <tr>
-              <th colspan="5" class="">
-                <h5 class="text-info">
-                  公众平台绑定
-                </h5>
-              </th>
-            </tr>
-            <tr>
-              <td>公共账号</td>
-              <td>URL</td>
-              <td>Token</td>
-              <td width="10%">状态</td>
-              <td width="15%">操作</td>
-            </tr>
-            <tr>
-              <td><%= @wx_mp_user.try(:nickname) %></td>
-              <td><%= @wx_mp_user.try(:url) %></td>
-              <td><%= @wx_mp_user.try(:token) %></td>
-              <td><span class="blue"><%= @wx_mp_user.try(:status_name) %></span></td>
-              <td>
-                <%= link_to '重新绑定', bind_platforms_url, target: '_blank', id: 'rebind_link', data: {confirm: '<h4>警告：变更公众账号绑定，会导致会员卡和电商数据丢失！请谨慎操作！后果商家自负！</h4>'} %>
-                <% if current_site.wx_mp_user %><a class="margin-left-10" href="javascript:;" data-toggle="modals" data-height="350" data-iframe="<%= qrcode_wx_mp_users_url %>" data-title="二维码管理">二维码管理</a><% end %>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- 此处更新了boostrap.min.css -->
-        <% if @wx_mp_user %>
+
         <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTabletable table-striped table-bordered table-hover dataTable margin-top-20">
-          <h5 class="text-info">开发者信息设置</h5>
-          <hr>
+          <h5 class="text-info">公众号设置</h5>
           <%= form_for @wx_mp_user, validate: true, :html => { :class => 'form-table  margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
-            <div class="row">
+            <div class="row margin-top-10">
               <div class="col-md-3 text-right">公众号名称：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">
@@ -56,7 +28,70 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">公众号原始ID：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.text_field :openid, class: "form-control", size: 60 %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">公众号二维码：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <a class="margin-left-10" href="javascript:;" data-toggle="modals" data-height="350" data-iframe="<%= qrcode_wx_mp_users_url %>" data-title="上传二维码">上传</a>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">公众号类型：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.select :user_type, WxMpUser.user_type_options, class: "form-control" %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right"></div>
+              <div class="col-md-2">
+                <%= f.submit '保存', class: "btn btn-primary btn-sm" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTabletable table-striped table-bordered table-hover dataTable margin-top-20">
+          <h5 class="text-info">开发者设置</h5>
+          <%= form_for @wx_mp_user, validate: true, :html => { :class => 'form-table  margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">URL：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= @wx_mp_user.url %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">Token：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= @wx_mp_user.token %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">绑定状态：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= @wx_mp_user.status_name %>
+                  <%#= link_to '重新绑定', bind_platforms_url, target: '_blank', id: 'rebind_link', data: {confirm: '<h4>警告：变更公众账号绑定，会导致会员卡和电商数据丢失！请谨慎操作！后果商家自负！</h4>'} %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row margin-top-10">
               <div class="col-md-3 text-right">AppID(应用ID)：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">
@@ -88,6 +123,7 @@
             </div>
           <% end %>
         </div>
+
         <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTable margin-top-20">
           <h5 class="margin-top-10 text-info">网页授权</h5>
           <div class="alert alert-block alert-info margin-top-10">
@@ -121,12 +157,14 @@
           </form>
           <%= link_to '', @wx_mp_user.is_oauth? ?  close_oauth_wx_mp_user_path(@wx_mp_user) : open_oauth_wx_mp_user_path(@wx_mp_user), method: :post, remote: true, id: 'ace-switch' %>
         </div>
-        <% end %>
+
       </div>
     </div>
   </div>
+
 </div>
 <% end %>
+
 <% content_for :custom_js do %>
 <script type="text/javascript">
   $(function(){

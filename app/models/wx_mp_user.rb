@@ -17,7 +17,6 @@ class WxMpUser < ActiveRecord::Base
   ]
 
   enum_attr :user_type, :in => [
-    ['default_user', 0, '未识别类型'],
     ['subscribe', 1, '订阅号'],
     ['auth_subscribe', 2, '认证订阅号'],
     ['service', 3, '服务号'],
