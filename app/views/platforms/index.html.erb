@@ -21,7 +21,7 @@
           <h5 class="text-info">公众号设置</h5>
           <%= form_for @wx_mp_user, validate: true, :html => { :class => 'form-table  margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
             <div class="row margin-top-10">
-              <div class="col-md-3 text-right">公众号名称：</div>
+              <div class="col-md-3 text-right">名称：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">
                   <%= f.text_field :nickname, class: "form-control", size: 60 %>
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="row margin-top-10">
-              <div class="col-md-3 text-right">公众号原始ID：</div>
+              <div class="col-md-3 text-right">原始ID：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">
                   <%= f.text_field :openid, class: "form-control", size: 60 %>
@@ -37,7 +37,7 @@
               </div>
             </div>
             <div class="row margin-top-10">
-              <div class="col-md-3 text-right">公众号二维码：</div>
+              <div class="col-md-3 text-right">二维码：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">
                   <a class="margin-left-10" href="javascript:;" data-toggle="modals" data-height="350" data-iframe="<%= qrcode_wx_mp_users_url %>" data-title="上传二维码">上传</a>
@@ -45,7 +45,7 @@
               </div>
             </div>
             <div class="row margin-top-10">
-              <div class="col-md-3 text-right">公众号类型：</div>
+              <div class="col-md-3 text-right">类型：</div>
               <div class="col-md-5">
                 <div class="input-group input-group-text">
                   <%= f.select :user_type, WxMpUser.user_type_options, class: "form-control" %>
