@@ -120,30 +120,30 @@ class Mobile::AidsController < Mobile::BaseController
 
   def award
     @activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
-   
+
     @shop_branches = @site.shop_branches.select do |shop|
       shop.sub_account.can? 'manage_marketing_sncode'
-    end 
- 
+    end
+
     @shop_branches = @site.shop_branches
   end
-  
+
   def verification
+    mobile = params[:mobile]
+    return render json: {errcode: 40002, errmsg: "电话号码不存在"} unless mobile.present?
     return render json: {errcode: 40001, errmsg: "site不存在"} unless @site.present?
 
     code = Random.rand(100000..999999)
-    mobile = params[:mobile]
-
-    return render json: {errcode: 40002, errmsg: "电话号码不存在"} unless mobile.present?
-
-    # @site.send_message(mobile, code, true, operation_id: 6, account_id: @site.account_id, userable_id: @user.id, userable_type: 'User')
+    sms_options = { mobiles: mobile, template_code: 'SMS_6770657', params: { code: code.to_s } }
+    options = { operation_id: 6, site_id: @site.id, userable_id: @user.id, userable_type: 'User' }
+    @site.send_message(sms_options, options)
 
     render json: {errcode: 0, code: code, errmsg: "短信验证码发送成功"}
   end
 
   # acceptance prize page
   def acceptance
-    site = Account.find params[:site_id]
+    site = Site.find params[:site_id]
     activity_consume = @activity.activity_consumes.where(user_id: @user.id).first
     return render json: {errcode: 20001, errmsg: "他人不能兑奖"} unless self? 
     return render json: {errcode: 20002, errmsg: "没有奖项"} unless activity_consume.present?
@@ -154,7 +154,7 @@ class Mobile::AidsController < Mobile::BaseController
     end
 
     activity_consume.use!(params[:shop])
- 
+
     return render json: {errcode: 0, code: activity_consume.code, consume_id: activity_consume.id, prize_type: activity_consume.activity_prize.prize_type, status: activity_consume.status, errmsg: "兑奖成功"}
   end
 

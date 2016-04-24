@@ -22,7 +22,7 @@ class BookingOrder < ActiveRecord::Base
     update_attributes(status: CANCELED, canceled_at: Time.now)
   end
 
-  private
+  # private
 
   def add_default_attrs
     if booking_item
@@ -42,10 +42,10 @@ class BookingOrder < ActiveRecord::Base
   def send_message
     return if booking.notify_merchant_mobiles.blank?
 
-    options = { operation_id: 7, account_id: booking.site.account_id, userable_id: user_id, userable_type: 'User' }
+    options = { operation_id: 7, site_id: booking.site_id, userable_id: user_id, userable_type: 'User' }
     sms_options = { mobiles: booking.notify_merchant_mobiles, template_code: 'SMS_7260929', params: { name: [booking_item.try(:name), username].compact.join(', '), tel: tel, total_amount: total_amount, address: address, remark: description } }
 
-    booking.site.account.send_message(sms_options, false, options)
+    booking.site.send_message(sms_options, options)
   end
 
   def update_user_address

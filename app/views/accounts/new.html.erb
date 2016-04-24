@@ -78,54 +78,6 @@
                 exceptClass: ["validate"]
             });
             var count = 60;
-            // $(".input-check").on("click", function () {
-            //     var self = $(this);
-            //     var checkClass = "input-check-forbid";
-            //     var countStr = "重发验证码({munber})";
-            //     var sendStr = "发送验证码";
-
-            //     var timer;
-            //     var counter = function () {
-            //         if (--count < 0) {
-            //             count = 60;
-            //             self.val(sendStr);
-            //             if ($("#account_mobile").val() != "" && $("#account_mobile").val() != "手机号") {
-            //                 self.removeClass(checkClass);
-            //             }
-            //             clearTimeout(timer);
-            //             return false;
-            //         }
-
-            //         self.val(countStr.replace(/{munber}/, count));
-            //         timer = setTimeout(function () {
-            //             counter();
-            //         }, 1000);
-            //     };
-            //     if (!self.hasClass(checkClass)) {
-            //         if (validate_image_code() == false){
-            //             return false;
-            //         }
-            //         //发送验证码
-            //         if ($('#account_mobile').val() == "" || !reg_mobile.test($('#account_mobile').val())) {
-            //             alert('请输入正确的手机号码');
-            //             return false;
-            //         } else {
-            //             result = $.ajax({
-            //                 url: "<%= send_sms_accounts_path %>?mobile=" + $('#account_mobile').val() + '&verify_code=' + $("#check-place").val(),
-            //                 type: 'get',
-            //                 dataType: 'json',
-            //                 success: function (data, textStatus, jqXhr) {
-            //                     if (data.errcode == -1) {
-            //                         alert('请输入正确的验证码');
-            //                     } else {
-            //                         counter();
-            //                         self.addClass(checkClass);
-            //                     }
-            //                 }
-            //             });
-            //         }
-            //     }
-            // });
 
             $("#account_mobile").on("input", function () {
                 if ($(this).val() && count == 60) {

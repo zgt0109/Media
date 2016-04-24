@@ -1,4 +1,4 @@
-class SmsOrdersController < ApplicationController
+class Sms::OrdersController < ApplicationController
   skip_before_filter *ADMIN_FILTERS, only: [:notify, :notify_verify, :error_notify]
   before_filter :set_sms_order, only: [:show, :edit, :update, :destroy, :cancel]
 
@@ -8,20 +8,20 @@ class SmsOrdersController < ApplicationController
 
   def index
     if params[:search].present? && params[:search][:status_eq].present?
-      @search = current_user.sms_orders.where(["status not in (?) and plan_type = ? ", [SmsOrder::F_DELETE, SmsOrder::T_DELETE], SmsOrder::BUY]).order("sms_orders.id DESC").search(params[:search])
+      @search = current_site.sms_orders.where(["status not in (?) and plan_type = ? ", [SmsOrder::F_DELETE, SmsOrder::T_DELETE], SmsOrder::BUY]).order("sms_orders.id DESC").search(params[:search])
     else
-      @search = current_user.sms_orders.where(["status not in (?)", [SmsOrder::F_DELETE, SmsOrder::T_DELETE]]).order("sms_orders.id DESC").search(params[:search])
+      @search = current_site.sms_orders.where(["status not in (?)", [SmsOrder::F_DELETE, SmsOrder::T_DELETE]]).order("sms_orders.id DESC").search(params[:search])
     end
     @sms_orders = @search.page(params[:page])
   end
 
   def new
-    @sms_order = current_user.sms_orders.new(plan_id: 1)
+    @sms_order = current_site.sms_orders.new(plan_id: 1)
     render layout: 'application_pop'
   end
 
   def create
-    @sms_order = current_user.sms_orders.new(params[:sms_order])
+    @sms_order = current_site.sms_orders.new(params[:sms_order])
     if @sms_order.save
       @payment = @sms_order.payment!
 
@@ -50,19 +50,11 @@ class SmsOrdersController < ApplicationController
   end
 
   def alipayapi
-    # unless current_user
-    #   return redirect_to :back, alert: '您没有权限访问'
-    # end
-
-    # @sms_order = current_user.sms_orders.find params[:id]
-
     @sms_order = SmsOrder.pending.find params[:id]
     @payment = Payment.pending.find(params[:payment_id])
 
     @data = @sms_order.options_pay_for(@payment)
     @sign = @sms_order.generate_md5(@sms_order.sort_str(@data))
-
-    # logger.info("data #{@data} sign:#{@sign}")
 
     render layout: false
   rescue => error
@@ -76,16 +68,10 @@ class SmsOrdersController < ApplicationController
     payment = Payment.where(out_trade_no: params[:out_trade_no]).first
     paymentable =  payment.try(:paymentable)
 
-    # if request.host == 'www.winwemedia.com'
-      redirect_url = 'http://www.winwemedia.com/sms_orders'
-    # else
-    #   redirect_url = sms_orders_url
-    # end
-
     if paymentable.present? && params['is_success'] == 'T'
-      redirect_to redirect_url, notice: '购买短信套餐成功'
+      redirect_to sms_orders_path, notice: '购买短信套餐成功'
     else
-      redirect_to redirect_url, alert: '购买短信套餐失败'
+      redirect_to sms_orders_path, alert: '购买短信套餐失败'
     end
   end
 
@@ -96,13 +82,11 @@ class SmsOrdersController < ApplicationController
     paymentable =  payment.try(:paymentable)
 
     if notify_verify(params['notify_id'])
-
       payment.update_attributes(trade_status: 'TRADE_SUCCESS', trade_no: params[:trade_no], status: Payment::SUCCESS, order_msg: params.to_s)
       paymentable.set_to_succeed(true) if paymentable
 
       render text: 'success'
     else
-
       paymentable.set_to_succeed(false) if paymentable
 
       render text: 'fail'
@@ -127,7 +111,7 @@ class SmsOrdersController < ApplicationController
   end
 
   def set_sms_order
-    @sms_order = current_user.sms_orders.find(params[:id])
+    @sms_order = current_site.sms_orders.find(params[:id])
   end
 
 end

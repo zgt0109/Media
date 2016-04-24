@@ -58,7 +58,7 @@ module App
         if @hotel_order.try(:hotel_branch).try(:mobile).present?
           # begin
           #   sms_content = "微酒店订房通知：用户“#{@hotel_order.name}”电话：#{@hotel_order.mobile} 于 #{@hotel_order.created_at} 预定了《#{@hotel_order.hotel_room_type.try(:name)}》房间，所属分店：#{@hotel_order.hotel_branch.try(:name)}"
-          #   @site.account.send_message(@hotel_order.hotel_branch.mobile, sms_content, false, operation_id: 4, account_id: @site.account_id, userable_id: @hotel_order.user_id, userable_type: 'User')
+          #   @site.send_message(@hotel_order.hotel_branch.mobile, sms_content, false, operation_id: 4, account_id: @site.account_id, userable_id: @hotel_order.user_id, userable_type: 'User')
           # rescue Exception => e
           #   Rails.logger.error "微酒店订房通知短信发送失败：#{e}"
           # end

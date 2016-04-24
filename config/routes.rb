@@ -50,15 +50,6 @@ Wp::Application.routes.draw do
     post :read_all, :api, on: :collection
   end
 
-  resources :sms_expenses, only: :index
-  resources :sms_orders, except: [:edit, :show, :update] do
-    get :alipayapi, :cancel, on: :member
-    collection do
-      get :callback, :merchant
-      post :notify, :payment_request
-    end
-  end
-
   resources :payment_settings do
     post :enable, :disable, on: :member
   end
@@ -127,8 +118,8 @@ Wp::Application.routes.draw do
 
   resources :accounts, only: [:new, :create, :update, :edit] do
     collection do
-      get :sms_switch, :send_sms
-      post :open_sms, :close_sms, :send_message, :send_text_message, :update_mobile
+      get :send_sms
+      post :update_mobile
     end
   end
 
@@ -267,6 +258,23 @@ Wp::Application.routes.draw do
     resources :sessions, only: :create
     match 'login'  => 'sessions#new',     as: :login
     match 'secret' => 'sessions#secret'
+  end
+
+  namespace :sms do
+    resource :messages, only: [] do
+      collection do
+        get :switch
+        post :toggle, :send_message, :send_text_message
+      end
+    end
+    resources :expenses, only: :index
+    resources :orders, except: [:edit, :show, :update] do
+      get :alipayapi, :cancel, on: :member
+      collection do
+        get :callback, :merchant
+        post :notify, :payment_request
+      end
+    end
   end
 
 end

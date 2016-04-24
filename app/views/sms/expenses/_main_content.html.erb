@@ -9,8 +9,8 @@
               <li><%= link_to '使用记录', sms_expenses_path %></li>
             <% elsif current_page?(sms_orders_path) %>
               <li><%= link_to '套餐管理', sms_orders_path %></li>
-            <% elsif current_page?(sms_switch_accounts_path) %>
-              <li><%= link_to '短信发送控制', sms_switch_accounts_path %></li>
+            <% elsif current_page?(switch_sms_messages_path) %>
+              <li><%= link_to '短信发送控制', switch_sms_messages_path %></li>
             <% end %>
         </ul>
         <%= render '/layouts/qrcode' %>
@@ -22,7 +22,7 @@
                     <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
                         <%= link_to_li '使用记录', sms_expenses_path %>
                         <%= link_to_li '套餐管理', sms_orders_path %>
-                        <%= link_to_li '短信发送控制', sms_switch_accounts_path %>
+                        <%= link_to_li '短信发送控制', switch_sms_messages_path %>
                     </ul>
                     <div class="tab-content no-border padding-24">
                       <%= yield :tab %>

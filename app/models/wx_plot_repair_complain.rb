@@ -11,7 +11,7 @@ class WxPlotRepairComplain < ActiveRecord::Base
   accepts_nested_attributes_for :messages
 
   before_save :create_statuses
-  after_create :send_sms#, :igetui
+  # after_create :send_sms#, :igetui
 
   enum_attr :gender, :in => [
     ['sir', 1, '先生'],
@@ -53,7 +53,7 @@ class WxPlotRepairComplain < ActiveRecord::Base
       return if wx_plot_category.nil? || wx_plot.try(:site).nil? || !is_open_sms
       options = { operation_id: 5, account_id: wx_plot.site.account_id, userable_id: user_id, userable_type: 'User' }
       sms_settings = wx_plot_category.sms_settings.where(['wx_plot_sms_settings.start_at <= ? and wx_plot_sms_settings.end_at >= ?', created_at.strftime('%H:%M'), created_at.strftime('%H:%M')]).all
-      wx_plot.site.account.send_message(sms_settings.collect(&:phone).uniq.join(','), "#{created_at.strftime('%H:%M')}收到#{nickname}用户#{phone}的#{wx_plot_category.name}#{repair? ? '报修申请' : '投诉建议'}", false, options)
+      wx_plot.site.send_message(sms_settings.collect(&:phone).uniq.join(','), "#{created_at.strftime('%H:%M')}收到#{nickname}用户#{phone}的#{wx_plot_category.name}#{repair? ? '报修申请' : '投诉建议'}", false, options)
     end
 
     def igetui

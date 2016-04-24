@@ -137,7 +137,7 @@ class InitDb < ActiveRecord::Migration
   create_table "activities_business_shops", :id => false do |t|
     t.integer  "activity_id"
     t.integer  "business_shop_id"
-    t.datetime "created_at",       :null => false
+    t.datetime "created_at"
   end
 
   add_index "activities_business_shops", ["activity_id"], :name => "index_activities_business_shops_on_activity_id"
@@ -147,8 +147,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "activity_id",                 :null => false
     t.integer  "fans_game_id",                :null => false
     t.integer  "game_status",  :default => 1, :null => false
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at"
   end
 
   add_index "activities_fans_games", ["activity_id"], :name => "index_activities_fans_games_on_activity_id"
@@ -464,7 +463,7 @@ class InitDb < ActiveRecord::Migration
   create_table "admin_users_roles" do |t|
     t.integer  "admin_user_id", :null => false
     t.integer  "role_id",       :null => false
-    t.datetime "created_at",    :null => false
+    t.datetime "created_at"
   end
 
   add_index "admin_users_roles", ["admin_user_id"], :name => "index_admin_users_roles_on_admin_user_id"
@@ -474,8 +473,8 @@ class InitDb < ActiveRecord::Migration
     t.integer  "user_id",          :null => false
     t.integer  "activity_user_id", :null => false
     t.integer  "points"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "album_photos" do |t|
@@ -622,7 +621,6 @@ class InitDb < ActiveRecord::Migration
     t.string   "pic_key"
     t.integer  "sort",            :default => 1, :null => false
     t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
   end
 
   add_index "booking_item_pictures", ["booking_item_id"], :name => "index_booking_item_pictures_on_booking_item_id"
@@ -859,8 +857,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "pic_key"
     t.integer  "business_shop_id"
     t.integer  "sort"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
   end
 
   add_index "business_shop_pictures", ["business_shop_id"], :name => "index_business_shop_pictures_on_business_shop_id"
@@ -1162,8 +1159,8 @@ class InitDb < ActiveRecord::Migration
     t.integer  "micro_college_id"
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "college_attachments", ["micro_college_id"], :name => "index_college_attachments_on_micro_college_id"
@@ -1511,8 +1508,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "name",                      :null => false
     t.integer  "sort",       :default => 1
     t.integer  "status",     :default => 1, :null => false
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at"
   end
 
   create_table "feedbacks" do |t|
@@ -1694,7 +1690,7 @@ class InitDb < ActiveRecord::Migration
     t.string   "name"
     t.string   "greet_cover"
     t.string   "recommand_pic"
-    t.datetime "created_at",    :null => false
+    t.datetime "created_at"
     t.datetime "updated_at",    :null => false
   end
 
@@ -1739,7 +1735,6 @@ class InitDb < ActiveRecord::Migration
     t.string   "pic_key"
     t.integer  "sort",          :default => 0, :null => false
     t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
   end
 
   add_index "group_item_pictures", ["group_item_id"], :name => "index_group_item_pictures_on_group_item_id"
@@ -2277,7 +2272,6 @@ class InitDb < ActiveRecord::Migration
     t.integer  "house_intro_id"
     t.string   "pic_key"
     t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
   end
 
   create_table "house_intros" do |t|
@@ -2650,7 +2644,7 @@ class InitDb < ActiveRecord::Migration
     t.integer  "paired_id"
     t.string   "pairing_type"
     t.text     "pairing_value"
-    t.datetime "created_at",    :null => false
+    t.datetime "created_at"
     t.datetime "updated_at",    :null => false
   end
 
@@ -3100,8 +3094,8 @@ class InitDb < ActiveRecord::Migration
     t.integer  "activity_user_id"
     t.float    "award_amount"
     t.datetime "used_at"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "red_packet_releases", ["activity_id"], :name => "index_red_packet_releases_on_activity_id"
@@ -3727,8 +3721,8 @@ class InitDb < ActiveRecord::Migration
     t.string   "answer"
     t.string   "summary"
     t.integer  "survey_question_choice_id"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "survey_answers", ["activity_id"], :name => "index_survey_answers_on_activity_id"
@@ -4086,8 +4080,8 @@ class InitDb < ActiveRecord::Migration
     t.datetime "end_at"
     t.text     "description"
     t.integer  "status",       :default => 1, :null => false
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "vip_givens", ["vip_care_id"], :name => "index_vip_givens_on_vip_care_id"
@@ -4132,7 +4126,7 @@ class InitDb < ActiveRecord::Migration
   create_table "vip_grades_vip_privileges", :id => false do |t|
     t.integer  "vip_grade_id",     :null => false
     t.integer  "vip_privilege_id", :null => false
-    t.datetime "created_at",       :null => false
+    t.datetime "created_at"
   end
 
   add_index "vip_grades_vip_privileges", ["vip_grade_id"], :name => "index_vip_grades_vip_privileges_on_vip_grade_id"
@@ -4833,8 +4827,8 @@ class InitDb < ActiveRecord::Migration
     t.string   "username",                    :null => false
     t.string   "phone"
     t.integer  "people_count", :default => 1, :null => false
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "wedding_guests", ["phone"], :name => "index_wedding_guests_on_phone"
@@ -4857,7 +4851,6 @@ class InitDb < ActiveRecord::Migration
     t.integer  "wedding_id"
     t.text     "content"
     t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "wedding_seats" do |t|
@@ -4924,7 +4917,7 @@ class InitDb < ActiveRecord::Migration
     t.boolean  "is_login_join"
     t.string   "ip_address"
     t.string   "mobile"
-    t.datetime "created_at",    :null => false
+    t.datetime "created_at"
     t.datetime "updated_at",    :null => false
   end
 
@@ -5128,8 +5121,8 @@ class InitDb < ActiveRecord::Migration
     t.string   "location_address"
     t.float    "location_x"
     t.float    "location_y"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "wmall_slide_pictures" do |t|
@@ -5216,8 +5209,8 @@ class InitDb < ActiveRecord::Migration
     t.text     "ext_info"
     t.text     "pic_info"
     t.integer  "status",       :default => 0
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "wx_feedbacks", ["feed_back_id"], :name => "index_wx_feedbacks_on_feed_back_id"

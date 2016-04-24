@@ -1,6 +1,6 @@
 class SmsOrder < ActiveRecord::Base
-
   belongs_to :account
+  belongs_to :site
   has_many   :payments, as: :paymentable
 
   attr_accessor :payment_type
@@ -96,29 +96,27 @@ class SmsOrder < ActiveRecord::Base
   end
 
   def payment!
-    transaction do
-      pending_payment = payments.wait_buyer_pay.first
-      if pending_payment
-        payment = pending_payment
-      else
-        payment = Payment.setup({
-          payment_type_id: 10003,
-          account_id: account_id,
-          account_id: site_id,
-          customer_id: site_id,
-          customer_type: 'Site',
-          paymentable_id: id,
-          paymentable_type: 'SmsOrder',
-          out_trade_no: order_no,
-          amount: plan_cost.to_f / 100,
-          subject: "充值 #{order_no}",
-          body: "充值 #{order_no}",
-          source: 'sms_order'
-        })
-      end
-
-      payment
+    pending_payment = payments.wait_buyer_pay.first
+    if pending_payment
+      payment = pending_payment
+    else
+      payment = Payment.setup({
+        payment_type_id: 10003,
+        account_id: account_id,
+        site_id: site_id,
+        customer_id: site_id,
+        customer_type: 'Site',
+        paymentable_id: id,
+        paymentable_type: 'SmsOrder',
+        out_trade_no: order_no,
+        amount: plan_cost.to_f / 100,
+        subject: "充值 #{order_no}",
+        body: "充值 #{order_no}",
+        source: 'sms_order'
+      })
     end
+
+    payment
   end
 
   def domain_url
@@ -322,7 +320,6 @@ class SmsOrder < ActiveRecord::Base
       end
     end
 
-
     img = Magick::Image::read_inline(rqrcode.to_data_url).first #二维码作为背景图
     #if self.logo?
     #  mark = Magick::ImageList.new
@@ -333,28 +330,27 @@ class SmsOrder < ActiveRecord::Base
   end
 
   def add_default_attrs
-    raise "account_id cannot be nil" unless account
-
     self.date = Date.today
+    self.account_id = site.account_id
     self.order_no = Concerns::OrderNoGenerator.generate
-    SmsOrder::PLANS[self.plan_id].each{|key, value| self[key] = value} if self.plan_id
-    if self.buy?
 
-    else
+    # plan_name=xxx
+    SmsOrder::PLANS[self.plan_id].each{|key, value| self[key] = value} if self.plan_id
+
+    if self.giv?
       self.status = 1 # 赠送的套餐，订单直接设为已支付状态
-      account.update_attributes(free_sms: SmsOrder::PLANS[self.plan_id][:plan_sms])
+      self.free_sms = SmsOrder::PLANS[self.plan_id][:plan_sms]
     end
+
+    # 测试环境支付1分钱
     self.plan_cost = 1 unless Rails.env.production? || Rails.env.staging?
   end
 
-  def set_to_succeed(type)
-    return unless self.account
-    return unless self.pending? || self.failure?
-    if type
-      transaction do
-        update_attributes(status: SmsOrder::SUCCEED)
-        account.update_attributes(pay_sms_count: account.pay_sms_count.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
-      end
+  def set_to_succeed(is_true)
+    return unless pending? || failure?
+
+    if is_true
+      update_attributes(status: SmsOrder::SUCCEED, pay_sms_count: pay_sms_count.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
     else
       update_attributes(status: SmsOrder::FAILURE)
     end

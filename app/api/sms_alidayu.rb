@@ -33,9 +33,23 @@ class SmsAlidayu
     false
   end
 
+  # sms_options = {
+  #   mobiles: '18621632985',
+  #   template_code: 'SMS_6770657',
+  #   params: {
+  #     code: '234569',
+  #     product: '微枚迪'
+  #   }
+  # }
+  # # params为模板内容的变量集合，根据模板中定义变量的不同而不同，若模板中未定义变量可不传
+  # Alidayu::Sms.send(sms_options)
+  #
+  # options: source, account_id, site_id, userable_id, userable_type
+  # source 业务类型(1:会员卡,2:电商,3:餐饮,4:酒店,5:小区,6:活动,7:微服务,8:其它)
   def send_sms(sms_options, options = {})
     content = sms_options[:template_code]
     mobiles = sms_options[:mobiles]
+
     if mobiles.is_a?(Array)
       mobiles_count = mobiles.count
       mobiles = mobiles.join(',')
@@ -48,13 +62,15 @@ class SmsAlidayu
     #   Rails.logger.info("手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
     #   SiteLog::Base.logger('smslog', "手机号码：#{mobiles} 今天短信发送次数：#{today_send_count}")
 
-    #   return_code = -999
+    #   return_code = -1
     # else
+
+      # SiteLog::Base.logger('smslog', "request: #{sms_options}")
+
       response = Alidayu::Sms.send(sms_options.merge!(mobiles: mobiles.to_s))
+      SiteLog::Base.logger('smslog', "request: #{sms_options}, response：#{response}")
 
-      SiteLog::Base.logger('smslog', "response：#{response}")
-
-      return_code = response['alibaba_aliqin_fc_sms_num_send_response']['result']['model'] rescue -999
+      return_code = response['alibaba_aliqin_fc_sms_num_send_response']['result']['model'] rescue -1
       SmsLog.create(options.merge!(date: Date.today, phone: mobiles, content: content, provider: 'Alidayu', return_code: return_code))
     # end
 

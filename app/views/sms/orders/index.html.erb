@@ -24,7 +24,7 @@
           <a href="javascript:;" class="btn btn-primary btn-sm" data-toggle="modals" data-height="500" data-iframe="<%= new_sms_order_path %>" data-title="购买短信套餐">购买套餐</a>
         </div>
         <div class="col-sm-3">
-          <p class="line-height-30 text-right">购买总数：<%= current_user.buy_sms_totality %>条； 赠送总数：<%= current_user.giv_sms_totality %>条</p>
+          <p class="line-height-30 text-right">购买总数：<%= current_site.buy_sms_totality %>条； 赠送总数：<%= current_site.giv_sms_totality %>条</p>
         </div>
         <% end %>
       </div>
@@ -74,4 +74,4 @@
   </div>
 <% end %>
 
-<%= render 'sms_expenses/main_content' %>
+<%= render 'sms/expenses/main_content' %>

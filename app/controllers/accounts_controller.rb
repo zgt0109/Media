@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class AccountsController < ApplicationController
-  skip_before_filter *ADMIN_FILTERS, only: [:new, :create, :send_message, :send_remind_message, :send_text_message]
-  before_filter :set_account, only: [:edit, :update_mobile, :update, :open_sms, :close_sms]
+  skip_before_filter *ADMIN_FILTERS, only: [:new, :create]
+  before_filter :set_account, only: [:edit, :update_mobile, :update]
   skip_before_filter :check_auth_mobile, only: [:send_sms, :update_mobile]
 
   def index
@@ -79,85 +79,6 @@ class AccountsController < ApplicationController
 
     if @account.update_attributes(auth_mobile: 1, mobile: params[:account][:mobile])
       redirect_to :back, notice: '验证成功'
-    end
-  end
-
-  def sms_switch
-    @shop_branches = current_site.shop_branches.used
-    @partialLeftNav = "/layouts/partialLeftSys"
-  end
-
-  def open_sms
-    respond_to do |format|
-      if @account.open_sms!
-        format.js { render js: "$('.info').html('');$('.btn-pluin').attr('href', '#{close_sms_accounts_path}');showTip('success', '操作成功');" }
-      else
-        format.js { render js: "showTip('warning', '操作失败');" }
-      end
-    end
-  end
-
-  def close_sms
-    respond_to do |format|
-      if @account.close_sms!
-        format.js { render js: "$('.btn-pluin').attr('href', '#{open_sms_accounts_path}');showTip('success', '操作成功');" }
-      else
-        format.js { render js: "showTip('warning', '操作失败');" }
-      end
-    end
-  end
-
-  # 参数 operation_id in (1:会员卡,2:电商,3:餐饮,4:酒店,5:小区)
-  # 发送付费短信http接口,调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_message", {phone: '13262902619', content: '电商短信测试', operation_id: '2', account_id: 10000, userable_id: 10001, userable_type: 'User'})
-  # 发送免费短信http接口调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_message", {phone: '13262902619', content: '电商短信测试', operation_id: '2', account_id: 10000, userable_id: 10001, userable_type: 'User', is_free: 1})
-  def send_message
-    errors = []
-    errors << "参数必须带有 wx_mp_user_open_id 或 account_id" if params[:wx_mp_user_open_id].blank? && params[:account_id].blank?
-    errors << "参数必须带有 phone, content 和 operation_id" if params[:phone].blank? || params[:content].blank? || params[:operation_id].blank?
-    errors << "短信通知功能未包含【#{params[:operation_id]}】模块" unless SmsExpense.operations.include?(params[:operation_id].to_i)
-
-    if errors.blank?
-      if params[:wx_mp_user_open_id].present?
-        @wx_mp_user = WxMpUser.where(openidid: params[:wx_mp_user_open_id]).first
-        @account = @wx_mp_user.site.try(:account)
-      elsif params[:account_id].present?
-        @account = Account.where(id: params[:account_id]).first
-      end
-
-      errors << "商户不存在" unless @account
-
-      result = @account.send_message(params[:phone], params[:content], !!params[:is_free], params) if @account
-      errors = errors + result[:errors] if result.present? && result[:errors].present?
-    end
-
-    render text: errors.present? ? errors.join("\n") : '商户短信通知发送成功'
-  end
-
-  # 发送免费短信http接口,调用方法如下：
-  # RestClient.post("http://dev.winwemedia.local:3000/accounts/send_text_message", {phone: '13262902619', content: '免费短信测试', userable_id: 10000, userable_type: 'User', source: 'ec', token: 'qwertyuiop[]asdfghjklzxcvbnm'})
-  def send_text_message
-    errors = []
-    %i(phone content userable_id userable_type source token).each do |key|
-    	errors << "#{key.to_s}不能为空" if params[key].blank?
-    end
-
-    errors << "token不存在" unless params[:token] == 'qwertyuiop[]asdfghjklzxcvbnm'
-
-    if errors.blank?
-      sms_service = SmsAlidayu.new
-      phones = params[:phone].split(',').map(&:to_s).map{|m| m.gsub(' ', '')}.compact.uniq
-      # TODO just for get code
-      sms_service.send_code_for_verify(phones, params[:content], {userable_id: params[:userable_id], userable_type: params[:userable_type], source: params[:source]})
-      # 短信发送失败，添加错误信息
-      errors << sms_service.error_message if sms_service.error?
-    end
-
-    if errors.blank?
-      render json: {result: 'success'}
-    else
-      render json: {result: 'failure', error_msg: errors.join(',')}
     end
   end
 

@@ -2,7 +2,7 @@
     <div id="tab1" class="tab-pane fade active in ">
       <div class="row">
         <div class="col-sm-12">
-          <% if current_user.usable_sms < 100 %>
+          <% if current_site.usable_sms < 100 %>
             <div class="alert alert-block alert-warning">
               <span class=""><strong>预警：</strong>你的短信条数少于100条，为确保你的信息准确到达请尽快购买新的短信套餐。</span>
               <a href="javascript:;" class="pull-right" data-toggle="modals" data-height="500" data-iframe="<%= new_sms_order_path %>" data-title="购买短信套餐">立即购买</a>
@@ -36,8 +36,8 @@
                 <input type="submit" class="btn btn-primary btn-sm" value="查询">
               </div>
               <div class="col-sm-6 pull-right">
-                <p class="line-height-30 text-right">赠送剩余：<%= current_user.free_sms_count %>条； 购买剩余<%= current_user.pay_sms_count %>条；
-                  总共使用：<%= current_user.sms_expenses.succeed.count %>条</p>
+                <p class="line-height-30 text-right">赠送剩余：<%= current_site.free_sms_count %>条； 购买剩余<%= current_site.pay_sms_count %>条；
+                  总共使用：<%= current_site.sms_expenses.succeed.count %>条</p>
               </div>
           <% end %>
         </div>
@@ -57,10 +57,10 @@
               <% @dates.each do |d| %>
                 <tr>
                   <td><%= d.date %></td>
-                  <td><%= current_user.sms_expenses_count(d.date) %></td>
+                  <td><%= current_site.sms_expenses_count(d.date) %></td>
                   <% @operation_options.each do |f| %>
                     <%# next if f.first == "电商" %>
-                    <td><%= current_user.sms_expenses_count(d.date, f.last) %></td>
+                    <td><%= current_site.sms_expenses_count(d.date, f.last) %></td>
                   <% end %>
                 </tr>
               <% end %>

@@ -1,6 +1,7 @@
 class SmsExpense < ActiveRecord::Base
 
   belongs_to :account
+  belongs_to :site
 
   enum_attr :status, :in => [
     ['succeed', 1, '发送成功'],

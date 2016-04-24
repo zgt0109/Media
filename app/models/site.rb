@@ -37,6 +37,9 @@ class Site < ActiveRecord::Base
   # has_one :wx_mp_user, inverse_of: :site
   # has_many  :wx_users, through: :wx_mp_user
 
+  has_many :sms_expenses
+  has_many :sms_orders
+
   has_many :assistants_sites
   has_many :assistants, through: :assistants_sites
   has_many :replies
@@ -248,8 +251,96 @@ class Site < ActiveRecord::Base
     enabled_payment_setting_types.count > 0
   end
 
-  def need_auth_mobile?
-    auth_mobile.to_i != 1 && agent_id != 10656
+  def open_sms
+    update_attributes(is_open_sms: true)
+  end
+
+  def close_sms
+    update_attributes(is_open_sms: false)
+  end
+
+  def buy_sms_totality
+    sms_orders.buy.where(status: [SmsOrder::SUCCEED, SmsOrder::F_DELETE]).collect(&:plan_sms).sum
+  end
+
+  def giv_sms_totality
+    sms_orders.giv.collect(&:plan_sms).sum
+  end
+
+  def usable_sms
+    pay_sms_count.to_i + free_sms_count.to_i
+  end
+
+  def sms_expenses_count(date, operation_id = nil)
+    condtions = {date: date, status: 1}
+    condtions.merge!(operation_id: operation_id) if  operation_id
+    sms_expenses.where(condtions).count
+  end
+
+  # sms_options: template_code, mobiles, params
+  # options: is_free, operation_id, site_id, userable_id, userable_type
+  # is_free 发送短信是否免费
+  # operation_id 业务类型(1:会员卡,2:电商,3:餐饮,4:酒店,5:小区,6:活动,7:微服务,8:其它)
+  def send_message(sms_options, options = {})
+    content = sms_options[:template_code]
+    mobiles = sms_options[:mobiles]
+    is_free = options[:is_free] || false
+    message_id = 0
+
+    @errors = []
+    @errors << "手机号码不能为空" if mobiles.blank?
+    unless is_free
+      @errors << "商户未开启短信通知服务" unless is_open_sms
+    end
+
+    phones = mobiles.split(',').map(&:to_s).map{|m| m.gsub(' ', '')}.compact.uniq
+    phones.map{|m| @errors << "手机号码格式不正确" unless m.to_s =~ /^\d+$/ }
+    @errors << "短信内容不能为空" if content.blank?
+
+    if @errors.blank?
+      _options = options.slice(:userable_id, :userable_type).merge(account_id: account_id, site_id: id, source: options[:operation_id])
+      if is_free
+        message_id = mass_send_message(sms_options, _options).to_i
+      elsif free_sms_count > 0 || pay_sms_count > 0
+        message_id = mass_send_message(sms_options, _options).to_i
+        send_success = message_id > 1 || message_id < -10000000
+        sms_status = send_success ? 1 : message_id
+        Rails.logger.info "sms message_id #{message_id}, send_success: #{send_success}, sms_status: #{sms_status}"
+
+        if send_success
+          if free_sms_count > 0
+            update_attribute(:free_sms_count, free_sms_count - phones.count)
+          else
+            update_attribute(:pay_sms_count, pay_sms_count - phones.count)
+          end
+        end
+
+        phones.each do |phone|
+          SmsExpense.create({
+            date: Date.today, account_id: account_id, site_id: id, phone: phone, content: content,
+            operation_id: options[:operation_id], status: sms_status
+          })
+        end unless is_free
+      else
+        @errors << "商户 site_id #{id} 短信套餐余额不足"
+      end
+    end
+    {errors: @errors, message_id: message_id}
+  rescue => e
+    Rails.logger.info "account send_message is error: #{e}"
+    e.backtrace.each { |error_msg| Rails.logger.info error_msg }
+    {errors: ["发送短信出错：#{e.message}"], message_id: 0}
+  end
+
+  def send_system_message(options = {}, smm = nil)
+    smm = SystemMessageModule.where(module_id: options[:module_id]).first unless smm
+    sms = SystemMessageSetting.where(site_id: options[:site_id], system_message_module_id: smm.id).first_or_initialize(site_id: options[:site_id], system_message_module_id: smm.id)
+    if sms.is_open
+      sms.system_messages << SystemMessage.new(site_id: options[:site_id], content: options[:content], system_message_module_id: smm.id)
+      sms.save!
+    else
+      sms.view_remind_music
+    end
   end
 
   def enabled_payment_settings
@@ -1004,6 +1095,17 @@ START
     full_attrs.merge!(extend_attrs) if extend_attrs.present?
 
     [default_attrs, full_attrs]
+  end
+
+  private
+
+  # TODO
+  def mass_send_message(sms_options, options = {})
+    sms_service = SmsAlidayu.new
+    sms_service.send_sms(sms_options, options)
+    # 短信发送失败，添加错误信息
+    @errors << sms_service.error_message if sms_service.error?
+    sms_service.result
   end
 
 end

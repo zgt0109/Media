@@ -14,18 +14,18 @@
         <div class="form-group">
           <label>接收短信开关：</label>
           <label>
-            <input name="switch-field-1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" <%= 'checked' if current_user.is_open_sms %>>
+            <input name="switch-field-1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" <%= 'checked' if current_site.is_open_sms? %>>
             <span class="lbl"></span>
           </label>
         </div>
       </form>
 
-      <%= link_to '', current_user.is_open_sms ?  close_sms_accounts_path : open_sms_accounts_path, method: :post, remote: true, id: 'ace-switch' %>
+      <%= link_to '', toggle_sms_messages_path, method: :post, remote: true, id: 'ace-switch' %>
     </div>
   </div>
 <% end %>
 
-<%= render 'sms_expenses/main_content' %>
+<%= render 'sms/expenses/main_content' %>
 
 <% content_for :custom_js do %>
   <script type="text/javascript">
