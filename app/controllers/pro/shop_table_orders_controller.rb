@@ -69,7 +69,7 @@ class Pro::ShopTableOrdersController < Pro::ShopBaseController
 
   private
     def authorize_shop_branch_account
-      authorize_shop_branch_account! 'manage_catering_book_table' if current_user.industry_food?
+      authorize_shop_branch_account! 'manage_catering_book_table' if current_site.industry_food?
     end
 
     def find_record

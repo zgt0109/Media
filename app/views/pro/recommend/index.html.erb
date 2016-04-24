@@ -9,11 +9,11 @@
 				<%= render '/layouts/qrcode' %>
 			</div>
       <div class="page-content">
-        <iframe src="<%= RECOMMEND_HOST %>/union-wkl/console?admin_token=<%= current_user.find_or_generate_auth_token %>" frameborder="0" width="100%" height="1000px" scrolling="no"></iframe>
+        <iframe src="<%= RECOMMEND_HOST %>/union-wkl/console?admin_token=<%= current_site.find_or_generate_auth_token %>" frameborder="0" width="100%" height="1000px" scrolling="no"></iframe>
         <!--
         <div class="col-md-12 text-center" id="showmess" style="display:none;"><button class="btn btn-primary btn-lg">加入联盟</button></div>
         <div id="show_mess_box" style="display:none;">
-          <%= form_for :recommend_wx_mp_user, url: "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_user.find_or_generate_auth_token}", method: :put, remote: true, html: {id: "recommend_wx_mp_user_form"} do |f| %>
+          <%= form_for :recommend_wx_mp_user, url: "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_site.find_or_generate_auth_token}", method: :put, remote: true, html: {id: "recommend_wx_mp_user_form"} do |f| %>
 						<div class="form-group">
 							<label class="control-label">微信号（自定义ID）</label>
 							<div class="clearfix">
@@ -89,7 +89,7 @@
 		}
 
     $.ajax({
-      url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/fetch_info?auth_token=#{current_user.token}" %>',
+      url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/fetch_info?auth_token=#{current_site.token}" %>',
       data: {},
       crossDomain: true,
       dataType: "json",
@@ -128,7 +128,7 @@
 
 		$("form").on('silentSubmit', function(){
 			$.ajax({
-				url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_user.token}" %>',
+				url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/update_info?auth_token=#{current_site.token}" %>',
 				data: $("#recommend_wx_mp_user_form").serializeArray(),
 				crossDomain: true,
 				dataType: 'json',
@@ -192,7 +192,7 @@
 				  $("#showmess").show();
 				  $("#show_mess_box").hide();
 					$.ajax({
-						url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/disable?auth_token=#{current_user.token}" %>',
+						url: '<%= "#{RECOMMEND_HOST}/admin/wx_mp_users/disable?auth_token=#{current_site.token}" %>',
 						data: {_method: 'put'},
 						crossDomain: true,
 						dataType: "json",

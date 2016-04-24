@@ -6,9 +6,9 @@
           <%= render 'partials/home' %>
 
           <li>
-            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+            <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
                 <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
-            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+            <% elsif current_site.industry_takeout? || session[:current_industry_id] == 10002 %>
                 <%= link_to "微外卖", shops_path(industry_id: 10002) %>
             <% end %>
           </li>

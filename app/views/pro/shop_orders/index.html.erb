@@ -4,16 +4,16 @@
         <ul class="breadcrumb">
           <%= render 'partials/home' %>
           <li>
-            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+            <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
                 <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
-            <% elsif current_user.industry_takeout? ||  session[:current_industry_id] == 10002 %>
+            <% elsif current_site.industry_takeout? ||  session[:current_industry_id] == 10002 %>
                 <%= link_to "微外卖", shops_path(industry_id: 10002) %>
             <% end %>
           </li>
           <li>
-            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+            <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
                 <%= link_to "订餐管理", shop_orders_path(industry_id: 10001) %>
-            <% elsif current_user.industry_takeout? %>
+            <% elsif current_site.industry_takeout? %>
                 <%= link_to "外卖管理", shop_orders_path(industry_id: 10002) %>
             <% end %>
           </li>
@@ -107,17 +107,17 @@
                 <th>订单号</th>
                 <th>姓名</th>
                 <th>手机号码</th>
-                <% if current_user.industry_takeout? %>
+                <% if current_site.industry_takeout? %>
                     <th>外送地址</th>
                 <% end %>
                 <th>订单状态</th>
                 <th>支付状态</th>
                 <th>支付方式</th>
                 <th>下单时间</th>
-                <% if current_user.industry_food? %>
+                <% if current_site.industry_food? %>
                     <th>订餐时间或桌号排号</th>                  
                 <% end %>
-                    <% if current_user.industry_takeout? %>
+                    <% if current_site.industry_takeout? %>
                       <th>送餐时间</th>
                       <% end %>
                 <th>操作</th>
@@ -132,7 +132,7 @@
                     </td>
                     <td><%= shop_order.username %></td>
                     <td><%= shop_order.mobile %></td>
-                    <% if current_user.industry_takeout? %>
+                    <% if current_site.industry_takeout? %>
                         <td><%= shop_order.address %></td>
                     <% end %>
                     <td>
@@ -145,7 +145,7 @@
                       <%= shop_order.pay_type_name %>
                     </td>
                     <td><%= shop_order.created_at %></td>
-                    <% if current_user.industry_food? %>
+                    <% if current_site.industry_food? %>
                          <% if shop_order.in_queue? %>
                          <td><%= shop_order.book_at %>   排队号:   <%= shop_order.queue_no %></td>
                          <% elsif shop_order.in_branch? %>
@@ -154,7 +154,7 @@
                          <td><%= shop_order.book_at %></td>
                         <% end %>
                     <% end %>
-                      <% if current_user.industry_takeout? %>
+                      <% if current_site.industry_takeout? %>
                         <td><%= shop_order.book_at %></td>
                       <% end %>
                     <td>
@@ -166,7 +166,7 @@
                   </tr>
               <% end %>
               <% if @shop_orders.blank? %>
-                  <tr><td colspan="<%= current_user.industry_takeout? ? 12 : 9 %>">无记录</td></tr>
+                  <tr><td colspan="<%= current_site.industry_takeout? ? 12 : 9 %>">无记录</td></tr>
               <% end %>
 
               </tbody>

@@ -1,10 +1,10 @@
 module Pro::ShopBranchHelper
   def industry_food?
-    # session[:current_industry_id] == 10001 || current_user.industry_food?
+    # session[:current_industry_id] == 10001 || current_site.industry_food?
   end
 
   def industry_takeout?
-    # session[:current_industry_id] == 10002 || current_user.industry_takeout?
+    # session[:current_industry_id] == 10002 || current_site.industry_takeout?
   end
 
   def industry_food_path?

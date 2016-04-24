@@ -14,9 +14,9 @@ class Biz::WmallGroupBaseController < Biz::GroupBaseController
 
   def login_from_api
     if params[:auth_token].present?
-      account = Account.where(token: params[:auth_token]).first
-      if account
-        session[:account_id] = account.id
+      site = Site.where(token: params[:auth_token]).first
+      if site
+        session[:account_id] = site.id
         require_group
       end
     end

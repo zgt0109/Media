@@ -7,10 +7,10 @@
         <a href="#">首页</a>
       </li>
       <li>
-        <% if current_user.industry_food? %>
+        <% if current_site.industry_food? %>
         微餐饮
         <% end %>
-        <% if current_user.industry_takeout? %>
+        <% if current_site.industry_takeout? %>
         微外卖
         <% end %>
       </li>

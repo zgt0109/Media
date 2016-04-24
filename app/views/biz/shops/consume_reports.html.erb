@@ -25,7 +25,7 @@
             </div>
 
             <div class="col-sm-12">
-              <%= form_for @search, url: shops_consume_reports_path(account_id: current_shop_account.id), html: { method: :get } do |f| %>
+              <%= form_for @search, url: shops_consume_reports_path(site_id: current_shop_account.id), html: { method: :get } do |f| %>
                   <div class="col-md-3 row">
                     <div class="input-group input-group-text">
                       <span class="input-group-addon">活动名称：</span>
@@ -48,7 +48,7 @@
 
                   <div class="col-md-3 row">
                     <button class="btn btn-primary btn-sm btn-filter">查询</button>
-                    <%= link_to '导出EXCEL', shops_consume_reports_path(account_id: current_shop_account.id, format: :xls),
+                    <%= link_to '导出EXCEL', shops_consume_reports_path(site_id: current_shop_account.id, format: :xls),
                                 class: 'btn btn-primary btn-sm btn-filter' %>
                   </div>
               <%- end %>

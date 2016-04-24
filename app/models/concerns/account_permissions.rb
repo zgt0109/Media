@@ -6,7 +6,7 @@ module AccountPermissions
   def statistics_permissions
     %w[
       view_following_num
-      view_vip_users_num 
+      view_vip_users_num
       view_pv_num
       view_uv_num
     ]
@@ -14,15 +14,14 @@ module AccountPermissions
 
   def order_permissions
     permissions = []
-    permissions << 'manage_ec_orders'            if has_privilege_for?(AccountIndustry::INDUSTRY_COMMERCE)
-    permissions << 'manage_hotel_orders'         if has_privilege_for?(AccountIndustry::INDUSTRY_HOTEL)
-    permissions << 'manage_car_orders'           if has_privilege_for?(AccountIndustry::INDUSTRY_CAR)
-    permissions << 'manage_house_orders'         if has_privilege_for?(AccountIndustry::INDUSTRY_HOUSE)
-    permissions << 'manage_catering_book_dinner' if has_privilege_for?(AccountIndustry::INDUSTRY_FOOD)
-    permissions << 'manage_takeout_orders'       if has_privilege_for?(AccountIndustry::INDUSTRY_TAKEOUT)
-    permissions << 'manage_plot_orders'          if has_privilege_for?(AccountIndustry::INDUSTRY_PLOT)
-    permissions << 'manage_reservation_orders'  #if has_privilege_for?(AccountIndustry::INDUSTRY_PLOT)
-    # permissions << 'manage_reservation_orders'   if has_privilege_for?(AccountIndustry::INDUSTRY_PLOT)
+    permissions << 'manage_ec_orders'            if has_privilege_for?(10007)
+    permissions << 'manage_hotel_orders'         if has_privilege_for?(10005)
+    permissions << 'manage_car_orders'           if has_privilege_for?(10004)
+    permissions << 'manage_house_orders'         if has_privilege_for?(10009)
+    permissions << 'manage_catering_book_dinner' if has_privilege_for?(10001)
+    permissions << 'manage_takeout_orders'       if has_privilege_for?(10002)
+    permissions << 'manage_plot_orders'          if has_privilege_for?(10012)
+    permissions << 'manage_reservation_orders'  #if has_privilege_for?(10014)
   end
 
   def vip_permissions
@@ -44,10 +43,10 @@ module AccountPermissions
     {
       id:                id,
       username:          nickname,
-      role:              'account',
-      token:             auth_token,
-      expired_at:        expired_at.try(:strftime, '%F'),
-      account_type_name: account_type_name,
+      role:              'site',
+      token:             token,
+      # expired_at:        expired_at.try(:strftime, '%F'),
+      # account_type_name: account_type_name,
       permissions:       app_permissions
     }
   end

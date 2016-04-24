@@ -29,7 +29,7 @@
     <span>手机<span class="fgray">（用于接收客户订单信息，请正确填写）</span></span>
     <%= f.text_field :mobile, class: "input-text" %>
   </div>
-  <% if current_user.industry_food? || current_user.industry_takeout? %>
+  <% if current_site.industry_food? || current_site.industry_takeout? %>
     <div class="p">
       <span>订餐规则<em>*</em></span>
       <%= f.text_area :book_dinner_rule, class: "inp", rows: 5 %>

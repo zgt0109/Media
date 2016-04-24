@@ -3,11 +3,11 @@
     <% if can_see? %>
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+      <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
         <li><%= link_to "微餐饮", shops_path(industry_id: 10001) %></li>
         <li><%= link_to "菜单管理", shop_products_path(industry_id: 10001) %></li>
         <li><%= link_to "菜单设置", shop_products_path(industry_id: 10001) %></li>
-      <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+      <% elsif current_site.industry_takeout? || session[:current_industry_id] == 10002 %>
         <li><%= link_to "微餐饮", shops_path(industry_id: 10002) %></li>
         <li><%= link_to "菜单管理", shop_products_path(industry_id: 10002) %></li>
         <li><%= link_to "菜单设置", shop_products_path(industry_id: 10002) %></li>

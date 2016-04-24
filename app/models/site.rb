@@ -212,11 +212,6 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def has_privilege_for?(id)
-    return true unless Rails.env.production?
-    privileges.to_s.split(',').uniq.include?(id.to_s)
-  end
-
   def user_password_correct?( password )
     password.present? && password == user_password.try(:password_digest)
   end
@@ -224,6 +219,10 @@ class Site < ActiveRecord::Base
   def find_or_generate_auth_token(encrypt = true)
     update_attributes(token: SecureRandom.urlsafe_base64(60)) unless token.present?
     encrypt ? Des.encrypt(self.token) : self.token
+  end
+
+  def auth_token
+    token
   end
 
   def uid
@@ -242,13 +241,27 @@ class Site < ActiveRecord::Base
     payment_settings.present?
   end
 
+  def can_recharge?
+    enabled_payment_setting_types.count > 0
+  end
+
   def can_show_introduce?
     false
     # trial_account?# || free_account?
   end
 
-  def can_recharge?
-    enabled_payment_setting_types.count > 0
+  def has_privilege_for?(id)
+    return true unless Rails.env.production?
+    privileges.to_s.split(',').uniq.include?(id.to_s)
+  end
+
+  # TODO
+  def industry_food?
+    true
+  end
+
+  def industry_takeout?
+    true
   end
 
   def open_sms

@@ -4,7 +4,7 @@ class Biz::ShopsController < ApplicationController
   helper_method :current_shop_branch, :current_shop_account, :current_shop_vip_user, :hotel_branch_path
 
   skip_before_filter *ADMIN_FILTERS
-  before_filter :require_shop_site
+  before_filter :require_shop_account
   before_filter :require_shop_branch, :require_privilege, except: [ :sign_in, :sign_out ]
 
   def sign_in
@@ -391,8 +391,8 @@ class Biz::ShopsController < ApplicationController
       search
     end
 
-    def require_shop_site
-      account = Account.find(params[:account_id])
+    def require_shop_account
+      account = Site.find(params[:site_id])
       session[:shop_account_id] = account.id
 
       sub_account_id = Des.decrypt(params[:said])
@@ -441,7 +441,7 @@ class Biz::ShopsController < ApplicationController
       session[:sub_account_id] = sub_account_id
 
       signed_in_path = after_sign_in_path
-      return redirect_to shops_sign_in_path(account_id: params[:account_id]), alert: '商户没有授权该门店管理权限' unless signed_in_path
+      return redirect_to shops_sign_in_path(site_id: params[:site_id]), alert: '商户没有授权该门店管理权限' unless signed_in_path
       redirect_to signed_in_path if request.path != signed_in_path
     end
 

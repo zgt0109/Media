@@ -24,16 +24,16 @@
         <div class="col-sm-12">
           <div class="col-md-5 row">
             <div class="input-group input-group-sm input-group-text">
-            <input type="text" class="col-xs-12" value="<%= shops_sign_in_url(current_user) %>">
+            <input type="text" class="col-xs-12" value="<%= shops_sign_in_url(current_site) %>">
               <span class="input-group-addon">
-                <a href="javascript:void(0);" class="btn btn-primary btn-sm btn-filter" id="J-copy" data-clipboard-text="<%= shops_sign_in_url(current_user) %>">复制地址</a>
+                <a href="javascript:void(0);" class="btn btn-primary btn-sm btn-filter" id="J-copy" data-clipboard-text="<%= shops_sign_in_url(current_site) %>">复制地址</a>
               </span>
             </div>
           </div>
           <div class="col-md-3">
             <div class="input-group input-group-sm input-group-text">
               <span class="input-group-addon">
-                <a href="<%= shops_sign_in_url(current_user) %>" class="btn btn-success btn-sm btn-filter margin-left-10" target="_blank">登录门店管理系统</a>
+                <a href="<%= shops_sign_in_url(current_site) %>" class="btn btn-success btn-sm btn-filter margin-left-10" target="_blank">登录门店管理系统</a>
               </span>
             </div>
           </div>
@@ -70,7 +70,7 @@
               <% if @shop_branches.includes(:sub_account).each do |shop_branch| %>
                 <tr>
                   <td>
-                    <%= link_to shop_branch.name, shops_vip_deals_path(current_user, said: Des.encrypt(shop_branch.sub_account.id.to_s)), confirm: '确定退出当前登录并登录门店子系统？' %>
+                    <%= link_to shop_branch.name, shops_vip_deals_path(current_site, said: Des.encrypt(shop_branch.sub_account.id.to_s)), confirm: '确定退出当前登录并登录门店子系统？' %>
                   </td>
                   <td><%= shop_branch.ditu_address %></td>
                   <td><%= shop_branch.tel %></td>
@@ -105,4 +105,3 @@
     }).on( "complete", function() { showTip("success","复制成功"); } );
   </script>
 <% end %>
-

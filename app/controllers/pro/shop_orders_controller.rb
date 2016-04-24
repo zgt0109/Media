@@ -201,12 +201,12 @@ class Pro::ShopOrdersController < Pro::ShopBaseController
 
   private
   def authorize_shop_branch_account
-    authorize_shop_branch_account! 'manage_catering_book_dinner'     if current_user.industry_food? && action_name =~ /\Aindex|show|complete|print|cancel\z/
-    authorize_shop_branch_account! 'manage_catering_reports'         if current_user.industry_food? && action_name == 'report'
-    authorize_shop_branch_account! 'manage_catering_reports_graphic' if current_user.industry_food? && action_name == 'graphic'
+    authorize_shop_branch_account! 'manage_catering_book_dinner'     if current_site.industry_food? && action_name =~ /\Aindex|show|complete|print|cancel\z/
+    authorize_shop_branch_account! 'manage_catering_reports'         if current_site.industry_food? && action_name == 'report'
+    authorize_shop_branch_account! 'manage_catering_reports_graphic' if current_site.industry_food? && action_name == 'graphic'
 
-    authorize_shop_branch_account! 'manage_takeout_orders'           if current_user.industry_takeout? && action_name =~ /\Aindex|show|complete|print|cancel\z/
-    authorize_shop_branch_account! 'manage_takeout_reports'          if current_user.industry_takeout? && action_name == 'report'
-    authorize_shop_branch_account! 'manage_takeout_reports_graphic'  if current_user.industry_takeout? && action_name == 'graphic'
+    authorize_shop_branch_account! 'manage_takeout_orders'           if current_site.industry_takeout? && action_name =~ /\Aindex|show|complete|print|cancel\z/
+    authorize_shop_branch_account! 'manage_takeout_reports'          if current_site.industry_takeout? && action_name == 'report'
+    authorize_shop_branch_account! 'manage_takeout_reports_graphic'  if current_site.industry_takeout? && action_name == 'graphic'
   end
 end

@@ -11,10 +11,10 @@
         <% end %>
       </li>
       <li>
-        <% if current_user.industry_takeout? || session[:current_industry_id] == 10002 || params[:rule_type] == "3" %>
+        <% if current_site.industry_takeout? || session[:current_industry_id] == 10002 || params[:rule_type] == "3" %>
           <%= link_to "外卖规则", shop_products_path(industry_id: 10002) %>
         <% end %>
-        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
           <%= link_to "订座规则", shop_products_path(industry_id: 10001)  if params[:rule_type] == "2" %>
           <%= link_to "订餐规则", shop_products_path(industry_id: 10001) if params[:rule_type] == "1" %>
         <% end %>

@@ -1,13 +1,5 @@
 class SubAccount < ActiveRecord::Base
   include ShopBranchPermission
-  belongs_to :user, polymorphic: true
-
-  scope :unset, -> { where('sub_accounts.permissions IS NULL')     }
-  scope :set,   -> { where('sub_accounts.permissions IS NOT NULL') }
-  serialize :permissions, JSON
-  has_secure_password validations: false
-
-  before_save :set_auth_token
 
   acts_as_enum :account_type, in: [
     ['shop_account', 1, '门店子账号']
@@ -19,6 +11,17 @@ class SubAccount < ActiveRecord::Base
     ['deleted', -1, '已删除']
   ]
 
+  serialize :permissions, JSON
+
+  has_secure_password validations: false
+
+  belongs_to :user, polymorphic: true
+
+  scope :unset, -> { where('sub_accounts.permissions IS NULL')     }
+  scope :set,   -> { where('sub_accounts.permissions IS NOT NULL') }
+
+  before_save :set_auth_token
+
   def toggle_status!
     update_column :status, (enabled? ? DISABLED : ENABLED)
   end
@@ -29,7 +32,7 @@ class SubAccount < ActiveRecord::Base
 
   def method_missing(m, *args, &block)
     if user.is_a?(ShopBranch)
-      account = user.site.account
+      account = user.site
       if account.respond_to?(m)
         return account.public_send(m, *args, &block)
       end
@@ -40,7 +43,7 @@ class SubAccount < ActiveRecord::Base
   end
 
   def account
-    user.site.account
+    user.site
   end
 
   def app_permissions
@@ -53,8 +56,8 @@ class SubAccount < ActiveRecord::Base
       username:          username,
       role:              'micro_shop',
       token:             auth_token,
-      expired_at:        account.expired_at.try(:strftime, '%F'),
-      account_type_name: account.account_type_name,
+      # expired_at:        account.expired_at.try(:strftime, '%F'),
+      # account_type_name: account.account_type_name,
       permissions:       app_permissions
     }
   end

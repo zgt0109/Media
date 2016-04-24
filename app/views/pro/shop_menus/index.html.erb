@@ -3,16 +3,16 @@
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
       <li>
-        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
           <%= link_to "微餐饮", shops_path(industry_id: 10001) %>
-        <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+        <% elsif current_site.industry_takeout? || session[:current_industry_id] == 10002 %>
           <%= link_to "微外卖", shops_path(industry_id: 10002) %>
         <% end %>
       </li>
       <li>
-        <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+        <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
           <%= link_to "菜单管理", shop_menus_path(industry_id: 10001) %>
-        <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+        <% elsif current_site.industry_takeout? || session[:current_industry_id] == 10002 %>
           <%= link_to "菜单管理", shop_menus_path(industry_id: 10002) %>
         <% end %>
       </li>
@@ -28,16 +28,16 @@
             <%= link_to "菜单管理", shop_menus_path %>
           </li>
           <li >
-            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+            <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
               <%= link_to "菜单设置", shop_products_path(industry_id: 10001) %>
-            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+            <% elsif current_site.industry_takeout? || session[:current_industry_id] == 10002 %>
               <%= link_to "菜单设置", shop_products_path(industry_id: 10002) %>
             <% end %>
           </li>
           <li class="#{controller_name == 'shop_categories' ? 'active' : '' }">
-            <% if current_user.industry_food? || session[:current_industry_id] == 10001 %>
+            <% if current_site.industry_food? || session[:current_industry_id] == 10001 %>
               <%= link_to "菜单分类", shop_categories_path(industry_id: 10001) %>
-            <% elsif current_user.industry_takeout? || session[:current_industry_id] == 10002 %>
+            <% elsif current_site.industry_takeout? || session[:current_industry_id] == 10002 %>
               <%= link_to "菜单分类", shop_categories_path(industry_id: 10002) %>
             <% end %>
           </li>

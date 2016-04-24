@@ -30,15 +30,6 @@ class Account < ActiveRecord::Base
   has_one :site
   has_many :sites
 
-  has_one  :shop, through: :site
-  has_many :shop_branches, through: :shop
-  has_many :shop_branch_sub_accounts, through: :shop_branches, source: :sub_account, conditions: "shop_branches.status = #{ShopBranch::USED}"
-  has_many :shop_orders
-  has_many :shop_table_orders
-  has_many :shop_categories
-  has_many :shop_table_settings
-  has_many :shop_order_reports
-
   after_create :init_site
 
   def self.current
@@ -54,21 +45,11 @@ class Account < ActiveRecord::Base
     where("lower(nickname) LIKE ?", nickname.to_s.downcase).first.try(:authenticate, password)
   end
 
-
   def update_all_system_messages
     if system_messages.unread.update_all(is_read: true) > 0
       uri = URI.parse("http://#{FAYE_HOST}/faye")
       Net::HTTP.post_form(uri, message: {channel: "/system_messages/change/#{id}", data: {operate: 'delete_all'}}.to_json)
     end
-  end
-
-  def find_or_generate_auth_token(encrypt = true)
-    update_attributes(token: SecureRandom.urlsafe_base64(60)) unless token.present?
-    encrypt ? Des.encrypt(token) : token
-  end
-
-  def auth_token
-    token
   end
 
   def update_sign_in_attrs_with(sign_in_ip)
@@ -85,42 +66,8 @@ class Account < ActiveRecord::Base
     expired_at.nil? || expired_at < Time.now
   end
 
-  def can_pay?
-    payment_settings.present?
-  end
-
-  def can_recharge?
-    enabled_payment_setting_types.count > 0
-  end
-
-  # TODO
-  def has_privilege_for?(id)
-    true
-  end
-
-  # TODO
-  def industry_food?
-    true
-  end
-
-  def industry_takeout?
-    true
-  end
-
   def need_auth_mobile?
     auth_mobile.to_i != 1
-  end
-
-  def enabled_payment_settings
-    payment_settings.enabled
-  end
-
-  def enabled_payment_types
-    payment_settings.enabled.map(&:payment_type).map(&:id_name)
-  end
-
-  def enabled_payment_setting_types
-    @enabled_payment_setting_types ||= enabled_payment_settings.pluck(:type)
   end
 
   def send_password_reset

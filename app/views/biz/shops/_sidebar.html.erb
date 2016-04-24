@@ -6,7 +6,7 @@
         }
     </script>
 
-    <% account_id = current_shop_account.id %>
+    <% site_id = current_shop_account.id %>
 
     <ul class="nav nav-list">
       <% if current_sub_account.can_manage_any_vip? || current_sub_account.can_manage_marketing_sncode? %>
@@ -18,22 +18,22 @@
         <%- end %>
 
         <ul class="submenu" style="display: <%= controller_name == "shops" ? 'block;' : 'none;'%>">
-            <%= link_to_left_nav( '会员交易', shops_vip_deals_path(account_id: account_id) ) if current_sub_account.can_manage_any_vip? %>
-            <%= link_to_left_nav( '活动核销', shops_vip_deals_path(account_id: account_id) ) if current_sub_account.can_manage_marketing_sncode? && !current_sub_account.can_manage_any_vip? %>
-            <%= link_to_left_nav( '礼品兑换', shops_point_gift_exchanges_path(account_id: account_id) ) if current_sub_account.can?('manage_vip_gift_exchange') %>
+            <%= link_to_left_nav( '会员交易', shops_vip_deals_path(site_id: site_id) ) if current_sub_account.can_manage_any_vip? %>
+            <%= link_to_left_nav( '活动核销', shops_vip_deals_path(site_id: site_id) ) if current_sub_account.can_manage_marketing_sncode? && !current_sub_account.can_manage_any_vip? %>
+            <%= link_to_left_nav( '礼品兑换', shops_point_gift_exchanges_path(site_id: site_id) ) if current_sub_account.can?('manage_vip_gift_exchange') %>
             <%- if current_sub_account.can?('manage_vip_package_release') %>
-              <%= link_to_left_nav( '会员套餐记录', shops_package_users_path(account_id: account_id), action_name =~ /^package_users|item_consumes$/ ) %>
+              <%= link_to_left_nav( '会员套餐记录', shops_package_users_path(site_id: site_id), action_name =~ /^package_users|item_consumes$/ ) %>
             <%- elsif current_sub_account.can?('manage_vip_package_write_off') %>
-              <%= link_to_left_nav( '会员套餐记录', shops_item_consumes_path(account_id: account_id), action_name =~ /^package_users|item_consumes$/ ) %>
+              <%= link_to_left_nav( '会员套餐记录', shops_item_consumes_path(site_id: site_id), action_name =~ /^package_users|item_consumes$/ ) %>
             <%- end %>
-            <%= link_to_left_nav( '消费统计', shops_vip_consumes_path(account_id: account_id) ) if current_sub_account.can?('view_vip_transactions') %>
+            <%= link_to_left_nav( '消费统计', shops_vip_consumes_path(site_id: site_id) ) if current_sub_account.can?('view_vip_transactions') %>
         </ul>
       </li>
       <% end %>
 
       <%- if current_sub_account.can_manage_marketing_sncode? %>
         <li class="<%= 'active open' if controller_name == 'shops' && action_name =~ /activity_consumes|consume_reports/ %>">
-          <a href="<%= shops_activity_consumes_path(account_id: account_id) %>" class="dropdown-toggle">
+          <a href="<%= shops_activity_consumes_path(site_id: site_id) %>" class="dropdown-toggle">
             <i class="icon-list"></i>
             <span class="menu-text">活动核销记录</span>
           </a>

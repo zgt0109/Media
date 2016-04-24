@@ -216,7 +216,7 @@ class Pro::ShopProductsController < Pro::ShopBaseController
   private
   
   def authorize_shop_branch_account
-    authorize_shop_branch_account! 'manage_catering_menus' if current_user.industry_food?
-    authorize_shop_branch_account! 'manage_takeout_menus' if current_user.industry_takeout?
+    authorize_shop_branch_account! 'manage_catering_menus' if current_site.industry_food?
+    authorize_shop_branch_account! 'manage_takeout_menus' if current_site.industry_takeout?
   end
 end

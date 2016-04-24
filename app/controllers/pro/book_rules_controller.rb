@@ -91,8 +91,8 @@ class Pro::BookRulesController < Pro::ShopBaseController
     #     render_404 and return false
     #   end
     # else
-      authorize_shop_branch_account! 'manage_catering_book_rules' if current_user.industry_food?
-      authorize_shop_branch_account! 'manage_takeout_book_rules' if current_user.industry_takeout?
+      authorize_shop_branch_account! 'manage_catering_book_rules' if current_site.industry_food?
+      authorize_shop_branch_account! 'manage_takeout_book_rules' if current_site.industry_takeout?
     # end
   end
 
