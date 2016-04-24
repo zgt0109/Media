@@ -168,7 +168,7 @@ module DetectUserAgent
 
           @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @wx_mp_user.openid)
           if @wx_mp_user.present? and !@wx_user.has_info?
-            attrs = Weixin.get_wx_user_info(nil, openid, access_token)
+            attrs = Weixin.get_wx_user_info(@wx_mp_user, openid, access_token)
 
             if attrs.present?
               @wx_user.attributes = attrs
@@ -256,7 +256,7 @@ module DetectUserAgent
 
           @wx_user = WxUser.follow(@wx_mp_user, wx_user_openid: openid, wx_mp_user_openid: @wx_mp_user.openid)
           if @wx_mp_user.present? and !@wx_user.has_info?
-            attrs = Weixin.get_wx_user_info(nil, openid, access_token)
+            attrs = Weixin.get_wx_user_info(@wx_mp_user, openid, access_token)
             if attrs.present?
               @wx_user.attributes = attrs
               @wx_user.save if @wx_user.changed?
