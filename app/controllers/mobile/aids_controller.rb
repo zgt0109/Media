@@ -1,8 +1,8 @@
 class Mobile::AidsController < Mobile::BaseController
-  skip_filter   :auth, :authorize, :fetch_wx_user_info
+  # skip_filter   :auth, :authorize, :fetch_wx_user_info
 
-  before_filter :auth_with_user_info, if: -> { @wx_mp_user.manual? and !@wx_user.try(:has_info?) }
-  before_filter :authorize_with_user_info, if: -> { @wx_mp_user.plugin? and !@wx_user.try(:has_info?) }
+  # before_filter :auth_with_user_info, if: -> { @wx_mp_user.manual? and !@wx_user.try(:has_info?) }
+  # before_filter :authorize_with_user_info, if: -> { @wx_mp_user.plugin? and !@wx_user.try(:has_info?) }
 
   before_filter :block_non_wx_browser, :block_none_wx_user, :find_activity, :require_owner_user_none_self
   #before_filter :find_activity, :require_owner_user_none_self

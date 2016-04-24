@@ -33,6 +33,7 @@ class WxUserInfoUpdateWorker
   def perform(mp_user_openid, openid)
     mp_user = WxMpUser.where(openid: mp_user_openid).first
     return unless mp_user
+
     wx_user = mp_user.wx_users.where(openid: openid).first
     return if wx_user.nil? || wx_user.nickname.present?
 

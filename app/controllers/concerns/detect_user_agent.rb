@@ -114,7 +114,6 @@ module DetectUserAgent
       Rails.logger.info "==== @wx_user.blank? = #{@wx_user.blank?}"
       Rails.logger.info "==== is_oauth? = #{@wx_mp_user.try(:is_oauth?)}"
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
-      # Rails.logger.info "==== openid = #{@wx_user.try(:openid)}"
       Rails.logger.info "==== session[:openid] = #{session[:openid]}"
       Rails.logger.info "==== session[:user_id] = #{session[:user_id]}"
 
@@ -155,6 +154,8 @@ module DetectUserAgent
       Rails.logger.info "==== @wx_user.blank? = #{@wx_user.blank?}"
       Rails.logger.info "==== is_oauth? = #{@wx_mp_user.try(:is_oauth?)}"
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
+      Rails.logger.info "==== session[:openid] = #{session[:openid]}"
+      Rails.logger.info "==== session[:user_id] = #{session[:user_id]}"
 
       # no user and open id or none user infos
       if (@wx_user.blank? and @wx_mp_user.try(:is_oauth?) and app_id.present?) or !@wx_user.try(:has_info?)
@@ -204,6 +205,8 @@ module DetectUserAgent
       Rails.logger.info "==== @wx_user.blank? = #{@wx_user.blank?}"
       Rails.logger.info "==== is_oauth? = #{@wx_mp_user.try(:is_oauth?)}"
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
+      Rails.logger.info "==== session[:openid] = #{session[:openid]}"
+      Rails.logger.info "==== session[:user_id] = #{session[:user_id]}"
 
       if @wx_user.blank? && @wx_mp_user.try(:is_oauth?)# && app_id.present?
         if params[:code].present?
@@ -242,6 +245,8 @@ module DetectUserAgent
       Rails.logger.info "==== @wx_user.blank? = #{@wx_user.blank?}"
       Rails.logger.info "==== is_oauth? = #{@wx_mp_user.try(:is_oauth?)}"
       Rails.logger.info "==== nickname = #{@wx_user.try(:nickname)}"
+      Rails.logger.info "==== session[:openid] = #{session[:openid]}"
+      Rails.logger.info "==== session[:user_id] = #{session[:user_id]}"
 
       # no user and open id or none user infos
       if (@wx_user.blank? and @wx_mp_user.try(:is_oauth?) and app_id.present?) or !@wx_user.try(:has_info?)

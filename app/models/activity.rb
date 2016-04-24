@@ -147,7 +147,7 @@ class Activity < ActiveRecord::Base
   scope :unexpired, -> { where("activities.end_at is null or activities.end_at > :time", time: Time.now)}
 
   scope :old_coupon, -> { where(activity_type_id: 3) }
-  scope :coupon, -> { where(activity_type_id: 62) }
+  scope :coupon, -> { where(activity_type_id: 3) }
   scope :reservations, -> { where(activity_type_id: 63) }
 
   delegate :consume_day_allow_count, to: :activity_property, allow_nil: true
