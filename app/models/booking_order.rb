@@ -22,7 +22,7 @@ class BookingOrder < ActiveRecord::Base
     update_attributes(status: CANCELED, canceled_at: Time.now)
   end
 
-  # private
+  private
 
   def add_default_attrs
     if booking_item

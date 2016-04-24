@@ -221,16 +221,6 @@ Wp::Application.routes.draw do
       end
     end
 
-    resources :sms_orders, only: [] do
-      get :alipayapi, on: :member
-      collection do
-        get :callback
-        post :notify, :payment_request
-      end
-    end
-
-    #================== food start =========================================
-
     resources :shop_orders, only: [:index, :new, :show, :update, :destroy] do
       match :success, :send_captcha, :clone, on: :member
       member do
@@ -269,8 +259,6 @@ Wp::Application.routes.draw do
       get  :success, on: :member
       post :confirm, on: :collection
     end
-
-    #================== food end =======================================
 
     namespace :wmall do
       get :wx_user, to: 'dashboard#wx_user'
