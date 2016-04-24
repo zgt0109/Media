@@ -124,6 +124,7 @@
           <% end %>
         </div>
 
+        <% if @wx_mp_user.auth_service? %>
         <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTable margin-top-20">
           <h5 class="margin-top-10 text-info">网页授权</h5>
           <div class="alert alert-block alert-info margin-top-10">
@@ -157,6 +158,7 @@
           </form>
           <%= link_to '', @wx_mp_user.is_oauth? ?  close_oauth_wx_mp_user_path(@wx_mp_user) : open_oauth_wx_mp_user_path(@wx_mp_user), method: :post, remote: true, id: 'ace-switch' %>
         </div>
+        <% end %>
 
       </div>
     </div>
