@@ -1,5 +1,5 @@
 class SitesController < ApplicationController
-  before_filter :check_role
+  before_filter :check_role, except: [:copyright, :update_copyright]
   before_filter :load_site, only: [:show, :update]
 
   def index
