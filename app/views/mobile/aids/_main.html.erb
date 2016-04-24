@@ -59,7 +59,7 @@
             <% if self_joined? %>
               <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id), class: "btn main-btn main-right main-btn-join" %>
             <% else #self_joined %>
-              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id)), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id), class: "btn main-btn main-right main-btn-join" %>
             <% end #self_joined %>
           </div>
         <% else #aided? %>
@@ -68,9 +68,9 @@
             <%= link_to "邀请好友为他助力", "javascript:;", class: "btn main-btn main-left main-btn-share main-btn-hidden" %>
 
             <% if self_joined? %>
-              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id)), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "查看我的助力", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id), class: "btn main-btn main-right main-btn-join" %>
             <% else #self_joined %>
-              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id)), class: "btn main-btn main-right main-btn-join" %>
+              <%= link_to "我也要参与", mobile_aids_url(site_id: @activity.site_id, aid: @activity.id), class: "btn main-btn main-right main-btn-join" %>
             <% end #self_joined %>
           </div>
         <% end #aided? %>
