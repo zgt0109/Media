@@ -340,11 +340,7 @@
     <li class="<%= controller_name =~ /booking/ || controller_name =~ /ktv_order/ ? parent_class : '' %>">
       <%= left_nav_dropdown 'icon-plus', '微服务' %>
       <ul class="submenu" style="<%= 'display: block' if controller_name =~ /booking/ || controller_name =~ /ktv_order/ %>">
-        <%= link_to_left_nav( '基本信息', bookings_path, controller_name == 'bookings' ) %>
-        <%= link_to_left_nav( '轮播图片', booking_ads_path, controller_name == 'booking_ads' ) %>
-        <%= link_to_left_nav( '分类管理', booking_categories_path, controller_name == 'booking_categories' ) %>
-        <%= link_to_left_nav( '商品管理', booking_items_path, controller_name == 'booking_items' ) %>
-        <%= link_to_left_nav( '订单管理', booking_orders_path, controller_name == 'booking_orders' ) %>
+        <%= link_to_left_nav( '微服务管理', bookings_path, controller_name =~ /bookings|booking_ads|booking_categories|booking_items|booking_orders/ ) %>
       </ul>
     </li>
   <% end %>
