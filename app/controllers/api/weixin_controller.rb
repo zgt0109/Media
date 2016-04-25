@@ -325,7 +325,7 @@ class Api::WeixinController < Api::BaseController
       return Weixin.respond_text(@from_user_name, @to_user_name, '会员卡暂停使用') if !activity.setted?
 
       activity_notice = ActivityNotice.vip_notice(activity, @from_user_name)
-      respond_news_with_activity_notice(@from_user_name, @to_user_name, activity_notice, cover_pic: activity.pic_display_url)
+      respond_news_with_activity_notice(@from_user_name, @to_user_name, activity_notice)
     # elsif activity.wifi?
     #   @wx_user.wifi!
     #   return Weixin.respond_text(@from_user_name, @to_user_name, '请输入wifi验证码')
@@ -351,11 +351,8 @@ class Api::WeixinController < Api::BaseController
 
     url = activity.respond_mobile_url(activity_notice, openid: from_user_name)
     url << '#mp.weixin.qq.com'
-    if activity.vip?
-      pic_url ||= qiniu_image_url(activity.pic_key) || qiniu_image_url(option[:cover_pic])
-    else
-      pic_url ||= qiniu_image_url(activity_notice.pic_key) || qiniu_image_url(option[:cover_pic])
-    end
+
+    pic_url = activity.vip? ? activity.pic_url : qiniu_image_url(activity_notice.pic_key)
 
     items = [{title: activity_notice.title, description: activity_notice.summary, pic_url: pic_url, url: url}]
     Weixin.respond_news(from_user_name, to_user_name, items)
