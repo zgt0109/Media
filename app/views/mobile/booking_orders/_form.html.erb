@@ -28,7 +28,7 @@
       </p>
 
       <p>
-        <span class="fl">地址：</span>
+        <span class="fl">收货地址：</span>
         <span class="fr">
           <%= f.text_field :address %>
         </span>
@@ -48,7 +48,7 @@
       </p>
 </div>
       <p>
-        <span class="fl">快递取货备注：</span>
+        <span class="fl">取货信息：</span>
         <span class="fr">
           <%= f.text_area :description, rows: 5, placeholder: '请填写快递名称+取货号（取件密码），建议复制快递取货提醒短信内容' %>
         </span>
@@ -123,7 +123,7 @@
                 $('#booking_order_address').focus();
                 return false;
             }else if(!$('#booking_order_description').val()){
-                alert("快递取货备注不能为空");
+                alert("取货信息不能为空");
                 $('#booking_order_description').focus();
                 return false;
             }else if(!$('#booking_order_booking_at').val()){
