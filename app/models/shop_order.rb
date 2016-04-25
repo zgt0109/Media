@@ -408,11 +408,11 @@ class ShopOrder < ActiveRecord::Base
     return if shop_branch.mobile.blank?
 
     if book_dinner?
-      sms_params = { username: user.name, mobile: mobile, time: Time.now.to_s, shop_branch_name: shop_branch.name }
+      sms_params = { username: username, mobile: mobile, time: Time.now.to_s, shop_branch_name: shop_branch.name }
       sms_options = { mobiles: shop_branch.mobile, template_code: 'SMS_6705931', params: sms_params }
     else
       sms_params = {
-        username: user.name,
+        username: username,
         tel: mobile,
         total_amount: total_amount,
         address: address,
