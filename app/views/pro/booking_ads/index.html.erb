@@ -31,9 +31,9 @@
                     <div class="tools">
                       <a href="#">
                         <i class="icon-trash btn-fa btn-remove"></i>
-                        <i class="icon-pencil btn-fa" data-toggle="modals" data-target="pictureModal" data-title="编辑图片" data-width="800" data-height="500" data-iframe="<%= edit_booking_ad_path(picture) %>"></i>
+                        <i class="icon-pencil btn-fa" data-toggle="modals" data-target="pictureModal" data-title="编辑图片" data-width="800" data-height="500" data-iframe="<%= edit_booking_ad_path(picture.booking, picture) %>"></i>
                       </a>
-                      <%= link_to '', booking_ad_path(picture), data: {method: :delete, confirm: '确定要删除吗？'}, style: 'display: none;', class: 'remove-picture' %>
+                      <%= link_to '', booking_ad_path(picture.booking, picture), data: {method: :delete, confirm: '确定要删除吗？'}, style: 'display: none;', class: 'remove-picture' %>
                     </div>
                   </li>
               <% end %>

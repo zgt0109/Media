@@ -4,8 +4,7 @@ class Pro::BookingBaseController < ApplicationController
   private
 
   def require_booking
-    @booking = current_site.booking
-    redirect_to bookings_path, notice: "请先设置微服务" unless @booking
+    @booking = current_site.bookings.where(id: params[:booking_id]).first
   end
 
   def require_industry

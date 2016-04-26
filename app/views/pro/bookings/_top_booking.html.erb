@@ -1,10 +1,12 @@
 <div class="tabbable">
   <ul class="nav nav-tabs padding-24 tab-size-bigger">
-      <%= link_to_li '基本信息', bookings_path %>
-      <%= link_to_li '轮播图片',   booking_ads_path %>
-      <%= link_to_li '分类管理',   booking_categories_path %>
-      <%= link_to_li '商品管理',   booking_items_path %>
-      <%= link_to_li '订单管理',   booking_orders_path %>
+    <% unless @booking.new_record? %>
+      <%= link_to_li '基本信息', edit_booking_path(@booking) %>
+      <%= link_to_li '轮播图片', booking_ads_path(@booking) %>
+      <%= link_to_li '分类管理', booking_categories_path(@booking) %>
+      <%= link_to_li '商品管理', booking_items_path(@booking) %>
+      <%= link_to_li '订单管理', booking_orders_path(@booking) %>
+    <% end %>
   </ul>
 </div>
 
