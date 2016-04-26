@@ -100,7 +100,7 @@ class Mobile::GroupOrdersController < Mobile::BaseController
 
   def set_payment_types
     @payment_types = @site.payment_settings.enabled.map(&:payment_type)
-    @payment_types << PaymentType.where(id: 10000).first
+    @payment_types << PaymentType.where(id: 10005).first
   end
 
 end

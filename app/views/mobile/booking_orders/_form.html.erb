@@ -69,7 +69,7 @@
                      <span class="left zf_pic <%= payment_classes[payment_type.name] %>"></span>
                      <span><%= payment_type.name %></span>
                     </li>
-                    <%= f.radio_button :payment_type_id, payment_type.id, {checked: index.eql?(0), style: 'display:none;'} %>
+                    <%= f.radio_button :payment_type_id, payment_type.id, {checked: (index.eql?(0) && f.object.new_record?) || payment_type.id == f.object.payment_type_id, style: 'display:none;'} %>
                   <% end %>
                 <% else %>
                   <span>没有可用的支付方式</span>
