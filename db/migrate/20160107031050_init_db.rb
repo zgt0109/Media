@@ -674,7 +674,6 @@ class InitDb < ActiveRecord::Migration
 
   create_table "bookings" do |t|
     t.integer  "site_id",                                 :null => false
-    t.integer  "booking_id",                              :null => true
     t.string   "name"
     t.string   "tel"
     t.integer  "status",      :limit => 1, :default => 1, :null => false
