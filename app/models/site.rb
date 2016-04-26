@@ -110,11 +110,11 @@ class Site < ActiveRecord::Base
   has_many :hospital_doctors
   has_many :hospital_comments
 
-  has_one  :booking
-  has_many :booking_ads
-  has_many :booking_categories
-  has_many :booking_items
-  has_many :booking_orders
+  has_many :bookings
+  has_many :booking_ads, through: :bookings
+  has_many :booking_categories, through: :bookings
+  has_many :booking_items, through: :bookings
+  has_many :booking_orders, through: :bookings
 
   has_many :ktv_orders
 
@@ -998,26 +998,24 @@ START
   end
 
   def create_booking
-    attrs = { site_id: id }
-
-    booking = Booking.where(attrs).first_or_create(name: '微服务')
+    booking = Booking.create(site_id: id, name: '微服务')
 
     now = Time.now
     attrs = {
       site_id: id,
-        activity_type_id: ActivityType::BOOKING
+      activity_type_id: ActivityType::BOOKING,
+      activityable_id: booking.id,
+      activityable_type: 'Booking',
     }
     full_attrs = {
-        activityable_id: booking.id,
-        activityable_type: 'Booking',
-        status:   Activity::SETTED,
-        name:     booking.name,
-        keyword:  booking.name,
-        description:  booking.name,
-        pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
-        ready_at: now,
-        start_at: now,
-        end_at:   now + 100.years
+      status:   Activity::SETTED,
+      name:     booking.name,
+      keyword:  booking.name,
+      description:  booking.name,
+      pic_key: Concerns::ActivityQiniuPicKeys.default_site_pic_qiniu_key,
+      ready_at: now,
+      start_at: now,
+      end_at:   now + 100.years
     }.merge! attrs
     Activity.where(attrs).first || Activity.create!(full_attrs)
 

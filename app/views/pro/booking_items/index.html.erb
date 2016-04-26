@@ -71,8 +71,8 @@
                     <td><%= item.qty %></td>
                     <td><%= item.created_at %></td>
                     <td class="txt-left-align">
-                      <%= link_to '编辑', edit_booking_item_path(item) %>
-                      <%= link_to '删除', booking_item_path(item), data: {method: :delete, confirm: '确定要删除吗？'} %>
+                      <%= link_to '编辑', edit_booking_item_path(item.booking, item) %>
+                      <%= link_to '删除', booking_item_path(item.booking, item), data: {method: :delete, confirm: '确定要删除吗？'} %>
                     </td>
                   </tr>
               <% end %>

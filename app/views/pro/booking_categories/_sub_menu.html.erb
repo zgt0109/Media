@@ -8,10 +8,10 @@
             <%= link_to '', new_booking_category_path(parent_id: sub_menu.id), class: 'fa fa-plus tree-add', title: '新增子目录', data: {remote: true} if sub_menu.allow_menu_layer %>
           </div>
           <div>
-            <%= link_to '', edit_booking_category_path(sub_menu), class: 'fa fa-pencil tree-edit', title: '编辑当前目录', data: {remote: true} %>
+            <%= link_to '', edit_booking_category_path(sub_menu.booking, sub_menu), class: 'fa fa-pencil tree-edit', title: '编辑当前目录', data: {remote: true} %>
           </div>
           <div>
-            <%= link_to '', booking_category_path(sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确认删除分类？'}, title: '删除当前目录' %>
+            <%= link_to '', booking_category_path(sub_menu.booking, sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确认删除分类？'}, title: '删除当前目录' %>
           </div>
           <div>
             <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {toggle: 'treeUp'}, title: '上移' %>
@@ -35,10 +35,10 @@
           <%= link_to '', new_booking_category_path(parent_id: sub_menu.id), class: 'fa fa-plus tree-add', title: '新增子目录', data: {remote: true} if sub_menu.allow_menu_layer %>
         </div>
         <div>
-          <%= link_to '', edit_booking_category_path(sub_menu), class: 'fa fa-pencil tree-edit', title: '编辑当前目录', data: {remote: true} %>
+          <%= link_to '', edit_booking_category_path(sub_menu.booking, sub_menu), class: 'fa fa-pencil tree-edit', title: '编辑当前目录', data: {remote: true} %>
         </div>
         <div>
-          <%= link_to '', booking_category_path(sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确认删除分类？' }, title: '删除当前目录' %>
+          <%= link_to '', booking_category_path(sub_menu.booking, sub_menu), class: 'fa fa-times tree-remove', data: {method: :delete, confirm: '确认删除分类？' }, title: '删除当前目录' %>
         </div>
         <div>
           <%= link_to '', 'javascript:;', class: 'fa fa-long-arrow-up tree-up', data: {toggle: 'treeUp'}, title: '上移' %>
