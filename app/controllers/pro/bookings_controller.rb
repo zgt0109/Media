@@ -21,15 +21,17 @@ class Pro::BookingsController < Pro::BookingBaseController
   end
 
   def destroy
-    if @booking.destroy
+    # if @booking.clear_menus!
       redirect_to :back
-    else
-      redirect_to :back, notice: '操作失败'
-    end
+    # else
+    #   redirect_to :back, notice: '操作失败'
+    # end
   end
 
   private
-    def load_booking
-      @booking = current_site.bookings.find(params[:id])
-    end
+
+  def load_booking
+    @booking = current_site.bookings.find(params[:id])
+  end
+
 end

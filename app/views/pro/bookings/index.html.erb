@@ -35,7 +35,6 @@
                 <td><%= booking.tel  %></td>
                 <td>
                   <%= link_to "编辑", edit_booking_path(booking) %>
-                  <%= link_to "删除", booking_path(booking), method: :delete, data: { confirm: '确定要删除？'} %>
                 </td>
               </tr>
             <% end %>
