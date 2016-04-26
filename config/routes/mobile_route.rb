@@ -162,7 +162,7 @@ Wp::Application.routes.draw do
     resources :booking_comments, only: [:index, :new, :create]
     resources :booking_items, :booking_categories, only: :show
 
-    resources :booking_orders, except: [:edit, :update] do
+    resources :booking_orders, except: :edit do
       get :cancel, on: :member
     end
 

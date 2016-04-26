@@ -14,6 +14,14 @@ namespace :dev do
     puts "created account: #{account.nickname}"
   end
 
+  desc 'create wx_user'
+  task :create_wx_user => :environment do
+    puts 'Starting create wx_user ******'
+    user = WxUser.where(openid: 'aaa').first_or_create(wx_mp_user_id: WxMpUser.first.id, openid: 'aaa')
+    puts "created wx_user. openid: #{user.openid}"
+  end
+
+
   desc 'update city'
   task :update_city => :environment do
     puts 'Starting update city ******'
