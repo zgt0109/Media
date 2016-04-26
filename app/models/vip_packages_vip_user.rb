@@ -13,7 +13,7 @@ class VipPackagesVipUser < ActiveRecord::Base
   scope :expired, -> { where("expired_at < ?", Time.now) }
 
   enum_attr :payment_type, in: [
-    ['by_balance', '10005', '会员卡余额支付'],
+    ['by_balance', '10005', '余额支付'],
     ['by_cash',    '10000', '现金支付'],
   ]
 
