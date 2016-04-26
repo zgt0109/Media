@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
 
   def new
     clear_login_wrong_count
-    render layout: "com"
+    render layout: false
   end
 
   def create
