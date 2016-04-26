@@ -2,11 +2,16 @@ class BookingOrder < ActiveRecord::Base
   belongs_to :booking
   belongs_to :booking_item
   belongs_to :user
+  belongs_to :payment_type
+
+  has_many   :payments, as: :paymentable
 
   acts_as_enum :status, :in => [
-    ['pending', 1, '待处理'],
-    ['completed', 2, '已完成'],
-    ['canceled', 3, '已取消'],
+    ['pending',   1, '待处理'],
+    ['paid',      2, '已付款'],
+    ['canceled',  3, '已取消'],
+    ['expired',   4, '已过期'],
+    ['completed', 5, '已完成']
   ]
 
   scope :latest, -> { order('created_at DESC') }
@@ -20,6 +25,27 @@ class BookingOrder < ActiveRecord::Base
 
   def cancele!
     update_attributes(status: CANCELED, canceled_at: Time.now)
+  end
+
+  def payment_request_params(params = {})
+    params = HashWithIndifferentAccess.new(params)
+
+    _order_params = {
+      payment_type_id: payment_type_id,
+      account_id: booking.site.account_id,
+      site_id: booking.site.id,
+      customer_id: user_id,
+      customer_type: 'User',
+      paymentable_id: id,
+      paymentable_type: 'BookingOrder',
+      out_trade_no: order_no,
+      amount: total_amount,
+      body: "订单 #{order_no}",
+      subject: "订单 #{order_no}",
+      source: 'booking_order'
+    }
+
+    params.reverse_merge(_order_params)
   end
 
   private

@@ -137,6 +137,7 @@ class Payment < ActiveRecord::Base
   def self.source_hash
     {
       group_order: '微团购',
+      booking_order: '微服务',
       vip_recharge: '会员充值',
       shop_order: '微餐饮/外卖',
       donation_order: '微公益',
