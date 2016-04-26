@@ -54,14 +54,15 @@ Wp::Application.routes.draw do
       get  :history, on: :collection
     end
 
-    resources :booking_categories do
-      get :update_sorts, on: :member
-    end
-
-    resources :bookings, :booking_ads, :booking_items
-
-    resources :booking_orders do
-      post :complete, :cancele, on: :member
+    resources :bookings do
+      resources :booking_categories, as: :categories do
+        get :update_sorts, on: :member
+      end
+      resources :booking_ads,    as: :ads
+      resources :booking_items,  as: :items
+      resources :booking_orders, as: :orders do
+        post :complete, :cancele, on: :member
+      end
     end
 
     # resources :business do
@@ -207,7 +208,7 @@ Wp::Application.routes.draw do
 
     resources :houses
     resources :house_comments, :house_expert_comments, :house_experts
-    
+
     resources :house_intros do
       collection do
         get :activity
