@@ -7,12 +7,14 @@ class BookingOrder < ActiveRecord::Base
   has_many   :payments, as: :paymentable
 
   acts_as_enum :status, :in => [
-    ['pending',   1, '待处理'],
-    ['paid',      2, '已付款'],
-    ['canceled',  3, '已取消'],
-    ['expired',   4, '已过期'],
-    ['completed', 5, '已完成']
+    ['pending',   0, '待支付'],
+    ['paid',      1, '已支付'],
+    ['completed', 2, '已完成'],
+    ['canceled',  -1, '已取消'],
+    ['expired',   -2, '已过期']
   ]
+
+  enum_attr :payment_type_id, in: PaymentType::ENUM_ID_OPTIONS
 
   scope :latest, -> { order('created_at DESC') }
 

@@ -43,9 +43,13 @@ class Mobile::BookingOrdersController < Mobile::BaseController
                   :notice =>  @booking_item.surplus_qty == 0 ? "今天商品预定量已经达到饱和，不能再预定了" : "预定数量不能大于每日商品预定总数"
     else
       if @booking_order.save
-        params[:id] = @booking_order.id
-        pay
-        # redirect_to mobile_booking_orders_url(site_id: @site.id), :notice => "恭喜您订单提交成功！\\n订单编号:#{@booking_order.order_no}"
+
+        if @booking_order.cashpay?
+          @booking_order.paid!
+          redirect_to mobile_booking_order_url(@site, @booking_order)
+        else
+          pay
+        end
       else
         redirect_to mobile_booking_item_url(@booking_item, site_id: @site.id), :notice => "预定失败"
       end
@@ -55,8 +59,12 @@ class Mobile::BookingOrdersController < Mobile::BaseController
   def update
     if @booking_order.update_attributes(params[:booking_order])
       @booking_order.payments.update_all(payment_type_id: @booking_order.payment_type_id)
-      params[:id] = @booking_order.id
-      pay
+      if @booking_order.cashpay?
+        @booking_order.paid!
+        redirect_to mobile_booking_order_url(@site, @booking_order)
+      else
+        pay
+      end
     else
       redirect_to mobile_booking_order_url(@booking_order), notice: "数据出错"
     end
@@ -66,7 +74,6 @@ class Mobile::BookingOrdersController < Mobile::BaseController
 
   def pay
     @user = User.find(session[:user_id]) unless @user
-    @order = @user.booking_orders.find params[:id]
 
     options = {
                 callback_url: callback_payments_url,
@@ -74,7 +81,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
                 merchant_url: booking_orders_url({site_id: session[:site_id]}),
                 open_id: @user.wx_user.openid
               }
-    @payment_request_params = @order.payment_request_params(options)
+    @payment_request_params = @booking_order.payment_request_params(options)
 
     respond_to do |format|
       format.js   {render "mobile/booking_orders/pay.js.erb"}
@@ -99,6 +106,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
   def set_payment_types
     @payment_types = @site.payment_settings.enabled.map(&:payment_type)
     @payment_types << PaymentType.where(id: 10005).first
+    @payment_types.unshift(PaymentType.where(id: 10000).first)
   end
 
 end
