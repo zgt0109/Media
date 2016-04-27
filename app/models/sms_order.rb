@@ -136,9 +136,9 @@ class SmsOrder < ActiveRecord::Base
 
     {
       :service => 'create_direct_pay_by_user',
-      :return_url => "#{domain_url}/sms_orders/callback",
-      :notify_url => "#{domain_url}/sms_orders/notify",
-      :error_notify_url => "#{domain_url}/sms_orders/error_notify",
+      :return_url => "#{domain_url}/sms/orders/callback",
+      :notify_url => "#{domain_url}/sms/orders/notify",
+      :error_notify_url => "#{domain_url}/sms/orders/error_notify",
       :service_url => 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8',
       :partner => SmsOrder::ALIPAY_ID,
       :_input_charset  => 'utf-8',
@@ -158,9 +158,9 @@ class SmsOrder < ActiveRecord::Base
       alipay_key: SmsOrder::ALIPAY_KEY,
       seller_account_name: SmsOrder::ALIPAY_ACCOUNT_NAME,
       service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
-      callback_url: "#{domain_url}/sms_orders/callback",
-      notify_url: "#{domain_url}/sms_orders/notify",
-      merchant_url: "#{domain_url}/sms_orders/new"
+      callback_url: "#{domain_url}/sms/orders/callback",
+      notify_url: "#{domain_url}/sms/orders/notify",
+      merchant_url: "#{domain_url}/sms/orders/new"
     }
   end
 
