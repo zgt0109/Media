@@ -1,5 +1,5 @@
 class Booking < ActiveRecord::Base
-  store :metadata, accessors: [:notify_merchant_mobiles]
+  store :metadata, accessors: [:notify_merchant_mobiles, :is_open_booking]
 
   validates :name, presence: true, length: { maximum: 64, message: '名称过长' }
   # validates :tel, presence: true
@@ -15,10 +15,11 @@ class Booking < ActiveRecord::Base
 
   default_scope -> { order('created_at desc') }
   enum_attr :booking_type, :in => [
-    ['type1',1,'快递服务'],
-    ['type2',2,'外卖服务'],
-    ['type3',3,'保洁服务'],
-    ['type4',4,'搬家服务'],
+    ['deliver',1,'快递服务'],
+    ['rent',2,'租赁服务'],
+    ['driving',3,'驾校服务'],
+    ['clean',4,'保洁服务'],
+    ['moving',5,'搬家服务']
   ]
 
   def clear_menus!

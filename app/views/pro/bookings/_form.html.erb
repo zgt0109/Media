@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-group ">
-                  <label class="control-label">预约电话<span class="icon-question-sign "data-rel="popover" data-trigger="hover" data-placement="right" data-content="用于手机端一键拨号" title="" data-original-title=""></span></label>
+                  <label class="control-label">服务电话<span class="icon-question-sign "data-rel="popover" data-trigger="hover" data-placement="right" data-content="用于手机端一键拨号" title="" data-original-title=""></span></label>
                   <div class="clearfix">
                     <%= f.text_field :tel, class: 'col-xs-6', placeholder: '如13988888888或021-66666666' %>
                   </div>
@@ -68,6 +68,14 @@
                   <div class="clearfix">
                     <%= f.text_field :notify_merchant_mobiles, class: 'col-xs-6', placeholder: '如13988888888' %>
                   </div>
+                </div>
+
+                <div class="form-group ">
+                  <label class="control-label">
+                    <%= f.check_box :is_open_booking %>
+                    是否开启服务
+                    <span class="icon-question-sign "data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选之后，用户才能下单购买商品" title="" data-original-title=""></span>
+                  </label>
                 </div>
 
                 <div class="form-group ">

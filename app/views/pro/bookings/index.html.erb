@@ -21,10 +21,10 @@
           class="table table-striped table-bordered table-hover dataTable ">
           <thead>
             <tr>
-              <th>微服务类型</th>
-              <th>微服务名称</th>
+              <th>服务类型</th>
+              <th>服务名称</th>
+              <th>关键词</th>
               <th>服务电话</th>
-              <th>回复关键词</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -33,8 +33,8 @@
               <tr>
                 <td><%= booking.booking_type_name %></td>
                 <td><%= booking.name %></td>
-                <td><%= booking.tel  %></td>
                 <td><%= booking.activity.keyword %></td>
+                <td><%= booking.tel  %></td>
                 <td>
                   <%= link_to "编辑", edit_booking_path(booking) %>
                 </td>
