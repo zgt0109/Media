@@ -998,7 +998,7 @@ START
   end
 
   def create_booking
-    booking = Booking.create(site_id: id, booking_type: 1, name: '微服务')
+    booking = Booking.create(site_id: id, name: '微服务')
 
     now = Time.now
     attrs = {
