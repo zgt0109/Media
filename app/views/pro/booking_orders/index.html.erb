@@ -78,8 +78,8 @@
                     <td><%= order.booking_at.try(:to_date) %></td>
                     <td class="txt-left-align">
                       <% if order.pending? %>
-                          <%= link_to '完成', complete_booking_order_path(order), data: {method: :post, confirm: '确认完成？'} %>
-                          <%= link_to '取消', cancele_booking_order_path(order), data: {method: :post, confirm: '确认取消？'} %>
+                          <%= link_to '完成', complete_booking_order_path(order.booking, order), data: {method: :post, confirm: '确认完成？'} %>
+                          <%= link_to '取消', cancele_booking_order_path (order.booking, order), data: {method: :post, confirm: '确认取消？'} %>
                       <% end %>
                       <%= link_to '查看', 'javascript:;', data: {toggle: 'modals', height: '1000', title: '订单详情', iframe: booking_order_path(order.booking, order)}%>
                     </td>
