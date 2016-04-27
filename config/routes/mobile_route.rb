@@ -158,12 +158,13 @@ Wp::Application.routes.draw do
     resources :trips, only: [:index, :show]
     resources :trip_orders, only: [:index, :new, :create]
 
-    resources :bookings, only: :index
-    resources :booking_comments, only: [:index, :new, :create]
-    resources :booking_items, :booking_categories, only: :show
+    resources :bookings, only: [:index, :show] do
+      resources :booking_comments, only: [:index, :new, :create]
+      resources :booking_items, :booking_categories, only: :show
 
-    resources :booking_orders, except: :edit do
-      get :cancel, on: :member
+      resources :booking_orders, except: :edit do
+        get :cancel, on: :member
+      end
     end
 
     resources :hospital_doctors, only: [:index, :show]

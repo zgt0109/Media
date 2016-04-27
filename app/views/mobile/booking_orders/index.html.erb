@@ -2,7 +2,7 @@
 
 <% content_for :booking_top_pic do %>
   <header>
-    <a href="<%= mobile_bookings_url(site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev">
+    <a href="<%= mobile_booking_url(@site, @booking, anchor: "mp.weixin.qq.com") %>" class="ico-prev">
       <img src="/assets/mobile/wserver/ico-back.png"/>
     </a>
     <h1>我的订单</h1>
@@ -10,7 +10,7 @@
 <% end %>
 
 <% @booking_orders.each do |order| %>
-  <a href="<%= mobile_booking_order_url(order, site_id: @site.id) %>" class="box-p">
+  <a href="<%= mobile_booking_booking_order_url(@site, @booking, order) %>" class="box-p">
     <p class="p-title">
       <b>预订单号：</b>
       <span><%= order.order_no %></span>

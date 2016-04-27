@@ -7,7 +7,7 @@
           <% next if booking_category.products.count == 0 %>
           <dl class="active">
             <dt>
-              <%= link_to booking_category.has_children? ? 'javascript:void(0);' : mobile_booking_category_url(site_id: @site.id, id: booking_category.id), style: 'width: 100%; color: #888888;' do %>
+              <%= link_to booking_category.has_children? ? 'javascript:void(0);' : mobile_booking_booking_category_url(@site, @booking.id, booking_category), style: 'width: 100%; color: #888888;' do %>
                   <%= booking_category.name %>
                   <i class="arrow"></i>
               <% end %>
@@ -20,11 +20,11 @@
                       <p>
                         <% sub_category.children.order(:sort).each do |category|%>
                             <% next if category.products.count == 0 %>
-                            <%= link_to mobile_booking_category_url(site_id: @site.id, id: category.id) do %><i></i><%= category.name %><% end %>
+                            <%= link_to mobile_booking_booking_category_url(@site, @booking, category) do %><i></i><%= category.name %><% end %>
                         <% end %>
                       </p>
                   <% else %>
-                      <%= link_to mobile_booking_category_url(site_id: @site.id, id: sub_category.id) do %><i></i><%= sub_category.name %><% end %>
+                      <%= link_to mobile_booking_booking_category_url(@site, @booking, sub_category) do %><i></i><%= sub_category.name %><% end %>
                   <% end %>
                 </dd>
             <% end if booking_category.has_children? %>

@@ -56,7 +56,7 @@ module MobileHelper
   end
 
   def mobile_booking_body_class
-    if controller_name == 'bookings' && action_name == 'index'
+    if controller_name == 'bookings' && ['index', 'show'].include?(action_name)
       'index'
     elsif controller_name == 'booking_categories' && action_name == 'show'
       'list'

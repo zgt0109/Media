@@ -48,7 +48,7 @@ class PaymentsController < ApplicationController
         if params['status'].present? && params['status'] == '1'
           paymentable.paid!
         end
-        redirect_to mobile_booking_order_url(site_id: payment.site_id, id: paymentable.id)
+        redirect_to mobile_booking_booking_order_url(site_id: payment.site_id, booking_id: paymentable.booking_id, id: paymentable.id)
       end
     else
       render text: '支付成功'

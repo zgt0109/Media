@@ -1,7 +1,7 @@
 <% title "订单详情" %>
 <% content_for :booking_top_pic do %>
     <header>
-      <a href="<%= mobile_booking_orders_url(site_id: @site.id) %>" class="ico-prev">
+      <a href="<%= mobile_booking_booking_orders_url(@site, @booking) %>" class="ico-prev">
         <img src="/assets/mobile/wserver/ico-back.png"/></a>
       <h1>订单详情</h1>
     </header>
@@ -10,7 +10,7 @@
   <dl class="box-orderList">
     <dd>
       <ul class="shopcar-list">
-        <a href="<%= mobile_booking_item_url(@booking_item, site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="li-fw">
+        <a href="<%= mobile_booking_booking_item_url(@site, @booking, @booking_item, anchor: "mp.weixin.qq.com") %>" class="li-fw">
           <li class="shopcar-info">
             <% picture = @booking_item.booking_item_pictures.first %>
             <span class="<%= picture.pic_url ? "" : "img-null"%> info-fl">
@@ -76,7 +76,7 @@
   </div>
   <% if @booking_order.pending? %>
 
-    <%= form_for @booking_order, url: mobile_booking_order_url(@booking_order), remote: true do |f| %>
+    <%= form_for @booking_order, url: mobile_booking_booking_order_url(@booking_order), remote: true do |f| %>
       <% payment_classes = {'余额支付' => 'zhifu1', '微信支付' => 'zhifu2', '支付宝支付' => 'zhifu3', '易宝支付' => 'zhifu4'} %>
       <div class="tit1">选择支付方式</div>
         <div class="bgf bord1 radiu3">
@@ -100,7 +100,7 @@
       </div>
       <%= f.submit '支付订单', class: 'btn btn-fw' %>
     <% end %>
-    <%= link_to '取消订单', cancel_mobile_booking_order_url(@booking_order, site_id: @site.id), class: "btn btn-fw", confirm:"确认取消订单?" %>
+    <%= link_to '取消订单', cancel_mobile_booking_booking_order_url(@site, @booking, @booking_order), class: "btn btn-fw", confirm:"确认取消订单?" %>
   <% end %>
 
 <script>

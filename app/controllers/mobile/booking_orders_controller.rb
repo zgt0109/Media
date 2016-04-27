@@ -6,14 +6,15 @@ class Mobile::BookingOrdersController < Mobile::BaseController
   before_filter :set_payment_types, only: [:show, :new]
 
   def index
-    @booking_orders = @user.booking_orders.order("created_at desc")
+    @booking = @site.bookings.where(id: params[:booking_id]).first
+    @booking_orders = @user.booking_orders.where(booking_id: params[:booking_id]).order("created_at desc")
   end
 
   def cancel
     if @booking_order.update_attributes(status: BookingOrder::CANCELED, canceled_at: Time.now())
-      redirect_to mobile_booking_order_url(@booking_order, site_id: @site.id), :notice => "订单取消成功"
+      redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order), :notice => "订单取消成功"
     else
-      redirect_to mobile_booking_order_url(@booking_order, site_id: @site.id), :notice => "订单取消失败"
+      redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order), :notice => "订单取消失败"
     end
   end
 
@@ -25,7 +26,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
       address: @user.try(:address),
       booking_at: Date.today,
       qty: 1,
-      booking_id: @site.booking.id
+      booking_id: @site.bookings.where(id: params[:booking_id]).first.id
     }
     @booking_order ||= @user.booking_orders.new(attrs)
   end
@@ -46,12 +47,12 @@ class Mobile::BookingOrdersController < Mobile::BaseController
 
         if @booking_order.cashpay?
           @booking_order.paid!
-          redirect_to mobile_booking_order_url(@site, @booking_order)
+          redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order)
         else
           pay
         end
       else
-        redirect_to mobile_booking_item_url(@booking_item, site_id: @site.id), :notice => "预定失败"
+        redirect_to mobile_booking_booking_item_url(@site, @booking, @booking_item), :notice => "预定失败"
       end
     end
   end
@@ -61,12 +62,12 @@ class Mobile::BookingOrdersController < Mobile::BaseController
       @booking_order.payments.update_all(payment_type_id: @booking_order.payment_type_id)
       if @booking_order.cashpay?
         @booking_order.paid!
-        redirect_to mobile_booking_order_url(@site, @booking_order)
+        redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order)
       else
         pay
       end
     else
-      redirect_to mobile_booking_order_url(@booking_order), notice: "数据出错"
+      redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order), notice: "数据出错"
     end
   end
 
@@ -93,12 +94,14 @@ class Mobile::BookingOrdersController < Mobile::BaseController
   end
 
   def set_booking_order
-    @booking_order = @user.booking_orders.find(params[:id])
+    @booking = @site.bookings.where(id: params[:booking_id]).first
+    @booking_order = @booking.booking_orders.find(params[:id])
     @booking_item  = @booking_order.booking_item
   end
 
   def set_booking_item
-    @booking_item = @site.booking.booking_items.find(params[:booking_item_id] || params[:booking_order][:booking_item_id])
+    @booking = @site.bookings.where(id: params[:booking_id]).first
+    @booking_item = @booking.booking_items.find(params[:booking_item_id] || params[:booking_order][:booking_item_id])
   rescue
     render :text => "商品不存在"
   end

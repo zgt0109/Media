@@ -1,9 +1,9 @@
 <% title "商品详情" %>
 <% content_for :booking_top_pic do %>
     <header>
-      <a href="<%= mobile_bookings_url(site_id: @site.id, anchor: "mp.weixin.qq.com") %>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+      <a href="<%= mobile_booking_url(@site, @booking, anchor: "mp.weixin.qq.com") %>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
       <a href="<%= @booking.tel? ? "tel:#{@booking.tel}" : "#" %>"><img src="/assets/mobile/wserver/ico-phone.png"/></a>
-      <a href="<%= mobile_booking_orders_url(site_id: @site.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
+      <a href="<%= mobile_booking_booking_orders_url(@site, @booking) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
       <a class="btn-list"><img src="/assets/mobile/wserver/ico-list.png"/></a>
     </header>
 <% end %>
@@ -66,7 +66,7 @@
 
   <div class="detail-btn">
     <% if @booking_item.is_able_booking %>
-        <a href="<%= new_mobile_booking_order_url(site_id: @site.id, booking_item_id: @booking_item.id) %>"  class="btn btn-red">
+        <a href="<%= new_mobile_booking_booking_order_url(@site.id, @booking, booking_item_id: @booking_item.id) %>"  class="btn btn-red">
           <img src="/assets/mobile/wserver/ico-car-add.png"/>
           立即预订
         </a>
@@ -79,7 +79,7 @@
   </div>
 
   <div class="detail-tab">
-    <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_booking_comments_url(site_id: @site.id, booking_item_id: @booking_item.id) %>">商品评价(<%= @booking_item.booking_comments.count %>)</a></div>
+    <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_booking_booking_comments_url(@site, @booking, @booking_item) %>">商品评价(<%= @booking_item.booking_comments.count %>)</a></div>
     <div class="bd">
       <div class="detail-bd">
         <%= raw @booking_item.description.to_s %>
