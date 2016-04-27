@@ -13,6 +13,14 @@ class Booking < ActiveRecord::Base
 
   accepts_nested_attributes_for :activity
 
+  default_scope -> { order('created_at desc') }
+  enum_attr :booking_type, :in => [
+    ['type1',1,'快递服务'],
+    ['type2',2,'外卖服务'],
+    ['type3',3,'保洁服务'],
+    ['type4',4,'搬家服务'],
+  ]
+
   def clear_menus!
     booking_categories.clear
   end
