@@ -8,10 +8,11 @@
         </ul>
         <%= render '/layouts/qrcode' %>
       </div>
+
       <div class="page-content">
         <%= render "pro/bookings/top_booking"%>
-        <div class="row">
 
+        <div class="row">
           <%= form_for @search, :html => { :method => :get } do |f| %>
               <div class="col-sm-12">
                 <div class="col-md-3 row">
