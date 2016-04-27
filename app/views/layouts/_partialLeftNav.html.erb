@@ -216,47 +216,6 @@
     </li>
   <% end %>
 
-  <% if current_site.has_privilege_for?(10004) %>
-    <li class="<%= parent_class if cars_page? %>">
-      <%= left_nav_dropdown 'icon-plus', '微汽车' %>
-      <ul class="submenu" style="display: <%= cars_page? ? 'block;' : 'none;'%>">
-        <%= link_to_left_nav('我的4S店', car_shops_path, controller_name == 'car_shops') %>
-        <%= link_to_left_nav('车系管理', car_catenas_path, controller_name == 'car_catenas') %>
-        <%= link_to_left_nav('车型管理', car_types_path, %w(car_types car_pictures).include?(controller_name)) %>
-        <%= link_to_left_nav('保养预约', activity_notice_car_bespeaks_path(bespeak_type: 1), controller_name == 'car_bespeaks' && params[:bespeak_type].to_i == 1) %>
-        <%= link_to_left_nav('试驾预约', activity_notice_car_bespeaks_path(bespeak_type: 2), controller_name == 'car_bespeaks' && params[:bespeak_type].to_i == 2) %>
-        <%= link_to_left_nav('销售代表', activity_notice_car_sellers_path, controller_name == 'car_sellers') %>
-        <%= link_to_left_nav('车主关怀', car_owners_path, controller_name == 'car_owners') %>
-        <%= link_to_left_nav('实用工具', car_assistants_path, controller_name == 'car_assistants') %>
-      </ul>
-    </li>
-  <% end %>
-
-  <% if current_site.has_privilege_for?(10009) %>
-    <li class="<%= ["house_intros","house_pictures","house_layouts","house_layout_panoramas","house_bespeaks","house_sellers","house_impressions","house_reviews","house_live_photos"].include?(controller_name) ? parent_class : ''%>">
-      <%= left_nav_dropdown 'icon-plus', '微房产' %>
-      <ul class="submenu" style="display: <%= ["house_intros","house_pictures","house_layouts","house_layout_panoramas","house_bespeaks","house_sellers","house_reviews","house_live_photos","house_impressions","broches", "broche_photos"].include?(controller_name) ? 'block;' : 'none;'%>">
-        <li class="<%= current_page?(house_intros_path) ? sub_class : '' %>"><a href="<%= house_intros_path %>"> <i class="icon-double-angle-right"></i> 楼盘简介</a></li>
-        <li class="<%= (current_page?(house_layouts_path) or current_page?(house_pictures_path)) ? sub_class : '' %>"><a href="<%= house_layouts_path %>"> <i class="icon-double-angle-right"></i> 户型图设置</a></li>
-        <li class="<%= (current_page?(broches_path) or current_page?(broche_photos_path)) ? sub_class : '' %>"><a href="<%= broches_path %>"> <i class="icon-double-angle-right"></i> 微楼书</a></li>
-        <li class="<%= current_page?(house_bespeaks_path) ? sub_class : '' %>"><a href="<%= house_bespeaks_path %>"> <i class="icon-double-angle-right"></i> 预约看房查询</a></li>
-        <li class="<%= current_page?(activity_house_sellers_path) or current_page?(house_sellers_path) ? sub_class : '' %>"><a href="<%= activity_house_sellers_path %>"> <i class="icon-double-angle-right"></i> 销售顾问管理</a></li>
-        <li class="<%= current_page?(house_impressions_path) ? sub_class : '' %>"><a href="<%= house_impressions_path %>"> <i class="icon-double-angle-right"></i> 房友印象管理</a></li>
-        <li class="<%= current_page?(house_live_photos_path) ? sub_class : '' %>"><a href="<%= house_live_photos_path %>"> <i class="icon-double-angle-right"></i> 实景拍摄管理</a></li>
-        <li class="<%= current_page?(house_reviews_path) ? sub_class : '' %>"><a href="<%= house_reviews_path %>"> <i class="icon-double-angle-right"></i> 专家点评管理</a></li>
-      </ul>
-    </li>
-  <% end %>
-
-  <% if current_site.has_privilege_for?(10010) %>
-    <%= content_tag :li, class: ( ["weddings"].include?(controller_name) ? "active" : false) do %>
-      <a href="/weddings">
-        <i class="icon-plus"></i>
-        <span class="menu-text">微婚礼</span>
-      </a>
-    <% end %>
-  <% end %>
-
   <% if current_site.has_privilege_for?(10001) %>
     <li class="<%= parent_class if (%W(shops shop_branches shop_products shop_categories shop_orders shop_table_orders shop_table_settings book_rules shop_menus).include?(controller_name) and session[:current_industry_id] == 10001 ) %>">
       <%= left_nav_dropdown 'icon-plus', '微餐饮' %>
@@ -310,6 +269,56 @@
     <% end %>
   <% end %>
 
+  <% if current_site.has_privilege_for?(10012) %>
+    <%= content_tag :li, class: (controller_path =~ /booking/ ? "active" : false) do %>
+      <a href="<%= bookings_path %>">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微服务</span>
+      </a>
+    <% end %>
+  <% end %>
+
+  <% if current_site.has_privilege_for?(10004) %>
+    <li class="<%= parent_class if cars_page? %>">
+      <%= left_nav_dropdown 'icon-plus', '微汽车' %>
+      <ul class="submenu" style="display: <%= cars_page? ? 'block;' : 'none;'%>">
+        <%= link_to_left_nav('我的4S店', car_shops_path, controller_name == 'car_shops') %>
+        <%= link_to_left_nav('车系管理', car_catenas_path, controller_name == 'car_catenas') %>
+        <%= link_to_left_nav('车型管理', car_types_path, %w(car_types car_pictures).include?(controller_name)) %>
+        <%= link_to_left_nav('保养预约', activity_notice_car_bespeaks_path(bespeak_type: 1), controller_name == 'car_bespeaks' && params[:bespeak_type].to_i == 1) %>
+        <%= link_to_left_nav('试驾预约', activity_notice_car_bespeaks_path(bespeak_type: 2), controller_name == 'car_bespeaks' && params[:bespeak_type].to_i == 2) %>
+        <%= link_to_left_nav('销售代表', activity_notice_car_sellers_path, controller_name == 'car_sellers') %>
+        <%= link_to_left_nav('车主关怀', car_owners_path, controller_name == 'car_owners') %>
+        <%= link_to_left_nav('实用工具', car_assistants_path, controller_name == 'car_assistants') %>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_site.has_privilege_for?(10009) %>
+    <li class="<%= ["house_intros","house_pictures","house_layouts","house_layout_panoramas","house_bespeaks","house_sellers","house_impressions","house_reviews","house_live_photos"].include?(controller_name) ? parent_class : ''%>">
+      <%= left_nav_dropdown 'icon-plus', '微房产' %>
+      <ul class="submenu" style="display: <%= ["house_intros","house_pictures","house_layouts","house_layout_panoramas","house_bespeaks","house_sellers","house_reviews","house_live_photos","house_impressions","broches", "broche_photos"].include?(controller_name) ? 'block;' : 'none;'%>">
+        <li class="<%= current_page?(house_intros_path) ? sub_class : '' %>"><a href="<%= house_intros_path %>"> <i class="icon-double-angle-right"></i> 楼盘简介</a></li>
+        <li class="<%= (current_page?(house_layouts_path) or current_page?(house_pictures_path)) ? sub_class : '' %>"><a href="<%= house_layouts_path %>"> <i class="icon-double-angle-right"></i> 户型图设置</a></li>
+        <li class="<%= (current_page?(broches_path) or current_page?(broche_photos_path)) ? sub_class : '' %>"><a href="<%= broches_path %>"> <i class="icon-double-angle-right"></i> 微楼书</a></li>
+        <li class="<%= current_page?(house_bespeaks_path) ? sub_class : '' %>"><a href="<%= house_bespeaks_path %>"> <i class="icon-double-angle-right"></i> 预约看房查询</a></li>
+        <li class="<%= current_page?(activity_house_sellers_path) or current_page?(house_sellers_path) ? sub_class : '' %>"><a href="<%= activity_house_sellers_path %>"> <i class="icon-double-angle-right"></i> 销售顾问管理</a></li>
+        <li class="<%= current_page?(house_impressions_path) ? sub_class : '' %>"><a href="<%= house_impressions_path %>"> <i class="icon-double-angle-right"></i> 房友印象管理</a></li>
+        <li class="<%= current_page?(house_live_photos_path) ? sub_class : '' %>"><a href="<%= house_live_photos_path %>"> <i class="icon-double-angle-right"></i> 实景拍摄管理</a></li>
+        <li class="<%= current_page?(house_reviews_path) ? sub_class : '' %>"><a href="<%= house_reviews_path %>"> <i class="icon-double-angle-right"></i> 专家点评管理</a></li>
+      </ul>
+    </li>
+  <% end %>
+
+  <% if current_site.has_privilege_for?(10010) %>
+    <%= content_tag :li, class: ( ["weddings"].include?(controller_name) ? "active" : false) do %>
+      <a href="/weddings">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微婚礼</span>
+      </a>
+    <% end %>
+  <% end %>
+
   <% if current_site.has_privilege_for?(10013) %>
     <li class="<%= parent_class if controller_name =~ /hospital|doctor_arranges|doctor_watches/ %>">
       <%= left_nav_dropdown 'icon-plus', '微医疗' %>
@@ -334,15 +343,6 @@
         <%= link_to_left_nav( '学院简介', intro_college_path(current_site.college || 0), controller_name == 'college_branches' || action_name == 'intro' ) %>
       </ul>
     </li>
-  <% end %>
-
-  <% if current_site.has_privilege_for?(10012) %>
-    <%= content_tag :li, class: ( ["bookings"].include?(controller_name) ? "active" : false) do %>
-      <a href="/bookings">
-        <i class="icon-plus"></i>
-        <span class="menu-text">微服务</span>
-      </a>
-    <% end %>
   <% end %>
 
   <% if current_site.has_privilege_for?(10014) %>

@@ -136,9 +136,9 @@ class SmsOrder < ActiveRecord::Base
 
     {
       :service => 'create_direct_pay_by_user',
-      :return_url => "#{domain_url}/sms_orders/callback",
-      :notify_url => "#{domain_url}/sms_orders/notify",
-      :error_notify_url => "#{domain_url}/sms_orders/error_notify",
+      :return_url => "#{domain_url}/sms/orders/callback",
+      :notify_url => "#{domain_url}/sms/orders/notify",
+      :error_notify_url => "#{domain_url}/sms/orders/error_notify",
       :service_url => 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8',
       :partner => SmsOrder::ALIPAY_ID,
       :_input_charset  => 'utf-8',
@@ -158,9 +158,9 @@ class SmsOrder < ActiveRecord::Base
       alipay_key: SmsOrder::ALIPAY_KEY,
       seller_account_name: SmsOrder::ALIPAY_ACCOUNT_NAME,
       service_url: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
-      callback_url: "#{domain_url}/sms_orders/callback",
-      notify_url: "#{domain_url}/sms_orders/notify",
-      merchant_url: "#{domain_url}/sms_orders/new"
+      callback_url: "#{domain_url}/sms/orders/callback",
+      notify_url: "#{domain_url}/sms/orders/notify",
+      merchant_url: "#{domain_url}/sms/orders/new"
     }
   end
 
@@ -350,7 +350,10 @@ class SmsOrder < ActiveRecord::Base
     return unless pending? || failure?
 
     if is_true
-      update_attributes(status: SmsOrder::SUCCEED, pay_sms_count: pay_sms_count.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
+      transaction do
+        update_attributes(status: SmsOrder::SUCCEED)
+        site.update_attributes(pay_sms_count: site.pay_sms_count.to_i + SmsOrder::PLANS[plan_id][:plan_sms])
+      end
     else
       update_attributes(status: SmsOrder::FAILURE)
     end

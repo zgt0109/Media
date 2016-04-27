@@ -1,9 +1,11 @@
+<style type="text/css">
+</style>
 <% title "商品一览" %>
 <% content_for :booking_top_pic do %>
   <header>
-    <a href="<%= mobile_booking_url(@site, @booking, anchor: "mp.weixin.qq.com")%>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
+    <a href="<%= mobile_booking_url(site_id: @site.id, anchor: "mp.weixin.qq.com")%>" class="ico-prev"><img src="/assets/mobile/wserver/ico-back.png"/></a>
     <a href="<%= @booking.tel? ? "tel:#{@booking.tel}" : "#" %>"><img src="/assets/mobile/wserver/ico-phone.png"/></a>
-    <a href="<%= mobile_booking_booking_orders_url(@site, @booking) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
+    <a href="<%= mobile_booking_booking_orders_url(site_id: @site.id, booking_id: @booking.id) %>"><img src="/assets/mobile/wserver/ico-member.png"/></a>
     <a class="btn-list"><img src="/assets/mobile/wserver/ico-list.png"/></a>
   </header>
 <% end %>
@@ -29,13 +31,13 @@
    <% @booking_categories.each do |booking_category| %>
         <% @items = booking_category.products.slice(0, 6) %>
         <% next unless @items.present? %>
-        <div class="bd-title"><a href="<%= mobile_booking_booking_category_url(@site.id, @booking, booking_category)%>"><%= booking_category.name %></a></div>
+        <div class="bd-title"><a href="<%= mobile_booking_booking_category_url(site_id: @site.id, booking_id: @booking.id, id: booking_category.id)%>"><%= booking_category.name %></a></div>
         <div class="box-list">
           <% if @items.present? %>
               <% @items.each do |item| %>
                   <% picture = item.booking_item_pictures.first %>
                   <div class="list-li">
-                    <a class="box-block" onclick="javascript:location.href='<%= mobile_booking_booking_item_url(@site, @booking, item, anchor: "mp.weixin.qq.com") %>'"></a>
+                    <a class="box-block" onclick="javascript:location.href='<%= mobile_booking_booking_item_url(item, site_id: @site.id, booking_id: @booking.id, anchor: "mp.weixin.qq.com") %>'"></a>
                     <div class="hd">
                           <span>
                             <%= picture.pic_url ? (image_tag picture.pic_url) : "暂无图片" %>

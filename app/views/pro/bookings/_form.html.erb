@@ -9,7 +9,6 @@
     </div>
     <div class="col-sm-12">
       <%= form_for @booking, validate: true, html: { id: 'booking_form', class: 'form', role: 'form' } do |f| %>
-
         <%= f.fields_for :activity do |activity| %>
               <%= render "weixin_preview", wx_title: activity.object.name, wx_summary: activity.object.summary,  wx_pic: (activity.object.pic_url.present? ?  activity.object.pic_url : activity.object.default_pic_url) %>
               <div class="col-xs-12 col-md-6 col-lg-7">
