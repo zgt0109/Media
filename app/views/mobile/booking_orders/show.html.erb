@@ -75,6 +75,39 @@
     </p>
   </div>
   <% if @booking_order.pending? %>
+
+    <%= form_for @booking_order, url: mobile_booking_order_url(@booking_order), remote: true do |f| %>
+      <% payment_classes = {'余额支付' => 'zhifu1', '微信支付' => 'zhifu2', '支付宝支付' => 'zhifu3', '易宝支付' => 'zhifu4'} %>
+      <div class="tit1">选择支付方式</div>
+        <div class="bgf bord1 radiu3">
+          <div class="zhifu_list">
+            <ul>
+              <% if @payment_types.present? %>
+                <% @payment_types.each_with_index do |payment_type, index|%>
+                  <li class="<%= 'on' if (index.eql?(0) && f.object.payment_type_id == nil) || payment_type.id == f.object.payment_type_id %>">
+                   <span class="right check_icon"></span>
+                   <span class="left zf_pic <%= payment_classes[payment_type.name] %>"></span>
+                   <span><%= payment_type.name %></span>
+                  </li>
+                  <%= f.radio_button :payment_type_id, payment_type.id, {checked: (index.eql?(0) && f.object.new_record?) || payment_type.id == f.object.payment_type_id, style: 'display:none;'} %>
+                <% end %>
+              <% else %>
+                <span>没有可用的支付方式</span>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <%= f.submit '支付订单', class: 'btn btn-fw' %>
+    <% end %>
     <%= link_to '取消订单', cancel_mobile_booking_order_url(@booking_order, site_id: @site.id), class: "btn btn-fw", confirm:"确认取消订单?" %>
   <% end %>
 
+<script>
+  $(function(){
+    $(".zhifu_list ul li").click(function(){
+      $(this).addClass("on").siblings().removeClass("on");
+      $(this).next().prop('checked', true);
+    })
+  });
+</script>

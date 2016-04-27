@@ -29,7 +29,7 @@
     <div class="form-group">
       <label>支付方式<span class="required-star">*</span>
       <div class="clearfix">
-        <% payment_types = [['请选择',''],['会员卡余额支付',VipPackagesVipUser::BY_BALANCE],['现金支付',VipPackagesVipUser::BY_CASH]] %>
+        <% payment_types = [['请选择',''],['余额支付',VipPackagesVipUser::BY_BALANCE],['现金支付',VipPackagesVipUser::BY_CASH]] %>
         <%= select_tag :payment_type,
             options_for_select(payment_types)
         %>

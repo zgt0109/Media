@@ -44,6 +44,11 @@ class PaymentsController < ApplicationController
           # paymentable.unpay!
           redirect_to mobile_donation_order_url(site_id: paymentable.site_id, aid: paymentable.donation.id)
         end
+      elsif paymentable.is_a?(BookingOrder)
+        if params['status'].present? && params['status'] == '1'
+          paymentable.paid!
+        end
+        redirect_to mobile_booking_order_url(site_id: payment.site_id, id: paymentable.id)
       end
     else
       render text: '支付成功'
@@ -67,6 +72,8 @@ class PaymentsController < ApplicationController
           paymentable.recharge! if paymentable.is_a?(VipRechargeOrder) and paymentable.pending?
 
           paymentable.paid! if paymentable.is_a?(DonationOrder) and paymentable.pending?
+
+          paymentable.paid! if paymentable.is_a?(BookingOrder) and paymentable.pending? and payment.success?
 
           if paymentable.is_a?(ShopOrder)
             #标记为支付成功!
