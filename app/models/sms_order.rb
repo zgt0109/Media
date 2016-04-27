@@ -350,7 +350,10 @@ class SmsOrder < ActiveRecord::Base
     return unless pending? || failure?
 
     if is_true
-      update_attributes(status: SmsOrder::SUCCEED, pay_sms_count: pay_sms_count.to_i + SmsOrder::PLANS[self.plan_id][:plan_sms])
+      transaction do
+        update_attributes(status: SmsOrder::SUCCEED)
+        site.update_attributes(pay_sms_count: site.pay_sms_count.to_i + SmsOrder::PLANS[plan_id][:plan_sms])
+      end
     else
       update_attributes(status: SmsOrder::FAILURE)
     end
