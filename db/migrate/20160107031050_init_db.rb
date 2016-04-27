@@ -662,7 +662,7 @@ class InitDb < ActiveRecord::Migration
     t.datetime "canceled_at"
     t.text     "description"
     t.string   "address"
-    t.integer  "status",          :limit => 1,                                :default => 1
+    t.integer  "status",          :limit => 1,                                :default => 0
     t.datetime "created_at",                                                                   :null => false
     t.datetime "updated_at",                                                                   :null => false
   end

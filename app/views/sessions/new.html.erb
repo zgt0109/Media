@@ -1,34 +1,90 @@
-<div class="m-main">
-  <%= form_tag sessions_path, id: "session_form", remote: true do %>
-    <div class="m-form">
-      <div class="m-icon circle"><i class="fa fa-user"></i></div>
-      <div class="m-title">微枚迪</div>
-      <div class="m-input-text m-input-join-u">
-        <%= text_field_tag :login, params[:login], class: "input-focus radius-bl0 radius-br0 validate", data: {tip: "请输入您的账号"} %>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10"> <![endif]-->
+<!--[if IE 10]>         <html class="no-js ie10"> <![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <% if content_for?(:head) %>
+      <%= yield :head %>
+    <% else %>
+      <title>登录</title>
+    <% end %>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/com/css/normalize.css">
+    <link rel="stylesheet" href="/com/css/main.css">
+    <link rel="stylesheet" href="/com/css/anythingslider.css">
+
+    <%= javascript_include_tag "sessions" %>
+    <script src="/com/js/vendor/modernizr-2.6.2.min.js"></script>
+    <%= csrf_meta_tags %>
+</head>
+<body class="bg-blue login-body">
+  <!--[if lt IE 7]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div class="login-main">
+    <div class="mod-form form-login">
+      <div class="clearfix">
+        <p class="logo1">
+          <a href="javascript:history.go(0);"></a>
+        </p>
       </div>
-      <div class="m-input-text m-input-join-d m-input-pass">
-        <%= password_field_tag :password, nil, class: "input-focus radius-tl0 radius-tr0 validate", data: {tip: "请输入密码"} %>
-      </div>
-      <div class="m-input-text">
-        <%= rucaptcha_input_tag(class: 'input-focus validate', placeholder: '请输入验证码') %>
-        <div class="m-check-num">
-          <a class="rucaptcha-image-box" href="javascript:;"><%= rucaptcha_image_tag %></a>
+      <%= form_tag sessions_path, :class => "form-hor clearfix", id: "session_form", remote: true do %>
+        <div class="form-li">
+          <div class="li-lable">账号</div>
+          <div class="li-input">
+            <%= text_field_tag :login, params[:login] , class: "input", id: "account-place", placeholder: '请输入您的账号' %>
+          </div>
         </div>
-      </div>
-      <div class="m-link-tip">
-        <!-- <a class="m-link-tip-fg" href="<%= new_password_reset_path %>">忘记密码？</a> -->
-        <!-- <a class="m-link-tip-rg" href="<%= register_path %>">注册新账号&gt;</a> -->
-      </div>
-      <div class="m-input-btn m-input-btn-ps">
-        <%= submit_tag "登录", class: "m-input-btn-s", disabled: true, disable_with: "提交中..."%>
-      </div>
+        <div class="form-li">
+          <div class="li-lable">密码</div>
+          <div class="li-input">
+            <%= password_field_tag :password, nil, class: "input", id: "password-place", placeholder: '请输入密码' %>
+          </div>
+        </div>
+        <div class="form-li">
+          <div class="li-lable">验证码</div>
+          <div class="li-input">
+            <div class="input input-verify">
+              <%#= text_field_tag "verify_code", nil, class: "", id: "check-place", placeholder: '请输入验证码' %>
+              <!-- <img id="image_code" src="/verify_code?<%= rand %>" style=""><a id="change_verify_code" href="javascript:void(0)">换一张</a> -->
+              <%= rucaptcha_input_tag(class: 'input-focus validate', placeholder: '请输入验证码') %>
+              <a class="rucaptcha-image-box" href="javascript:;"><%= rucaptcha_image_tag %></a>
+            </div>
+          </div>
+        </div>
+        <div class="login-tips">
+        </div>
+        <div class="form-li">
+          <div class="li-lable w100">
+            <!-- <label class='checkbox'> -->
+              <!-- <input type="checkbox"/>自动登录 -->
+            <!-- </label> -->
+            <a href="<%= register_path %>">注册账号&gt;</a>
+          </div>
+          <div class="li-input li-login">
+            <%= submit_tag "登录", class: "btn btn-green btn-submit", disable_with: "提交中..."%>
+          </div>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
+  </div>
+  <div class="bg-form">
+    <span>微信营销解决方案领导品牌</span>
+    <small>Micro-channel marketing solutions for leading brands</small>
+  </div>
 
-<%= content_for :custom_js do %>
+  <script src="/com/js/vendor/jquery.anythingslider.min.js"></script>
+  <script src="/com/js/vendor/affix.js"></script>
+  <script src="/com/js/vendor/scrollspy.js"></script>
+  <script src="/com/js/plugins.js"></script>
+  <script src="/com/js/main.js"></script>
   <script>
-
     $(".rucaptcha-image-box").on('click', function(){
       var img = $(this).find('img:first'),
         currentSrc = img.attr('src');
@@ -36,16 +92,16 @@
     });
 
     $("#session_form").bind("ajax:success", function(event, xhr, settings) {
-      checkInputDel($(".m-input-text"));
+      checkInputDel($(".li-input"));
       if(xhr["code"]==0){
         location.href=xhr["url"];
       }else{
-        checkInput($(".m-input-text").eq(xhr["num"]), xhr["status"], xhr["message"]);
+        checkInput($(".li-input").eq(xhr["num"]), xhr["status"], xhr["message"]);
       }
     });
 
     $(function(){
-      $(".m-input-text input").Ztip({
+      $(".li-input input").Ztip({
         exceptClass: ["validate"]
       });
     });
@@ -57,15 +113,17 @@
         var $val = $(this).val();
         if (!$val || $val =="请输入您的账号" || $val =="请输入验证码") {
           flag = false;
-          $(".m-input-btn-s").removeClass("m-input-btn-active").prop("disabled", true);
+          $(".btn-submit").removeClass("m-input-btn-active").prop("disabled", true);
           return false;
         }
       });
       if(flag){
-        $(".m-input-btn-s").addClass("m-input-btn-active").prop("disabled", false);
+        $(".btn-submit").addClass("m-input-btn-active").prop("disabled", false);
           console.log()
           $("#password").prev().val($("#login").val());
       }
     });
   </script>
-<% end %>
+
+</body>
+</html>
