@@ -10,6 +10,7 @@
     </div>
 
     <div class="page-content">
+      <%= render "pro/hospitals/top_hospital" %>
       <%= form_for @search, url: history_hospital_orders_path, :html => { :method => :get} do |f| %>
           <div class="col-sm-12 no-padding">
             <div class="col-sm-3 no-padding">
