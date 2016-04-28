@@ -3,12 +3,13 @@
   <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
-      <li>微公益</li>
-      <li>类别设置</li>
+      <li><%= link_to '微公益', donations_path %></li>
+      <li><%= link_to '类别设置', list_activities_donations_path %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
   <div class="page-content">
+    <%= render 'top_donation' %>
     <div class="row">
       <div class="col-sm-12">
         <div class="alert alert-block alert-info">

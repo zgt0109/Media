@@ -5,10 +5,8 @@
         <i class="icon-home home-icon"></i>
         <a href="#">首页</a>
       </li>
-      <li>
-        微公益
-      </li>
-      <li>项目管理</li>
+      <li><%= link_to '微公益', donations_path %></li>
+      <li><%= link_to '公益信息', donations_path %></li>
     </ul>
     <!-- .breadcrumb -->
     <div class="pull-right">
@@ -22,6 +20,7 @@
     </div>
   </div>
   <div class="page-content">
+    <%= render 'top_donation' %>
     <div class="row">
       <div class="col-md-12">
         <!-- PAGE CONTENT BEGINS -->

@@ -6,13 +6,14 @@
           <i class="icon-home home-icon"></i>
           <%= link_to "首页", root_path %> 
         </li>
-        <li>微公益</li>
-        <li>类别设置</li>
+        <li><%= link_to '微公益', donations_path %></li>
+        <li><%= link_to '类别设置', list_activities_donations_path %></li>
       </ul>
       <%= render partial:'/layouts/qrcode' %>
     </div>
 
     <div class="page-content">
+      <%= render 'top_donation' %>
       <div class="row">
         <div class="col-sm-12">
           <%= link_to "新增", activity_donations_path, class: "btn btn-primary btn-sm pull-right"  %>

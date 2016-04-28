@@ -2,14 +2,15 @@
     <div class="main-content ">
       <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
-           <%= render 'partials/home' %>
-           <li>微公益</li>
-           <li>捐款明细</li>
+          <%= render 'partials/home' %>
+          <li><%= link_to '微公益', donations_path %></li>
+          <li><%= link_to '捐款明细', orders_donations_path %></li>
         </ul>
         <!-- .breadcrumb -->
         <%= render partial: '/layouts/qrcode' %>
       </div>
       <div class="page-content">
+        <%= render 'top_donation' %>
         <div class="row">
           <div class="col-md-12">
             <!-- PAGE CONTENT BEGINS -->
