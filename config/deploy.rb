@@ -36,7 +36,7 @@ end
 task :test do
   require 'rvm/capistrano'
   server 'test.winwemedia.com', :app, :web, :db, primary: true
-  config_deploy application: 'winwemedia_test', branch: 'dev'
+  config_deploy application: 'winwemedia_test', branch: 'master'
 end
 
 
