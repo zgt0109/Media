@@ -67,7 +67,7 @@ class AuthAgentController < ApplicationController
       return_to_uri = decode_return_to_uri
       return_to_uri.query = Rack::Utils.parse_query(return_to_uri.query).merge(openid: @wx_user.openid).to_param
 
-      SiteLog::Base.logger('wxoauth', "****** return_to_uri: #{return_to_uri.to_s}")
+      # SiteLog::Base.logger('wxoauth', "****** return_to_uri: #{return_to_uri.to_s}")
 
       redirect_to return_to_uri.to_s
     else
@@ -82,7 +82,7 @@ class AuthAgentController < ApplicationController
   private
 
   def generate_oauth_uri(wx_mp_user, auth_params = {})
-    SiteLog::Base.logger('wxoauth', "****** request params: #{params}")
+    # SiteLog::Base.logger('wxoauth', "****** request params: #{params}")
 
     app_id = wx_mp_user.try(:app_id)
     app_secret = wx_mp_user.try(:app_secret)
@@ -132,7 +132,7 @@ class AuthAgentController < ApplicationController
     # $redis.hdel(OAUTH_STATE, key)
     WxOauthDelKeyWorker.perform_at(3.minutes.from_now, OAUTH_STATE, key)
 
-    SiteLog::Base.logger('wxoauth', "base64_encoded_uri: #{base64_encoded_uri}, params: #{params}")
+    # SiteLog::Base.logger('wxoauth', "base64_encoded_uri: #{base64_encoded_uri}, params: #{params}")
 
     URI(Base64.decode64(base64_encoded_uri))
   end

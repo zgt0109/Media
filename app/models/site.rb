@@ -678,7 +678,7 @@ START
     return puts "wx_mp_user not exists" unless self.wx_mp_user
 
     # 初始化公众号和微官网
-    # wx_mp_user = create_wx_mp_user!(name: nickname) unless wx_mp_user
+    # wx_mp_user = create_wx_mp_user!(nickname: nickname) unless wx_mp_user
     # wx_mp_user.create_activity_for_website
 
     user_cloner.wx_mp_user = self.wx_mp_user

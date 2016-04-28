@@ -136,7 +136,7 @@ module DetectUserAgent
         end
       end
     rescue => error
-      SiteLog::Base.logger('weixin_oauth', "weixin_oauth error: #{error.message} > #{error.backtrace}")
+      SiteLog::Base.logger('wxoauth', "weixin_oauth error: #{error.message} > #{error.backtrace}")
       require_wx_user
     end
 
