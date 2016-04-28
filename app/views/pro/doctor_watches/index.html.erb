@@ -12,7 +12,9 @@
   </div>
 
  <div class="page-content">
-   <%= render "pro/hospitals/top_hospital" %>
+   <div class="tabbable">
+     <%= render "pro/hospitals/top_hospital" %>
+     <div class="tab-content no-border padding-24">
         <div class="row">
           <%= form_for @search, :html => { :method => :get } do |f| %>
           <div class="col-sm-3">
@@ -93,6 +95,8 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
   <!-- /.page-content -->
 </div>
 
