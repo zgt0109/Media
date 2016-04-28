@@ -10,10 +10,7 @@
     </div>
     <div class="page-content">
       <div class="tabbable">
-        <ul class="nav nav-tabs padding-24 tab-size-bigger">
-          <li><%= link_to '门票设置', ticket_trips_url %></li>
-          <li class="active"><%= link_to '门票分类', trip_ticket_categories_url %></li>
-        </ul>
+        <%= render "pro/trips/top_trip" %>
 
         <div class="row" id="class-tickets" style="">
           <div class="col-sm-12">
@@ -36,9 +33,9 @@
             <!---->
             <!---->
             </div>
-          
+
           </div>
-      
+
         </div>
       </div>
     </div>
@@ -47,14 +44,14 @@
 <% content_for :custom_js do %>
   <script type="text/javascript">
     $(function(){
-      
+
       $('#tree1').on("click", ".fa-plus-square, .fa-minus-square", function () {
         $(this).closest('.tree-folder').find('.tree-folder-content').eq(0).toggle();
         if($(this).hasClass('fa-plus-square')){
           $(this).removeClass('fa-plus-square').addClass('fa-minus-square');
         }
         else{
-          $(this).removeClass('fa-minus-square').addClass('fa-plus-square');                
+          $(this).removeClass('fa-minus-square').addClass('fa-plus-square');
         }
       });
 

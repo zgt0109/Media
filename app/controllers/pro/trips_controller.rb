@@ -35,6 +35,10 @@ class Pro::TripsController < Pro::TripBaseController
   end
 
   def ads
+    @current_titles << '轮播图片'
+    @trip = current_site.trip || Trip.new(site_id: current_site.id, name: "微旅游")
+    @trip.activity = Activity.new(site_id: current_site.id, activity_type_id: ActivityType::TRIP, activityable: @trip, status: 1 ) unless @trip.activity
+
     @trip_ads = current_site.trip.trip_ads.order(:sort) || []
   end
 

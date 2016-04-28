@@ -246,26 +246,11 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(10006) %>
-    <%= content_tag :li, class: side_menu_group_status(['pro/trips', 'pro/trip_ticket_categories'],"open active") do %>
-      <%= left_nav_dropdown 'icon-plus', '微旅游' %>
-      <ul class="submenu">
-        <%= content_tag :li, class: side_menu_status(controller="pro/trips", action="index", nil, active = "active") do%>
-          <%= link_to trips_path do %>
-            <i class="icon-double-angle-right"></i>旅游服务
-          <% end %>
-        <% end %>
-        <%= content_tag :li, class: side_menu_status(controller="pro/trips",action="ticket", nil, active = "active") || side_menu_status(controller="pro/trips",action="show_ticket", nil, active = "active") || side_menu_status("pro/trip_ticket_categories", nil, nil, 'active') do%>
-          <%= link_to ticket_trips_path do %>
-            <i class="icon-double-angle-right"></i>门票管理
-          <% end %>
-        <% end %>
-
-        <%= content_tag :li, class: side_menu_status(controller="pro/trips",action="order", nil, active = "active") do%>
-          <%= link_to order_trips_path do %>
-            <i class="icon-double-angle-right"></i>预约管理
-          <% end %>
-        <% end %>
-      </ul>
+    <%= content_tag :li, class: (controller_path =~ /trip/ ? "active" : false) do %>
+      <a href="<%= trips_path %>">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微旅游</span>
+      </a>
     <% end %>
   <% end %>
 

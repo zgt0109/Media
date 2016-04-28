@@ -1,9 +1,6 @@
 <div class="tabbable">
-  <ul class="nav nav-tabs padding-24 tab-size-bigger">
-    <li class="active"><%= link_to '门票设置', ticket_trips_url %></li>
-    <li><%= link_to '门票分类', trip_ticket_categories_url %></li>
-  </ul>
-  
+  <%= render "pro/trips/top_trip" %>
+
   <%= form_for @search, url: ticket_trips_path, html: { method: :get, class: "col-sm-12" } do |f| %>
   <%= hidden_field_tag :trip_ticket_category_id %>
   <div class="col-md-3 row" style=" margin-top: 20px; ">
@@ -50,17 +47,21 @@
     <%= paginate @trip_tickets %>
 </div>
 
+<style type="text/css">
+  .width-305 {width: 100%;}
+</style>
+
 <% content_for :custom_js do %>
   <script type="text/javascript">
-    
-    var category_data = <%= raw JSON.pretty_generate(current_site.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>, 
+
+    var category_data = <%= raw JSON.pretty_generate(current_site.trip_ticket_categories.order(:position).collect{|t| {id: t.id, parent_id: t.parent_id.to_i, name: t.name, position: t.position}})%>,
         select_data = []
         series = <%= raw @category.try(:series) || 1 %>;
 
     function select_categories(id, parent_id, level){
       //console.log(level);
-      var data = {level: level, selected: id, categories: [{name: '全部', parent_id: parent_id, id: 0}]}, 
-          category=null, 
+      var data = {level: level, selected: id, categories: [{name: '全部', parent_id: parent_id, id: 0}]},
+          category=null,
           parent=null;
       $.each(category_data, function(i,c){
         if(c.parent_id == parent_id){
@@ -76,12 +77,12 @@
 
       data.categories = data.categories.sort(function(a, b){return a.position-b.position});
       select_data.unshift(data);
-      
+
 
       if(parent){
         select_categories(parent.id, parent.parent_id, level - 1);
       }else{
-        
+
         if(select_data.length > 0){
 
           var selected = select_data[select_data.length - 1].selected,
@@ -101,15 +102,15 @@
             }
           }
         }
-        
+
         var index = null, ids = [];
         $.each(select_data, function(i, data){
           $select = $('select').eq(i);
           var html ='';
           if(data.selected != 0 && data.selected != '' ){
-            ids.push(data.selected);  
+            ids.push(data.selected);
           }
-          
+
           //console.log('data.selected');
           //console.log(a.selected);
           $.each(data.categories, function(j, c){
@@ -119,16 +120,16 @@
             }else{
               html += '<option value='+c.id+' parent_id='+c.parent_id+'>'+c.name+'</option>'
             }
-             
+
             if(data.selected == 0){
               index = data.selected
             }
 
-            
+
           });
           $select.html(html);
           $select.attr('series', i + 1);
-        
+
         });
 
         if(ids.length > 0){
@@ -142,12 +143,12 @@
             if(i > index && select_data[i] && select_data[i].categories.length == 0){$(e).html('<option>全部</option>');}
           });
         }
-        
+
         $.each($('select'), function(i, e){
           if(i > select_data.length -1){$(e).html('<option>全部</option>');}
         });
 
-      }   
+      }
     }
 
     $(function(){
