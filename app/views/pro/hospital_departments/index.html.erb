@@ -8,8 +8,9 @@
     </ul>
     <%= render partial:'/layouts/qrcode' %>
   </div>
-  
+
   <div class="page-content">
+    <%= render "pro/hospitals/top_hospital" %>
     <div class="row">
       <div class="col-sm-12">
        <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
@@ -30,11 +31,11 @@
             <%= render :partial=> "sub_menu", :collection => @hospital_departments.root.order(:sort), :as =>:sub_menu %>
           </div>
         </div>
-        
+
       </div>
     </div>
     <div class="col-md-6 col-lg-6 margin-top-10" id="form"></div>
-    
+
   </div>
 </div>
 </div>

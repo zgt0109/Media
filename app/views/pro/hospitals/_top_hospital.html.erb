@@ -1,0 +1,18 @@
+<div class="tabbable">
+  <ul class="nav nav-tabs padding-24 tab-size-bigger">
+    <%= link_to_li '基本信息', hospitals_url, {class: "#{'active' if controller_name == 'hospitals'}"} %>
+    <%= link_to_li '医生管理', hospital_doctors_url, {class: "#{'active' if controller_name == 'hospital_doctors'}"} %>
+    <%= link_to_li '排班管理', doctor_watches_url, {class: "#{'active' if controller_name =~ /doctor_arranges|doctor_watches/}"} %>
+    <%= link_to_li '科室管理', hospital_departments_url, {class: "#{'active' if controller_name == 'hospital_departments'}"} %>
+    <%= link_to_li '预约管理', hospital_orders_url, {class: "#{'active' if controller_name == 'hospital_orders'}"} %>
+  </ul>
+</div>
+
+<style type="text/css">
+  .tabbable {
+    padding-bottom: 20px;
+  }
+  .nav {
+    height: 34px;
+  }
+</style>

@@ -320,16 +320,12 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(10013) %>
-    <li class="<%= parent_class if controller_name =~ /hospital|doctor_arranges|doctor_watches/ %>">
-      <%= left_nav_dropdown 'icon-plus', '微医疗' %>
-      <ul class="submenu" style="display: <%= ( controller_name =~ /hospital|doctor_arranges|doctor_watches/ ) ? 'block;' : 'none;'%>">
-        <%= link_to_left_nav( '基本信息', hospitals_url, controller_name == 'hospitals' ) %>
-        <%= link_to_left_nav( '医生管理', hospital_doctors_url, controller_name == 'hospital_doctors' ) %>
-        <%= link_to_left_nav( '排班管理', doctor_watches_url, controller_name =~ /doctor_arranges|doctor_watches/ ) %>
-        <%= link_to_left_nav( '科室管理', hospital_departments_url, controller_name == 'hospital_departments' ) %>
-        <%= link_to_left_nav( '预约管理', hospital_orders_url, controller_name == 'hospital_orders' ) %>
-      </ul>
-    </li>
+    <%= content_tag :li, class: (controller_path =~ /hospital|doctor/ ? "active" : false) do %>
+      <a href="/hospitals">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微医疗</span>
+      </a>
+    <% end %>
   <% end %>
 
   <% if current_site.has_privilege_for?(10011) %>
