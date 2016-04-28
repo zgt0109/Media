@@ -33,10 +33,10 @@ task :production do
   deploy_whenever
 end
 
-task :staging do
+task :test do
   require 'rvm/capistrano'
-  server 'winwemedia.com', :app, :web, :db, primary: true
-  config_deploy application: 'winwemedia_staging', rails_env: 'staging', branch: 'staging'
+  server 'test.winwemedia.com', :app, :web, :db, primary: true
+  config_deploy application: 'winwemedia_test', branch: 'dev'
 end
 
 
