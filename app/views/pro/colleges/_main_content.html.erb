@@ -10,11 +10,12 @@
 
         <div class="page-content">
             <div class="tabbable">
-                <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
-                    <%= link_to_li '微信消息设置', message_colleges_path %>
-                    <%= link_to_li '基本信息设置', colleges_path %>
-                    <%= link_to_li '查看报名信息', college_college_enrolls_path(current_site.college.try(:id) || 0) %>
-                </ul>
+            <%= render 'pro/colleges/top_college' %>
+                <!-- <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
+                    <%#= link_to_li '微信消息设置', message_colleges_path %>
+                    <%#= link_to_li '基本信息设置', colleges_path %>
+                    <%#= link_to_li '查看报名信息', college_college_enrolls_path(current_site.college.try(:id) || 0) %>
+                </ul> -->
                 <div class="tab-content no-border padding-24">
                     <%= yield :tab_content %>
                 </div>
