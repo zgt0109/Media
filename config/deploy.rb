@@ -33,7 +33,7 @@ task :production do
   deploy_whenever
 end
 
-task :test do
+task :testing do
   require 'rvm/capistrano'
   server 'test.winwemedia.com', :app, :web, :db, primary: true
   config_deploy application: 'winwemedia_test', branch: 'master'
