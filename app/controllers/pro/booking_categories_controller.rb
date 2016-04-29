@@ -32,7 +32,7 @@ class Pro::BookingCategoriesController < Pro::BookingBaseController
   end
 
   def destroy
-    if @booking_category.booking_items.count > 0
+    if @booking_category.booking_items.normal.count > 0
       redirect_to :back,  notice: "菜单下面有商品， 不能删除"
     elsif @booking_category.has_children?
       redirect_to :back,  notice: "菜单下面有子菜单， 不能删除"
