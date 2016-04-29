@@ -4,7 +4,7 @@
     <ul class="breadcrumb">
       <%= render 'partials/home' %>
       <li><%= link_to '微服务', bookings_path %></li>
-      <li><%= link_to '基本信息', bookings_path %></li>
+      <li><%= link_to '服务列表', bookings_path %></li>
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
@@ -36,7 +36,7 @@
                 <td><%= booking.activity.keyword %></td>
                 <td><%= booking.tel  %></td>
                 <td>
-                  <%= link_to "编辑", edit_booking_path(booking) %>
+                  <%= link_to "管理", edit_booking_path(booking) %>
                 </td>
               </tr>
             <% end %>

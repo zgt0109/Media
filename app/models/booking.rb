@@ -18,7 +18,7 @@ class Booking < ActiveRecord::Base
     ['deliver',1,'快递服务'],
     ['rent',2,'租赁服务'],
     ['driving',3,'驾校服务'],
-    ['clean',4,'保洁服务'],
+    ['home_service',4,'家政服务'],
     ['moving',5,'搬家服务']
   ]
 
