@@ -1,4 +1,4 @@
-<%= form_for @picture, validate: true do |f| %>
+<%= form_for @picture, url: @picture.new_record? ? @picture : booking_ad_path(@booking, @picture), validate: true do |f| %>
     <div class="modal-body">
     <div class="alert alert-block alert-info ">
       <strong class="pull-left">提示：</strong>
@@ -16,7 +16,7 @@
       <label class="control-label">图片<span class="required-star">*</span></label>
       <div class="clearfix">
         <div id="logo" class="pull-left margin-right-10"></div>
-        <div class="cieldon-file width-100px" data-type="0" data-div="#logo" data-height="90" data-width="160" data-img="<%= f.object.pic_url %>" data-name="booking_ad[pic_key]" data-key="<%= f.object.pic_url %>"></div>
+        <div class="cieldon-file width-100px" data-type="0" data-div="#logo" data-height="90" data-width="160" data-img="<%= @picture.pic_url %>" data-name="booking_ad[pic_key]" data-key="<%= @picture.pic_key %>"></div>
       </div>
     </div>
 
