@@ -58,7 +58,7 @@ production:
 staging:
   <<: *common
   hostname: "staging.winwemedia.com"
-  mhostname: "staging.m.winwemedia.com"
+  mhostname: "stagingm.winwemedia.com"
   wshop_host:     "http://staging.ec.winwemedia.com"
   wmall_host:     "http://staging.mall.winwemedia.com"
   wlife_host:     "http://wlife.winwemedia.com"
