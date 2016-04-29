@@ -68,12 +68,12 @@
     <% if @booking_item.is_able_booking %>
         <a href="<%= new_mobile_booking_booking_order_url(@site.id, @booking, booking_item_id: @booking_item.id) %>"  class="btn btn-red">
           <img src="/assets/mobile/wserver/ico-car-add.png"/>
-          立即预订
+          立即购买
         </a>
     <% else %>
         <a onclick="javascript:not_booking_info();" class="btn btn-gray">
           <img src="/assets/mobile/wserver/ico-car-add.png"/>
-          立即预订
+          立即购买
         </a>
     <% end %>
   </div>
