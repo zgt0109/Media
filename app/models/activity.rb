@@ -922,7 +922,7 @@ class Activity < ActiveRecord::Base
       when message?          then app_leaving_messages_url(_default_params)
       when house_bespeak?    then new_app_house_market_url(_default_params)
       when house_seller?     then app_house_sellers_url(_default_params)
-      when booking?          then mobile_bookings_url(_default_params)
+      when booking?          then mobile_bookings_url(_default_params.merge(id: activityable_id))
       when group?            then mobile_groups_url(_default_params.merge(id: id))
       when hospital?         then mobile_hospital_doctors_url(_default_params)
       when trip?             then mobile_trips_url(_default_params)
