@@ -1,32 +1,6 @@
 <div class="tabbable">
-  <ul class="nav nav-tabs padding-24 tab-size-bigger" id="myTab">
-    <li class="active">
-      <a data-toggle="tab" href="#home">
-        基本信息
-      </a>
-    </li>
-    <li>
-      <a data-toggle="tab" href="#tab-2">
-        轮播图片
-      </a>
-    </li>
-  </ul>
+  <%= render "pro/trips/top_trip" %>
   <div class="tab-content no-border padding-24">
     <%= render "pro/trips/base_setting"%>
-    <%= render "pro/trips/ads"%>
   </div>
 </div>
-
-<% content_for :custom_js do %>
-  <%= javascript_tag do %>
-    $(function(){
-      $("input[name='trip_ad[pic_key]'").bind("change", function () {
-        $(this).parents("form").submit()
-      })
-
-      $("input[name='trip_ad[title]'").bind("change", function () {
-        $(this).parents("form").submit()
-      })
-    })
-  <% end %>
-<% end %>

@@ -10,39 +10,44 @@
     </div>
 
     <div class="page-content">
-        <div class="row">
+      <div class="tabbable">
+        <%= render "pro/hospitals/top_hospital" %>
+        <div class="tab-content no-border padding-24">
+          <div class="row">
             <div class="col-sm-12">
                 <div class="alert alert-block alert-info">
-                    <strong class="pull-left">提示：</strong>
-                    <ul class="vwebsiteHeadAlert">
-                        <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微医疗。</li>
-                    </ul>
+                  <strong class="pull-left">提示：</strong>
+                  <ul class="vwebsiteHeadAlert">
+                      <li>以下内容为微信推送相关设置，用户通过回复关键字触发本条信息，链接到微医疗。</li>
+                  </ul>
                 </div>
             </div>
-            <div class="col-sm-12">
-              <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述' %>
+          <div class="col-sm-12">
+            <%= render "weixin_preview", wx_title: @activity.try(:name) || '标题', wx_summary: @activity.try(:summary) || '描述' %>
 
-              <div class="col-xs-12 col-md-6 col-lg-7">
-                <%= form_for @hospital, validate: true, html: { class: "form col-sm-12", role: "form" } do |f| %>
-                  <div class="form-group">
-                    <label class="control-label">医院名称<span class="required-star">*</span></label>
-                    <div class="clearfix">
-                        <%= f.text_field :name, class: 'col-xs-6', placeholder: "请输入医院名称" %>
-                    </div>
+            <div class="col-xs-12 col-md-6 col-lg-7">
+              <%= form_for @hospital, validate: true, html: { class: "form col-sm-12", role: "form" } do |f| %>
+                <div class="form-group">
+                  <label class="control-label">医院名称<span class="required-star">*</span></label>
+                  <div class="clearfix">
+                      <%= f.text_field :name, class: 'col-xs-6', placeholder: "请输入医院名称" %>
                   </div>
+                </div>
 
-                  <%= f.fields_for :activity  do |activity| %>
-                    <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "hospital[activity_attributes][pic_key]", pic_data_key: @activity.pic_key %>
-                  <% end %>
-
-                  <div class="form-group">
-                    <input type="submit" class="btn btn-sm btn-primary" value="保存">
-                    <!--<input type="button" class="btn btn-sm btn-default" value="停用">-->
-                  </div>
+                <%= f.fields_for :activity  do |activity| %>
+                  <%= render "weixin_setting", activity: activity, data_img: @activity.pic_url, pic_data_name: "hospital[activity_attributes][pic_key]", pic_data_key: @activity.pic_key %>
                 <% end %>
-              </div>
+
+                <div class="form-group">
+                  <input type="submit" class="btn btn-sm btn-primary" value="保存">
+                  <!--<input type="button" class="btn btn-sm btn-default" value="停用">-->
+                </div>
+              <% end %>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 <% end %>

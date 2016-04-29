@@ -10,6 +10,9 @@
     </div>
 
     <div class="page-content">
+      <div class="tabbable">
+      <%= render "pro/hospitals/top_hospital" %>
+      <div class="tab-content no-border padding-24">
       <%= form_for @search, url: hospital_orders_url, method: :get,  :html => { :method => :get} do |f| %>
           <div class="col-sm-12 no-padding">
             <div class="col-sm-3 no-padding">
@@ -60,7 +63,8 @@
               <%= link_to "查看历史预约单",  history_hospital_orders_path %>
                           </div>
           </div>
-
+        </div>
+      </div>
       <% end %>
 
       <div class="row">

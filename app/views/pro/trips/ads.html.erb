@@ -1,0 +1,20 @@
+<div class="tabbable">
+  <%= render "pro/trips/top_trip" %>
+  <div class="tab-content no-border padding-24">
+    <%= render "pro/trips/ads"%>
+  </div>
+</div>
+
+<% content_for :custom_js do %>
+  <%= javascript_tag do %>
+    $(function(){
+      $("input[name='trip_ad[pic_key]'").bind("change", function () {
+        $(this).parents("form").submit()
+      })
+
+      $("input[name='trip_ad[title]'").bind("change", function () {
+        $(this).parents("form").submit()
+      })
+    })
+  <% end %>
+<% end %>

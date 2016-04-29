@@ -246,26 +246,11 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(10006) %>
-    <%= content_tag :li, class: side_menu_group_status(['pro/trips', 'pro/trip_ticket_categories'],"open active") do %>
-      <%= left_nav_dropdown 'icon-plus', '微旅游' %>
-      <ul class="submenu">
-        <%= content_tag :li, class: side_menu_status(controller="pro/trips", action="index", nil, active = "active") do%>
-          <%= link_to trips_path do %>
-            <i class="icon-double-angle-right"></i>旅游服务
-          <% end %>
-        <% end %>
-        <%= content_tag :li, class: side_menu_status(controller="pro/trips",action="ticket", nil, active = "active") || side_menu_status(controller="pro/trips",action="show_ticket", nil, active = "active") || side_menu_status("pro/trip_ticket_categories", nil, nil, 'active') do%>
-          <%= link_to ticket_trips_path do %>
-            <i class="icon-double-angle-right"></i>门票管理
-          <% end %>
-        <% end %>
-
-        <%= content_tag :li, class: side_menu_status(controller="pro/trips",action="order", nil, active = "active") do%>
-          <%= link_to order_trips_path do %>
-            <i class="icon-double-angle-right"></i>预约管理
-          <% end %>
-        <% end %>
-      </ul>
+    <%= content_tag :li, class: (controller_path =~ /trip/ ? "active" : false) do %>
+      <a href="<%= trips_path %>">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微旅游</span>
+      </a>
     <% end %>
   <% end %>
 
@@ -320,29 +305,21 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(10013) %>
-    <li class="<%= parent_class if controller_name =~ /hospital|doctor_arranges|doctor_watches/ %>">
-      <%= left_nav_dropdown 'icon-plus', '微医疗' %>
-      <ul class="submenu" style="display: <%= ( controller_name =~ /hospital|doctor_arranges|doctor_watches/ ) ? 'block;' : 'none;'%>">
-        <%= link_to_left_nav( '基本信息', hospitals_url, controller_name == 'hospitals' ) %>
-        <%= link_to_left_nav( '医生管理', hospital_doctors_url, controller_name == 'hospital_doctors' ) %>
-        <%= link_to_left_nav( '排班管理', doctor_watches_url, controller_name =~ /doctor_arranges|doctor_watches/ ) %>
-        <%= link_to_left_nav( '科室管理', hospital_departments_url, controller_name == 'hospital_departments' ) %>
-        <%= link_to_left_nav( '预约管理', hospital_orders_url, controller_name == 'hospital_orders' ) %>
-      </ul>
-    </li>
+    <%= content_tag :li, class: (controller_path =~ /hospital|doctor/ ? "active" : false) do %>
+      <a href="/hospitals">
+        <i class="icon-plus"></i>
+        <span class="menu-text">微医疗</span>
+      </a>
+    <% end %>
   <% end %>
 
   <% if current_site.has_privilege_for?(10011) %>
-    <li class="<%= parent_class if controller_name =~ /college/ %>">
-      <%= left_nav_dropdown 'icon-plus', '微教育' %>
-      <ul class="submenu" style="<%= 'display: block' if controller_name =~ /college/ %>">
-        <%= link_to_left_nav( '基本信息', colleges_path, controller_name =~ /colleges|college_enrolls/ && action_name != 'intro' ) %>
-        <%= link_to_left_nav( '专业介绍', college_majors_path(current_site.college || 0), controller_name == 'college_majors' ) %>
-        <%= link_to_left_nav( '专业名师', college_teachers_path(current_site.college || 0), controller_name == 'college_teachers' ) %>
-        <%= link_to_left_nav( '学院环境', college_photos_path(current_site.college || 0), controller_name == 'college_photos' ) %>
-        <%= link_to_left_nav( '学院简介', intro_college_path(current_site.college || 0), controller_name == 'college_branches' || action_name == 'intro' ) %>
-      </ul>
-    </li>
+    <%= content_tag :li, class: (controller_path =~ /college/ ? "active" : false) do %>
+      <a href="<%= colleges_path %>">
+        <i class=icon-plus></i>
+        <span class="menu-text">微教育</span>
+      </a>
+    <% end %>
   <% end %>
 
   <% if current_site.has_privilege_for?(10014) %>
@@ -374,16 +351,12 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(53) %>
-    <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
-      <%= left_nav_dropdown 'icon-camera', '微公益' %>
-      <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
-        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
-        <%= link_to_left_nav( '店铺管理', donations_path, current_page?(donations_path) ) %>
-        <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
-          <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
-        </li>
-      </ul>
-    </li>
+    <%= content_tag :li, class: (controller_path =~ /donation/ ? "active" : false) do %>
+      <a href="<%= donations_path %>">
+        <i class="icon-camera"></i>
+        <span class="menu-text">微公益</span>
+      </a>
+    <% end %>
   <% end %>
 
 </ul>

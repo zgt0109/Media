@@ -8,33 +8,38 @@
     </ul>
     <%= render partial:'/layouts/qrcode' %>
   </div>
-  
-  <div class="page-content">
-    <div class="row">
-      <div class="col-sm-12">
-       <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
-         <div class="widget-box transparent" id="menu">
-           <div class="widget-header">
-             <h4>
-              <i class="icon icon-cogs"></i>科室管理
-            </h4>
 
-            <div class="widget-toolbar no-border">
-              <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-title="新增科室" data-height="300" data-parent-id>
-                <i class="icon-plus"></i>   新增科室
-              </a>
+  <div class="page-content">
+    <div class="tabbable">
+      <%= render "pro/hospitals/top_hospital" %>
+      <div class="tab-content no-border padding-24">
+        <div class="row">
+          <div class="col-sm-12">
+           <div class="col-md-6 col-lg-6 widget-container-span ui-sortable no-padding-left margin-top-10">
+             <div class="widget-box transparent" id="menu">
+               <div class="widget-header">
+                 <h4>
+                  <i class="icon icon-cogs"></i>科室管理
+                </h4>
+
+                <div class="widget-toolbar no-border">
+                  <a href="javascript:;" class="btn btn-info btn-sm menu-category" data-title="新增科室" data-height="300" data-parent-id>
+                    <i class="icon-plus"></i>   新增科室
+                  </a>
+                </div>
+              </div>
+              <div class="widget-body">
+               <div id="tree1" class="tree tree-selectable">
+                <%= render :partial=> "sub_menu", :collection => @hospital_departments.root.order(:sort), :as =>:sub_menu %>
+              </div>
             </div>
-          </div>
-          <div class="widget-body">
-           <div id="tree1" class="tree tree-selectable">
-            <%= render :partial=> "sub_menu", :collection => @hospital_departments.root.order(:sort), :as =>:sub_menu %>
+
           </div>
         </div>
-        
+        <div class="col-md-6 col-lg-6 margin-top-10" id="form"></div>
+
       </div>
     </div>
-    <div class="col-md-6 col-lg-6 margin-top-10" id="form"></div>
-    
   </div>
 </div>
 </div>

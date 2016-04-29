@@ -5,10 +5,8 @@
         <i class="icon-home home-icon"></i>
         <a href="#">首页</a>
       </li>
-      <li>
-        微公益
-      </li>
-      <li>项目管理</li>
+      <li><%= link_to '微公益', donations_path %></li>
+      <li><%= link_to '公益信息', donations_path %></li>
     </ul>
     <!-- .breadcrumb -->
     <div class="pull-right">
@@ -22,59 +20,62 @@
     </div>
   </div>
   <div class="page-content">
-    <div class="row">
-      <div class="col-md-12">
-        <!-- PAGE CONTENT BEGINS -->
-      </div>
-      <div class="col-sm-12">
-        <div class="col-md-3 row">
-          <div class="input-group input-group-text">
-            <span class="input-group-addon">活动名称：</span>
-            <input class="col-xs-12" type="text" autocomplete="off">
+    <div class="tabbable row">
+      <%= render 'biz/donations/top_donation' %>
+      <div class="tab-content no-border padding-24">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- PAGE CONTENT BEGINS -->
+          </div>
+          <div class="col-sm-12">
+            <div class="col-md-3 row">
+              <div class="input-group input-group-text">
+                <span class="input-group-addon">活动名称：</span>
+                <input class="col-xs-12" type="text" autocomplete="off">
+              </div>
+            </div>
+            <div class="col-md-3 row">
+              <button class="btn btn-primary btn-sm btn-filter">查询</button>
+            </div>
+            <%=link_to "新增", new_donation_url, class: "btn btn-primary btn-sm btn-filter pull-right" %>
+          </div>
+          <div class="col-md-12 margin-top-20">
+            <table id="actTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+                <tr>
+                  <th>活动名称</th>
+                  <th>所属类别</th>
+                  <th>公益组织</th>
+                  <th>目标金额</th>
+                  <th>捐款人数</th>
+                  <th>募集金额</th>
+                  <th>状态</th>
+                  <th width="10%">操作</th>
+                </tr>
+              </thead>
+            <tbody>
+              <% @donations.each do |donation| %>
+                <tr>
+                  <td><%= donation.name %></td>
+                  <td><%= donation.activity.try(:name) %></td>
+                  <td><%= donation.group_name %></td>
+                  <td><%= donation.target_money %></td>
+                  <td><%= donation.donation_orders.active.count + donation.init_number %></td>
+                  <td><%= donation.donation_orders.active.sum(:fee) + donation.init_fee %></td>
+                  <td><%= donation.status_name %></td>
+                  <td>
+                    <%= link_to "编辑", edit_donation_path(donation) %>
+                    <%= link_to "开启", start_donation_path(donation), method: :post, remote: true, id: "#{donation.id}-btn" if donation.status == -1%>
+                    <%= link_to "停止", stop_donation_path(donation), method: :post, remote: true, id: "#{donation.id}-btn" if donation.status == 1 %>
+                    <%= link_to '删除', donation_path(donation), method: :delete, confirm: "确定要删除？", data: {height: 160, weight: 350} %>
+                  </td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <%= paginate @donations %>
           </div>
         </div>
-        <div class="col-md-3 row">
-          <button class="btn btn-primary btn-sm btn-filter">查询</button>
-        </div>
-        <%=link_to "新增", new_donation_url, class: "btn btn-primary btn-sm btn-filter pull-right" %>
-      </div>
-      <div class="col-md-12 margin-top-20">
-        <table id="actTable" class="table table-striped table-bordered table-hover dataTable ">
-          <thead>
-            <tr>
-              <th>活动名称</th>
-              <th>所属类别</th>
-              <th>公益组织</th>
-              <th>目标金额</th>
-              <th>捐款人数</th>
-              <th>募集金额</th>
-              <th>状态</th>
-              <th width="10%">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <% @donations.each do |donation| %>
-            <tr>
-              <td><%= donation.name %></td>
-              <td><%= donation.activity.try(:name) %></td>
-              <td><%= donation.group_name %></td>
-              <td><%= donation.target_money %></td>
-              <td><%= donation.donation_orders.active.count + donation.init_number %></td>
-              <td><%= donation.donation_orders.active.sum(:fee) + donation.init_fee %></td>
-              <td><%= donation.status_name %></td>
-              <td>
-            		<%= link_to "编辑", edit_donation_path(donation) %>
-          	    <%= link_to "开启", start_donation_path(donation), method: :post, remote: true, id: "#{donation.id}-btn" if donation.status == -1%>
-	              <%= link_to "停止", stop_donation_path(donation), method: :post, remote: true, id: "#{donation.id}-btn" if donation.status == 1 %>
-		            <%= link_to '删除', donation_path(donation), method: :delete, confirm: "确定要删除？", data: {height: 160, weight: 350} %>
-              </td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
-
-        <%= paginate @donations %>
       </div>
     </div>
   </div>
