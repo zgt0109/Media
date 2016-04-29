@@ -64,6 +64,7 @@
     <% end %>
   </div>
 
+  <% if @booking.is_open_booking? %>
   <div class="detail-btn">
     <% if @booking_item.is_able_booking %>
         <a href="<%= new_mobile_booking_booking_order_url(@site.id, @booking, booking_item_id: @booking_item.id) %>"  class="btn btn-red">
@@ -77,6 +78,7 @@
         </a>
     <% end %>
   </div>
+  <% end %>
 
   <div class="detail-tab">
     <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_booking_booking_comments_url(@site, @booking, @booking_item) %>">商品评价(<%= @booking_item.booking_comments.count %>)</a></div>

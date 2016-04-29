@@ -61,4 +61,8 @@ class Booking < ActiveRecord::Base
     items = items.select{|item| item.name =~ /.*(#{params[:name].strip()}).*/} if params[:name].present?
     items.flatten.sort{|x, y| y.created_at <=> x.created_at }
   end
+
+  def is_open_booking?
+    is_open_booking.to_i == 1
+  end
 end
