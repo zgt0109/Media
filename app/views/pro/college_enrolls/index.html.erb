@@ -8,58 +8,60 @@
     </ul>
     <%= render '/layouts/qrcode' %>
   </div>
-
   <div class="page-content">
-    <%= render 'pro/colleges/top_college' %>
-    <div class="row">
-      <%= form_for @search, url: college_college_enrolls_path(@college), html: { method: :get } do |f| %>
-        <div class="col-sm-12">
-          <div class="col-md-3 row">
-            <div class="input-group input-group-sm input-group-text">
-              <span class="input-group-addon">姓名：</span>
-              <%= f.text_field :name_like, class: 'col-xs-12' %>
+    <div class="tabbable">
+      <%= render 'pro/colleges/top_college' %>
+      <div class="tab-content no-border padding-24">
+        <div class="row">
+          <%= form_for @search, url: college_college_enrolls_path(@college), html: { method: :get } do |f| %>
+            <div class="col-sm-12">
+              <div class="col-md-3 row">
+                <div class="input-group input-group-sm input-group-text">
+                  <span class="input-group-addon">姓名：</span>
+                  <%= f.text_field :name_like, class: 'col-xs-12' %>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group input-group-text">
+                  <span class="input-group-addon">手机号码：</span>
+                  <%= f.text_field :mobile_like, class: 'col-xs-12' %>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+              </div>
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="input-group input-group-text">
-              <span class="input-group-addon">手机号码：</span>
-              <%= f.text_field :mobile_like, class: 'col-xs-12' %>
-            </div>
-          </div>
-          <div class="col-md-1">
-            <button type="submit" class="btn btn-primary btn-sm btn-filter">查询</button>
+          <% end %>
+          <div class="col-md-12 margin-top-20">
+            <table id="applyTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>手机号码</th>
+                  <th>报名专业</th>
+                  <th>备注</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if @enrolls.each do |enroll| %>
+                  <tr>
+                    <td><%= enroll.name %></td>
+                    <td><%= enroll.mobile  %></td>
+                    <td><%= enroll.college_major.try(:name)  %></td>
+                    <td><%= enroll.description  %></td>
+                    <td><%= link_to '删除', college_college_enroll_path(@college, enroll), method: 'delete', confirm: '确定删除?' %></td>
+                  </tr>
+                <% end.blank? %>
+                  <tr>
+                    <td colspan="5" class="green text-center">没有记录</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <%= paginate @enrolls %>
           </div>
         </div>
-      <% end %>
-
-      <div class="col-md-12 margin-top-20">
-        <table id="applyTable" class="table table-striped table-bordered table-hover dataTable ">
-          <thead>
-            <tr>
-              <th>姓名</th>
-              <th>手机号码</th>
-              <th>报名专业</th>
-              <th>备注</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if @enrolls.each do |enroll| %>
-              <tr>
-                <td><%= enroll.name %></td>
-                <td><%= enroll.mobile  %></td>
-                <td><%= enroll.college_major.try(:name)  %></td>
-                <td><%= enroll.description  %></td>
-                <td><%= link_to '删除', college_college_enroll_path(@college, enroll), method: 'delete', confirm: '确定删除?' %></td>
-              </tr>
-            <% end.blank? %>
-              <tr>
-                <td colspan="5" class="green text-center">没有记录</td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <%= paginate @enrolls %>
       </div>
     </div>
   </div>

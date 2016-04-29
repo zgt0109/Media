@@ -11,42 +11,45 @@
       </ul>
       <%= render partial:'/layouts/qrcode' %>
     </div>
-
     <div class="page-content">
-      <%= render 'top_donation' %>
-      <div class="row">
-        <div class="col-sm-12">
-          <%= link_to "新增", activity_donations_path, class: "btn btn-primary btn-sm pull-right"  %>
-        </div>
+      <div class="tabbable">
+        <%= render 'biz/donations/top_donation' %>
+        <div class="tab-content no-border padding-24">
+          <!-- tab-content -->
+          <div class="row">
+            <div class="col-sm-12">
+              <%= link_to "新增", activity_donations_path, class: "btn btn-primary btn-sm pull-right"  %>
+            </div>
 
-        <div class="col-md-12 margin-top-20">
-          <table id="vweddingTable" class="table table-striped table-bordered table-hover dataTable">
-            <thead>
-              <tr>
-                <th>类别名称</th>
-                <th>关键词</th>
-                <th>创建时间</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @activities.each do |activity| %>
-                <tr>
-                  <td><%= activity.name %></td>
-                  <td><%= activity.keyword %></td>
-                  <td><%= activity.created_at %></td>
-                  <td>
-                    <%= link_to "编辑", edit_activity_donations_path(aid: activity.id) %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <%= paginate @activities %>
+            <div class="col-md-12 margin-top-20">
+              <table id="vweddingTable" class="table table-striped table-bordered table-hover dataTable">
+                <thead>
+                  <tr>
+                    <th>类别名称</th>
+                    <th>关键词</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @activities.each do |activity| %>
+                    <tr>
+                      <td><%= activity.name %></td>
+                      <td><%= activity.keyword %></td>
+                      <td><%= activity.created_at %></td>
+                      <td>
+                        <%= link_to "编辑", edit_activity_donations_path(aid: activity.id) %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @activities %>
+            </div>
+          </div>
+          <!-- tab-content -->
         </div>
-
       </div>
     </div>
-
   </div>
 <% end %>

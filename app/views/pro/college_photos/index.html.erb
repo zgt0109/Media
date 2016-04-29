@@ -9,22 +9,26 @@
     <%= render '/layouts/qrcode' %>
   </div>
   <div class="page-content">
-    <%= render 'pro/colleges/top_college' %>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label>图片列表
-            <span class="help-inline text-warning line-height-32">图片建议尺寸：280像素*220像素 图片在手机中显示的顺序以最后上传的为显示最前</span>
-          </label>
-          <div class="vwebsitePicture col-sm-12">
-            <ul class="ace-thumbnails thumbnails-1">
-              <li>
-                <div class="cieldon-file" data-college-id="<%= @college.id %>" data-type="5" data-height="96" data-width="176"></div>
-              </li>
-              <% @photos.each do |photo| %>
-                <%= render "pro/college_photos/photo", {photo: photo} %>
-              <% end %>
-            </ul>
+    <div class="tabbable">
+      <%= render 'pro/colleges/top_college' %>
+      <div class="tab-content no-border padding-24">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>图片列表
+                <span class="help-inline text-warning line-height-32">图片建议尺寸：280像素*220像素 图片在手机中显示的顺序以最后上传的为显示最前</span>
+              </label>
+              <div class="vwebsitePicture col-sm-12 row">
+                <ul class="ace-thumbnails thumbnails-1">
+                  <li>
+                    <div class="cieldon-file" data-college-id="<%= @college.id %>" data-type="5" data-height="96" data-width="176"></div>
+                  </li>
+                  <% @photos.each do |photo| %>
+                    <%= render "pro/college_photos/photo", {photo: photo} %>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

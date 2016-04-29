@@ -1,85 +1,88 @@
 <% content_for :main_content do %>
 <div class="main-content ">
-    <div class="breadcrumbs" id="breadcrumbs">
-        <ul class="breadcrumb">
-            <%= render 'partials/home' %>
-            <li><%= link_to '微教育', colleges_path %></li>
-            <li><%= link_to '学院简介', intro_college_path(@college) %></li>
-        </ul>
-        <%= render '/layouts/qrcode' %>
-    </div>
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <%= render 'partials/home' %>
+      <li><%= link_to '微教育', colleges_path %></li>
+      <li><%= link_to '学院简介', intro_college_path(@college) %></li>
+    </ul>
+    <%= render '/layouts/qrcode' %>
+  </div>
 
-    <div class="page-content">
+  <div class="page-content">
+    <div class="tabbable">
       <%= render 'pro/colleges/top_college' %>
+      <div class="tab-content no-border padding-24">
         <div class="row">
-            <div class="col-sm-12">
-                <%= form_for @search, url: { action: "intro" }, html: { method: :get } do |f| %>
-                <div class="col-md-3 row">
-                  <div class="input-group input-group-sm input-group-text">
-                    <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入学院名称" %>
-                    <span class="input-group-addon">
-                      <button class="btn btn-sm btn-filter btn-primary">查询</button>
-                    </span>
+          <div class="col-sm-12">
+            <%= form_for @search, url: { action: "intro" }, html: { method: :get } do |f| %>
+              <div class="col-md-3 row">
+                <div class="input-group input-group-sm input-group-text">
+                  <%= f.text_field :name_like, class: 'col-xs-12', placeholder:"请输入学院名称" %>
+                  <span class="input-group-addon">
+                    <button class="btn btn-sm btn-filter btn-primary">查询</button>
+                  </span>
+                </div>
+              </div>
+            <% end %>
+            <a href="javascript:;" class="btn btn-primary btn-sm pull-right" data-toggle="modals" data-title="新增地址" data-height="1000" data-iframe="<%= new_college_branch_path(@college) %>">新增</a>
+          </div>
+          <div class="col-md-12 margin-top-20">
+            <table id="districtTable" class="table table-striped table-bordered table-hover dataTable ">
+              <thead>
+                <tr>
+                  <th>已登入校区地址</th>
+                  <th>联系电话</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="colleges_body">
+                <% if @branches.each do |branch| %>
+                  <tr id="branch-row-<%= branch.id %>">
+                    <td><%= branch.name %></td>
+                    <td><%= branch.tel %></td>
+                    <td>
+                      <a href="javascript:;" data-toggle="modals" data-title="编辑地址" data-height="1000" data-iframe="<%= edit_college_branch_path(@college, branch) %>">编辑</a>
+                      <%= link_to '删除', college_branch_path(@college, branch), method: :delete, confirm: '确定删除？' %>
+                    </td>
+                  </tr>
+                  <% end.blank? %>
+                  <tr>
+                    <td colspan="3" class="green text-center">无记录</td>
+                  </tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @branches %>
+              <%= form_for(@college, remote: true) do |f| %>
+                <div class="form-group margin-top-20">
+                  <label class="control-label">学院简介</label>
+                  <div class="clearfix">
+                    <%= f.text_area :intro, class: 'col-md-8', rows: 5 %>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-primary btn-sm margin-top-10">保存</button>
                   </div>
                 </div>
-                <% end %>
-                <a href="javascript:;" class="btn btn-primary btn-sm pull-right" data-toggle="modals" data-title="新增地址" data-height="1000" data-iframe="<%= new_college_branch_path(@college) %>">新增</a>
-            </div>
-            <div class="col-md-12 margin-top-20">
-                <table id="districtTable"
-                       class="table table-striped table-bordered table-hover dataTable ">
-                    <thead>
-                    <tr>
-                        <th>已登入校区地址</th>
-                        <th>联系电话</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody id="colleges_body">
-                      <% if @branches.each do |branch| %>
-                          <tr id="branch-row-<%= branch.id %>">
-                            <td><%= branch.name %></td>
-                            <td><%= branch.tel %></td>
-                            <td>
-                              <a href="javascript:;" data-toggle="modals" data-title="编辑地址" data-height="1000" data-iframe="<%= edit_college_branch_path(@college, branch) %>">编辑</a>
-                              <%= link_to '删除', college_branch_path(@college, branch), method: :delete, confirm: '确定删除？' %>
-                            </td>
-                          </tr>
-                      <% end.blank? %>
-                          <tr>
-                            <td colspan="3" class="green text-center">无记录</td>
-                          </tr>
-                      <% end %>
-                    </tbody>
-                </table>
-                <%= paginate @branches %>
+              <% end %>
 
-                <%= form_for(@college, remote: true) do |f| %>
-                  <div class="form-group margin-top-20">
-                      <label class="control-label">学院简介</label>
-                      <div class="clearfix">
-                          <%= f.text_area :intro, class: 'col-md-8', rows: 5 %>
-                      </div>
-                      <div>
-                          <button type="submit" class="btn btn-primary btn-sm margin-top-10">保存</button>
-                      </div>
+              <%= form_for(@college, remote: true) do |f| %>
+                <div class="form-group">
+                  <label class="control-label">就业保障</label>
+                  <div class="clearfix">
+                    <%= f.text_area :security, class: 'col-md-8', rows: 5 %>
                   </div>
-                <% end %>
-
-                <%= form_for(@college, remote: true) do |f| %>
-                  <div class="form-group">
-                      <label class="control-label">就业保障</label>
-                      <div class="clearfix">
-                          <%= f.text_area :security, class: 'col-md-8', rows: 5 %>
-                      </div>
-                      <div>
-                          <button type="submit" class="btn btn-primary btn-sm margin-top-10">保存</button>
-                      </div>
+                  <div>
+                    <button type="submit" class="btn btn-primary btn-sm margin-top-10">保存</button>
                   </div>
-                <% end %>
-
+                </div>
+              <% end %>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+
 </div>
 <% end %>
