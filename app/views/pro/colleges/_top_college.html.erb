@@ -1,0 +1,22 @@
+<div class="tabbable">
+  <ul class="nav nav-tabs padding-24 tab-size-bigger">
+    <% unless @college.new_record? %>
+      <%= link_to_li '微信设置', message_colleges_path %>
+      <%= link_to_li '基本信息', colleges_path %>
+      <%= link_to_li '学院简介', intro_college_path(@college) %>
+      <%= link_to_li '学院环境', college_photos_path(@college) %>
+      <%= link_to_li '专业介绍', college_majors_path(@college) %>
+      <%= link_to_li '专业名师', college_teachers_path(@college) %>
+      <%= link_to_li '报名信息', college_college_enrolls_path(@college) %>
+    <% end %>
+  </ul>
+</div>
+
+<style type="text/css">
+  .tabbable {
+    padding-bottom: 20px;
+  }
+  .nav {
+    height: 34px;
+  }
+</style>

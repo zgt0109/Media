@@ -314,16 +314,12 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(10011) %>
-    <li class="<%= parent_class if controller_name =~ /college/ %>">
-      <%= left_nav_dropdown 'icon-plus', '微教育' %>
-      <ul class="submenu" style="<%= 'display: block' if controller_name =~ /college/ %>">
-        <%= link_to_left_nav( '基本信息', colleges_path, controller_name =~ /colleges|college_enrolls/ && action_name != 'intro' ) %>
-        <%= link_to_left_nav( '专业介绍', college_majors_path(current_site.college || 0), controller_name == 'college_majors' ) %>
-        <%= link_to_left_nav( '专业名师', college_teachers_path(current_site.college || 0), controller_name == 'college_teachers' ) %>
-        <%= link_to_left_nav( '学院环境', college_photos_path(current_site.college || 0), controller_name == 'college_photos' ) %>
-        <%= link_to_left_nav( '学院简介', intro_college_path(current_site.college || 0), controller_name == 'college_branches' || action_name == 'intro' ) %>
-      </ul>
-    </li>
+    <%= content_tag :li, class: (controller_path =~ /college/ ? "active" : false) do %>
+      <a href="<%= colleges_path %>">
+        <i class=icon-plus></i>
+        <span class="menu-text">微教育</span>
+      </a>
+    <% end %>
   <% end %>
 
   <% if current_site.has_privilege_for?(10014) %>
@@ -355,16 +351,12 @@
   <% end %>
 
   <% if current_site.has_privilege_for?(53) %>
-    <li class="<%= parent_class if (controller_name =~ /donations/i) %>">
-      <%= left_nav_dropdown 'icon-camera', '微公益' %>
-      <ul class="submenu" style="display: <%= (controller_name =~ /donations/i) ? 'block;' : 'none;' %>">
-        <%= link_to_left_nav( '类别设置', list_activities_donations_path, (current_page?(list_activities_donations_path) || current_page?(prints_path) ) ) %>
-        <%= link_to_left_nav( '店铺管理', donations_path, current_page?(donations_path) ) %>
-        <li class="<%= current_page?(orders_donations_path) ? sub_class : '' %>">
-          <%= link_to orders_donations_path do %><i class="icon-double-angle-right"></i>捐款明细<% end %>
-        </li>
-      </ul>
-    </li>
+    <%= content_tag :li, class: (controller_path =~ /donation/ ? "active" : false) do %>
+      <a href="<%= donations_path %>">
+        <i class="icon-camera"></i>
+        <span class="menu-text">微公益</span>
+      </a>
+    <% end %>
   <% end %>
 
 </ul>
