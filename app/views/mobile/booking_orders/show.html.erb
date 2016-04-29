@@ -97,8 +97,10 @@
             </ul>
           </div>
         </div>
-        <%= f.submit '支付订单', class: 'order_sub' %>
+        <div class="blank1"></div>
+        <%= f.submit '支付订单', class: 'order_sub btn' %>
       <% end %>
+        <div class="blank1"></div>
         <%= link_to '取消订单', cancel_mobile_booking_booking_order_url(@site, @booking, @booking_order), class: "order_cancel", confirm:"确认取消订单?" %>
       </div>
   <% end %>
