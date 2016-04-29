@@ -3,7 +3,7 @@
     <h4 class=""><%= @booking_category.new_record? ? '新增分类' : '编辑分类'%></h4>
   </div>
   <div class="widget-body">
-    <%= form_for @booking_category, validate: true, html: {id: 'booking_category_form'} do |f| %>
+    <%= form_for @booking_category, url: @booking_category.new_record? ? @booking_category : booking_category_path(@booking, @booking_category), validate: true, html: {id: 'booking_category_form'} do |f| %>
         <%= f.hidden_field :parent_id %>
         <%= f.hidden_field :id %>
 

@@ -1,4 +1,4 @@
-<%= form_for @booking_item, validate: true, html: {id: 'pro_booking_item'} do |f| %>
+<%= form_for @booking_item, url: @booking_item.new_record? ? @booking_item : booking_item_path(@booking, @booking_item), validate: true, html: {id: 'pro_booking_item'} do |f| %>
 
     <div class="col-xs-12">
 
