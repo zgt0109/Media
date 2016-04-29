@@ -57,7 +57,7 @@ class Pro::TripsController < Pro::TripBaseController
       flash = {alert: "最多上传五张轮播图片"}
     end
 
-    redirect_to trips_path(anchor: "tab-2"), flash
+    redirect_to ads_trips_path, flash
   end
 
   def up_ad_title
@@ -71,7 +71,7 @@ class Pro::TripsController < Pro::TripBaseController
   def del_ad
     ad = current_site.trip.trip_ads.find(params[:id])
     ad.destroy
-    redirect_to trips_path(anchor: "tab-2")
+    redirect_to ads_trips_path
   end
 
   def ticket
