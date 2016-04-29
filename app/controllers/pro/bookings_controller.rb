@@ -4,7 +4,7 @@ class Pro::BookingsController < Pro::BookingBaseController
   before_filter :load_booking, only: [:edit, :update, :destroy, :show]
 
   def index
-    @bookings = Booking.page(params[:page])
+    @bookings = current_site.bookings.page(params[:page])
   end
 
   def new
