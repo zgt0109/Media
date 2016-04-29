@@ -36,7 +36,7 @@ end
 task :staging do
   require 'rvm/capistrano'
   server 'staging.winwemedia.com', :app, :web, :db, primary: true
-  config_deploy application: 'winwemedia', branch: 'staging'
+  config_deploy application: 'winwemedia', rails_env: 'staging', branch: 'staging'
 end
 
 
