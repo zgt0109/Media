@@ -110,7 +110,7 @@
                 else{
                     $.ajax({
                         type: "GET",
-                        url: "/bookings/" + $(this.booking) + "/booking_categories/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=2',
+                        url: "/bookings/" + <%= @booking.id %> + "/booking_categories/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=2',
                         success: function(data) {
                             return false;
                         },

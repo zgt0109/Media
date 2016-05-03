@@ -53,7 +53,7 @@ class Pro::BookingItemsController < Pro::BookingBaseController
   private
 
   def set_booking_item
-    @booking_item = BookingItem.where(id: params[:id]).first
+    @booking_item = @booking.booking_items.where(id: params[:id]).first
     return redirect_to booking_items_path, alert: '商品不存在或已删除' unless @booking_item
   end
 
