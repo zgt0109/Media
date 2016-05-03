@@ -56,7 +56,7 @@ if(type == 2){
             }else{
                 $.ajax({
                     type: "GET",
-                    url: "/booking_categories/" + $("#booking_category_id" + (rel + 1)).val() + "?rel=" + (rel + 1) + "&&type=" + type,
+                    url: "/bookings/" + $(this.booking) + "/booking_categories/" + $("#booking_category_id" + (rel + 1)).val() + "?rel=" + (rel + 1) + "&&type=" + type,
                     success: function(data) {
                         return false;
                     },

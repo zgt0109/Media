@@ -65,7 +65,7 @@
                     p.prev().before(p);
                     $.ajax({
                         type: "GET",
-                        url: "/booking_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=up",
+                        url: "/bookings/" + $(this.booking) + "/booking_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=up",
                         success: function(data) {
                             showTip("success","操作成功");
                             return false;
@@ -84,7 +84,7 @@
                     p.next().after(p);
                     $.ajax({
                         type: "GET",
-                        url: "/booking_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=down",
+                        url: "/bookings/" + $(this.booking) + "/booking_categories/" + self.closest('.tree-tools').attr('data-id') +"/update_sorts?type=down",
                         success: function(data) {
                             showTip("success","操作成功");
                             return false;

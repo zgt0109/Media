@@ -147,7 +147,7 @@
                 else{
                     $.ajax({
                         type: "GET",
-                        url: "/booking_categories/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=1',
+                        url: "/bookings/" + $(this.booking) + "/booking_categories/" + $(this).val() + "?rel=" + ($(this).attr('rel')) + '&&type=1',
                         success: function(data) {
                             return false;
                         },
