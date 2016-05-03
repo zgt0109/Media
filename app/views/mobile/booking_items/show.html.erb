@@ -54,13 +54,13 @@
     <b><%= @booking_item.name %></b>
     <span class="fl">价格：￥<%= f @booking_item.price %></span>
     <% if @booking_item.no_limit? %>
-        <span class="fw tright">总数：<%= @booking_item.qty %></span>
-        <span class="fw tright">剩余：<%= @booking_item.surplus_qty %></span>
+        <span class="fw tright">库存：<%= @booking_item.qty %></span>
+        <span class="fw tright">已售：<%= @booking_item.sold_qty %></span>
     <% elsif @booking_item.time_limit? %>
         <span class="fw tright">预定日期为：<%= @booking_item.start_at %>到<%= @booking_item.end_at %></span>
     <% elsif @booking_item.day_qty_limit? %>
         <span class="fw tright">每日：<%= @booking_item.limit_qty %></b></span>
-        <span class="fw tright">剩余：<%= @booking_item.surplus_qty %></b></span>
+        <span class="fw tright">已售：<%= @booking_item.sold_qty %></b></span>
     <% end %>
   </div>
 

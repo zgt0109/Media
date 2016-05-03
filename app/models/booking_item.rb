@@ -14,7 +14,6 @@ class BookingItem < ActiveRecord::Base
     ['no_limit', 1, '不限定'],
     ['time_limit', 2, '限定时间'],
     ['day_qty_limit', 3, '限定每日量'],
-    ['qty_limit', 4, '限定全部总量'],
   ]
 
   enum_attr :status, :in => [
@@ -25,11 +24,19 @@ class BookingItem < ActiveRecord::Base
   accepts_nested_attributes_for :booking_item_pictures, allow_destroy: true
   validates_associated :booking_item_pictures
 
+  def sold_qty
+    if day_qty_limit?
+      booking_orders.where(["DATE(created_at) = DATE(?) and status >= ? ", Time.now, 0]).map(&:qty).sum.to_i
+    else
+      booking_orders.where(["status >= ?", 0]).map(&:qty).sum.to_i
+    end
+  end
+
   def surplus_qty
-    if no_limit? or time_limit?
-      qty - booking_orders.where(["status <> ?", BookingOrder::CANCELED]).map(&:qty).sum.to_i
-    elsif day_qty_limit?
-      limit_qty - booking_orders.where(["DATE(created_at) = DATE(?) and status <> ? ", Time.now, BookingOrder::CANCELED]).map(&:qty).sum.to_i
+    if day_qty_limit?
+      limit_qty - sold_qty
+    else
+      qty - sold_qty
     end
   end
 
