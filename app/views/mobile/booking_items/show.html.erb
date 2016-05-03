@@ -81,7 +81,7 @@
   <% end %>
 
   <div class="detail-tab">
-    <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_booking_booking_comments_url(@site, @booking, @booking_item) %>">商品评价(<%= @booking_item.booking_comments.count %>)</a></div>
+    <div class="hd"><a class="current">商品详情</a><a href="<%= mobile_booking_booking_comments_url(site_id: @site.id, booking_id: @booking.id, booking_item_id: @booking_item.id) %>">商品评价(<%= @booking_item.booking_comments.count %>)</a></div>
     <div class="bd">
       <div class="detail-bd">
         <%= raw @booking_item.description.to_s %>

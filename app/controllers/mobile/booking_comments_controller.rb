@@ -10,14 +10,15 @@ class Mobile::BookingCommentsController < Mobile::BaseController
   def create
     @booking_comment = BookingComment.new(params[:booking_comment])
     if @booking_comment.save
-      redirect_to new_mobile_booking_comment_url(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id])
+      redirect_to new_mobile_booking_booking_comment_url(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id])
     else
-      redirect_to mobile_booking_comments_url(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id]), :notice => "评论失败"
+      redirect_to mobile_booking_booking_comments_url(site_id: @site.id, booking_item_id: params[:booking_comment][:booking_item_id]), :notice => "评论失败"
     end
   end
 
   def set_booking_item
-    @booking_item = @site.booking.booking_items.find(params[:booking_item_id])
+    @booking = @site.bookings.where(id: params[:booking_id]).first
+    @booking_item = @booking.booking_items.find(params[:booking_item_id])
     @booking_comments = @booking_item.booking_comments.order("created_at desc")
   rescue
     render :text => '商品不存在'
