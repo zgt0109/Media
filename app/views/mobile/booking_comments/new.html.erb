@@ -1,4 +1,4 @@
-<% title "写评论" %>
+<% title @booking.name %>
 <% content_for :booking_top_pic do %>
   <header>
     <a href="<%= mobile_booking_comments_url(site_id: @site.id, booking_item_id: @booking_item.id) %>" class="ico-prev">

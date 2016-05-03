@@ -77,6 +77,21 @@
                   </label>
                 </div>
 
+                <div class="form-group">
+                  <label class="control-label">订单备注内容提示<span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="提醒用户此处应填的信息"></span></label>
+                  <div class="clearfix">
+                    <%= f.text_field :descr_placeholder, class: 'col-xs-6', placeholder: '用户下单时, 备注内容框的提示信息' %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">
+                    <%= f.check_box :is_require_descr %>
+                    订单备注是否必须
+                  </label>
+                  <span class="icon-question-sign" data-rel="popover" data-trigger="hover" data-placement="right" data-content="勾选之后，用户下单的备注内容为必填项" title="" data-original-title=""></span>
+                </div>
+
                 <div class="form-group ">
                   <%= f.submit '保存', class: 'btn btn-sm btn-primary' %>
                   <!--<input type="button" class="btn btn-sm btn-info" value="停用">-->

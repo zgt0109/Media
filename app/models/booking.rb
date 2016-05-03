@@ -1,5 +1,5 @@
 class Booking < ActiveRecord::Base
-  store :metadata, accessors: [:notify_merchant_mobiles, :is_open_booking]
+  store :metadata, accessors: [:notify_merchant_mobiles, :is_open_booking, :descr_placeholder, :is_require_descr]
 
   validates :name, presence: true, length: { maximum: 64, message: '名称过长' }
   # validates :tel, presence: true
@@ -64,5 +64,9 @@ class Booking < ActiveRecord::Base
 
   def is_open_booking?
     is_open_booking.to_i == 1
+  end
+
+  def is_require_descr?
+    is_require_descr.to_i == 1
   end
 end
