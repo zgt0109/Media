@@ -48,9 +48,9 @@
       </p>
 </div>
       <p>
-        <span class="fl">取货信息：</span>
+        <span class="fl">备注内容：</span>
         <span class="fr">
-          <%= f.text_area :description, rows: 5, placeholder: '建议复制快递取货提醒短信' %>
+          <%= f.text_area :description, rows: 5, placeholder: @booking.descr_placeholder %>
         </span>
       </p>
 
@@ -150,10 +150,6 @@
                 alert("地址不能为空");
                 $('#booking_order_address').focus();
                 return false;
-            }else if(!$('#booking_order_description').val()){
-                alert("取货信息不能为空");
-                $('#booking_order_description').focus();
-                return false;
             }else if(!$('#booking_order_booking_at').val()){
                 // alert("请选择预订日期");
                 // $('#booking_order_booking_at').focus();
@@ -162,7 +158,15 @@
                 // alert("预订日期不能小于当前日期");
                 // $('#booking_order_booking_at').focus();
                 // return false;
-            }
+            };
+
+            <% if @booking.is_require_descr? %>
+              if(!$('#booking_order_description').val()){
+                alert("备注内容不能为空");
+                $('#booking_order_description').focus();
+                return false;
+              };
+            <% end %>
         });
 
         $(".zhifu_list ul li").click(function(){
