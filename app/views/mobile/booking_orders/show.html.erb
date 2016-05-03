@@ -44,7 +44,7 @@
       <b>地址：</b>
       <span><%= @booking_order.address %></span>
     </p>
-
+<!-- 
     <p>
       <b>预订数量：</b>
       <span><%= @booking_order.qty %></span>
@@ -53,11 +53,16 @@
       <b>预订日期：</b>
       <span><%= @booking_order.booking_at %></span>
     </p>
-
+ -->
+    <p>
+      <b>支付方式：</b>
+      <span><%= @booking_order.payment_type_id_name %></span>
+    </p>
     <p>
       <b>订单状态：</b>
       <span><%= @booking_order.status_name %></span>
     </p>
+
     <% if @booking_order.completed? %>
         <p>
           <b>完成时间：</b>

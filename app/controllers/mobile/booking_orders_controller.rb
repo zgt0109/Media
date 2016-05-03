@@ -44,9 +44,8 @@ class Mobile::BookingOrdersController < Mobile::BaseController
                   :notice =>  @booking_item.surplus_qty == 0 ? "今天商品预定量已经达到饱和，不能再预定了" : "预定数量不能大于每日商品预定总数"
     else
       if @booking_order.save
-
         if @booking_order.cashpay?
-          @booking_order.paid!
+          # @booking_order.paid!
           redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order)
         else
           pay
@@ -61,7 +60,7 @@ class Mobile::BookingOrdersController < Mobile::BaseController
     if @booking_order.update_attributes(params[:booking_order])
       @booking_order.payments.update_all(payment_type_id: @booking_order.payment_type_id)
       if @booking_order.cashpay?
-        @booking_order.paid!
+        # @booking_order.paid!
         redirect_to mobile_booking_booking_order_url(@site, @booking, @booking_order)
       else
         pay
