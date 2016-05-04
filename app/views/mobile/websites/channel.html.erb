@@ -7,7 +7,7 @@
 <% if @website_menu.has_children? or @website_menu.games? %>
   <%= render "mobile/websites/channel/#{template}", { website_menu: @website_menu, main_material: nil, child_material: nil } %>
 <% elsif @website_menu.multiple_graphic? %>
-  <%= render "mobile/websites/channel/#{template}", { website_menu: @website_menu, main_material: @main_material, child_material: @main_material.children } if @main_material %>
+  <%= render "mobile/websites/channel/#{template}", { website_menu: @website_menu, main_material: @main_material, child_material: @main_material.children.unshift(@main_material) } if @main_material %>
 <% end %>
 
 <%= render "mobile/websites/navs/nav#{@nav_template_id}", {:website_menus => @website_menus} if @nav_template_id > 0 %>
