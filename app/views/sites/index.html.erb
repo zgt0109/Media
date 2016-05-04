@@ -83,3 +83,11 @@
   </div>
 </div>
 <% end %>
+
+<% content_for :custom_js do %>
+  <script>
+    new ZeroClipboard( document.getElementById("J-copy"), {
+      moviePath: "/flash/ZeroClipboard.swf"
+    }).on( "complete", function() { showTip("success","复制成功"); } );
+  </script>
+<% end %>
