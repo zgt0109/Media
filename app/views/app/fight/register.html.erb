@@ -6,7 +6,7 @@
 
 	<div id="user_info">
 		<%#= form_tag app_fight_index_url, class: 'user_inner' do %>
-		<form action="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&%>&m=register" method="post" class="user_inner">
+		<form action="/app/fight?aid=<%= params[:aid]%>&anid=<%= params[:anid]%>&m=register" method="post" class="user_inner">
 		<p><label for="us_name">请输入您的昵称：</label><%= text_field_tag :name, @activity_user.try(:name), class: 'input_style' %><span class="name-message" style="color:red;"></span></p>
 		<p><label for="us_name">请输入您的手机号码：</label><%= text_field_tag :mobile, @activity_user.try(:mobile), class: 'input_style' %><span class="mobile-message" style="color:red;"></span></p>
 		<h3>*请务必填写正确，这将是作为您中奖后的领奖依据</h3>
