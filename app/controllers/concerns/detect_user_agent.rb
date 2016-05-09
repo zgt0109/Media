@@ -52,6 +52,7 @@ module DetectUserAgent
   def redirect_to_non_openid_url
     non_openid_url = request.url
     if params[:openid] && non_openid_url =~ OPENID_REG
+      params.delete("origin_openid")
       session[:openid] = params[:openid]
       join_mark = non_openid_url[OPENID_REG].first
       non_openid_url.sub!(OPENID_REG, "#{join_mark}origin_openid=")
