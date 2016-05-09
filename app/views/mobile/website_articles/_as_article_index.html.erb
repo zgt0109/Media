@@ -15,6 +15,7 @@
   </ul>
 </div>
 
+<%= paginate @articles, :theme => 'article', :window => 1 %>
 <div class="news-list">
   <% if @articles.blank? %>
     <div class="new-null">
